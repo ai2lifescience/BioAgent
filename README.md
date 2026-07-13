@@ -31,20 +31,10 @@ cd BioAgent
 
 ### 2. Create An Environment
 
-Using `venv`:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
-
-Or using Conda:
-
 ```bash
 conda create -n bioagent python=3.12 -y
 conda activate bioagent
+python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
