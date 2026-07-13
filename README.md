@@ -47,6 +47,10 @@ planning, or report generation:
 export OPENROUTER_API_KEY="your-openrouter-api-key"
 ```
 
+```powershell
+$env:OPENROUTER_API_KEY = "your-openrouter-api-key"
+```
+
 Deterministic operations such as sequence analysis and some public database
 requests can run without an LLM key.
 
