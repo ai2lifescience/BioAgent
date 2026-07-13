@@ -29,7 +29,7 @@ git switch -c docs/git-workflow-example
 
 Examples for other work:
 
-```text
+```text/
 feature/add-uniprot-tool
 fix/pipeline-input-path
 docs/update-web-guide
@@ -117,3 +117,9 @@ clean.
 The principal sets priorities and approves important architecture changes.
 Team members use focused branches, implement and test tasks, and review pull
 requests. Keep `main` stable and do not develop directly on it.
+
+
+
+
+
+
