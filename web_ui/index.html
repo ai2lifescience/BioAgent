@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BioAgent</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="left-sidebar">
+      <div class="brand">
+        <div class="brand-mark">BA</div>
+        <div>
+          <div class="brand-title">BioAgent</div>
+          <div class="brand-subtitle">Local agent console</div>
+        </div>
+      </div>
+
+      <div class="sidebar-panel session-panel">
+        <div class="sidebar-heading">
+          <div>
+            <label>Sessions</label>
+            <div class="sidebar-hint"><span id="sessionCount">0</span> saved chats</div>
+          </div>
+          <button id="newChat" class="new-chat-button" type="button">New</button>
+        </div>
+        <div id="sessionList" class="session-list"></div>
+      </div>
+
+      <div class="sidebar-panel settings-panel">
+        <div class="control-group">
+          <label for="model">Model</label>
+          <select id="model"></select>
+        </div>
+
+        <div class="control-group">
+          <label for="maxSteps">Max skill steps</label>
+          <input id="maxSteps" type="number" min="1" max="20">
+        </div>
+      </div>
+
+      <div class="sidebar-panel uploads-panel">
+        <div class="sidebar-heading">
+          <div>
+            <label>Uploads</label>
+            <div class="sidebar-hint"><span id="uploadCount">0</span> session files</div>
+          </div>
+          <button id="uploadButton" class="new-chat-button" type="button">Upload</button>
+        </div>
+        <input id="uploadInput" type="file" multiple hidden>
+        <div class="upload-insert-control">
+          <label for="uploadInputLabel">Input label</label>
+          <select id="uploadInputLabel">
+            <option value="input_path">input_path</option>
+            <option value="">raw path</option>
+          </select>
+          <div class="sidebar-hint">Choose a requested slot name. Use raw path to insert only the file path.</div>
+        </div>
+        <div id="uploadList" class="upload-list"></div>
+      </div>
+
+    </aside>
+
+    <main>
+      <header>
+        <div class="header-title">
+          <strong>Bioinformatics Agent</strong>
+          <span id="activeModel">Loading model</span>
+          <span id="activeSession">New chat</span>
+        </div>
+      </header>
+
+      <section id="chatScroll" class="chat-scroll">
+        <div id="chat" class="chat">
+          <div id="emptyState" class="empty-state">
+            <div>
+              <h1>Ask BioAgent</h1>
+            </div>
+            <div class="empty-grid">
+              <button class="example-button" data-example="Download 10 NCBI records for PhiX174 genes A G">NCBI retrieval</button>
+              <button class="example-button" data-example="Analyze the structure of 3GOU">Analyze PDB 3GOU</button>
+              <button class="example-button" data-example="Compare PhiX174 and M13 genome structure, host range, and applications.">Compare biology</button>
+              <button class="example-button" data-example="Inspect file runtime/downloads/ncbi_phix174/phix174_A.fasta">Inspect file</button>
+              <button class="example-button" data-example="Please test skill calling by running the example skill with message hello and tag smoke.">Test skill calling</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="composer-wrap">
+        <section id="thinkingBar" class="thinking-bar ready" aria-live="polite">
+          <div class="thinking-inner">
+            <div class="thinking-main">
+              <div id="status" class="status-pill">Ready</div>
+            </div>
+            <div id="thinkingMeta" class="thinking-meta">
+              <span>Elapsed: 0s</span>
+              <span>Skills: none</span>
+              <span>Tools: none</span>
+              <span>Files: 0</span>
+            </div>
+            <details id="thinkingDetails" class="thinking-details">
+              <summary>Thinking log</summary>
+              <div class="thinking-panel">
+                <div class="thinking-section">
+                  <div class="thinking-section-title">CLI Progress</div>
+                  <pre id="thinkingLogs">No thinking log yet.</pre>
+                </div>
+              </div>
+            </details>
+          </div>
+        </section>
+        <form id="composer" class="composer">
+          <textarea id="prompt" placeholder="Message BioAgent"></textarea>
+          <div class="composer-actions">
+            <button id="stop" class="stop-button" type="button" aria-label="Stop current request" title="Stop current request" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor"/>
+              </svg>
+            </button>
+            <button id="send" class="send-button" type="submit" aria-label="Send">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <aside class="right-sidebar">
+      <div class="sidebar-panel examples-panel">
+        <div>
+          <label>Examples</label>
+          <div class="sidebar-hint">Click one to fill the message box</div>
+        </div>
+        <div class="examples">
+          <button class="example-button" data-example="What is GC content?">What is GC content?</button>
+          <button class="example-button" data-example="Analyze PhiX174 segment sequence GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT">Analyze PhiX174</button>
+          <button class="example-button" data-example="Analyze the structure of 3GOU">Analyze PDB 3GOU</button>
+          <button class="example-button" data-example="Search UniProt for BRCA1 human">Search UniProt</button>
+          <button class="example-button" data-example="Summarize genome structure and host range of PhiX174 with trusted sources.">Species report</button>
+          <button class="example-button" data-example="Run pipeline with pipeline_name: generic_shell">Run shell pipeline</button>
+          <button class="example-button" data-example="Run pipeline with pipeline_name: generic_snakemake">Run Snakemake pipeline</button>
+          <button class="example-button" data-example="Run pipeline with pipeline_name: generic_wdl">Run WDL pipeline</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/2.5.3/3Dmol-min.js"></script>
+  <script src="/static/markdown.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

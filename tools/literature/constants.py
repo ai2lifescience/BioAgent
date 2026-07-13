@@ -1,0 +1,50 @@
+"""Literature collection constants."""
+
+EUTILS_BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
+PUBMED_BASE_URL = "https://pubmed.ncbi.nlm.nih.gov"
+REQUEST_TIMEOUT = 30
+REQUEST_RETRIES = 1
+DEFAULT_USER_AGENT = "BioAgent/1.0 (+https://example.local; pubmed collection)"
+STOPWORDS = {
+    "about",
+    "according",
+    "after",
+    "against",
+    "also",
+    "analysis",
+    "answer",
+    "before",
+    "between",
+    "concern",
+    "concerned",
+    "could",
+    "from",
+    "give",
+    "have",
+    "into",
+    "know",
+    "knowledge",
+    "like",
+    "more",
+    "please",
+    "pubmed",
+    "report",
+    "search",
+    "show",
+    "source",
+    "sources",
+    "species",
+    "their",
+    "there",
+    "these",
+    "this",
+    "trusted",
+    "using",
+    "what",
+    "when",
+    "where",
+    "which",
+    "with",
+    "website",
+    "who",
+}

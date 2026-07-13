@@ -1,0 +1,35 @@
+- prompt: "Please test skill calling by running the example skill with message hello and tag smoke."
+  expected_route: direct_skill
+  expected_skill: example_skill
+
+- prompt: "download 10 records phiX174 genes A G"
+  expected_route: direct_skill
+  expected_skill: ncbi_retrieval
+
+- prompt: "Summarize genome structure and host range of PhiX174 with trusted sources."
+  expected_route: direct_skill
+  expected_skill: species_report
+
+- prompt: "Analyze PhiX174 segment sequence GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT"
+  expected_route: direct_skill
+  expected_skill: sequence_analysis
+
+- prompt: "Show genome structure of the latest FASTA as a circular map"
+  expected_route: direct_skill
+  expected_skill: genome_map
+
+- prompt: "Search UniProt for BRCA1 human"
+  expected_route: direct_skill
+  expected_skill: database_lookup
+
+- prompt: "Download PDB structure 1A3N as cif"
+  expected_route: direct_skill
+  expected_skill: pdb_download
+
+- prompt: "Analyze structure file runtime/sessions/demo/artifacts/structures/1A3N.cif"
+  expected_route: direct_skill
+  expected_skill: protein_structure_analysis
+
+- prompt: "Analyze the structure of 3GOU"
+  expected_route: direct_skill
+  expected_skill: protein_structure_analysis

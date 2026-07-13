@@ -1,0 +1,36 @@
+name: generic_snakemake
+engine: snakemake
+config: config.yaml
+snakefile: Snakefile
+cores: 1
+timeout: 300
+inputs:
+  sequence:
+    label: Sequence FASTA
+    config_key: input_path
+    required: true
+    accepts: [".fa", ".fasta", ".fna"]
+  metadata:
+    label: Metadata table
+    config_key: metadata_path
+    required: true
+    accepts: [".tsv", ".csv"]
+outputs:
+  report:
+    label: Report
+    config_key: report_path
+    default: output/report.md
+    kind: report
+    required: true
+  metrics:
+    label: Metrics
+    config_key: metrics_path
+    default: output/metrics.json
+    kind: metrics
+    required: true
+  normalized_sequence:
+    label: Normalized sequence
+    config_key: normalized_fasta_path
+    default: output/normalized.fasta
+    kind: sequence
+    required: true

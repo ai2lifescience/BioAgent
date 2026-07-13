@@ -1,0 +1,167 @@
+"""No-network architecture smoke checks."""
+
+from __future__ import annotations
+
+from pathlib import Path
+import sys
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from agent_core.router import IntentRouter
+from agent_core.planner import Planner
+from registries.skill_registry import list_skill_names
+from registries.tool_registry import list_tool_names
+
+
+def main() -> int:
+    skills = set(list_skill_names())
+    assert {
+        "example_skill",
+        "ncbi_retrieval",
+        "pipeline_runner",
+        "species_report",
+        "pdb_download",
+        "protein_structure_analysis",
+        "genome_map",
+    } <= skills
+    tools = set(list_tool_names())
+    assert {
+        "echo",
+        "ncbi_fetch",
+        "pipeline_runner",
+        "sequence_analyze",
+        "genome_map",
+        "protein_structure_analyze",
+        "bio_database_search",
+        "pdb_download",
+    } <= tools
+
+    router = IntentRouter()
+    example_route = router.route(
+        "Please test skill calling by running the example skill with message hello and tag smoke."
+    )
+    assert example_route.mode == "direct_skill"
+    assert example_route.skill_name == "example_skill"
+
+    shell_route = router.route("Run the shell pipeline.")
+    assert shell_route.mode == "direct_skill"
+    assert shell_route.skill_name == "pipeline_runner"
+    assert shell_route.arguments["pipeline_name"] == "generic_shell"
+
+    snakemake_route = router.route("Run the example snakemake pipeline dry-run with 2 cores.")
+    assert snakemake_route.mode == "direct_skill"
+    assert snakemake_route.skill_name == "pipeline_runner"
+    assert snakemake_route.arguments["pipeline_name"] == "generic_snakemake"
+    assert snakemake_route.arguments["dry_run"] is True
+    assert snakemake_route.arguments["cores"] == 2
+
+    ncbi_route = router.route("download 10 records phiX174 genes A G")
+    assert ncbi_route.mode == "direct_skill"
+    assert ncbi_route.skill_name == "ncbi_retrieval"
+
+    report_route = router.route(
+        "Summarize genome structure and host range of PhiX174 with trusted sources."
+    )
+    assert report_route.mode == "direct_skill"
+    assert report_route.skill_name == "species_report"
+
+    compare_route = router.route(
+        "Compare PhiX174 and M13 genome structure, host range, and applications."
+    )
+    assert compare_route.mode == "llm_skill_loop"
+    assert compare_route.arguments["entities"] == ["PhiX174", "M13"]
+    assert "genome structure" in compare_route.arguments["focus"]
+    compare_plan = Planner().plan(
+        user_request="Compare PhiX174 and M13 genome structure, host range, and applications.",
+        route=compare_route,
+    )
+    assert compare_plan.mode == "llm_skill_loop"
+    assert [step.kind for step in compare_plan.steps] == [
+        "llm_skill_loop",
+        "evidence",
+        "verification",
+        "respond",
+    ]
+    natural_compare_route = router.route("How are PhiX174 and M13 different?")
+    assert natural_compare_route.mode == "llm_skill_loop"
+    assert natural_compare_route.arguments["entities"] == ["PhiX174", "M13"]
+
+    evidence_review_route = router.route(
+        "Summarize evidence for gene X in disease Y from PubMed and explain conflicts"
+    )
+    assert evidence_review_route.mode == "llm_skill_loop"
+    assert evidence_review_route.skill_name is None
+    assert evidence_review_route.arguments["task_type"] == "literature_evidence_review"
+
+    pubmed_gene_route = router.route("Find PubMed papers for TP53")
+    assert pubmed_gene_route.mode == "llm_skill_loop"
+    assert pubmed_gene_route.skill_name is None
+
+    sequence_route = router.route("Analyze PhiX174 segment sequence GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT")
+    assert sequence_route.mode == "direct_skill"
+    assert sequence_route.skill_name == "sequence_analysis"
+
+    genome_map_route = router.route("Show genome structure of the latest FASTA as a circular map")
+    assert genome_map_route.mode == "direct_skill"
+    assert genome_map_route.skill_name == "genome_map"
+    assert genome_map_route.arguments["artifact_ref"] == "latest_fasta"
+    assert genome_map_route.arguments["layout"] == "circular"
+    species_structure_route = router.route("Show genome structure and host range for PhiX174")
+    assert species_structure_route.mode == "direct_skill"
+    assert species_structure_route.skill_name == "species_report"
+
+    uniprot_route = router.route("Search UniProt for BRCA1 human")
+    assert uniprot_route.mode == "direct_skill"
+    assert uniprot_route.skill_name == "database_lookup"
+
+    pdb_download_route = router.route("Download PDB structure 1A3N as cif")
+    assert pdb_download_route.mode == "direct_skill"
+    assert pdb_download_route.skill_name == "pdb_download"
+    assert pdb_download_route.arguments["pdb_id"] == "1A3N"
+    assert pdb_download_route.arguments["file_format"] == "cif"
+
+    structure_route = router.route(
+        "Analyze structure file runtime/sessions/demo/artifacts/structures/1A3N.cif"
+    )
+    assert structure_route.mode == "direct_skill"
+    assert structure_route.skill_name == "protein_structure_analysis"
+    assert structure_route.arguments["structure_path"].endswith("1A3N.cif")
+
+    latest_structure_route = router.route("Analyze the latest structure")
+    assert latest_structure_route.mode == "direct_skill"
+    assert latest_structure_route.skill_name == "protein_structure_analysis"
+    assert latest_structure_route.arguments["artifact_ref"] == "latest_structure"
+
+    pdb_structure_route = router.route("Analyze the structure of 3GOU")
+    assert pdb_structure_route.mode == "direct_skill"
+    assert pdb_structure_route.skill_name == "protein_structure_analysis"
+    assert pdb_structure_route.arguments["pdb_id"] == "3GOU"
+
+    help_route = router.route("help")
+    assert help_route.mode == "control_response"
+    help_plan = Planner().plan(user_request="help", route=help_route)
+    assert help_plan.mode == "control_response"
+    assert [(step.kind, step.name) for step in help_plan.steps] == [
+        ("respond", "control_response"),
+    ]
+
+    llm_response_route = router.route("What is GC content?")
+    assert llm_response_route.mode == "llm_response"
+    llm_response_plan = Planner().plan(
+        user_request="What is GC content?",
+        route=llm_response_route,
+    )
+    assert llm_response_plan.mode == "llm_response"
+    assert [step.kind for step in llm_response_plan.steps] == [
+        "llm_response",
+        "verification",
+        "respond",
+    ]
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

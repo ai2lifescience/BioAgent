@@ -1,0 +1,122 @@
+import json
+import os
+import re
+
+
+LABEL = config.get("label", "generic_snakemake")
+INPUT_PATH = config["input_path"]
+METADATA_PATH = config.get("metadata_path", "")
+OUTPUT_DIR = config.get("output_dir", "output")
+PARAMS = config.get("params", {})
+
+SEGMENT = str(PARAMS.get("segment", "segment1"))
+NORMALIZED_FASTA = config.get("normalized_fasta_path") or f"{OUTPUT_DIR}/normalized.fasta"
+METRICS_PATH = config.get("metrics_path") or f"{OUTPUT_DIR}/metrics.json"
+REPORT_PATH = config.get("report_path") or f"{OUTPUT_DIR}/report.md"
+
+
+def ensure_parent(path):
+    parent = os.path.dirname(str(path))
+    if parent:
+        os.makedirs(parent, exist_ok=True)
+
+
+def clean_fasta_sequence(path):
+    sequence_parts = []
+    with open(path, "r", encoding="utf-8") as handle:
+        for line in handle:
+            line = line.strip()
+            if not line or line.startswith(">"):
+                continue
+            sequence_parts.append(re.sub(r"[^A-Za-z*-]", "", line).upper())
+    return "".join(sequence_parts)
+
+
+def metadata_rows(path):
+    if not path:
+        return 0
+    with open(path, "r", encoding="utf-8") as handle:
+        lines = [line for line in handle.read().splitlines() if line.strip()]
+    return max(0, len(lines) - 1)
+
+
+rule all:
+    input:
+        REPORT_PATH,
+        METRICS_PATH,
+        NORMALIZED_FASTA,
+
+
+rule normalize_sequence:
+    input:
+        INPUT_PATH
+    output:
+        NORMALIZED_FASTA
+    run:
+        ensure_parent(output[0])
+        sequence = clean_fasta_sequence(input[0])
+        with open(output[0], "w", encoding="utf-8") as handle:
+            handle.write(f">{LABEL}|{SEGMENT}\n")
+            for index in range(0, len(sequence), 80):
+                handle.write(sequence[index:index + 80] + "\n")
+
+
+rule metrics:
+    input:
+        sequence=NORMALIZED_FASTA,
+    output:
+        METRICS_PATH
+    run:
+        ensure_parent(output[0])
+        sequence = clean_fasta_sequence(input.sequence)
+        min_length = int(PARAMS.get("min_length", 0) or 0)
+        metrics = {
+            "status": "ok",
+            "pipeline": "generic_snakemake",
+            "label": LABEL,
+            "analysis_mode": PARAMS.get("analysis_mode", "example"),
+            "subtype": PARAMS.get("subtype", ""),
+            "segment": SEGMENT,
+            "time": PARAMS.get("time", ""),
+            "metadata_rows": metadata_rows(METADATA_PATH),
+            "sequence_length": len(sequence),
+            "passes_min_length": len(sequence) >= min_length,
+            "min_length": min_length,
+            "gc_percent": round(
+                ((sequence.count("G") + sequence.count("C")) / len(sequence) * 100)
+                if sequence else 0,
+                2,
+            ),
+        }
+        with open(output[0], "w", encoding="utf-8") as handle:
+            json.dump(metrics, handle, indent=2)
+
+
+rule report:
+    input:
+        metrics=METRICS_PATH
+    output:
+        REPORT_PATH
+    run:
+        ensure_parent(output[0])
+        with open(input.metrics, "r", encoding="utf-8") as handle:
+            metrics = json.load(handle)
+        lines = [
+            "# Generic Snakemake Pipeline Report",
+            "",
+            f"- Label: {LABEL}",
+            f"- Input: {INPUT_PATH}",
+            f"- Metadata: {METADATA_PATH or 'none'}",
+            f"- Output directory: {OUTPUT_DIR}",
+            f"- Analysis mode: {metrics['analysis_mode']}",
+            f"- Subtype: {metrics['subtype']}",
+            f"- Segment: {metrics['segment']}",
+            f"- Time: {metrics['time']}",
+            f"- Metadata rows: {metrics['metadata_rows']}",
+            f"- Sequence length: {metrics['sequence_length']}",
+            f"- Minimum length: {metrics['min_length']}",
+            f"- Passes minimum length: {metrics['passes_min_length']}",
+            f"- GC percent: {metrics['gc_percent']}",
+        ]
+        with open(output[0], "w", encoding="utf-8") as handle:
+            handle.write("\n".join(lines) + "\n")

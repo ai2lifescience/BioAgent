@@ -1,0 +1,31 @@
+name: generic_wdl
+engine: wdl
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 300
+inputs:
+  sequence:
+    label: Sequence FASTA
+    wdl_key: GenericWdl.input_fasta
+    required: true
+    accepts: [".fa", ".fasta", ".fna"]
+outputs:
+  report:
+    label: Report
+    wdl_output: GenericWdl.report
+    target: output/report.md
+    kind: report
+    required: true
+  metrics:
+    label: Metrics
+    wdl_output: GenericWdl.metrics
+    target: output/metrics.json
+    kind: metrics
+    required: true
+  normalized_sequence:
+    label: Normalized sequence
+    wdl_output: GenericWdl.normalized_fasta
+    target: output/normalized.fasta
+    kind: sequence
+    required: true
