@@ -43,13 +43,20 @@ python -m pip install -r requirements.txt
 The default model uses OpenRouter. Set an API key before using LLM-backed chat,
 planning, or report generation:
 
+On Linux or macOS Bash:
+
 ```bash
 export OPENROUTER_API_KEY="your-openrouter-api-key"
 ```
 
+On Windows PowerShell:
+
 ```powershell
 $env:OPENROUTER_API_KEY = "your-openrouter-api-key"
 ```
+
+Replace the placeholder with your real key. The variable is available to
+BioAgent commands started from the current terminal session.
 
 Deterministic operations such as sequence analysis and some public database
 requests can run without an LLM key.
