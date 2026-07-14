@@ -1,7 +1,7 @@
 # BioAgent Development Workflow
 
-Use this branch-and-pull-request workflow when developing BioAgent with the team.
-The example below adds this documentation file to the project.
+Use one short-lived branch and one pull request for each task. This example
+updates `README.md`.
 
 ## 1. Prepare The Repository
 
@@ -12,24 +12,53 @@ git clone https://github.com/ai2lifescience/BioAgent.git
 cd BioAgent
 ```
 
-Before every new task, update the stable branch:
+Before each task, update the stable branch:
 
 ```bash
 git switch main
 git pull --ff-only origin main
 ```
 
-## 2. Create A Task Branch
+### Troubleshooting: Local Changes Block Pulling
 
-Use a short branch name that describes the task:
+> Skip this subsection if `git pull --ff-only origin main` succeeds.
+
+Git stops a pull when it would overwrite local changes. Inspect them first:
 
 ```bash
-git switch -c docs/git-workflow-example
+git status
+git diff
 ```
 
-Examples for other work:
+The common solution for unfinished work is to stash it, update `main`, create a
+task branch, and restore the work there:
 
-```text/
+```bash
+git stash push -u -m "Temporary README work"
+git pull --ff-only origin main
+git switch -c docs/update-readme
+git stash pop
+```
+
+Resolve any conflicts from `git stash pop`, then continue at step 3. If the
+local edit is not needed, discard only that file and pull again:
+
+```bash
+git restore README.md
+git pull --ff-only origin main
+```
+
+## 2. Create A Task Branch
+
+Use a unique name that describes the work:
+
+```bash
+git switch -c docs/update-readme
+```
+
+Other examples:
+
+```text
 feature/add-uniprot-tool
 fix/pipeline-input-path
 docs/update-web-guide
@@ -37,208 +66,124 @@ docs/update-web-guide
 
 ## 3. Make And Review Changes
 
-Edit the files, then inspect the workspace:
+Edit `README.md`, then inspect the workspace:
 
 ```bash
 git status --short
-git diff
+git diff -- README.md
 ```
 
-For this example, the new file is `docs/dev_workflow.md`.
+Keep the change focused on the task. Do not include unrelated generated files
+or local runtime data.
 
 ## 4. Run Tests
 
-Run the checks before committing:
+Run the project checks before committing:
 
 ```bash
 python -m evals.smoke_architecture
 python -m evals.smoke_session_artifacts
 ```
 
-Add focused tests for new behavior when smoke checks are not enough.
+Add focused tests when the change affects behavior not covered by smoke checks.
 
 ## 5. Commit The Change
 
 Stage only the files that belong to the task:
 
 ```bash
-git add docs/dev_workflow.md
+git add README.md
 git diff --cached
-git commit -m "Add team development workflow"
+git commit -m "Update README"
 ```
 
 ## 6. Push And Open A Pull Request
 
-Push the task branch:
+Push the current task branch:
 
 ```bash
 git branch --show-current
 git push -u origin "$(git branch --show-current)"
 ```
 
-Open a pull request from the current branch. The `--fill` option uses the commit
-message for the initial title and description:
+Create a pull request from the current branch:
 
 ```bash
 gh pr create --base main --fill
 ```
 
-A teammate reviews the files and tests. Address requested changes on the same
-branch, commit them, and push again; the pull request updates automatically.
+### Troubleshooting: A Pull Request Already Exists
 
-### A Pull Request Already Exists
+> Skip this subsection if `gh pr create --base main --fill` creates the PR.
 
-GitHub allows only one open pull request for the same task branch and base
-branch. If `gh pr create` reports that a pull request already exists, open it:
+GitHub allows only one open pull request from the same branch into `main`. If a
+PR already exists, open it instead of creating another one:
 
 ```bash
 gh pr view --web
 ```
 
-Do not create another pull request. Push additional commits to the same branch;
-the existing pull request updates automatically.
+Push new commits to the same branch and the existing PR updates automatically.
+Use a new branch for a different task.
 
-If the existing pull request is obsolete or duplicates work that was already
-merged, confirm that it contains no unique changes before closing it:
+If the PR is obsolete, confirm that it has no unique work before closing it:
 
 ```bash
-gh pr close <PR_NUMBER> --delete-branch
+gh pr close "$(git branch --show-current)" --delete-branch
 ```
-
-Create a new, uniquely named task branch for any new work.
 
 ## 7. Merge The Pull Request
 
-After approval and successful tests, merge it on GitHub or run:
+After review and successful tests, merge the PR associated with the current
+branch:
 
 ```bash
 gh pr merge --squash --delete-branch
 ```
 
-### Resolve A Merge Conflict
+No PR number is needed when the current branch has an open pull request.
 
-If GitHub says the merge cannot be cleanly created, first check whether the pull
-request is duplicate or no longer needed. Close a redundant pull request:
+### Troubleshooting: Pull Request Merge Conflicts
 
-```bash
-gh pr close <PR_NUMBER> --delete-branch
-```
+> Skip this subsection if `gh pr merge --squash --delete-branch` succeeds.
 
-For a required pull request, merge the latest `main` into its task branch:
+If GitHub says the merge cannot be cleanly created, update the task branch with
+the latest `main`:
 
 ```bash
-git switch <TASK_BRANCH>
 git fetch origin
 git merge origin/main
 ```
 
 Edit each conflicted file, choose the correct content, and remove Git's conflict
-markers. Then update the pull request and retry the merge:
+markers. Then finish the merge and update the PR:
 
 ```bash
-git add <CONFLICTED_FILE>
-git commit -m "Resolve merge conflict with main"
+git add README.md
+git commit -m "Resolve README conflict with main"
 git push
-gh pr merge <PR_NUMBER> --squash --delete-branch
+gh pr merge --squash --delete-branch
 ```
 
 The `--auto` option can wait for reviews or checks, but it cannot resolve file
-conflicts.
-
-Use repository branch protection if review must be mandatory.
+conflicts. If the PR duplicates work already merged, close it instead of
+resolving an unnecessary conflict.
 
 ## 8. Update The Local Repository
 
-Return to the latest `main` after the merge:
+Return to the latest `main` after the PR is merged:
 
 ```bash
 git switch main
 git pull --ff-only origin main
-git branch --list
 git status
 ```
 
 The task is complete when `main` contains the change and the working tree is
 clean.
 
-### Local Changes Block Pulling
-
-Git refuses to pull when an incoming commit would overwrite uncommitted local
-changes:
-
-```text
-error: Your local changes would be overwritten by merge
-```
-
-Inspect the changes before choosing how to proceed:
-
-```bash
-git status
-git diff
-```
-
-#### Keep The Changes
-
-The recommended solution is to move the work onto a task branch:
-
-```bash
-git switch -c docs/update-readme
-git add README.md
-git commit -m "Update README"
-
-git switch main
-git pull --ff-only origin main
-
-git switch docs/update-readme
-git rebase main
-```
-
-If the rebase reports a conflict, edit the conflicted file, remove the conflict
-markers, and continue:
-
-```bash
-git add README.md
-git rebase --continue
-```
-
-Push the updated task branch when it is ready:
-
-```bash
-git push -u origin docs/update-readme
-```
-
-#### Stash Unfinished Changes
-
-Use a stash when the work is not ready to commit:
-
-```bash
-git stash push -u -m "Temporary local work"
-git pull --ff-only origin main
-git switch -c docs/update-readme
-git stash pop
-```
-
-Resolve any conflicts from `git stash pop`, then commit the work normally.
-
-#### Discard Unwanted Changes
-
-Only discard a local edit after confirming that it is not needed:
-
-```bash
-git restore README.md
-git pull --ff-only origin main
-```
-
-Avoid this problem by updating `main` and creating a task branch before editing:
-
-```bash
-git switch main
-git pull --ff-only origin main
-git switch -c feature/my-task
-```
-
 ## Team Responsibilities
 
 The principal sets priorities and approves important architecture changes.
-Team members use focused branches, implement and test tasks, and review pull
-requests. Keep `main` stable and do not develop directly on it.
+Team members implement focused tasks, run tests, and review pull requests. Keep
+`main` stable and do not develop directly on it.
