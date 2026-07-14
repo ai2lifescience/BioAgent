@@ -72,21 +72,40 @@ git commit -m "Add team development workflow"
 Push the task branch:
 
 ```bash
-git push -u origin docs/git-workflow-example
+git branch --show-current
+git push -u origin "$(git branch --show-current)"
 ```
 
-Open a pull request with GitHub CLI:
+Open a pull request from the current branch. The `--fill` option uses the commit
+message for the initial title and description:
 
 ```bash
-gh pr create \
-  --base main \
-  --head docs/git-workflow-example \
-  --title "Add team development workflow" \
-  --body "Documents the BioAgent branch, test, review, and merge workflow."
+gh pr create --base main --fill
 ```
 
 A teammate reviews the files and tests. Address requested changes on the same
 branch, commit them, and push again; the pull request updates automatically.
+
+### A Pull Request Already Exists
+
+GitHub allows only one open pull request for the same task branch and base
+branch. If `gh pr create` reports that a pull request already exists, open it:
+
+```bash
+gh pr view --web
+```
+
+Do not create another pull request. Push additional commits to the same branch;
+the existing pull request updates automatically.
+
+If the existing pull request is obsolete or duplicates work that was already
+merged, confirm that it contains no unique changes before closing it:
+
+```bash
+gh pr close <PR_NUMBER> --delete-branch
+```
+
+Create a new, uniquely named task branch for any new work.
 
 ## 7. Merge The Pull Request
 
