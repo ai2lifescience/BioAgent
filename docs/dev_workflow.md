@@ -112,16 +112,84 @@ git status
 The task is complete when `main` contains the change and the working tree is
 clean.
 
+## Troubleshooting Local Changes Before Pulling
+
+Git refuses to pull when an incoming commit would overwrite uncommitted local
+changes:
+
+```text
+error: Your local changes would be overwritten by merge
+```
+
+Inspect the changes before choosing how to proceed:
+
+```bash
+git status
+git diff
+```
+
+### Keep The Changes
+
+The recommended solution is to move the work onto a task branch:
+
+```bash
+git switch -c docs/update-readme
+git add README.md
+git commit -m "Update README"
+
+git switch main
+git pull --ff-only origin main
+
+git switch docs/update-readme
+git rebase main
+```
+
+If the rebase reports a conflict, edit the conflicted file, remove the conflict
+markers, and continue:
+
+```bash
+git add README.md
+git rebase --continue
+```
+
+Push the updated task branch when it is ready:
+
+```bash
+git push -u origin docs/update-readme
+```
+
+### Stash Unfinished Changes
+
+Use a stash when the work is not ready to commit:
+
+```bash
+git stash push -u -m "Temporary local work"
+git pull --ff-only origin main
+git switch -c docs/update-readme
+git stash pop
+```
+
+Resolve any conflicts from `git stash pop`, then commit the work normally.
+
+### Discard Unwanted Changes
+
+Only discard a local edit after confirming that it is not needed:
+
+```bash
+git restore README.md
+git pull --ff-only origin main
+```
+
+Avoid this problem by updating `main` and creating a task branch before editing:
+
+```bash
+git switch main
+git pull --ff-only origin main
+git switch -c feature/my-task
+```
+
 ## Team Responsibilities
 
 The principal sets priorities and approves important architecture changes.
 Team members use focused branches, implement and test tasks, and review pull
 requests. Keep `main` stable and do not develop directly on it.
-
-
-
-
-
-
-
-
