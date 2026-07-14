@@ -96,6 +96,36 @@ After approval and successful tests, merge it on GitHub or run:
 gh pr merge --squash --delete-branch
 ```
 
+### Resolve A Merge Conflict
+
+If GitHub says the merge cannot be cleanly created, first check whether the pull
+request is duplicate or no longer needed. Close a redundant pull request:
+
+```bash
+gh pr close <PR_NUMBER> --delete-branch
+```
+
+For a required pull request, merge the latest `main` into its task branch:
+
+```bash
+git switch <TASK_BRANCH>
+git fetch origin
+git merge origin/main
+```
+
+Edit each conflicted file, choose the correct content, and remove Git's conflict
+markers. Then update the pull request and retry the merge:
+
+```bash
+git add <CONFLICTED_FILE>
+git commit -m "Resolve merge conflict with main"
+git push
+gh pr merge <PR_NUMBER> --squash --delete-branch
+```
+
+The `--auto` option can wait for reviews or checks, but it cannot resolve file
+conflicts.
+
 Use repository branch protection if review must be mandatory.
 
 ## 8. Update The Local Repository
@@ -112,7 +142,7 @@ git status
 The task is complete when `main` contains the change and the working tree is
 clean.
 
-## Troubleshooting Local Changes Before Pulling
+### Local Changes Block Pulling
 
 Git refuses to pull when an incoming commit would overwrite uncommitted local
 changes:
@@ -128,7 +158,7 @@ git status
 git diff
 ```
 
-### Keep The Changes
+#### Keep The Changes
 
 The recommended solution is to move the work onto a task branch:
 
@@ -158,7 +188,7 @@ Push the updated task branch when it is ready:
 git push -u origin docs/update-readme
 ```
 
-### Stash Unfinished Changes
+#### Stash Unfinished Changes
 
 Use a stash when the work is not ready to commit:
 
@@ -171,7 +201,7 @@ git stash pop
 
 Resolve any conflicts from `git stash pop`, then commit the work normally.
 
-### Discard Unwanted Changes
+#### Discard Unwanted Changes
 
 Only discard a local edit after confirming that it is not needed:
 
