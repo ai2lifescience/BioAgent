@@ -134,6 +134,10 @@ gh pr close "$(git branch --show-current)" --delete-branch
 
 ## 7. Merge The Pull Request
 
+> **BioAgent policy:** Only the principal repository administrator merges pull
+> requests into `main`. Contributors create branches, open PRs, and review
+> changes, but they do not run the merge command.
+
 After review and successful tests, merge the PR associated with the current
 branch:
 
