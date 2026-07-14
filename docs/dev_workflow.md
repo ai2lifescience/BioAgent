@@ -72,21 +72,40 @@ git commit -m "Add team development workflow"
 Push the task branch:
 
 ```bash
-git push -u origin docs/git-workflow-example
+git branch --show-current
+git push -u origin "$(git branch --show-current)"
 ```
 
-Open a pull request with GitHub CLI:
+Open a pull request from the current branch. The `--fill` option uses the commit
+message for the initial title and description:
 
 ```bash
-gh pr create \
-  --base main \
-  --head docs/git-workflow-example \
-  --title "Add team development workflow" \
-  --body "Documents the BioAgent branch, test, review, and merge workflow."
+gh pr create --base main --fill
 ```
 
 A teammate reviews the files and tests. Address requested changes on the same
 branch, commit them, and push again; the pull request updates automatically.
+
+### A Pull Request Already Exists
+
+GitHub allows only one open pull request for the same task branch and base
+branch. If `gh pr create` reports that a pull request already exists, open it:
+
+```bash
+gh pr view --web
+```
+
+Do not create another pull request. Push additional commits to the same branch;
+the existing pull request updates automatically.
+
+If the existing pull request is obsolete or duplicates work that was already
+merged, confirm that it contains no unique changes before closing it:
+
+```bash
+gh pr close <PR_NUMBER> --delete-branch
+```
+
+Create a new, uniquely named task branch for any new work.
 
 ## 7. Merge The Pull Request
 
@@ -95,6 +114,36 @@ After approval and successful tests, merge it on GitHub or run:
 ```bash
 gh pr merge --squash --delete-branch
 ```
+
+### Resolve A Merge Conflict
+
+If GitHub says the merge cannot be cleanly created, first check whether the pull
+request is duplicate or no longer needed. Close a redundant pull request:
+
+```bash
+gh pr close <PR_NUMBER> --delete-branch
+```
+
+For a required pull request, merge the latest `main` into its task branch:
+
+```bash
+git switch <TASK_BRANCH>
+git fetch origin
+git merge origin/main
+```
+
+Edit each conflicted file, choose the correct content, and remove Git's conflict
+markers. Then update the pull request and retry the merge:
+
+```bash
+git add <CONFLICTED_FILE>
+git commit -m "Resolve merge conflict with main"
+git push
+gh pr merge <PR_NUMBER> --squash --delete-branch
+```
+
+The `--auto` option can wait for reviews or checks, but it cannot resolve file
+conflicts.
 
 Use repository branch protection if review must be mandatory.
 
@@ -112,7 +161,7 @@ git status
 The task is complete when `main` contains the change and the working tree is
 clean.
 
-## Troubleshooting Local Changes Before Pulling
+### Local Changes Block Pulling
 
 Git refuses to pull when an incoming commit would overwrite uncommitted local
 changes:
@@ -128,7 +177,7 @@ git status
 git diff
 ```
 
-### Keep The Changes
+#### Keep The Changes
 
 The recommended solution is to move the work onto a task branch:
 
@@ -158,7 +207,7 @@ Push the updated task branch when it is ready:
 git push -u origin docs/update-readme
 ```
 
-### Stash Unfinished Changes
+#### Stash Unfinished Changes
 
 Use a stash when the work is not ready to commit:
 
@@ -171,7 +220,7 @@ git stash pop
 
 Resolve any conflicts from `git stash pop`, then commit the work normally.
 
-### Discard Unwanted Changes
+#### Discard Unwanted Changes
 
 Only discard a local edit after confirming that it is not needed:
 
