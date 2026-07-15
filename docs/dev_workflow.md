@@ -40,10 +40,20 @@ git switch -c docs/update-readme
 git stash pop
 ```
 
-Resolve any conflicts from `git stash pop`, then continue at step 3. If the
-local edit is not needed, discard only that file and pull again:
+Resolve any conflicts from `git stash pop`, then continue at step 3.
+
+#### Danger: Discarding Local Work
+
+> **Warning:** `git restore README.md` immediately deletes every uncommitted
+> change in the local `README.md`. Git normally cannot recover those edits. Do
+> not use this command as the default solution to a blocked pull; use the stash
+> method above when the work might be needed.
+
+Run the following commands only after `git diff` confirms that every displayed
+local change can be permanently discarded:
 
 ```bash
+git diff -- README.md
 git restore README.md
 git pull --ff-only origin main
 ```
