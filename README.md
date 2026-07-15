@@ -8,7 +8,7 @@ CLI, API, and Python interface.
 
 ## What BioAgent Does
 
-![BioAgent functions](docs/images/system_functions.png)
+BioAgent functions
 
 BioAgent can:
 
@@ -20,7 +20,11 @@ BioAgent can:
 - run Shell, Snakemake, and WDL pipelines; and
 - retain uploads and generated artifacts within a chat session.
 
+
+
 ## Quick Start
+
+
 
 ### 1. Get The Project
 
@@ -28,6 +32,8 @@ BioAgent can:
 git clone https://github.com/ai2lifescience/BioAgent.git
 cd BioAgent
 ```
+
+
 
 ### 2. Create An Environment
 
@@ -37,6 +43,8 @@ conda activate bioagent
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
+
+
 
 ### 3. Configure A Model
 
@@ -65,7 +73,7 @@ python -B -m interfaces.web --host 127.0.0.1 --port 8000
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in a browser. Stop the
 server with `Ctrl+C`.
 
-![BioAgent web interface](docs/images/web_ui.png)
+BioAgent web interface
 
 ### 5. Use BioAgent
 
@@ -105,7 +113,7 @@ Then open `http://<SERVER_LAN_IP>:8000` from the other computer.
 
 ## Architecture
 
-![BioAgent system architecture](docs/images/system_architecture.png)
+BioAgent system architecture
 
 ```text
 User / App
@@ -133,11 +141,15 @@ evidence, verification results, artifacts, and runtime trace events.
 
 ## Other Interfaces
 
+
+
 ### CLI
 
 ```bash
 python -m interfaces.cli "Search UniProt for BRCA1 human"
 ```
+
+
 
 ### HTTP API
 
@@ -149,6 +161,8 @@ curl -X POST http://127.0.0.1:8000/run \
   -d '{"request": "What is GC content?"}'
 ```
 
+
+
 ### Python
 
 ```python
@@ -158,15 +172,19 @@ result = run_bioagent("Analyze PhiX174")
 print(result["answer"])
 ```
 
+
+
 ## Pipeline Notes
 
 - Shell pipelines use the local shell environment.
 - Snakemake pipelines require the `snakemake` package included in
-  `requirements.txt`.
+`requirements.txt`.
 - WDL pipelines use `miniwdl` and require a working Docker daemon plus access to
-  the task container images.
+the task container images.
 - Pipeline inputs should be supplied explicitly through the request or uploaded
-  through the web UI.
+through the web UI.
+
+
 
 ## Documentation
 

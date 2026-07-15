@@ -51,6 +51,11 @@ def pipeline_input_specs(runner_config: dict[str, Any]) -> dict[str, dict[str, A
             "required": bool(value.get("required", False)),
             "accepts": normalize_suffix_list(accepts),
             "description": str(value.get("description") or ""),
+            "multiple": bool(
+                value.get("multiple")
+                or value.get("array")
+                or str(value.get("type") or "").strip().lower() in {"array", "file_array", "array[file]"}
+            ),
         }
     return specs
 
@@ -80,8 +85,8 @@ def normalize_input_overrides(input_overrides: dict[str, Any] | None) -> dict[st
 def resolve_input_overrides(
     input_overrides: dict[str, str],
     input_specs: dict[str, dict[str, Any]],
-) -> tuple[dict[str, Path], list[dict[str, Any]]]:
-    resolved: dict[str, Path] = {}
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    resolved: dict[str, Any] = {}
     records: list[dict[str, Any]] = []
     for slot, path_value in input_overrides.items():
         spec = input_specs.get(slot)
@@ -89,18 +94,41 @@ def resolve_input_overrides(
             allowed = ", ".join(sorted(input_specs)) or "<none>"
             raise ValueError(f"Unknown pipeline input slot '{slot}'. Allowed slots: {allowed}.")
         config_key = str(spec.get("config_key") or slot)
-        path = resolve_project_path(path_value)
-        validate_input_path(path, spec)
+        path = resolve_input_value(path_value, spec)
+        validate_input_value(path, spec)
         resolved[config_key] = path
         records.append(
             {
                 "slot": slot,
                 "config_key": config_key,
-                "path": str(path),
+                "path": stringify_input_value(path),
                 "source": "input_overrides",
             }
         )
     return resolved, records
+
+
+def resolve_input_value(value: Any, spec: dict[str, Any] | None = None) -> Any:
+    """Resolve a pipeline input path or path list from a request/base config."""
+    if spec and spec.get("multiple"):
+        return [resolve_project_path(item) for item in split_input_paths(value)]
+    if isinstance(value, list):
+        if not value:
+            return []
+        return resolve_project_path(value[0])
+    return resolve_project_path(str(value))
+
+
+def split_input_paths(value: Any) -> list[str]:
+    if isinstance(value, list):
+        return [str(item).strip() for item in value if str(item).strip()]
+    text = str(value or "").strip()
+    if not text:
+        return []
+    separator = ";" if ";" in text else ","
+    if separator in text:
+        return [item.strip() for item in text.split(separator) if item.strip()]
+    return [text]
 
 
 def validate_input_path(path: Path, spec: dict[str, Any] | None = None) -> None:
@@ -117,10 +145,20 @@ def validate_input_path(path: Path, spec: dict[str, Any] | None = None) -> None:
         raise ValueError(f"Input {path} does not match accepted suffixes for {spec.get('name')}: {allowed}.")
 
 
+def validate_input_value(value: Any, spec: dict[str, Any] | None = None) -> None:
+    if isinstance(value, list):
+        if spec and spec.get("required") and not value:
+            raise ValueError(f"Required pipeline input '{spec.get('name')}' has no files.")
+        for path in value:
+            validate_input_path(path, spec)
+        return
+    validate_input_path(value, spec)
+
+
 def validate_declared_inputs(
     raw_config: dict[str, Any],
     input_specs: dict[str, dict[str, Any]],
-    resolved_input_overrides: dict[str, Path],
+    resolved_input_overrides: dict[str, Any],
     pipeline_dir: Path,
 ) -> None:
     for slot, spec in input_specs.items():
@@ -130,8 +168,15 @@ def validate_declared_inputs(
             if spec.get("required"):
                 raise ValueError(f"Required pipeline input '{slot}' is missing config key '{config_key}'.")
             continue
-        path = value if isinstance(value, Path) else resolve_pipeline_input_path(str(value), pipeline_dir)
-        validate_input_path(path, spec)
+        if isinstance(value, list):
+            paths = [
+                item if isinstance(item, Path) else resolve_pipeline_input_path(str(item), pipeline_dir)
+                for item in value
+            ]
+            validate_input_value(paths, spec)
+        else:
+            path = value if isinstance(value, Path) else resolve_pipeline_input_path(str(value), pipeline_dir)
+            validate_input_path(path, spec)
 
 
 def normalize_suffix_list(values: Any) -> list[str]:
@@ -142,6 +187,12 @@ def normalize_suffix_list(values: Any) -> list[str]:
             continue
         suffixes.append(suffix if suffix.startswith(".") else f".{suffix}")
     return suffixes
+
+
+def stringify_input_value(value: Any) -> Any:
+    if isinstance(value, list):
+        return [str(item) for item in value]
+    return str(value)
 
 
 def staged_input_records(context: PipelineContext) -> list[dict[str, Any]]:

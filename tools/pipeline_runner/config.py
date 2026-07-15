@@ -9,6 +9,7 @@ from typing import Any
 from tools.pipeline_config import load_yaml_config, write_yaml_config
 from tools.pipeline_runner.inputs import (
     rewrite_top_level_path_fields,
+    stringify_input_value,
     staged_input_records,
 )
 from tools.pipeline_runner.outputs import rewrite_output_config_fields
@@ -50,7 +51,13 @@ def write_runtime_config(
     """Write the config file passed to the concrete pipeline engine."""
     runtime_config = copy.deepcopy(context.raw_config)
     input_records = apply_input_overrides(runtime_config, context)
-    applied_config_overrides = apply_config_overrides(runtime_config, context.config_overrides)
+    applied_config_overrides = apply_runner_param_overrides(
+        runtime_config,
+        context.config_overrides,
+        context.runner_config,
+    )
+    if applied_config_overrides is None:
+        applied_config_overrides = apply_config_overrides(runtime_config, context.config_overrides)
     output_records = rewrite_output_config_fields(runtime_config, context)
     output_config_keys = {str(record.get("config_key") or "") for record in output_records}
     path_records = rewrite_top_level_path_fields(runtime_config, context, skip_keys=output_config_keys)
@@ -65,7 +72,10 @@ def write_runtime_config(
             "output_dir": str(context.output_dir),
             "label": context.label,
             "timeout": context.timeout,
-            "input_overrides": {key: str(path) for key, path in context.resolved_input_overrides.items()},
+            "input_overrides": {
+                key: stringify_input_value(path)
+                for key, path in context.resolved_input_overrides.items()
+            },
             **dict(extra or {}),
         }
     )
@@ -86,7 +96,7 @@ def apply_input_overrides(
 ) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
     for config_key, path in context.resolved_input_overrides.items():
-        runtime_config[config_key] = str(path)
+        runtime_config[config_key] = stringify_input_value(path)
     for record in context.input_override_records:
         config_key = str(record.get("config_key") or "")
         if not config_key or config_key == "input_path":
@@ -119,6 +129,41 @@ def apply_config_overrides(
     for key, requested_value in requested_overrides.items():
         params[key] = coerce_param_value(params[key], requested_value)
         applied[key] = requested_value
+    return applied
+
+
+def apply_runner_param_overrides(
+    runtime_config: dict[str, Any],
+    requested_overrides: dict[str, Any],
+    runner_config: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Apply runner-declared parameter overrides directly to config keys."""
+    specs = runner_config.get("param_overrides")
+    if not isinstance(specs, dict) or not specs:
+        return None
+
+    unknown = sorted(set(requested_overrides) - set(str(key) for key in specs))
+    if unknown:
+        allowed = ", ".join(sorted(str(key) for key in specs)) or "<none>"
+        raise ValueError(
+            f"Unsupported config override(s): {', '.join(unknown)}. "
+            f"Allowed params for this pipeline: {allowed}."
+        )
+
+    applied: dict[str, Any] = {}
+    for key, requested_value in requested_overrides.items():
+        spec = specs.get(key) or {}
+        if isinstance(spec, str):
+            target_key = spec
+            default = runtime_config.get(target_key)
+        elif isinstance(spec, dict):
+            target_key = str(spec.get("config_key") or spec.get("wdl_key") or spec.get("key") or key)
+            default = runtime_config.get(target_key, spec.get("default"))
+        else:
+            target_key = str(key)
+            default = runtime_config.get(target_key)
+        runtime_config[target_key] = coerce_param_value(default, requested_value)
+        applied[str(key)] = requested_value
     return applied
 
 
