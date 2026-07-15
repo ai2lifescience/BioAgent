@@ -291,5 +291,20 @@ git push -u origin fix/copy-architecture-fix
 gh pr create --base main --head fix/copy-architecture-fix --fill
 ```
 
+After the required review and checks pass, the principal repository
+administrator merges the pull request and deletes its temporary branch:
+
+```bash
+gh pr merge --squash --delete-branch
+```
+
+Then update the local `main` branch and remove stale remote references:
+
+```bash
+git switch main
+git pull --ff-only origin main
+git fetch --prune
+```
+
 Do not merge all of `dev/architecture` into `main` when only one fix is needed.
 The branches may have different files and squash-diverged histories.
