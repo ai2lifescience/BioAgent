@@ -46,6 +46,8 @@ The pipeline produces:
 - `metrics.json`: input size and subtype-assignment counts.
 - `report.md`: a human-readable run summary.
 
+The default run writes the complete generated output set under `data/output/`.
+
 Example subtype output:
 
 ```tsv

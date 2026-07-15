@@ -29,3 +29,5 @@ and the resulting sequence is converted to uppercase.
 - `metrics.json`: sequence length, GC percentage, metadata row count,
   minimum-length result, and analysis parameters.
 - `report.md`: human-readable summary of the metrics.
+
+The default run writes the complete generated output set under `data/output/`.
