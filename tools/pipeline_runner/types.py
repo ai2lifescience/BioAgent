@@ -25,7 +25,7 @@ class PipelineContext:
     stage_input: bool
     config_overrides: dict[str, Any]
     input_overrides: dict[str, str]
-    resolved_input_overrides: dict[str, Path]
+    resolved_input_overrides: dict[str, Any]
     input_override_records: list[dict[str, Any]]
     run_dir: Path
     output_dir: Path

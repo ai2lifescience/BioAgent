@@ -10,7 +10,10 @@ from tools.pipeline_runner.config import load_pipeline_config, load_runner_confi
 from tools.pipeline_runner.inputs import (
     default_input_slot,
     pipeline_input_specs,
+    resolve_input_value,
+    stringify_input_value,
     validate_input_path,
+    validate_input_value,
 )
 from tools.pipeline_runner.paths import (
     resolve_pipeline_dir,
@@ -196,16 +199,16 @@ def _resolve_supplied_inputs(
     input_path: str | None,
     input_overrides: dict[str, str],
     input_specs: dict[str, dict[str, Any]],
-) -> tuple[dict[str, Path], list[dict[str, Any]]]:
-    resolved: dict[str, Path] = {}
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    resolved: dict[str, Any] = {}
     invalid: list[dict[str, Any]] = []
 
     for slot, path_text in input_overrides.items():
         spec = input_specs.get(slot) or {}
         config_key = str(spec.get("config_key") or slot)
         try:
-            path = resolve_project_path(path_text)
-            validate_input_path(path, spec)
+            path = resolve_input_value(path_text, spec)
+            validate_input_value(path, spec)
             resolved[config_key] = path
         except Exception as exc:
             invalid.append(

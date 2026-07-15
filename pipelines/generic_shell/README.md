@@ -1,75 +1,44 @@
-# Generic Shell Pipeline
+# Generic Shell Pipeline Environment
 
-This is the simplest plug-and-play shell pipeline template for BioAgent.
+## Requirements
 
-## Files
+The pipeline runtime requires:
 
-```text
-pipelines/generic_shell/
-  runner.yaml   # how BioAgent runs the pipeline
-  config.yaml   # default base config selected by runner.yaml config:
-  run.sh        # shell entrypoint selected by runner.yaml entrypoint:
+- Bash with standard Unix utilities: `cat`, `cp`, `dirname`, `mkdir`, `mv`,
+  `sed`, `tr`, and `wc`.
+- Python 3.9 or newer.
+- PyYAML 6.0 or newer.
+
+It does not require Docker, network access, or external bioinformatics command
+line tools.
+
+## BioAgent environment
+
+The project environment already includes the required dependency. From the
+repository root:
+
+```bash
+conda create -n bioagent python=3.12 -y
+conda activate bioagent
+python -m pip install -r requirements.txt
 ```
 
-## Config
+## Minimal standalone environment
 
-Use this shape for easy agent execution:
+To run only this pipeline, a small virtual environment is sufficient:
 
-```yaml
-label: generic_shell
-input_path: data/example_reads.txt
-output_dir: output
-report_path: output/report.md
-metrics_path: output/metrics.json
-normalized_path: output/normalized.txt
-params:
-  normalize_mode: whitespace
-  uppercase: false
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install "PyYAML>=6.0"
 ```
 
-When the web UI uploads a file, BioAgent replaces `input_path` in the generated
-runtime config. When the agent runs the pipeline, BioAgent resolves declared
-output file keys such as `report_path`, `metrics_path`, and `normalized_path`
-inside the per-run pipeline artifact directory.
+Verify the required commands and Python package:
 
-## Runner
-
-Keep `runner.yaml` small:
-
-```yaml
-name: generic_shell
-engine: shell
-config: config.yaml
-entrypoint: run.sh
-timeout: 120
-inputs:
-  reads:
-    label: Reads text
-    config_key: input_path
-    required: true
-    accepts: [".txt", ".fastq", ".fq", ".fasta", ".fa"]
-outputs:
-  report:
-    config_key: report_path
-    default: output/report.md
-    kind: report
-    required: true
-  metrics:
-    config_key: metrics_path
-    default: output/metrics.json
-    kind: metrics
-    required: true
-  normalized_text:
-    config_key: normalized_path
-    default: output/normalized.txt
-    kind: text
-    required: true
+```bash
+bash --version
+python -c "import yaml; print(yaml.__version__)"
 ```
 
-BioAgent automatically lets requests override keys under `params`.
-
-Example:
-
-```text
-Run the shell pipeline with input_path: "runtime/sessions/<session_id>/artifacts/uploads/reads.txt" uppercase true
-```
+Pipeline function, inputs, and outputs are documented in
+[`DESCRIPTION.md`](DESCRIPTION.md).

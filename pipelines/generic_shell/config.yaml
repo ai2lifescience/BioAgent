@@ -1,11 +1,16 @@
 label: generic_shell
-input_path: data/example_reads.txt
-output_dir: output
-report_path: output/report.md
-metrics_path: output/metrics.json
-normalized_path: output/normalized.txt
+input_path: data/input/example_reads.txt
+metadata_path: data/input/example_metadata.tsv
+output_dir: data/output
+report_path: data/output/report.md
+metrics_path: data/output/metrics.json
+normalized_path: data/output/normalized.txt
+subtype_path: data/output/subtypes.tsv
 
 # Optional user-tunable settings. BioAgent can override these at runtime.
 params:
   normalize_mode: whitespace
   uppercase: false
+  sequence_id_column: sequence_id
+  subtype_column: subtype
+  missing_subtype: unassigned
