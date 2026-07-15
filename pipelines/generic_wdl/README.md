@@ -1,34 +1,44 @@
-# Generic WDL Pipeline
+# Generic WDL Pipeline Environment
 
-This is a small plug-and-play WDL example for BioAgent pipeline experiments.
+## Requirements
 
-Files:
+The host runtime requires:
 
-- `runner.yaml`: BioAgent-facing metadata for the pipeline folder.
-- `workflow.wdl`: WDL 1.0 workflow that normalizes a FASTA sequence and writes a report.
-- `inputs.json`: default WDL workflow inputs.
-- `options.json`: optional WDL engine options metadata kept with each run.
-- `data/example_sequence.fasta`: example input FASTA.
+- Python 3.9 or newer.
+- miniwdl 1.12 or newer.
+- A running Docker daemon accessible to the current user.
+- Access to the `python:3.11-slim` task image.
 
-`runner.yaml` declares BioAgent-facing input slots and WDL output mapping. A
-WDL run generates `inputs.runtime.json` from `inputs.json`, writes
-`options.runtime.json` from `options.json`, runs `miniwdl`, then copies declared
-WDL outputs to the `target` paths declared in `runner.yaml`.
+The task image supplies Python and the standard-library modules used by the
+workflow. No additional bioinformatics tools are required.
 
-Current status:
+## BioAgent environment
 
-- The current BioAgent `pipeline_runner` supports this folder with `miniwdl`.
-- Install WDL support with `pip install -r requirements.txt`.
-- miniwdl uses your normal local miniwdl runtime configuration. By default,
-  miniwdl expects Docker unless your environment is configured otherwise.
-- This example task declares `docker: "python:3.11-slim"` in `workflow.wdl`.
-  Pull that image first if your machine cannot reach Docker Hub during runs.
-- Cromwell support is not implemented yet. `options.runtime.json` is prepared so
-  future Cromwell support can pass rewritten runtime output options without
-  changing `runner.yaml.outputs`.
-
-Example local command with miniwdl:
+From the repository root:
 
 ```bash
-miniwdl run workflow.wdl -i inputs.json
+conda create -n bioagent python=3.12 -y
+conda activate bioagent
+python -m pip install -r requirements.txt
+docker pull python:3.11-slim
 ```
+
+## Minimal standalone environment
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install "miniwdl>=1.12.0"
+docker pull python:3.11-slim
+```
+
+Verify the environment:
+
+```bash
+miniwdl --version
+docker info
+docker image inspect python:3.11-slim
+```
+
+Pipeline function, inputs, and outputs are documented in
+[`DESCRIPTION.md`](DESCRIPTION.md).

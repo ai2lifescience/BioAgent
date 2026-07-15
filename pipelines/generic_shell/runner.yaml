@@ -5,10 +5,15 @@ entrypoint: run.sh
 timeout: 120
 inputs:
   reads:
-    label: Reads text
+    label: Sequence data
     config_key: input_path
     required: true
     accepts: [".txt", ".fastq", ".fq", ".fasta", ".fa"]
+  metadata:
+    label: Subtype metadata
+    config_key: metadata_path
+    required: true
+    accepts: [".tsv", ".csv"]
 outputs:
   report:
     label: Report
@@ -27,4 +32,10 @@ outputs:
     config_key: normalized_path
     default: output/normalized.txt
     kind: text
+    required: true
+  subtype_assignments:
+    label: Sequence subtype assignments
+    config_key: subtype_path
+    default: output/subtypes.tsv
+    kind: table
     required: true

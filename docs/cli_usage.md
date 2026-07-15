@@ -251,14 +251,19 @@ The shell base config should use the plug-and-play shape:
 
 ```yaml
 label: generic_shell
-input_path: data/example_reads.txt
+input_path: data/input/example_reads.txt
+metadata_path: data/input/example_metadata.tsv
 output_dir: output
 report_path: output/report.md
 metrics_path: output/metrics.json
 normalized_path: output/normalized.txt
+subtype_path: output/subtypes.tsv
 params:
   normalize_mode: whitespace
   uppercase: false
+  sequence_id_column: sequence_id
+  subtype_column: subtype
+  missing_subtype: unassigned
 ```
 
 The shell script must accept one argument:
@@ -306,7 +311,7 @@ python -m interfaces.cli "Run the snakemake pipeline with pipeline_name: generic
 Run a WDL pipeline folder with a declared input slot:
 
 ```bash
-python -m interfaces.cli 'Run pipeline with pipeline_name: generic_wdl sequence: "pipelines/generic_wdl/data/example_sequence.fasta"'
+python -m interfaces.cli 'Run pipeline with pipeline_name: generic_wdl sequence: "pipelines/generic_wdl/data/input/example_sequence.fasta"'
 ```
 
 WDL execution uses `miniwdl`. Install dependencies first:
@@ -375,8 +380,8 @@ The Snakemake base config should use the same plug-and-play shape:
 
 ```yaml
 label: generic_snakemake
-input_path: data/sequences_segment1.fasta
-metadata_path: data/metadata.tsv
+input_path: data/input/sequences_segment1.fasta
+metadata_path: data/input/metadata.tsv
 output_dir: output
 report_path: output/report.md
 metrics_path: output/metrics.json
