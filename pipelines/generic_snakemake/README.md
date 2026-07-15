@@ -1,86 +1,41 @@
-# Generic Snakemake Pipeline
+# Generic Snakemake Pipeline Environment
 
-This is the simplest plug-and-play Snakemake pipeline template for BioAgent.
+## Requirements
 
-## Files
+The pipeline runtime requires:
 
-```text
-pipelines/generic_snakemake/
-  runner.yaml   # how BioAgent runs the pipeline
-  config.yaml   # default base config selected by runner.yaml config:
-  Snakefile     # workflow selected by runner.yaml snakefile:
-  data/         # example input data
+- Python 3.10 or newer.
+- Snakemake 8.0 or newer.
+- PyYAML 6.0 or newer.
+
+The workflow uses only Python standard-library modules for its analysis and
+does not require Docker, network access, workflow-managed Conda environments,
+or external bioinformatics tools.
+
+## BioAgent environment
+
+From the repository root:
+
+```bash
+conda create -n bioagent python=3.12 -y
+conda activate bioagent
+python -m pip install -r requirements.txt
 ```
 
-## Config
+## Minimal standalone environment
 
-Use this shape for easy agent execution:
-
-```yaml
-label: generic_snakemake
-input_path: data/sequences_segment1.fasta
-metadata_path: data/metadata.tsv
-output_dir: output
-report_path: output/report.md
-metrics_path: output/metrics.json
-normalized_fasta_path: output/normalized.fasta
-params:
-  subtype: subtype1
-  segment: segment1
-  time: all-time
-  analysis_mode: example
-  min_length: 0
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install "snakemake>=8.0" "PyYAML>=6.0"
 ```
 
-When the web UI uploads a file, BioAgent replaces `input_path` in the generated
-runtime config. When the agent runs the pipeline, BioAgent resolves declared
-output file keys such as `report_path`, `metrics_path`, and
-`normalized_fasta_path` inside the per-run pipeline artifact directory.
+Verify the environment:
 
-## Runner
-
-Keep `runner.yaml` small:
-
-```yaml
-name: generic_snakemake
-engine: snakemake
-config: config.yaml
-snakefile: Snakefile
-cores: 1
-timeout: 300
-inputs:
-  sequence:
-    label: Sequence FASTA
-    config_key: input_path
-    required: true
-    accepts: [".fa", ".fasta", ".fna"]
-  metadata:
-    label: Metadata table
-    config_key: metadata_path
-    required: true
-    accepts: [".tsv", ".csv"]
-outputs:
-  report:
-    config_key: report_path
-    default: output/report.md
-    kind: report
-    required: true
-  metrics:
-    config_key: metrics_path
-    default: output/metrics.json
-    kind: metrics
-    required: true
-  normalized_sequence:
-    config_key: normalized_fasta_path
-    default: output/normalized.fasta
-    kind: sequence
-    required: true
+```bash
+snakemake --version
+python -c "import yaml; print(yaml.__version__)"
 ```
 
-BioAgent automatically lets requests override keys under `params`.
-
-Example:
-
-```text
-Run the snakemake pipeline with pipeline_name: generic_snakemake input_path: "runtime/sessions/<session_id>/artifacts/uploads/sequences.fasta" min_length 50
-```
+Pipeline function, inputs, and outputs are documented in
+[`DESCRIPTION.md`](DESCRIPTION.md).

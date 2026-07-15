@@ -10,7 +10,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 from tools.pipeline_runner.config import write_runtime_config
-from tools.pipeline_runner.inputs import pipeline_input_specs
+from tools.pipeline_runner.inputs import pipeline_input_specs, stringify_input_value
 from tools.pipeline_runner.outputs import finalize_output_records
 from tools.pipeline_runner.paths import (
     PROJECT_ROOT,
@@ -93,7 +93,10 @@ def run_wdl_pipeline(
         "original_input_path": str(context.original_input_path),
         "session_input_path": str(context.session_input_path or ""),
         "input_staged": context.input_staged,
-        "input_overrides": {key: str(path) for key, path in context.resolved_input_overrides.items()},
+        "input_overrides": {
+            key: stringify_input_value(path)
+            for key, path in context.resolved_input_overrides.items()
+        },
         "run_dir": str(context.run_dir),
         "output_dir": str(context.output_dir),
         "engine_dir": str(engine_dir),
@@ -114,16 +117,23 @@ def write_wdl_inputs(context: PipelineContext) -> Path:
     """Write miniwdl input JSON from inputs.json and selected runtime files."""
     inputs = dict(context.raw_config)
     for key, path in context.resolved_input_overrides.items():
-        inputs[key] = str(path)
+        inputs[key] = stringify_input_value(path)
 
     for spec in pipeline_input_specs(context.runner_config).values():
         key = str(spec.get("config_key") or "")
         value = inputs.get(key)
         if not key or not value:
             continue
-        resolved = resolve_pipeline_input_path(str(value), context.pipeline_dir)
-        if resolved.exists():
-            inputs[key] = str(resolved)
+        if isinstance(value, list):
+            resolved_values = []
+            for item in value:
+                resolved = resolve_pipeline_input_path(str(item), context.pipeline_dir)
+                resolved_values.append(str(resolved) if resolved.exists() else str(item))
+            inputs[key] = resolved_values
+        else:
+            resolved = resolve_pipeline_input_path(str(value), context.pipeline_dir)
+            if resolved.exists():
+                inputs[key] = str(resolved)
 
     path = context.run_dir / "inputs.runtime.json"
     path.write_text(json.dumps(inputs, indent=2) + "\n", encoding="utf-8")
