@@ -201,3 +201,161 @@ clean.
 The principal sets priorities and approves important architecture changes.
 Team members implement focused tasks, run tests, and review pull requests. Keep
 `main` stable and do not develop directly on it.
+
+## Admin: Copy One File From Another Branch
+
+Use this when the repository administrator needs to bring only one file from
+another branch directly into `main`. Do not use this if all changes on the
+source branch should be merged; use a normal pull request or branch merge
+instead.
+
+Start from the latest `main`:
+
+```bash
+git switch main
+git pull --ff-only origin main
+```
+
+Fetch the source branch:
+
+```bash
+git fetch origin dev/architecture
+```
+
+This fetch command does not overwrite local files, staged files, local commits,
+or the current branch. It only downloads remote branch data into Git.
+
+Copy only `README.md` from the source branch:
+
+```bash
+git restore --source=origin/dev/architecture -- README.md
+```
+
+The `git restore` command is the command that changes the local `README.md`.
+If `README.md` already has uncommitted local edits, commit or stash them before
+running it.
+
+Review, commit, and push the single-file change directly to `main`:
+
+```bash
+git status --short
+git diff -- README.md
+git add README.md
+git commit -m "Update README from dev architecture branch"
+git push origin main
+```
+
+## Admin: Merge main Into dev/architecture Without Pipelines
+
+Use this when `dev/architecture` needs updates from `main`, but the heavy
+`pipelines/` directory should stay as it is on `dev/architecture`. This should
+go through a pull request because `dev/architecture` is a shared branch.
+
+Start from the latest `dev/architecture`, then create a temporary merge branch:
+
+```bash
+git switch dev/architecture
+git pull --ff-only origin dev/architecture
+git switch -c sync-main-into-architecture-no-pipelines
+```
+
+Fetch and start the merge from `main`, but do not commit it yet:
+
+```bash
+git fetch origin
+git merge --no-commit --no-ff origin/main
+```
+
+Keep the `pipelines/` directory exactly as it was on `dev/architecture`:
+
+```bash
+git restore --source=HEAD --staged --worktree -- pipelines/
+```
+
+Resolve any remaining non-pipeline conflicts, then review the staged files:
+
+```bash
+git status
+git diff --name-only --cached
+```
+
+Confirm that the staged file list does not include files under `pipelines/`.
+Then commit and push the temporary merge branch:
+
+```bash
+git add .
+git diff --name-only --cached
+git commit -m "Merge main into architecture without pipelines"
+git push -u origin sync-main-into-architecture-no-pipelines
+```
+
+Open the pull request into `dev/architecture`:
+
+```bash
+gh pr create --base dev/architecture --head sync-main-into-architecture-no-pipelines
+```
+
+Before merging the PR, confirm again that the file list does not include
+`pipelines/`. Use a normal merge commit for this PR if the repository settings
+allow it. Squashing is acceptable only if required by team policy, but it does
+not preserve the fact that `main` was merged into `dev/architecture`.
+
+This workflow is safer than pushing directly to `dev/architecture`, but it
+should not become the normal way to manage long-lived branches. If `pipelines/`
+contains generated or very large files, prefer moving them to `.gitignore`, Git
+LFS, DVC, or external storage.
+
+## Admin: Merge dev/architecture Into main Without Pipelines
+
+Use this when `main` needs architecture updates from `dev/architecture`, but
+the heavy `pipelines/` directory should stay as it is on `main`. This should go
+through a pull request into `main`.
+
+Start from the latest `main`, then create a temporary merge branch:
+
+```bash
+git switch main
+git pull --ff-only origin main
+git switch -c merge-architecture-into-main-no-pipelines
+```
+
+Fetch and start the merge from `dev/architecture`, but do not commit it yet:
+
+```bash
+git fetch origin
+git merge --no-commit --no-ff origin/dev/architecture
+```
+
+Keep the `pipelines/` directory exactly as it was on `main`:
+
+```bash
+git restore --source=HEAD --staged --worktree -- pipelines/
+```
+
+Resolve any remaining non-pipeline conflicts, then review the staged files:
+
+```bash
+git status
+git diff --name-only --cached
+```
+
+Confirm that the staged file list does not include files under `pipelines/`.
+Then commit and push the temporary merge branch:
+
+```bash
+git add .
+git diff --name-only --cached
+git commit -m "Merge architecture into main without pipelines"
+git push -u origin merge-architecture-into-main-no-pipelines
+```
+
+Open the pull request into `main`:
+
+```bash
+gh pr create --base main --head merge-architecture-into-main-no-pipelines
+```
+
+Before merging the PR, confirm again that the file list does not include
+`pipelines/`. This workflow is useful for a controlled admin merge, but repeated
+use can make branch history harder to understand because part of the source
+branch is intentionally excluded.
