@@ -1,35 +1,51 @@
-# Molecular Meta WDL Pipeline
+# Molecular Meta WDL Pipeline Environment
 
-This folder exposes the molecular typing WDL workflow through BioAgent's
-standard pipeline runner.
+## Host requirements
 
-Files:
+The host runtime requires:
 
-- `runner.yaml`: BioAgent-facing metadata, input slots, parameter overrides,
-  and output mapping.
-- `workflow.wdl`: WDL workflow for read cleaning, alignment, trimming, and
-  typing.
-- `inputs.json`: default WDL workflow inputs.
-- `options.json`: optional WDL engine options metadata copied into each run.
-- `data/molecular_demo_h1n1.fastq.gz`: example read input.
+- Python 3.9 or newer.
+- miniwdl 1.12 or newer.
+- A running Docker daemon accessible to the current user.
+- Access to the `cncb/molecular-wdl:v1.0` task image, or a compatible image
+  supplied through the workflow's `docker_image` input.
+- Up to 16 CPU cores and 32 GB memory with the default input settings.
 
-Web UI example:
+## BioAgent environment
 
-```text
-Run pipeline with pipeline_name: molecular_meta_wdl
+From the repository root:
+
+```bash
+conda create -n bioagent python=3.12 -y
+conda activate bioagent
+python -m pip install -r requirements.txt
+docker pull cncb/molecular-wdl:v1.0
 ```
 
-BioAgent will ask for explicit runtime files. The WDL workflow needs `read1`,
-`reference`, and `nextclade_dataset`; `read2` is optional. For `reference` and
-`nextclade_dataset`, provide one or more file paths separated by commas or
-semicolons:
+## Task environment
 
-```text
-Run pipeline with pipeline_name: molecular_meta_wdl read1: "runtime/sessions/<session_id>/artifacts/uploads/sample.fastq.gz" reference: "path/to/ref.fasta" nextclade_dataset: "path/to/reference.fasta,path/to/genome_annotation.gff3,path/to/pathogen.json"
+The WDL tasks require Bash/core utilities, fastp, BWA, SAMtools, BamUtil,
+iVar, Nextclade, and Java. These commands must be present inside the configured
+task image.
+
+[`environment.yml`](environment.yml) documents this tool environment and can
+be resolved separately with:
+
+```bash
+conda env create -f pipelines/molecular_meta_wdl/environment.yml
+conda activate molecular-meta-wdl
 ```
 
-Runtime parameters can be overridden by name, for example:
+The current WDL `runtime` blocks explicitly select Docker, so activating this
+Conda environment does not replace miniwdl and Docker during a workflow run.
 
-```text
-Run pipeline with pipeline_name: molecular_meta_wdl read1: "sample.fastq.gz" reference: "ref.fasta" nextclade_dataset: "reference.fasta,genome_annotation.gff3" sample: "sample_001" pathogen: H1N1 threads: 8
+Verify the host environment:
+
+```bash
+miniwdl --version
+docker info
+docker image inspect cncb/molecular-wdl:v1.0
 ```
+
+Pipeline function, inputs, and outputs are documented in
+[`DESCRIPTION.md`](DESCRIPTION.md).

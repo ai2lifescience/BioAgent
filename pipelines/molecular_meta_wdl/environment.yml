@@ -1,0 +1,30 @@
+# Command-line environment required inside the WDL task container.
+#
+# BioAgent runs this workflow with the Docker image configured by
+# run_molecular_typing.docker_image. This file documents that image's required
+# tools and can be used as the dependency source when rebuilding it.
+name: molecular-meta-wdl
+
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+
+dependencies:
+  # Shell utilities used directly by workflow.wdl.
+  - bash >=4.4
+  - coreutils
+  - gawk
+  - grep
+  - sed
+
+  # Read QC, alignment, BAM processing, consensus calling, and typing.
+  - fastp >=0.23
+  - bwa >=0.7.17
+  - samtools >=1.17
+  - bamutil >=1.0.15
+  - ivar >=1.4
+  - nextclade >=3
+
+  # The H3N2 branch checks for a Java runtime.
+  - openjdk >=11
