@@ -41,3 +41,6 @@ branch. H3N2 uses its dedicated Nextclade output-column mapping.
 - `nextclade.json`: Nextclade JSON results.
 - `consensus.fa`: generated consensus sequence.
 - `final.bam`: filtered alignment BAM.
+
+BioAgent copies completed WDL outputs to `data/output/` as declared in
+`runner.yaml`.

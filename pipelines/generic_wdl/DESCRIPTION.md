@@ -26,4 +26,5 @@ FASTA
 - `metrics.json`: sequence length, GC percentage, and minimum-length result.
 - `report.md`: human-readable metric summary.
 
-BioAgent copies these WDL outputs to the paths declared in `runner.yaml`.
+BioAgent copies these WDL outputs to `data/output/` as declared in
+`runner.yaml`.
