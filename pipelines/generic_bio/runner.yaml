@@ -1,0 +1,121 @@
+name: generic_bio
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 120
+inputs:
+  reads:
+    label: Sequencing reads
+    config_key: input_path
+    required: true
+    accepts: [".fastq", ".fq", ".fastq.gz", ".fq.gz"]
+    description: Single-end DNA reads with Phred+33 quality scores.
+  reference:
+    label: Reference genome
+    config_key: reference_path
+    required: true
+    accepts: [".fasta", ".fa", ".fna", ".fasta.gz", ".fa.gz", ".fna.gz"]
+    description: One reference sequence used by the positional comparison demo.
+  metadata:
+    label: Sample metadata
+    config_key: metadata_path
+    required: true
+    accepts: [".tsv", ".csv"]
+    description: Sample sheet containing a sample_id column.
+outputs:
+  report:
+    label: Analysis report
+    config_key: report_path
+    default: data/output/report.md
+    kind: report
+    required: true
+  metrics:
+    label: QC and analysis metrics
+    config_key: metrics_path
+    default: data/output/metrics.json
+    kind: metrics
+    required: true
+  html_report:
+    label: Interactive-style HTML report
+    config_key: html_report_path
+    default: data/output/report.html
+    kind: report
+    required: true
+  filtered_reads:
+    label: Quality-filtered FASTQ
+    config_key: filtered_fastq_path
+    default: data/output/filtered_reads.fastq
+    kind: sequence
+    required: true
+  read_qc:
+    label: Per-read QC table
+    config_key: read_qc_path
+    default: data/output/read_qc.tsv
+    kind: table
+    required: true
+  sample_summary:
+    label: Sample summary table
+    config_key: sample_summary_path
+    default: data/output/sample_summary.tsv
+    kind: table
+    required: true
+  coverage:
+    label: Per-position coverage table
+    config_key: coverage_path
+    default: data/output/coverage.tsv
+    kind: table
+    required: true
+  alignments:
+    label: Demonstration alignments
+    config_key: alignment_sam_path
+    default: data/output/alignments.sam
+    kind: alignment
+    required: true
+  consensus:
+    label: Consensus sequence
+    config_key: consensus_fasta_path
+    default: data/output/consensus.fasta
+    kind: sequence
+    required: true
+  variants:
+    label: Demonstration variants
+    config_key: variants_vcf_path
+    default: data/output/variants.vcf
+    kind: variants
+    required: true
+  variant_table:
+    label: Variant summary table
+    config_key: variant_table_path
+    default: data/output/variant_summary.tsv
+    kind: table
+    required: true
+  qc_figure:
+    label: Read QC overview figure
+    config_key: qc_figure_path
+    default: data/output/qc_overview.png
+    kind: image
+    required: true
+  coverage_figure:
+    label: Coverage profile figure
+    config_key: coverage_figure_path
+    default: data/output/coverage.png
+    kind: image
+    required: true
+  variant_figure:
+    label: Variant allele fraction figure
+    config_key: variant_figure_path
+    default: data/output/variant_allele_fraction.png
+    kind: image
+    required: true
+  phylogenetic_tree:
+    label: Optional phylogenetic tree
+    config_key: phylogenetic_tree_path
+    default: data/output/phylogenetic_tree.nwk
+    kind: phylogenetic_tree
+    required: false
+  phylogenetic_tree_figure:
+    label: Optional phylogenetic tree figure
+    config_key: phylogenetic_tree_figure_path
+    default: data/output/phylogenetic_tree.png
+    kind: image
+    required: false

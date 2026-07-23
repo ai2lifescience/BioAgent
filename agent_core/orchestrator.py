@@ -518,7 +518,11 @@ class BioAgentOrchestrator:
         if isinstance(result, dict) and result.get("answer"):
             answer = str(result["answer"])
             report_path = result.get("report_path")
-            if report_path and str(report_path) not in answer:
+            if (
+                report_path
+                and result.get("presentation") != "downloads_only"
+                and str(report_path) not in answer
+            ):
                 return f"{answer}\n\nReport saved to: {report_path}"
             return answer
         if isinstance(result, dict) and result.get("summary"):

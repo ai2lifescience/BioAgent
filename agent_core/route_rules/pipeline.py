@@ -81,11 +81,13 @@ def route_pipeline(user_request: str) -> IntentRoute | None:
     if input_overrides:
         args["input_overrides"] = input_overrides
 
-    path = (
-        extract_labeled_value(user_request, "input_path")
-        or extract_labeled_value(user_request, "input")
-        or (None if input_overrides else extract_quoted_or_labeled_path(user_request))
-    )
+    path = None
+    if not input_overrides:
+        path = (
+            extract_labeled_value(user_request, "input_path")
+            or extract_labeled_value(user_request, "input")
+            or extract_quoted_or_labeled_path(user_request)
+        )
     if path:
         args["input_path"] = path
 

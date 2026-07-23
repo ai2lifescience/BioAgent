@@ -1,0 +1,32 @@
+label: generic_bio_demo
+input_path: data/input/example_reads.fastq
+reference_path: data/input/example_reference.fasta
+metadata_path: data/input/example_samples.tsv
+output_dir: data/output
+report_path: data/output/report.md
+html_report_path: data/output/report.html
+metrics_path: data/output/metrics.json
+filtered_fastq_path: data/output/filtered_reads.fastq
+read_qc_path: data/output/read_qc.tsv
+sample_summary_path: data/output/sample_summary.tsv
+coverage_path: data/output/coverage.tsv
+alignment_sam_path: data/output/alignments.sam
+consensus_fasta_path: data/output/consensus.fasta
+variants_vcf_path: data/output/variants.vcf
+variant_table_path: data/output/variant_summary.tsv
+qc_figure_path: data/output/qc_overview.png
+coverage_figure_path: data/output/coverage.png
+variant_figure_path: data/output/variant_allele_fraction.png
+phylogenetic_tree_path: data/output/phylogenetic_tree.nwk
+phylogenetic_tree_figure_path: data/output/phylogenetic_tree.png
+
+# BioAgent may override only these user-tunable values at runtime.
+params:
+  sample_id: sample_demo
+  min_length: 12
+  min_mean_quality: 20.0
+  min_base_quality: 20
+  min_alt_fraction: 0.6
+  min_alt_depth: 2
+  plot_dpi: 140
+  emit_phylogenetic_tree: true
