@@ -364,7 +364,6 @@ def pipeline_runner(
             }
         ),
     )["result"]
-    metrics = result.get("metrics", {})
     engine = str(result.get("engine", "pipeline"))
     answer = (
         f"{engine.title()} pipeline completed.\n"
@@ -372,19 +371,13 @@ def pipeline_runner(
         f"Pipeline: {result.get('pipeline_name', pipeline_name)}\n"
         f"Engine: {engine}\n"
         f"Dry run: {result.get('dry_run', False)}\n"
-        f"Config: {result.get('config_path')}\n"
-        f"Input: {result.get('input_path') or input_path or '<runner default>'}\n"
-        f"Original input: {result.get('original_input_path') or input_path or '<runner default>'}\n"
-        f"Run directory: {result.get('run_dir')}\n"
-        f"Output directory: {result.get('output_dir')}\n"
-        f"Input overrides: {result.get('input_overrides', {})}\n"
-        f"Config overrides: {result.get('config_overrides', {})}\n"
-        f"Report: {result.get('report_path')}\n"
-        f"Metrics: {metrics}"
+        "Results are ready in the web UI as download links; previews are hidden by default.\n"
+        "If you want an interpreted view, ask: Collect and show all results from this pipeline run."
     )
     return {
         "skill": "pipeline_runner",
         "tool": "pipeline_runner",
         "answer": answer,
         **result,
+        "presentation": "downloads_only",
     }

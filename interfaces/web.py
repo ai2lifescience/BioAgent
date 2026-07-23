@@ -379,15 +379,30 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
             except Exception as exc:
                 self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=500)
             return
-        self._send_file(artifact_path, artifact_content_type(artifact_path))
+        self._send_file(
+            artifact_path,
+            artifact_content_type(artifact_path),
+            sandbox_html=True,
+        )
 
-    def _send_file(self, path: Path, content_type: str, status: int = 200) -> None:
+    def _send_file(
+        self,
+        path: Path,
+        content_type: str,
+        status: int = 200,
+        sandbox_html: bool = False,
+    ) -> None:
         if not path.exists() or not path.is_file():
             self._send_json({"error": "not found"}, status=404)
             return
         data = path.read_bytes()
         self.send_response(status)
         self.send_header("Content-Type", content_type)
+        if sandbox_html and content_type.startswith("text/html"):
+            self.send_header(
+                "Content-Security-Policy",
+                "sandbox; default-src 'none'; img-src data:; style-src 'unsafe-inline'",
+            )
         self.send_header("Content-Length", str(len(data)))
         self.end_headers()
         try:
