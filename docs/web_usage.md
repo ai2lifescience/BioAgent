@@ -496,6 +496,30 @@ For `generic_snakemake`, use named input paths:
 Run pipeline with pipeline_name: generic_snakemake sequence: "runtime/sessions/<session_id>/artifacts/uploads/sequences.fasta" metadata: "runtime/sessions/<session_id>/artifacts/uploads/metadata.tsv"
 ```
 
+The dependency-light `generic_bio` demo accepts three common bioinformatics
+inputs and produces filtered FASTQ, demonstration SAM, consensus FASTA,
+variants VCF, multiple TSV tables, three PNG figures, metrics JSON, and
+Markdown and HTML reports:
+
+```text
+Run pipeline with pipeline_name: generic_bio reads: "pipelines/generic_bio/data/input/example_reads.fastq" reference: "pipelines/generic_bio/data/input/example_reference.fasta" metadata: "pipelines/generic_bio/data/input/example_samples.tsv"
+```
+
+Completed pipelines are presented as download links. The web UI does not
+automatically preview figures, tables, metrics, or report contents. To request
+an interpreted view in the same chat, send:
+
+```text
+Collect and show all results from this pipeline run.
+```
+
+Pipeline outputs may be conditional. `generic_bio` emits a Newick phylogenetic
+tree and PNG preview by default. To disable those two outputs:
+
+```text
+Run pipeline with pipeline_name: generic_bio reads: "pipelines/generic_bio/data/input/example_reads.fastq" reference: "pipelines/generic_bio/data/input/example_reference.fasta" metadata: "pipelines/generic_bio/data/input/example_samples.tsv" emit_phylogenetic_tree false
+```
+
 Pipeline folder contract:
 
 ```text

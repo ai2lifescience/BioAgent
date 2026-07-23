@@ -11,6 +11,7 @@ from tools.genome_map import GENOME_MAP_TOOL
 from tools.literature import PUBMED_COLLECT_TOOL
 from tools.ncbi import NCBI_FETCH_TOOL
 from tools.pipeline_runner import PIPELINE_RUNNER_TOOL
+from tools.pipeline_results import PIPELINE_RESULTS_COLLECT_TOOL
 from tools.pdb import PDB_DOWNLOAD_TOOL
 from tools.rag import (
     RAG_CHUNK_TOOL,
@@ -37,6 +38,7 @@ TOOL_REGISTRY: dict[str, ToolDefinition] = {
         BLAST_SEARCH_TOOL,
         FILE_INSPECT_TOOL,
         PIPELINE_RUNNER_TOOL,
+        PIPELINE_RESULTS_COLLECT_TOOL,
         PUBMED_COLLECT_TOOL,
         TRUSTED_WEB_COLLECT_TOOL,
         RAG_CHUNK_TOOL,

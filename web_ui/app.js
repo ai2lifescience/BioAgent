@@ -889,6 +889,115 @@ function artifactUrl(path, options = {}) {
   return `/artifact?${params.toString()}`;
 }
 
+function collectPipelineOutputRecords(result) {
+  const records = [];
+  const seen = new Set();
+  const evidence = result?.evidence || {};
+  const candidates = [
+    ...(Array.isArray(evidence.outputs) ? evidence.outputs : []),
+    ...(Array.isArray(evidence.tool_outputs) ? evidence.tool_outputs : []),
+  ];
+
+  for (const candidate of candidates) {
+    const isPipeline = candidate?.skill === "pipeline_runner" || candidate?.tool === "pipeline_runner";
+    if (!isPipeline || !Array.isArray(candidate.output_records)) continue;
+    for (const record of candidate.output_records) {
+      const path = String(record?.path || "").trim();
+      if (!path || record?.exists === false || seen.has(path)) continue;
+      seen.add(path);
+      records.push({
+        path,
+        label: String(record?.label || record?.name || fileNameFromPath(path)),
+        kind: String(record?.kind || "file"),
+      });
+    }
+  }
+
+  if (records.length) return records;
+  const excludedKinds = new Set(["config", "directory", "input", "upload"]);
+  for (const artifact of result?.artifacts || []) {
+    const path = String(artifact?.path || "").trim();
+    if (
+      artifact?.source_skill !== "pipeline_runner" ||
+      !path ||
+      excludedKinds.has(String(artifact?.kind || "")) ||
+      seen.has(path)
+    ) continue;
+    seen.add(path);
+    records.push({
+      path,
+      label: String(artifact?.label || fileNameFromPath(path)),
+      kind: String(artifact?.kind || "file"),
+    });
+  }
+  return records;
+}
+
+function pipelineNameFromResult(result) {
+  const outputs = result?.evidence?.outputs;
+  if (Array.isArray(outputs)) {
+    for (let index = outputs.length - 1; index >= 0; index -= 1) {
+      if (outputs[index]?.skill === "pipeline_runner" && outputs[index]?.pipeline_name) {
+        return String(outputs[index].pipeline_name);
+      }
+    }
+  }
+  return "pipeline";
+}
+
+function pipelineDownloadsHtml(result, records = collectPipelineOutputRecords(result)) {
+  if (!records.length) return "";
+  const pipelineName = pipelineNameFromResult(result);
+  const links = records.map((record) => {
+    const filename = fileNameFromPath(record.path);
+    const url = artifactUrl(record.path);
+    return `
+      <a class="pipeline-download" href="${escapeHtml(url)}" download="${escapeHtml(filename)}"
+        title="${escapeHtml(record.path)}">
+        <span>${escapeHtml(record.label)}</span>
+        <small>${escapeHtml(filename)} · ${escapeHtml(record.kind)}</small>
+      </a>
+    `;
+  }).join("");
+  return `
+    <section class="pipeline-downloads" aria-label="Pipeline result downloads">
+      <div class="pipeline-downloads-heading">
+        <strong>Result downloads</strong>
+        <span>${records.length} files</span>
+      </div>
+      <div class="pipeline-download-grid">${links}</div>
+      <p class="pipeline-download-note">
+        Result contents are not previewed automatically.
+        To review them here, ask: <q>Collect and show all results from the ${escapeHtml(pipelineName)} pipeline run.</q>
+      </p>
+    </section>
+  `;
+}
+
+function collectedBundleHtml(result) {
+  const bundles = (result?.artifacts || []).filter((artifact) => (
+    artifact?.source_skill === "pipeline_results" &&
+    artifact?.kind === "compressed" &&
+    String(artifact?.path || "").toLowerCase().endsWith(".zip")
+  ));
+  if (!bundles.length) return "";
+  return bundles.map((artifact) => {
+    const filename = fileNameFromPath(artifact.path);
+    return `
+      <section class="pipeline-downloads" aria-label="Collected result bundle">
+        <div class="pipeline-downloads-heading"><strong>Collected result bundle</strong></div>
+        <div class="pipeline-download-grid">
+          <a class="pipeline-download" href="${escapeHtml(artifactUrl(artifact.path))}"
+            download="${escapeHtml(filename)}">
+            <span>Download all collected results</span>
+            <small>${escapeHtml(filename)} · ZIP archive</small>
+          </a>
+        </div>
+      </section>
+    `;
+  }).join("");
+}
+
 function figureArtifactsHtml(result) {
   const artifacts = collectFigureArtifacts(result);
   if (!artifacts.length) return "";
@@ -944,30 +1053,35 @@ function structureViewerHtml(result) {
 function resultDetails(result) {
   if (!result) return "";
   const runtime = result.runtime || {};
+  const pipelineOutputs = collectPipelineOutputRecords(result);
   return `
-    ${figureArtifactsHtml(result)}
-    ${structureViewerHtml(result)}
+    ${pipelineDownloadsHtml(result, pipelineOutputs)}
+    ${pipelineOutputs.length ? "" : collectedBundleHtml(result)}
+    ${pipelineOutputs.length ? "" : figureArtifactsHtml(result)}
+    ${pipelineOutputs.length ? "" : structureViewerHtml(result)}
     ${resultSummaryTags(result)}
-    <details>
-      <summary>Runtime</summary>
-      <pre>${prettyJson(runtime)}</pre>
-    </details>
-    <details>
-      <summary>Evidence</summary>
-      <pre>${prettyJson(result.evidence)}</pre>
-    </details>
-    <details>
-      <summary>Verification</summary>
-      <pre>${prettyJson(result.verification)}</pre>
-    </details>
-    <details>
-      <summary>Route and plan</summary>
-      <pre>${prettyJson({ route: result.route, plan: result.plan })}</pre>
-    </details>
-    <details>
-      <summary>Trace</summary>
-      <pre>${prettyJson(result.trace)}</pre>
-    </details>
+    <div class="result-diagnostics">
+      <details>
+        <summary>Runtime</summary>
+        <pre>${prettyJson(runtime)}</pre>
+      </details>
+      <details>
+        <summary>Evidence</summary>
+        <pre>${prettyJson(result.evidence)}</pre>
+      </details>
+      <details>
+        <summary>Verification</summary>
+        <pre>${prettyJson(result.verification)}</pre>
+      </details>
+      <details>
+        <summary>Route and plan</summary>
+        <pre>${prettyJson({ route: result.route, plan: result.plan })}</pre>
+      </details>
+      <details>
+        <summary>Trace</summary>
+        <pre>${prettyJson(result.trace)}</pre>
+      </details>
+    </div>
   `;
 }
 

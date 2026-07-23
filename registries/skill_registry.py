@@ -13,6 +13,7 @@ from skills.genome_map import SKILL_SPEC as GENOME_MAP_SPEC, genome_map
 from skills.ncbi_retrieval import SKILL_SPEC as NCBI_RETRIEVAL_SPEC, ncbi_retrieval
 from skills.pdb_download import SKILL_SPEC as PDB_DOWNLOAD_SPEC, pdb_download
 from skills.pipeline_runner import SKILL_SPEC as PIPELINE_RUNNER_SPEC, pipeline_runner
+from skills.pipeline_results import SKILL_SPEC as PIPELINE_RESULTS_SPEC, pipeline_results
 from skills.sequence_analysis import SKILL_SPEC as SEQUENCE_ANALYSIS_SPEC, sequence_analysis
 from skills.species_report.workflow import SKILL_SPEC as SPECIES_REPORT_SPEC, species_report
 from skills.protein_structure_analysis import SKILL_SPEC as PROTEIN_STRUCTURE_ANALYSIS_SPEC, protein_structure_analysis
@@ -32,6 +33,13 @@ SKILL_DEFINITIONS = [
         category="pipeline",
         tools=("pipeline_runner",),
         instruction_path="skills/pipeline_runner/SKILL.md",
+    ),
+    SkillDefinition(
+        skill_spec=PIPELINE_RESULTS_SPEC,
+        handler=pipeline_results,
+        category="pipeline",
+        tools=("pipeline_results_collect",),
+        instruction_path="skills/pipeline_results/SKILL.md",
     ),
     SkillDefinition(
         skill_spec=SPECIES_REPORT_SPEC,

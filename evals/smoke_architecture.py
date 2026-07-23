@@ -25,6 +25,7 @@ def main() -> int:
         "pdb_download",
         "protein_structure_analysis",
         "genome_map",
+        "pipeline_results",
     } <= skills
     tools = set(list_tool_names())
     assert {
@@ -36,6 +37,7 @@ def main() -> int:
         "protein_structure_analyze",
         "bio_database_search",
         "pdb_download",
+        "pipeline_results_collect",
     } <= tools
 
     router = IntentRouter()
@@ -56,6 +58,36 @@ def main() -> int:
     assert snakemake_route.arguments["pipeline_name"] == "generic_snakemake"
     assert snakemake_route.arguments["dry_run"] is True
     assert snakemake_route.arguments["cores"] == 2
+
+    generic_bio_route = router.route(
+        "Run pipeline with pipeline_name: generic_bio "
+        'reads: "pipelines/generic_bio/data/input/reads.fastq" '
+        'reference: "pipelines/generic_bio/data/input/reference.fasta" '
+        'metadata: "pipelines/generic_bio/data/input/samples.tsv"'
+    )
+    assert generic_bio_route.mode == "direct_skill"
+    assert generic_bio_route.skill_name == "pipeline_runner"
+    assert generic_bio_route.arguments["pipeline_name"] == "generic_bio"
+    assert generic_bio_route.arguments["input_overrides"] == {
+        "reads": "pipelines/generic_bio/data/input/reads.fastq",
+        "reference": "pipelines/generic_bio/data/input/reference.fasta",
+        "metadata": "pipelines/generic_bio/data/input/samples.tsv",
+    }
+    assert "input_path" not in generic_bio_route.arguments
+
+    pipeline_results_route = router.route(
+        "Collect and show all results from the generic_bio pipeline run"
+    )
+    assert pipeline_results_route.mode == "direct_skill"
+    assert pipeline_results_route.skill_name == "pipeline_results"
+    assert pipeline_results_route.arguments == {"pipeline_name": "generic_bio"}
+
+    latest_pipeline_results_route = router.route(
+        "Collect and show all results from this pipeline run."
+    )
+    assert latest_pipeline_results_route.mode == "direct_skill"
+    assert latest_pipeline_results_route.skill_name == "pipeline_results"
+    assert latest_pipeline_results_route.arguments == {}
 
     ncbi_route = router.route("download 10 records phiX174 genes A G")
     assert ncbi_route.mode == "direct_skill"

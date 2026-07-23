@@ -92,6 +92,10 @@ Download PDB structure 1A3N as cif
 Run pipeline with pipeline_name: generic_snakemake
 ```
 
+```text
+Run pipeline with pipeline_name: generic_bio
+```
+
 Use the Uploads panel for local input files. BioAgent stores uploads and outputs
 under the active session so later requests in the same chat can reuse them.
 

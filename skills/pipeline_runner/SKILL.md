@@ -108,6 +108,7 @@ Keys under `params` may be changed through `config_overrides`.
 Default examples:
 
 ```text
+pipelines/generic_bio/
 pipelines/generic_shell/
 pipelines/generic_snakemake/
 pipelines/generic_wdl/
