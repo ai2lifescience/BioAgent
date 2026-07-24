@@ -13,6 +13,18 @@ from .common import extract_labeled_value, extract_quoted_or_labeled_path
 DEFAULT_GENERIC_SHELL = "generic_shell"
 DEFAULT_GENERIC_SNAKEMAKE = "generic_snakemake"
 DEFAULT_GENERIC_WDL = "generic_wdl"
+BACTERIAL_ANNOTATION_PIPELINE = "bacterial_annotation"
+
+
+def _is_bacterial_annotation_request(user_request: str) -> bool:
+    return bool(
+        re.search(
+            r"\b(?:annotate\s+(?:an?\s+|this\s+|the\s+)?bacterial\s+genome|"
+            r"bacterial\s+genome\s+annotation)\b",
+            user_request,
+            flags=re.IGNORECASE,
+        )
+    )
 
 
 def _extract_pipeline_name(user_request: str) -> str | None:
@@ -47,7 +59,8 @@ def _clean_pipeline_name(value: str | None) -> str | None:
 
 
 def route_pipeline(user_request: str) -> IntentRoute | None:
-    if not re.search(
+    bacterial_annotation = _is_bacterial_annotation_request(user_request)
+    if not bacterial_annotation and not re.search(
         r"\b(example pipeline|test pipeline|shell pipeline|snakemake pipeline|wdl pipeline|pipeline skill|run pipeline|execute pipeline|start pipeline)\b",
         user_request,
         flags=re.IGNORECASE,
@@ -68,7 +81,9 @@ def route_pipeline(user_request: str) -> IntentRoute | None:
     if output_dir:
         args["output_dir"] = output_dir
     pipeline_name = _extract_pipeline_name(user_request)
-    if pipeline_name:
+    if bacterial_annotation and not pipeline_name:
+        args["pipeline_name"] = BACTERIAL_ANNOTATION_PIPELINE
+    elif pipeline_name:
         args["pipeline_name"] = pipeline_name
     elif is_wdl:
         args["pipeline_name"] = DEFAULT_GENERIC_WDL
@@ -104,13 +119,22 @@ def route_pipeline(user_request: str) -> IntentRoute | None:
         re.IGNORECASE,
     )
     if cores_match:
-        args["cores"] = max(1, int(cores_match.group(1) or cores_match.group(2)))
+        cores = max(1, int(cores_match.group(1) or cores_match.group(2)))
+        args["cores"] = cores
+        if bacterial_annotation:
+            config_overrides = dict(args.get("config_overrides") or {})
+            config_overrides.setdefault("cpus", cores)
+            args["config_overrides"] = config_overrides
 
     return IntentRoute(
         mode="direct_skill",
         skill_name="pipeline_runner",
         arguments=args,
-        reason="Matched an explicit approved pipeline execution request.",
+        reason=(
+            "Matched a bacterial genome annotation request."
+            if bacterial_annotation
+            else "Matched an explicit approved pipeline execution request."
+        ),
     )
 
 

@@ -1,0 +1,79 @@
+name: bacterial_annotation
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 3600
+inputs:
+  genome:
+    label: Assembled bacterial genome
+    config_key: genome_path
+    required: true
+    accepts: [".fasta", ".fa", ".fna"]
+    description: Assembled bacterial contigs in FASTA format.
+outputs:
+  report:
+    label: Annotation report
+    config_key: report_path
+    default: output/report.md
+    kind: report
+    required: true
+  metrics:
+    label: Annotation metrics
+    config_key: metrics_path
+    default: output/metrics.json
+    kind: metrics
+    required: true
+  gff:
+    label: GFF3 annotation
+    config_key: gff_path
+    default: output/annotation.gff
+    kind: annotation
+    required: true
+  genbank:
+    label: GenBank annotation
+    config_key: gbk_path
+    default: output/annotation.gbk
+    kind: annotation
+    required: true
+  proteins:
+    label: Protein sequences
+    config_key: faa_path
+    default: output/annotation.faa
+    kind: sequence
+    required: true
+  genes:
+    label: Gene nucleotide sequences
+    config_key: ffn_path
+    default: output/annotation.ffn
+    kind: sequence
+    required: true
+  contigs:
+    label: Annotated contigs
+    config_key: fna_path
+    default: output/annotation.fna
+    kind: sequence
+    required: true
+  features:
+    label: Feature table
+    config_key: tsv_path
+    default: output/annotation.tsv
+    kind: table
+    required: true
+  summary:
+    label: Prokka statistics
+    config_key: summary_path
+    default: output/annotation.txt
+    kind: text
+    required: true
+  log:
+    label: Prokka execution log
+    config_key: log_path
+    default: output/prokka.log
+    kind: text
+    required: true
+  bundle:
+    label: Complete Prokka output
+    config_key: bundle_path
+    default: output/prokka_outputs.zip
+    kind: archive
+    required: true

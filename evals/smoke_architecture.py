@@ -75,6 +75,33 @@ def main() -> int:
     }
     assert "input_path" not in generic_bio_route.arguments
 
+    bacterial_annotation_route = router.route(
+        "Annotate bacterial genome "
+        'genome: "pipelines/bacterial_annotation/data/input/contigs.fasta" '
+        'genus Escherichia species coli strain "K-12" cpus 4'
+    )
+    assert bacterial_annotation_route.mode == "direct_skill"
+    assert bacterial_annotation_route.skill_name == "pipeline_runner"
+    assert bacterial_annotation_route.arguments["pipeline_name"] == "bacterial_annotation"
+    assert bacterial_annotation_route.arguments["input_overrides"] == {
+        "genome": "pipelines/bacterial_annotation/data/input/contigs.fasta"
+    }
+    assert bacterial_annotation_route.arguments["config_overrides"] == {
+        "genus": "Escherichia",
+        "species": "coli",
+        "strain": "K-12",
+        "cpus": "4",
+    }
+
+    bacterial_annotation_cores_route = router.route(
+        'Annotate this bacterial genome "contigs.fna" with 3 cores'
+    )
+    assert bacterial_annotation_cores_route.arguments["pipeline_name"] == "bacterial_annotation"
+    assert bacterial_annotation_cores_route.arguments["input_overrides"] == {
+        "genome": "contigs.fna"
+    }
+    assert bacterial_annotation_cores_route.arguments["config_overrides"]["cpus"] == 3
+
     pipeline_results_route = router.route(
         "Collect and show all results from the generic_bio pipeline run"
     )
