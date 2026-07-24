@@ -1,0 +1,75 @@
+name: de_novo_Assembly
+engine: wdl
+wdl_engine: cromwell
+cromwell_url: http://127.0.0.1:8000
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: assembly_id.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 86400
+inputs:
+  read1:
+    label: Read 1 FASTQ
+    wdl_key: AssemblyId.fastq_r1
+    required: true
+    accepts: [".fastq", ".fq", ".fastq.gz", ".fq.gz"]
+  read2:
+    label: Read 2 FASTQ
+    wdl_key: AssemblyId.fastq_r2
+    required: false
+    accepts: [".fastq", ".fq", ".fastq.gz", ".fq.gz"]
+param_overrides:
+  sample_id:
+    wdl_key: AssemblyId.sample_id
+    default: assembly_sample
+  do_evaluate:
+    wdl_key: AssemblyId.do_evaluate
+    default: true
+  megahit_min_contig_len:
+    wdl_key: AssemblyId.megahit_min_contig_len
+    default: 100
+  megahit_k_list:
+    wdl_key: AssemblyId.megahit_k_list
+    default: "15,21,29,39"
+  megahit_extra_params:
+    wdl_key: AssemblyId.megahit_extra_params
+    default: "--min-count 1"
+  minimap2_params:
+    wdl_key: AssemblyId.minimap2_params
+    default: "-x asm20 -N 5"
+  minimap2_read_params:
+    wdl_key: AssemblyId.minimap2_read_params
+    default: "-ax sr --secondary=no"
+  max_unique_references:
+    wdl_key: AssemblyId.max_unique_references
+    default: 100
+  metaquast_params:
+    wdl_key: AssemblyId.metaquast_params
+    default: "--no-plots --no-html --no-icarus --fast"
+  threads:
+    wdl_key: AssemblyId.threads
+    default: 32
+  docker_image:
+    wdl_key: AssemblyId.docker_image
+    default: cncb/assembly-id:v1.0
+outputs:
+  contigs:
+    label: Renamed assembled contigs
+    wdl_output: AssemblyId.final_contigs_renamed
+    target: data/output/final.contigs.renamed.fa
+    kind: sequence
+    required: true
+  contig_report:
+    label: Contig identification report
+    wdl_output: AssemblyId.contig_report_tsv
+    target: data/output/contig_report.tsv
+    kind: table
+    required: true
+  species_report:
+    label: Species identification report
+    wdl_output: AssemblyId.species_report_tsv
+    target: data/output/species_report.tsv
+    kind: table
+    required: true

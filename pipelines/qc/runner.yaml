@@ -1,0 +1,66 @@
+name: qc
+engine: wdl
+wdl_engine: cromwell
+cromwell_url: http://127.0.0.1:8000
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: stage0_qc.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 86400
+inputs:
+  read1:
+    label: Read 1 FASTQ
+    wdl_key: MetagenomicQc.fastq_r1
+    required: true
+    accepts: [".fastq", ".fq", ".fastq.gz", ".fq.gz"]
+  read2:
+    label: Read 2 FASTQ
+    wdl_key: MetagenomicQc.fastq_r2
+    required: false
+    accepts: [".fastq", ".fq", ".fastq.gz", ".fq.gz"]
+param_overrides:
+  sample_id:
+    wdl_key: MetagenomicQc.sample_id
+    default: qc_sample
+  lean_io_mode:
+    wdl_key: MetagenomicQc.lean_io_mode
+    default: true
+  docker_image:
+    wdl_key: MetagenomicQc.docker_image
+    default: mscan-detection-qc:v1.0
+  cpu:
+    wdl_key: MetagenomicQc.cpu
+    default: 8
+  memory_gb:
+    wdl_key: MetagenomicQc.memory_gb
+    default: 64
+  disk_gb:
+    wdl_key: MetagenomicQc.disk_gb
+    default: 500
+outputs:
+  clean_r1:
+    label: Host-filtered read 1
+    wdl_output: MetagenomicQc.clean_r1
+    target: data/output/clean.R1.fq
+    kind: sequence
+    required: true
+  clean_r2:
+    label: Host-filtered read 2
+    wdl_output: MetagenomicQc.clean_r2
+    target: data/output/clean.R2.fq
+    kind: sequence
+    required: false
+  qc_counts:
+    label: QC read counts
+    wdl_output: MetagenomicQc.qc_counts
+    target: data/output/qc_counts.tsv
+    kind: table
+    required: true
+  phase1_metrics:
+    label: Phase 1 read overview
+    wdl_output: MetagenomicQc.phase1_metrics
+    target: data/output/phase1_read_overview.tsv
+    kind: table
+    required: true

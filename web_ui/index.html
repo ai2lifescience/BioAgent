@@ -111,6 +111,13 @@
             </details>
           </div>
         </section>
+        <div id="exampleParamPrompt" class="example-param-prompt" hidden>
+          <div class="example-param-prompt-main">
+            <div id="exampleParamPromptLabel" class="example-param-prompt-label"></div>
+            <div id="exampleParamPromptOptions" class="example-param-prompt-options"></div>
+          </div>
+          <button id="exampleParamPromptDismiss" class="example-param-prompt-dismiss" type="button" aria-label="Dismiss parameter prompt">Dismiss</button>
+        </div>
         <form id="composer" class="composer">
           <textarea id="prompt" placeholder="Message BioAgent"></textarea>
           <div class="composer-actions">
@@ -133,7 +140,7 @@
       <div class="sidebar-panel examples-panel">
         <div>
           <label>Examples</label>
-          <div class="sidebar-hint">Click one to fill the message box</div>
+          <div class="sidebar-hint">Click one to fill the message box. Pipelines with options will ask in the composer.</div>
         </div>
         <div class="examples">
           <button class="example-button" data-example="What is GC content?">What is GC content?</button>
@@ -145,7 +152,23 @@
           <button class="example-button" data-example="Run pipeline with pipeline_name: generic_shell">Run shell pipeline</button>
           <button class="example-button" data-example="Run pipeline with pipeline_name: generic_snakemake">Run Snakemake pipeline</button>
           <button class="example-button" data-example="Run pipeline with pipeline_name: generic_wdl">Run WDL pipeline</button>
-          <button class="example-button" data-example="Run pipeline with pipeline_name: molecular_meta_wdl">Run Molecular WDL</button>
+          <button class="example-button" data-example="Run pipeline with pipeline_name: qc">Run Metagenomic QC</button>
+          <button class="example-button" data-example="Run pipeline with pipeline_name: Alignment_based_Identification">Alignment-based Identification</button>
+          <button
+            class="example-button"
+            data-example-template="Run pipeline with pipeline_name: molecular_typing_meta_wdl pathogen: {pathogen}"
+            data-param-name="pathogen"
+            data-param-label="Choose pathogen for Molecular Typing"
+            data-param-options="H1N1,H3N2,SARS_CoV_2"
+          >Molecular Typing</button>
+          <button class="example-button" data-example="Run pipeline with pipeline_name: de_novo_Assembly">Run de novo Assembly</button>
+          <button
+            class="example-button"
+            data-example-template="Run pipeline with pipeline_name: Risk_Assessment pathogen: {pathogen}"
+            data-param-name="pathogen"
+            data-param-label="Choose pathogen for Risk Assessment"
+            data-param-options="H1N1,H3N2,SARS_CoV_2"
+          >Risk Assessment</button>
         </div>
       </div>
     </aside>

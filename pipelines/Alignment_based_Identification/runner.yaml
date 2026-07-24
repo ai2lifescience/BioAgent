@@ -1,0 +1,135 @@
+name: Alignment_based_Identification
+engine: wdl
+wdl_engine: cromwell
+cromwell_url: http://127.0.0.1:8000
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: pipeline.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 86400
+inputs:
+  clean_r1:
+    label: Host-filtered read 1 FASTQ
+    wdl_key: MetagenomicDetection.clean_r1
+    required: true
+    accepts: [".fastq", ".fq", ".fastq.gz", ".fq.gz"]
+  clean_r2:
+    label: Host-filtered read 2 FASTQ
+    wdl_key: MetagenomicDetection.clean_r2
+    required: false
+    accepts: [".fastq", ".fq", ".fastq.gz", ".fq.gz"]
+param_overrides:
+  sample_id:
+    wdl_key: MetagenomicDetection.sample_id
+    default: detection_sample
+  project_id:
+    wdl_key: MetagenomicDetection.project_id
+    default: ""
+  user_id:
+    wdl_key: MetagenomicDetection.user_id
+    default: ""
+  maprate_bacteria:
+    wdl_key: MetagenomicDetection.maprate_bacteria
+    default: 0.8
+  maprate_virus:
+    wdl_key: MetagenomicDetection.maprate_virus
+    default: 0.7
+  maprate_fungi:
+    wdl_key: MetagenomicDetection.maprate_fungi
+    default: 0.8
+  maprate_parasite:
+    wdl_key: MetagenomicDetection.maprate_parasite
+    default: 0.8
+  misrate:
+    wdl_key: MetagenomicDetection.misrate
+    default: 0.1
+  min_as_score:
+    wdl_key: MetagenomicDetection.min_as_score
+    default: 30
+  min_mapq:
+    wdl_key: MetagenomicDetection.min_mapq
+    default: 20
+  highpos_cutoff:
+    wdl_key: MetagenomicDetection.highpos_cutoff
+    default: 0.05
+  shannon_cut:
+    wdl_key: MetagenomicDetection.shannon_cut
+    default: 3.0
+  stage6_lib_type:
+    wdl_key: MetagenomicDetection.stage6_lib_type
+    default: DNA
+  stage6_product_type:
+    wdl_key: MetagenomicDetection.stage6_product_type
+    default: DNA
+  stage6_nonvir_topn:
+    wdl_key: MetagenomicDetection.stage6_nonvir_topn
+    default: 1000
+  stage6_fil_mrn:
+    wdl_key: MetagenomicDetection.stage6_fil_mrn
+    default: 10
+  stage6_fil_shannon:
+    wdl_key: MetagenomicDetection.stage6_fil_shannon
+    default: 0.75
+  stage6_fil_breadth:
+    wdl_key: MetagenomicDetection.stage6_fil_breadth
+    default: 0.5
+  stage6_species_keep_limit:
+    wdl_key: MetagenomicDetection.stage6_species_keep_limit
+    default: 400
+  keep_intermediate:
+    wdl_key: MetagenomicDetection.keep_intermediate
+    default: false
+  lean_io_mode:
+    wdl_key: MetagenomicDetection.lean_io_mode
+    default: true
+  docker_image:
+    wdl_key: MetagenomicDetection.docker_image
+    default: mscan-detection:v1.0
+  cpu_map:
+    wdl_key: MetagenomicDetection.cpu_map
+    default: 8
+  cpu_stage:
+    wdl_key: MetagenomicDetection.cpu_stage
+    default: 4
+  mem_map_gb:
+    wdl_key: MetagenomicDetection.mem_map_gb
+    default: 64
+  mem_stage_gb:
+    wdl_key: MetagenomicDetection.mem_stage_gb
+    default: 16
+  disk_gb:
+    wdl_key: MetagenomicDetection.disk_gb
+    default: 500
+outputs:
+  final_report:
+    label: Priority panel with confidence
+    wdl_output: MetagenomicDetection.final_report_with_confidence
+    target: data/output/priority_with_confidence.tsv
+    kind: table
+    required: true
+  priority_panel:
+    label: Stage 5 priority microbe panel
+    wdl_output: MetagenomicDetection.stage5_priority_panel
+    target: data/output/priority_microbe_panel.tsv
+    kind: table
+    required: true
+  sample_overview:
+    label: Sample overview
+    wdl_output: MetagenomicDetection.sample_overview
+    target: data/output/sample_overview.tsv
+    kind: table
+    required: true
+  read_accounting:
+    label: Stage 2 read accounting
+    wdl_output: MetagenomicDetection.stage2_read_accounting
+    target: data/output/stage2_read_accounting.tsv
+    kind: table
+    required: true
+  crossdb_signature:
+    label: Stage 2 cross-database signature
+    wdl_output: MetagenomicDetection.stage2_crossdb_signature
+    target: data/output/stage2_crossdb_signature.tsv
+    kind: table
+    required: true

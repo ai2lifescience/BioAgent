@@ -10,8 +10,8 @@ input {
 	File? file2Path
 	String sample
 	String pathogen
-	Array[File] REF
-	Array[File] NEXTCLADE_DATASET
+	Array[String] REF
+	Array[String] NEXTCLADE_DATASET
 	String MIN_LENGTH
 	String MIN_QUAL
 	String? HA_REFNAME

@@ -32,8 +32,8 @@ task image.
 be resolved separately with:
 
 ```bash
-conda env create -f pipelines/molecular_meta_wdl/environment.yml
-conda activate molecular-meta-wdl
+conda env create -f pipelines/molecular_typing_meta_wdl/environment.yml
+conda activate molecular_typing_meta_wdl
 ```
 
 The current WDL `runtime` blocks explicitly select Docker, so activating this
@@ -49,3 +49,8 @@ docker image inspect cncb/molecular-wdl:v1.0
 
 Pipeline function, inputs, and outputs are documented in
 [`DESCRIPTION.md`](DESCRIPTION.md).
+
+The user must upload read 1 FASTQ (and optionally read 2) and explicitly choose
+`H1N1`, `H3N2`, or `SARS_CoV_2`. BioAgent then applies the matching reference,
+Nextclade dataset, HA/reference names, quality thresholds, and resources copied
+from the production application configuration.

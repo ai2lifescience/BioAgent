@@ -1,0 +1,20 @@
+# Commands required inside the WDL task image. The four /app/scripts entrypoints
+# are supplied by cncb/assembly-id:v1.0 and are not installed by this file.
+name: de-novo-assembly
+
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+
+dependencies:
+  - bash >=4.4
+  - coreutils
+  - gawk
+  - grep
+  - sed
+  - megahit >=1.2.9
+  - minimap2 >=2.26
+  - samtools >=1.17
+  - quast >=5.2
+  - python >=3.10

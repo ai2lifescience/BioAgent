@@ -445,6 +445,73 @@ textarea:focus {
   background: var(--surface-soft);
 }
 
+.example-param-prompt {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--accent-soft);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f3fbf9 0%, #ffffff 100%);
+}
+
+.example-param-prompt[hidden] {
+  display: none;
+}
+
+.example-param-prompt-main {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.example-param-prompt-label {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.example-param-prompt-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.example-param-option {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  padding: 7px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.example-param-option:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.example-param-prompt-dismiss {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 0 0;
+  white-space: nowrap;
+}
+
+.example-param-prompt-dismiss:hover {
+  color: var(--ink);
+}
+
 main {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
