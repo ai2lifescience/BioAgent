@@ -8,7 +8,7 @@ CLI, API, and Python interface.
 
 ## What BioAgent Does
 
-BioAgent functions
+![BioAgent functions](docs/images/system_functions.png)
 
 BioAgent can:
 
@@ -73,7 +73,7 @@ python -B -m interfaces.web --host 127.0.0.1 --port 8000
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in a browser. Stop the
 server with `Ctrl+C`.
 
-BioAgent web interface
+![BioAgent web interface](docs/images/web_ui.png)
 
 ### 5. Use BioAgent
 
@@ -121,7 +121,7 @@ Then open `http://<SERVER_LAN_IP>:8000` from the other computer.
 
 ## Architecture
 
-BioAgent system architecture
+![BioAgent system architecture](docs/images/system_architecture.png)
 
 ```text
 User / App
@@ -201,4 +201,3 @@ through the web UI.
 - [CLI usage and examples](docs/cli_usage.md)
 - [Team development workflow](docs/dev_workflow.md)
 - [Planned improvements](docs/todo.md)
-
