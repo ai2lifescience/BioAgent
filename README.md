@@ -96,6 +96,10 @@ Run pipeline with pipeline_name: generic_snakemake
 Run pipeline with pipeline_name: generic_bio
 ```
 
+```text
+Run pipeline with pipeline_name: bacterial_annotation genome: "path/to/contigs.fasta" genus Escherichia species coli strain "K-12" cpus 4
+```
+
 Use the Uploads panel for local input files. BioAgent stores uploads and outputs
 under the active session so later requests in the same chat can reuse them.
 
