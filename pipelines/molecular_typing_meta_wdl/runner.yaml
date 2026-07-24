@@ -1,10 +1,5 @@
-name: molecular_typing_meta_wdl
+name: molecular_typing_meta
 engine: wdl
-wdl_engine: cromwell
-cromwell_url: http://127.0.0.1:8000
-cromwell_api_version: v1
-cromwell_poll_interval: 5
-cromwell_visibility_timeout: 300
 workflow: workflow.wdl
 inputs_json: inputs.json
 options_json: options.json
@@ -26,9 +21,7 @@ param_overrides:
     default: molecular_demo_H1N1
   pathogen:
     wdl_key: run_molecular_typing.pathogen
-    label: Pathogen
-    required: true
-    choices: [H1N1, H3N2, SARS_CoV_2]
+    default: H1N1
   min_length:
     wdl_key: run_molecular_typing.MIN_LENGTH
     default: "35"
@@ -44,77 +37,6 @@ param_overrides:
   docker_image:
     wdl_key: run_molecular_typing.docker_image
     default: cncb/molecular-wdl:v1.0
-preset_param: pathogen
-presets:
-  H1N1:
-    run_molecular_typing.pathogen: H1N1
-    run_molecular_typing.REF:
-      - /data/zhaomh39/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna
-      - /data/zhaomh39/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna.amb
-      - /data/zhaomh39/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna.ann
-      - /data/zhaomh39/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna.bwt
-      - /data/zhaomh39/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna.fai
-      - /data/zhaomh39/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna.pac
-      - /data/zhaomh39/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna.sa
-    run_molecular_typing.NEXTCLADE_DATASET:
-      - /data/zhaomh39/program/database/molecular_database/h1n1/h1n1pdm_ha_CY121680.20251125/reference.fasta
-      - /data/zhaomh39/program/database/molecular_database/h1n1/h1n1pdm_ha_CY121680.20251125/genome_annotation.gff3
-      - /data/zhaomh39/program/database/molecular_database/h1n1/h1n1pdm_ha_CY121680.20251125/tree.json
-      - /data/zhaomh39/program/database/molecular_database/h1n1/h1n1pdm_ha_CY121680.20251125/pathogen.json
-    run_molecular_typing.THREADS: "16"
-    run_molecular_typing.HA_REFNAME: NC_026433.1
-    run_molecular_typing.MIN_LENGTH: "35"
-    run_molecular_typing.MIN_QUAL: "20"
-    run_molecular_typing.REFNAME: null
-    run_molecular_typing.EXPECTED_LEN: null
-    run_molecular_typing.task_cpu: 16
-    run_molecular_typing.docker_image: cncb/molecular-wdl:v1.0
-  H3N2:
-    run_molecular_typing.pathogen: H3N2
-    run_molecular_typing.REF:
-      - /data/zhaomh39/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta
-      - /data/zhaomh39/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta.amb
-      - /data/zhaomh39/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta.ann
-      - /data/zhaomh39/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta.bwt
-      - /data/zhaomh39/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta.fai
-      - /data/zhaomh39/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta.pac
-      - /data/zhaomh39/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta.sa
-    run_molecular_typing.NEXTCLADE_DATASET:
-      - /data/zhaomh39/program/database/molecular_database/h3n2/h3n2_ha_EPI1857216.20260205/reference.fasta
-      - /data/zhaomh39/program/database/molecular_database/h3n2/h3n2_ha_EPI1857216.20260205/genome_annotation.gff3
-      - /data/zhaomh39/program/database/molecular_database/h3n2/h3n2_ha_EPI1857216.20260205/tree.json
-      - /data/zhaomh39/program/database/molecular_database/h3n2/h3n2_ha_EPI1857216.20260205/pathogen.json
-    run_molecular_typing.THREADS: "16"
-    run_molecular_typing.HA_REFNAME: PX230021.1
-    run_molecular_typing.MIN_LENGTH: "35"
-    run_molecular_typing.MIN_QUAL: "20"
-    run_molecular_typing.REFNAME: null
-    run_molecular_typing.EXPECTED_LEN: null
-    run_molecular_typing.task_cpu: 16
-    run_molecular_typing.docker_image: cncb/molecular-wdl:v1.0
-  SARS_CoV_2:
-    run_molecular_typing.pathogen: SARS_CoV_2
-    run_molecular_typing.REF:
-      - /data/zhaomh39/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna
-      - /data/zhaomh39/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna.amb
-      - /data/zhaomh39/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna.ann
-      - /data/zhaomh39/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna.bwt
-      - /data/zhaomh39/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna.fai
-      - /data/zhaomh39/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna.pac
-      - /data/zhaomh39/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna.sa
-    run_molecular_typing.NEXTCLADE_DATASET:
-      - /data/zhaomh39/program/database/molecular_database/sars/SARS_cov2.20260205/reference.fasta
-      - /data/zhaomh39/program/database/molecular_database/sars/SARS_cov2.20260205/genome_annotation.gff3
-      - /data/zhaomh39/program/database/molecular_database/sars/SARS_cov2.20260205/tree.json
-      - /data/zhaomh39/program/database/molecular_database/sars/SARS_cov2.20260205/pathogen.json
-    run_molecular_typing.THREADS: "8"
-    run_molecular_typing.HA_REFNAME: null
-    run_molecular_typing.MIN_LENGTH: "35"
-    run_molecular_typing.MIN_QUAL: "20"
-    run_molecular_typing.REFNAME: NC_045512.2
-    run_molecular_typing.EXPECTED_LEN: "29903"
-    run_molecular_typing.task_cpu: 8
-    run_molecular_typing.docker_image: cncb/molecular-wdl:v1.0
 outputs:
   result_csv:
     label: Typing result CSV
