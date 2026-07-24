@@ -308,3 +308,86 @@ git fetch --prune
 
 Do not merge all of `dev/architecture` into `main` when only one fix is needed.
 The branches may have different files and squash-diverged histories.
+
+## Admin: Directly Push a file to main
+
+Only the principal repository administrator should use this workflow. Start on
+`main`, review the documentation change, and stage only the workflow guide:
+
+```bash
+git switch main
+git diff -- docs/dev_workflow.md
+git add docs/dev_workflow.md
+git diff --cached
+git commit -m "Document selective main-to-architecture merge"
+```
+
+Update the new local commit with any changes that reached remote `main`, then
+push it directly:
+
+```bash
+git fetch origin
+git rebase origin/main
+git push origin main
+```
+
+If the push is rejected because `main` is protected, do not attempt to bypass
+the protection. Push the commit to a task branch and open a pull request:
+
+```bash
+git switch -c docs/update-development-workflow
+git push -u origin docs/update-development-workflow
+gh pr create --base main --fill
+```
+
+## Admin: Merge main Into dev/architecture Except pipelines
+
+Use this workflow to bring the latest changes from `main` into
+`dev/architecture` while keeping the entire `pipelines/` directory exactly as
+it was on `dev/architecture`. Git cannot exclude a path directly from a normal
+merge, so pause the merge before committing and restore that path from the
+target branch.
+
+Start with a clean working tree and update both remote-tracking branches:
+
+```bash
+git status --short
+git fetch origin
+git switch dev/architecture
+git pull --ff-only origin dev/architecture
+```
+
+Start the merge without creating its commit:
+
+```bash
+git merge --no-commit --no-ff origin/main
+```
+
+Keep the `dev/architecture` version of `pipelines/`, including restoring files
+changed or deleted on `main` and removing files added only on `main`:
+
+```bash
+git restore --source=HEAD --staged --worktree -- pipelines/
+```
+
+If Git reports conflicts outside `pipelines/`, resolve those files and stage
+them with `git add`. Then verify that the merge contains no `pipelines/`
+changes before committing:
+
+```bash
+git diff --name-only --diff-filter=U
+git diff --cached -- pipelines/
+git status
+git commit -m "Merge main into dev/architecture excluding pipelines"
+git push origin dev/architecture
+```
+
+The first verification command must print no unresolved files, and the second
+must print no changes. To cancel the in-progress merge instead, run:
+
+```bash
+git merge --abort
+```
+
+This exclusion applies only to this merge. Repeat the restore and verification
+steps during future merges from `main` when `pipelines/` must remain unchanged.
