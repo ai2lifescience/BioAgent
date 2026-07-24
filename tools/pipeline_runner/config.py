@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 from pathlib import Path
+import re
 from typing import Any
 
 from tools.pipeline_config import load_yaml_config, write_yaml_config
@@ -51,13 +52,18 @@ def write_runtime_config(
     """Write the config file passed to the concrete pipeline engine."""
     runtime_config = copy.deepcopy(context.raw_config)
     input_records = apply_input_overrides(runtime_config, context)
-    applied_config_overrides = apply_runner_param_overrides(
+    requested_overrides = apply_runner_preset(
         runtime_config,
         context.config_overrides,
         context.runner_config,
     )
+    applied_config_overrides = apply_runner_param_overrides(
+        runtime_config,
+        requested_overrides,
+        context.runner_config,
+    )
     if applied_config_overrides is None:
-        applied_config_overrides = apply_config_overrides(runtime_config, context.config_overrides)
+        applied_config_overrides = apply_config_overrides(runtime_config, requested_overrides)
     output_records = rewrite_output_config_fields(runtime_config, context)
     output_config_keys = {str(record.get("config_key") or "") for record in output_records}
     path_records = rewrite_top_level_path_fields(runtime_config, context, skip_keys=output_config_keys)
@@ -165,6 +171,53 @@ def apply_runner_param_overrides(
         runtime_config[target_key] = coerce_param_value(default, requested_value)
         applied[str(key)] = requested_value
     return applied
+
+
+def apply_runner_preset(
+    runtime_config: dict[str, Any],
+    requested_overrides: dict[str, Any],
+    runner_config: dict[str, Any],
+) -> dict[str, Any]:
+    """Apply a runner preset selected by a required user-facing parameter."""
+    requested = dict(requested_overrides)
+    preset_param = str(runner_config.get("preset_param") or "").strip()
+    presets = runner_config.get("presets")
+    if not preset_param or not isinstance(presets, dict) or not presets:
+        return requested
+
+    param_specs = runner_config.get("param_overrides") or {}
+    param_spec = param_specs.get(preset_param) if isinstance(param_specs, dict) else {}
+    required = isinstance(param_spec, dict) and bool(param_spec.get("required"))
+    selected = requested.get(preset_param)
+    if selected in (None, ""):
+        if required:
+            choices = ", ".join(str(key) for key in presets)
+            raise ValueError(
+                f"Required pipeline parameter '{preset_param}' is missing. "
+                f"Choose one of: {choices}."
+            )
+        return requested
+
+    normalized = _normalize_preset_name(selected)
+    matched_name = next(
+        (str(name) for name in presets if _normalize_preset_name(name) == normalized),
+        None,
+    )
+    if matched_name is None:
+        choices = ", ".join(str(key) for key in presets)
+        raise ValueError(
+            f"Unsupported {preset_param} '{selected}'. Choose one of: {choices}."
+        )
+    preset_values = presets.get(matched_name)
+    if not isinstance(preset_values, dict):
+        raise ValueError(f"Pipeline preset '{matched_name}' must be a mapping.")
+    runtime_config.update(copy.deepcopy(preset_values))
+    requested[preset_param] = matched_name
+    return requested
+
+
+def _normalize_preset_name(value: Any) -> str:
+    return re.sub(r"[^a-z0-9]+", "", str(value or "").lower())
 
 
 def normalize_config_overrides(config_overrides: dict[str, Any] | None) -> dict[str, Any]:

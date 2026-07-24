@@ -29,7 +29,7 @@ PIPELINE_RUNNER_TOOL = ToolDefinition(
             "cores": {"type": "integer", "default": 1},
             "dry_run": {
                 "type": "boolean",
-                "description": "Run Snakemake in dry-run mode or validate WDL with miniwdl check.",
+                "description": "Run Snakemake in dry-run mode or validate WDL locally with miniwdl check.",
                 "default": False,
             },
             "timeout": {"type": "integer", "default": 300},

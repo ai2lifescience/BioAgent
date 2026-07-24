@@ -32,8 +32,8 @@ task image.
 be resolved separately with:
 
 ```bash
-conda env create -f pipelines/molecular_meta_wdl/environment.yml
-conda activate molecular-meta-wdl
+conda env create -f pipelines/molecular_typing_meta/environment.yml
+conda activate molecular_typing_meta
 ```
 
 The current WDL `runtime` blocks explicitly select Docker, so activating this

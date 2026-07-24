@@ -1,0 +1,181 @@
+name: Risk_Assessment
+engine: wdl
+wdl_engine: cromwell
+cromwell_url: http://127.0.0.1:8000
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: pipline.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 86400
+inputs:
+  read1:
+    label: Read 1 FASTQ
+    wdl_key: VariantRisk.fastq_r1
+    required: true
+    accepts: [".fastq", ".fq", ".fastq.gz", ".fq.gz"]
+  read2:
+    label: Read 2 FASTQ
+    wdl_key: VariantRisk.fastq_r2
+    required: false
+    accepts: [".fastq", ".fq", ".fastq.gz", ".fq.gz"]
+param_overrides:
+  sample_id:
+    wdl_key: VariantRisk.sample_id
+    default: risk_demo_H1N1_1
+  pathogen:
+    wdl_key: VariantRisk.pathogen
+    label: Pathogen
+    required: true
+    choices: [H1N1, H3N2, SARS_CoV_2]
+  log_tag:
+    wdl_key: VariantRisk.log_tag
+    default: H1N1
+  reference_label:
+    wdl_key: VariantRisk.reference_label
+    default: A/California/07/2009(H1N1)
+  snpeff_db:
+    wdl_key: VariantRisk.snpeff_db
+    default: Influenza_A_H1N1
+  threads:
+    wdl_key: VariantRisk.threads
+    default: 8
+  mapq:
+    wdl_key: VariantRisk.mapq
+    default: 20
+  baseq:
+    wdl_key: VariantRisk.baseq
+    default: 20
+  ivar_min_depth:
+    wdl_key: VariantRisk.ivar_min_depth
+    default: 2.0
+  ivar_min_af:
+    wdl_key: VariantRisk.ivar_min_af
+    default: 0.6
+  highconf_depth:
+    wdl_key: VariantRisk.highconf_depth
+    default: 20.0
+  highconf_af:
+    wdl_key: VariantRisk.highconf_af
+    default: 0.05
+  segment_depth_threshold:
+    wdl_key: VariantRisk.segment_depth_threshold
+    default: 5
+  trim_bp:
+    wdl_key: VariantRisk.trim_bp
+    default: 3
+  snpeff_java_mem_gb:
+    wdl_key: VariantRisk.snpeff_java_mem_gb
+    default: 32
+  docker_image:
+    wdl_key: VariantRisk.docker_image
+    default: cncb/risk-wdl:v1.0
+  cpu:
+    wdl_key: VariantRisk.cpu
+    default: 8
+  memory_gb:
+    wdl_key: VariantRisk.memory_gb
+    default: 64
+  disk_gb:
+    wdl_key: VariantRisk.disk_gb
+    default: 200
+preset_param: pathogen
+presets:
+  H1N1:
+    VariantRisk.pathogen: H1N1
+    VariantRisk.log_tag: H1N1
+    VariantRisk.reference_fasta: /data/zhaomh39/program/database/risk_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna
+    VariantRisk.snpeff_config: /data/zhaomh39/program/database/risk_database/h1n1/snpeff_h1n1.config
+    VariantRisk.snpeff_db: Influenza_A_H1N1
+    VariantRisk.snpeff_data_tarball: /data/zhaomh39/program/database/risk_database/h1n1/snpEff_H1N1.tar.gz
+    VariantRisk.segments_tsv: /data/zhaomh39/program/database/risk_database/h1n1/h1n1_segments.tsv
+    VariantRisk.reference_label: A/California/07/2009(H1N1)
+    VariantRisk.risk_annotation_h: /data/zhaomh39/program/database/risk_database/h1n1/H1N1_H_risk_annotation.tsv
+    VariantRisk.risk_annotation_n: /data/zhaomh39/program/database/risk_database/h1n1/H1N1_N_risk_annotation.tsv
+    VariantRisk.spike_risk_annotation: null
+    VariantRisk.threads: 8
+    VariantRisk.mapq: 20
+    VariantRisk.baseq: 20
+    VariantRisk.ivar_min_depth: 2.0
+    VariantRisk.ivar_min_af: 0.6
+    VariantRisk.highconf_depth: 20.0
+    VariantRisk.highconf_af: 0.05
+    VariantRisk.segment_depth_threshold: 5
+    VariantRisk.trim_bp: 3
+    VariantRisk.snpeff_java_mem_gb: 32
+    VariantRisk.docker_image: cncb/risk-wdl:v1.0
+    VariantRisk.cpu: 8
+    VariantRisk.memory_gb: 64
+    VariantRisk.disk_gb: 200
+  H3N2:
+    VariantRisk.pathogen: H3N2
+    VariantRisk.log_tag: H3N2
+    VariantRisk.reference_fasta: /data/zhaomh39/program/database/risk_database/h3n2/H3N2_Darwin2021.fasta
+    VariantRisk.snpeff_config: /data/zhaomh39/program/database/risk_database/h3n2/snpeff_h3n2.config
+    VariantRisk.snpeff_db: Influenza_A_H3N2
+    VariantRisk.snpeff_data_tarball: /data/zhaomh39/program/database/risk_database/h3n2/snpEff_H3N2.tar.gz
+    VariantRisk.segments_tsv: /data/zhaomh39/program/database/risk_database/h3n2/h3n2_segments.tsv
+    VariantRisk.reference_label: A/Darwin/2021(H3N2)
+    VariantRisk.risk_annotation_h: /data/zhaomh39/program/database/risk_database/h3n2/H3N2_H_risk_annotation.tsv
+    VariantRisk.risk_annotation_n: /data/zhaomh39/program/database/risk_database/h3n2/H3N2_N_risk_annotation.tsv
+    VariantRisk.spike_risk_annotation: null
+    VariantRisk.threads: 8
+    VariantRisk.mapq: 20
+    VariantRisk.baseq: 20
+    VariantRisk.ivar_min_depth: 2.0
+    VariantRisk.ivar_min_af: 0.6
+    VariantRisk.highconf_depth: 20.0
+    VariantRisk.highconf_af: 0.05
+    VariantRisk.segment_depth_threshold: 5
+    VariantRisk.trim_bp: 3
+    VariantRisk.snpeff_java_mem_gb: 32
+    VariantRisk.docker_image: cncb/risk-wdl:v1.0
+    VariantRisk.cpu: 8
+    VariantRisk.memory_gb: 64
+    VariantRisk.disk_gb: 200
+  SARS_CoV_2:
+    VariantRisk.pathogen: SARS_CoV_2
+    VariantRisk.log_tag: SARS-CoV-2
+    VariantRisk.reference_fasta: /data/zhaomh39/program/database/risk_database/SARS_cov2/GCF_009858895.2_ASM985889v3_genomic.fna
+    VariantRisk.snpeff_config: /data/zhaomh39/program/database/risk_database/SARS_cov2/snpeff_sars_cov2.config
+    VariantRisk.snpeff_db: SARS-CoV-2
+    VariantRisk.snpeff_data_tarball: /data/zhaomh39/program/database/risk_database/SARS_cov2/snpEff_SARS_cov2.tar.gz
+    VariantRisk.segments_tsv: /data/zhaomh39/program/database/risk_database/SARS_cov2/sars_cov2_segments.tsv
+    VariantRisk.reference_label: Wuhan-Hu-1(SARS-CoV-2)
+    VariantRisk.risk_annotation_h: null
+    VariantRisk.risk_annotation_n: null
+    VariantRisk.spike_risk_annotation: /data/zhaomh39/program/database/risk_database/SARS_cov2/SARS_COV2_spike_risk_annotation.tsv
+    VariantRisk.threads: 8
+    VariantRisk.mapq: 20
+    VariantRisk.baseq: 20
+    VariantRisk.ivar_min_depth: 2.0
+    VariantRisk.ivar_min_af: 0.6
+    VariantRisk.highconf_depth: 20.0
+    VariantRisk.highconf_af: 0.05
+    VariantRisk.segment_depth_threshold: 5
+    VariantRisk.trim_bp: 3
+    VariantRisk.snpeff_java_mem_gb: 32
+    VariantRisk.docker_image: cncb/risk-wdl:v1.0
+    VariantRisk.cpu: 8
+    VariantRisk.memory_gb: 64
+    VariantRisk.disk_gb: 200
+outputs:
+  final_report:
+    label: Final variant risk report
+    wdl_output: VariantRisk.final_report
+    target: data/output/final_variant_risk_report.tsv
+    kind: table
+    required: true
+  segments:
+    label: Segment depth summary
+    wdl_output: VariantRisk.segments
+    target: data/output/segments.tsv
+    kind: table
+    required: true
+  output_archive:
+    label: Complete risk assessment output
+    wdl_output: VariantRisk.output_tar
+    target: data/output/risk_assessment_output.tar
+    kind: archive
+    required: true
