@@ -17,6 +17,10 @@ const thinkingMeta = document.getElementById("thinkingMeta");
 const thinkingDetails = document.getElementById("thinkingDetails");
 const thinkingLogs = document.getElementById("thinkingLogs");
 const composer = document.getElementById("composer");
+const exampleParamPrompt = document.getElementById("exampleParamPrompt");
+const exampleParamPromptLabel = document.getElementById("exampleParamPromptLabel");
+const exampleParamPromptOptions = document.getElementById("exampleParamPromptOptions");
+const exampleParamPromptDismiss = document.getElementById("exampleParamPromptDismiss");
 const newChatButton = document.getElementById("newChat");
 const sessionList = document.getElementById("sessionList");
 const sessionCount = document.getElementById("sessionCount");
@@ -337,6 +341,7 @@ function startNewChat() {
   updateActiveSession();
   loadUploads().catch((error) => console.warn("Failed to load uploads.", error));
   resetThinkingBar();
+  hideExampleParamPrompt();
   promptInput.focus();
 }
 
@@ -472,6 +477,7 @@ function pipelineInputRequestFromResult(result) {
       pipelineName: String(output.pipeline_name || ""),
       text: "",
       requestedInputs,
+      configOverrides: output.config_overrides || {},
     };
   }
   return null;
@@ -537,7 +543,11 @@ function renderUploadInsertOptions() {
 
 function requestPrefixForPendingPipeline() {
   const pending = latestPipelineInputRequest();
-  return pending?.pipelineName ? `Run pipeline with pipeline_name: ${pending.pipelineName}` : "";
+  if (!pending?.pipelineName) return "";
+  const parameters = Object.entries(pending.configOverrides || {}).map(
+    ([key, value]) => `${key}: ${String(value)}`,
+  );
+  return [`Run pipeline with pipeline_name: ${pending.pipelineName}`, ...parameters].join(" ");
 }
 
 function uploadPathSnippet(path) {
@@ -1445,6 +1455,7 @@ async function submitPrompt(event) {
   if (!text) return;
 
   promptInput.value = "";
+  hideExampleParamPrompt();
   addMessage("user", text);
   requestStopped = false;
   activeAbortController = new AbortController();
@@ -1466,11 +1477,72 @@ async function submitPrompt(event) {
   }
 }
 
+function fillExamplePrompt(text) {
+  promptInput.value = text;
+  promptInput.focus();
+  promptInput.setSelectionRange(text.length, text.length);
+}
+
+function formatParamOptionLabel(value) {
+  if (value === "SARS_CoV_2") {
+    return "SARS-CoV-2";
+  }
+  return value;
+}
+
+function hideExampleParamPrompt() {
+  if (!exampleParamPrompt) {
+    return;
+  }
+  exampleParamPrompt.hidden = true;
+  exampleParamPromptLabel.textContent = "";
+  exampleParamPromptOptions.innerHTML = "";
+}
+
+function showExampleParamPrompt({ label, paramName, options, template }) {
+  if (!exampleParamPrompt) {
+    return;
+  }
+  exampleParamPromptLabel.textContent = label;
+  exampleParamPromptOptions.innerHTML = "";
+  options.forEach((value) => {
+    const optionButton = document.createElement("button");
+    optionButton.type = "button";
+    optionButton.className = "example-param-option";
+    optionButton.textContent = formatParamOptionLabel(value);
+    optionButton.addEventListener("click", () => {
+      const text = template.replaceAll(`{${paramName}}`, value);
+      hideExampleParamPrompt();
+      fillExamplePrompt(text);
+    });
+    exampleParamPromptOptions.appendChild(optionButton);
+  });
+  exampleParamPrompt.hidden = false;
+  promptInput.focus();
+}
+
 function bindExampleButtons(root = document) {
-  root.querySelectorAll("[data-example]").forEach((button) => {
+  root.querySelectorAll(".example-button").forEach((button) => {
+    if (button.dataset.exampleBound === "1") {
+      return;
+    }
+    button.dataset.exampleBound = "1";
     button.addEventListener("click", () => {
-      promptInput.value = button.getAttribute("data-example");
-      promptInput.focus();
+      const template = button.getAttribute("data-example-template");
+      if (template) {
+        const paramName = button.getAttribute("data-param-name") || "value";
+        const label = button.getAttribute("data-param-label") || `Choose ${paramName}`;
+        const options = String(button.getAttribute("data-param-options") || "")
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+        if (options.length) {
+          showExampleParamPrompt({ label, paramName, options, template });
+          return;
+        }
+      }
+      hideExampleParamPrompt();
+      fillExamplePrompt(button.getAttribute("data-example") || "");
     });
   });
 }
@@ -1485,6 +1557,9 @@ function bindEvents() {
   });
 
   bindExampleButtons(document);
+  if (exampleParamPromptDismiss) {
+    exampleParamPromptDismiss.addEventListener("click", hideExampleParamPrompt);
+  }
   modelSelect.addEventListener("change", updateActiveModel);
   stopButton.addEventListener("click", stopCurrentRequest);
   newChatButton.addEventListener("click", startNewChat);

@@ -245,6 +245,7 @@ def _required_input_check(
     pipeline_name: str,
     input_path: str | None,
     input_overrides: dict[str, Any] | None,
+    config_overrides: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any] | None, dict[str, str] | None]:
     """Return a user-facing input request when the pipeline is not ready to run."""
     resolved_name = resolve_pipeline_name(pipeline_name)
@@ -319,10 +320,64 @@ def _required_input_check(
             "invalid_inputs": invalid,
             "input_errors": override_errors,
             "requested_inputs": _requested_inputs(missing, invalid),
+            "config_overrides": dict(config_overrides or {}),
             "answer": "\n".join(lines),
         },
         canonical_overrides,
     )
+
+
+def _required_parameter_check(
+    pipeline_name: str,
+    config_overrides: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    """Request runner parameters that must be chosen explicitly by the user."""
+    resolved_name = resolve_pipeline_name(pipeline_name)
+    pipeline_dir = resolve_pipeline_dir(resolved_name)
+    runner_config, _runner_path = load_runner_config(pipeline_dir)
+    specs = runner_config.get("param_overrides") or {}
+    if not isinstance(specs, dict):
+        return None
+    supplied = dict(config_overrides or {})
+    missing: list[dict[str, Any]] = []
+    invalid: list[str] = []
+    for name, raw_spec in specs.items():
+        spec = raw_spec if isinstance(raw_spec, dict) else {}
+        if not spec.get("required"):
+            continue
+        value = supplied.get(str(name))
+        choices = [str(item) for item in (spec.get("choices") or [])]
+        if value in (None, ""):
+            missing.append({"name": str(name), "label": spec.get("label") or name, "choices": choices})
+            continue
+        if choices and _normalized_choice(value) not in {_normalized_choice(item) for item in choices}:
+            invalid.append(f"`{name}` must be one of: {', '.join(choices)} (received `{value}`).")
+    if not missing and not invalid:
+        return None
+    lines = [f"Pipeline `{resolved_name}` needs a parameter choice before it can run.", ""]
+    for item in missing:
+        choices = ", ".join(item["choices"]) or "a supported value"
+        lines.append(f"- {item['label']} (`{item['name']}`): choose {choices}")
+    lines.extend(f"- {message}" for message in invalid)
+    lines.extend(
+        [
+            "",
+            f"Example: Run pipeline with pipeline_name: {resolved_name} pathogen: H1N1",
+        ]
+    )
+    return {
+        "skill": "pipeline_runner",
+        "status": "needs_parameters",
+        "needs_parameters": True,
+        "pipeline_name": resolved_name,
+        "required_parameters": missing,
+        "parameter_errors": invalid,
+        "answer": "\n".join(lines),
+    }
+
+
+def _normalized_choice(value: Any) -> str:
+    return "".join(character for character in str(value or "").lower() if character.isalnum())
 
 
 def pipeline_runner(
@@ -338,10 +393,14 @@ def pipeline_runner(
     context: SkillContext | None = None,
 ) -> dict[str, Any]:
     context = ensure_skill_context(context, "pipeline_runner")
+    parameter_request = _required_parameter_check(pipeline_name, config_overrides)
+    if parameter_request:
+        return parameter_request
     input_request, canonical_input_overrides = _required_input_check(
         pipeline_name=pipeline_name,
         input_path=input_path,
         input_overrides=input_overrides,
+        config_overrides=config_overrides,
     )
     if input_request:
         return input_request

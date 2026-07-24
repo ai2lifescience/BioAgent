@@ -20,7 +20,11 @@ BioAgent can:
 - run Shell, Snakemake, and WDL pipelines; and
 - retain uploads and generated artifacts within a chat session.
 
+
+
 ## Quick Start
+
+
 
 ### 1. Get The Project
 
@@ -28,6 +32,8 @@ BioAgent can:
 git clone https://github.com/ai2lifescience/BioAgent.git
 cd BioAgent
 ```
+
+
 
 ### 2. Create An Environment
 
@@ -38,6 +44,8 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
+
+
 ### 3. Configure A Model
 
 The default model uses OpenRouter. Set an API key before using LLM-backed chat,
@@ -47,8 +55,8 @@ On Linux Bash:
 
 ```bash
 export OPENROUTER_API_KEY="your-openrouter-api-key"
+export CROMWELL_URL=http://192.168.164.39:39000
 ```
-
 
 Replace the placeholder with your real key. The variable is available to
 BioAgent commands started from the current terminal session.
@@ -96,6 +104,10 @@ Run pipeline with pipeline_name: generic_snakemake
 Run pipeline with pipeline_name: generic_bio
 ```
 
+```text
+Run pipeline with pipeline_name: bacterial_annotation genome: "path/to/contigs.fasta" genus Escherichia species coli strain "K-12" cpus 4
+```
+
 Use the Uploads panel for local input files. BioAgent stores uploads and outputs
 under the active session so later requests in the same chat can reuse them.
 
@@ -137,11 +149,15 @@ evidence, verification results, artifacts, and runtime trace events.
 
 ## Other Interfaces
 
+
+
 ### CLI
 
 ```bash
 python -m interfaces.cli "Search UniProt for BRCA1 human"
 ```
+
+
 
 ### HTTP API
 
@@ -153,6 +169,8 @@ curl -X POST http://127.0.0.1:8000/run \
   -d '{"request": "What is GC content?"}'
 ```
 
+
+
 ### Python
 
 ```python
@@ -162,15 +180,19 @@ result = run_bioagent("Analyze PhiX174")
 print(result["answer"])
 ```
 
+
+
 ## Pipeline Notes
 
 - Shell pipelines use the local shell environment.
 - Snakemake pipelines require the `snakemake` package included in
-  `requirements.txt`.
+`requirements.txt`.
 - WDL pipelines use `miniwdl` and require a working Docker daemon plus access to
-  the task container images.
+the task container images.
 - Pipeline inputs should be supplied explicitly through the request or uploaded
-  through the web UI.
+through the web UI.
+
+
 
 ## Documentation
 
