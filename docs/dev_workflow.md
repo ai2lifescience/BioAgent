@@ -319,7 +319,7 @@ git switch main
 git diff -- docs/dev_workflow.md
 git add docs/dev_workflow.md
 git diff --cached
-git commit -m "Document selective main-to-architecture merge"
+git commit -m "update docs/dev_workflow.md"
 ```
 
 Update the new local commit with any changes that reached remote `main`, then
