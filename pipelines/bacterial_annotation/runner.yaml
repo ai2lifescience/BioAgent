@@ -60,20 +60,50 @@ outputs:
     kind: table
     required: true
   summary:
-    label: Prokka statistics
+    label: Annotation statistics
     config_key: summary_path
     default: output/annotation.txt
     kind: text
     required: true
   log:
-    label: Prokka execution log
+    label: Annotation execution log
     config_key: log_path
-    default: output/prokka.log
+    default: output/annotation.log
     kind: text
     required: true
   bundle:
-    label: Complete Prokka output
+    label: Complete raw annotation output
     config_key: bundle_path
-    default: output/prokka_outputs.zip
+    default: output/annotation_outputs.zip
     kind: archive
     required: true
+  bakta_json:
+    label: Bakta machine-readable annotation
+    config_key: bakta_json_path
+    default: output/annotation.json
+    kind: metadata
+    required: false
+  inference:
+    label: Bakta inference evidence
+    config_key: inference_path
+    default: output/annotation.inference.tsv
+    kind: table
+    required: false
+  hypotheticals:
+    label: Bakta hypothetical proteins
+    config_key: hypotheticals_path
+    default: output/annotation.hypotheticals.tsv
+    kind: table
+    required: false
+  plot_svg:
+    label: Bakta annotation plot (SVG)
+    config_key: plot_svg_path
+    default: output/annotation.svg
+    kind: image
+    required: false
+  plot_png:
+    label: Bakta annotation plot (PNG)
+    config_key: plot_png_path
+    default: output/annotation.png
+    kind: image
+    required: false

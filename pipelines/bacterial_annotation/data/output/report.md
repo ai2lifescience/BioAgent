@@ -4,6 +4,7 @@
 > Prokka.
 
 - Status: mock
+- Annotator: prokka
 - Tool: Prokka
 - Input genome: `data/input/example_contigs.fasta`
 - Input contigs: 2
@@ -31,4 +32,4 @@
 - `annotation.tsv`
 - `annotation.txt`
 - `metrics.json`
-- `prokka.log`
+- `annotation.log`
