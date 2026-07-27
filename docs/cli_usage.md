@@ -685,6 +685,15 @@ Search PDB:
 python -m interfaces.cli "Find 3 PDB entries for hemoglobin"
 ```
 
+Look up domains, pathways, ontology annotations, and predicted structures:
+
+```bash
+python -m interfaces.cli "Search InterPro domains for P0A7V8"
+python -m interfaces.cli "Get KEGG query: eco:b0002"
+python -m interfaces.cli "Find QuickGO annotations for UniProtKB:P0A7V8 taxid 562"
+python -m interfaces.cli "Download AlphaFold structure for P0A7V8 as cif"
+```
+
 Expected behavior:
 
 ```text
@@ -695,6 +704,10 @@ Output: database, query, record count, IDs/accessions, URLs
 ```
 
 This skill uses public web APIs and requires network access.
+
+AlphaFold DB returns existing predicted models; it does not run AlphaFold.
+KEGG public REST access is intended for academic use and is rate-limited by
+BioAgent to at most three requests per second.
 
 ## 9. PDB Download Skill
 

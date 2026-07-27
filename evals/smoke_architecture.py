@@ -102,6 +102,24 @@ def main() -> int:
     }
     assert bacterial_annotation_cores_route.arguments["config_overrides"]["cpus"] == 3
 
+    bakta_annotation_route = router.route(
+        "annotate_bacterial_genome "
+        'genome: "contigs.fna" annotator bakta '
+        'bakta_db_path: "/opt/bakta-db/db-full" translation_table 11 gram - cpus 8'
+    )
+    assert bakta_annotation_route.skill_name == "pipeline_runner"
+    assert bakta_annotation_route.arguments["pipeline_name"] == "bacterial_annotation"
+    assert bakta_annotation_route.arguments["config_overrides"] == {
+        "annotator": "bakta",
+        "cpus": "8",
+        "translation_table": "11",
+        "bakta_db_path": "/opt/bakta-db/db-full",
+        "gram": "-",
+    }
+
+    natural_bakta_route = router.route('Annotate bacterial genome "contigs.fna" using Bakta')
+    assert natural_bakta_route.arguments["config_overrides"]["annotator"] == "bakta"
+
     pipeline_results_route = router.route(
         "Collect and show all results from the generic_bio pipeline run"
     )
@@ -174,6 +192,51 @@ def main() -> int:
     uniprot_route = router.route("Search UniProt for BRCA1 human")
     assert uniprot_route.mode == "direct_skill"
     assert uniprot_route.skill_name == "database_lookup"
+
+    interpro_route = router.route("Search InterPro domains for P0A7V8")
+    assert interpro_route.skill_name == "database_lookup"
+    assert interpro_route.arguments == {
+        "database": "interpro",
+        "query": "P0A7V8",
+        "operation": "protein_domains",
+    }
+
+    kegg_route = router.route("Get KEGG query: eco:b0002")
+    assert kegg_route.skill_name == "database_lookup"
+    assert kegg_route.arguments["query"] == "eco:b0002"
+
+    quickgo_route = router.route(
+        "Find QuickGO annotations for UniProtKB:P0A7V8 taxid 562"
+    )
+    assert quickgo_route.skill_name == "database_lookup"
+    assert quickgo_route.arguments["operation"] == "annotation_search"
+    assert quickgo_route.arguments["taxid"] == 562
+
+    alphafold_route = router.route("Download AlphaFold structure for P0A7V8 as cif")
+    assert alphafold_route.skill_name == "database_lookup"
+    assert alphafold_route.arguments["query"] == "P0A7V8"
+    assert alphafold_route.arguments["download"] is True
+
+    rna_route = router.route(
+        "Predict RNA secondary structure "
+        'rna: "pipelines/rna_secondary_structure/data/input/example_rna.fasta" '
+        "temperature_c 30"
+    )
+    assert rna_route.skill_name == "pipeline_runner"
+    assert rna_route.arguments["pipeline_name"] == "rna_secondary_structure"
+    assert rna_route.arguments["input_overrides"] == {
+        "rna": "pipelines/rna_secondary_structure/data/input/example_rna.fasta"
+    }
+    assert rna_route.arguments["config_overrides"] == {"temperature_c": "30"}
+
+    named_rna_route = router.route(
+        'predict_rna_secondary_structure rna_path: "sequences.fasta"'
+    )
+    assert named_rna_route.arguments["pipeline_name"] == "rna_secondary_structure"
+
+    named_interpro_route = router.route("query_interpro P0A7V8")
+    assert named_interpro_route.skill_name == "database_lookup"
+    assert named_interpro_route.arguments["query"] == "P0A7V8"
 
     pdb_download_route = router.route("Download PDB structure 1A3N as cif")
     assert pdb_download_route.mode == "direct_skill"

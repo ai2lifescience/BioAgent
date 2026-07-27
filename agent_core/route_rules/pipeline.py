@@ -14,13 +14,28 @@ DEFAULT_GENERIC_SHELL = "generic_shell"
 DEFAULT_GENERIC_SNAKEMAKE = "generic_snakemake"
 DEFAULT_GENERIC_WDL = "generic_wdl"
 BACTERIAL_ANNOTATION_PIPELINE = "bacterial_annotation"
+RNA_SECONDARY_STRUCTURE_PIPELINE = "rna_secondary_structure"
 
 
 def _is_bacterial_annotation_request(user_request: str) -> bool:
     return bool(
         re.search(
-            r"\b(?:annotate\s+(?:an?\s+|this\s+|the\s+)?bacterial\s+genome|"
+            r"\b(?:annotate_bacterial_genome|"
+            r"annotate\s+(?:an?\s+|this\s+|the\s+)?bacterial\s+genome|"
             r"bacterial\s+genome\s+annotation)\b",
+            user_request,
+            flags=re.IGNORECASE,
+        )
+    )
+
+
+def _is_rna_secondary_structure_request(user_request: str) -> bool:
+    return bool(
+        re.search(
+            r"\b(?:predict_rna_secondary_structure|"
+            r"predict(?:ing|ion)?\s+(?:an?\s+|the\s+)?rna\s+secondary\s+structure|"
+            r"predict(?:ing|ion)?\s+(?:an?\s+|the\s+)?secondary\s+structure\s+(?:of|for)\s+rna|"
+            r"rna\s+secondary\s+structure\s+prediction|fold\s+(?:an?\s+|the\s+)?rna)\b",
             user_request,
             flags=re.IGNORECASE,
         )
@@ -60,7 +75,8 @@ def _clean_pipeline_name(value: str | None) -> str | None:
 
 def route_pipeline(user_request: str) -> IntentRoute | None:
     bacterial_annotation = _is_bacterial_annotation_request(user_request)
-    if not bacterial_annotation and not re.search(
+    rna_secondary_structure = _is_rna_secondary_structure_request(user_request)
+    if not bacterial_annotation and not rna_secondary_structure and not re.search(
         r"\b(example pipeline|test pipeline|shell pipeline|snakemake pipeline|wdl pipeline|pipeline skill|run pipeline|execute pipeline|start pipeline)\b",
         user_request,
         flags=re.IGNORECASE,
@@ -83,6 +99,8 @@ def route_pipeline(user_request: str) -> IntentRoute | None:
     pipeline_name = _extract_pipeline_name(user_request)
     if bacterial_annotation and not pipeline_name:
         args["pipeline_name"] = BACTERIAL_ANNOTATION_PIPELINE
+    elif rna_secondary_structure and not pipeline_name:
+        args["pipeline_name"] = RNA_SECONDARY_STRUCTURE_PIPELINE
     elif pipeline_name:
         args["pipeline_name"] = pipeline_name
     elif is_wdl:
@@ -107,6 +125,14 @@ def route_pipeline(user_request: str) -> IntentRoute | None:
         args["input_path"] = path
 
     config_overrides = _extract_runner_config_overrides(user_request, args["pipeline_name"])
+    if bacterial_annotation and "annotator" not in config_overrides:
+        annotator_match = re.search(
+            r"\b(?:with|using|via)\s+(prokka|bakta)\b",
+            user_request,
+            flags=re.IGNORECASE,
+        )
+        if annotator_match:
+            config_overrides["annotator"] = annotator_match.group(1).lower()
     if config_overrides:
         args["config_overrides"] = config_overrides
 
@@ -133,7 +159,11 @@ def route_pipeline(user_request: str) -> IntentRoute | None:
         reason=(
             "Matched a bacterial genome annotation request."
             if bacterial_annotation
-            else "Matched an explicit approved pipeline execution request."
+            else (
+                "Matched an RNA secondary structure prediction request."
+                if rna_secondary_structure
+                else "Matched an explicit approved pipeline execution request."
+            )
         ),
     )
 

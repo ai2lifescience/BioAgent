@@ -36,6 +36,11 @@ ARTIFACT_KIND_BY_KEY = {
     "raw_config_path": "config",
     "config_path": "config",
     "metrics_path": "metrics",
+    "bakta_json_path": "metadata",
+    "inference_path": "metadata",
+    "hypotheticals_path": "metadata",
+    "plot_svg_path": "image",
+    "plot_png_path": "image",
     "output_dir": "directory",
 }
 
@@ -47,6 +52,7 @@ ARTIFACT_KIND_BY_SUFFIX = {
     ".fna": "fasta",
     ".fq": "sequence",
     ".fastq": "sequence",
+    ".dbn": "sequence_structure",
     ".sam": "sequence_alignment",
     ".bam": "sequence_alignment",
     ".bai": "sequence_alignment_index",
@@ -108,6 +114,7 @@ ARTIFACT_CONTENT_TYPES = {
     ".fna": "text/plain; charset=utf-8",
     ".fq": "text/plain; charset=utf-8",
     ".fastq": "text/plain; charset=utf-8",
+    ".dbn": "text/plain; charset=utf-8",
     ".sam": "text/plain; charset=utf-8",
     ".bam": "application/octet-stream",
     ".bai": "application/octet-stream",

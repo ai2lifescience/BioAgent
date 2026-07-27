@@ -1,0 +1,43 @@
+name: rna_secondary_structure
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 3600
+inputs:
+  rna:
+    label: RNA sequences
+    config_key: rna_path
+    required: true
+    accepts: [".fasta", ".fa", ".fna"]
+    description: One or more RNA or DNA-letter nucleotide sequences in FASTA format.
+outputs:
+  report:
+    label: RNA folding report
+    config_key: report_path
+    default: output/report.md
+    kind: report
+    required: true
+  metrics:
+    label: RNA folding metrics
+    config_key: metrics_path
+    default: output/metrics.json
+    kind: metrics
+    required: true
+  structures:
+    label: RNA structures table
+    config_key: structures_path
+    default: output/structures.tsv
+    kind: table
+    required: true
+  dot_bracket:
+    label: Dot-bracket structures
+    config_key: dot_bracket_path
+    default: output/structures.dbn
+    kind: sequence_structure
+    required: true
+  log:
+    label: RNAfold execution log
+    config_key: log_path
+    default: output/rnafold.log
+    kind: text
+    required: true

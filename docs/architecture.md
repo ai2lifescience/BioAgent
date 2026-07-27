@@ -254,7 +254,7 @@ PDB/mmCIF structure analysis    -> protein_structure_analysis
 file inspection request         -> file_inspection
 BLAST request                   -> blast_search
 sequence analysis request       -> sequence_analysis
-UniProt / PDB lookup            -> database_lookup
+UniProt / InterPro / KEGG / QuickGO / PDB / AlphaFold lookup -> database_lookup
 PDB structure download          -> pdb_download
 trusted-source species report   -> species_report
 complex biological comparison   -> llm_skill_loop
@@ -405,7 +405,7 @@ tools/
 │   ├── core.py              echo implementation
 │   └── tool.py              echo ToolDefinition
 ├── bio_database/
-│   ├── core.py              UniProt/PDB search implementation
+│   ├── core.py              UniProt/InterPro/KEGG/QuickGO/PDB/AlphaFold adapter facade
 │   └── tool.py              bio_database_search ToolDefinition
 ├── blast/
 │   ├── core.py              BLAST implementation adapter
@@ -508,7 +508,7 @@ Good tool examples:
 ```text
 ncbi_fetch(term, genes, db, max_records)
 sequence_analyze(sequence, fasta_path, min_orf_length)
-bio_database_search(database, query, max_results)
+bio_database_search(database, query, max_results, operation, taxid, download, file_format)
 file_inspect(path)
 ```
 

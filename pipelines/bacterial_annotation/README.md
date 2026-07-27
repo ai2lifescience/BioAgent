@@ -1,53 +1,62 @@
 # Bacterial Annotation Pipeline Environment
 
-This pipeline annotates assembled bacterial genomes with Prokka and exposes the
-important annotation files as BioAgent session artifacts.
+This pipeline annotates assembled bacterial genomes with either Prokka or
+Bakta and exposes a stable set of BioAgent artifacts. Prokka remains the
+default for compatibility with the original Biomni-style function. Bakta is
+recommended for new analyses that can use its maintained, versioned database.
 
-## Requirements
+## Ubuntu requirements
 
 - Bash and Python 3.11 or newer.
 - PyYAML, already included in the BioAgent requirements.
-- Prokka available on `PATH` together with its databases and command-line
-  dependencies.
+- Prokka and/or Bakta available on `PATH`.
+- A compatible Bakta database when `annotator: bakta` is selected.
 
-A pinned Bioconda installation is recommended for reproducibility:
+One Bioconda environment can provide both executables:
 
 ```bash
-conda install bioconda::prokka=1.15.6
+conda create -n bacterial-annotation -c conda-forge -c bioconda \
+  python=3.12 prokka bakta
+conda activate bacterial-annotation
 prokka --version
-prokka --listdb
+bakta --version
 ```
 
-Start BioAgent from the same activated environment so its pipeline subprocess
-can find `prokka`.
+Download the Bakta database once, outside pipeline execution:
 
-## Run through BioAgent
+```bash
+bakta_db download --output /opt/bakta-db --type full
+```
+
+Use the exact downloaded database directory as `bakta_db_path`, or export it
+as `BAKTA_DB`. Start BioAgent from the same activated environment.
+
+## Run with Prokka
 
 ```text
-Run pipeline with pipeline_name: bacterial_annotation genome: "path/to/contigs.fasta" genus Escherichia species coli strain "K-12" prefix ecoli cpus 4
+annotate_bacterial_genome genome: "path/to/contigs.fasta" annotator prokka genus Escherichia species coli strain "K-12" cpus 4
 ```
 
-The shorter request `Annotate bacterial genome genome: "path/to/contigs.fasta"`
-is routed to the same pipeline.
+Because Prokka is the compatibility default, `annotator prokka` can be omitted.
+
+## Run with Bakta
+
+```text
+annotate_bacterial_genome genome: "path/to/contigs.fasta" annotator bakta bakta_db_path: "/opt/bakta-db/db" genus Escherichia species coli strain "K-12" translation_table 11 gram - cpus 8
+```
+
+The natural form `Annotate bacterial genome "contigs.fasta" using Bakta` also
+selects Bakta, but a database must still be supplied in the request or through
+`BAKTA_DB`.
 
 ## Example data
 
-An artificial two-contig FASTA is provided at:
+The artificial input is located at:
 
 ```text
 pipelines/bacterial_annotation/data/input/example_contigs.fasta
 ```
 
-Run it through BioAgent with:
-
-```text
-Run pipeline with pipeline_name: bacterial_annotation genome: "pipelines/bacterial_annotation/data/input/example_contigs.fasta" genus Mock species bacterium strain example
-```
-
-Representative text outputs are committed under `data/output/`. They are
-clearly marked mock fixtures and show the expected formats without claiming to
-be real Prokka annotations.
-
-Prokka's upstream project recommends Bakta for new long-lived pipelines. This
-wrapper intentionally uses Prokka to provide behavior compatible with Biomni's
-`annotate_bacterial_genome` function.
+Committed outputs under `data/output/` are clearly marked synthetic fixtures.
+The root of that folder documents the Prokka contract; `data/output/bakta/`
+documents Bakta normalization and Bakta-specific artifacts.
