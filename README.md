@@ -18,7 +18,7 @@ BioAgent can:
 - analyze nucleotide sequences, genome maps, and protein structures;
 - inspect FASTA, CSV, TSV, JSON, Markdown, and text files;
 - create species reports with sources, citations, and generated files;
-- run Shell, Snakemake, and WDL pipelines; and
+- run Shell, Snakemake, Nextflow, and WDL pipelines; and
 - retain uploads and generated artifacts within a chat session.
 
 
@@ -102,6 +102,10 @@ Run pipeline with pipeline_name: generic_snakemake
 ```
 
 ```text
+Run pipeline with pipeline_name: generic_nextflow
+```
+
+```text
 Run pipeline with pipeline_name: generic_bio
 ```
 
@@ -161,7 +165,7 @@ User / App
                                  QuickGO, PDB, AlphaFold DB
      -> Bio Tools                sequence, BLAST, structure, genome map
      -> RAG                      retrieval and evidence-backed answers
-     -> Pipeline Runner          Shell, Snakemake, WDL
+     -> Pipeline Runner          Shell, Snakemake, Nextflow, WDL
      -> File I/O                 uploads, inspection, and reports
   -> Evidence Collector          sources, identifiers, citations, files
   -> Verifier                    result and biosafety checks
@@ -213,6 +217,8 @@ print(result["answer"])
 - Shell pipelines use the local shell environment.
 - Snakemake pipelines require the `snakemake` package included in
 `requirements.txt`.
+- Nextflow pipelines require a local `nextflow` executable, Java 17 or newer,
+  and a POSIX shell. On Windows, run BioAgent and Nextflow inside WSL.
 - WDL pipelines use `miniwdl` and require a working Docker daemon plus access to
 the task container images.
 - Pipeline inputs should be supplied explicitly through the request or uploaded

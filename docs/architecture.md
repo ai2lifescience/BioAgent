@@ -942,7 +942,7 @@ Explicit user-provided output paths are still honored.
 Pipeline folders use three config layers:
 
 ```text
-runner.yaml          how to run: engine, config/inputs, entrypoint/Snakefile/workflow, cores, timeout
+runner.yaml          how to run: engine, config/inputs, entrypoint/Snakefile/main.nf/workflow, cores, timeout
 config.yaml          default base config; can be renamed with runner.yaml config:
 config.runtime.yaml  generated per run with session input/output paths
 ```

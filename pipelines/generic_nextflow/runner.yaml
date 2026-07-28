@@ -1,0 +1,40 @@
+name: generic_nextflow
+engine: nextflow
+config: config.yaml
+workflow: main.nf
+nextflow_config: nextflow.config
+cores: 1
+timeout: 300
+inputs:
+  sequence:
+    label: Sequence FASTA
+    config_key: input_path
+    required: true
+    accepts: [".fa", ".fasta", ".fna"]
+  metadata:
+    label: Metadata table
+    config_key: metadata_path
+    required: true
+    accepts: [".tsv", ".csv"]
+outputs:
+  report:
+    label: Report
+    config_key: report_path
+    default: data/output/report.md
+    nextflow_output: report.md
+    kind: report
+    required: true
+  metrics:
+    label: Metrics
+    config_key: metrics_path
+    default: data/output/metrics.json
+    nextflow_output: metrics.json
+    kind: metrics
+    required: true
+  normalized_sequence:
+    label: Normalized sequence
+    config_key: normalized_fasta_path
+    default: data/output/normalized.fasta
+    nextflow_output: normalized.fasta
+    kind: sequence
+    required: true

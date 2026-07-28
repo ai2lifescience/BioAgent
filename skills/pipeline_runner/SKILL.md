@@ -28,6 +28,15 @@ snakefile: Snakefile
 or:
 
 ```yaml
+config: config.yaml
+engine: nextflow
+workflow: main.nf
+nextflow_config: nextflow.config  # optional
+```
+
+or:
+
+```yaml
 engine: wdl
 workflow: workflow.wdl
 inputs_json: inputs.json
@@ -51,8 +60,8 @@ inputs:
 ```
 
 The skill calls only the registered `pipeline_runner` tool. It must not execute
-arbitrary shell commands, arbitrary Snakefiles, arbitrary WDL workflows, or
-paths outside the selected pipeline folder.
+arbitrary shell commands, arbitrary Snakefiles, arbitrary Nextflow workflows,
+arbitrary WDL workflows, or paths outside the selected pipeline folder.
 
 Before calling the tool, the skill checks required `runner.yaml` inputs against:
 
@@ -88,11 +97,11 @@ in the current session artifact directory:
 runtime/sessions/<session_id>/artifacts/uploads/
 ```
 
-The runtime config passed to shell, Snakemake, or WDL starts from the configured
-base config/input file, then BioAgent replaces input paths with the selected
-session input paths and resolves declared outputs inside the per-run pipeline
-artifact directory. Use this simple base config shape for shell and Snakemake
-plug-and-play pipelines:
+The runtime config passed to Shell, Snakemake, Nextflow, or WDL starts from the
+configured base config/input file, then BioAgent replaces input paths with the
+selected session input paths and resolves declared outputs inside the per-run
+pipeline artifact directory. Use this simple base config shape for Shell,
+Snakemake, and Nextflow plug-and-play pipelines:
 
 ```yaml
 label: my_pipeline
@@ -111,5 +120,11 @@ Default examples:
 pipelines/generic_bio/
 pipelines/generic_shell/
 pipelines/generic_snakemake/
+pipelines/generic_nextflow/
 pipelines/generic_wdl/
 ```
+
+Nextflow workflows receive the generated YAML through `-params-file`, plus the
+runner-managed `bioagent_config_path`, `nextflow_output_dir`, and `cores`
+parameters. Publish final files under `nextflow_output_dir` and map them to
+declared artifacts with each output's relative `nextflow_output` value.
