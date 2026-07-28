@@ -30,9 +30,9 @@ SKILL_SPEC = {
         "name": "pipeline_runner",
         "description": (
             "Run an approved pipeline folder under pipelines/. The pipeline "
-            "runner.yaml selects engine: shell, engine: snakemake, or engine: wdl. "
-            "Use for controlled pipeline execution, including shell, Snakemake, "
-            "and WDL examples."
+            "runner.yaml selects engine: shell, engine: snakemake, engine: nextflow, "
+            "or engine: wdl. Use for controlled pipeline execution, including shell, "
+            "Snakemake, Nextflow, and WDL examples."
         ),
         "parameters": {
             "type": "object",
@@ -59,12 +59,14 @@ SKILL_SPEC = {
                 },
                 "cores": {
                     "type": "integer",
-                    "description": "Snakemake cores. Ignored for shell pipelines.",
+                    "description": (
+                        "Snakemake or Nextflow cores. Ignored for shell and WDL pipelines."
+                    ),
                     "default": 1,
                 },
                 "dry_run": {
                     "type": "boolean",
-                    "description": "Run Snakemake in dry-run mode.",
+                    "description": "Run Snakemake dry-run, Nextflow preview, or WDL validation.",
                     "default": False,
                 },
                 "timeout": {

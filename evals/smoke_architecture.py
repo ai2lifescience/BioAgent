@@ -59,6 +59,23 @@ def main() -> int:
     assert snakemake_route.arguments["dry_run"] is True
     assert snakemake_route.arguments["cores"] == 2
 
+    nextflow_route = router.route("Run the example Nextflow pipeline with 3 cores.")
+    assert nextflow_route.mode == "direct_skill"
+    assert nextflow_route.skill_name == "pipeline_runner"
+    assert nextflow_route.arguments["pipeline_name"] == "generic_nextflow"
+    assert nextflow_route.arguments["cores"] == 3
+
+    nextflow_inputs_route = router.route(
+        "Run pipeline with pipeline_name: generic_nextflow "
+        'sequence: "pipelines/generic_nextflow/data/input/sequences_segment1.fasta" '
+        'metadata: "pipelines/generic_nextflow/data/input/metadata.tsv" min_length 20'
+    )
+    assert nextflow_inputs_route.arguments["input_overrides"] == {
+        "sequence": "pipelines/generic_nextflow/data/input/sequences_segment1.fasta",
+        "metadata": "pipelines/generic_nextflow/data/input/metadata.tsv",
+    }
+    assert nextflow_inputs_route.arguments["config_overrides"] == {"min_length": "20"}
+
     generic_bio_route = router.route(
         "Run pipeline with pipeline_name: generic_bio "
         'reads: "pipelines/generic_bio/data/input/reads.fastq" '

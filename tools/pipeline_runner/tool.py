@@ -10,8 +10,9 @@ PIPELINE_RUNNER_TOOL = ToolDefinition(
     name="pipeline_runner",
     description=(
         "Run an approved pipeline folder under pipelines/. The folder must "
-        "contain runner.yaml with engine: shell, engine: snakemake, or "
-        "engine: wdl and a configured base input/config file with pipeline defaults."
+        "contain runner.yaml with engine: shell, engine: snakemake, engine: "
+        "nextflow, or engine: wdl and a configured base input/config file with "
+        "pipeline defaults."
     ),
     handler=run_pipeline,
     category="pipeline",
@@ -29,7 +30,7 @@ PIPELINE_RUNNER_TOOL = ToolDefinition(
             "cores": {"type": "integer", "default": 1},
             "dry_run": {
                 "type": "boolean",
-                "description": "Run Snakemake in dry-run mode or validate WDL locally with miniwdl check.",
+                "description": "Run Snakemake in dry-run mode, preview Nextflow, or validate WDL locally with miniwdl check.",
                 "default": False,
             },
             "timeout": {"type": "integer", "default": 300},

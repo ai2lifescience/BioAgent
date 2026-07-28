@@ -473,6 +473,18 @@ Specific Snakemake pipeline folder:
 Run the snakemake pipeline with pipeline_name: generic_snakemake dry-run with 2 cores
 ```
 
+Default Nextflow pipeline:
+
+```text
+Run the Nextflow pipeline
+```
+
+For `generic_nextflow`, use named input paths:
+
+```text
+Run pipeline with pipeline_name: generic_nextflow sequence: "runtime/sessions/<session_id>/artifacts/uploads/sequences.fasta" metadata: "runtime/sessions/<session_id>/artifacts/uploads/metadata.tsv"
+```
+
 For uploaded inputs:
 
 ```text
@@ -527,6 +539,8 @@ pipelines/<pipeline_name>/runner.yaml
 pipelines/<pipeline_name>/config.yaml   # default, or runner.yaml config:
 pipelines/<pipeline_name>/run.sh        # shell default, or runner.yaml entrypoint:
 pipelines/<pipeline_name>/Snakefile     # snakemake default, or runner.yaml snakefile:
+pipelines/<pipeline_name>/main.nf       # nextflow default, or runner.yaml workflow:
+pipelines/<pipeline_name>/nextflow.config # optional runner.yaml nextflow_config:
 ```
 
 For multi-input pipelines, `runner.yaml` can declare named input slots:
@@ -578,6 +592,16 @@ For `engine: snakemake`, `pipeline_runner` uses:
 ```text
 snakemake --cores <cores> --snakefile pipelines/<pipeline_name>/Snakefile --configfile <run_dir>/config.runtime.yaml
 ```
+
+For `engine: nextflow`, `pipeline_runner` uses:
+
+```text
+nextflow -c pipelines/<pipeline_name>/nextflow.config run pipelines/<pipeline_name>/main.nf -params-file <run_dir>/config.runtime.yaml -work-dir <run_dir>/nextflow_work
+```
+
+The workflow publishes final files into the runtime `nextflow_output_dir`.
+`runner.yaml.outputs[*].nextflow_output` maps those relative published names to
+BioAgent's stable artifact paths. Dry run uses Nextflow `-preview`.
 
 For `engine: wdl`, `pipeline_runner` uses miniwdl:
 

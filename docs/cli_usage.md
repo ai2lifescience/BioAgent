@@ -149,7 +149,7 @@ CLI request
   -> pipeline_runner tool
   -> pipelines/<pipeline_name>/runner.yaml
   -> configured base config file, default: pipelines/<pipeline_name>/config.yaml
-  -> engine: shell, snakemake, or wdl
+  -> engine: shell, snakemake, nextflow, or wdl
   -> uploaded input path, if provided
   -> runtime/sessions/<session_id>/artifacts/pipelines/<pipeline_name>/<run_id>/
 ```
@@ -159,6 +159,8 @@ The default pipeline folders are:
 ```text
 pipelines/generic_shell/
 pipelines/generic_snakemake/
+pipelines/generic_nextflow/
+pipelines/generic_wdl/
 ```
 
 Use `pipeline_name` to select a different approved folder. The runner accepts
@@ -307,6 +309,57 @@ Choose a specific Snakemake pipeline folder:
 ```bash
 python -m interfaces.cli "Run the snakemake pipeline with pipeline_name: generic_snakemake dry-run with 2 cores."
 ```
+
+Run the Nextflow example with its declared inputs:
+
+```bash
+python -m interfaces.cli 'Run pipeline with pipeline_name: generic_nextflow sequence: "pipelines/generic_nextflow/data/input/sequences_segment1.fasta" metadata: "pipelines/generic_nextflow/data/input/metadata.tsv" min_length 20.'
+```
+
+The Nextflow folder contract is:
+
+```text
+pipelines/<pipeline_name>/
+  runner.yaml
+  config.yaml       # or another file selected by runner.yaml config:
+  main.nf           # or another file selected by runner.yaml workflow:
+  nextflow.config   # optional, selected by runner.yaml nextflow_config:
+```
+
+A Nextflow `runner.yaml` uses the same input declarations as other engines and
+maps published output names back to BioAgent artifact paths:
+
+```yaml
+name: generic_nextflow
+engine: nextflow
+config: config.yaml
+workflow: main.nf
+nextflow_config: nextflow.config
+cores: 1
+inputs:
+  sequence:
+    config_key: input_path
+    required: true
+    accepts: [".fa", ".fasta", ".fna"]
+outputs:
+  report:
+    config_key: report_path
+    default: output/report.md
+    nextflow_output: report.md
+    kind: report
+    required: true
+```
+
+BioAgent calls Nextflow with the generated YAML parameter file and an isolated
+work directory:
+
+```bash
+nextflow -c pipelines/<pipeline_name>/nextflow.config run pipelines/<pipeline_name>/main.nf -params-file <run_dir>/config.runtime.yaml -work-dir <run_dir>/nextflow_work
+```
+
+The runtime parameters include `nextflow_output_dir`. The workflow must publish
+final files there; the runner copies and validates them using the
+`nextflow_output` mappings. A BioAgent dry run uses Nextflow `-preview`.
 
 Run a WDL pipeline folder with a declared input slot:
 
