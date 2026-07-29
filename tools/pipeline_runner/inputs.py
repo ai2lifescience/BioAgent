@@ -14,6 +14,7 @@ from tools.pipeline_runner.paths import (
     resolve_project_path,
     safe_label,
 )
+from tools.pipeline_runner.nested import get_config_value
 from tools.pipeline_runner.types import PipelineContext
 
 
@@ -163,7 +164,7 @@ def validate_declared_inputs(
 ) -> None:
     for slot, spec in input_specs.items():
         config_key = str(spec.get("config_key") or slot)
-        value = resolved_input_overrides.get(config_key) or raw_config.get(config_key)
+        value = resolved_input_overrides.get(config_key) or get_config_value(raw_config, config_key)
         if not value:
             if spec.get("required"):
                 raise ValueError(f"Required pipeline input '{slot}' is missing config key '{config_key}'.")

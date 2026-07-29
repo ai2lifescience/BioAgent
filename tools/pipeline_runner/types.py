@@ -30,7 +30,7 @@ class PipelineContext:
     run_dir: Path
     output_dir: Path
     label: str
-    timeout: int
+    timeout: int | None
 
 
 @dataclass(frozen=True)
@@ -41,3 +41,4 @@ class RuntimeConfigWrite:
     staged_config_paths: list[dict[str, Any]]
     applied_config_overrides: dict[str, Any]
     output_records: list[dict[str, Any]]
+    config: dict[str, Any]

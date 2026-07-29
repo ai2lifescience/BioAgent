@@ -19,6 +19,7 @@ from tools.pipeline_runner.inputs import (
     validate_declared_inputs,
     validate_input_path,
 )
+from tools.pipeline_runner.nested import get_config_value
 from tools.pipeline_runner.outputs import default_pipeline_output_dir
 from tools.pipeline_runner.paths import (
     resolve_optional_artifact_dir,
@@ -130,7 +131,7 @@ def prepare_pipeline_context(
         resolved_input_overrides.get(default_config_key)
         or resolved_input_overrides.get("input_path")
         or runner_config.get("default_input_path")
-        or raw_config.get(default_config_key)
+        or get_config_value(raw_config, default_config_key)
         or raw_config.get("input_path")
     )
     if not input_value:
@@ -190,5 +191,24 @@ def prepare_pipeline_context(
             label,
             str(raw_config.get("label") or runner_config.get("label") or resolved_pipeline_name),
         ),
-        timeout=int(timeout or runner_config.get("timeout") or raw_config.get("timeout") or 300),
+        timeout=_resolve_timeout(timeout, runner_config, raw_config),
     )
+
+
+def _resolve_timeout(
+    requested: int | None,
+    runner_config: dict[str, Any],
+    raw_config: dict[str, Any],
+) -> int | None:
+    """Resolve a timeout; zero explicitly means unlimited synchronous execution."""
+    candidates = (
+        requested,
+        runner_config.get("timeout"),
+        raw_config.get("timeout"),
+    )
+    for value in candidates:
+        if value is None or value == "":
+            continue
+        resolved = int(value)
+        return None if resolved <= 0 else resolved
+    return 300

@@ -1,0 +1,69 @@
+modules:
+  qc:
+    entry: wShortReadQualityControl
+    step: qc
+    description: Quality control for Illumina short reads.
+  qc_ont:
+    entry: wOntQualityControl
+    step: qcONT
+    description: Quality control for Oxford Nanopore reads.
+  assembly:
+    entry: wShortReadAssembly
+    step: assembly
+    description: Assembly of prepared short reads.
+  assembly_ont:
+    entry: wOntAssembly
+    step: assemblyONT
+    description: Assembly of prepared Oxford Nanopore reads.
+  binning:
+    entry: wShortReadBinning
+    step: binning
+    description: Binning with short-read mappings and contigs.
+  binning_ont:
+    entry: wOntBinning
+    step: binningONT
+    description: Binning with Nanopore reads and contigs.
+  multi_binning:
+    entry: wMultiBinningShortRead
+    step: multiBinning
+    description: Multi-sample short-read binning.
+  multi_binning_ont:
+    entry: wMultiBinningLongRead
+    step: multiBinningONT
+    description: Multi-sample Nanopore binning.
+  mag_attributes:
+    entry: wMagAttributes
+    step: magAttributes
+    description: MAG quality and taxonomy attributes.
+  annotation:
+    entry: wAnnotate
+    step: annotation
+    description: Functional and taxonomic annotation of bins or contigs.
+  plasmids:
+    entry: wPlasmids
+    step: plasmid
+    description: Plasmid identification and characterization.
+  fragment_recruitment:
+    entry: wFragmentRecruitment
+    step: fragmentRecruitment
+    description: Recovery of unassembled community genomes.
+  metabolomics:
+    entry: wMetabolomics
+    step: metabolomics
+    description: Genome-scale metabolic model analysis.
+  dereplication:
+    entry: wDereplication
+    step: dereplication
+    description: MAG dereplication.
+  read_mapping:
+    entry: wReadMapping
+    step: readMapping
+    description: Read mapping against selected genomes.
+  cooccurrence:
+    entry: wCooccurrence
+    step: cooccurrence
+    description: Co-occurrence and metabolic interaction analysis.
+  export:
+    entry: wExportPipeline
+    step: export
+    description: Export existing toolkit output.

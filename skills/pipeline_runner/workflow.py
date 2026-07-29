@@ -71,7 +71,7 @@ SKILL_SPEC = {
                 },
                 "timeout": {
                     "type": "integer",
-                    "description": "Maximum runtime in seconds.",
+                    "description": "Maximum runtime in seconds; use 0 for unlimited synchronous execution.",
                 },
                 "input_overrides": {
                     "type": "object",
