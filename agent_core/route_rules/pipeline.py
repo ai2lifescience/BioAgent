@@ -14,14 +14,16 @@ DEFAULT_GENERIC_SHELL = "generic_shell"
 DEFAULT_GENERIC_SNAKEMAKE = "generic_snakemake"
 DEFAULT_GENERIC_NEXTFLOW = "generic_nextflow"
 DEFAULT_GENERIC_WDL = "generic_wdl"
-METAGENOMICS_TOOLKIT_PIPELINE = "metagenomics_toolkit"
+BACTERIAL_ANNOTATION_PIPELINE = "bacterial_annotation"
 RNA_SECONDARY_STRUCTURE_PIPELINE = "rna_secondary_structure"
 
 
-def _is_metagenomics_toolkit_request(user_request: str) -> bool:
+def _is_bacterial_annotation_request(user_request: str) -> bool:
     return bool(
         re.search(
-            r"\b(?:metagenomics[- ]toolkit|metagenomics_toolkit|metagenomics\s+pipeline)\b",
+            r"\b(?:annotate_bacterial_genome|"
+            r"annotate\s+(?:an?\s+|this\s+|the\s+)?bacterial\s+genome|"
+            r"bacterial\s+genome\s+annotation)\b",
             user_request,
             flags=re.IGNORECASE,
         )
@@ -73,9 +75,9 @@ def _clean_pipeline_name(value: str | None) -> str | None:
 
 
 def route_pipeline(user_request: str) -> IntentRoute | None:
-    metagenomics_toolkit = _is_metagenomics_toolkit_request(user_request)
+    bacterial_annotation = _is_bacterial_annotation_request(user_request)
     rna_secondary_structure = _is_rna_secondary_structure_request(user_request)
-    if not metagenomics_toolkit and not rna_secondary_structure and not re.search(
+    if not bacterial_annotation and not rna_secondary_structure and not re.search(
         r"\b(example pipeline|test pipeline|shell pipeline|snakemake pipeline|nextflow pipeline|wdl pipeline|pipeline skill|run pipeline|execute pipeline|start pipeline)\b",
         user_request,
         flags=re.IGNORECASE,
@@ -97,8 +99,8 @@ def route_pipeline(user_request: str) -> IntentRoute | None:
     if output_dir:
         args["output_dir"] = output_dir
     pipeline_name = _extract_pipeline_name(user_request)
-    if metagenomics_toolkit and not pipeline_name:
-        args["pipeline_name"] = METAGENOMICS_TOOLKIT_PIPELINE
+    if bacterial_annotation and not pipeline_name:
+        args["pipeline_name"] = BACTERIAL_ANNOTATION_PIPELINE
     elif rna_secondary_structure and not pipeline_name:
         args["pipeline_name"] = RNA_SECONDARY_STRUCTURE_PIPELINE
     elif pipeline_name:
@@ -127,24 +129,14 @@ def route_pipeline(user_request: str) -> IntentRoute | None:
         args["input_path"] = path
 
     config_overrides = _extract_runner_config_overrides(user_request, args["pipeline_name"])
-    if metagenomics_toolkit:
-        if "execution_mode" not in config_overrides:
-            if re.search(r"\bstandalone\b", user_request, re.IGNORECASE):
-                config_overrides["execution_mode"] = "standalone"
-            elif re.search(r"\bfull(?:\s+pipeline)?\b", user_request, re.IGNORECASE):
-                config_overrides["execution_mode"] = "full"
-        module_match = re.search(
-            r"\b(?:run|execute)\s+(?:only\s+)?(?:the\s+)?([A-Za-z][A-Za-z0-9_-]*)\s+module\b|"
-            r"\bmodule\s+(?:only\s+)?([A-Za-z][A-Za-z0-9_-]*)\b",
+    if bacterial_annotation and "annotator" not in config_overrides:
+        annotator_match = re.search(
+            r"\b(?:with|using|via)\s+(prokka|bakta)\b",
             user_request,
             flags=re.IGNORECASE,
         )
-        if module_match:
-            config_overrides["module"] = (
-                module_match.group(1) or module_match.group(2)
-            ).lower()
-        if config_overrides.get("module") and "execution_mode" not in config_overrides:
-            config_overrides["execution_mode"] = "standalone"
+        if annotator_match:
+            config_overrides["annotator"] = annotator_match.group(1).lower()
     if config_overrides:
         args["config_overrides"] = config_overrides
 
@@ -159,14 +151,18 @@ def route_pipeline(user_request: str) -> IntentRoute | None:
     if cores_match:
         cores = max(1, int(cores_match.group(1) or cores_match.group(2)))
         args["cores"] = cores
+        if bacterial_annotation:
+            config_overrides = dict(args.get("config_overrides") or {})
+            config_overrides.setdefault("cpus", cores)
+            args["config_overrides"] = config_overrides
 
     return IntentRoute(
         mode="direct_skill",
         skill_name="pipeline_runner",
         arguments=args,
         reason=(
-            "Matched a Metagenomics-Toolkit execution request."
-            if metagenomics_toolkit
+            "Matched a bacterial genome annotation request."
+            if bacterial_annotation
             else (
                 "Matched an RNA secondary structure prediction request."
                 if rna_secondary_structure

@@ -110,11 +110,11 @@ Run pipeline with pipeline_name: generic_bio
 ```
 
 ```text
-Run the metagenomics toolkit full pipeline params_file: "/data/full.yml"
+Run pipeline with pipeline_name: bacterial_annotation genome: "path/to/contigs.fasta" genus Escherichia species coli strain "K-12" cpus 4
 ```
 
 ```text
-Run the metagenomics toolkit standalone module: annotation params_file: "/data/annotation.yml"
+annotate_bacterial_genome genome: "path/to/contigs.fasta" annotator bakta bakta_db_path: "/opt/bakta-db/db" translation_table 11 gram - cpus 8
 ```
 
 ```text
@@ -223,10 +223,9 @@ print(result["answer"])
 the task container images.
 - Pipeline inputs should be supplied explicitly through the request or uploaded
 through the web UI.
-- The Metagenomics-Toolkit integration runs synchronously on Linux with Java,
-  Nextflow, and Docker. It supports the full pipeline or exactly one standalone
-  named module. See
-  [its environment guide](pipelines/metagenomics_toolkit/README.md).
+- The bacterial annotation pipeline supports Prokka or Bakta; Bakta also
+  requires a compatible database. See
+  [its environment guide](pipelines/bacterial_annotation/README.md).
 - The RNA secondary-structure pipeline requires ViennaRNA `RNAfold`. See
   [its environment guide](pipelines/rna_secondary_structure/README.md).
 
