@@ -36,6 +36,11 @@ ARTIFACT_KIND_BY_KEY = {
     "raw_config_path": "config",
     "config_path": "config",
     "metrics_path": "metrics",
+    "bakta_json_path": "metadata",
+    "inference_path": "metadata",
+    "hypotheticals_path": "metadata",
+    "plot_svg_path": "image",
+    "plot_png_path": "image",
     "output_dir": "directory",
 }
 

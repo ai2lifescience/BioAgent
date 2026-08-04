@@ -208,14 +208,14 @@ def wait_for_workflow(
     api_version: str,
     workflow_id: str,
     headers: dict[str, str],
-    timeout: int | None,
+    timeout: int,
     poll_interval: float,
     visibility_timeout: float = 300,
     initial_status: str = "Submitted",
 ) -> str:
     url = f"{base_url}/api/workflows/{api_version}/{workflow_id}/status"
     started_at = time.monotonic()
-    deadline = float("inf") if timeout is None else started_at + timeout
+    deadline = started_at + timeout
     visibility_deadline = min(deadline, started_at + visibility_timeout)
     if initial_status in TERMINAL_STATUSES:
         return initial_status
@@ -238,7 +238,7 @@ def wait_for_workflow(
         status = str(payload.get("status") or "Unknown")
         if status in TERMINAL_STATUSES:
             return status
-        if timeout is not None and time.monotonic() >= deadline:
+        if time.monotonic() >= deadline:
             raise TimeoutError(
                 f"Timed out waiting for Cromwell workflow {workflow_id}; last status: {status}. "
                 "The workflow was not aborted and may still be running on Cromwell."

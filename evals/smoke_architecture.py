@@ -92,41 +92,50 @@ def main() -> int:
     }
     assert "input_path" not in generic_bio_route.arguments
 
-    metagenomics_full_route = router.route(
-        "Run the metagenomics toolkit full pipeline "
-        'params_file: "/data/full.yml"'
+    bacterial_annotation_route = router.route(
+        "Annotate bacterial genome "
+        'genome: "pipelines/bacterial_annotation/data/input/contigs.fasta" '
+        'genus Escherichia species coli strain "K-12" cpus 4'
     )
-    assert metagenomics_full_route.mode == "direct_skill"
-    assert metagenomics_full_route.skill_name == "pipeline_runner"
-    assert metagenomics_full_route.arguments["pipeline_name"] == "metagenomics_toolkit"
-    assert metagenomics_full_route.arguments["input_overrides"] == {
-        "params_file": "/data/full.yml"
+    assert bacterial_annotation_route.mode == "direct_skill"
+    assert bacterial_annotation_route.skill_name == "pipeline_runner"
+    assert bacterial_annotation_route.arguments["pipeline_name"] == "bacterial_annotation"
+    assert bacterial_annotation_route.arguments["input_overrides"] == {
+        "genome": "pipelines/bacterial_annotation/data/input/contigs.fasta"
     }
-    assert metagenomics_full_route.arguments["config_overrides"] == {
-        "execution_mode": "full"
+    assert bacterial_annotation_route.arguments["config_overrides"] == {
+        "genus": "Escherichia",
+        "species": "coli",
+        "strain": "K-12",
+        "cpus": "4",
     }
 
-    metagenomics_module_route = router.route(
-        "Run the metagenomics toolkit standalone "
-        'module: annotation params_file: "/data/annotation.yml"'
+    bacterial_annotation_cores_route = router.route(
+        'Annotate this bacterial genome "contigs.fna" with 3 cores'
     )
-    assert metagenomics_module_route.arguments["pipeline_name"] == "metagenomics_toolkit"
-    assert metagenomics_module_route.arguments["input_overrides"] == {
-        "params_file": "/data/annotation.yml"
+    assert bacterial_annotation_cores_route.arguments["pipeline_name"] == "bacterial_annotation"
+    assert bacterial_annotation_cores_route.arguments["input_overrides"] == {
+        "genome": "contigs.fna"
     }
-    assert metagenomics_module_route.arguments["config_overrides"] == {
-        "execution_mode": "standalone",
-        "module": "annotation",
+    assert bacterial_annotation_cores_route.arguments["config_overrides"]["cpus"] == 3
+
+    bakta_annotation_route = router.route(
+        "annotate_bacterial_genome "
+        'genome: "contigs.fna" annotator bakta '
+        'bakta_db_path: "/opt/bakta-db/db-full" translation_table 11 gram - cpus 8'
+    )
+    assert bakta_annotation_route.skill_name == "pipeline_runner"
+    assert bakta_annotation_route.arguments["pipeline_name"] == "bacterial_annotation"
+    assert bakta_annotation_route.arguments["config_overrides"] == {
+        "annotator": "bakta",
+        "cpus": "8",
+        "translation_table": "11",
+        "bakta_db_path": "/opt/bakta-db/db-full",
+        "gram": "-",
     }
 
-    inferred_module_route = router.route(
-        "Run only annotation module with the metagenomics toolkit "
-        'params_file: "/data/annotation.yml"'
-    )
-    assert inferred_module_route.arguments["config_overrides"] == {
-        "execution_mode": "standalone",
-        "module": "annotation",
-    }
+    natural_bakta_route = router.route('Annotate bacterial genome "contigs.fna" using Bakta')
+    assert natural_bakta_route.arguments["config_overrides"]["annotator"] == "bakta"
 
     pipeline_results_route = router.route(
         "Collect and show all results from the generic_bio pipeline run"
