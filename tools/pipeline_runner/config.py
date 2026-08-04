@@ -13,6 +13,8 @@ from tools.pipeline_runner.inputs import (
     stringify_input_value,
     staged_input_records,
 )
+from tools.pipeline_runner.hooks import prepare_runtime_config
+from tools.pipeline_runner.nested import get_config_value, set_config_value
 from tools.pipeline_runner.outputs import rewrite_output_config_fields
 from tools.pipeline_runner.paths import resolve_pipeline_file
 from tools.pipeline_runner.types import PipelineContext, RuntimeConfigWrite
@@ -64,6 +66,7 @@ def write_runtime_config(
     )
     if applied_config_overrides is None:
         applied_config_overrides = apply_config_overrides(runtime_config, requested_overrides)
+    runtime_config = prepare_runtime_config(context, runtime_config)
     output_records = rewrite_output_config_fields(runtime_config, context)
     output_config_keys = {str(record.get("config_key") or "") for record in output_records}
     path_records = rewrite_top_level_path_fields(runtime_config, context, skip_keys=output_config_keys)
@@ -93,6 +96,7 @@ def write_runtime_config(
         staged_config_paths=[*staged_input_records(context), *input_records, *path_records],
         applied_config_overrides=applied_config_overrides,
         output_records=output_records,
+        config=runtime_config,
     )
 
 
@@ -102,7 +106,7 @@ def apply_input_overrides(
 ) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
     for config_key, path in context.resolved_input_overrides.items():
-        runtime_config[config_key] = stringify_input_value(path)
+        set_config_value(runtime_config, config_key, stringify_input_value(path))
     for record in context.input_override_records:
         config_key = str(record.get("config_key") or "")
         if not config_key or config_key == "input_path":
@@ -161,14 +165,14 @@ def apply_runner_param_overrides(
         spec = specs.get(key) or {}
         if isinstance(spec, str):
             target_key = spec
-            default = runtime_config.get(target_key)
+            default = get_config_value(runtime_config, target_key)
         elif isinstance(spec, dict):
             target_key = str(spec.get("config_key") or spec.get("wdl_key") or spec.get("key") or key)
-            default = runtime_config.get(target_key, spec.get("default"))
+            default = get_config_value(runtime_config, target_key, spec.get("default"))
         else:
             target_key = str(key)
-            default = runtime_config.get(target_key)
-        runtime_config[target_key] = coerce_param_value(default, requested_value)
+            default = get_config_value(runtime_config, target_key)
+        set_config_value(runtime_config, target_key, coerce_param_value(default, requested_value))
         applied[str(key)] = requested_value
     return applied
 

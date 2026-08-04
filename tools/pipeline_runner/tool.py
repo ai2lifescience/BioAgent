@@ -33,7 +33,10 @@ PIPELINE_RUNNER_TOOL = ToolDefinition(
                 "description": "Run Snakemake in dry-run mode, preview Nextflow, or validate WDL locally with miniwdl check.",
                 "default": False,
             },
-            "timeout": {"type": "integer", "default": 300},
+            "timeout": {
+                "type": "integer",
+                "description": "Maximum runtime in seconds; use 0 for unlimited synchronous execution.",
+            },
             "input_overrides": {
                 "type": "object",
                 "description": "Map runner.yaml input slot names to runtime file paths.",

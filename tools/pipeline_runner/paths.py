@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 import re
 from typing import Any
@@ -53,6 +54,32 @@ def resolve_pipeline_file(
     if not resolved.is_file():
         raise FileNotFoundError(f"{label} not found: {resolved}")
     return resolved
+
+
+def resolve_workflow_root(
+    pipeline_dir: Path,
+    runner_config: dict[str, Any],
+) -> Path:
+    """Resolve an approved external workflow checkout or the pipeline folder."""
+    env_name = str(runner_config.get("workflow_root_env") or "").strip()
+    env_value = os.getenv(env_name, "").strip() if env_name else ""
+    configured = env_value or str(
+        runner_config.get("workflow_root")
+        or runner_config.get("workflow_root_default")
+        or ""
+    ).strip()
+    if not configured:
+        return pipeline_dir.resolve()
+    root = Path(configured)
+    if not root.is_absolute():
+        root = PROJECT_ROOT / root
+    root = root.resolve()
+    if not root.is_dir():
+        setting = f" environment variable {env_name}" if env_name else ""
+        raise FileNotFoundError(
+            f"Workflow root not found: {root}. Configure{setting} with the workflow checkout."
+        )
+    return root
 
 
 def resolve_project_path(path: str | Path) -> Path:

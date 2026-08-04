@@ -9,6 +9,7 @@ import subprocess
 from typing import Any
 
 from tools.pipeline_runner.config import write_runtime_config
+from tools.pipeline_runner.hooks import finalize_nextflow_run
 from tools.pipeline_runner.outputs import (
     finalize_output_records,
     output_path_by_config_key,
@@ -17,6 +18,7 @@ from tools.pipeline_runner.paths import (
     assert_inside,
     read_json,
     resolve_pipeline_file,
+    resolve_workflow_root,
 )
 from tools.pipeline_runner.types import PipelineContext
 
@@ -28,13 +30,14 @@ def run_nextflow_pipeline(
 ) -> dict[str, Any]:
     """Run a Nextflow pipeline using its configured local workflow file."""
     resolved_cores = max(1, int(cores or context.runner_config.get("cores", 1)))
+    workflow_root = resolve_workflow_root(context.pipeline_dir, context.runner_config)
     workflow_path = resolve_pipeline_file(
-        context.pipeline_dir,
+        workflow_root,
         str(context.runner_config.get("workflow") or "main.nf"),
         fallback="main.nf",
         label="Nextflow workflow",
     )
-    config_path = _nextflow_config_path(context)
+    config_path = _nextflow_config_path(context, workflow_root)
     work_dir = context.run_dir / "nextflow_work"
     engine_output_dir = context.run_dir / "nextflow_output"
     work_dir.mkdir(parents=True, exist_ok=True)
@@ -48,6 +51,8 @@ def run_nextflow_pipeline(
             "nextflow_output_dir": str(engine_output_dir),
         },
     )
+    entry = _nextflow_entry(context, runtime_config.config)
+    profile = str(context.runner_config.get("profile") or "").strip()
     command = [*_nextflow_command()]
     if config_path is not None:
         command.extend(["-c", str(config_path)])
@@ -63,11 +68,21 @@ def run_nextflow_pipeline(
             "false",
         ]
     )
+    if profile:
+        command.extend(["-profile", profile])
+    if entry:
+        command.extend(["-entry", entry])
+    if bool(context.runner_config.get("resume", False)):
+        command.append("-resume")
+    command.extend(_trusted_nextflow_args(context))
     if dry_run:
         command.append("-preview")
 
     env = os.environ.copy()
     env["NXF_ANSI_LOG"] = "false"
+    nextflow_version = str(context.runner_config.get("nextflow_version") or "").strip()
+    if nextflow_version:
+        env["NXF_VER"] = nextflow_version
     completed = subprocess.run(
         command,
         cwd=str(context.run_dir),
@@ -83,6 +98,15 @@ def run_nextflow_pipeline(
             f"nextflow pipeline failed with exit code {completed.returncode}: {details}"
         )
 
+    if not dry_run:
+        finalize_nextflow_run(
+            context=context,
+            runtime_config=runtime_config.config,
+            output_records=runtime_config.output_records,
+            command=command,
+            stdout=completed.stdout,
+            stderr=completed.stderr,
+        )
     if not dry_run:
         _copy_declared_outputs(runtime_config.output_records, engine_output_dir)
     if runtime_config.output_records:
@@ -118,6 +142,10 @@ def run_nextflow_pipeline(
         "base_config_path": str(context.raw_config_path),
         "nextflow_config_path": str(config_path or ""),
         "workflow_path": str(workflow_path),
+        "workflow_root": str(workflow_root),
+        "entry": entry,
+        "profile": profile,
+        "nextflow_version": nextflow_version,
         "staged_config_paths": runtime_config.staged_config_paths,
         "config_overrides": runtime_config.applied_config_overrides,
         "pipeline_dir": str(context.pipeline_dir),
@@ -134,6 +162,7 @@ def run_nextflow_pipeline(
         "work_dir": str(work_dir),
         "label": context.label,
         "cores": resolved_cores,
+        "timeout": context.timeout,
         "returncode": completed.returncode,
         "command": command,
         "stdout": completed.stdout,
@@ -146,19 +175,55 @@ def run_nextflow_pipeline(
     }
 
 
-def _nextflow_config_path(context: PipelineContext) -> Path | None:
+def _nextflow_config_path(
+    context: PipelineContext,
+    workflow_root: Path,
+) -> Path | None:
     value = context.runner_config.get("nextflow_config") or context.runner_config.get(
         "nextflow_config_file"
     )
     if not value:
-        conventional_path = context.pipeline_dir / "nextflow.config"
+        conventional_path = workflow_root / "nextflow.config"
         return conventional_path.resolve() if conventional_path.is_file() else None
     return resolve_pipeline_file(
-        context.pipeline_dir,
+        workflow_root,
         str(value),
         fallback="nextflow.config",
         label="Nextflow config",
     )
+
+
+def _nextflow_entry(
+    context: PipelineContext,
+    runtime_config: dict[str, Any],
+) -> str:
+    bioagent = runtime_config.get("bioagent")
+    dynamic_entry = bioagent.get("entry") if isinstance(bioagent, dict) else None
+    entry = str(dynamic_entry or context.runner_config.get("entry") or "").strip()
+    if not entry:
+        return ""
+    allowed = [
+        str(item).strip()
+        for item in (context.runner_config.get("allowed_entries") or [])
+        if str(item).strip()
+    ]
+    if allowed and entry not in allowed:
+        raise ValueError(
+            f"Nextflow entry '{entry}' is not approved for pipeline {context.pipeline_name}. "
+            f"Allowed entries: {', '.join(allowed)}."
+        )
+    return entry
+
+
+def _trusted_nextflow_args(context: PipelineContext) -> list[str]:
+    """Return static Nextflow arguments declared by an approved runner folder."""
+    value = context.runner_config.get("nextflow_args") or []
+    if not isinstance(value, list):
+        raise ValueError("runner.yaml nextflow_args must be a list.")
+    args = [str(item) for item in value]
+    if any(not item.strip() or "\x00" in item for item in args):
+        raise ValueError("runner.yaml nextflow_args contains an invalid argument.")
+    return args
 
 
 def _copy_declared_outputs(

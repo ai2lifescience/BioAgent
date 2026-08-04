@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from tools.pipeline_runner.paths import resolve_pipeline_output_path, safe_label
+from tools.pipeline_runner.nested import get_config_value, set_config_value
 from tools.pipeline_runner.types import PipelineContext
 
 
@@ -64,7 +65,11 @@ def rewrite_output_config_fields(
     for name, spec in pipeline_output_specs(context.runner_config).items():
         declared_config_key = str(spec.get("config_key") or "")
         default_path = str(spec.get("default") or "").strip()
-        raw_value = (runtime_config.get(declared_config_key) if declared_config_key else None) or default_path
+        raw_value = (
+            get_config_value(runtime_config, declared_config_key)
+            if declared_config_key
+            else None
+        ) or default_path
         if not raw_value:
             if spec.get("required"):
                 raise ValueError(
@@ -76,7 +81,7 @@ def rewrite_output_config_fields(
         output_path = resolve_pipeline_output_path(str(raw_value), context.run_dir)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         if declared_config_key:
-            runtime_config[declared_config_key] = str(output_path)
+            set_config_value(runtime_config, declared_config_key, str(output_path))
         records.append(
             {
                 "name": name,
