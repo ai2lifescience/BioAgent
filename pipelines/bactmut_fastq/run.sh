@@ -27,7 +27,7 @@ PY
 }
 
 PIPELINE_LABEL="$(config_value label)"
+PIPELINE_ENVIRONMENT="$(config_value environment)"
 export PIPELINE_LABEL
-export PYTHONPATH="$SCRIPT_DIR${PYTHONPATH:+:$PYTHONPATH}"
-
-python3 -m bactmut_fastq.config_runner "$CONFIG_PATH"
+conda run --no-capture-output -n "$PIPELINE_ENVIRONMENT" \
+  python "$SCRIPT_DIR/workflow.py" "$CONFIG_PATH"

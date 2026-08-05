@@ -17,13 +17,12 @@ FASTQ reads mode: validate -> Trimmomatic -> minimap2 -x sr against MEGARes sequ
 
 Paired reads use paired Trimmomatic outputs. Unpaired outputs are retained and are excluded from assembly by default; administrators can enable `tools.assembler.include_unpaired`.
 
-## Installation
+## Deployment requirements
 
-```bash
-conda env create -f environment.yml
-conda activate <environment-chosen-by-deployer>
-python -m pip install -e .
-```
+This delivery is a self-contained `runner.yaml` + `run.sh` + `workflow.py`
+pipeline, not an installable Python package. Deploy it under
+`BioAgent/pipelines/bacarg-V2/` and ensure that the Conda environment named
+`bacarg` contains the required tools listed below.
 
 Databases are not bundled or downloaded by normal runs. Prepare official MEGARes nucleotide FASTA and metadata as described in `docs/DATABASE_SETUP.md`, then either edit a copy of `config.example.yaml` or set:
 
@@ -47,7 +46,7 @@ bacarg doctor --json
 bacarg version
 ```
 
-`runner.yaml`, `runner.directory.yaml`, `runner.fasta.yaml`, and `runner.fastq.yaml` describe the general and explicit Agent contracts. `run.sh` and `run.ps1` locate only their own project and never activate a fixed environment.
+`runner.yaml` defines the single BioAgent runtime contract. `run.sh` invokes the local `workflow.py` implementation.
 
 Use `--dry-run` to validate input/configuration and write a command plan without requiring external tools. It records `dry_run: true`; its empty hit table is not a biological result.
 
@@ -72,8 +71,8 @@ Assembly, gene calling, database curation, thresholds, and contig fragmentation 
 
 ```bash
 python -m pytest
-python -m bacarg --help
-python -m bacarg version
+python workflow.py --help
+python workflow.py version
 ```
 
 Local tests use synthetic files and fake tools. Copy this directory alone to a server, create its environment, prepare the database anywhere permitted, configure paths, run `bacarg doctor`, then process a small validation sample. See `DESCRIPTION.md` and `docs/DEPLOYMENT.md`.
@@ -95,3 +94,33 @@ bacarg run --input-dir batch_inputs --output batch_results --dry-run
 ```
 
 Schema version 1.1 records `input_type` (`reads` or `genome`) and `analysis_mode` in `status.json`, `qc.json`, and `manifest.json`. Dry-run records only the commands in the selected supported branch.
+
+## BioAgent packaged workflow
+
+This packaged version is run through `runner.yaml` and `run.sh`; the previous
+multi-module package and its `environment.yml` are not part of this delivery.
+The entrypoint uses Conda environment `bacarg`. Required production tools are
+Python with PyYAML, Prokka, ABRicate with a configured MEGARes database, and
+for read/assembly modes Trimmomatic, minimap2, and metaSPAdes.
+
+Run a deployment check before production:
+
+```bash
+conda run -n bacarg python workflow.py doctor --config config.yaml
+```
+
+For a direct assembled-contig run, use:
+
+```bash
+conda run -n bacarg python workflow.py run \
+  --config config.yaml --input contigs.fasta --input-type genome \
+  --analysis-mode genome --output results --threads 8 --sample-id sample01
+```
+
+In BioAgent, provide `pipeline_name: bacarg-V2` and `input_data`. Use
+`input_type` and `analysis_mode` overrides only when their values match the
+actual input: `genome` for FASTA, or `reads` / `assemble` for FASTQ.
+
+See [`../../DATABASE_REQUIREMENTS.md`](../../DATABASE_REQUIREMENTS.md) for the
+required MEGARes files and tested server paths. These large files are excluded
+from the package and must not be uploaded to Git.

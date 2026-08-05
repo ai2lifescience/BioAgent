@@ -20,14 +20,20 @@ docs/project_intro/
 
 # Pipeline runtime outputs and test input data.
 **/output/
-pipelines/*/data/input/
-pipelines/*/data/output/
+!pipelines/*/data/
+!pipelines/*/data/output/
+pipelines/*/data/output/*
+!pipelines/*/data/output/README.md
 
 # Large sequencing and alignment files.
 *.fastq
 *.fastq.gz
 *.fq
 *.fq.gz
+!pipelines/*/data/input/example_*.fastq
+!pipelines/*/data/input/example_*.fastq.gz
+!pipelines/*/data/input/example_*.fq
+!pipelines/*/data/input/example_*.fq.gz
 *.bam
 *.sam
 

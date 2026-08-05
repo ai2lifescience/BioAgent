@@ -33,9 +33,9 @@ cp -R bactmut_fasta /path/to/BioAgent/pipelines/
 chmod +x /path/to/BioAgent/pipelines/bactmut_fasta/run.sh
 ```
 
-Place at least five query FASTA files in `data/input/genomes/` and the local
-reference in `data/input/reference.fasta`, or let BioAgent replace those paths
-in its generated `config.runtime.yaml`.
+Place one query FASTA file at `data/input/example_genomes.fasta`, or place one
+or more query FASTA files in a directory. BioAgent can replace either input
+path in its generated runtime configuration.
 
 ## Configuration
 
@@ -73,8 +73,37 @@ the configured input paths, and run the same command.
 - `config.yaml`: plug-and-play default paths and parameters.
 - `run.sh`: strict shell entrypoint; validates and parses the YAML, then starts
   the adapter.
-- `bactmut_fasta/config_runner.py`: validates config, invokes the original
-  pipeline, publishes configured paths, and creates BioAgent report/metrics.
-- `bactmut_fasta/*.py`: original BactMut FASTA implementation.
+- `workflow.py`: consolidated configuration adapter and BactMut FASTA
+  implementation; it validates paths, invokes analysis, and publishes the
+  declared BioAgent outputs.
 - `DESCRIPTION.md`: short pipeline description for users and agents.
 - `README.md`: dependencies, installation, and configuration.
+
+## BioAgent packaged workflow
+
+`genomes` accepts either one FASTA file or a directory of FASTA files; it is
+not restricted to five inputs. `reference` is optional only when
+`params.reference_mode` is `species` or `taxonid`; it is required for the
+default `local` mode. The main parameters are `threads`, `aligner`
+(`auto|minimap2|internal`), `min_coverage`, `window_size`, `step_size`,
+`sd_threshold`, and the optional simulation parameters.
+
+Use the generated runtime configuration through BioAgent, or run directly:
+
+```bash
+./run.sh config.yaml
+```
+
+For a single FASTA comparison in BioAgent, provide `pipeline_name:
+bactmut_fasta`, `genomes`, and `reference`. A one-sample run can legitimately
+skip phylogeny; `report.md`, `metrics.json`, the SNP matrix, and variant tables
+remain the required outputs.
+
+Database/reference policy is summarized in
+[`../../DATABASE_REQUIREMENTS.md`](../../DATABASE_REQUIREMENTS.md): the normal
+`local` mode uses the `reference` input and does not need GTDB; GTDB is needed
+only for `species` or `taxonid` reference selection. On the validated server,
+set `GTDB_DB_PATH` to
+`/hpcdisk1/jcyj_group/jiangxq226/pathdect_pipeline/database/pcf/bacterial_reference_res96_v2/representative.fa.filter_sp_mag`
+and `GTDB_METADATA_PATH` to
+`/hpcdisk1/jcyj_group/jiangxq226/pathdect_pipeline/database/pcf/bacterial_reference_res96_v2/bac120_metadata.tsv.deversion`.

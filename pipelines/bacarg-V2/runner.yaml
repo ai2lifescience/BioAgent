@@ -9,33 +9,34 @@ inputs:
     label: Input file or directory
     config_key: input_path
     required: true
+    accepts: [".fasta", ".fa", ".fna", ".fastq", ".fq"]
 
 outputs:
   arg_hits:
     label: ARG hits table
     config_key: arg_hits_path
-    default: output/arg_hits.tsv
+    default: data/output/arg_hits.tsv
     kind: table
     required: true
 
   arg_hits_jsonl:
     label: ARG hits JSONL
     config_key: arg_hits_jsonl_path
-    default: output/arg_hits.jsonl
+    default: data/output/arg_hits.jsonl
     kind: report
     required: false
 
   qc:
     label: Quality-control summary
     config_key: qc_path
-    default: output/qc.json
+    default: data/output/qc.json
     kind: report
     required: true
 
   status:
     label: Pipeline status
     config_key: status_path
-    default: output/status.json
+    default: data/output/status.json
     kind: report
     required: true
 

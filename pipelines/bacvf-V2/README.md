@@ -13,13 +13,12 @@ FASTQ reads mode: validate -> Trimmomatic -> minimap2 -x sr against VFDB core se
 
 Paired Trimmomatic outputs feed metaSPAdes. Unpaired outputs are retained and excluded by default; administrators can enable them in YAML.
 
-## Installation and database
+## Deployment requirements and database
 
-```bash
-conda env create -f environment.yml
-conda activate <environment-chosen-by-deployer>
-python -m pip install -e .
-```
+This delivery is a self-contained `runner.yaml` + `run.sh` + `workflow.py`
+pipeline, not an installable Python package. Deploy it under
+`BioAgent/pipelines/bacvf-V2/` and ensure that the Conda environment named
+`bacvf` contains the required tools listed below.
 
 Normal runs neither bundle nor download VFDB. Follow `docs/DATABASE_SETUP.md` to build the custom `vfdb_core` database from official core nucleotide FASTA and metadata. Configure it in YAML or with:
 
@@ -43,7 +42,7 @@ bacvf doctor --json
 bacvf version
 ```
 
-The runner YAML files describe general file-list, directory-batch, FASTA-only, and FASTQ-only Agent contracts. `run.sh` and `run.ps1` locate their own project without activating a fixed environment. `--dry-run` validates and records command argument lists without requiring tools; its empty result is explicitly marked as a dry run.
+`runner.yaml` defines the single BioAgent runtime contract, while `run.sh` invokes the local `workflow.py` implementation. `--dry-run` validates and records command argument lists without requiring tools; its empty result is explicitly marked as a dry run.
 
 ## Outputs
 
@@ -63,8 +62,8 @@ Detecting a virulence-factor homolog does not prove that a sample is pathogenic.
 
 ```bash
 python -m pytest
-python -m bacvf --help
-python -m bacvf version
+python workflow.py --help
+python workflow.py version
 ```
 
 Tests use synthetic fixtures and fake executables. Copy this directory alone, create its environment, prepare VFDB separately at any deployment-chosen location, configure it, run `bacvf doctor`, and validate a small control before production. See `DESCRIPTION.md` and `docs/DEPLOYMENT.md`.
@@ -86,3 +85,32 @@ bacvf run --input-dir batch_inputs --output batch_results --dry-run
 ```
 
 Schema version 1.1 records `input_type` (`reads` or `genome`) and `analysis_mode` in `status.json`, `qc.json`, and `manifest.json`. Dry-run records only the commands in the selected supported branch.
+
+## BioAgent packaged workflow
+
+This packaged version is run through `runner.yaml` and `run.sh`, which use
+Conda environment `bacvf`. Required production tools are Python with PyYAML,
+Prokka, ABRicate with a configured VFDB-core database, and for read/assembly
+modes Trimmomatic, minimap2, and metaSPAdes.
+
+Check deployment readiness before production:
+
+```bash
+conda run -n bacvf python workflow.py doctor --config config.yaml
+```
+
+For a direct assembled-contig run:
+
+```bash
+conda run -n bacvf python workflow.py run \
+  --config config.yaml --input contigs.fasta --input-type genome \
+  --analysis-mode genome --output results --threads 8 --sample-id sample01
+```
+
+In BioAgent, use `pipeline_name: bacvf-V2` and `input_data`. The required
+outputs are `vf_hits.tsv`, `qc.json`, and `status.json`; a no-hit result is a
+valid successful result with an otherwise schema-complete output set.
+
+See [`../../DATABASE_REQUIREMENTS.md`](../../DATABASE_REQUIREMENTS.md) for the
+required VFDB-core files and configuration variables. The database is excluded
+from this package and must not be uploaded to Git.

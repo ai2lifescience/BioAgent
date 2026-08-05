@@ -5,7 +5,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_PATH="${1:?runtime config path is required}"
 
 PIPELINE_ENV="bacarg"
-PIPELINE_MODULE="bacarg"
 
 config_value() {
   local key="$1"
@@ -45,7 +44,7 @@ mkdir -p "$output_dir"
 
 command=(
   conda run -n "$PIPELINE_ENV"
-  python -m "$PIPELINE_MODULE" run
+  python "$SCRIPT_DIR/workflow.py" run
   --config "$SCRIPT_DIR/config.yaml"
   --input-type "$input_type"
   --analysis-mode "$analysis_mode"

@@ -28,6 +28,4 @@ PY
 
 PIPELINE_LABEL="$(config_value label)"
 export PIPELINE_LABEL
-export PYTHONPATH="$SCRIPT_DIR${PYTHONPATH:+:$PYTHONPATH}"
-
-python3 -m bactmut_fasta.config_runner "$CONFIG_PATH"
+python3 "$SCRIPT_DIR/workflow.py" "$CONFIG_PATH"

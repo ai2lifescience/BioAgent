@@ -9,33 +9,34 @@ inputs:
     label: Input file or directory
     config_key: input_path
     required: true
+    accepts: [".fasta", ".fa", ".fna", ".fastq", ".fq"]
 
 outputs:
   vf_hits:
     label: Virulence-factor hits table
     config_key: vf_hits_path
-    default: output/vf_hits.tsv
+    default: data/output/vf_hits.tsv
     kind: table
     required: true
 
   vf_hits_jsonl:
     label: Virulence-factor hits JSONL
     config_key: vf_hits_jsonl_path
-    default: output/vf_hits.jsonl
+    default: data/output/vf_hits.jsonl
     kind: report
     required: false
 
   qc:
     label: Quality-control summary
     config_key: qc_path
-    default: output/qc.json
+    default: data/output/qc.json
     kind: report
     required: true
 
   status:
     label: Pipeline status
     config_key: status_path
-    default: output/status.json
+    default: data/output/status.json
     kind: report
     required: true
 

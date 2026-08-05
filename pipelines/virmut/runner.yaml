@@ -6,9 +6,16 @@ timeout: 3600
 
 inputs:
   genomes:
-    label: Genome FASTA directory
+    label: Genome FASTA file or directory
     config_key: input_path
     required: true
+    accepts: [".fasta", ".fa", ".fna"]
+
+  reference:
+    label: Reference genome FASTA (required when reference_mode is local)
+    config_key: reference_path
+    required: false
+    accepts: [".fasta", ".fa", ".fna"]
 
 outputs:
   matrix:

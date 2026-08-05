@@ -1,14 +1,15 @@
 # BactMut FASTA
 
-BactMut FASTA compares at least five assembled bacterial genomes against a
+BactMut FASTA compares one or more assembled bacterial genomes against a
 reference, calls SNPs, filters low-coverage and recombination-dense positions,
 builds a filtered SNP alignment, annotates variants, and optionally constructs
 an IQ-TREE phylogeny.
 
 ## Inputs
 
-- `input_path`: directory containing query genomes with `.fasta`, `.fa`, `.fna`,
-  or `.fas` suffixes. It is not used when `params.simulate` is `true`.
+- `input_path`: one query genome FASTA or a directory of query FASTAs with
+  `.fasta`, `.fa`, `.fna`, or `.fas` suffixes. It is not used when
+  `params.simulate` is `true`.
 - `reference_path`: local reference FASTA used when
   `params.reference_mode: local`.
 - `params.reference_mode`: `local`, `species`, or `taxonid`.

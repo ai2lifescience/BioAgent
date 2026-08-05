@@ -7,6 +7,14 @@ This folder is self-contained and can be copied directly to BioAgent's
 
 - Bash
 - Python 3.9 or newer
+- Conda environment `bactmut` with `minimap2`, `samtools`, and `bcftools`
+
+Create the environment once:
+
+```bash
+conda create -y -n bactmut -c conda-forge -c bioconda \
+  python=3.11 pyyaml minimap2 samtools bcftools
+```
 - PyYAML (`python3 -m pip install pyyaml`)
 - `minimap2`
 - `samtools`
@@ -34,9 +42,10 @@ cp -R bactmut_fastq /path/to/BioAgent/pipelines/
 chmod +x /path/to/BioAgent/pipelines/bactmut_fastq/run.sh
 ```
 
-Place FASTQ files in `data/input/fastq/` and the local reference in
-`data/input/reference.fasta`, or let BioAgent replace those paths in its
-generated `config.runtime.yaml`.
+Place one FASTQ file at `data/input/example_reads.fastq`, or place one or more
+FASTQ files in a directory. The local reference is
+`data/input/example_reference.fasta`; BioAgent can replace either input path
+in its generated runtime configuration.
 
 ## FASTQ naming
 
@@ -77,8 +86,42 @@ the configured input paths, and run the same command.
 - `config.yaml`: plug-and-play default paths and parameters.
 - `run.sh`: strict shell entrypoint; validates and parses the YAML, then starts
   the adapter.
-- `bactmut_fastq/config_runner.py`: validates config, invokes the original
-  pipeline, publishes configured paths, and creates BioAgent report/metrics.
-- `bactmut_fastq/*.py`: original BactMut FASTQ implementation.
+- `workflow.py`: consolidated configuration adapter and BactMut FASTQ
+  implementation; it validates paths, calls variants, and publishes the
+  declared BioAgent outputs.
 - `DESCRIPTION.md`: short pipeline description for users and agents.
 - `README.md`: dependencies, installation, and configuration.
+
+## BioAgent packaged workflow
+
+`reads` accepts either one single-end FASTQ file or a directory containing
+single-end and/or recognizably paired FASTQs. `reference` is required for the
+default `params.reference_mode: local`; `species` and `taxonid` instead require
+the GTDB environment variables documented above.
+
+The entrypoint deliberately uses the dedicated Conda environment named by the
+top-level `environment` field in `config.yaml` (default: `bactmut`). It must
+contain modern `minimap2`, `samtools`, and `bcftools`; the pipeline converts
+SAM to BAM explicitly before sorting, so it does not rely on ambiguous format
+detection.
+
+Run a configured direct job with:
+
+```bash
+./run.sh config.yaml
+```
+
+In BioAgent, provide `pipeline_name: bactmut_fastq`, `reads`, and `reference`.
+The adjustable parameters are `threads`, `min_coverage`, `window_size`,
+`step_size`, `sd_threshold`, `reference_mode`, and `verbose`. A single sample
+can validly skip the optional tree while producing the required report,
+metrics, SNP matrix, and variant files.
+
+Database/reference policy is summarized in
+[`../../DATABASE_REQUIREMENTS.md`](../../DATABASE_REQUIREMENTS.md): the normal
+`local` mode uses the `reference` input and does not need GTDB; GTDB is needed
+only for `species` or `taxonid` reference selection. On the validated server,
+set `GTDB_DB_PATH` to
+`/hpcdisk1/jcyj_group/jiangxq226/pathdect_pipeline/database/pcf/bacterial_reference_res96_v2/representative.fa.filter_sp_mag`
+and `GTDB_METADATA_PATH` to
+`/hpcdisk1/jcyj_group/jiangxq226/pathdect_pipeline/database/pcf/bacterial_reference_res96_v2/bac120_metadata.tsv.deversion`.

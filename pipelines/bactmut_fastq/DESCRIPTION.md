@@ -7,8 +7,9 @@ matrix, annotates variants, and optionally constructs an IQ-TREE phylogeny.
 
 ## Inputs
 
-- `input_path`: directory containing single-end or paired-end FASTQ files with
-  `.fastq`, `.fq`, `.fastq.gz`, or `.fq.gz` suffixes.
+- `input_path`: one single-end FASTQ file or a directory containing single-end
+  or paired-end FASTQ files with `.fastq`, `.fq`, `.fastq.gz`, or `.fq.gz`
+  suffixes.
 - `reference_path`: local reference FASTA used when
   `params.reference_mode: local`.
 - `params.reference_mode`: `local`, `species`, or `taxonid`.

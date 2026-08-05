@@ -13,13 +13,12 @@ FASTQ reads mode: validate -> Trimmomatic -> FASTQ-to-FASTA -> DIAMOND blastx ag
 
 Paired reads use paired Trimmomatic outputs. Unpaired outputs are retained and excluded from assembly by default.
 
-## Installation and database
+## Deployment requirements and database
 
-```bash
-conda env create -f environment.yml
-conda activate <environment-chosen-by-deployer>
-python -m pip install -e .
-```
+This delivery is a self-contained `runner.yaml` + `run.sh` + `workflow.py`
+pipeline, not an installable Python package. Deploy it under
+`BioAgent/pipelines/bacfunc-V2/` and ensure that the Conda environment named
+`bacfunc` contains the required tools listed below.
 
 The environment pins `eggnog-mapper==2.1.15`. The project does not include or download eggNOG. An existing data directory must contain `eggnog.db`, `eggnog.taxa.db`, `eggnog.taxa.db.traverse.pkl`, and `eggnog_proteins.dmnd`. Configure:
 
@@ -62,8 +61,8 @@ Results depend on assembly, gene prediction, search sensitivity, and database ve
 
 ```bash
 python -m pytest
-python -m bacfunc --help
-python -m bacfunc version
+python workflow.py --help
+python workflow.py version
 ```
 
 Tests use synthetic annotations, SQLite fixtures, and fake executables. For server deployment, copy this directory alone, prepare eggNOG at any administrator-chosen location, configure it, run `bacfunc doctor`, and validate a small control. See the deployment documents.
@@ -85,3 +84,35 @@ bacfunc run --input-dir batch_inputs --output batch_results --dry-run
 ```
 
 Schema version 1.1 records `input_type` (`reads` or `genome`) and `analysis_mode` in `status.json`, `qc.json`, and `manifest.json`. Dry-run records only the commands in the selected supported branch.
+
+## BioAgent packaged workflow
+
+This packaged version is run through `runner.yaml` and `run.sh`, which use
+Conda environment `bacfunc`. It requires Python with PyYAML, Prokka,
+eggNOG-mapper 2.1.15, and a readable eggNOG v5 data directory containing
+`eggnog.db`, `eggnog.taxa.db`, `eggnog.taxa.db.traverse.pkl`, and
+`eggnog_proteins.dmnd`. Read/assembly modes additionally require Trimmomatic,
+DIAMOND, and metaSPAdes.
+
+Check deployment readiness:
+
+```bash
+conda run -n bacfunc python workflow.py doctor --config config.yaml
+```
+
+Complete genome-mode annotation is intentionally database-intensive. For a
+direct run with an appropriate CPU allocation:
+
+```bash
+conda run --no-capture-output -n bacfunc python workflow.py run \
+  --config config.yaml --input contigs.fasta --input-type genome \
+  --analysis-mode genome --output results --threads 8 --sample-id sample01
+```
+
+In BioAgent, provide `pipeline_name: bacfunc-V2` and `input_data`. The required
+outputs are `gene_annotations.tsv`, `annotation_terms.tsv`, `qc.json`, and
+`status.json`; raw eggNOG files and logs remain under the run output directory.
+
+See [`../../DATABASE_REQUIREMENTS.md`](../../DATABASE_REQUIREMENTS.md) for the
+four required eggNOG v5 files and deployment-path rules. The eggNOG database is
+intentionally excluded from this package and must not be uploaded to Git.
