@@ -1,0 +1,41 @@
+schema_version: "1.0"
+# input_type and analysis_mode are run-level inputs; FASTA uses genome.
+# FASTQ auto mode uses assemble; --analysis-mode reads selects direct read analysis.
+pipeline:
+  threads: auto
+  sample_type: metagenome
+runtime:
+  keep_work: true
+  strict_manifest: false
+tools:
+  trimmomatic:
+    executable: trimmomatic
+    prefix_options: []
+    options: [LEADING:3, TRAILING:3, "SLIDINGWINDOW:4:15", MINLEN:36]
+  assembler:
+    executable: metaspades.py
+    prefix_options: []
+    options: []
+    include_unpaired: false
+    memory_gb:
+  prokka:
+    executable: prokka
+    prefix_options: []
+    options: [--kingdom, Bacteria, --metagenome]
+  reads_search:
+    executable: diamond
+    prefix_options: []
+    options: [--sensitive]
+    evalue: 1.0e-5
+    min_identity: 30
+    min_query_coverage: 60
+  eggnog:
+    executable: emapper.py
+    prefix_options: []
+    version: "2.1.15"
+    search_mode: diamond
+    options: [--itype, proteins]
+databases:
+  eggnog:
+    data_dir:
+    manifest:

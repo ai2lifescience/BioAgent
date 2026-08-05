@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bacarg"
+version = "0.2.0"
+description = "Metagenome MEGARes 3.0 sequence-homology ARG candidate annotation"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["PyYAML>=6.0"]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+bacarg = "bacarg.cli:main"
+bacarg-fasta = "bacarg.cli:fasta_main"
+bacarg-fastq = "bacarg.cli:fastq_main"
+
+[tool.setuptools.packages.find]
+include = ["bacarg*"]
+
+[tool.setuptools.package-data]
+bacarg = ["default_config.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

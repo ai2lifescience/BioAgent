@@ -1,0 +1,54 @@
+name: bacarg-v2
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 3600
+
+inputs:
+  input_data:
+    label: Input file or directory
+    config_key: input_path
+    required: true
+
+outputs:
+  arg_hits:
+    label: ARG hits table
+    config_key: arg_hits_path
+    default: output/arg_hits.tsv
+    kind: table
+    required: true
+
+  arg_hits_jsonl:
+    label: ARG hits JSONL
+    config_key: arg_hits_jsonl_path
+    default: output/arg_hits.jsonl
+    kind: report
+    required: false
+
+  qc:
+    label: Quality-control summary
+    config_key: qc_path
+    default: output/qc.json
+    kind: report
+    required: true
+
+  status:
+    label: Pipeline status
+    config_key: status_path
+    default: output/status.json
+    kind: report
+    required: true
+
+param_overrides:
+  input_type:
+    config_key: input_type
+    default: auto
+  analysis_mode:
+    config_key: analysis_mode
+    default: auto
+  threads:
+    config_key: threads
+    default: 8
+  sample_id:
+    config_key: sample_id
+    default: ""

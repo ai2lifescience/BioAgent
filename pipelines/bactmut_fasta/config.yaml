@@ -1,0 +1,35 @@
+label: bactmut_fasta_example
+
+input_path: data/input/genomes
+reference_path: data/input/reference.fasta
+output_dir: data/output
+
+report_path: data/output/report.md
+metrics_path: data/output/metrics.json
+matrix_path: data/output/filtered_snp_matrix.fasta
+variants_path: data/output/variants.tsv
+variants_summary_path: data/output/variants_summary.txt
+pipeline_summary_path: data/output/summary.txt
+initial_snps_path: data/output/initial_snp_list.csv
+mutation_report_path: data/output/mutation_report.csv
+final_tree_path: data/output/final_tree.nwk
+treefile_path: data/output/iqtree_run.treefile
+iqtree_report_path: data/output/iqtree_run.iqtree
+iqtree_log_path: data/output/iqtree_run.log
+pipeline_log_path: data/output/pipeline.log
+
+params:
+  reference_mode: local
+  species: ""
+  taxonid: ""
+  threads: 4
+  aligner: auto
+  min_coverage: 0.9
+  window_size: 50
+  step_size: 10
+  sd_threshold: 3.0
+  simulate: false
+  simulate_snp_rate: 0.001
+  simulate_samples: 5
+  seed: 42
+  verbose: false

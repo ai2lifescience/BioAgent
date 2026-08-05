@@ -1,0 +1,126 @@
+name: bactmut_fasta
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 14400
+
+inputs:
+  genomes:
+    label: Query genome FASTA directory (at least 5 genomes)
+    config_key: input_path
+    required: false
+    accepts: [".fasta", ".fa", ".fna", ".fas"]
+
+  reference:
+    label: Reference genome FASTA (required when reference_mode is local)
+    config_key: reference_path
+    required: false
+    accepts: [".fasta", ".fa", ".fna", ".fas"]
+
+outputs:
+  report:
+    label: BioAgent Markdown report
+    config_key: report_path
+    default: data/output/report.md
+    kind: report
+    required: true
+
+  metrics:
+    label: BioAgent metrics
+    config_key: metrics_path
+    default: data/output/metrics.json
+    kind: metrics
+    required: true
+
+  matrix:
+    label: Filtered SNP alignment
+    config_key: matrix_path
+    default: data/output/filtered_snp_matrix.fasta
+    kind: fasta
+    required: true
+
+  variants:
+    label: Annotated variants
+    config_key: variants_path
+    default: data/output/variants.tsv
+    kind: table
+    required: true
+
+  variants_summary:
+    label: Variant statistics
+    config_key: variants_summary_path
+    default: data/output/variants_summary.txt
+    kind: report
+    required: true
+
+  pipeline_summary:
+    label: Pipeline summary
+    config_key: pipeline_summary_path
+    default: data/output/summary.txt
+    kind: report
+    required: true
+
+  initial_snps:
+    label: SNP calls before filtering
+    config_key: initial_snps_path
+    default: data/output/initial_snp_list.csv
+    kind: table
+    required: false
+
+  mutation_report:
+    label: Detailed mutation report
+    config_key: mutation_report_path
+    default: data/output/mutation_report.csv
+    kind: table
+    required: false
+
+  final_tree:
+    label: Final phylogenetic tree
+    config_key: final_tree_path
+    default: data/output/final_tree.nwk
+    kind: tree
+    required: false
+
+  treefile:
+    label: IQ-TREE tree
+    config_key: treefile_path
+    default: data/output/iqtree_run.treefile
+    kind: tree
+    required: false
+
+  iqtree_report:
+    label: IQ-TREE report
+    config_key: iqtree_report_path
+    default: data/output/iqtree_run.iqtree
+    kind: report
+    required: false
+
+  iqtree_log:
+    label: IQ-TREE log
+    config_key: iqtree_log_path
+    default: data/output/iqtree_run.log
+    kind: report
+    required: false
+
+  pipeline_log:
+    label: Pipeline execution log
+    config_key: pipeline_log_path
+    default: data/output/pipeline.log
+    kind: report
+    required: false
+
+param_overrides:
+  reference_mode: {}
+  species: {}
+  taxonid: {}
+  threads: {}
+  aligner: {}
+  min_coverage: {}
+  window_size: {}
+  step_size: {}
+  sd_threshold: {}
+  simulate: {}
+  simulate_snp_rate: {}
+  simulate_samples: {}
+  seed: {}
+  verbose: {}

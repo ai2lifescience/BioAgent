@@ -1,0 +1,27 @@
+engine: shell
+name: bacvf-fasta
+version: "0.2.0"
+description: VFDB core virulence-factor annotation from supplied metagenome contigs
+entrypoint: bacvf-fasta
+configuration: config.yaml
+resources:
+  cpu: 8
+  memory: 16Gi
+  temporary_storage: 20Gi
+inputs:
+  assembly:
+    type: file
+    required: true
+    formats: [fasta, fasta.gz]
+  output:
+    type: directory
+    required: true
+  sample_id:
+    type: string
+    required: false
+outputs:
+  directory: output
+  required: [vf_hits.tsv, vf_hits.jsonl, status.json, manifest.json, qc.json]
+execution:
+  interactive: false
+  command: bacvf-fasta --assembly ${inputs.assembly} --output ${inputs.output}

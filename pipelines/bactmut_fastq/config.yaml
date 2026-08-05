@@ -1,0 +1,28 @@
+label: bactmut_fastq_example
+
+input_path: data/input/fastq
+reference_path: data/input/reference.fasta
+output_dir: data/output
+
+report_path: data/output/report.md
+metrics_path: data/output/metrics.json
+matrix_path: data/output/matrix.tsv
+variants_path: data/output/variants.tsv
+variants_summary_path: data/output/variants_summary.txt
+final_tree_path: data/output/final_tree.nwk
+tree_alignment_path: data/output/tree.fasta
+treefile_path: data/output/tree.treefile
+iqtree_report_path: data/output/tree.iqtree
+iqtree_log_path: data/output/tree.log
+pipeline_log_path: data/output/pipeline.log
+
+params:
+  reference_mode: local
+  species: ""
+  taxonid: ""
+  threads: 4
+  min_coverage: 0.9
+  window_size: 50
+  step_size: 10
+  sd_threshold: 3.0
+  verbose: false

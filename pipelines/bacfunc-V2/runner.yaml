@@ -1,0 +1,54 @@
+name: bacfunc-v2
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 28800
+
+inputs:
+  input_data:
+    label: Input file or directory
+    config_key: input_path
+    required: true
+
+outputs:
+  gene_annotations:
+    label: Gene annotations table
+    config_key: gene_annotations_path
+    default: output/gene_annotations.tsv
+    kind: table
+    required: true
+
+  annotation_terms:
+    label: Annotation terms table
+    config_key: annotation_terms_path
+    default: output/annotation_terms.tsv
+    kind: table
+    required: true
+
+  qc:
+    label: Quality-control summary
+    config_key: qc_path
+    default: output/qc.json
+    kind: report
+    required: true
+
+  status:
+    label: Pipeline status
+    config_key: status_path
+    default: output/status.json
+    kind: report
+    required: true
+
+param_overrides:
+  input_type:
+    config_key: input_type
+    default: auto
+  analysis_mode:
+    config_key: analysis_mode
+    default: auto
+  threads:
+    config_key: threads
+    default: 8
+  sample_id:
+    config_key: sample_id
+    default: ""
