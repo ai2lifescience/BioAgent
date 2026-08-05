@@ -69,6 +69,7 @@ signal for tree construction.
 - `data/input`: small synthetic test inputs;
 - `data/output/README.md`: explanation of runtime-produced files.
 
-See [`../../DATABASE_REQUIREMENTS.md`](../../DATABASE_REQUIREMENTS.md) for the
-exact default server paths used by the viral reference database modes. Those
-large reference files are server-managed and are not included in this package.
+For `species` or `taxonid` reference selection, the validated server uses
+`/hpcdisk1/jcyj_group/jiangxq226/pathdect_pipeline/database/pcf/virus_db_reference_merged3/reference.fasta`
+and `/hpcdisk1/jcyj_group/jiangxq226/pathdect_pipeline/database/pcf/virus_db_reference_merged3/meta.tsv`.
+These large server-managed reference files are not included in this package.

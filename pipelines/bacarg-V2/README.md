@@ -121,6 +121,8 @@ In BioAgent, provide `pipeline_name: bacarg-V2` and `input_data`. Use
 `input_type` and `analysis_mode` overrides only when their values match the
 actual input: `genome` for FASTA, or `reads` / `assemble` for FASTQ.
 
-See [`../../DATABASE_REQUIREMENTS.md`](../../DATABASE_REQUIREMENTS.md) for the
-required MEGARes files and tested server paths. These large files are excluded
-from the package and must not be uploaded to Git.
+The MEGARes/ABRicate database is deployment-managed and must not be uploaded
+to Git. On the validated server, use `BACARG_ABRICATE_DATADIR`:
+`/data/wutt/xjp/BioAgent-clean/databases/bacarg/abricate`; its associated
+metadata and manifest are `megares_v3/metadata.normalized.tsv` and
+`megares_v3/database_manifest.json` beneath that directory.

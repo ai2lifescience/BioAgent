@@ -113,6 +113,8 @@ In BioAgent, provide `pipeline_name: bacfunc-V2` and `input_data`. The required
 outputs are `gene_annotations.tsv`, `annotation_terms.tsv`, `qc.json`, and
 `status.json`; raw eggNOG files and logs remain under the run output directory.
 
-See [`../../DATABASE_REQUIREMENTS.md`](../../DATABASE_REQUIREMENTS.md) for the
-four required eggNOG v5 files and deployment-path rules. The eggNOG database is
-intentionally excluded from this package and must not be uploaded to Git.
+Set `BACFUNC_EGGNOG_DATA_DIR` to the deployment's eggNOG v5 data directory
+(optionally set `BACFUNC_EGGNOG_MANIFEST` for provenance). It must contain
+`eggnog.db`, `eggnog.taxa.db`, `eggnog.taxa.db.traverse.pkl`, and
+`eggnog_proteins.dmnd`. The eggNOG database is intentionally excluded from
+this package and must not be uploaded to Git.

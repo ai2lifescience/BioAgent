@@ -117,9 +117,7 @@ The adjustable parameters are `threads`, `min_coverage`, `window_size`,
 can validly skip the optional tree while producing the required report,
 metrics, SNP matrix, and variant files.
 
-Database/reference policy is summarized in
-[`../../DATABASE_REQUIREMENTS.md`](../../DATABASE_REQUIREMENTS.md): the normal
-`local` mode uses the `reference` input and does not need GTDB; GTDB is needed
+The normal `local` mode uses the `reference` input and does not need GTDB; GTDB is needed
 only for `species` or `taxonid` reference selection. On the validated server,
 set `GTDB_DB_PATH` to
 `/hpcdisk1/jcyj_group/jiangxq226/pathdect_pipeline/database/pcf/bacterial_reference_res96_v2/representative.fa.filter_sp_mag`

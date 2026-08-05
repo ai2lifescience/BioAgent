@@ -111,6 +111,7 @@ In BioAgent, use `pipeline_name: bacvf-V2` and `input_data`. The required
 outputs are `vf_hits.tsv`, `qc.json`, and `status.json`; a no-hit result is a
 valid successful result with an otherwise schema-complete output set.
 
-See [`../../DATABASE_REQUIREMENTS.md`](../../DATABASE_REQUIREMENTS.md) for the
-required VFDB-core files and configuration variables. The database is excluded
-from this package and must not be uploaded to Git.
+Configure the deployment-owned VFDB-core database with
+`BACVF_ABRICATE_DATADIR` (or the equivalent YAML path); it must provide the
+configured `vfdb_core` ABRicate database and its metadata. The database is
+excluded from this package and must not be uploaded to Git.
