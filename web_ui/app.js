@@ -483,6 +483,26 @@ function pipelineInputRequestFromResult(result) {
   return null;
 }
 
+function askUserRequestFromResult(result) {
+  const outputs = result?.evidence?.outputs;
+  if (!Array.isArray(outputs)) return null;
+  for (let index = outputs.length - 1; index >= 0; index -= 1) {
+    const output = outputs[index];
+    if (!output || output.skill !== "ask_user" || !output.needs_input) continue;
+    const question = String(output.question || "").trim();
+    const options = Array.isArray(output.options)
+      ? output.options.map((option) => String(option || "").trim()).filter(Boolean)
+      : [];
+    if (!question || options.length < 2) continue;
+    return {
+      question,
+      options,
+      otherLabel: String(output.other_label || "Other").trim() || "Other",
+    };
+  }
+  return null;
+}
+
 function pipelineInputSlotsFromText(text) {
   const slots = [];
   const seen = new Set();
@@ -617,12 +637,16 @@ function renderThinkingPanel(payload = {}) {
 }
 
 function runtimeMeta(runtime = {}) {
-  return [
+  const items = [
     `Elapsed: ${formatElapsed(runtime.elapsed_seconds)}`,
     `Skills: ${compactList(runtime.skills)}`,
     `Tools: ${compactList(runtime.tools)}`,
     `Files: ${runtime.file_count || 0}`,
   ];
+  if (runtime.model_tool_fallback?.used) {
+    items.push("Model: tool-free fallback");
+  }
+  return items;
 }
 
 function setThinkingDisplay(state, metaItems = [], payload = null) {
@@ -1065,6 +1089,7 @@ function resultDetails(result) {
   const runtime = result.runtime || {};
   const pipelineOutputs = collectPipelineOutputRecords(result);
   return `
+    ${askUserPromptHtml(result)}
     ${pipelineDownloadsHtml(result, pipelineOutputs)}
     ${pipelineOutputs.length ? "" : collectedBundleHtml(result)}
     ${pipelineOutputs.length ? "" : figureArtifactsHtml(result)}
@@ -1092,6 +1117,35 @@ function resultDetails(result) {
         <pre>${prettyJson(result.trace)}</pre>
       </details>
     </div>
+  `;
+}
+
+function askUserPromptHtml(result) {
+  const request = askUserRequestFromResult(result);
+  if (!request) return "";
+  const optionButtons = request.options.map((option) => `
+    <button class="ask-user-option" type="button" data-ask-user-option="${escapeHtml(option)}">
+      ${escapeHtml(option)}
+    </button>
+  `).join("");
+  return `
+    <section class="ask-user-card" aria-label="Clarifying question">
+      <div class="ask-user-heading">
+        <strong>Input needed</strong>
+        <span>Choose an option or enter another answer.</span>
+      </div>
+      <div class="ask-user-options">
+        ${optionButtons}
+      </div>
+      <form class="ask-user-other-form">
+        <label>
+          <span>${escapeHtml(request.otherLabel)}</span>
+          <input data-ask-user-other type="text" maxlength="500"
+            placeholder="Enter another answer">
+        </label>
+        <button type="submit">Send</button>
+      </form>
+    </section>
   `;
 }
 
@@ -1130,6 +1184,25 @@ function renderMessage(role, text, result = null) {
   `;
   chat.appendChild(message);
   initializeStructureViewers(message);
+  bindAskUserCards(message);
+}
+
+function bindAskUserCards(root = document) {
+  root.querySelectorAll(".ask-user-card").forEach((card) => {
+    if (card.dataset.bound === "true") return;
+    card.dataset.bound = "true";
+    card.querySelectorAll("[data-ask-user-option]").forEach((button) => {
+      button.addEventListener("click", () => {
+        submitAskUserAnswer(button.dataset.askUserOption || "");
+      });
+    });
+    const form = card.querySelector(".ask-user-other-form");
+    form?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const input = form.querySelector("[data-ask-user-other]");
+      submitAskUserAnswer(input?.value || "");
+    });
+  });
 }
 
 function initializeStructureViewers(root = document) {
@@ -1448,10 +1521,8 @@ async function runAgent(request, signal) {
   throw new Error("Agent stream ended before returning a result.");
 }
 
-async function submitPrompt(event) {
-  event.preventDefault();
+async function submitAgentRequest(text) {
   if (isRunning) return;
-  const text = promptInput.value.trim();
   if (!text) return;
 
   promptInput.value = "";
@@ -1475,6 +1546,17 @@ async function submitPrompt(event) {
     requestStopped = false;
     promptInput.focus();
   }
+}
+
+async function submitPrompt(event) {
+  event.preventDefault();
+  await submitAgentRequest(promptInput.value.trim());
+}
+
+function submitAskUserAnswer(answer) {
+  const text = String(answer || "").trim();
+  if (!text || isRunning) return;
+  submitAgentRequest(text);
 }
 
 function fillExamplePrompt(text) {

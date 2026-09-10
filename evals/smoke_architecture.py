@@ -18,6 +18,7 @@ from registries.tool_registry import list_tool_names
 def main() -> int:
     skills = set(list_skill_names())
     assert {
+        "ask_user",
         "example_skill",
         "ncbi_retrieval",
         "pipeline_runner",
@@ -29,6 +30,7 @@ def main() -> int:
     } <= skills
     tools = set(list_tool_names())
     assert {
+        "ask_user",
         "echo",
         "ncbi_fetch",
         "pipeline_runner",

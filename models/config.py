@@ -6,6 +6,17 @@ import os
 from typing import Any
 
 
+DEFAULT_LLM_TIMEOUT_SECONDS = max(1, int(os.getenv("BIOAGENT_LLM_TIMEOUT_SECONDS", "60")))
+
+
+def _env_bool(name: str, default: bool) -> bool:
+    """Read a boolean environment override without accepting ambiguous values."""
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
 DEFAULT_MODELS: dict[str, dict[str, Any]] = {
     "nemotron-3-super": {
         "label": "Nemotron",
@@ -14,11 +25,13 @@ DEFAULT_MODELS: dict[str, dict[str, Any]] = {
             "openrouter/nvidia/nemotron-3-super-120b-a12b:free",
         ),
         "answer_instruction": "Be concise and structured.",
+        "supports_tool_calling": True,
     },
     "gpt-oss": {
         "label": "GPT-OSS",
         "model": os.getenv("BIOAGENT_GPT_OSS_MODEL", "openrouter/openai/gpt-oss-120b:free"),
         "answer_instruction": "Return concise bullet points.",
+        "supports_tool_calling": True,
     },
     "deepseek-v4-flash": {
         "label": "DeepSeek V4 Flash",
@@ -29,6 +42,19 @@ DEFAULT_MODELS: dict[str, dict[str, Any]] = {
         ),
         "api_key": os.getenv("BIOAGENT_DEEPSEEK_V4_FLASH_API_KEY", "noapi"),
         "answer_instruction": "Be concise and structured.",
+        "timeout_seconds": max(
+            1,
+            int(
+                os.getenv(
+                    "BIOAGENT_DEEPSEEK_V4_FLASH_TIMEOUT_SECONDS",
+                    str(DEFAULT_LLM_TIMEOUT_SECONDS),
+                )
+            ),
+        ),
+        "supports_tool_calling": _env_bool(
+            "BIOAGENT_DEEPSEEK_V4_FLASH_SUPPORTS_TOOL_CALLING",
+            False,
+        ),
     },
 }
 

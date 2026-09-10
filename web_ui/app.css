@@ -794,6 +794,80 @@ header {
   white-space: pre-wrap;
 }
 
+.ask-user-card {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid #b8d8d3;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #f1fbf9 0%, #ffffff 100%);
+}
+
+.ask-user-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+  margin-bottom: 12px;
+}
+
+.ask-user-heading strong {
+  color: var(--accent-strong);
+}
+
+.ask-user-heading span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.ask-user-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ask-user-option,
+.ask-user-other-form button {
+  border: 1px solid #9fc7c1;
+  border-radius: 7px;
+  background: white;
+  color: var(--accent-strong);
+  padding: 7px 11px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.ask-user-option:hover,
+.ask-user-other-form button:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.ask-user-other-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ask-user-other-form label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.ask-user-other-form input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 7px;
+  padding: 7px 9px;
+  color: var(--ink);
+  background: white;
+}
+
 .markdown-body > *:first-child {
   margin-top: 0;
 }
@@ -979,17 +1053,21 @@ header {
 
 .markdown-table-wrap {
   margin: 12px 0;
+  max-width: 100%;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
 }
 
 .markdown-body table {
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
   font-size: 15px;
 }
 
 .markdown-body th,
 .markdown-body td {
+  min-width: 160px;
   border: 1px solid #dbe4e8;
   padding: 8px 10px;
   vertical-align: top;

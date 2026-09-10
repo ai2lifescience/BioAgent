@@ -10,26 +10,20 @@ inputs_json: inputs.json
 options_json: options.json
 timeout: 86400
 inputs:
-  clean_r1:
+  sequence_file1:
     label: Host-filtered read 1 FASTQ
-    wdl_key: MetagenomicDetection.clean_r1
+    wdl_key: MetagenomicDetection.sequence_file1
     required: true
     accepts: [".fastq", ".fq", ".fastq.gz", ".fq.gz"]
-  clean_r2:
+  sequence_file2:
     label: Host-filtered read 2 FASTQ
-    wdl_key: MetagenomicDetection.clean_r2
+    wdl_key: MetagenomicDetection.sequence_file2
     required: false
     accepts: [".fastq", ".fq", ".fastq.gz", ".fq.gz"]
 param_overrides:
   sample_id:
     wdl_key: MetagenomicDetection.sample_id
     default: detection_sample
-  project_id:
-    wdl_key: MetagenomicDetection.project_id
-    default: ""
-  user_id:
-    wdl_key: MetagenomicDetection.user_id
-    default: ""
   maprate_bacteria:
     wdl_key: MetagenomicDetection.maprate_bacteria
     default: 0.8

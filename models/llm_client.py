@@ -8,6 +8,7 @@ from typing import Any
 
 from .config import (
     DEFAULT_OPENROUTER_API_BASE,
+    DEFAULT_LLM_TIMEOUT_SECONDS,
     configure_runtime_env,
     get_default_model,
     get_default_model_id,
@@ -64,6 +65,11 @@ class LLMClient:
         self.model_config = get_default_model(model_key)
         self.model_id = get_default_model_id(model_key)
         self.model_label = str(self.model_config["label"])
+        self.timeout_seconds = max(
+            1.0,
+            float(self.model_config.get("timeout_seconds", DEFAULT_LLM_TIMEOUT_SECONDS)),
+        )
+        self.supports_tool_calling = bool(self.model_config.get("supports_tool_calling", True))
         self._completion = load_completion_function()
 
     def complete(
@@ -72,6 +78,7 @@ class LLMClient:
         tools: list[dict[str, Any]] | None = None,
         tool_choice: str | None = None,
         temperature: float = 0.1,
+        timeout: float | None = None,
         **kwargs: Any,
     ) -> Any:
         request: dict[str, Any] = {
@@ -79,6 +86,7 @@ class LLMClient:
             **provider_kwargs(self.model_id, self.model_config),
             "messages": messages,
             "temperature": temperature,
+            "timeout": self.timeout_seconds if timeout is None else timeout,
             **kwargs,
         }
         if tools is not None:
@@ -86,3 +94,16 @@ class LLMClient:
         if tool_choice is not None:
             request["tool_choice"] = tool_choice
         return self._completion(**request)
+
+    def complete_without_tools(
+        self,
+        messages: list[dict[str, Any]],
+        temperature: float = 0.1,
+        **kwargs: Any,
+    ) -> Any:
+        """Request a normal model response without tool-call parameters."""
+        return self.complete(
+            messages=messages,
+            temperature=temperature,
+            **kwargs,
+        )

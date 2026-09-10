@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from tools.base import ToolDefinition
+from tools.ask_user import ASK_USER_TOOL
 from tools.bio_database import BIO_DATABASE_SEARCH_TOOL
 from tools.blast import BLAST_SEARCH_TOOL
 from tools.diagnostics import ECHO_TOOL
@@ -29,6 +30,7 @@ TOOL_REGISTRY: dict[str, ToolDefinition] = {
     tool.name: tool
     for tool in [
         ECHO_TOOL,
+        ASK_USER_TOOL,
         NCBI_FETCH_TOOL,
         PDB_DOWNLOAD_TOOL,
         BIO_DATABASE_SEARCH_TOOL,

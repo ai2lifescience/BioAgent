@@ -14,7 +14,7 @@ BioAgent can:
 
 - answer biology questions and explain biological concepts;
 - retrieve records from NCBI, PubMed, UniProt, InterPro, KEGG, QuickGO, PDB,
-  and AlphaFold DB;
+and AlphaFold DB;
 - analyze nucleotide sequences, genome maps, and protein structures;
 - inspect FASTA, CSV, TSV, JSON, Markdown, and text files;
 - create species reports with sources, citations, and generated files;
@@ -218,16 +218,16 @@ print(result["answer"])
 - Snakemake pipelines require the `snakemake` package included in
 `requirements.txt`.
 - Nextflow pipelines require a local `nextflow` executable, Java 17 or newer,
-  and a POSIX shell. On Windows, run BioAgent and Nextflow inside WSL.
+and a POSIX shell. On Windows, run BioAgent and Nextflow inside WSL.
 - WDL pipelines use `miniwdl` and require a working Docker daemon plus access to
 the task container images.
 - Pipeline inputs should be supplied explicitly through the request or uploaded
 through the web UI.
 - The bacterial annotation pipeline supports Prokka or Bakta; Bakta also
-  requires a compatible database. See
-  [its environment guide](pipelines/bacterial_annotation/README.md).
+requires a compatible database. See
+[its environment guide](pipelines/bacterial_annotation/README.md).
 - The RNA secondary-structure pipeline requires ViennaRNA `RNAfold`. See
-  [its environment guide](pipelines/rna_secondary_structure/README.md).
+[its environment guide](pipelines/rna_secondary_structure/README.md).
 
 
 
@@ -238,3 +238,4 @@ through the web UI.
 - [CLI usage and examples](docs/cli_usage.md)
 - [Team development workflow](docs/dev_workflow.md)
 - [Planned improvements](docs/todo.md)
+

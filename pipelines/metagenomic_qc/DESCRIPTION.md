@@ -14,9 +14,11 @@ single-end or paired-end FASTQ
 
 ## Inputs
 
-- `MetagenomicQc.fastq_r1`: required read 1 FASTQ.
-- `MetagenomicQc.fastq_r2`: optional read 2 FASTQ. Its presence selects the
-  paired-end task; otherwise the single-end task is used.
+- `MetagenomicQc.fastq_r1`: required read 1 (`.fastq`, `.fq`, `.fastq.gz`,
+  or `.fq.gz`). Compression is detected from file content, not the suffix.
+- `MetagenomicQc.fastq_r2`: optional read 2, same FASTQ / FASTQ.GZ formats.
+  Its presence selects the paired-end task; otherwise the single-end task is
+  used. The two files need not use the same compression.
 - `MetagenomicQc.kraken2_db_files`: mounted Kraken2 database file paths.
 - `MetagenomicQc.host_bowtie2_index_files`: mounted host Bowtie2 index paths.
 - `sample_id`, `lean_io_mode`, Docker image, CPU, memory, and disk settings.

@@ -71,6 +71,13 @@ def _runtime_info(
     trace = result.get("trace") or []
     run = result.get("run") or {}
     last_event = trace[-1] if trace else {}
+    fallback_events = [
+        event
+        for event in trace
+        if event.get("event", "").startswith("model_tool_fallback_")
+    ]
+    latest_fallback = fallback_events[-1] if fallback_events else {}
+    latest_fallback_data = latest_fallback.get("data") or {}
     skills = evidence.get("skills") or []
     tools = evidence.get("tools") or []
     files = evidence.get("files") or []
@@ -89,6 +96,11 @@ def _runtime_info(
         "files": files,
         "file_count": len(files),
         "last_event": last_event.get("event"),
+        "model_tool_fallback": {
+            "used": bool(fallback_events),
+            "status": latest_fallback.get("event"),
+            "reason": latest_fallback_data.get("reason"),
+        },
         "logs": logs,
     }
 

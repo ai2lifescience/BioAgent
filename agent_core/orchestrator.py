@@ -45,6 +45,32 @@ def _record_has_error(record: dict[str, Any]) -> bool:
     return isinstance(result, dict) and bool(result.get("error"))
 
 
+def _record_needs_user_input(record: dict[str, Any]) -> bool:
+    result = record.get("result")
+    return isinstance(result, dict) and bool(result.get("needs_input"))
+
+
+def _ask_user_answer(record: dict[str, Any]) -> str:
+    result = record.get("result")
+    if not isinstance(result, dict):
+        return "More information is needed before BioAgent can continue."
+    question = str(result.get("question") or "").strip()
+    return question or "More information is needed before BioAgent can continue."
+
+
+def _exception_summary(exc: Exception) -> str:
+    """Return a compact error suitable for trace events and client logs."""
+    detail = " ".join(str(exc).split())
+    return f"{type(exc).__name__}: {detail[:300]}" if detail else type(exc).__name__
+
+
+ASK_USER_SKILL_SPECS = [
+    skill_spec
+    for skill_spec in SKILL_SPECS
+    if skill_spec.get("function", {}).get("name") == "ask_user"
+]
+
+
 def _format_skill_record_summary(record: dict[str, Any]) -> str:
     result = record.get("result")
     if not isinstance(result, dict):
@@ -96,6 +122,7 @@ class BioAgentOrchestrator:
         artifact_store: SessionArtifactStore | None = None,
         evidence_collector: EvidenceCollector | None = None,
         verifier: Verifier | None = None,
+        llm_client_factory: Callable[[str], Any] | None = None,
     ) -> None:
         self.router = router or IntentRouter()
         self.planner = planner or Planner()
@@ -105,6 +132,10 @@ class BioAgentOrchestrator:
         self.artifact_store = artifact_store or SessionArtifactStore(self.memory)
         self.evidence_collector = evidence_collector or EvidenceCollector()
         self.verifier = verifier or Verifier()
+        self.llm_client_factory = llm_client_factory or LLMClient
+
+    def _new_llm_client(self, model_key: str) -> Any:
+        return self.llm_client_factory(model_key=model_key)
 
     def run(
         self,
@@ -317,13 +348,92 @@ class BioAgentOrchestrator:
             verification=verification,
         )
 
+    def _complete_with_tool_fallback(
+        self,
+        llm_client: Any,
+        messages: list[dict[str, Any]],
+        tools: list[dict[str, Any]],
+        temperature: float,
+        session,
+        model_key: str,
+        mode: str,
+        log_fn: Callable[[str], None] | None,
+    ) -> tuple[Any, bool]:
+        """Complete with tools, then retry once without them if needed."""
+        fallback_reason: str | None = None
+        tool_calling_disabled = not bool(getattr(llm_client, "supports_tool_calling", True))
+        if tool_calling_disabled:
+            fallback_reason = "tool calling is disabled for this model"
+        else:
+            try:
+                response = llm_client.complete(
+                    messages=messages,
+                    tools=tools,
+                    tool_choice="auto",
+                    temperature=temperature,
+                )
+                return response, False
+            except Exception as exc:
+                fallback_reason = _exception_summary(exc)
+
+        self.trace_store.record(
+            session.session_id,
+            "model_tool_fallback_started",
+            model_key=model_key,
+            model_label=llm_client.model_label,
+            mode=mode,
+            reason=fallback_reason,
+        )
+        if log_fn:
+            if tool_calling_disabled:
+                log_fn("[orchestrator] Tool calling is disabled; requesting a normal model response.")
+            else:
+                log_fn(
+                    "[orchestrator] Tool calling failed; retrying once "
+                    f"without tools ({fallback_reason})."
+                )
+        try:
+            response = llm_client.complete_without_tools(
+                messages=messages,
+                temperature=temperature,
+            )
+        except Exception as exc:
+            fallback_error = _exception_summary(exc)
+            self.trace_store.record(
+                session.session_id,
+                "model_tool_fallback_failed",
+                model_key=model_key,
+                model_label=llm_client.model_label,
+                mode=mode,
+                reason=fallback_reason,
+                error=fallback_error,
+            )
+            if log_fn:
+                log_fn(f"[orchestrator] Tool-free retry failed: {fallback_error}.")
+            raise RuntimeError(
+                f"{llm_client.model_label} did not respond. Tool-call attempt: "
+                f"{fallback_reason}; tool-free retry: {fallback_error}."
+            ) from exc
+
+        self.trace_store.record(
+            session.session_id,
+            "model_tool_fallback_completed",
+            model_key=model_key,
+            model_label=llm_client.model_label,
+            mode=mode,
+            reason=fallback_reason,
+        )
+        if log_fn:
+            log_fn("[orchestrator] Tool-free retry completed; returning a normal model response.")
+        return response, True
+
     def _run_llm_response_step(
         self,
         session,
         model_key: str,
         log_fn: Callable[[str], None] | None,
     ) -> dict[str, Any]:
-        llm_client = LLMClient(model_key=model_key)
+        llm_client = self._new_llm_client(model_key)
         messages: list[dict[str, Any]] = [
             {
                 "role": "system",
@@ -341,15 +451,53 @@ class BioAgentOrchestrator:
             model_label=llm_client.model_label,
             mode="llm_response",
         )
-        response = llm_client.complete(messages=messages, temperature=0.2)
+        response, used_tool_fallback = self._complete_with_tool_fallback(
+            llm_client=llm_client,
+            messages=messages,
+            tools=ASK_USER_SKILL_SPECS,
+            temperature=0.2,
+            session=session,
+            model_key=model_key,
+            mode="llm_response",
+            log_fn=log_fn,
+        )
         message = response.choices[0].message
         messages.append(message_to_dict(message))
+        skill_calls = llm_skill_calls_from_message(message)
         self.trace_store.record(
             session.session_id,
             "model_responded",
             mode="llm_response",
-            skill_call_count=0,
+            skill_call_count=len(skill_calls),
+            tool_fallback=used_tool_fallback,
         )
+        if skill_calls:
+            call_id, record = self.skill_executor.execute_llm_skill_call(
+                skill_calls[0],
+                log_fn=log_fn,
+                user_context=self.artifact_store.user_context(session),
+            )
+            session.skill_results.append(record)
+            self.artifact_store.register_result(session, record)
+            self.trace_store.record(
+                session.session_id,
+                "llm_skill_call_executed",
+                call_id=call_id,
+                skill=record.get("skill"),
+                category=record.get("category"),
+            )
+            messages.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": call_id,
+                    "name": record["skill"],
+                    "content": json.dumps(record["result"], ensure_ascii=False),
+                }
+            )
+            if _record_needs_user_input(record):
+                if log_fn:
+                    log_fn("[orchestrator] Waiting for the user to answer a clarification question.")
+                return {"answer": _ask_user_answer(record), "messages": messages}
         return {"answer": message.content or "", "messages": messages}
 
     def _run_llm_skill_loop_step(
@@ -359,7 +507,7 @@ class BioAgentOrchestrator:
         max_skill_steps: int,
         log_fn: Callable[[str], None] | None,
     ) -> dict[str, Any]:
-        llm_client = LLMClient(model_key=model_key)
+        llm_client = self._new_llm_client(model_key)
         messages: list[dict[str, Any]] = [
             {
                 "role": "system",
@@ -385,11 +533,15 @@ class BioAgentOrchestrator:
                 model_label=llm_client.model_label,
             )
 
-            response = llm_client.complete(
+            response, used_tool_fallback = self._complete_with_tool_fallback(
+                llm_client=llm_client,
                 messages=messages,
                 tools=SKILL_SPECS,
-                tool_choice="auto",
                 temperature=0.1,
+                session=session,
+                model_key=model_key,
+                mode="llm_skill_loop",
+                log_fn=log_fn,
             )
             message = response.choices[0].message
             messages.append(message_to_dict(message))
@@ -397,6 +549,7 @@ class BioAgentOrchestrator:
                 session.session_id,
                 "model_responded",
                 skill_call_count=len(llm_skill_calls_from_message(message)),
+                tool_fallback=used_tool_fallback,
             )
 
             skill_calls = llm_skill_calls_from_message(message)
@@ -408,6 +561,14 @@ class BioAgentOrchestrator:
             if log_fn:
                 names = [skill_call_parts(skill_call)[1] or "unknown" for skill_call in skill_calls]
                 log_fn(f"[orchestrator] Model selected skill call(s): {', '.join(names)}.")
+            ask_user_calls = [
+                skill_call
+                for skill_call in skill_calls
+                if skill_call_parts(skill_call)[1] == "ask_user"
+            ]
+            if ask_user_calls:
+                skill_calls = ask_user_calls[:1]
+
             for skill_call in skill_calls:
                 call_id, record = self.skill_executor.execute_llm_skill_call(
                     skill_call,
@@ -437,6 +598,10 @@ class BioAgentOrchestrator:
                         "content": json.dumps(record["result"], ensure_ascii=False),
                     }
                 )
+                if _record_needs_user_input(record):
+                    if log_fn:
+                        log_fn("[orchestrator] Waiting for the user to answer a clarification question.")
+                    return {"answer": _ask_user_answer(record), "messages": messages}
 
         return {
             "answer": "Stopped because the maximum number of skill-calling steps was reached.",

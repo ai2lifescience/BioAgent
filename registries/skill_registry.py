@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any, Callable
 
 from skills.base import SkillDefinition
+from skills.ask_user import SKILL_SPEC as ASK_USER_SPEC, ask_user
 from skills.bio_database_search import SKILL_SPEC as DATABASE_LOOKUP_SPEC, database_lookup
 from skills.blast_search import SKILL_SPEC as BLAST_SEARCH_SPEC, blast_search
 from skills.example_skill import SKILL_SPEC as EXAMPLE_SPEC, example_skill
@@ -20,6 +21,13 @@ from skills.protein_structure_analysis import SKILL_SPEC as PROTEIN_STRUCTURE_AN
 
 
 SKILL_DEFINITIONS = [
+    SkillDefinition(
+        skill_spec=ASK_USER_SPEC,
+        handler=ask_user,
+        category="interaction",
+        tools=("ask_user",),
+        instruction_path="skills/ask_user/SKILL.md",
+    ),
     SkillDefinition(
         skill_spec=EXAMPLE_SPEC,
         handler=example_skill,

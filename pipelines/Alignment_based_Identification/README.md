@@ -21,6 +21,8 @@ polls status until completion, and collects the reports declared in
 `runner.yaml`. A temporary `Unrecognized workflow ID` is retried for up to
 300 seconds.
 
-Provide host-filtered FASTQ from Stage 0 QC as `clean_r1` (optional
-`clean_r2`). Enable pathogen databases by setting the corresponding `db_*`
-paths in `inputs.json`; leave unused databases unset.
+Provide host-filtered FASTQ from Stage 0 QC as `sequence_file1` (optional
+`sequence_file2`). Each file may be plain FASTQ (`.fastq` / `.fq`) or gzip
+(`.fastq.gz` / `.fq.gz`); paired ends may mix those formats. Enable pathogen
+databases by setting the corresponding `db_*` paths in `inputs.json`; leave
+unused databases unset.

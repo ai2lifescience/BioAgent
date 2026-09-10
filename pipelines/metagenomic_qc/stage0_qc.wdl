@@ -84,7 +84,18 @@ task QcAndHostRemovalPe {
     PREP="~{prep_dir}"
     mkdir -p "$PREP"
 
-    count_reads() { python3 /app/scripts/count_reads.py "$1"; }
+    count_reads() {
+      python3 -c '
+import gzip
+import sys
+path = sys.argv[1]
+with open(path, "rb") as raw:
+    magic = raw.read(2)
+opener = gzip.open if magic == b"\x1f\x8b" else open
+with opener(path, "rt") as fh:
+    print(sum(1 for _ in fh) // 4)
+' "$1"
+    }
     KR_DB="$(dirname '~{kraken2_db_files[0]}')"
     BT2_F="~{host_bowtie2_index_files[0]}"
     BT2_IDX="${BT2_F%.1.bt2l}"; BT2_IDX="${BT2_IDX%.1.bt2}"
@@ -161,7 +172,18 @@ task QcAndHostRemovalSe {
     PREP="~{prep_dir}"
     mkdir -p "$PREP"
 
-    count_reads() { python3 /app/scripts/count_reads.py "$1"; }
+    count_reads() {
+      python3 -c '
+import gzip
+import sys
+path = sys.argv[1]
+with open(path, "rb") as raw:
+    magic = raw.read(2)
+opener = gzip.open if magic == b"\x1f\x8b" else open
+with opener(path, "rt") as fh:
+    print(sum(1 for _ in fh) // 4)
+' "$1"
+    }
     KR_DB="$(dirname '~{kraken2_db_files[0]}')"
     BT2_F="~{host_bowtie2_index_files[0]}"
     BT2_IDX="${BT2_F%.1.bt2l}"; BT2_IDX="${BT2_IDX%.1.bt2}"
