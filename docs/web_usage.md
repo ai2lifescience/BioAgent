@@ -27,6 +27,15 @@ Use this when another PC on the same LAN should open the BioAgent page:
 python -B -m interfaces.web --host 0.0.0.0 --port 8000
 ```
 
+If proxy environment variables interfere with local web access, start the
+server with them unset:
+
+```bash
+env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY \
+  -u http_proxy -u https_proxy -u all_proxy \
+  python -B -m interfaces.web --host 0.0.0.0 --port 8000
+```
+
 Find this machine's LAN IP:
 
 ```bash
