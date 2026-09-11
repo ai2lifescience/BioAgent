@@ -204,245 +204,291 @@ Team members implement focused tasks, run tests, and review pull requests. Keep
 
 ## Admin: Merge All dev/architecture Changes Into main Except pipelines
 
-Use this workflow when all development changes are ready for `main`. It merges
-the branches on a temporary branch based on `main`, then restores `main`'s
-entire `pipelines/` tree before opening a PR. Cherry-pick is not required.
-A merge combines both branches' work; it does not replace every file with the
-dev version.
+Use this workflow when all development changes are ready for `main`. It
+combines the branches on a temporary branch based on `main`, then restores
+`main`'s complete `pipelines/` tree before opening a PR. Cherry-pick is not
+required for this full synchronization.
 
-Commit your finished work on `dev/architecture` using steps 3–5 above. Continue
-only when `git status --short` prints nothing, then publish those commits:
+### Normal path
 
-```bash
-git switch dev/architecture
-git status --short
-git push origin dev/architecture
-```
+1. Commit and push the finished work on `dev/architecture`. Continue only
+   when the working tree is clean:
 
-Fetch the latest branch tips and create a temporary branch. Use a new branch
-name for each sync if `sync/dev-to-main` already exists:
+   ```bash
+   git switch dev/architecture
+   git status --short
+   git push origin dev/architecture
+   ```
 
-```bash
-git fetch origin
-git switch -c sync/dev-to-main origin/main
-git merge --no-commit --no-ff origin/dev/architecture
-```
+2. Create a temporary branch from the latest `main` and merge all dev changes
+   without committing:
 
-### Normal path: no merge conflicts
+   ```bash
+   git fetch origin
+   git switch -c sync/dev-to-main origin/main
+   git merge --no-commit --no-ff origin/dev/architecture
+   ```
 
-If Git reports `Already up to date.`, stop this merge sequence: no merge is
-pending. If it reports conflicts, continue with the resolution below. For any
-other error, resolve that error before proceeding.
+3. If Git reports `Already up to date.`, stop: there is no merge to
+   commit. If `git diff --name-only --diff-filter=U` prints nothing, restore
+   `main`'s pipeline tree from the starting `HEAD`:
 
-If `git diff --name-only --diff-filter=U` prints nothing, restore the complete
-pipeline tree from the starting `main` commit:
+   ```bash
+   git restore --source=HEAD --staged --worktree -- pipelines/
+   ```
 
-```bash
-git restore --source=HEAD --staged --worktree -- pipelines/
-```
+4. Review the staged result and run the checks from step 4 above:
 
-### Troubleshooting: merge conflicts
+   ```bash
+   git diff --cached -- pipelines/
+   git diff --cached
+   git status
+   ```
 
-If Git reports pipeline conflicts, remove the conflicted pipeline entries first
-and then restore the complete pipeline tree from `HEAD`:
+   The first command must print nothing. If the merge reported conflicts, stop
+   this normal path and use the troubleshooting section at the end instead.
 
-```bash
-git diff --name-only --diff-filter=U -z -- pipelines/ | \
-  xargs -0 -r git rm --
-git restore --source=HEAD --staged --worktree -- pipelines/
-```
+5. Commit the merge and check the committed pipeline diff:
 
-If conflicts remain outside `pipelines/`, resolve those files and stage each
-resolved file with `git add`. Check that no conflicts remain and that the merge
-contains no pipeline changes:
+   ```bash
+   git commit -m "Merge dev architecture changes while preserving main pipelines"
+   git diff --exit-code origin/main...HEAD -- pipelines/
+   ```
 
-```bash
-git diff --name-only --diff-filter=U
-git diff --cached -- pipelines/
-```
+   The last command must exit successfully and print nothing. Then publish the
+   temporary branch and open its PR into `main`:
 
-Both commands must print nothing. Review the staged changes and run the
-appropriate checks from step 4:
+   ```bash
+   git push -u origin sync/dev-to-main
+   gh pr create --base main --head sync/dev-to-main --fill
+   ```
 
-```bash
-git diff --cached
-git status
-```
-
-Use `git diff --cached` before committing; `git diff origin/main...HEAD` only
-shows committed changes. Finish the merge and check the committed pipeline
-diff:
-
-```bash
-git commit -m "Merge dev architecture changes while preserving main pipelines"
-git diff origin/main...HEAD -- pipelines/
-```
-
-The pipeline diff must print nothing. Publish the temporary branch and open
-its PR into `main`:
-
-```bash
-git push -u origin sync/dev-to-main
-gh pr create --base main --head sync/dev-to-main --fill
-```
-
-Only the principal repository administrator merges the PR after review. To
-cancel the pending local merge before committing, use `git merge --abort`.
-
-After the PR is merged, follow
-[Merge main Into dev/architecture Except pipelines](#admin-merge-main-into-devarchitecture-except-pipelines)
-below to bring the latest `main` back into dev while preserving dev's pipelines.
+   Only the principal repository administrator merges the PR. After it is
+   merged, update local `main` and follow the merge-back workflow below.
 
 ## Admin: Send Selected Files or Commits From dev/architecture to main
 
 Use this alternative when only part of the dev work is ready. A file copy
-transfers the selected file's current contents; cherry-pick transfers the
-changes made by a selected commit. Choose one method for each transfer.
+transfers one file's current contents; cherry-pick transfers one complete
+commit. Neither method should be used by opening a PR directly from
+`dev/architecture`, because its missing pipeline folders would appear as
+deletions.
 
-Do not open a PR from `dev/architecture` directly into `main`. The branches
-intentionally have different pipeline trees, so that PR would show the missing
-pipeline files as deletions.
+### Normal path
 
-First commit and push the change on `dev/architecture`:
+1. Commit and push the selected change on `dev/architecture`:
 
-```bash
-git switch dev/architecture
-git add <changed-files>
-git diff --cached
-git commit -m "Describe the change"
-git push origin dev/architecture
-git log -1 --oneline dev/architecture
-```
+   ```bash
+   git switch dev/architecture
+   git add <changed-files>
+   git diff --cached
+   git commit -m "Describe the change"
+   git push origin dev/architecture
+   git log -1 --oneline dev/architecture
+   ```
 
-Create a temporary branch from the latest `main`:
+2. Create a clean branch from the latest `main`:
 
-```bash
-git fetch origin
-git switch -c fix/copy-architecture-change origin/main
-```
+   ```bash
+   git fetch origin
+   git switch -c fix/copy-architecture-change origin/main
+   ```
 
-Use a fresh branch name if this one already exists. For a single file, copy it
-from `dev/architecture`, review the replacement, then commit it. This copies
-the whole file, including any differences unrelated to the latest fix:
+3. Choose one transfer method.
 
-```bash
-git restore --source=origin/dev/architecture -- docs/dev_workflow.md
-git diff -- docs/dev_workflow.md
-git add docs/dev_workflow.md
-git diff --cached
-git commit -m "Update development workflow documentation"
-```
+   To copy one file:
 
-For a complete non-pipeline commit, skip the file-copy block and cherry-pick
-the commit instead. A successful cherry-pick creates the new commit for you:
+   ```bash
+   git restore --source=origin/dev/architecture -- docs/dev_workflow.md
+   git diff -- docs/dev_workflow.md
+   git add docs/dev_workflow.md
+   git diff --cached
+   git commit -m "Update development workflow documentation"
+   ```
 
-```bash
-git cherry-pick <FEATURE_COMMIT_SHA>
-```
+   To transfer one complete non-pipeline commit, use this instead of the file
+   copy block:
 
-After the copy is committed or the cherry-pick succeeds, review the result
-and confirm that no pipeline files are changed:
+   ```bash
+   git cherry-pick <FEATURE_COMMIT_SHA>
+   ```
 
-```bash
-git status
-git diff origin/main...HEAD
-git diff origin/main...HEAD -- pipelines/
-```
+4. Review the committed result:
 
-The pipeline diff must print nothing. Push the temporary branch and open a PR
-into `main`:
+   ```bash
+   git status
+   git diff origin/main...HEAD
+   git diff --exit-code origin/main...HEAD -- pipelines/
+   ```
 
-```bash
-git push -u origin fix/copy-architecture-change
-gh pr create --base main --head fix/copy-architecture-change --fill
-```
+   The last command must exit successfully and print nothing. If a copy or
+   cherry-pick reports a conflict, stop this normal path and use the
+   troubleshooting section at the end.
 
-After the principal repository administrator merges the PR, use the following
-workflow to sync `main` back into `dev/architecture`.
+5. Push the temporary branch and open its PR:
+
+   ```bash
+   git push -u origin fix/copy-architecture-change
+   gh pr create --base main --head fix/copy-architecture-change --fill
+   ```
+
+   After the PR is merged, update local `main` and follow the merge-back
+   workflow below.
 
 ## Admin: Merge main Into dev/architecture Except pipelines
 
-Use this workflow whenever `main` has new commits and
-`dev/architecture` must keep its own `pipelines/` directory. Git cannot exclude
-a path from a normal merge, so pause the merge before committing and restore
-that directory from `dev/architecture`.
+Use this workflow after `main` advances. It keeps the entire
+`pipelines/` directory exactly as it exists on `dev/architecture`.
 
-Commit or stash unfinished work first. Start with a clean working tree and
-update the branch; `git status --short` must print nothing before merging:
+### Normal path
+
+1. Commit or stash unfinished work. Start with a clean working tree and update
+   the branch:
+
+   ```bash
+   git status --short
+   git fetch origin
+   git switch dev/architecture
+   git pull --ff-only origin dev/architecture
+   ```
+
+2. Merge `main` without creating its commit:
+
+   ```bash
+   git merge --no-commit --no-ff origin/main
+   ```
+
+3. If Git reports `Already up to date.`, stop: there is no merge to
+   commit. If `git diff --name-only --diff-filter=U` prints nothing, restore
+   dev's pipeline tree from the pre-merge `HEAD`:
+
+   ```bash
+   git restore --source=HEAD --staged --worktree -- pipelines/
+   ```
+
+4. Review the staged result and run the checks from step 4 above:
+
+   ```bash
+   git diff --cached -- pipelines/
+   git diff --cached
+   git status
+   ```
+
+   The first command must print nothing. If the merge reported conflicts, stop
+   this normal path and use the troubleshooting section at the end instead.
+
+5. Commit the merge and verify that the committed result has no pipeline diff:
+
+   ```bash
+   git commit -m "Merge main into dev/architecture excluding pipelines"
+   git diff --exit-code origin/main...HEAD -- pipelines/
+   git push origin dev/architecture
+   ```
+
+   The diff command must exit successfully and print nothing.
+
+## After Either PR Is Merged
+
+Update local branches and remove stale remote references:
 
 ```bash
-git status --short
-git fetch origin
+git switch main
+git pull --ff-only origin main
+git fetch --prune
 git switch dev/architecture
 git pull --ff-only origin dev/architecture
 ```
 
-Start the merge without creating its commit:
+To compare the published branches outside `pipelines/`:
 
 ```bash
-git merge --no-commit --no-ff origin/main
+git diff origin/main origin/dev/architecture -- . ':!pipelines/'
 ```
 
-### Normal path: no merge conflicts
+No output means all non-pipeline files match.
 
-If Git reports `Already up to date.`, stop this merge sequence. There is no
-pending merge to commit. If it reports conflicts, continue with the
-troubleshooting steps below. Resolve any other error before proceeding.
+## Troubleshooting: Merge Conflicts
 
-Keep the `dev/architecture` version of `pipelines/`. If
-`git diff --name-only --diff-filter=U` prints nothing, restore the complete
-pipeline tree from the pre-merge `HEAD`:
+Use this section only when a command in a normal path reports a conflict.
+Do not run these steps after a normal merge with no unresolved paths.
 
-```bash
-git restore --source=HEAD --staged --worktree -- pipelines/
-```
+### Pipeline conflicts while merging dev into main
 
-### Troubleshooting: pipeline conflicts
-
-If Git reports pipeline conflicts, mark those conflicts as deleted first, then
-restore the complete pipeline tree from `HEAD`:
+If `git merge --no-commit --no-ff origin/dev/architecture` reports
+pipeline conflicts, leave the merge in progress and run:
 
 ```bash
+git diff --name-only --diff-filter=U -- pipelines/
 git diff --name-only --diff-filter=U -z -- pipelines/ | \
   xargs -0 -r git rm --
 git restore --source=HEAD --staged --worktree -- pipelines/
 ```
 
-If Git reports conflicts outside `pipelines/`, resolve those files and stage
-them with `git add`. Then verify that the merge contains no `pipelines/`
-changes before committing:
+Here `HEAD` is the temporary branch based on `main`, so this restores
+`main`'s pipeline tree. Resolve any conflicts outside `pipelines/` by
+editing the files, removing conflict markers, and running `git add`.
+
+Then resume at **Step 4** of “Merge All dev/architecture Changes Into main
+Except pipelines”:
 
 ```bash
 git diff --name-only --diff-filter=U
 git diff --cached -- pipelines/
-```
-
-Both commands must print nothing. Review the staged changes, run the
-appropriate checks from step 4, then commit and push:
-
-```bash
 git diff --cached
 git status
-git commit -m "Merge main into dev/architecture excluding pipelines"
-git push origin dev/architecture
 ```
 
-To cancel the in-progress merge before committing, run:
+The first two checks must print nothing before you commit.
+
+### Pipeline conflicts while merging main into dev
+
+If `git merge --no-commit --no-ff origin/main` reports pipeline conflicts,
+leave the merge in progress and run:
+
+```bash
+git diff --name-only --diff-filter=U -- pipelines/
+git diff --name-only --diff-filter=U -z -- pipelines/ | \
+  xargs -0 -r git rm --
+git restore --source=HEAD --staged --worktree -- pipelines/
+```
+
+Here `HEAD` is the pre-merge `dev/architecture` commit, so this restores
+dev's pipeline tree. Resolve any conflicts outside `pipelines/`, then resume
+at **Step 4** of “Merge main Into dev/architecture Except pipelines”:
+
+```bash
+git diff --name-only --diff-filter=U
+git diff --cached -- pipelines/
+git diff --cached
+git status
+```
+
+The first two checks must print nothing before you commit.
+
+### Cherry-pick conflicts
+
+If `git cherry-pick <FEATURE_COMMIT_SHA>` reports a conflict:
+
+```bash
+git status
+```
+
+Resolve the listed files, remove conflict markers, stage them, and continue:
+
+```bash
+git add <resolved-files>
+git cherry-pick --continue
+```
+
+To abandon the cherry-pick instead:
+
+```bash
+git cherry-pick --abort
+```
+
+After any troubleshooting path completes, return to the normal path at the
+step named above. If you need to cancel an in-progress merge, use:
 
 ```bash
 git merge --abort
 ```
-
-Repeat the restore and verification steps during future merges from `main` when
-`pipelines/` must remain unchanged. A normal merge without this step can
-reintroduce `main`'s pipeline files or create conflicts.
-
-To compare the published branches outside `pipelines/`:
-
-```bash
-git fetch origin
-git diff origin/main origin/dev/architecture -- . ':!pipelines/'
-```
-
-No output means that all non-pipeline files match. Remaining differences can
-represent dev changes that have not yet been sent to `main`.
