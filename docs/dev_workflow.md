@@ -228,13 +228,23 @@ git switch -c sync/dev-to-main origin/main
 git merge --no-commit --no-ff origin/dev/architecture
 ```
 
+### Normal path: no merge conflicts
+
 If Git reports `Already up to date.`, stop this merge sequence: no merge is
 pending. If it reports conflicts, continue with the resolution below. For any
 other error, resolve that error before proceeding.
 
-While the merge is paused, `HEAD` still points to the starting `main` commit.
-Remove conflicted pipeline entries, then restore the complete pipeline tree
-from that commit, including files absent from `dev/architecture`:
+If `git diff --name-only --diff-filter=U` prints nothing, restore the complete
+pipeline tree from the starting `main` commit:
+
+```bash
+git restore --source=HEAD --staged --worktree -- pipelines/
+```
+
+### Troubleshooting: merge conflicts
+
+If Git reports pipeline conflicts, remove the conflicted pipeline entries first
+and then restore the complete pipeline tree from `HEAD`:
 
 ```bash
 git diff --name-only --diff-filter=U -z -- pipelines/ | \
@@ -242,8 +252,9 @@ git diff --name-only --diff-filter=U -z -- pipelines/ | \
 git restore --source=HEAD --staged --worktree -- pipelines/
 ```
 
-Resolve any conflicts outside `pipelines/` and stage each resolved file with
-`git add`. Check that there are no unresolved paths and no pipeline changes:
+If conflicts remain outside `pipelines/`, resolve those files and stage each
+resolved file with `git add`. Check that no conflicts remain and that the merge
+contains no pipeline changes:
 
 ```bash
 git diff --name-only --diff-filter=U
@@ -372,13 +383,24 @@ Start the merge without creating its commit:
 git merge --no-commit --no-ff origin/main
 ```
 
-If Git reports `Already up to date.`, stop this merge sequence. There is no
-pending merge to commit. If it reports conflicts, continue below; resolve any
-other error before proceeding.
+### Normal path: no merge conflicts
 
-Keep the `dev/architecture` version of `pipelines/`. If the merge reports
-pipeline conflicts, mark those conflicts as deleted first, then restore the
-complete pipeline tree from the pre-merge `HEAD`:
+If Git reports `Already up to date.`, stop this merge sequence. There is no
+pending merge to commit. If it reports conflicts, continue with the
+troubleshooting steps below. Resolve any other error before proceeding.
+
+Keep the `dev/architecture` version of `pipelines/`. If
+`git diff --name-only --diff-filter=U` prints nothing, restore the complete
+pipeline tree from the pre-merge `HEAD`:
+
+```bash
+git restore --source=HEAD --staged --worktree -- pipelines/
+```
+
+### Troubleshooting: pipeline conflicts
+
+If Git reports pipeline conflicts, mark those conflicts as deleted first, then
+restore the complete pipeline tree from `HEAD`:
 
 ```bash
 git diff --name-only --diff-filter=U -z -- pipelines/ | \
