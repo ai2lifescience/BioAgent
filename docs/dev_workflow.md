@@ -342,11 +342,10 @@ gh pr create --base main --fill
 
 ## Admin: Merge main Into dev/architecture Except pipelines
 
-Use this workflow to bring the latest changes from `main` into
-`dev/architecture` while keeping the entire `pipelines/` directory exactly as
-it was on `dev/architecture`. Git cannot exclude a path directly from a normal
-merge, so pause the merge before committing and restore that path from the
-target branch.
+Use this workflow whenever `main` has new commits and
+`dev/architecture` must keep its own `pipelines/` directory. Git cannot exclude
+a path from a normal merge, so pause the merge before committing and restore
+that directory from `dev/architecture`.
 
 Start with a clean working tree and update both remote-tracking branches:
 
@@ -363,10 +362,13 @@ Start the merge without creating its commit:
 git merge --no-commit --no-ff origin/main
 ```
 
-Keep the `dev/architecture` version of `pipelines/`, including restoring files
-changed or deleted on `main` and removing files added only on `main`:
+Keep the `dev/architecture` version of `pipelines/`. If the merge reports
+pipeline conflicts, mark those conflicts as deleted first, then restore the
+complete pipeline tree from the pre-merge `HEAD`:
 
 ```bash
+git diff --name-only --diff-filter=U -z -- pipelines/ | \
+  xargs -0 -r git rm --
 git restore --source=HEAD --staged --worktree -- pipelines/
 ```
 
@@ -389,5 +391,6 @@ must print no changes. To cancel the in-progress merge instead, run:
 git merge --abort
 ```
 
-This exclusion applies only to this merge. Repeat the restore and verification
-steps during future merges from `main` when `pipelines/` must remain unchanged.
+Repeat the restore and verification steps during future merges from `main` when
+`pipelines/` must remain unchanged. A normal merge without this step can
+reintroduce `main`'s pipeline files or create conflicts.
