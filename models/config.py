@@ -9,6 +9,8 @@ from typing import Any
 DEFAULT_MODELS: dict[str, dict[str, Any]] = {
     "nemotron-3-super": {
         "label": "Nemotron",
+        "deployment": "OpenRouter",
+        "cost_tier": "Free",
         "model": os.getenv(
             "BIOAGENT_NEMOTRON_MODEL",
             "openrouter/nvidia/nemotron-3-super-120b-a12b:free",
@@ -17,17 +19,51 @@ DEFAULT_MODELS: dict[str, dict[str, Any]] = {
     },
     "gpt-oss": {
         "label": "GPT-OSS",
-        "model": os.getenv("BIOAGENT_GPT_OSS_MODEL", "openrouter/openai/gpt-oss-120b:free"),
+        "deployment": "OpenRouter",
+        "cost_tier": "Low-cost",
+        "model": os.getenv("BIOAGENT_GPT_OSS_MODEL", "openrouter/openai/gpt-oss-120b"),
         "answer_instruction": "Return concise bullet points.",
     },
     "deepseek-v4-flash": {
         "label": "DeepSeek V4 Flash",
+        "deployment": "Local endpoint",
+        "cost_tier": "Local",
         "model": os.getenv("BIOAGENT_DEEPSEEK_V4_FLASH_MODEL", "openai/DeepSeek-V4-Flash"),
         "api_base": os.getenv(
             "BIOAGENT_DEEPSEEK_V4_FLASH_API_BASE",
             "http://192.168.116.46:8088/v1",
         ),
         "api_key": os.getenv("BIOAGENT_DEEPSEEK_V4_FLASH_API_KEY", "noapi"),
+        "answer_instruction": "Be concise and structured.",
+    },
+    "gpt-5.6-luna": {
+        "label": "GPT-5.6 Luna",
+        "deployment": "OpenRouter",
+        "cost_tier": "Low-cost",
+        "model": os.getenv(
+            "BIOAGENT_GPT_56_LUNA_MODEL",
+            "openrouter/openai/gpt-5.6-luna",
+        ),
+        "answer_instruction": "Be concise and structured.",
+    },
+    "gpt-5.6-sol": {
+        "label": "GPT-5.6 Sol",
+        "deployment": "OpenRouter",
+        "cost_tier": "Premium",
+        "model": os.getenv(
+            "BIOAGENT_GPT_56_SOL_MODEL",
+            "openrouter/openai/gpt-5.6-sol",
+        ),
+        "answer_instruction": "Use careful multi-step reasoning and return a structured answer.",
+    },
+    "gemini-3.8-flash": {
+        "label": "Gemini 3.8 Flash",
+        "deployment": "OpenRouter",
+        "cost_tier": "Standard",
+        "model": os.getenv(
+            "BIOAGENT_GEMINI_38_FLASH_MODEL",
+            "openrouter/google/gemini-3.8-flash",
+        ),
         "answer_instruction": "Be concise and structured.",
     },
 }

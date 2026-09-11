@@ -211,14 +211,26 @@ required for this full synchronization.
 
 ### Normal path
 
-1. Commit and push the finished work on `dev/architecture`. Continue only
-   when the working tree is clean:
+1. Commit your changes, pull the latest `dev/architecture`, and push. An `M`
+   line means the file is not committed; pull and push transfer commits only.
+   Finish with a clean working tree:
 
    ```bash
    git switch dev/architecture
    git status --short
+   git add .
+   git diff --cached
+   git commit -m "Describe the finished change"
+   git status --short
+   git pull --ff-only origin dev/architecture
    git push origin dev/architecture
+   git status --short
    ```
+
+   The first status check is for review. The status check after `git commit`
+   should print nothing before you pull and push. Run `git add .` from the
+   repository root only when every uncommitted, unignored change belongs in
+   this commit; review `git diff --cached` before committing.
 
 2. Create a temporary branch from the latest `main` and merge all dev changes
    without committing:

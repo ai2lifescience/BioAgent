@@ -79,7 +79,7 @@ function renderModelOptions() {
   for (const model of config.models || []) {
     const option = document.createElement("option");
     option.value = model.key;
-    option.textContent = `${model.label} (${model.key})`;
+    option.textContent = formatModelLabel(model);
     if (model.key === config.default_model_key) {
       option.selected = true;
     }
@@ -89,9 +89,15 @@ function renderModelOptions() {
   updateActiveModel();
 }
 
+function formatModelLabel(model) {
+  const label = model.label || model.key;
+  const cost = model.cost_tier || "Unknown cost";
+  return `${label} (${cost})`;
+}
+
 function updateActiveModel() {
   const selected = (config.models || []).find((model) => model.key === modelSelect.value);
-  activeModel.textContent = selected ? selected.label : "Model ready";
+  activeModel.textContent = selected ? formatModelLabel(selected) : "Model ready";
 }
 
 function generateSessionId() {
