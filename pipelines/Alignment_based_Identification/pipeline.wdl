@@ -19,13 +19,13 @@ version 1.0
 workflow MetagenomicDetection {
   input {
     # ── 样本信息 ─────────────────────────────────────────────────────────────
-    String  sample_id
-    String  project_id = ""
-    String  user_id    = ""
+    String  sample_id = "detection_sample"
 
     # ── Stage 0 输出（PE 双端 / SE 单端）────────────────────────────────────
-    File    clean_r1
-    File?   clean_r2
+    # sequence_file1 / sequence_file2 各自可为明文 FASTQ（.fastq/.fq）
+    # 或 gzip（.fastq.gz/.fq.gz）；两端压缩格式可不同。
+    File    sequence_file1
+    File?   sequence_file2
     Int?    post_host_reads
 
     # ── 病原体参考数据库（.mmi；未启用类型可不传，勿写 ""）────────────────
@@ -79,7 +79,7 @@ workflow MetagenomicDetection {
     Int    disk_gb     = 500        # 每个任务磁盘 (GB)
   }
 
-  Boolean is_pe = defined(clean_r2)
+  Boolean is_pe = defined(sequence_file2)
   Boolean enable_bacteria = defined(db_bacteria)
   Boolean enable_virus    = defined(db_virus)
   Boolean enable_fungi    = defined(db_fungi)
@@ -94,8 +94,8 @@ workflow MetagenomicDetection {
         sample_id    = sample_id,
         db_type      = "bacteria",
         db_file      = select_first([db_bacteria]),
-        clean_r1     = clean_r1,
-        clean_r2     = clean_r2,
+        sequence_file1     = sequence_file1,
+        sequence_file2     = sequence_file2,
         is_pe        = is_pe,
         maprate      = maprate_bacteria,
         threads      = cpu_map,
@@ -113,8 +113,8 @@ workflow MetagenomicDetection {
         sample_id    = sample_id,
         db_type      = "virus",
         db_file      = select_first([db_virus]),
-        clean_r1     = clean_r1,
-        clean_r2     = clean_r2,
+        sequence_file1     = sequence_file1,
+        sequence_file2     = sequence_file2,
         is_pe        = is_pe,
         maprate      = maprate_virus,
         threads      = cpu_map,
@@ -132,8 +132,8 @@ workflow MetagenomicDetection {
         sample_id    = sample_id,
         db_type      = "fungi",
         db_file      = select_first([db_fungi]),
-        clean_r1     = clean_r1,
-        clean_r2     = clean_r2,
+        sequence_file1     = sequence_file1,
+        sequence_file2     = sequence_file2,
         is_pe        = is_pe,
         maprate      = maprate_fungi,
         threads      = cpu_map,
@@ -151,8 +151,8 @@ workflow MetagenomicDetection {
         sample_id    = sample_id,
         db_type      = "parasite",
         db_file      = select_first([db_parasite]),
-        clean_r1     = clean_r1,
-        clean_r2     = clean_r2,
+        sequence_file1     = sequence_file1,
+        sequence_file2     = sequence_file2,
         is_pe        = is_pe,
         maprate      = maprate_parasite,
         threads      = cpu_map,
@@ -256,7 +256,7 @@ workflow MetagenomicDetection {
       enable_fungi                   = enable_fungi,
       enable_parasite                = enable_parasite,
       post_host_reads                = post_host_reads,
-      clean_r1                       = clean_r1,
+      sequence_file1                       = sequence_file1,
       stage2_read_accounting         = Stage2Arbitration.read_accounting,
       non_report_list                = non_report_list,
       special_aspergillus_genus_ids  = special_aspergillus_genus_ids,
@@ -315,8 +315,8 @@ task MapToDatabase {
     String  sample_id
     String  db_type       # bacteria | virus | fungi | parasite
     File    db_file       # .mmi 参考数据库
-    File    clean_r1      # PE R1 或 SE reads
-    File?   clean_r2      # PE R2；SE 时不传
+    File    sequence_file1      # PE R1 或 SE：.fastq/.fq 或 .fastq.gz/.fq.gz
+    File?   sequence_file2      # PE R2，格式同上（可与 R1 不同）；SE 时不传
     Boolean is_pe
     Float   maprate
     Int     threads
@@ -346,11 +346,11 @@ task MapToDatabase {
         ;;
     esac
 
-    CLEAN_R2="~{if defined(clean_r2) then select_first([clean_r2]) else ''}"
+    CLEAN_R2="~{if defined(sequence_file2) then select_first([sequence_file2]) else ''}"
     if [ "~{is_pe}" = "true" ]; then
-      READS=("~{clean_r1}" "$CLEAN_R2")
+      READS=("~{sequence_file1}" "$CLEAN_R2")
     else
-      READS=("~{clean_r1}")
+      READS=("~{sequence_file1}")
     fi
 
     if [ "~{lean_io_mode}" = "true" ]; then
@@ -620,7 +620,7 @@ task Stage5Reporting {
     Boolean enable_fungi
     Boolean enable_parasite
     Int?    post_host_reads
-    File    clean_r1
+    File    sequence_file1
     File    stage2_read_accounting
     File    non_report_list
     String  special_aspergillus_genus_ids
@@ -640,7 +640,17 @@ task Stage5Reporting {
 
     POST_HOST_READS="~{if defined(post_host_reads) then select_first([post_host_reads]) else -1}"
     if [ "$POST_HOST_READS" -lt 0 ]; then
-      POST_HOST_READS=$(python3 /app/scripts/count_reads.py "~{clean_r1}")
+      # gzip vs plain FASTQ by magic bytes (filename *.gz is not reliable)
+      POST_HOST_READS=$(python3 -c '
+import gzip
+import sys
+path = sys.argv[1]
+with open(path, "rb") as raw:
+    magic = raw.read(2)
+opener = gzip.open if magic == b"\x1f\x8b" else open
+with opener(path, "rt") as fh:
+    print(sum(1 for _ in fh) // 4)
+' "~{sequence_file1}")
     fi
 
     export ENABLE_BACTERIA="~{enable_bacteria}"
