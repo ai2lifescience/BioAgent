@@ -204,15 +204,15 @@ Team members implement focused tasks, run tests, and review pull requests. Keep
 
 ## Admin: Merge All dev/architecture Changes Into main Except pipelines
 
-Use this workflow when all development changes are ready for `main`. It
-combines the branches on a temporary branch based on `main`, then restores
-`main`'s complete `pipelines/` tree before opening a PR. Cherry-pick is not
-required for this full synchronization.
+Use this workflow when all development changes are ready for `main`. It starts
+from the latest `main`, copies every non-pipeline file from
+`dev/architecture`, and leaves `main`'s complete `pipelines/` tree unchanged.
+This avoids combining edits from both branches in the same file.
 
 ### Normal path
 
-1. Commit your changes, pull the latest `dev/architecture`, and push. An `M`
-   line means the file is not committed; pull and push transfer commits only.
+1. Commit your changes and push the latest `dev/architecture`. An `M` line
+   means the file is not committed; pull and push transfer commits only.
    Finish with a clean working tree:
 
    ```bash
@@ -232,47 +232,50 @@ required for this full synchronization.
    repository root only when every uncommitted, unignored change belongs in
    this commit; review `git diff --cached` before committing.
 
-2. Create a temporary branch from the latest `main` and merge all dev changes
-   without committing:
+2. Create a fresh temporary branch from the latest `main`:
 
    ```bash
    git fetch origin
-   git switch -c sync/dev-to-main origin/main
-   git merge --no-commit --no-ff origin/dev/architecture
+   git switch -c sync/dev-to-main-20260911 origin/main
    ```
 
-3. If Git reports `Already up to date.`, stop: there is no merge to
-   commit. If `git diff --name-only --diff-filter=U` prints nothing, restore
-   `main`'s pipeline tree from the starting `HEAD`:
+   Use a new temporary branch name if that example already exists.
+
+3. Copy the complete non-pipeline tree from `dev/architecture`. The
+   `pipelines/` directory is excluded, so it remains exactly as it is on
+   `main`:
 
    ```bash
-   git restore --source=HEAD --staged --worktree -- pipelines/
+   git restore --source=origin/dev/architecture --staged --worktree -- . ':!pipelines/'
    ```
 
-4. Review the staged result and run the checks from step 4 above:
+4. Verify that the staged result has no pipeline changes and that every other
+   file matches `dev/architecture`:
 
    ```bash
    git diff --cached -- pipelines/
+   git diff --cached --exit-code origin/dev/architecture -- . ':!pipelines/'
    git diff --cached
    git status
    ```
 
-   The first command must print nothing. If the merge reported conflicts, stop
-   this normal path and use the troubleshooting section at the end instead.
+   Both of the first two commands must print nothing. If the restore reports a
+   path or checkout error, stop and inspect the working tree before continuing.
 
-5. Commit the merge and check the committed pipeline diff:
+5. Commit the synchronized tree and verify it again:
 
    ```bash
-   git commit -m "Merge dev architecture changes while preserving main pipelines"
-   git diff --exit-code origin/main...HEAD -- pipelines/
+   git commit -m "Sync dev architecture changes while preserving main pipelines"
+   git diff --exit-code origin/main HEAD -- pipelines/
+   git diff --exit-code HEAD origin/dev/architecture -- . ':!pipelines/'
    ```
 
-   The last command must exit successfully and print nothing. Then publish the
-   temporary branch and open its PR into `main`:
+   Both diff commands must exit successfully and print nothing. Then publish
+   the temporary branch and open its PR into `main`:
 
    ```bash
-   git push -u origin sync/dev-to-main
-   gh pr create --base main --head sync/dev-to-main --fill
+   git push -u origin HEAD
+   gh pr create --base main --fill
    ```
 
    Only the principal repository administrator merges the PR. After it is
@@ -423,34 +426,6 @@ No output means all non-pipeline files match.
 
 Use this section only when a command in a normal path reports a conflict.
 Do not run these steps after a normal merge with no unresolved paths.
-
-### Pipeline conflicts while merging dev into main
-
-If `git merge --no-commit --no-ff origin/dev/architecture` reports
-pipeline conflicts, leave the merge in progress and run:
-
-```bash
-git diff --name-only --diff-filter=U -- pipelines/
-git diff --name-only --diff-filter=U -z -- pipelines/ | \
-  xargs -0 -r git rm --
-git restore --source=HEAD --staged --worktree -- pipelines/
-```
-
-Here `HEAD` is the temporary branch based on `main`, so this restores
-`main`'s pipeline tree. Resolve any conflicts outside `pipelines/` by
-editing the files, removing conflict markers, and running `git add`.
-
-Then resume at **Step 4** of “Merge All dev/architecture Changes Into main
-Except pipelines”:
-
-```bash
-git diff --name-only --diff-filter=U
-git diff --cached -- pipelines/
-git diff --cached
-git status
-```
-
-The first two checks must print nothing before you commit.
 
 ### Pipeline conflicts while merging main into dev
 
