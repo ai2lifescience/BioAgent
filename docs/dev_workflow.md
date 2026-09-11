@@ -236,7 +236,7 @@ This avoids combining edits from both branches in the same file.
 
    ```bash
    git fetch origin
-   git switch -c sync/dev-to-main-20260911 origin/main
+   git switch -c sync/dev-to-main origin/main
    ```
 
    Use a new temporary branch name if that example already exists.
