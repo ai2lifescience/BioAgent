@@ -149,16 +149,7 @@ def _requested_input_record(item: dict[str, Any], reason: str) -> dict[str, Any]
 def _requested_inputs(
     missing: list[dict[str, Any]],
     invalid: list[dict[str, Any]],
-    input_specs: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
-    """Build input metadata for clients rendering upload/input controls.
-
-    Required inputs that are missing and inputs that were supplied with an
-    invalid path are listed first.  When a request is already blocked on one
-    of those inputs, also expose the declared optional slots so clients can
-    offer them (for example, read 2 for a paired-end workflow) without
-    treating them as required.
-    """
     requested: list[dict[str, Any]] = []
     seen_slots: set[str] = set()
     for item, reason in [(item, "invalid") for item in invalid] + [(item, "missing") for item in missing]:
@@ -169,16 +160,6 @@ def _requested_inputs(
         if slot:
             seen_slots.add(slot)
         requested.append(record)
-
-    for slot, spec in (input_specs or {}).items():
-        if spec.get("required") or slot in seen_slots:
-            continue
-        requested.append(
-            _requested_input_record(
-                {"slot": slot, "spec": spec},
-                "optional",
-            )
-        )
     return requested
 
 
@@ -340,7 +321,7 @@ def _required_input_check(
             "missing_inputs": missing,
             "invalid_inputs": invalid,
             "input_errors": override_errors,
-            "requested_inputs": _requested_inputs(missing, invalid, input_specs),
+            "requested_inputs": _requested_inputs(missing, invalid),
             "config_overrides": dict(config_overrides or {}),
             "answer": "\n".join(lines),
         },

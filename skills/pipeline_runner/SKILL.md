@@ -76,9 +76,7 @@ input is missing or invalid, the skill returns a user-facing question and does
 not call the tool.
 
 For web and API clients, missing-input responses also include structured
-`requested_inputs` records. These contain missing or invalid required inputs
-and declared optional slots, so upload controls can offer optional paired
-inputs without treating them as required:
+`requested_inputs` records:
 
 ```json
 [
