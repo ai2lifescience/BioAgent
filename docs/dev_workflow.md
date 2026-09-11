@@ -342,13 +342,12 @@ gh pr create --base main --fill
 
 ## Admin: Merge main Into dev/architecture Except pipelines
 
-Use this workflow to bring the latest changes from `main` into
-`dev/architecture` while keeping the entire `pipelines/` directory exactly as
-it was on `dev/architecture`. Git cannot exclude a path directly from a normal
-merge, so pause the merge before committing and restore that path from the
-target branch.
+Use this workflow whenever `main` has new commits and
+`dev/architecture` must keep its own `pipelines/` directory. Git cannot exclude
+a path from a normal merge, so pause the merge and restore that directory from
+`dev/architecture` before committing.
 
-Start with a clean working tree and update both remote-tracking branches:
+Start with a clean working tree and update the branch:
 
 ```bash
 git status --short
@@ -363,31 +362,83 @@ Start the merge without creating its commit:
 git merge --no-commit --no-ff origin/main
 ```
 
-Keep the `dev/architecture` version of `pipelines/`, including restoring files
-changed or deleted on `main` and removing files added only on `main`:
+Resolve any pipeline conflicts as the `dev/architecture` version, then restore
+the complete pipeline tree. The first command marks modify/delete conflicts as
+deleted; the second command restores every pipeline path from the pre-merge
+`HEAD`, including the generic folders:
 
 ```bash
+git diff --name-only --diff-filter=U -z -- pipelines/ | \
+  xargs -0 -r git rm --
 git restore --source=HEAD --staged --worktree -- pipelines/
 ```
 
-If Git reports conflicts outside `pipelines/`, resolve those files and stage
-them with `git add`. Then verify that the merge contains no `pipelines/`
-changes before committing:
+Resolve conflicts outside `pipelines/` and stage those files. Verify that no
+conflicts remain and that the merge contains no staged pipeline changes:
 
 ```bash
 git diff --name-only --diff-filter=U
 git diff --cached -- pipelines/
 git status
+```
+
+The first two commands must print nothing. Finish and publish the merge:
+
+```bash
 git commit -m "Merge main into dev/architecture excluding pipelines"
 git push origin dev/architecture
 ```
 
-The first verification command must print no unresolved files, and the second
-must print no changes. To cancel the in-progress merge instead, run:
+If the merge is already in progress and you need to cancel it, run:
 
 ```bash
 git merge --abort
 ```
 
-This exclusion applies only to this merge. Repeat the restore and verification
-steps during future merges from `main` when `pipelines/` must remain unchanged.
+Repeat this procedure whenever `main` advances. A normal merge without the
+restore step will reintroduce `main`'s pipeline files or create conflicts.
+
+## Developer: Send a Feature From dev/architecture to main
+
+Do not open a PR from `dev/architecture` directly into `main`. Because the
+branches intentionally have different pipeline trees, that PR would show the
+missing pipeline files as deletions.
+
+Commit and push the feature on `dev/architecture`:
+
+```bash
+git switch dev/architecture
+git add <feature-files>
+git diff --cached
+git commit -m "Describe the feature"
+git push origin dev/architecture
+git log -1 --oneline dev/architecture
+```
+
+Create a temporary branch from the latest `main` and cherry-pick only the
+feature commit:
+
+```bash
+git switch main
+git pull --ff-only origin main
+git switch -c feature/describe-feature
+git cherry-pick <FEATURE_COMMIT_SHA>
+git diff origin/main...HEAD
+git push -u origin feature/describe-feature
+gh pr create --base main --head feature/describe-feature --fill
+```
+
+Review the PR to confirm that it contains the feature and does not delete
+`pipelines/`. After the PR is merged, update both local branches and prune
+stale remote references:
+
+```bash
+git switch main
+git pull --ff-only origin main
+git fetch --prune
+git switch dev/architecture
+git pull --ff-only origin dev/architecture
+```
+
+If a feature commit touches `pipelines/`, review that change separately before
+cherry-picking it; the workflow above is intended for non-pipeline features.
