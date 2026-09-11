@@ -49,6 +49,8 @@ def _model_options() -> list[dict[str, str]]:
             "key": key,
             "label": str(config.get("label", key)),
             "model": str(config.get("model", key)),
+            "deployment": str(config.get("deployment", "Unknown")),
+            "cost_tier": str(config.get("cost_tier", "Unknown")),
         }
         for key, config in DEFAULT_MODELS.items()
     ]
