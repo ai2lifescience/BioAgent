@@ -202,142 +202,67 @@ The principal sets priorities and approves important architecture changes.
 Team members implement focused tasks, run tests, and review pull requests. Keep
 `main` stable and do not develop directly on it.
 
-## Admin: Copy One File From Another Branch
+## Admin: Send a Change From dev/architecture to main
 
-Use this when the repository administrator needs to bring only one file from
-another branch directly into `main`. Do not use this if all changes on the
-source branch should be merged; use a normal pull request or branch merge
-instead.
+Do not open a PR from `dev/architecture` directly into `main`. The branches
+intentionally have different pipeline trees, so that PR would show the missing
+pipeline files as deletions.
 
-Start from the latest `main`:
-
-```bash
-git switch main
-git pull --ff-only origin main
-```
-
-Fetch the source branch:
-
-```bash
-git fetch origin dev/architecture
-```
-
-This fetch command does not overwrite local files, staged files, local commits,
-or the current branch. It only downloads remote branch data into Git.
-
-Copy only `README.md` from the source branch:
-
-```bash
-git restore --source=origin/dev/architecture -- README.md
-```
-
-The `git restore` command is the command that changes the local `README.md`.
-If `README.md` already has uncommitted local edits, commit or stash them before
-running it.
-
-Review, commit, and push the single-file change directly to `main`:
-
-```bash
-git status --short
-git diff -- README.md
-git add README.md
-git commit -m "Update README from dev architecture branch"
-git push origin main
-```
-
-## Admin: Copy A Fix From dev/architecture Into main
-
-Use this workflow when a fix was developed on `dev/architecture`, but only that
-fix—not every difference between the branches—should be added to `main`. A
-cherry-pick preserves files that exist only on `main`, such as
-`pipelines/molecular_typing/`.
-
-First, commit and push the fix on `dev/architecture`:
+First commit and push the change on `dev/architecture`:
 
 ```bash
 git switch dev/architecture
 git add <changed-files>
 git diff --cached
-git commit -m "Describe the fix"
+git commit -m "Describe the change"
 git push origin dev/architecture
-```
-
-Record the new commit ID:
-
-```bash
 git log -1 --oneline dev/architecture
 ```
 
-Then create a task branch from the latest `main` and copy that commit onto it:
+Create a temporary branch from the latest `main`:
 
 ```bash
 git switch main
 git pull --ff-only origin main
-git switch -c fix/copy-architecture-fix
-git cherry-pick <FIX_COMMIT_SHA>
+git switch -c fix/copy-architecture-change
 ```
 
-Review the result before publishing it:
+For a single file, copy it from `dev/architecture`:
+
+```bash
+git restore --source=origin/dev/architecture -- docs/dev_workflow.md
+```
+
+For a complete non-pipeline commit, cherry-pick its commit instead:
+
+```bash
+git cherry-pick <FEATURE_COMMIT_SHA>
+```
+
+Review the result and confirm that no pipeline files are changed:
 
 ```bash
 git status
 git diff origin/main...HEAD
+git diff origin/main...HEAD -- pipelines/
 ```
 
-Push the task branch and open a pull request into `main`:
+Push the temporary branch and open a PR into `main`:
 
 ```bash
-git push -u origin fix/copy-architecture-fix
-gh pr create --base main --head fix/copy-architecture-fix --fill
+git push -u origin fix/copy-architecture-change
+gh pr create --base main --head fix/copy-architecture-change --fill
 ```
 
-After the required review and checks pass, the principal repository
-administrator merges the pull request and deletes its temporary branch:
-
-```bash
-gh pr merge --squash --delete-branch
-```
-
-Then update the local `main` branch and remove stale remote references:
+After the PR is merged, update local branches and remove stale remote
+references:
 
 ```bash
 git switch main
 git pull --ff-only origin main
 git fetch --prune
-```
-
-Do not merge all of `dev/architecture` into `main` when only one fix is needed.
-The branches may have different files and squash-diverged histories.
-
-## Admin: Directly Push a file to main
-
-Only the principal repository administrator should use this workflow. Start on
-`main`, review the documentation change, and stage only the workflow guide:
-
-```bash
-git switch main
-git diff -- docs/dev_workflow.md
-git add docs/dev_workflow.md
-git diff --cached
-git commit -m "update docs/dev_workflow.md"
-```
-
-Update the new local commit with any changes that reached remote `main`, then
-push it directly:
-
-```bash
-git fetch origin
-git rebase origin/main
-git push origin main
-```
-
-If the push is rejected because `main` is protected, do not attempt to bypass
-the protection. Push the commit to a task branch and open a pull request:
-
-```bash
-git switch -c docs/update-development-workflow
-git push -u origin docs/update-development-workflow
-gh pr create --base main --fill
+git switch dev/architecture
+git pull --ff-only origin dev/architecture
 ```
 
 ## Admin: Merge main Into dev/architecture Except pipelines
