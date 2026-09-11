@@ -17,9 +17,11 @@ host-filtered FASTQ (R1[, R2])
 
 ## Inputs
 
-- `MetagenomicDetection.clean_r1`: required host-filtered read 1 FASTQ
-  (typically from the `qc` pipeline).
-- `MetagenomicDetection.clean_r2`: optional read 2 for paired-end runs.
+- `MetagenomicDetection.sequence_file1`: required host-filtered read 1
+  (`.fastq`, `.fq`, `.fastq.gz`, or `.fq.gz`; typically from the `qc`
+  pipeline). Compression is detected from file content, not the suffix.
+- `MetagenomicDetection.sequence_file2`: optional read 2 for paired-end runs,
+  same FASTQ / FASTQ.GZ formats as read 1 (the two files need not match).
 - Optional database paths: `db_bacteria`, `db_virus`, `db_fungi`,
   `db_parasite` (omit unused types; do not pass empty strings).
 - Annotation tables: `anno_pathogen`, `anno_virus`, `non_report_list`,
