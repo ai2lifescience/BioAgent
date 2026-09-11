@@ -65,19 +65,25 @@ def run_pipeline(
         from tools.pipeline_runner.shell import run_shell_pipeline
 
         if dry_run:
-            raise ValueError("dry_run is only supported for Snakemake and WDL pipelines.")
+            raise ValueError(
+                "dry_run is only supported for Snakemake, Nextflow, and WDL pipelines."
+            )
         return run_shell_pipeline(context)
     if engine == "snakemake":
         from tools.pipeline_runner.snakemake import run_snakemake_pipeline
 
         return run_snakemake_pipeline(context, cores=cores, dry_run=dry_run)
+    if engine == "nextflow":
+        from tools.pipeline_runner.nextflow import run_nextflow_pipeline
+
+        return run_nextflow_pipeline(context, cores=cores, dry_run=dry_run)
     if engine == "wdl":
         from tools.pipeline_runner.wdl import run_wdl_pipeline
 
         return run_wdl_pipeline(context, dry_run=dry_run)
     raise ValueError(
         f"Unsupported pipeline engine '{engine or '<missing>'}' in {context.runner_config_path}. "
-        "Supported engines: shell, snakemake, wdl."
+        "Supported engines: shell, snakemake, nextflow, wdl."
     )
 
 

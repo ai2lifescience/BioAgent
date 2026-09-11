@@ -1,0 +1,75 @@
+name: virmut
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 3600
+
+inputs:
+  genomes:
+    label: Genome FASTA file or directory
+    config_key: input_path
+    required: true
+    accepts: [".fasta", ".fa", ".fna"]
+
+  reference:
+    label: Reference genome FASTA (required when reference_mode is local)
+    config_key: reference_path
+    required: false
+    accepts: [".fasta", ".fa", ".fna"]
+
+outputs:
+  matrix:
+    label: SNP matrix
+    config_key: matrix_path
+    default: data/output/matrix.tsv
+    kind: table
+    required: true
+
+  variants:
+    label: Variants table
+    config_key: variants_path
+    default: data/output/variants.tsv
+    kind: table
+    required: true
+
+  summary:
+    label: Variants summary
+    config_key: summary_path
+    default: data/output/variants_summary.txt
+    kind: report
+    required: true
+
+  tree_fasta:
+    label: Tree FASTA
+    config_key: tree_fasta_path
+    default: data/output/tree.fasta
+    kind: fasta
+    required: false
+
+  treefile:
+    label: IQ-TREE tree
+    config_key: treefile_path
+    default: data/output/tree.treefile
+    kind: tree
+    required: false
+
+  iqtree_report:
+    label: IQ-TREE report
+    config_key: iqtree_report_path
+    default: data/output/tree.iqtree
+    kind: report
+    required: false
+
+  iqtree_log:
+    label: IQ-TREE log
+    config_key: iqtree_log_path
+    default: data/output/tree.log
+    kind: report
+    required: false
+
+param_overrides:
+  mode: {}
+  reference_mode: {}
+  species: {}
+  taxonid: {}
+  threads: {}

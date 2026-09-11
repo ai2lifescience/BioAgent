@@ -49,6 +49,7 @@ def pipeline_output_specs(runner_config: dict[str, Any]) -> dict[str, dict[str, 
             "kind": str(value.get("kind") or "file"),
             "required": bool(value.get("required", True)),
             "description": str(value.get("description") or ""),
+            "nextflow_output": str(value.get("nextflow_output") or ""),
             "wdl_output": str(value.get("wdl_output") or ""),
         }
     return specs
@@ -85,6 +86,7 @@ def rewrite_output_config_fields(
                 "raw_path": str(raw_value),
                 "kind": spec.get("kind") or "file",
                 "required": bool(spec.get("required", True)),
+                "nextflow_output": spec.get("nextflow_output") or "",
                 "wdl_output": spec.get("wdl_output") or "",
             }
         )

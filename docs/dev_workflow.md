@@ -250,7 +250,7 @@ git push origin main
 Use this workflow when a fix was developed on `dev/architecture`, but only that
 fix—not every difference between the branches—should be added to `main`. A
 cherry-pick preserves files that exist only on `main`, such as
-`pipelines/molecular_typing_meta/`.
+`pipelines/molecular_typing/`.
 
 First, commit and push the fix on `dev/architecture`:
 
