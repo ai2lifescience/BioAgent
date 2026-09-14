@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import os
-from functools import lru_cache
 from typing import Any
 
 import httpx2
@@ -38,9 +37,8 @@ def create_client() -> OpenAI:
     return OpenAI(**options)
 
 
-@lru_cache(maxsize=1)
 def create_async_client() -> AsyncOpenAI:
-    """Return the process-wide async client used by Agents SDK model calls."""
+    """Create a client owned and closed by one Agents SDK run."""
     options = client_options()
     options["http_client"] = httpx2.AsyncClient(
         timeout=options.pop("timeout"),

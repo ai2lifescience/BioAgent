@@ -15,6 +15,7 @@ from harness.support.artifacts import SessionArtifactStore
 from harness.support.evidence import EvidenceCollector
 from harness.support.verifier import Verifier
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_SKILL_STEPS
+from models.openrouter_client import create_async_client
 
 from .agent import create_agent
 from .context import BioRunContext
@@ -55,10 +56,12 @@ async def async_run_bioagent(
         session_db = Path(SESSION_DB)
         session_db.parent.mkdir(parents=True, exist_ok=True)
         sdk_session = SQLiteSession(resolved_session_id, db_path=session_db)
-        agent = create_agent(model_key, model=model)
+        client = None
         trace_id = gen_trace_id()
         LOCAL_TRACES.bind(trace_id, context)
         try:
+            client = create_async_client() if model is None else None
+            agent = create_agent(model_key, model=model, client=client)
             result = await Runner.run(
                 agent,
                 request,
@@ -82,6 +85,8 @@ async def async_run_bioagent(
         finally:
             LOCAL_TRACES.unbind(trace_id)
             sdk_session.close()
+            if client is not None:
+                await client.close()
 
         for record in context.skill_results:
             ARTIFACT_STORE.register_result(session, record)

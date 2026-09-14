@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from agents import Agent, Model, OpenAIChatCompletionsModel
+from openai import AsyncOpenAI
 
 from models.config import get_default_model_id
 from models.openrouter_client import create_async_client
@@ -23,9 +24,9 @@ existing session context when the user refers to a previous upload or result.
 """
 
 
-def create_agent(model_key: str, model: Model | None = None) -> Agent:
+def create_agent(model_key: str, model: Model | None = None, client: AsyncOpenAI | None = None) -> Agent:
     model = model or OpenAIChatCompletionsModel(
-        model=get_default_model_id(model_key), openai_client=create_async_client()
+        model=get_default_model_id(model_key), openai_client=client or create_async_client()
     )
     return Agent(
         name="BioAgent",
