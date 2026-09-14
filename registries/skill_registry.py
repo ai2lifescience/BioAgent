@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable
-
 from skills.base import SkillDefinition
 from skills.bio_database_search import SKILL_SPEC as DATABASE_LOOKUP_SPEC, database_lookup
 from skills.blast_search import SKILL_SPEC as BLAST_SEARCH_SPEC, blast_search
@@ -115,33 +113,3 @@ SKILL_DEFINITIONS = [
         instruction_path="skills/file_inspection/SKILL.md",
     ),
 ]
-
-SKILL_SPECS = [skill.skill_spec for skill in SKILL_DEFINITIONS]
-
-SKILLS: dict[str, Callable[..., dict[str, Any]]] = {
-    skill.name: skill.handler for skill in SKILL_DEFINITIONS
-}
-
-
-def get_skill_definition(name: str) -> SkillDefinition | None:
-    for skill in SKILL_DEFINITIONS:
-        if skill.name == name:
-            return skill
-    return None
-
-
-def list_skill_names() -> list[str]:
-    return [skill.name for skill in SKILL_DEFINITIONS]
-
-
-def list_skill_prompt_hints() -> list[str]:
-    """Return model-facing skill descriptions from registered skill specs."""
-    hints: list[str] = []
-    for skill in SKILL_DEFINITIONS:
-        function = skill.skill_spec.get("function", {})
-        description = str(function.get("description") or "").strip()
-        if not description:
-            description = f"Registered {skill.category} skill."
-        tool_text = f" Tools: {', '.join(skill.tools)}." if skill.tools else ""
-        hints.append(f"- {skill.name}: {description}{tool_text}")
-    return hints

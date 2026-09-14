@@ -116,7 +116,6 @@ async def async_run_bioagent(
         context.record("run_finished", status=status, skill_count=len(context.skill_results))
         run = dict(session.metadata.get("run") or {})
         STATE_STORE.record_exchange(session, request, answer)
-        public_run = {key: value for key, value in run.items() if key != "trace_start_index"}
         return {
             "answer": answer,
             "session_id": session.session_id,
@@ -124,7 +123,7 @@ async def async_run_bioagent(
             "evidence": evidence,
             "verification": verification,
             "trace": context.events,
-            "run": public_run,
+            "run": run,
             "artifacts": ARTIFACT_STORE.for_run(session, run.get("run_id")),
             "runtime": "agents_sdk",
             "model_key": model_key,

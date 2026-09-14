@@ -13,7 +13,6 @@ if str(PROJECT_ROOT) not in sys.path:
 from agents.testing import ModelStep, ScriptedModel, assistant_message, function_call
 from harness import runtime
 from harness.agent import create_agent
-from harness.guardrails import input_check
 from harness.tools import build_tools
 
 

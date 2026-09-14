@@ -65,7 +65,6 @@ DEFAULT_MODELS: dict[str, dict[str, Any]] = {
 
 DEFAULT_AGENT_MODEL_KEY = os.getenv("BIOAGENT_AGENT_MODEL_KEY", "nemotron-3-super")
 DEFAULT_MODEL_KEYS = tuple(DEFAULT_MODELS)
-DEFAULT_REPORT_MODEL_KEYS = (DEFAULT_AGENT_MODEL_KEY,)
 DEFAULT_MAX_SKILL_STEPS = int(os.getenv("BIOAGENT_MAX_SKILL_STEPS", "5"))
 DEFAULT_SYNTHESIS_MODEL_KEY = os.getenv("BIOAGENT_SYNTHESIS_MODEL_KEY", DEFAULT_AGENT_MODEL_KEY)
 DEFAULT_OPENROUTER_API_BASE = os.getenv(
@@ -76,12 +75,6 @@ DEFAULT_EMBEDDING_MODEL = os.getenv(
     "EMBEDDING_MODEL",
     "nvidia/llama-nemotron-embed-vl-1b-v2:free",
 )
-
-
-def configure_runtime_env() -> None:
-    """Set non-secret defaults for OpenRouter requests."""
-    os.environ.setdefault("OPENROUTER_API_BASE", DEFAULT_OPENROUTER_API_BASE)
-    os.environ.setdefault("EMBEDDING_MODEL", DEFAULT_EMBEDDING_MODEL)
 
 
 def get_default_model(model_key: str) -> dict[str, Any]:

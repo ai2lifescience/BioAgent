@@ -73,10 +73,6 @@ async def _invoke(definition: Any, tool_context: ToolContext[Any], raw_input: st
         return json.dumps(error, ensure_ascii=False)
 
 
-def _needs_approval(definition: Any) -> bool:
-    return False
-
-
 def build_tools(names: set[str] | None = None) -> list[FunctionTool]:
     """Build the complete high-level workflow tool set once per agent."""
     tools: list[FunctionTool] = []
@@ -91,7 +87,7 @@ def build_tools(names: set[str] | None = None) -> list[FunctionTool]:
                 params_json_schema=dict(function.get("parameters") or {"type": "object"}),
                 on_invoke_tool=lambda ctx, raw, definition=definition: _invoke(definition, ctx, raw),
                 strict_json_schema=False,
-                needs_approval=_needs_approval(definition),
+                needs_approval=False,
             )
         )
     return tools

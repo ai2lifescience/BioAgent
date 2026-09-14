@@ -19,11 +19,6 @@ class WorkflowContext:
     action_calls: list[dict[str, Any]] = field(default_factory=list)
 
     @property
-    def skill_name(self) -> str:
-        """Compatibility name for workflows during the source migration."""
-        return self.workflow_name
-
-    @property
     def tool_calls(self) -> list[dict[str, Any]]:
         return self.action_calls
 

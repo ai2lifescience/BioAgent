@@ -8,7 +8,6 @@ from .config import (
     DEFAULT_MODELS,
     DEFAULT_OPENROUTER_API_BASE,
     DEFAULT_SYNTHESIS_MODEL_KEY,
-    configure_runtime_env,
     get_default_model,
     get_default_model_id,
 )
@@ -20,10 +19,8 @@ __all__ = [
     "DEFAULT_MODELS",
     "DEFAULT_OPENROUTER_API_BASE",
     "DEFAULT_SYNTHESIS_MODEL_KEY",
-    "configure_runtime_env",
     "get_default_model",
     "get_default_model_id",
-    "LLMClient",
     "ModelChatbot",
     "generate_from_messages",
     "generate_text",
@@ -33,9 +30,6 @@ __all__ = [
 
 
 def __getattr__(name: str):
-    if name == "LLMClient":
-        from .llm_client import LLMClient
-        return LLMClient
     if name == "ModelChatbot":
         from .chatbot import ModelChatbot
         return ModelChatbot

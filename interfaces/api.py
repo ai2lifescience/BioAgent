@@ -4,10 +4,8 @@ from __future__ import annotations
 
 from typing import Any, Callable
 
-from harness.runtime import ARTIFACT_STORE, STATE_STORE, delete_session, list_sessions, run_bioagent
+from harness.runtime import ARTIFACT_STORE, delete_session, list_sessions, run_bioagent
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_SKILL_STEPS
-
-
 
 
 def handle_request(
