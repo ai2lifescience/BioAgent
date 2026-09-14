@@ -1,0 +1,146 @@
+:root {
+  color-scheme: light;
+  --bg: #f7f9f9;
+  --surface: #fff;
+  --ink: #172e32;
+  --muted: #62777b;
+  --line: #dce6e6;
+  --accent: #0f766e;
+  --soft: #e7f4f1;
+  --error: #b42318;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  font: 14px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+button, select, textarea { font: inherit; }
+button { cursor: pointer; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.assistant-app {
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+}
+.embedded-mode .assistant-header { display: none; }
+.embedded-mode .assistant-app { max-width: none; }
+.assistant-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.assistant-brand { display: flex; align-items: center; gap: 10px; margin-right: auto; min-width: 0; }
+.assistant-brand > div { display: grid; }
+.assistant-brand strong { font-size: 15px; }
+.assistant-brand small { color: var(--muted); font-size: 11px; }
+.brand-mark, .welcome-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  color: #fff;
+  background: var(--accent);
+  font-size: 12px;
+  font-weight: 750;
+}
+.text-button { border: 0; background: transparent; color: var(--accent); font-size: 12px; padding: 6px; }
+.context-summary {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 9px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+  color: var(--muted);
+  font-size: 11px;
+}
+.context-chip {
+  flex: 0 0 auto;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+}
+.messages {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.welcome { text-align: center; color: var(--muted); margin: auto; padding: 24px 0; }
+.welcome-mark { width: 44px; height: 44px; border-radius: 14px; margin: 0 auto 18px; font-size: 15px; }
+.welcome h1 { color: var(--ink); font-size: 24px; letter-spacing: -.6px; margin: 0 0 8px; }
+.welcome p { max-width: 290px; margin: 0 auto 20px; }
+.suggestion { color: var(--accent); background: var(--surface); border: 1px solid var(--line); padding: 9px 13px; border-radius: 10px; font-size: 12px; }
+.message { min-width: 0; overflow-wrap: anywhere; }
+.message-label { display: block; color: var(--muted); font-size: 10px; font-weight: 700; margin-bottom: 5px; }
+.message-body { padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; }
+.message.user { align-self: flex-end; max-width: 92%; }
+.message.user .message-body { background: var(--soft); border-color: #d0e9e2; white-space: pre-wrap; }
+.message.error { color: var(--error); }
+.message p:first-child { margin-top: 0; }
+.message p:last-child { margin-bottom: 0; }
+.message pre { background: var(--bg); padding: 10px; border-radius: 6px; overflow: auto; }
+.message code { font-size: 12px; }
+.message table { display: block; max-width: 100%; overflow: auto; border-collapse: collapse; }
+.message th, .message td { border: 1px solid var(--line); padding: 5px 8px; }
+.message img { max-width: 100%; }
+.message a { color: var(--accent); }
+.message-files { margin-top: 10px; font-size: 12px; }
+.message-files a { display: block; }
+.progress-area { padding: 0 16px; color: var(--muted); font-size: 11px; flex-shrink: 0; }
+.status { overflow-wrap: anywhere; }
+details summary { cursor: pointer; }
+#progressLog { max-height: 76px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+.composer {
+  flex-shrink: 0;
+  margin: 10px 12px 12px;
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 4px 18px #172e3208;
+}
+.composer textarea { display: block; resize: vertical; width: 100%; min-height: 52px; max-height: 20vh; padding: 4px; border: 0; color: var(--ink); background: transparent; }
+.model-control { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 8px 3px; color: var(--muted); font-size: 11px; }
+.model-control select { flex: 1; min-width: 0; width: 0; border: 0; background: var(--bg); border-radius: 6px; padding: 5px; color: var(--ink); font-size: 12px; }
+.composer-actions { display: flex; align-items: center; gap: 6px; }
+.primary-button, .stop-button, .attach-button { min-height: 34px; padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; }
+.primary-button { border: 1px solid var(--accent); background: var(--accent); color: #fff; }
+.stop-button { border: 1px solid var(--line); background: var(--surface); color: var(--muted); }
+.attach-button { display: inline-flex; align-items: center; gap: 6px; margin-right: auto; border: 0; background: var(--bg); color: var(--muted); }
+.file-list { display: flex; gap: 6px; overflow-x: auto; margin: 0 0 8px; padding: 0; list-style: none; }
+.file-list li { flex-shrink: 0; max-width: 220px; }
+.file-list button { display: block; text-align: left; max-width: 100%; padding: 5px 9px; border: 1px solid var(--line); background: var(--bg); border-radius: 6px; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-height: 540px) {
+  .assistant-header { padding: 10px 14px; }
+  .welcome { padding: 12px 0; }
+  .welcome-mark { display: none; }
+  .messages { padding-top: 12px; padding-bottom: 12px; }
+}
