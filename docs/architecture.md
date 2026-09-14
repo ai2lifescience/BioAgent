@@ -45,6 +45,8 @@ sequence calculations, and pipeline execution must be reproducible.
   the application result.
 - `harness/tools.py` exposes registered high-level workflows as SDK
   `FunctionTool` instances.
+- `harness/specialists.py` exposes focused sequence, retrieval, and pipeline
+  agents through SDK `Agent.as_tool`; they run under the same root context.
 - `harness/guardrails.py` contains input safety and output evidence checks.
 - `harness/tracing.py` consumes SDK lifecycle hooks and spans locally without
   sending traces to OpenAI.
@@ -112,7 +114,8 @@ checks tool errors and evidence completeness. These checks run after SDK tool
 execution and are included in the returned `verification` object.
 
 High-risk pipeline behavior should remain explicit in tool input and output.
-The HTTP UI can add SDK approval resumption when interactive approval is needed.
+The current tools expose approval metadata but leave approval disabled; the
+HTTP UI can add SDK approval resumption when interactive approval is needed.
 
 ### Tracing
 

@@ -9,6 +9,7 @@ from typing import Any, Callable
 from uuid import uuid4
 
 from agents import Model, Runner, RunConfig, SQLiteSession, set_default_openai_api
+from agents.exceptions import InputGuardrailTripwireTriggered
 from agents.tracing import gen_trace_id
 
 from harness.support.artifacts import SessionArtifactStore
@@ -78,6 +79,14 @@ async def async_run_bioagent(
             )
             answer = str(result.final_output or "")
             status = "ok"
+        except InputGuardrailTripwireTriggered:
+            answer = (
+                "I can’t help with actionable biological procedures that could increase "
+                "pathogen harm. I can provide safe, high-level background or discuss "
+                "defensive biosafety considerations."
+            )
+            status = "blocked"
+            context.record("run_blocked", reason="input_guardrail")
         except Exception as exc:
             answer = f"Agent run failed: {exc}"
             status = "error"
@@ -96,10 +105,14 @@ async def async_run_bioagent(
             skill_results=context.skill_results,
             evidence=evidence,
             allow_model_knowledge=not context.skill_results,
+            answer=answer,
         )
         if status == "error":
             verification["status"] = "error"
             verification.setdefault("errors", []).append(answer)
+        elif status == "blocked":
+            verification["status"] = "blocked"
+            verification.setdefault("warnings", []).append("Input guardrail blocked the request.")
         context.record("run_finished", status=status, skill_count=len(context.skill_results))
         run = dict(session.metadata.get("run") or {})
         STATE_STORE.record_exchange(session, request, answer)

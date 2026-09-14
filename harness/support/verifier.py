@@ -21,10 +21,14 @@ class Verifier:
         skill_results: list[dict[str, Any]],
         evidence: dict[str, Any] | None = None,
         allow_model_knowledge: bool = False,
+        answer: str | None = None,
     ) -> dict[str, Any]:
         warnings: list[str] = []
         errors: list[str] = []
         evidence = evidence or {}
+
+        if answer is not None and not str(answer).strip():
+            errors.append("The agent returned an empty answer.")
 
         for record in skill_results:
             result = record.get("result")

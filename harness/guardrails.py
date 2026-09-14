@@ -12,8 +12,10 @@ from .context import BioRunContext
 
 
 SENSITIVE = re.compile(
-    r"\b(gain[- ]of[- ]function|increase infectivity|evade immunity|"
-    r"synthesize virus|make pathogen|weaponize|enhance pathogenicity)\b",
+    r"\b(gain[- ]of[- ]function|increase infectivity|increase virulence|"
+    r"evade immunity|immune escape|synthesize virus|make pathogen|weaponize|"
+    r"enhance pathogenicity|engineer transmissibility|serial passage|"
+    r"design (?:a |the )?(?:pathogen|virus|toxin))\b",
     re.IGNORECASE,
 )
 BIOLOGICAL = re.compile(
@@ -57,9 +59,8 @@ async def output_check(
     if not text.strip():
         warnings.append("The agent returned an empty answer.")
     context.context.record("guardrail_completed", guardrail="output", warnings=warnings)
-    return GuardrailFunctionOutput(output_info={"warnings": warnings}, tripwire_triggered=False)
+    return GuardrailFunctionOutput(output_info={"warnings": warnings}, tripwire_triggered=not text.strip())
 
 
-INPUT_GUARDRAIL = InputGuardrail(guardrail_function=input_check, name="bio_safety_input")
+INPUT_GUARDRAIL = InputGuardrail(guardrail_function=input_check, name="bio_safety_input", run_in_parallel=False)
 OUTPUT_GUARDRAIL = OutputGuardrail(guardrail_function=output_check, name="bio_evidence_output")
-

@@ -9,8 +9,8 @@ architecture.
 
 - Add explicit interactive approval and RunState resumption for high-risk
   pipeline operations.
-- Add specialist agents and handoffs only for workflows where one agent is
-  insufficient.
+- Add handoffs only if a future workflow requires user-visible transfer between
+  specialists; current specialists already run as SDK agent-as-tool calls.
 - Add a persistent artifact metadata database if multiple web workers need to
   share metadata across processes.
 - Add model-specific capability tests for tool calling, structured output, and

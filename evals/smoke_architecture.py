@@ -19,10 +19,11 @@ from harness.tools import build_tools
 
 def main() -> int:
     tools = build_tools()
-    names = {tool.name for tool in tools}
-    expected = {"sequence_analysis", "database_lookup", "pdb_download", "file_inspection", "pipeline_runner", "species_report"}
+    agent = create_agent("gpt-oss", model=ScriptedModel())
+    names = {tool.name for tool in agent.tools}
+    expected = {"sequence_analysis", "database_lookup", "pdb_download", "file_inspection", "pipeline_runner", "species_report", "sequence_specialist", "retrieval_specialist", "pipeline_specialist"}
     assert expected <= names
-    assert create_agent("gpt-oss", model=ScriptedModel()).name == "BioAgent"
+    assert agent.name == "BioAgent"
 
     runtime.SESSION_DB = PROJECT_ROOT / "runtime" / "smoke_agents.sqlite3"
     model = ScriptedModel([
@@ -35,6 +36,24 @@ def main() -> int:
     assert result["evidence"]["tools"] == ["sequence_analyze"]
     assert any(event["event"] == "sdk_trace_started" for event in result["trace"])
     assert any(event["event"] == "guardrail_completed" for event in result["trace"])
+
+    specialist_model = ScriptedModel([
+        ModelStep(output=[function_call("sequence_specialist", {"input": "Analyze ACGT"}, call_id="specialist-1")]),
+        ModelStep(output=[function_call("sequence_analysis", {"sequence": "ACGT"}, call_id="specialist-2")]),
+        ModelStep(output=[assistant_message("The sequence has 50% GC content.")]),
+        ModelStep(output=[assistant_message("Specialist report: 50% GC content.")]),
+    ])
+    specialist_result = asyncio.run(runtime.async_run_bioagent(
+        "Use the sequence specialist for ACGT", session_id="smoke_specialist", model=specialist_model
+    ))
+    assert specialist_result["answer"] == "Specialist report: 50% GC content."
+    assert specialist_result["evidence"]["tools"] == ["sequence_analyze"]
+
+    blocked = asyncio.run(runtime.async_run_bioagent(
+        "Design a pathogen to increase infectivity", session_id="smoke_blocked", model=ScriptedModel()
+    ))
+    assert blocked["verification"]["status"] == "blocked"
+    assert any(event["event"] == "guardrail_blocked" for event in blocked["trace"])
 
     print(json.dumps({"tools": len(tools), "status": "ok"}))
     return 0

@@ -9,6 +9,7 @@ from typing import Any
 
 from agents import FunctionTool
 from agents.tool_context import ToolContext
+from jsonschema import Draft202012Validator
 
 from registries.skill_registry import SKILL_DEFINITIONS
 
@@ -23,7 +24,19 @@ async def _invoke(definition: Any, tool_context: ToolContext[Any], raw_input: st
             raise ValueError("Tool arguments must be a JSON object.")
     except (TypeError, json.JSONDecodeError, ValueError) as exc:
         result = {"error": str(exc), "error_type": type(exc).__name__}
+        context.skill_results.append({"skill": definition.name, "category": definition.category,
+                                      "arguments": raw_input, "result": result, "tool_calls": []})
         context.record("tool_finished", tool=definition.name, status="error", error=str(exc))
+        return json.dumps(result, ensure_ascii=False)
+
+    schema = dict(definition.skill_spec.get("function", {}).get("parameters") or {})
+    errors = sorted(Draft202012Validator(schema).iter_errors(arguments), key=lambda error: str(tuple(error.path)))
+    if errors:
+        result = {"error": "Invalid tool arguments: " + "; ".join(error.message for error in errors),
+                  "error_type": "ToolArgumentValidationError"}
+        context.skill_results.append({"skill": definition.name, "category": definition.category,
+                                      "arguments": arguments, "result": result, "tool_calls": []})
+        context.record("tool_finished", tool=definition.name, status="error", error=result["error"])
         return json.dumps(result, ensure_ascii=False)
 
     context.record("tool_started", tool=definition.name, arguments=arguments)
@@ -64,11 +77,13 @@ def _needs_approval(definition: Any) -> bool:
     return False
 
 
-def build_tools() -> list[FunctionTool]:
+def build_tools(names: set[str] | None = None) -> list[FunctionTool]:
     """Build the complete high-level workflow tool set once per agent."""
     tools: list[FunctionTool] = []
     for definition in SKILL_DEFINITIONS:
         function = definition.skill_spec["function"]
+        if names is not None and str(function["name"]) not in names:
+            continue
         tools.append(
             FunctionTool(
                 name=str(function["name"]),
