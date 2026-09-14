@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from execution.skill_context import SkillContext, ensure_skill_context
+from harness.workflow_context import WorkflowContext, ensure_workflow_context
 
 
 SKILL_SPEC = {
@@ -44,9 +44,9 @@ def sequence_analysis(
     fasta_path: str | None = None,
     artifact_ref: str | None = None,
     min_orf_length: int = 90,
-    context: SkillContext | None = None,
+    context: WorkflowContext | None = None,
 ) -> dict[str, Any]:
-    context = ensure_skill_context(context, "sequence_analysis")
+    context = ensure_workflow_context(context, "sequence_analysis")
     source_artifact = None
     if _should_use_latest_fasta(sequence=sequence, fasta_path=fasta_path, artifact_ref=artifact_ref):
         source_artifact = context.latest_artifact(

@@ -12,11 +12,6 @@ from .config import (
     get_default_model,
     get_default_model_id,
 )
-from .chatbot import ModelChatbot
-from .llm_client import LLMClient
-from .multi_model import run_multi_model_messages, run_multi_model_prompt
-from .text_generation import generate_from_messages, generate_text
-
 __all__ = [
     "DEFAULT_AGENT_MODEL_KEY",
     "DEFAULT_EMBEDDING_MODEL",
@@ -25,13 +20,29 @@ __all__ = [
     "DEFAULT_MODELS",
     "DEFAULT_OPENROUTER_API_BASE",
     "DEFAULT_SYNTHESIS_MODEL_KEY",
-    "LLMClient",
-    "ModelChatbot",
     "configure_runtime_env",
-    "generate_from_messages",
-    "generate_text",
     "get_default_model",
     "get_default_model_id",
+    "LLMClient",
+    "ModelChatbot",
+    "generate_from_messages",
+    "generate_text",
     "run_multi_model_messages",
     "run_multi_model_prompt",
 ]
+
+
+def __getattr__(name: str):
+    if name == "LLMClient":
+        from .llm_client import LLMClient
+        return LLMClient
+    if name == "ModelChatbot":
+        from .chatbot import ModelChatbot
+        return ModelChatbot
+    if name in {"generate_from_messages", "generate_text"}:
+        from .text_generation import generate_from_messages, generate_text
+        return {"generate_from_messages": generate_from_messages, "generate_text": generate_text}[name]
+    if name in {"run_multi_model_messages", "run_multi_model_prompt"}:
+        from .multi_model import run_multi_model_messages, run_multi_model_prompt
+        return {"run_multi_model_messages": run_multi_model_messages, "run_multi_model_prompt": run_multi_model_prompt}[name]
+    raise AttributeError(name)

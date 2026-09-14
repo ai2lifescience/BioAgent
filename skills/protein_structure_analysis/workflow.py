@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from execution.skill_context import SkillContext, ensure_skill_context
+from harness.workflow_context import WorkflowContext, ensure_workflow_context
 
 
 SKILL_SPEC = {
@@ -52,9 +52,9 @@ def protein_structure_analysis(
     pdb_id: str | None = None,
     file_format: str = "cif",
     artifact_ref: str | None = None,
-    context: SkillContext | None = None,
+    context: WorkflowContext | None = None,
 ) -> dict[str, Any]:
-    context = ensure_skill_context(context, "protein_structure_analysis")
+    context = ensure_workflow_context(context, "protein_structure_analysis")
     source_artifact = None
     download_result = None
     if pdb_id and not structure_path:

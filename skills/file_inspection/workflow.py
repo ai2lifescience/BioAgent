@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from execution.skill_context import SkillContext, ensure_skill_context
+from harness.workflow_context import WorkflowContext, ensure_workflow_context
 
 
 SKILL_SPEC = {
@@ -32,9 +32,9 @@ SKILL_SPEC = {
 def file_inspection(
     path: str,
     max_preview_lines: int = 20,
-    context: SkillContext | None = None,
+    context: WorkflowContext | None = None,
 ) -> dict[str, Any]:
-    context = ensure_skill_context(context, "file_inspection")
+    context = ensure_workflow_context(context, "file_inspection")
     result = context.run_tool(
         "file_inspect",
         {"path": path, "max_preview_lines": max_preview_lines}

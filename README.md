@@ -2,9 +2,7 @@
 
 BioAgent is a bioinformatics agent for biological question answering, public
 database retrieval, sequence and structure analysis, evidence-backed reporting,
-file inspection, and pipeline execution. It combines deterministic tools with
-reusable skills and model-guided skill selection behind a chat-style web UI,
-CLI, API, and Python interface.
+file inspection, and pipeline execution. It exposes deterministic biological operations as typed Agents SDK function tools behind a chat-style web UI, CLI, API, and Python interface.
 
 ## What BioAgent Does
 
@@ -39,8 +37,8 @@ cd BioAgent
 ### 2. Create An Environment
 
 ```bash
-conda create -n bioagent python=3.12 -y
-conda activate bioagent
+conda create -n openaisdk python=3.11 -y
+conda activate openaisdk
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
@@ -49,8 +47,7 @@ python -m pip install -r requirements.txt
 
 ### 3. Configure A Model
 
-The default model uses OpenRouter. Set an API key before using LLM-backed chat,
-planning, or report generation:
+The harness uses OpenRouter through the OpenAI Python client. Set an API key before running the agent or model-backed reports:
 
 On Linux Bash:
 
@@ -62,8 +59,7 @@ export CROMWELL_URL=http://192.168.164.39:39000
 Replace the placeholder with your real key. The variable is available to
 BioAgent commands started from the current terminal session.
 
-Deterministic operations such as sequence analysis and some public database
-requests can run without an LLM key.
+Every natural-language request is handled by the Agents SDK; deterministic functions run after the agent selects their registered tools. Offline smoke tests use a scripted model and do not need an API key.
 
 ### 4. Start The Web UI
 
@@ -150,32 +146,27 @@ Then open `http://<SERVER_LAN_IP>:8000` from the other computer.
 
 ## Architecture
 
-![BioAgent system architecture](docs/images/system_architecture.png)
+BioAgent is implemented as a single OpenAI Agents SDK harness. The SDK owns the
+agent loop, function-tool dispatch, guardrails, sessions, and tracing. The tools
+call deterministic biological libraries and registered external APIs.
 
 ```text
 User / App
-  -> Interface Layer             CLI, web UI/API, Python, notebook
-  -> Agent Orchestrator          session coordination and execution loop
-     -> Memory / Trace           session state, locks, and runtime events
-  -> Intent Router               deterministic route rules
-  -> Planner                     executable plan templates
-  -> Skill Executor              reusable biological workflows
-  -> Tool Executor               concrete validated actions
-     -> Bio APIs                 NCBI, PubMed, UniProt, InterPro, KEGG,
-                                 QuickGO, PDB, AlphaFold DB
-     -> Bio Tools                sequence, BLAST, structure, genome map
-     -> RAG                      retrieval and evidence-backed answers
-     -> Pipeline Runner          Shell, Snakemake, Nextflow, WDL
-     -> File I/O                 uploads, inspection, and reports
-  -> Evidence Collector          sources, identifiers, citations, files
-  -> Verifier                    result and biosafety checks
-  -> Final Answer
+  -> Agent + Runner (OpenAI Agents SDK)
+     -> OpenAI Python client -> OpenRouter
+     -> BioAgent function tools
+        -> databases, sequence/structure tools, files, RAG, pipelines
+     -> SDK sessions (SQLite)
+     -> SDK guardrails and local SDK tracing
+  -> structured answer, evidence, verification, and artifacts
 ```
 
-The router selects known workflows directly. When deterministic routing is not
-enough, the LLM may choose from registered skills. Skills call registered tools
-through the central tool executor, while the orchestrator records session state,
-evidence, verification results, artifacts, and runtime trace events.
+The public entry point is `harness.run_bioagent`. Each run returns the answer,
+SDK session ID, tool evidence, verification status, trace events, and artifact
+references. Uploads and generated files remain in per-session workspaces.
+
+OpenRouter model IDs are configured in `models/config.py` and are sent directly
+through the OpenAI client.
 
 ## Other Interfaces
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from execution.skill_context import SkillContext, ensure_skill_context
+from harness.workflow_context import WorkflowContext, ensure_workflow_context
 
 
 SKILL_SPEC = {
@@ -38,9 +38,9 @@ def example_skill(
     message: str,
     tag: str | None = None,
     uppercase: bool = False,
-    context: SkillContext | None = None,
+    context: WorkflowContext | None = None,
 ) -> dict[str, Any]:
-    context = ensure_skill_context(context, "example_skill")
+    context = ensure_workflow_context(context, "example_skill")
     result = context.run_tool(
         "echo",
         {"message": message, "tag": tag, "uppercase": uppercase}

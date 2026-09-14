@@ -15,7 +15,7 @@ from urllib.parse import parse_qs, urlparse
 
 from Bio.PDB import MMCIFParser, PDBIO
 
-from agent_core.artifacts import (
+from harness.support.artifacts import (
     allowed_artifact_suffix_message,
     artifact_content_type,
     artifact_suffix_config,
@@ -86,8 +86,7 @@ def _runtime_info(
         "session_id": result.get("session_id"),
         "run_id": run.get("run_id"),
         "runtime_dir": run.get("runtime_dir"),
-        "route": (result.get("route") or {}).get("mode"),
-        "plan": (result.get("plan") or {}).get("mode"),
+        "runtime": result.get("runtime", "agents_sdk"),
         "verification": verification.get("status"),
         "skills": skills,
         "tools": tools,

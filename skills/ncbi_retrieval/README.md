@@ -58,9 +58,9 @@ python -m interfaces.cli "download 10 records phiX174 genes A G"
 You can also call the agent from Python:
 
 ```python
-from agent_core import BioAgentOrchestrator
+from harness import run_bioagent
 
-result = BioAgentOrchestrator().run("download 10 records phiX174 genes A G")
+result = run_bioagent("download 10 records phiX174 genes A G")
 print(result["answer"])
 ```
 

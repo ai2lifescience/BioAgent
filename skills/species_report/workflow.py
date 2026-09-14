@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 from typing import Any, Callable
 
-from execution.skill_context import SkillContext, ensure_skill_context
+from harness.workflow_context import WorkflowContext, ensure_workflow_context
 from skills.species_report.utils import (
     build_research_question,
     build_source_query,
@@ -115,10 +115,10 @@ def species_report(
     collection_name: str | None = None,
     chroma_path: str = DEFAULT_CHROMA_PATH,
     output_dir: str = DEFAULT_OUTPUT_DIR,
-    context: SkillContext | None = None,
+    context: WorkflowContext | None = None,
     log_fn: Callable[[str], None] | None = None,
 ) -> dict[str, Any]:
-    context = ensure_skill_context(context, "species_report")
+    context = ensure_workflow_context(context, "species_report")
     if chroma_path == DEFAULT_CHROMA_PATH:
         chroma_path = context.runtime_path("chroma")
     if output_dir == DEFAULT_OUTPUT_DIR:

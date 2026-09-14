@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from execution.skill_context import SkillContext, ensure_skill_context
+from harness.workflow_context import WorkflowContext, ensure_workflow_context
 
 
 SKILL_SPEC = {
@@ -39,9 +39,9 @@ def pdb_download(
     pdb_id: str,
     file_format: str = "cif",
     output_dir: str | None = None,
-    context: SkillContext | None = None,
+    context: WorkflowContext | None = None,
 ) -> dict[str, Any]:
-    context = ensure_skill_context(context, "pdb_download")
+    context = ensure_workflow_context(context, "pdb_download")
     resolved_output_dir = output_dir or context.artifact_path("structures")
     result = context.run_tool(
         "pdb_download",

@@ -14,7 +14,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from agent_core.artifacts import artifact_content_type, can_serve_artifact
+from harness.support.artifacts import artifact_content_type, can_serve_artifact
 from tools.pipeline_config import load_yaml_config
 from tools.pipeline_runner.config import write_runtime_config
 from tools.pipeline_runner.core import prepare_pipeline_context
@@ -31,6 +31,9 @@ def _load_workflow_module():
 
 
 def main() -> int:
+    if not (PROJECT_ROOT / "pipelines" / "rna_secondary_structure" / "workflow.py").exists():
+        print("SKIP: rna_secondary_structure pipeline is not present in this checkout.")
+        return 0
     workflow = _load_workflow_module()
     with TemporaryDirectory(prefix="bioagent-rna-secondary-") as temporary_dir:
         temporary_path = Path(temporary_dir)

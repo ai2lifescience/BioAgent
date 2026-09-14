@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from execution.skill_context import SkillContext, ensure_skill_context
+from harness.workflow_context import WorkflowContext, ensure_workflow_context
 from tools.pipeline_runner.config import load_pipeline_config, load_runner_config
 from tools.pipeline_runner.inputs import (
     default_input_slot,
@@ -411,9 +411,9 @@ def pipeline_runner(
     timeout: int | None = None,
     input_overrides: dict[str, Any] | None = None,
     config_overrides: dict[str, Any] | None = None,
-    context: SkillContext | None = None,
+    context: WorkflowContext | None = None,
 ) -> dict[str, Any]:
-    context = ensure_skill_context(context, "pipeline_runner")
+    context = ensure_workflow_context(context, "pipeline_runner")
     parameter_request = _required_parameter_check(pipeline_name, config_overrides)
     if parameter_request:
         return parameter_request

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from .config import DEFAULT_AGENT_MODEL_KEY
-from .llm_client import LLMClient
+from .config import DEFAULT_AGENT_MODEL_KEY, get_default_model_id
+from .openrouter_client import create_client
 
 
 def generate_from_messages(
@@ -17,14 +17,18 @@ def generate_from_messages(
     **kwargs: Any,
 ) -> str:
     """Generate text from chat messages using a configured model."""
-    client = LLMClient(model_key=model_key)
-    response = client.complete(
-        messages=messages,
-        tools=tools,
-        tool_choice=tool_choice,
-        temperature=temperature,
+    request: dict[str, Any] = {
+        "model": get_default_model_id(model_key),
+        "messages": messages,
+        "temperature": temperature,
         **kwargs,
-    )
+    }
+    if tools is not None:
+        request["tools"] = tools
+    if tool_choice is not None:
+        request["tool_choice"] = tool_choice
+    with create_client() as client:
+        response = client.chat.completions.create(**request)
     content = response.choices[0].message.content
     if not content:
         raise RuntimeError(f"Model '{model_key}' returned an empty response.")

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from execution.skill_context import SkillContext, ensure_skill_context
+from harness.workflow_context import WorkflowContext, ensure_workflow_context
 
 
 SKILL_SPEC = {
@@ -51,9 +51,9 @@ def blast_search(
     expect: float = 10.0,
     wait: bool = False,
     timeout_seconds: int = 120,
-    context: SkillContext | None = None,
+    context: WorkflowContext | None = None,
 ) -> dict[str, Any]:
-    context = ensure_skill_context(context, "blast_search")
+    context = ensure_workflow_context(context, "blast_search")
     result = context.run_tool(
         "blast_search",
         {

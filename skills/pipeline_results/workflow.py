@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from execution.skill_context import SkillContext, ensure_skill_context
+from harness.workflow_context import WorkflowContext, ensure_workflow_context
 
 
 SKILL_SPEC = {
@@ -119,9 +119,9 @@ def _answer(result: dict[str, Any]) -> str:
 def pipeline_results(
     pipeline_name: str = "",
     max_table_rows: int = 10,
-    context: SkillContext | None = None,
+    context: WorkflowContext | None = None,
 ) -> dict[str, Any]:
-    context = ensure_skill_context(context, "pipeline_results")
+    context = ensure_workflow_context(context, "pipeline_results")
     result = context.run_tool(
         "pipeline_results_collect",
         {

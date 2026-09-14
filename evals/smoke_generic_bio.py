@@ -12,7 +12,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from tools.pipeline_runner.core import run_pipeline
-from agent_core.artifacts import artifact_content_type, can_serve_artifact
+from harness.support.artifacts import artifact_content_type, can_serve_artifact
 
 
 def main() -> int:

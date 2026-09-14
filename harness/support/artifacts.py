@@ -10,13 +10,16 @@ import re
 from typing import Any
 from uuid import uuid4
 
-from .memory import AgentSession, InMemoryStateStore
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from harness.sessions import SessionMetadata, SessionMetadataStore
 
 
 DEFAULT_RUNS_DIR = os.getenv("BIOAGENT_RUNS_DIR", "runtime/runs")
 DEFAULT_SESSIONS_DIR = os.getenv("BIOAGENT_SESSIONS_DIR", "runtime/sessions")
 DEFAULT_MAX_SESSION_ARTIFACTS = 100
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 ARTIFACT_KIND_BY_KEY = {
@@ -332,7 +335,7 @@ class SessionArtifactStore:
 
     def __init__(
         self,
-        state_store: InMemoryStateStore,
+        state_store: SessionMetadataStore,
         runs_dir: str | Path = DEFAULT_RUNS_DIR,
         sessions_dir: str | Path = DEFAULT_SESSIONS_DIR,
         max_session_artifacts: int = DEFAULT_MAX_SESSION_ARTIFACTS,
@@ -342,7 +345,7 @@ class SessionArtifactStore:
         self.sessions_dir = Path(sessions_dir)
         self.max_session_artifacts = max(1, int(max_session_artifacts))
 
-    def prepare_run(self, session: AgentSession) -> dict[str, Any]:
+    def prepare_run(self, session: SessionMetadata) -> dict[str, Any]:
         """Create run metadata without eagerly creating directories."""
         run_id = str(uuid4())
         runtime_dir = self.runs_dir / run_id
@@ -358,7 +361,7 @@ class SessionArtifactStore:
         return dict(session.metadata["run"])
 
     @staticmethod
-    def user_context(session: AgentSession) -> dict[str, Any]:
+    def user_context(session: SessionMetadata) -> dict[str, Any]:
         """Return the runtime context passed from a skill to its tools."""
         run = dict(session.metadata.get("run") or {})
         return {
@@ -367,7 +370,7 @@ class SessionArtifactStore:
             **run,
         }
 
-    def register_result(self, session: AgentSession, record: dict[str, Any]) -> None:
+    def register_result(self, session: SessionMetadata, record: dict[str, Any]) -> None:
         """Register file-like values produced by one skill and its tools."""
         candidates: list[dict[str, str]] = []
         result = record.get("result")
@@ -406,7 +409,7 @@ class SessionArtifactStore:
         session.metadata["artifacts"] = artifacts[-self.max_session_artifacts :]
 
     @staticmethod
-    def for_run(session: AgentSession, run_id: str | None) -> list[dict[str, Any]]:
+    def for_run(session: SessionMetadata, run_id: str | None) -> list[dict[str, Any]]:
         """Return artifacts associated with one run."""
         artifacts = [
             dict(item)

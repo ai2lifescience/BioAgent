@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from execution.skill_context import SkillContext, ensure_skill_context
+from harness.workflow_context import WorkflowContext, ensure_workflow_context
 
 
 SKILL_SPEC = {
@@ -47,9 +47,9 @@ def database_lookup(
     download: bool = False,
     file_format: str = "cif",
     output_dir: str | None = None,
-    context: SkillContext | None = None,
+    context: WorkflowContext | None = None,
 ) -> dict[str, Any]:
-    context = ensure_skill_context(context, "database_lookup")
+    context = ensure_workflow_context(context, "database_lookup")
     payload: dict[str, Any] = {
         "database": database,
         "query": query,
