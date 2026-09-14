@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BioAgent Drawer Preview</title>
+  <style>
+    :root { color: #173438; background: #f3f7f7; font: 16px/1.5 system-ui, sans-serif; }
+    body { max-width: 980px; margin: 0 auto; padding: 52px 24px; }
+    header { display: flex; align-items: center; gap: 18px; margin-bottom: 38px; }
+    h1 { margin: 0; font-size: clamp(28px, 5vw, 44px); letter-spacing: -.04em; }
+    .muted { color: #62777b; }
+    .workspace { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .card { min-height: 130px; padding: 18px; border: 1px solid #dce6e6; border-radius: 12px; background: #fff; }
+    .card strong { display: block; margin-bottom: 8px; }
+    @media (max-width: 680px) { .workspace { grid-template-columns: 1fr; } body { padding: 32px 16px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div><h1>Workspace</h1><div class="muted">This page demonstrates a host website with BioAgent in a right-side drawer.</div></div>
+  </header>
+  <section class="workspace" aria-label="Example workspace">
+    <article class="card"><strong>Project</strong><span class="muted">Respiratory surveillance</span></article>
+    <article class="card"><strong>Sample</strong><span class="muted">sample-2026-0914</span></article>
+    <article class="card"><strong>Result</strong><span class="muted">Metagenomic summary</span></article>
+  </section>
+  <div id="bioagent-drawer"></div>
+  <script src="./static/assistant-embed.js"></script>
+  <script>
+    BioAgentDrawer.mount({
+      target: document.getElementById("bioagent-drawer"),
+      context: { project_id: "respiratory-surveillance", sample_id: "sample-2026-0914", result_type: "metagenomic summary" },
+    });
+  </script>
+</body>
+</html>

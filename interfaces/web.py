@@ -38,8 +38,11 @@ WEB_UI_DIR = PROJECT_ROOT / "web_ui"
 MAX_UPLOAD_BYTES = int(os.getenv("BIOAGENT_MAX_UPLOAD_BYTES", str(256 * 1024 * 1024)))
 STATIC_FILES = {
     "/static/app.css": (WEB_UI_DIR / "app.css", "text/css; charset=utf-8"),
+    "/static/assistant.css": (WEB_UI_DIR / "assistant.css", "text/css; charset=utf-8"),
     "/static/markdown.js": (WEB_UI_DIR / "markdown.js", "application/javascript; charset=utf-8"),
     "/static/app.js": (WEB_UI_DIR / "app.js", "application/javascript; charset=utf-8"),
+    "/static/assistant.js": (WEB_UI_DIR / "assistant.js", "application/javascript; charset=utf-8"),
+    "/static/assistant-embed.js": (WEB_UI_DIR / "assistant-embed.js", "application/javascript; charset=utf-8"),
 }
 
 
@@ -107,6 +110,19 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
         path = urlparse(self.path).path
         if path in {"/", "/index.html"}:
             self._send_file(WEB_UI_DIR / "index.html", "text/html; charset=utf-8")
+            return
+        if path == "/assistant/":
+            # Keep relative asset/API URLs working when mounted behind a proxy.
+            query = urlparse(self.path).query
+            self.send_response(302)
+            self.send_header("Location", "../assistant" + (f"?{query}" if query else ""))
+            self.end_headers()
+            return
+        if path in {"/assistant", "/assistant.html"}:
+            self._send_file(WEB_UI_DIR / "assistant.html", "text/html; charset=utf-8")
+            return
+        if path in {"/assistant-demo", "/assistant-demo/"}:
+            self._send_file(WEB_UI_DIR / "assistant-demo.html", "text/html; charset=utf-8")
             return
         if path in STATIC_FILES:
             file_path, content_type = STATIC_FILES[path]
