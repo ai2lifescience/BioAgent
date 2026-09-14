@@ -61,8 +61,8 @@ OpenAI `OpenAI` and `AsyncOpenAI` clients with:
 - `OPENROUTER_API_KEY` for authentication;
 - `OPENROUTER_API_BASE`, defaulting to `https://openrouter.ai/api/v1`;
 - optional `HTTP-Referer` and `X-OpenRouter-Title` headers;
-- HTTPX2 clients with environment proxies disabled when required by the local
-  environment.
+- HTTPX2 clients with explicit proxy selection from `BIOAGENT_PROXY`, falling
+  back to `ALL_PROXY`/`all_proxy`.
 
 Chat generation and embeddings use this client directly. LiteLLM is not part of
 the project dependencies.
@@ -158,16 +158,20 @@ Set the provider key before a live run:
 export OPENROUTER_API_KEY="..."
 ```
 
-Network transport honors an explicit `BIOAGENT_PROXY` or the standard
-`ALL_PROXY`/`all_proxy` environment variable. Set `BIOAGENT_DISABLE_PROXY=1`
-to force direct connections. For example, a SOCKS-only launch is:
+For OpenRouter traffic, set `BIOAGENT_PROXY` in the terminal before starting
+the server:
 
 ```bash
 conda activate openaisdk
-env -u HTTP_PROXY -u HTTPS_PROXY -u http_proxy -u https_proxy \
-  -u all_proxy ALL_PROXY=socks5h://127.0.0.1:10801 \
-  python -B -m interfaces.web --host 0.0.0.0 --port 8000
+export BIOAGENT_PROXY=socks5h://127.0.0.1:10801
+python -B -m interfaces.web --host 0.0.0.0 --port 8000
 ```
+
+`BIOAGENT_PROXY` takes priority over `ALL_PROXY`/`all_proxy`; neither setting
+requires clearing `HTTP_PROXY` or `HTTPS_PROXY` for these clients. Set
+`BIOAGENT_DISABLE_PROXY=1` to force direct OpenRouter connections regardless
+of proxy settings. Unset that variable before switching back to a proxy.
+Database and pipeline clients retain their own proxy settings.
 
 Choose a configured model with `BIOAGENT_AGENT_MODEL_KEY`. Set
 `BIOAGENT_MAX_SKILL_STEPS` to bound the SDK run turns. Set

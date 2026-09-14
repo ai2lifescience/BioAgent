@@ -8,9 +8,16 @@ export OPENROUTER_API_KEY="..."
 python -m interfaces.cli "<request>"
 ```
 
-To use a SOCKS proxy for OpenRouter requests, set `ALL_PROXY` (or
-`BIOAGENT_PROXY`) in the same shell. Use `BIOAGENT_DISABLE_PROXY=1` to force a
-direct connection.
+To use a SOCKS proxy for OpenRouter requests, set this once in the same terminal:
+
+```bash
+export BIOAGENT_PROXY=socks5h://127.0.0.1:10801
+```
+
+`ALL_PROXY` is not required when `BIOAGENT_PROXY` is set, and there is no need
+to unset other proxy variables for OpenRouter. Use `BIOAGENT_DISABLE_PROXY=1`
+to force a direct OpenRouter connection; unset it before switching back to a
+proxy.
 
 The request is sent to one OpenAI Agents SDK `Agent` through `Runner`. The
 agent can call registered biological workflows exposed as typed function tools.

@@ -8,6 +8,7 @@ another computer on the same local network.
 Use this when you only need to open BioAgent on the same machine:
 
 ```bash
+conda activate openaisdk
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ```
 
@@ -97,26 +98,40 @@ disconnects the response stream; work already started on the server may continue
 
 Use this when another PC on the same LAN should open the BioAgent page:
 
-Choose the launch command that matches your VPN setup.
-
-Without a proxy:
+Set the OpenRouter proxy once in your terminal, then start the server:
 
 ```bash
-env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY \
-  -u http_proxy -u https_proxy -u all_proxy \
+conda activate openaisdk
+export BIOAGENT_PROXY=socks5h://127.0.0.1:10801
+python -B -m interfaces.web --host 0.0.0.0 --port 8000
+```
+
+`ALL_PROXY` is not required when `BIOAGENT_PROXY` is set. You do not need to
+unset `HTTP_PROXY` or `HTTPS_PROXY` for OpenRouter requests. Use `http://` if
+your proxy provides an HTTP listener; use `socks5h://` for the SOCKS5 listener
+shown above.
+
+Alternatively, set the proxy for just the server process after activating
+`openaisdk`:
+
+```bash
+BIOAGENT_PROXY=socks5h://127.0.0.1:10801 \
   python -B -m interfaces.web --host 0.0.0.0 --port 8000
 ```
 
-With a SOCKS5 proxy:
+For direct OpenRouter connections, use:
 
 ```bash
-python -m pip install "httpx[socks]"
-
-env -u HTTP_PROXY -u HTTPS_PROXY \
-  -u http_proxy -u https_proxy -u all_proxy \
-  ALL_PROXY=socks5h://127.0.0.1:10801 \
+BIOAGENT_DISABLE_PROXY=1 \
   python -B -m interfaces.web --host 0.0.0.0 --port 8000
 ```
+
+`BIOAGENT_DISABLE_PROXY=1` takes priority over proxy settings. If you previously
+exported it, run `unset BIOAGENT_DISABLE_PROXY` before switching back to a
+proxy. Restart a running server after changing its environment.
+
+These BioAgent settings control OpenRouter model and embedding requests.
+Other database and pipeline clients retain their own proxy settings.
 
 Find this machine's LAN IP:
 

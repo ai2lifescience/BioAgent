@@ -71,6 +71,17 @@ python -B -m interfaces.web --host 127.0.0.1 --port 8000
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in a browser. Stop the
 server with `Ctrl+C`.
 
+If OpenRouter needs a SOCKS proxy, set it in the same terminal before starting
+the server:
+
+```bash
+export BIOAGENT_PROXY=socks5h://127.0.0.1:10801
+```
+
+`ALL_PROXY` is not required when `BIOAGENT_PROXY` is set. See the
+[web usage guide](docs/web_usage.md#start-for-local-network-access) for the
+complete launch command and direct-connection option.
+
 ![BioAgent web interface](docs/images/web_ui.png)
 
 ### 5. Use BioAgent
