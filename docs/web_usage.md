@@ -19,6 +19,80 @@ http://127.0.0.1:8000
 
 `127.0.0.1` means only this computer can access the web page.
 
+## Separate Assistant Page
+
+Restart the web server after updating, then open:
+
+```text
+http://127.0.0.1:8000/assistant
+```
+
+The original interface remains at `/`. The assistant page is a compact chat
+surface intended to fill a host website's right-side drawer. It includes model
+selection, file attachments, streamed activity, and a small context summary.
+
+Open `/assistant-demo` to see a sample workspace with BioAgent mounted as a
+collapsible drawer:
+
+```text
+http://127.0.0.1:8000/assistant-demo
+```
+
+Another website can open the assistant in an iframe or a separate tab and
+prefill the visible context:
+
+```text
+/assistant?project_id=123&sample_id=456&result_type=summary
+```
+
+These values are labels included with your message; they do not fetch data from
+MScan. Attach a file or paste results for the agent to use. Encode parameter
+values with `URLSearchParams` when building links.
+
+For a host website, include the reusable drawer helper and mount it once:
+
+```html
+<div id="bioagent-drawer"></div>
+<script src="https://bioagent.example.org/static/assistant-embed.js"></script>
+<script>
+  const drawer = BioAgentDrawer.mount({
+    target: document.getElementById("bioagent-drawer"),
+    src: "https://bioagent.example.org/assistant",
+    context: { project_id: "123", sample_id: "456", result_type: "summary" }
+  });
+</script>
+```
+
+The helper creates the launcher, right-side panel, close button, iframe, and
+context messaging. Call `drawer.updateContext(nextContext)` when the user
+changes projects or samples.
+
+A custom embedding can update the assistant after loading with `postMessage`:
+
+```js
+assistantFrame.contentWindow.postMessage(
+  {
+    type: "bioagent-context",
+    context: { project_id: "123", sample_id: "456", result_type: "summary" }
+  },
+  "https://bioagent.example.org"
+);
+```
+
+Use the exact BioAgent origin as the second argument and validate `event.origin`
+in a custom embedding implementation. The assistant accepts text labels only.
+
+For a proxy mount such as `/bioagent/assistant`, route the whole `/bioagent/`
+prefix to BioAgent and rewrite that prefix before forwarding, including static
+files and API requests. The page resolves these URLs relative to its mount
+point. Disable proxy buffering for streaming responses. Public website
+integration still needs that website's authentication and session permissions;
+this page does not add them.
+
+The separate page keeps its conversation while it is open. Reloading or choosing
+**New chat** starts a new session; context labels stay on screen. **Stop waiting**
+disconnects the response stream; work already started on the server may continue.
+
 ## Start For Local Network Access
 
 Use this when another PC on the same LAN should open the BioAgent page:

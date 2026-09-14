@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BioAgent Assistant</title>
+  <link rel="stylesheet" href="./static/assistant.css">
+</head>
+<body>
+  <main class="assistant-app" aria-label="BioAgent assistant">
+    <header class="assistant-header">
+      <div class="assistant-brand">
+        <span class="brand-mark" aria-hidden="true">BA</span>
+        <div><strong>BioAgent</strong><small>Your analysis companion</small></div>
+      </div>
+      <button id="newChat" class="text-button" type="button">New chat</button>
+    </header>
+
+    <div id="contextSummary" class="context-summary" aria-label="Current workspace context" aria-live="polite" hidden></div>
+
+    <div id="messages" class="messages" role="log" aria-label="Conversation" aria-live="polite" tabindex="0">
+      <div class="welcome">
+        <div class="welcome-mark" aria-hidden="true">BA</div>
+        <h1>How can I help?</h1>
+        <p>Ask about your results or attach a file to get started.</p>
+        <button id="welcomePrompt" class="suggestion" type="button">Help me understand a results table</button>
+      </div>
+    </div>
+
+    <div class="progress-area">
+      <div id="status" class="status" role="status">Connecting to BioAgent…</div>
+      <button id="retryConfig" class="text-button" type="button" hidden>Retry connection</button>
+      <details id="progressDetails" hidden>
+        <summary>Activity</summary>
+        <pre id="progressLog"></pre>
+      </details>
+    </div>
+
+    <form id="composer" class="composer">
+      <ul id="uploadList" class="file-list" aria-label="Attached files" hidden></ul>
+      <label class="sr-only" for="prompt">Message BioAgent</label>
+      <textarea id="prompt" rows="2" placeholder="Ask BioAgent…"></textarea>
+      <div class="model-control">
+        <label for="model">Model</label>
+        <select id="model" disabled><option>Connecting…</option></select>
+      </div>
+      <div class="composer-actions">
+        <button id="attachButton" class="attach-button" type="button" aria-label="Attach files">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true">
+            <path d="m8 13 6-6a3 3 0 0 1 4 4l-8 8a5 5 0 0 1-7-7l9-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          Attach
+        </button>
+        <input id="uploadInput" type="file" multiple hidden>
+        <button id="stop" class="stop-button" type="button" hidden disabled>Stop waiting</button>
+        <button id="send" class="primary-button" type="submit" disabled>Send <span aria-hidden="true">↑</span></button>
+      </div>
+    </form>
+  </main>
+  <script src="./static/markdown.js"></script>
+  <script src="./static/assistant.js"></script>
+</body>
+</html>
