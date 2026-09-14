@@ -4,6 +4,8 @@ BioAgent uses one OpenAI Agents SDK runtime. The SDK owns model turns, tool
 calling, sessions, guardrails, and tracing. BioAgent supplies typed biological
 function tools and deterministic implementations for scientific operations.
 
+![BioAgent current system architecture](images/system_architecture.png)
+
 ## Runtime flow
 
 ```text
