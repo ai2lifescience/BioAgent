@@ -91,6 +91,7 @@ or local runtime data.
 Run the project checks before committing:
 
 ```bash
+conda activate openaisdk
 python -m evals.smoke_architecture
 python -m evals.smoke_session_artifacts
 ```
