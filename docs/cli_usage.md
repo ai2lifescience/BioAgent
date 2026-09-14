@@ -8,6 +8,10 @@ export OPENROUTER_API_KEY="..."
 python -m interfaces.cli "<request>"
 ```
 
+To use a SOCKS proxy for OpenRouter requests, set `ALL_PROXY` (or
+`BIOAGENT_PROXY`) in the same shell. Use `BIOAGENT_DISABLE_PROXY=1` to force a
+direct connection.
+
 The request is sent to one OpenAI Agents SDK `Agent` through `Runner`. The
 agent can call registered biological workflows exposed as typed function tools.
 Tool results are collected as evidence, checked by guardrails, and retained in

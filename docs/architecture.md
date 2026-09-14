@@ -158,6 +158,17 @@ Set the provider key before a live run:
 export OPENROUTER_API_KEY="..."
 ```
 
+Network transport honors an explicit `BIOAGENT_PROXY` or the standard
+`ALL_PROXY`/`all_proxy` environment variable. Set `BIOAGENT_DISABLE_PROXY=1`
+to force direct connections. For example, a SOCKS-only launch is:
+
+```bash
+conda activate openaisdk
+env -u HTTP_PROXY -u HTTPS_PROXY -u http_proxy -u https_proxy \
+  -u all_proxy ALL_PROXY=socks5h://127.0.0.1:10801 \
+  python -B -m interfaces.web --host 0.0.0.0 --port 8000
+```
+
 Choose a configured model with `BIOAGENT_AGENT_MODEL_KEY`. Set
 `BIOAGENT_MAX_SKILL_STEPS` to bound the SDK run turns. Set
 `BIOAGENT_SESSION_DB` and `BIOAGENT_RUNS_DIR` when the application needs

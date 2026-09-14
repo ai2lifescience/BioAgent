@@ -28,22 +28,33 @@ def client_options() -> dict[str, Any]:
     }
 
 
+def _transport_options() -> dict[str, Any]:
+    """Choose a proxy without accidentally inheriting a broken shell proxy.
+
+    ``BIOAGENT_PROXY`` is the explicit override. Otherwise an ``ALL_PROXY``
+    value is honored, which supports the common SOCKS-only launch command.
+    Set ``BIOAGENT_DISABLE_PROXY=1`` to force a direct connection.
+    """
+    if os.getenv("BIOAGENT_DISABLE_PROXY", "").strip().lower() in {"1", "true", "yes"}:
+        return {"trust_env": False}
+    proxy = os.getenv("BIOAGENT_PROXY", "").strip()
+    if not proxy:
+        proxy = os.getenv("ALL_PROXY", os.getenv("all_proxy", "")).strip()
+    if proxy:
+        return {"trust_env": False, "proxy": proxy}
+    return {"trust_env": False}
+
+
 def create_client() -> OpenAI:
     options = client_options()
-    options["http_client"] = httpx2.Client(
-        timeout=options.pop("timeout"),
-        trust_env=False,
-    )
+    options["http_client"] = httpx2.Client(timeout=options.pop("timeout"), **_transport_options())
     return OpenAI(**options)
 
 
 def create_async_client() -> AsyncOpenAI:
     """Create a client owned and closed by one Agents SDK run."""
     options = client_options()
-    options["http_client"] = httpx2.AsyncClient(
-        timeout=options.pop("timeout"),
-        trust_env=False,
-    )
+    options["http_client"] = httpx2.AsyncClient(timeout=options.pop("timeout"), **_transport_options())
     return AsyncOpenAI(**options)
 
 

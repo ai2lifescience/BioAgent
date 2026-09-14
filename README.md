@@ -64,6 +64,7 @@ Every natural-language request is handled by the Agents SDK; deterministic funct
 ### 4. Start The Web UI
 
 ```bash
+conda activate openaisdk
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ```
 
