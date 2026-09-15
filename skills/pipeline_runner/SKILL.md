@@ -93,16 +93,16 @@ inputs without treating them as required:
 ```
 
 By default, the tool uses `input_path` directly. Uploaded web files already live
-in the current session artifact directory:
+in the current session workspace file directory:
 
 ```text
-runtime/sessions/<session_id>/artifacts/uploads/
+runtime/sessions/<session_id>/uploads/
 ```
 
 The runtime config passed to Shell, Snakemake, Nextflow, or WDL starts from the
 configured base config/input file, then BioAgent replaces input paths with the
 selected session input paths and resolves declared outputs inside the per-run
-pipeline artifact directory. Use this simple base config shape for Shell,
+pipeline workspace output directory. Use this simple base config shape for Shell,
 Snakemake, and Nextflow plug-and-play pipelines:
 
 ```yaml
@@ -129,4 +129,4 @@ pipelines/generic_wdl/
 Nextflow workflows receive the generated YAML through `-params-file`, plus the
 runner-managed `bioagent_config_path`, `nextflow_output_dir`, and `cores`
 parameters. Publish final files under `nextflow_output_dir` and map them to
-declared artifacts with each output's relative `nextflow_output` value.
+declared outputs with each output's relative `nextflow_output` value.

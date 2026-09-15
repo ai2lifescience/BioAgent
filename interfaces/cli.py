@@ -67,7 +67,7 @@ def main() -> int:
             print(f"\n{item['tool_name']}: {json.dumps(item['arguments'], indent=2)}")
             print(f"python -m interfaces.cli --session-id {result['session_id']} --approve {item['approval_id']}")
             print("Use --reject in place of --approve to decline this call.")
-    return 0 if result.get("verification", {}).get("status") != "error" else 1
+    return 0 if result.get("status") not in {"error", "blocked"} else 1
 
 
 if __name__ == "__main__":

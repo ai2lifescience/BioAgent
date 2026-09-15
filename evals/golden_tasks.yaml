@@ -15,12 +15,46 @@
 
 - prompt: "Search UniProt for BRCA1 human"
   expected_workflow: database_lookup
+  forbidden_workflows:
+    - ncbi_retrieval
+    - species_report
 
 - prompt: "Download PDB structure 1A3N as cif"
   expected_workflow: pdb_download
+  forbidden_workflows:
+    - database_lookup
+    - protein_structure_analysis
 
-- prompt: "Analyze structure file runtime/sessions/demo/artifacts/structures/1A3N.cif"
+- prompt: "Analyze structure file runtime/sessions/demo/outputs/structures/1A3N.cif"
   expected_workflow: protein_structure_analysis
+  forbidden_workflows:
+    - pdb_download
+    - database_lookup
 
 - prompt: "Analyze the structure of 3GOU"
   expected_workflow: protein_structure_analysis
+  forbidden_workflows:
+    - pdb_download
+
+- prompt: "Calculate GC content and detect ORFs in this FASTA file"
+  expected_workflow: sequence_analysis
+  forbidden_workflows:
+    - file_inspection
+    - blast_search
+
+- prompt: "Show the columns and first 20 lines of this TSV file"
+  expected_workflow: file_inspection
+  forbidden_workflows:
+    - sequence_analysis
+    - genome_map
+
+- prompt: "Find sequences similar to this protein with BLASTP"
+  expected_workflow: blast_search
+  forbidden_workflows:
+    - sequence_analysis
+    - ncbi_retrieval
+
+- prompt: "Run the generic shell pipeline and then summarize its outputs"
+  expected_workflow: pipeline_specialist
+  forbidden_workflows:
+    - pipeline_results

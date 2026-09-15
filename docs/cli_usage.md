@@ -52,9 +52,10 @@ different key with `--model-key`.
 
 ## Registered workflows
 
-Each row is an SDK `FunctionTool` exported by the `tools` package. Workflows
-call ordinary deterministic functions in `biology/` and do not start another
-agent loop.
+Each row is an SDK `FunctionTool` exported by `tools/function_tools`. Workflows
+call deterministic implementations in their corresponding
+`tools/function_tools/<tool_name>/` package and do not start another agent
+loop.
 
 | Workflow | Main tool or actions |
 | --- | --- |
@@ -111,17 +112,16 @@ are not accepted.
   "answer": "...",
   "session_id": "demo",
   "evidence": {"items": []},
-  "verification": {"status": "ok"},
+  "status": "ok",
   "trace": {"events": []},
-  "artifacts": [],
+  "files": [],
   "runtime": "agents_sdk"
 }
 ```
 
 Conversation messages are stored by the SDK `SQLiteSession` in
-`runtime/agent_sessions.sqlite3`. Application metadata and artifact manifests
-are stored under `runtime/session_metadata/`. Use the API or Python interface
-to list and delete sessions; deletion clears both stores.
+`runtime/agent_sessions.sqlite3`. Session metadata is stored under
+`runtime/session_metadata/`; files are managed by the SDK sandbox workspace.
 
 ## Offline checks
 

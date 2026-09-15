@@ -204,13 +204,13 @@ The web page works like a chat interface:
 2. Type a biological request in the message box.
 3. Click Send.
 4. Open the Thinking panel if you want to see runtime progress.
-5. Check the answer, evidence, verification, trace, and generated artifacts below
+5. Check the answer, evidence, status, trace, and generated files below
    the response.
 
 The left session sidebar lets you create a new chat, switch between saved local
 browser sessions, and delete sessions.
 
-The same session can reuse downloaded artifacts. For example, you can download a
+The same session can reuse downloaded files. For example, you can download a
 FASTA file in one message and then ask BioAgent to analyze the latest FASTA in a
 later message.
 
@@ -227,7 +227,7 @@ input files that can be reused by skills or pipelines.
 5. Click `Use` beside a file to insert the labeled path into the message box.
 
 ```text
-input_path: "runtime/sessions/<session_id>/artifacts/uploads/<filename>"
+input_path: "runtime/sessions/<session_id>/uploads/<filename>"
 ```
 
 When BioAgent asks for missing pipeline inputs, the `Input label` box is filled
@@ -239,23 +239,23 @@ If BioAgent just asked for missing pipeline input and the message box is empty,
 `Use` prefills a complete pipeline request:
 
 ```text
-Run pipeline with pipeline_name: generic_shell input_path: "runtime/sessions/<session_id>/artifacts/uploads/reads.fastq"
+Run pipeline with pipeline_name: generic_shell input_path: "runtime/sessions/<session_id>/uploads/reads.fastq"
 ```
 
 Then combine that path with a normal request:
 
 ```text
-Run the shell pipeline with input_path: "runtime/sessions/<session_id>/artifacts/uploads/reads.fastq"
+Run the shell pipeline with input_path: "runtime/sessions/<session_id>/uploads/reads.fastq"
 ```
 
 ```text
-Inspect file input_path: "runtime/sessions/<session_id>/artifacts/uploads/metadata.tsv"
+Inspect file input_path: "runtime/sessions/<session_id>/uploads/metadata.tsv"
 ```
 
-Uploaded files are stored as immutable session artifacts:
+Uploaded files are stored as immutable session files:
 
 ```text
-runtime/sessions/<session_id>/artifacts/uploads/
+runtime/sessions/<session_id>/uploads/
 ```
 
 If the same filename is uploaded more than once, BioAgent avoids overwriting by
@@ -374,7 +374,7 @@ Download PDB 1A3N as pdb
 Fetch PDB 3GOU as cif
 ```
 
-Downloaded structures are stored in the active session artifact directory by
+Downloaded structures are stored in the active session file directory by
 default. They can be reused later in the same web chat session.
 
 ### Sequence / Genome Analysis
@@ -452,7 +452,7 @@ Analyze the structure of 3GOU
 Analyze a local structure file:
 
 ```text
-Analyze structure file runtime/sessions/demo/artifacts/structures/1A3N.cif
+Analyze structure file runtime/sessions/demo/outputs/structures/1A3N.cif
 ```
 
 After downloading a structure in the same web session:
@@ -511,7 +511,7 @@ Inspect file data/ncbi_downloads_phix174/phix174_A.metadata.csv
 ```
 
 ```text
-Inspect file runtime/sessions/<session_id>/artifacts/pipelines/generic_shell/<run_id>/report.md
+Inspect file runtime/sessions/<session_id>/outputs/pipelines/generic_shell/<run_id>/report.md
 ```
 
 Typical output:
@@ -588,7 +588,7 @@ Run the Nextflow pipeline
 For `generic_nextflow`, use named input paths:
 
 ```text
-Run pipeline with pipeline_name: generic_nextflow sequence: "runtime/sessions/<session_id>/artifacts/uploads/sequences.fasta" metadata: "runtime/sessions/<session_id>/artifacts/uploads/metadata.tsv"
+Run pipeline with pipeline_name: generic_nextflow sequence: "runtime/sessions/<session_id>/uploads/sequences.fasta" metadata: "runtime/sessions/<session_id>/uploads/metadata.tsv"
 ```
 
 For uploaded inputs:
@@ -611,7 +611,7 @@ are only examples for the raw pipeline.
 For `generic_snakemake`, use named input paths:
 
 ```text
-Run pipeline with pipeline_name: generic_snakemake sequence: "runtime/sessions/<session_id>/artifacts/uploads/sequences.fasta" metadata: "runtime/sessions/<session_id>/artifacts/uploads/metadata.tsv"
+Run pipeline with pipeline_name: generic_snakemake sequence: "runtime/sessions/<session_id>/uploads/sequences.fasta" metadata: "runtime/sessions/<session_id>/uploads/metadata.tsv"
 ```
 
 The dependency-light `generic_bio` demo accepts three common bioinformatics
@@ -684,7 +684,7 @@ as `report_path` and `metrics_path` inside the per-run pipeline directory. Web
 requests can override keys under `params`:
 
 ```text
-Run pipeline generic_snakemake with input_path: "runtime/sessions/<session_id>/artifacts/uploads/sequences.fasta" min_length 50
+Run pipeline generic_snakemake with input_path: "runtime/sessions/<session_id>/uploads/sequences.fasta" min_length 50
 ```
 
 For `engine: shell`, `pipeline_runner` uses:
@@ -707,7 +707,7 @@ nextflow -c pipelines/<pipeline_name>/nextflow.config run pipelines/<pipeline_na
 
 The workflow publishes final files into the runtime `nextflow_output_dir`.
 `runner.yaml.outputs[*].nextflow_output` maps those relative published names to
-BioAgent's stable artifact paths. Dry run uses Nextflow `-preview`.
+BioAgent's stable file paths. Dry run uses Nextflow `-preview`.
 
 For `engine: wdl`, `pipeline_runner` uses miniwdl:
 
@@ -727,7 +727,7 @@ Typical output:
 ```text
 Pipeline status
 Session input path
-Session artifact output directory
+Session file output directory
 Runtime config path
 Runner config path
 Raw config path
@@ -740,7 +740,7 @@ Pipeline input files from the web UI stay in the current session upload folder
 and are passed directly to the pipeline:
 
 ```text
-runtime/sessions/<session_id>/artifacts/uploads/
+runtime/sessions/<session_id>/uploads/
 ```
 
 ### Example Skill / Smoke Test
@@ -782,7 +782,7 @@ Then:
 Analyze the latest structure
 ```
 
-This works because the web session keeps a session artifact list. Separate CLI
+This works because the web session keeps a session file list. Separate CLI
 commands do not automatically share the same session unless you explicitly use
 the same API session.
 

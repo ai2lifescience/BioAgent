@@ -19,11 +19,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from agents import SQLiteSession
 from agents.testing import ModelStep, ScriptedModel, assistant_message, function_call
 from harness import runtime
+from harness import sandbox
 from harness.sessions import SessionMetadataStore
-from harness.support.artifacts import SessionArtifactStore
 from interfaces import web
 
-pipeline_module = importlib.import_module("tools.pipeline_runner")
+pipeline_module = importlib.import_module("tools.function_tools.pipeline_runner")
 
 
 def response(text="Completed."):
@@ -42,12 +42,14 @@ class ApprovalTests(unittest.TestCase):
         self.store = SessionMetadataStore(self.root / "metadata")
         for attr, value in {
             "STATE_STORE": self.store,
-            "ARTIFACT_STORE": SessionArtifactStore(self.store, self.root / "runs", self.root / "sessions"),
             "SESSION_DB": self.root / "conversation.sqlite3",
         }.items():
             patcher = patch.object(runtime, attr, value)
             patcher.start()
             self.addCleanup(patcher.stop)
+        patcher = patch.object(sandbox, "WORKSPACES_DIR", self.root / "sessions")
+        patcher.start()
+        self.addCleanup(patcher.stop)
         patcher = patch.object(pipeline_module, "_workflow", return_value={"status": "ok", "value": "fixture"})
         self.workflow = patcher.start()
         self.addCleanup(patcher.stop)
@@ -72,7 +74,6 @@ class ApprovalTests(unittest.TestCase):
         self.assertEqual(pending["approvals"][0]["arguments"], {"pipeline_name": "generic_shell"})
         # Recreate the metadata store, context, agents, and model as after restart.
         runtime.STATE_STORE = SessionMetadataStore(self.root / "metadata")
-        runtime.ARTIFACT_STORE = SessionArtifactStore(runtime.STATE_STORE, self.root / "runs", self.root / "sessions")
         result = self.resume(pending)
         self.assertEqual(result["status"], "ok", result["answer"])
         self.workflow.assert_called_once()

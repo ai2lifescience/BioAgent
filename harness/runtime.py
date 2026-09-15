@@ -10,23 +10,22 @@ from typing import Any, Callable
 from uuid import uuid4
 
 from agents import Model, Runner, RunConfig, RunState, SQLiteSession, ToolExecutionConfig, set_default_openai_api
+from agents.sandbox import SandboxRunConfig
 from agents.exceptions import InputGuardrailTripwireTriggered
 from agents.tracing import gen_trace_id
 
-from harness.support.artifacts import SessionArtifactStore
-from harness.support.evidence import EvidenceCollector
-from harness.support.verifier import Verifier
+from tools.common.evidence import EvidenceCollector
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_SKILL_STEPS
 from models.openrouter_client import create_async_client
 
 from .agent import create_agent
 from .context import BioRunContext
 from .sessions import SessionMetadata, SessionMetadataStore
+from .sandbox import delete_workspace, list_files, open_workspace, prepare_run, session_root
 from .tracing import BioAgentHooks, LOCAL_TRACES, configure_tracing
 
 
 STATE_STORE = SessionMetadataStore()
-ARTIFACT_STORE = SessionArtifactStore(STATE_STORE)
 SESSION_DB = Path(os.getenv("BIOAGENT_SESSION_DB", "runtime/agent_sessions.sqlite3"))
 
 # OpenRouter exposes Chat Completions; SDK tracing stays local.
@@ -70,7 +69,7 @@ async def async_run_bioagent(
     async with STATE_STORE.async_locked_session(identifier, request) as (session, _created):
         if session.metadata.get("pending_run"):
             raise ValueError("Resolve the pending tool approval before sending another request in this session.")
-        ARTIFACT_STORE.prepare_run(session)
+        prepare_run(session)
         return await _execute(session, request, model_key, max_skill_steps, log_fn, model)
 
 
@@ -114,7 +113,7 @@ async def _execute(
 ) -> dict[str, Any]:
     """Run or resume through the same SDK and result-collection path."""
     context = BioRunContext(
-        session=session, model_key=model_key, artifact_store=ARTIFACT_STORE, log_fn=log_fn,
+        session=session, model_key=model_key, log_fn=log_fn,
         skill_results=list(pending.get("skill_results", [])) if pending else [],
         events=list(pending.get("events", [])) if pending else [],
     )
@@ -130,7 +129,10 @@ async def _execute(
     LOCAL_TRACES.bind(trace_id, context)
     try:
         client = create_async_client() if model is None else None
-        agent = create_agent(model_key, model=model, client=client)
+        sandbox_root = session_root(session.session_id)
+        agent = create_agent(
+            model_key, model=model, client=client, sandbox_root=str(sandbox_root),
+        )
         run_input: str | RunState = request
         if pending:
             # Rebuild agents with a fresh client. Never retain an agent whose
@@ -150,16 +152,21 @@ async def _execute(
             # requests must not replay already-executed side effects.
             session.metadata.pop("pending_run", None)
             STATE_STORE.save(session)
-        result = await Runner.run(
-            agent, run_input, context=context, max_turns=max(1, int(max_turns)),
-            hooks=BioAgentHooks(),
-            run_config=RunConfig(
-                workflow_name="BioAgent", trace_id=trace_id, group_id=session.session_id,
-                trace_include_sensitive_data=False,
-                tool_execution=ToolExecutionConfig(max_function_tool_concurrency=4),
-            ),
-            session=sdk_session,
-        )
+        async with open_workspace(session.session_id) as sandbox_session:
+            context.sandbox_session = sandbox_session
+            context.files = await list_files(sandbox_session)
+            result = await Runner.run(
+                agent, run_input, context=context, max_turns=max(1, int(max_turns)),
+                hooks=BioAgentHooks(),
+                run_config=RunConfig(
+                    workflow_name="BioAgent", trace_id=trace_id, group_id=session.session_id,
+                    trace_include_sensitive_data=False,
+                    tool_execution=ToolExecutionConfig(max_function_tool_concurrency=4),
+                    sandbox=SandboxRunConfig(session=sandbox_session, cwd="."),
+                ),
+                session=sdk_session,
+            )
+            context.files = await list_files(sandbox_session)
         if result.interruptions:
             snapshot = result.to_state().to_json(context_serializer=lambda _context: {})
             approvals = _approval_details(result.interruptions)
@@ -186,19 +193,7 @@ async def _execute(
         if client is not None:
             await client.close()
 
-    for record in context.skill_results:
-        ARTIFACT_STORE.register_result(session, record)
     evidence = EvidenceCollector().collect(context.skill_results)
-    verification = Verifier().verify(
-        user_request=request, skill_results=context.skill_results, evidence=evidence,
-        allow_model_knowledge=not context.skill_results, answer=answer,
-    )
-    if status in {"error", "blocked", "pending_approval"}:
-        verification["status"] = status
-    if status == "error":
-        verification.setdefault("errors", []).append(answer)
-    elif status == "blocked":
-        verification.setdefault("warnings", []).append("Input guardrail blocked the request.")
     if snapshot is not None:
         context.record("run_paused", reason="tool_approval", tool_names=[i["tool_name"] for i in approvals])
         session.metadata["pending_run"] = {
@@ -215,8 +210,8 @@ async def _execute(
         "answer": answer, "status": status, "approval_required": bool(approvals),
         "approvals": approvals, "session_id": session.session_id,
         "messages": [{"role": "user", "content": request}, {"role": "assistant", "content": answer}],
-        "evidence": evidence, "verification": verification, "trace": context.events,
-        "run": run, "artifacts": ARTIFACT_STORE.for_run(session, run.get("run_id")),
+        "evidence": evidence, "trace": context.events,
+        "run": run, "files": context.files,
         "runtime": "agents_sdk", "model_key": model_key,
     }
 
@@ -261,7 +256,12 @@ def delete_session(session_id: str) -> bool:
         asyncio.run(sdk_session.clear_session())
     finally:
         sdk_session.close()
-    return STATE_STORE.delete_session(identifier)
+    deleted = STATE_STORE.delete_session(identifier)
+    try:
+        delete_workspace(identifier)
+    except (FileNotFoundError, ValueError):
+        pass
+    return deleted
 
 
 def list_sessions() -> list[dict[str, Any]]:

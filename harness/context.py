@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Callable
 
-from biology.context import WorkflowContext
+from tools.common.context import WorkflowContext
 
 
 def _now() -> str:
@@ -19,10 +19,11 @@ class BioRunContext:
 
     session: Any
     model_key: str
-    artifact_store: Any = None
+    sandbox_session: Any = None
     log_fn: Callable[[str], None] | None = None
     skill_results: list[dict[str, Any]] = field(default_factory=list)
     events: list[dict[str, Any]] = field(default_factory=list)
+    files: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def session_id(self) -> str:
@@ -32,14 +33,10 @@ class BioRunContext:
     def run(self) -> dict[str, Any]:
         return dict(self.session.metadata.get("run") or {})
 
-    @property
-    def artifacts(self) -> list[dict[str, Any]]:
-        return [dict(item) for item in self.session.metadata.get("artifacts") or []]
-
     def user_context(self) -> dict[str, Any]:
         return {
             "session_id": self.session_id,
-            "artifacts": self.artifacts,
+            "files": [dict(item) for item in self.files],
             "_bio_context": self,
             **self.run,
         }

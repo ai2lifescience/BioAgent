@@ -1,4 +1,4 @@
 """Documentation for this BioAgent workflow.
 
-The executable FunctionTool is defined in the top-level ``tools`` package.
+The executable FunctionTool is defined in ``tools.function_tools``.
 """

@@ -11,8 +11,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from biology.pipeline_runner.core import run_pipeline
-from harness.support.artifacts import artifact_content_type, can_serve_artifact
+from tools.function_tools.pipeline_runner.engine.runner import run_pipeline
+from tools.common.files import artifact_content_type, can_serve_artifact
 
 
 def main() -> int:

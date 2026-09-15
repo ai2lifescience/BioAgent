@@ -35,9 +35,8 @@ def main() -> int:
     if "sequence_analyze" not in (result.get("evidence") or {}).get("tools", []):
         print("FAIL: live run did not dispatch the sequence analysis function tool")
         return 1
-    verification = result.get("verification") or {}
-    if verification.get("status") == "error":
-        print(f"FAIL: verification error: {verification}")
+    if result.get("status") == "error":
+        print(f"FAIL: run error: {result.get('answer')}")
         return 1
     print("PASS: OpenRouter Agents SDK request completed")
     print(f"model_key={model_key} session_id={result.get('session_id')}")

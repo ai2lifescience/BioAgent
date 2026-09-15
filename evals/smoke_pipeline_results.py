@@ -33,7 +33,7 @@ def main() -> int:
     result = asyncio.run(runtime.async_resume_bioagent(
         session_id, True, pending["approvals"][0]["approval_id"], model=model,
     ))
-    assert result["verification"]["status"] in {"ok", "warning"}
+    assert result["status"] == "ok"
     assert result["evidence"]["tools"] == ["pipeline_runner"]
     return 0
 

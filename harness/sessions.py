@@ -1,4 +1,4 @@
-"""Persistent file/artifact metadata alongside SDK SQLite conversation sessions."""
+"""Application session metadata alongside SDK SQLite conversation sessions."""
 
 from __future__ import annotations
 

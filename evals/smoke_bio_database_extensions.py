@@ -15,12 +15,12 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from bio_data.alphafold import query_alphafold
-from bio_data.api_http import request_api, validate_api_url
-from bio_data.interpro import query_interpro
-from bio_data.kegg import query_kegg
-from bio_data.pdb import query_pdb
-from bio_data.quickgo import query_quickgo
+from tools.function_tools.bio_database_search.adapters.alphafold import query_alphafold
+from tools.common.http import request_api, validate_api_url
+from tools.function_tools.bio_database_search.adapters.interpro import query_interpro
+from tools.function_tools.bio_database_search.adapters.kegg import query_kegg
+from tools.function_tools.pdb_download.client import query_pdb
+from tools.function_tools.bio_database_search.adapters.quickgo import query_quickgo
 
 
 class FakeResponse:
@@ -49,7 +49,7 @@ class FakeResponse:
 
 
 def _single_response(response: FakeResponse):
-    return patch("bio_data.api_http.requests.request", return_value=response)
+    return patch("tools.common.http.requests.request", return_value=response)
 
 
 def main() -> int:
@@ -77,7 +77,7 @@ def main() -> int:
     kegg_text = "ENTRY       eco:b0002\nNAME        thrA\nDEFINITION  bifunctional enzyme\n///\n"
     with (
         _single_response(FakeResponse(text=kegg_text)),
-        patch("bio_data.kegg._throttle"),
+        patch("tools.function_tools.bio_database_search.adapters.kegg._throttle"),
     ):
         kegg = query_kegg("eco:b0002")
     assert kegg["operation"] == "get"
@@ -130,13 +130,13 @@ def main() -> int:
             FakeResponse(payload=alphafold_payload),
             FakeResponse(content=b"data_mock\n#\n"),
         ]
-        with patch("bio_data.api_http.requests.request", side_effect=responses):
+        with patch("tools.common.http.requests.request", side_effect=responses):
             alphafold = query_alphafold(
                 "P0A7V8",
                 download=True,
                 output_dir=temporary_dir,
             )
-        artifact = alphafold["artifacts"][0]
+        artifact = alphafold["files"][0]
         assert Path(artifact["path"]).read_bytes() == b"data_mock\n#\n"
         assert alphafold["records"][0]["mean_plddt"] == 92.4
 

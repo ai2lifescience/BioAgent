@@ -2,9 +2,8 @@
 
 The core Agents SDK migration on `dev/harness` is complete for the root
 BioAgent runtime, public biological tools, sessions, guardrails, and tracing.
-The follow-up list records the reporting-agent conversion and deployment
-hardening still required before calling every model call and filesystem path
-fully SDK-native and production-hardened.
+The follow-up list records deployment hardening still required before calling
+every filesystem operation fully isolated and production-hardened.
 
 ## Follow-up work
 
@@ -23,6 +22,8 @@ fully SDK-native and production-hardened.
 - `harness.run_bioagent` is the single application entry point.
 - BioAgent workflows are Agents SDK function tools.
 - Conversations use SDK `SQLiteSession`.
+- Session workspaces use the SDK Unix-local sandbox; the application keeps only
+  a thin artifact metadata adapter for uploads and web links.
 - Input safety and output evidence checks use SDK guardrails.
 - SDK lifecycle events and spans are captured by local tracing hooks.
 - Deterministic biological implementations remain behind the tools.

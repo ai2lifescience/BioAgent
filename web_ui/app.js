@@ -58,7 +58,7 @@ async function loadConfig() {
     throw new Error(`Failed to load /config: HTTP ${response.status}`);
   }
   config = await response.json();
-  applyArtifactConfig(config.artifacts || {});
+  applyArtifactConfig(config.files || {});
   renderModelOptions();
 }
 
@@ -355,15 +355,15 @@ function renderUploadList() {
   uploadCount.textContent = String(uploads.length);
   uploadList.innerHTML = "";
   if (!uploads.length) {
-    uploadList.innerHTML = `<div class="upload-empty">No files uploaded for this chat.</div>`;
+    uploadList.innerHTML = `<div class="upload-empty">No files in this chat workspace.</div>`;
     return;
   }
   for (const upload of uploads) {
     const item = document.createElement("div");
     item.className = "upload-item";
-    item.dataset.artifactId = upload.id || "";
+    item.dataset.workspacePath = upload.workspace_path || "";
     item.dataset.path = upload.path || "";
-    const name = upload.filename || upload.label || fileNameFromPath(upload.path);
+    const name = upload.name || fileNameFromPath(upload.path);
     item.innerHTML = `
       <div class="upload-main">
         <div class="upload-name" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
@@ -372,7 +372,7 @@ function renderUploadList() {
       <div class="upload-actions">
         <button class="upload-use" type="button" data-upload-use>Use</button>
         <a class="upload-open" href="${escapeHtml(artifactUrl(upload.path))}" target="_blank" rel="noopener noreferrer">Open</a>
-        <button class="upload-delete" type="button" data-upload-delete title="Delete upload">&times;</button>
+        <button class="upload-delete" type="button" data-upload-delete title="Delete file">&times;</button>
       </div>
     `;
     uploadList.appendChild(item);
@@ -385,12 +385,12 @@ async function loadUploads() {
     renderUploadList();
     return;
   }
-  const response = await fetch(`/uploads?session_id=${encodeURIComponent(activeSessionId)}`);
+  const response = await fetch(`/files?session_id=${encodeURIComponent(activeSessionId)}`);
   if (!response.ok) {
     throw new Error(`Upload list failed: HTTP ${response.status}`);
   }
   const payload = await response.json();
-  uploads = Array.isArray(payload.uploads) ? payload.uploads : [];
+  uploads = Array.isArray(payload.files) ? payload.files : [];
   renderUploadList();
 }
 
@@ -422,7 +422,7 @@ async function uploadSelectedFiles(files) {
       renderSessionList();
       updateActiveSession();
     }
-    uploads = Array.isArray(payload.uploads) ? payload.uploads : [];
+    uploads = Array.isArray(payload.files) ? payload.files : [];
     await loadUploads();
   } catch (error) {
     addMessage("assistant", `Upload failed: ${error.message}`);
@@ -581,15 +581,15 @@ function useUploadPath(path) {
   insertTextAtCursor(snippet);
 }
 
-async function deleteUploadById(artifactId) {
-  if (!artifactId || isRunning) return;
+async function deleteWorkspaceFile(workspacePath) {
+  if (!workspacePath || isRunning) return;
   const response = await fetch(
-    `/uploads/${encodeURIComponent(artifactId)}?session_id=${encodeURIComponent(activeSessionId)}`,
+    `/files/${encodeURIComponent(workspacePath)}?session_id=${encodeURIComponent(activeSessionId)}`,
     { method: "DELETE" },
   );
   const payload = await response.json();
   if (!response.ok || !payload.deleted) {
-    throw new Error(payload.error || "Upload was not deleted.");
+    throw new Error(payload.error || "File was not deleted.");
   }
   await loadUploads();
 }
@@ -687,7 +687,7 @@ function startThinking(request) {
         },
         trace: [],
         evidence: {},
-        verification: {},
+        status: "ok",
       },
     );
   };
@@ -709,8 +709,8 @@ function finishThinking(result) {
     activeSessionId = result.session_id;
   }
   const runtime = result?.runtime || {};
-  const verification = runtime.verification || result?.verification?.status || "ok";
-  const state = verification === "error" ? "error" : verification === "warning" ? "warning" : "done";
+  const status = runtime.status || result?.status || "ok";
+  const state = status === "error" ? "error" : status === "blocked" ? "warning" : "done";
   setThinkingDisplay(state, runtimeMeta(runtime), result);
   loadUploads().catch((error) => console.warn("Failed to load uploads.", error));
 }
@@ -753,7 +753,7 @@ function stopThinking() {
       },
       trace: [],
       evidence: {},
-      verification: {},
+      status: "ok",
     },
   );
 }
@@ -783,8 +783,8 @@ function prettyJson(value) {
   return escapeHtml(JSON.stringify(value ?? {}, null, 2));
 }
 
-function verificationClass(result) {
-  const status = result?.verification?.status || "ok";
+function statusClass(result) {
+  const status = result?.status || "ok";
   if (status === "error") return "error";
   if (status === "warning") return "warning";
   return "ok";
@@ -792,8 +792,8 @@ function verificationClass(result) {
 
 function resultSummaryTags(result) {
   const tags = [];
-  const verification = result?.verification?.status || "ok";
-  tags.push(`<span class="tag ${verificationClass(result)}">verification: ${escapeHtml(verification)}</span>`);
+  const status = result?.status || "ok";
+  tags.push(`<span class="tag ${statusClass(result)}">status: ${escapeHtml(status)}</span>`);
   return tags.length ? `<div class="meta-row">${tags.join("")}</div>` : "";
 }
 
@@ -838,7 +838,7 @@ function pdbIdFromLabelOrPath(label, path) {
 function collectStructureArtifacts(result) {
   const artifacts = [];
   const seen = new Set();
-  for (const item of result?.artifacts || []) {
+  for (const item of result?.files || []) {
     if (item?.kind === "structure" && item?.source_skill === "protein_structure_analysis") {
       addStructureArtifact(artifacts, seen, item?.path, item?.label || item?.source_skill);
     }
@@ -872,7 +872,7 @@ function addFigureArtifact(artifacts, seen, path, label = "") {
 function collectFigureArtifacts(result) {
   const artifacts = [];
   const seen = new Set();
-  for (const item of result?.artifacts || []) {
+  for (const item of result?.files || []) {
     if (item?.kind === "image") {
       addFigureArtifact(artifacts, seen, item?.path, item?.label || item?.source_skill);
     }
@@ -896,7 +896,7 @@ function artifactUrl(path, options = {}) {
   if (options.viewer) {
     params.set("viewer", options.viewer);
   }
-  return `/artifact?${params.toString()}`;
+  return `/file?${params.toString()}`;
 }
 
 function collectPipelineOutputRecords(result) {
@@ -925,7 +925,7 @@ function collectPipelineOutputRecords(result) {
 
   if (records.length) return records;
   const excludedKinds = new Set(["config", "directory", "input", "upload"]);
-  for (const artifact of result?.artifacts || []) {
+  for (const artifact of result?.files || []) {
     const path = String(artifact?.path || "").trim();
     if (
       artifact?.source_skill !== "pipeline_runner" ||
@@ -985,7 +985,7 @@ function pipelineDownloadsHtml(result, records = collectPipelineOutputRecords(re
 }
 
 function collectedBundleHtml(result) {
-  const bundles = (result?.artifacts || []).filter((artifact) => (
+  const bundles = (result?.files || []).filter((artifact) => (
     artifact?.source_skill === "pipeline_results" &&
     artifact?.kind === "compressed" &&
     String(artifact?.path || "").toLowerCase().endsWith(".zip")
@@ -1080,8 +1080,8 @@ function resultDetails(result) {
         <pre>${prettyJson(result.evidence)}</pre>
       </details>
       <details>
-        <summary>Verification</summary>
-        <pre>${prettyJson(result.verification)}</pre>
+        <summary>Status</summary>
+        <pre>${prettyJson({ status: result.status })}</pre>
       </details>
       <div class="approval-controls"></div>
       <details>
@@ -1098,9 +1098,8 @@ function compactStoredResult(result) {
     session_id: result.session_id || null,
     run: result.run || null,
     runtime: result.runtime || null,
-    artifacts: result.artifacts || null,
+    files: result.files || null,
     evidence: result.evidence || null,
-    verification: result.verification || null,
     status: result.status || null,
     approvals: result.approvals || null,
     trace: result.trace || null,
@@ -1585,8 +1584,8 @@ function bindEvents() {
       return;
     }
     if (event.target.closest("[data-upload-delete]")) {
-      deleteUploadById(item.dataset.artifactId).catch((error) => {
-        addMessage("assistant", `Delete upload failed: ${error.message}`);
+      deleteWorkspaceFile(item.dataset.workspacePath).catch((error) => {
+        addMessage("assistant", `Delete file failed: ${error.message}`);
       });
     }
   });

@@ -17,7 +17,8 @@ harness.run_bioagent()
         v
 Agents SDK Agent + Runner
         |                    \
-        |                     local SDK tracing and lifecycle hooks
+        |                     SDK tracing and lifecycle hooks
+        |                     per-session Unix-local sandbox
         v
 OpenAI Chat Completions client -> OpenRouter
         |
@@ -34,9 +35,13 @@ Typed BioAgent function tools
 SDK guardrails -> structured result -> user interface
 ```
 
-There is no second router, planner, model loop, or agent-facing tool system.
-Deterministic code remains under `biology/` and is called by the thin tools because database retrieval, file access,
-sequence calculations, and pipeline execution must be reproducible.
+There is no second router, planner, model loop, or custom agent-facing tool
+system. SDK-native `Agent.as_tool()` specialists are the only delegated agent
+surface.
+Each function tool owns its workflow and deterministic implementation under
+`tools/function_tools/<tool_name>/`, so database retrieval, file access,
+sequence calculations, and pipeline execution remain reproducible and easy to
+trace from the model-facing tool.
 
 ## Components
 
@@ -45,13 +50,19 @@ sequence calculations, and pipeline execution must be reproducible.
 - `harness/agent.py` defines the single `BioAgent` and its instructions.
 - `harness/runtime.py` creates the `Runner`, supplies run context, and returns
   the application result.
-- `tools/__init__.py` exposes the explicit public workflow `FunctionTool`
-  list defined by the modules under `tools/`.
-- `harness/specialists.py` exposes focused sequence, retrieval, and pipeline
-  agents through SDK `Agent.as_tool`; they run under the same root context.
+- `tools/function_tools/` contains the public biological `FunctionTool`
+  definitions and `tools/agent_tools/` contains the `Agent.as_tool()`
+  specialists.
+- `tools/registry.py` assembles function, agent, hosted, and runtime tools for
+  the root Agent.
 - `harness/guardrails.py` contains input safety and output evidence checks.
+- `harness/sandbox.py` configures the SDK Unix-local sandbox around the
+  per-session workspace. The SDK supplies filesystem capabilities; the
+  approval-controlled pipeline FunctionTool remains the command-execution
+  boundary.
 - `harness/tracing.py` consumes SDK lifecycle hooks and spans locally without
-  sending traces to OpenAI.
+  sending traces to OpenAI. The hooks provide UI progress; the SDK remains the
+  source of trace/span creation.
 - `harness/sessions.py` stores application metadata; conversation history is
   stored by the SDK `SQLiteSession`.
 
@@ -69,34 +80,130 @@ OpenAI `OpenAI` and `AsyncOpenAI` clients with:
 SDK model runs and embeddings use this OpenRouter transport. LiteLLM is not part
 of the project dependencies.
 
+### Tool categories
+
+The SDK tool surface is organized by execution semantics:
+
+- `tools/function_tools/` — local Python `FunctionTool` wrappers for biological
+  workflows. This is BioAgent's primary category.
+- `tools/agent_tools/` — focused agents exposed through `Agent.as_tool()`.
+- `tools/hosted_tools/` — extension point for tools executed by OpenAI-hosted
+  infrastructure. It is empty until the configured model/runtime supports one.
+- `tools/runtime_tools/` — extension point for SDK local/runtime tools such as
+  `ShellTool`, `ComputerTool`, or `ApplyPatchTool`. It is currently empty.
+- `tools/common/` — shared context, result envelopes, evidence and artifact
+  classification, guardrails, and bounded HTTP transport; these are
+  implementation helpers, not model-facing tools.
+
+`harness/agent.py` calls `tools.registry.build_all_tools(model)` so the root
+agent receives one SDK tool list assembled from these categories.
+
+Import tools and helpers directly from their category packages:
+
+```python
+from tools.function_tools.file_inspection import file_inspection
+from tools.agent_tools.specialists import build_specialist_tools
+from tools.common.results import ToolResult
+```
+
+Function-tool packages use a consistent layout:
+
+```text
+tools/function_tools/<tool_name>/
+├── __init__.py       # public SDK FunctionTool
+├── workflow.py       # run-context and result presentation
+├── analysis.py        # deterministic domain implementation
+├── adapters/         # optional external database clients
+└── engine/           # optional execution backends, used by pipeline_runner
+```
+
+Small tools keep one descriptive implementation module, such as `analysis.py`,
+`inspection.py`, or `diagnostics.py`, and `workflow.py` only when they need
+run context or result presentation. A
+package should add a subpackage only for a real subsystem, such as NCBI
+Entrez, species-report literature/web/RAG collection, or pipeline engines.
+Shared context, result envelopes, guardrails, and HTTP transport belong under
+`tools/common/`. Cross-tool imports are limited to explicit reusable domain
+adapters, such as structure download code reused when a PDB ID must be
+analyzed; public FunctionTool wrappers are never imported as implementation
+dependencies.
+
 ### Function tools and workflows
 
-Every agent-facing workflow in `tools/` is an OpenAI Agents SDK
+Every agent-facing workflow in `tools/function_tools/` is an OpenAI Agents SDK
 `FunctionTool`. The SDK `@function_tool` decorator owns its name, description,
-argument schema, validation, invocation, and failure handling. Deterministic
-implementations live under `biology/` and are called directly by workflows;
-they do not create another agent loop or require a second tool registry.
+argument schema, validation, invocation, and failure handling. The same
+function-tool package contains the workflow and its deterministic adapters,
+clients, and domain code. These implementations do not create another agent
+loop or require a second tool registry.
 
-Function-tool design principles:
+### Tool routing contract
 
-1. **One public abstraction.** Agents receive SDK `FunctionTool` objects. Do
-   not add a second router, planner, or custom agent-facing tool class.
-2. **One source of input truth.** Each workflow's typed Python signature and
-   annotations generate its SDK schema and validation rules.
-3. **Bounded handlers.** A tool handler performs one bounded biological
-   operation. Deterministic handlers contain no model loop. Species-report
-   opinion and synthesis requests are SDK reporting-agent runs as well.
-4. **Explicit context and permissions.** Session, artifact, and progress data
-   enter through the SDK run context. High-risk operations declare
-   `needs_approval=True` on their SDK function tool.
-5. **Stable result envelope.** Every SDK tool returns JSON with `status`,
-   `data`, `artifacts`, `evidence`, and `error`. Workflow-specific values live
-   inside `data`; callers never need tool-specific error parsing.
-6. **Side effects are visible.** File writes, downloads, and pipeline runs
-   declare their risk and approval requirements. Read-only tools should remain
-   free of hidden mutation.
-7. **Small, testable contracts.** Schemas, handlers, approvals, and result
-   envelopes are tested independently with deterministic SDK model fixtures.
+The root agent does not use a separate keyword router. When a request arrives,
+the Agents SDK presents the model with the registered tool names, descriptions,
+and JSON schemas. The model selects the tool whose documented purpose best
+matches the user's intent and emits arguments that conform to that schema. The
+SDK validates those arguments, invokes the Python function, and gives the
+result back to the model for the final response.
+
+Routing-critical information belongs in five places:
+
+1. **Function names** — name one clear operation.
+2. **Function docstrings** — explain what the tool does, when to use it, and
+   when another tool is more appropriate.
+3. **Parameter descriptions** — explain ambiguous inputs and side effects.
+4. **Type constraints** — use annotations, `Literal`, and `pydantic.Field` to
+   constrain the arguments the model can generate.
+5. **Agent instructions** — define cross-tool policy, safety rules, and how
+   the agent should use the available tools.
+
+The SDK derives the tool schema from these definitions, validates the model's
+arguments, invokes the Python function, and returns its result to the model.
+Each tool should remain bounded, expose side effects and approval requirements,
+and return the common `status`/`data`/`files`/`evidence`/`error` envelope.
+
+For example, a request to search AlphaFold should select `database_lookup` with
+`database="alphafold"`, while a request for sequence similarity should select
+`blast_search`. This is model-based semantic routing, so overlapping tool
+descriptions make selection less reliable; deterministic routing should be
+implemented in code when a workflow requires predictable dispatch.
+
+The primary intent boundaries are:
+
+| User intent | Direct route |
+| --- | --- |
+| Raw nucleotide or protein records | `ncbi_retrieval` |
+| Cited organism research or Markdown report | `species_report` |
+| Database annotations or metadata | `database_lookup` |
+| Download an RCSB PDB file | `pdb_download` |
+| Analyze a structure | `protein_structure_analysis` |
+| Sequence metrics or ORFs | `sequence_analysis` |
+| File metadata or previews | `file_inspection` |
+| Sequence similarity | `blast_search` |
+| Genome feature image | `genome_map` |
+| Execute a pipeline | `pipeline_runner` |
+| Review completed pipeline outputs | `pipeline_results` |
+
+Use a specialist only when the request combines multiple routes in one domain;
+use the direct route for a single operation.
+
+The files under `skills/*/SKILL.md` document workflows for developers, but are
+not loaded automatically by the runtime and do not route requests. Routing
+information that the model must see belongs in the FunctionTool name,
+docstring, schema descriptions, or agent instructions.
+
+### Specialist agents
+
+`tools/agent_tools/specialists.py` defines focused agents for sequence, retrieval, and
+pipeline domains. Each specialist owns a smaller set of FunctionTools and is
+exposed to the root agent with `Agent.as_tool()`. This is useful when a domain
+requires several related tools and its own instructions; the root agent keeps
+control of the user-facing answer.
+
+The root agent exposes both `FUNCTION_TOOLS` and these specialist tools, so some
+requests have direct and delegated routes. If routing becomes ambiguous as the
+tool catalog grows, choose one boundary per domain: expose the underlying tools
+directly, or expose them only through their specialist.
 
 The workflow wrapper keeps the common envelope at the SDK boundary while
 preserving raw action results inside `BioRunContext` for evidence collection
@@ -111,35 +218,58 @@ The SDK run context carries:
 - progress callback;
 - per-run workflow results.
 
-Deterministic implementations are called through explicit imports from each
-workflow. The model can call only the public FunctionTools listed by
-`tools.PUBLIC_TOOLS`.
+The same function-tool package contains each workflow and its deterministic
+adapters, clients, and domain code. These implementations do not create
+another agent loop or require a second tool registry. The direct public
+FunctionTools are listed by
+`tools.function_tools.FUNCTION_TOOLS`;
+the complete root surface is assembled by `tools.registry.build_all_tools`.
 
-### Sessions and artifacts
+### Sessions and workspace files
 
 `SQLiteSession` persists user and assistant messages in
 `runtime/agent_sessions.sqlite3` (configurable with `BIOAGENT_SESSION_DB`).
 Application metadata is persisted in `runtime/session_metadata`.
 
-Artifact files use the existing per-session layout:
+The SDK Unix-local sandbox uses the session directory as its workspace. This
+keeps host-side FunctionTools and SDK filesystem capabilities pointed at the
+same files:
 
 ```text
-runtime/sessions/<session-id>/artifacts/uploads/
-runtime/sessions/<session-id>/artifacts/<generated files>
-runtime/runs/<run-id>/
+runtime/sessions/<session-id>/
+├── uploads/
+├── outputs/
+└── runs/
+```
+
+The sandbox is the file owner. The API exposes workspace-relative file paths;
+there is no artifact registry or generated artifact ID. The local Unix backend
+shares the host OS, so it is a development workspace rather than a strong
+security boundary. Use a container-backed SDK sandbox when process isolation is
+needed.
+
+Run-specific temporary files use the same workspace:
+
+```text
+runtime/sessions/<session-id>/uploads/
+runtime/sessions/<session-id>/outputs/<generated files>
+runtime/sessions/<session-id>/runs/<run-id>/
 ```
 
 The result contains references to files instead of copying large contents into
 conversation history. The web interface continues to serve approved artifact
 suffixes through its existing checks.
 
-### Guardrails and verification
+### Guardrails and run status
 
 The input guardrail blocks requests asking for actionable harmful biological
-procedures. The output guardrail records warnings when biological claims have no
-executed evidence tool or when the answer is empty. The result verifier also
-checks tool errors and evidence completeness. These checks run after SDK tool
-execution and are included in the returned `verification` object.
+procedures. Tool guardrails validate each FunctionTool envelope, and the output
+guardrail checks the final answer. The API returns the run `status` directly
+(`ok`, `pending_approval`, `blocked`, or `error`).
+
+Evidence collection lives in `tools/common/evidence.py` beside tool result
+semantics. The harness calls it after a run so the UI can receive citations,
+record IDs, URLs, and artifact paths without making tools import the harness.
 
 High-risk pipeline behavior should remain explicit in tool input and output.
 Pipeline execution pauses with an SDK `RunState` interruption and returns an
@@ -211,8 +341,8 @@ non-default storage locations.
 ## Testing
 
 Offline harness tests use `agents.testing.ScriptedModel` and verify tool
-selection, tool execution, guardrails, SDK spans, sessions, artifacts, and
-pipeline results without an API key. Live tests should use a temporary
+selection, tool execution, guardrails, SDK spans, sessions, workspace files,
+and pipeline results without an API key. Live tests should use a temporary
 OpenRouter key and a model that supports Chat Completions and tool calls.
 
 Offline migration checks and the approval-resumption regression suite pass in

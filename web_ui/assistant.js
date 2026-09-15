@@ -86,14 +86,14 @@
     } else {
       body.textContent = text;
     }
-    const artifacts = Array.isArray(result?.artifacts) ? result.artifacts : [];
+    const artifacts = Array.isArray(result?.files) ? result.files : [];
     const paths = [...new Set(artifacts.map((item) => item.path).filter((path) => typeof path === "string" && path))];
     if (paths.length) {
       const files = document.createElement("div");
       files.className = "message-files";
       for (const path of paths) {
         const link = document.createElement("a");
-        link.href = apiUrl(`artifact?path=${encodeURIComponent(path)}`);
+        link.href = apiUrl(`file?path=${encodeURIComponent(path)}`);
         link.textContent = path.split("/").pop();
         link.target = "_blank";
         link.rel = "noopener noreferrer";
@@ -282,7 +282,7 @@
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
       state.sessionId = result.session_id || state.sessionId;
-      state.uploads.push(...(result.uploads || []));
+      state.uploads.push(...(result.files || []));
       renderUploads();
       status.textContent = "Files attached. Select a file to ask about it.";
     } catch (error) {

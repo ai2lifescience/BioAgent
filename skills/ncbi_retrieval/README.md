@@ -1,6 +1,6 @@
 # PhiX174 NCBI Retrieval Usage
 
-This folder provides the `ncbi_retrieval` skill workflow. The workflow calls the
+This folder provides developer documentation for the `ncbi_retrieval` workflow. The workflow calls the
 `ncbi_fetch` tool to download NCBI Entrez records as FASTA files plus metadata
 CSV files.
 
@@ -10,7 +10,7 @@ Calling the underlying `ncbi_fetch` tool with no arguments downloads PhiX174
 gene A and gene G nucleotide records.
 
 ```python
-from bio_data.ncbi import fetch_ncbi
+from tools.function_tools.ncbi_retrieval.entrez import fetch_ncbi
 
 result = fetch_ncbi()
 
@@ -28,7 +28,7 @@ runtime/downloads/ncbi_phix174
 ## Explicit Python Usage
 
 ```python
-from bio_data.ncbi import fetch_ncbi
+from tools.function_tools.ncbi_retrieval.entrez import fetch_ncbi
 
 result = fetch_ncbi(
     term='"Escherichia phage phiX174"[Organism]',

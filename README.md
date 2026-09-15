@@ -17,7 +17,7 @@ BioAgent can:
 - inspect FASTA, CSV, TSV, JSON, Markdown, and text files;
 - create species reports with sources, citations, and generated files;
 - run Shell, Snakemake, Nextflow, and WDL pipelines; and
-- retain uploads and generated artifacts within a chat session.
+- retain uploads and generated files within a chat session.
 
 
 
@@ -169,13 +169,13 @@ User / App
      -> BioAgent function tools
         -> databases, sequence/structure tools, files, RAG, pipelines
      -> SDK sessions (SQLite)
-     -> SDK guardrails and local SDK tracing
-  -> structured answer, evidence, verification, and artifacts
+     -> SDK guardrails, tracing, and per-session Unix-local sandbox
+  -> structured answer, evidence, status, and workspace files
 ```
 
 The public entry point is `harness.run_bioagent`. Each run returns the answer,
-SDK session ID, tool evidence, verification status, trace events, and artifact
-references. Uploads and generated files remain in per-session workspaces.
+SDK session ID, tool evidence, run status, trace events, and workspace file
+paths. Uploads and generated files remain in per-session sandboxes.
 
 OpenRouter model IDs are configured in `models/config.py` and are sent directly
 through the OpenAI client.
