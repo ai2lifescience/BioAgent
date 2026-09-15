@@ -27,7 +27,12 @@ def main() -> int:
         ModelStep(output=[assistant_message("Pipeline completed; inspect the generated artifacts for metrics and reports.")]),
     ])
     runtime.SESSION_DB = PROJECT_ROOT / "runtime" / "smoke_pipeline_agents.sqlite3"
-    result = asyncio.run(runtime.async_run_bioagent("Run the generic bio pipeline", session_id="smoke_pipeline_agents", model=model))
+    session_id = "smoke_pipeline_agents_v2"
+    pending = asyncio.run(runtime.async_run_bioagent("Run the generic bio pipeline", session_id=session_id, model=model))
+    assert pending["status"] == "pending_approval"
+    result = asyncio.run(runtime.async_resume_bioagent(
+        session_id, True, pending["approvals"][0]["approval_id"], model=model,
+    ))
     assert result["verification"]["status"] in {"ok", "warning"}
     assert result["evidence"]["tools"] == ["pipeline_runner"]
     return 0

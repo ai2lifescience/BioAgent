@@ -1,5 +1,4 @@
-"""Protein structure analysis skill package."""
+"""Documentation for this BioAgent workflow.
 
-from .workflow import SKILL_SPEC, protein_structure_analysis
-
-__all__ = ["SKILL_SPEC", "protein_structure_analysis"]
+The executable FunctionTool is defined in the top-level ``tools`` package.
+"""

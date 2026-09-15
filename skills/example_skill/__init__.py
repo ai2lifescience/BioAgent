@@ -1,5 +1,4 @@
-"""Example skill package."""
+"""Documentation for this BioAgent workflow.
 
-from .workflow import SKILL_SPEC, example_skill
-
-__all__ = ["SKILL_SPEC", "example_skill"]
+The executable FunctionTool is defined in the top-level ``tools`` package.
+"""

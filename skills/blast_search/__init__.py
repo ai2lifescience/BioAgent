@@ -1,5 +1,4 @@
-"""BLAST search skill package."""
+"""Documentation for this BioAgent workflow.
 
-from .workflow import SKILL_SPEC, blast_search
-
-__all__ = ["SKILL_SPEC", "blast_search"]
+The executable FunctionTool is defined in the top-level ``tools`` package.
+"""

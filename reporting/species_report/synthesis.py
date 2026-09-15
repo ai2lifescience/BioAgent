@@ -17,6 +17,7 @@ def synthesize_species_markdown_report(
     sources: list[dict[str, Any]],
     retrieval_context: str | None = None,
     model_key: str | None = None,
+    bio_context: Any = None,
 ) -> dict[str, Any]:
     model_labels = {
         key: str(config["label"])
@@ -47,6 +48,7 @@ def synthesize_species_markdown_report(
                 messages=messages,
                 model_key=candidate_key,
                 temperature=0.15,
+                bio_context=bio_context,
             )
             return {
                 "status": "ok",

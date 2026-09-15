@@ -1,11 +1,4 @@
-"""NCBI retrieval skill package."""
+"""Documentation for this BioAgent workflow.
 
-from skills.ncbi_retrieval.workflow import (
-    SKILL_SPEC,
-    ncbi_retrieval,
-)
-
-__all__ = [
-    "SKILL_SPEC",
-    "ncbi_retrieval",
-]
+The executable FunctionTool is defined in the top-level ``tools`` package.
+"""

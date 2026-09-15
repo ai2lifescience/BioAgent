@@ -25,6 +25,7 @@ from harness.support.artifacts import (
 from interfaces.api import (
     delete_session,
     delete_upload,
+    handle_approval,
     handle_request,
     list_sessions,
     list_uploads,
@@ -37,6 +38,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 WEB_UI_DIR = PROJECT_ROOT / "web_ui"
 MAX_UPLOAD_BYTES = int(os.getenv("BIOAGENT_MAX_UPLOAD_BYTES", str(256 * 1024 * 1024)))
 STATIC_FILES = {
+    "/static/approvals.js": (WEB_UI_DIR / "approvals.js", "application/javascript; charset=utf-8"),
     "/static/app.css": (WEB_UI_DIR / "app.css", "text/css; charset=utf-8"),
     "/static/assistant.css": (WEB_UI_DIR / "assistant.css", "text/css; charset=utf-8"),
     "/static/markdown.js": (WEB_UI_DIR / "markdown.js", "application/javascript; charset=utf-8"),
@@ -80,7 +82,7 @@ def _runtime_info(
     tools = evidence.get("tools") or []
     files = evidence.get("files") or []
     return {
-        "status": status,
+        "status": result.get("status", status),
         "elapsed_seconds": round(elapsed_seconds, 2),
         "model_key": model_key,
         "session_id": result.get("session_id"),
@@ -159,11 +161,39 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
         if path == "/run_stream":
             self._handle_run_stream()
             return
+        if path == "/approve":
+            self._handle_approval()
+            return
         if path != "/run":
             self._send_json({"error": "not found"}, status=404)
             return
 
         self._handle_run()
+
+    def _handle_approval(self) -> None:
+        try:
+            payload = self._read_json()
+            session_id = str(payload.get("session_id", "")).strip()
+            if not session_id:
+                self._send_json({"error": "session_id is required"}, status=400)
+                return
+            approved = payload.get("approved")
+            if type(approved) is not bool:
+                self._send_json({"error": "approved must be an explicit boolean"}, status=400)
+                return
+            approval_id = str(payload.get("approval_id", "")).strip() or None
+            if not approval_id:
+                self._send_json({"error": "approval_id is required"}, status=400)
+                return
+            logs: list[str] = []
+            start = perf_counter()
+            result = handle_approval(session_id, approved, approval_id, log_fn=logs.append)
+            result["runtime"] = _runtime_info(
+                result, perf_counter() - start, logs, model_key=result.get("model_key"),
+            )
+            self._send_json(result)
+        except Exception as exc:
+            self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
 
     def do_DELETE(self) -> None:
         path = urlparse(self.path).path

@@ -1,14 +1,13 @@
 # BioAgent TODO
 
-The Agents SDK migration on `dev/harness` is complete. The SDK owns the agent
-loop, function-tool dispatch, sessions, guardrails, and tracing. The remaining
-work is incremental product improvement rather than a second orchestration
-architecture.
+The core Agents SDK migration on `dev/harness` is complete for the root
+BioAgent runtime, public biological tools, sessions, guardrails, and tracing.
+The follow-up list records the reporting-agent conversion and deployment
+hardening still required before calling every model call and filesystem path
+fully SDK-native and production-hardened.
 
 ## Follow-up work
 
-- Add explicit interactive approval and RunState resumption for high-risk
-  pipeline operations.
 - Add handoffs only if a future workflow requires user-visible transfer between
   specialists; current specialists already run as SDK agent-as-tool calls.
 - Add a persistent artifact metadata database if multiple web workers need to
@@ -28,3 +27,5 @@ architecture.
 - SDK lifecycle events and spans are captured by local tracing hooks.
 - Deterministic biological implementations remain behind the tools.
 - LiteLLM is not a project dependency.
+- Pipeline execution pauses for SDK approval and can resume or reject through
+  the API and HTTP `/approve` endpoint.

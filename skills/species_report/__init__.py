@@ -1,6 +1,4 @@
-"""Species report skill package.
+"""Documentation for this BioAgent workflow.
 
-Import workflow symbols from ``skills.species_report.workflow`` directly. This
-package initializer stays lightweight so tool wrappers can import prompt helpers
-without triggering skill-registry circular imports.
+The executable FunctionTool is defined in the top-level ``tools`` package.
 """

@@ -13,11 +13,11 @@ if str(PROJECT_ROOT) not in sys.path:
 from agents.testing import ModelStep, ScriptedModel, assistant_message, function_call
 from harness import runtime
 from harness.agent import create_agent
-from harness.tools import build_tools
+from tools import PUBLIC_TOOLS
 
 
 def main() -> int:
-    tools = build_tools()
+    tools = list(PUBLIC_TOOLS)
     agent = create_agent("gpt-oss", model=ScriptedModel())
     names = {tool.name for tool in agent.tools}
     expected = {"sequence_analysis", "database_lookup", "pdb_download", "file_inspection", "pipeline_runner", "species_report", "sequence_specialist", "retrieval_specialist", "pipeline_specialist"}
@@ -54,7 +54,26 @@ def main() -> int:
     assert blocked["verification"]["status"] == "blocked"
     assert any(event["event"] == "guardrail_blocked" for event in blocked["trace"])
 
-    print(json.dumps({"tools": len(tools), "status": "ok"}))
+    approval_model = ScriptedModel([
+        ModelStep(output=[function_call("pipeline_runner", {
+            "pipeline_name": "generic_shell", "input_path": "input.fa", "dry_run": True,
+        }, call_id="approval-call")]),
+        ModelStep(output=[assistant_message("Pipeline approval completed.")]),
+    ])
+    pending = asyncio.run(runtime.async_run_bioagent(
+        "Run the pipeline", session_id="smoke_approval", model=approval_model,
+    ))
+    assert pending["status"] == "pending_approval"
+    assert pending["approval_required"] is True
+    assert pending["approvals"][0]["call_id"] == "approval-call"
+    resumed = asyncio.run(runtime.async_resume_bioagent(
+        "smoke_approval", approved=True, approval_id=pending["approvals"][0]["approval_id"],
+        model=approval_model,
+    ))
+    assert resumed["status"] == "ok"
+    assert resumed["answer"] == "Pipeline approval completed."
+
+    print(json.dumps({"tools": len(tools), "status": "ok", "approval": "ok"}))
     return 0
 
 

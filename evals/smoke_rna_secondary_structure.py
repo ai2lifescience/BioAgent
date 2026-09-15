@@ -15,9 +15,9 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from harness.support.artifacts import artifact_content_type, can_serve_artifact
-from tools.pipeline_config import load_yaml_config
-from tools.pipeline_runner.config import write_runtime_config
-from tools.pipeline_runner.core import prepare_pipeline_context
+from biology.pipeline_config import load_yaml_config
+from biology.pipeline_runner.config import write_runtime_config
+from biology.pipeline_runner.core import prepare_pipeline_context
 
 
 def _load_workflow_module():

@@ -32,6 +32,8 @@ the SDK session when a `--session-id` is supplied.
 --max-skill-steps N      Compatibility name; limits SDK turns (default: 8)
 --json                   Print the complete structured result as JSON
 --verbose                Include progress messages on stderr
+--approve ID             Approve a pending pipeline tool call (with --session-id)
+--reject ID              Reject a pending pipeline tool call (with --session-id)
 ```
 
 Examples:
@@ -50,15 +52,16 @@ different key with `--model-key`.
 
 ## Registered workflows
 
-Each row is a function tool generated from the workflow registry. Workflows
-use the shared `WorkflowContext` to call their deterministic actions.
+Each row is an SDK `FunctionTool` exported by the `tools` package. Workflows
+call ordinary deterministic functions in `biology/` and do not start another
+agent loop.
 
 | Workflow | Main tool or actions |
 | --- | --- |
 | `example_skill` | `echo` |
 | `pipeline_runner` | `pipeline_runner` |
 | `ncbi_retrieval` | `ncbi_fetch` |
-| `bio_database_search` | database search actions |
+| `database_lookup` | database search actions |
 | `pdb_download` | `pdb_download` |
 | `sequence_analysis` | `sequence_analyze` |
 | `genome_map` | `genome_map` |
@@ -67,8 +70,14 @@ use the shared `WorkflowContext` to call their deterministic actions.
 | `file_inspection` | `file_inspect` |
 | `species_report` | literature retrieval, RAG, and report actions |
 
-The SDK chooses tools from their JSON schemas. Workflows remain deterministic
-and do not make model calls themselves.
+The SDK chooses tools from their generated function signatures and annotations.
+Most workflows remain deterministic and do not make model calls themselves;
+`species_report` is the documented exception until its reporting services are
+converted to SDK reporting agents run through `Runner`.
+
+Pipeline execution pauses before the pipeline tool runs. The JSON result includes
+an `approval_id`; approve or reject it with the CLI options above, or POST the
+same `session_id`, `approval_id`, and boolean `approved` to `/approve`.
 
 ## Pipeline requests
 

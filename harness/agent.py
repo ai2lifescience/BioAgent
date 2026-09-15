@@ -9,7 +9,7 @@ from models.config import get_default_model_id
 from models.openrouter_client import create_async_client
 
 from .guardrails import INPUT_GUARDRAIL, OUTPUT_GUARDRAIL
-from .tools import build_tools
+from tools import PUBLIC_TOOLS
 from .specialists import build_specialist_tools
 
 
@@ -29,7 +29,7 @@ def create_agent(model_key: str, model: Model | None = None, client: AsyncOpenAI
     model = model or OpenAIChatCompletionsModel(
         model=get_default_model_id(model_key), openai_client=client or create_async_client()
     )
-    root_tools = build_tools()
+    root_tools = list(PUBLIC_TOOLS)
     # A single root agent remains the default orchestrator. Focused domain
     # agents are SDK agent-as-tools, so no custom router or model loop returns.
     root_tools.extend(build_specialist_tools(model))

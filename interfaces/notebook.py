@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any, Callable
 
 from interfaces.api import handle_request
-from harness.runtime import async_run_bioagent
+from harness.runtime import async_run_bioagent, async_resume_bioagent, resume_bioagent
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_SKILL_STEPS
 
 

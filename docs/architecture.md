@@ -34,8 +34,8 @@ Typed BioAgent function tools
 SDK guardrails -> structured result -> user interface
 ```
 
-There is no second router, planner, model loop, session store, or trace store.
-Deterministic code remains inside tools because database retrieval, file access,
+There is no second router, planner, model loop, or agent-facing tool system.
+Deterministic code remains under `biology/` and is called by the thin tools because database retrieval, file access,
 sequence calculations, and pipeline execution must be reproducible.
 
 ## Components
@@ -45,8 +45,8 @@ sequence calculations, and pipeline execution must be reproducible.
 - `harness/agent.py` defines the single `BioAgent` and its instructions.
 - `harness/runtime.py` creates the `Runner`, supplies run context, and returns
   the application result.
-- `harness/tools.py` exposes registered high-level workflows as SDK
-  `FunctionTool` instances.
+- `tools/__init__.py` exposes the explicit public workflow `FunctionTool`
+  list defined by the modules under `tools/`.
 - `harness/specialists.py` exposes focused sequence, retrieval, and pipeline
   agents through SDK `Agent.as_tool`; they run under the same root context.
 - `harness/guardrails.py` contains input safety and output evidence checks.
@@ -66,15 +66,41 @@ OpenAI `OpenAI` and `AsyncOpenAI` clients with:
 - HTTPX2 clients with explicit proxy selection from `BIOAGENT_PROXY`, falling
   back to `ALL_PROXY`/`all_proxy`.
 
-Chat generation and embeddings use this client directly. LiteLLM is not part of
-the project dependencies.
+SDK model runs and embeddings use this OpenRouter transport. LiteLLM is not part
+of the project dependencies.
 
 ### Function tools and workflows
 
-Each high-level workflow in `skills/` is an SDK function tool. The workflow may
-call deterministic action implementations in `tools/`, then returns a compact
-JSON-compatible result. Tool results include evidence and artifact paths when
-available.
+Every agent-facing workflow in `tools/` is an OpenAI Agents SDK
+`FunctionTool`. The SDK `@function_tool` decorator owns its name, description,
+argument schema, validation, invocation, and failure handling. Deterministic
+implementations live under `biology/` and are called directly by workflows;
+they do not create another agent loop or require a second tool registry.
+
+Function-tool design principles:
+
+1. **One public abstraction.** Agents receive SDK `FunctionTool` objects. Do
+   not add a second router, planner, or custom agent-facing tool class.
+2. **One source of input truth.** Each workflow's typed Python signature and
+   annotations generate its SDK schema and validation rules.
+3. **Bounded handlers.** A tool handler performs one bounded biological
+   operation. Deterministic handlers contain no model loop. Species-report
+   opinion and synthesis requests are SDK reporting-agent runs as well.
+4. **Explicit context and permissions.** Session, artifact, and progress data
+   enter through the SDK run context. High-risk operations declare
+   `needs_approval=True` on their SDK function tool.
+5. **Stable result envelope.** Every SDK tool returns JSON with `status`,
+   `data`, `artifacts`, `evidence`, and `error`. Workflow-specific values live
+   inside `data`; callers never need tool-specific error parsing.
+6. **Side effects are visible.** File writes, downloads, and pipeline runs
+   declare their risk and approval requirements. Read-only tools should remain
+   free of hidden mutation.
+7. **Small, testable contracts.** Schemas, handlers, approvals, and result
+   envelopes are tested independently with deterministic SDK model fixtures.
+
+The workflow wrapper keeps the common envelope at the SDK boundary while
+preserving raw action results inside `BioRunContext` for evidence collection
+and artifact registration.
 
 The SDK run context carries:
 
@@ -83,11 +109,11 @@ The SDK run context carries:
 - user context and uploaded artifact references;
 - model key;
 - progress callback;
-- per-run skill results.
+- per-run workflow results.
 
-The existing deterministic action validation and permission metadata are used by
-the workflow context. The model never receives direct unrestricted shell or file
-access; it can call only registered function tools.
+Deterministic implementations are called through explicit imports from each
+workflow. The model can call only the public FunctionTools listed by
+`tools.PUBLIC_TOOLS`.
 
 ### Sessions and artifacts
 
@@ -116,8 +142,10 @@ checks tool errors and evidence completeness. These checks run after SDK tool
 execution and are included in the returned `verification` object.
 
 High-risk pipeline behavior should remain explicit in tool input and output.
-The current tools expose approval metadata but leave approval disabled; the
-HTTP UI can add SDK approval resumption when interactive approval is needed.
+Pipeline execution pauses with an SDK `RunState` interruption and returns an
+approval identifier. Call `interfaces.api.handle_approval` (or POST `/approve`)
+to approve or reject it; approval resumes the saved state without replaying the
+original model request.
 
 ### Tracing
 
@@ -187,6 +215,6 @@ selection, tool execution, guardrails, SDK spans, sessions, artifacts, and
 pipeline results without an API key. Live tests should use a temporary
 OpenRouter key and a model that supports Chat Completions and tool calls.
 
-The migration is complete when all interfaces use `harness.run_bioagent`, the
-`openaisdk` environment passes `pip check`, LiteLLM is absent, and the offline
-and controlled live smoke suites pass.
+Offline migration checks and the approval-resumption regression suite pass in
+the `openaisdk` environment. A controlled live OpenRouter run remains an
+environment-dependent check and requires a separately supplied temporary key.

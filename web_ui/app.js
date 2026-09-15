@@ -794,12 +794,6 @@ function resultSummaryTags(result) {
   const tags = [];
   const verification = result?.verification?.status || "ok";
   tags.push(`<span class="tag ${verificationClass(result)}">verification: ${escapeHtml(verification)}</span>`);
-  if (result?.route?.mode) {
-    tags.push(`<span class="tag">route: ${escapeHtml(result.route.mode)}</span>`);
-  }
-  if (result?.plan?.mode) {
-    tags.push(`<span class="tag">plan: ${escapeHtml(result.plan.mode)}</span>`);
-  }
   return tags.length ? `<div class="meta-row">${tags.join("")}</div>` : "";
 }
 
@@ -1089,10 +1083,7 @@ function resultDetails(result) {
         <summary>Verification</summary>
         <pre>${prettyJson(result.verification)}</pre>
       </details>
-      <details>
-        <summary>Route and plan</summary>
-        <pre>${prettyJson({ route: result.route, plan: result.plan })}</pre>
-      </details>
+      <div class="approval-controls"></div>
       <details>
         <summary>Trace</summary>
         <pre>${prettyJson(result.trace)}</pre>
@@ -1110,8 +1101,8 @@ function compactStoredResult(result) {
     artifacts: result.artifacts || null,
     evidence: result.evidence || null,
     verification: result.verification || null,
-    route: result.route || null,
-    plan: result.plan || null,
+    status: result.status || null,
+    approvals: result.approvals || null,
     trace: result.trace || null,
   };
 }
@@ -1135,6 +1126,15 @@ function renderMessage(role, text, result = null) {
     </div>
   `;
   chat.appendChild(message);
+  const approvalHost = message.querySelector(".approval-controls");
+  if (approvalHost && window.mountToolApprovals) {
+    window.mountToolApprovals(approvalHost, result, {
+      url: "/approve",
+      isBusy: () => isRunning,
+      onBusy: (busy) => { sendButton.disabled = busy; },
+      onResult: (next) => addMessage("assistant", next.answer || "", next),
+    });
+  }
   initializeStructureViewers(message);
 }
 

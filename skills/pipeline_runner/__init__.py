@@ -1,5 +1,4 @@
-"""Pipeline runner skill package."""
+"""Documentation for this BioAgent workflow.
 
-from .workflow import SKILL_SPEC, pipeline_runner
-
-__all__ = ["SKILL_SPEC", "pipeline_runner"]
+The executable FunctionTool is defined in the top-level ``tools`` package.
+"""

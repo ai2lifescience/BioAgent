@@ -6,8 +6,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Callable
 
-from .action_executor import ActionExecutor
-from .workflow_context import WorkflowContext
+from biology.context import WorkflowContext
 
 
 def _now() -> str:
@@ -24,7 +23,6 @@ class BioRunContext:
     log_fn: Callable[[str], None] | None = None
     skill_results: list[dict[str, Any]] = field(default_factory=list)
     events: list[dict[str, Any]] = field(default_factory=list)
-    action_executor: ActionExecutor = field(default_factory=ActionExecutor)
 
     @property
     def session_id(self) -> str:
@@ -42,14 +40,13 @@ class BioRunContext:
         return {
             "session_id": self.session_id,
             "artifacts": self.artifacts,
+            "_bio_context": self,
             **self.run,
         }
 
-    def skill_context(self, skill_name: str, allowed_tools: tuple[str, ...]) -> WorkflowContext:
+    def workflow_context(self, workflow_name: str) -> WorkflowContext:
         return WorkflowContext(
-            workflow_name=skill_name,
-            allowed_actions=allowed_tools,
-            action_executor=self.action_executor,
+            workflow_name=workflow_name,
             user_context=self.user_context(),
             log_fn=self.log,
         )

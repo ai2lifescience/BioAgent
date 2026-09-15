@@ -102,6 +102,17 @@
       body.appendChild(files);
     }
     message.append(label, body);
+    if (result?.approval_required && window.mountToolApprovals) {
+      const approvals = document.createElement("div");
+      approvals.className = "approval-controls";
+      message.appendChild(approvals);
+      window.mountToolApprovals(approvals, result, {
+        url: apiUrl("approve"),
+        isBusy: () => state.busy,
+        onBusy: (busy) => { if (!busy) setBusy(false); else setBusy(true); },
+        onResult: (next) => addMessage("assistant", next.answer || "", next),
+      });
+    }
     messages.appendChild(message);
     messages.scrollTop = messages.scrollHeight;
   }

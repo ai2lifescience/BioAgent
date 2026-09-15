@@ -1,5 +1,4 @@
-"""PDB download skill package."""
+"""Documentation for this BioAgent workflow.
 
-from .workflow import SKILL_SPEC, pdb_download
-
-__all__ = ["SKILL_SPEC", "pdb_download"]
+The executable FunctionTool is defined in the top-level ``tools`` package.
+"""

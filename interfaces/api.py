@@ -4,7 +4,13 @@ from __future__ import annotations
 
 from typing import Any, Callable
 
-from harness.runtime import ARTIFACT_STORE, delete_session, list_sessions, run_bioagent
+from harness.runtime import (
+    ARTIFACT_STORE,
+    delete_session,
+    list_sessions,
+    resume_bioagent,
+    run_bioagent,
+)
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_SKILL_STEPS
 
 
@@ -17,6 +23,16 @@ def handle_request(
 ) -> dict[str, Any]:
     """Run BioAgent from application code."""
     return run_bioagent(request, session_id, model_key, max_skill_steps, log_fn)
+
+
+def handle_approval(
+    session_id: str,
+    approved: bool,
+    approval_id: str,
+    log_fn: Callable[[str], None] | None = None,
+) -> dict[str, Any]:
+    """Approve or reject the pending SDK tool call for a session."""
+    return resume_bioagent(session_id, approved, approval_id, log_fn=log_fn)
 
 
 def store_upload(

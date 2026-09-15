@@ -1,5 +1,4 @@
-"""Sequence analysis skill package."""
+"""Documentation for this BioAgent workflow.
 
-from .workflow import SKILL_SPEC, sequence_analysis
-
-__all__ = ["SKILL_SPEC", "sequence_analysis"]
+The executable FunctionTool is defined in the top-level ``tools`` package.
+"""

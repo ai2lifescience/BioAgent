@@ -18,7 +18,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from pipelines.generic_nextflow.workflow import run as run_example_step
-from tools.pipeline_runner.core import run_pipeline
+from biology.pipeline_runner.core import run_pipeline
 
 
 def _fake_nextflow_run(command: list[str], **_kwargs: object) -> subprocess.CompletedProcess[str]:
@@ -78,10 +78,10 @@ def main() -> int:
 
     with TemporaryDirectory(prefix="bioagent-nextflow-runner-") as artifact_dir:
         with patch(
-            "tools.pipeline_runner.nextflow._nextflow_command",
+            "biology.pipeline_runner.nextflow._nextflow_command",
             return_value=["nextflow-test-double"],
         ), patch(
-            "tools.pipeline_runner.nextflow.subprocess.run",
+            "biology.pipeline_runner.nextflow.subprocess.run",
             side_effect=_fake_nextflow_run,
         ):
             result = run_pipeline(

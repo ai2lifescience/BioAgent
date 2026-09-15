@@ -1,5 +1,4 @@
-"""Biological database search skill package."""
+"""Documentation for this BioAgent workflow.
 
-from .workflow import SKILL_SPEC, database_lookup
-
-__all__ = ["SKILL_SPEC", "database_lookup"]
+The executable FunctionTool is defined in the top-level ``tools`` package.
+"""

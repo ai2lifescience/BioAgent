@@ -1,5 +1,4 @@
-"""Genome map skill exports."""
+"""Documentation for this BioAgent workflow.
 
-from .workflow import SKILL_SPEC, genome_map
-
-__all__ = ["SKILL_SPEC", "genome_map"]
+The executable FunctionTool is defined in the top-level ``tools`` package.
+"""

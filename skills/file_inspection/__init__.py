@@ -1,5 +1,4 @@
-"""Biological file inspection skill package."""
+"""Documentation for this BioAgent workflow.
 
-from .workflow import SKILL_SPEC, file_inspection
-
-__all__ = ["SKILL_SPEC", "file_inspection"]
+The executable FunctionTool is defined in the top-level ``tools`` package.
+"""

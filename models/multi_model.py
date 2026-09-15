@@ -15,6 +15,7 @@ def run_multi_model_messages(
     message_builder: MessageBuilder,
     model_keys: list[str] | tuple[str, ...] | None = None,
     temperature: float = 0.2,
+    bio_context: Any = None,
 ) -> dict[str, str]:
     """Run model-specific messages against multiple configured models."""
     selected_model_keys = tuple(model_keys or DEFAULT_MODEL_KEYS)
@@ -27,6 +28,7 @@ def run_multi_model_messages(
             messages=message_builder(model_key, config),
             model_key=model_key,
             temperature=temperature,
+            bio_context=bio_context,
         )
 
     results: dict[str, str] = {}

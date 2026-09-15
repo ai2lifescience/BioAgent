@@ -1,4 +1,4 @@
-"""Skill workflow packages.
+"""Human-facing documentation for BioAgent workflows.
 
-Use `registries.skill_registry` to discover executable skills.
+Executable SDK FunctionTools are defined in the top-level ``tools`` package.
 """

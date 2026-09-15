@@ -1,7 +1,7 @@
 # Example Skill
 
 ## Purpose
-Verify that the skill registry, executor, and tool registry work.
+Verify that the example FunctionTool and deterministic implementation work.
 
 ## When to use
 Use when the user asks to test skill calling, run a demo skill, or echo a test

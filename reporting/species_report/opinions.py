@@ -14,6 +14,7 @@ def collect_species_model_opinions(
     species_name: str,
     question: str,
     model_keys: list[str] | None = None,
+    bio_context: Any = None,
 ) -> dict[str, Any]:
     selected_model_keys = tuple(model_keys or DEFAULT_MODEL_KEYS)
 
@@ -28,6 +29,7 @@ def collect_species_model_opinions(
         message_builder=_messages,
         model_keys=selected_model_keys,
         temperature=0.2,
+        bio_context=bio_context,
     )
     return {
         "status": "ok",
@@ -36,4 +38,3 @@ def collect_species_model_opinions(
         "model_keys": list(selected_model_keys),
         "model_answers": model_answers,
     }
-

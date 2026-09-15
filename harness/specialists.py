@@ -5,7 +5,7 @@ from __future__ import annotations
 from agents import Agent, FunctionTool, Model
 
 from .guardrails import INPUT_GUARDRAIL, OUTPUT_GUARDRAIL
-from .tools import build_tools
+from tools import PUBLIC_TOOLS
 
 
 SPECIALIST_GROUPS: tuple[tuple[str, str, set[str]], ...] = (
@@ -31,8 +31,9 @@ def build_specialist_tools(model: Model) -> list[FunctionTool]:
     """Build domain agents as tools while retaining one root Runner.
 
     The root agent may call these only for domain requests that benefit from a
-    focused instruction set. Their nested runs use the same SDK context,
-    session, guardrails, and trace as the root run.
+    focused instruction set. Nested runs share application context and tracing;
+    the root supplies the relevant conversation details in the tool input.
+    Specialists do not automatically read the root SQLite conversation.
     """
     specialist_tools: list[FunctionTool] = []
     for name, instructions, workflow_names in SPECIALIST_GROUPS:
@@ -40,7 +41,7 @@ def build_specialist_tools(model: Model) -> list[FunctionTool]:
             name=name,
             instructions=instructions,
             model=model,
-            tools=build_tools(workflow_names),
+            tools=[tool for tool in PUBLIC_TOOLS if tool.name in workflow_names],
             input_guardrails=[INPUT_GUARDRAIL],
             output_guardrails=[OUTPUT_GUARDRAIL],
         )
