@@ -242,7 +242,7 @@ aside {
 }
 
 .settings-panel,
-.uploads-panel,
+.workspace-panel,
 .examples-panel {
   flex: 0 0 auto;
 }
@@ -251,8 +251,51 @@ aside {
   gap: 12px;
 }
 
-.uploads-panel {
+.workspace-panel {
   gap: 10px;
+}
+
+.workspace-toolbar {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.icon-button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.icon-button:hover {
+  border-color: var(--line-strong);
+  background: var(--surface-soft);
+  color: var(--ink);
+}
+
+.workspace-summary {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.workspace-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 90px;
+  gap: 6px;
+}
+
+.workspace-filters input,
+.workspace-filters select {
+  min-height: 34px;
+  padding: 0 8px;
+  font-size: 12px;
 }
 
 .upload-insert-control {
@@ -282,6 +325,55 @@ aside {
   max-height: 220px;
   overflow-y: auto;
   padding-right: 2px;
+}
+
+.workspace-file-list {
+  display: grid;
+  gap: 7px;
+  max-height: min(42vh, 420px);
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.workspace-directory {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  overflow: hidden;
+  padding: 4px 4px 0;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.workspace-folder > summary {
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  overflow: hidden;
+  padding: 4px 3px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspace-folder-files {
+  display: grid;
+  gap: 7px;
+  padding-top: 4px;
+}
+
+.workspace-file-kind {
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: capitalize;
+}
+
+.workspace-path {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .upload-item {
@@ -315,7 +407,7 @@ aside {
 
 .upload-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr 30px;
+  grid-template-columns: 1fr 1fr 1fr 30px;
   gap: 5px;
 }
 

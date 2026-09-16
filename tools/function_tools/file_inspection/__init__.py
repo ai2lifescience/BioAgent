@@ -28,7 +28,7 @@ async def file_inspection(
     Use for file size, format, columns, row or record counts, sequence IDs,
     and preview lines. Use sequence_analysis for GC content or ORFs,
     protein_structure_analysis for structure measurements, and
-    pipeline_results for collecting completed pipeline outputs.
+    pipeline_shell results for collecting completed pipeline outputs.
     """
     return await run_workflow(ctx.context, 'file_inspection', _workflow,
         {'path': path, 'max_preview_lines': max_preview_lines}, category='file_inspection',

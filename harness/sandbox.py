@@ -157,5 +157,5 @@ def delete_workspace(session_id: str) -> None:
 
 
 def sandbox_capabilities() -> list[Filesystem]:
-    """Keep command execution behind approval-controlled FunctionTools."""
+    """Filesystem capabilities accompany the guarded local pipeline ShellTool."""
     return [Filesystem()]

@@ -207,7 +207,7 @@ Team members implement focused tasks, run tests, and review pull requests. Keep
 
 Use this workflow when all development changes are ready for `main`. It starts
 from the latest `main`, copies every non-pipeline file from
-`dev/architecture`, and leaves `main`'s complete `pipelines/` tree unchanged.
+`dev/architecture`, and leaves `main`'s complete `tools/runtime_tools/pipelines/` tree unchanged.
 This avoids combining edits from both branches in the same file.
 
 ### Normal path
@@ -243,19 +243,19 @@ This avoids combining edits from both branches in the same file.
    Use a new temporary branch name if that example already exists.
 
 3. Copy the complete non-pipeline tree from `dev/architecture`. The
-   `pipelines/` directory is excluded, so it remains exactly as it is on
+   `tools/runtime_tools/pipelines/` directory is excluded, so it remains exactly as it is on
    `main`:
 
    ```bash
-   git restore --source=origin/dev/architecture --staged --worktree -- . ':!pipelines/'
+   git restore --source=origin/dev/architecture --staged --worktree -- . ':!tools/runtime_tools/pipelines/'
    ```
 
 4. Verify that the staged result has no pipeline changes and that every other
    file matches `dev/architecture`:
 
    ```bash
-   git diff --cached -- pipelines/
-   git diff --cached --exit-code origin/dev/architecture -- . ':!pipelines/'
+   git diff --cached -- tools/runtime_tools/pipelines/
+   git diff --cached --exit-code origin/dev/architecture -- . ':!tools/runtime_tools/pipelines/'
    git diff --cached
    git status
    ```
@@ -267,8 +267,8 @@ This avoids combining edits from both branches in the same file.
 
    ```bash
    git commit -m "Sync dev architecture changes while preserving main pipelines"
-   git diff --exit-code origin/main HEAD -- pipelines/
-   git diff --exit-code HEAD origin/dev/architecture -- . ':!pipelines/'
+   git diff --exit-code origin/main HEAD -- tools/runtime_tools/pipelines/
+   git diff --exit-code HEAD origin/dev/architecture -- . ':!tools/runtime_tools/pipelines/'
    ```
 
    Both diff commands must exit successfully and print nothing. Then publish
@@ -334,7 +334,7 @@ deletions.
    ```bash
    git status
    git diff origin/main...HEAD
-   git diff --exit-code origin/main...HEAD -- pipelines/
+   git diff --exit-code origin/main...HEAD -- tools/runtime_tools/pipelines/
    ```
 
    The last command must exit successfully and print nothing. If a copy or
@@ -354,7 +354,7 @@ deletions.
 ## Admin: Merge main Into dev/architecture Except pipelines
 
 Use this workflow after `main` advances. It keeps the entire
-`pipelines/` directory exactly as it exists on `dev/architecture`.
+`tools/runtime_tools/pipelines/` directory exactly as it exists on `dev/architecture`.
 
 ### Normal path
 
@@ -379,13 +379,13 @@ Use this workflow after `main` advances. It keeps the entire
    dev's pipeline tree from the pre-merge `HEAD`:
 
    ```bash
-   git restore --source=HEAD --staged --worktree -- pipelines/
+   git restore --source=HEAD --staged --worktree -- tools/runtime_tools/pipelines/
    ```
 
 4. Review the staged result and run the checks from step 4 above:
 
    ```bash
-   git diff --cached -- pipelines/
+   git diff --cached -- tools/runtime_tools/pipelines/
    git diff --cached
    git status
    ```
@@ -397,7 +397,7 @@ Use this workflow after `main` advances. It keeps the entire
 
    ```bash
    git commit -m "Merge main into dev/architecture excluding pipelines"
-   git diff --exit-code origin/main...HEAD -- pipelines/
+   git diff --exit-code origin/main...HEAD -- tools/runtime_tools/pipelines/
    git push origin dev/architecture
    ```
 
@@ -415,10 +415,10 @@ git switch dev/architecture
 git pull --ff-only origin dev/architecture
 ```
 
-To compare the published branches outside `pipelines/`:
+To compare the published branches outside `tools/runtime_tools/pipelines/`:
 
 ```bash
-git diff origin/main origin/dev/architecture -- . ':!pipelines/'
+git diff origin/main origin/dev/architecture -- . ':!tools/runtime_tools/pipelines/'
 ```
 
 No output means all non-pipeline files match.
@@ -434,19 +434,19 @@ If `git merge --no-commit --no-ff origin/main` reports pipeline conflicts,
 leave the merge in progress and run:
 
 ```bash
-git diff --name-only --diff-filter=U -- pipelines/
-git diff --name-only --diff-filter=U -z -- pipelines/ | \
+git diff --name-only --diff-filter=U -- tools/runtime_tools/pipelines/
+git diff --name-only --diff-filter=U -z -- tools/runtime_tools/pipelines/ | \
   xargs -0 -r git rm --
-git restore --source=HEAD --staged --worktree -- pipelines/
+git restore --source=HEAD --staged --worktree -- tools/runtime_tools/pipelines/
 ```
 
 Here `HEAD` is the pre-merge `dev/architecture` commit, so this restores
-dev's pipeline tree. Resolve any conflicts outside `pipelines/`, then resume
+dev's pipeline tree. Resolve any conflicts outside `tools/runtime_tools/pipelines/`, then resume
 at **Step 4** of “Merge main Into dev/architecture Except pipelines”:
 
 ```bash
 git diff --name-only --diff-filter=U
-git diff --cached -- pipelines/
+git diff --cached -- tools/runtime_tools/pipelines/
 git diff --cached
 git status
 ```

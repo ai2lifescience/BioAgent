@@ -89,8 +89,10 @@ The SDK tool surface is organized by execution semantics:
 - `tools/agent_tools/` — focused agents exposed through `Agent.as_tool()`.
 - `tools/hosted_tools/` — extension point for tools executed by OpenAI-hosted
   infrastructure. It is empty until the configured model/runtime supports one.
-- `tools/runtime_tools/` — extension point for SDK local/runtime tools such as
-  `ShellTool`, `ComputerTool`, or `ApplyPatchTool`. It is currently empty.
+- `tools/runtime_tools/` — the SDK local `pipeline_shell` tool and its
+  allowlisted command protocol. It runs all declared pipeline engines locally.
+- `tools/runtime_tools/pipeline_runtime/` — declarative pipeline planning, durable jobs,
+  bounded waiting, cancellation, and result collection behind `pipeline_shell`.
 - `tools/common/` — shared context, result envelopes, evidence and artifact
   classification, guardrails, and bounded HTTP transport; these are
   implementation helpers, not model-facing tools.
@@ -114,7 +116,7 @@ tools/function_tools/<tool_name>/
 ├── workflow.py       # run-context and result presentation
 ├── analysis.py        # deterministic domain implementation
 ├── adapters/         # optional external database clients
-└── engine/           # optional execution backends, used by pipeline_runner
+└── engine/           # internal execution backends used by pipeline_shell
 ```
 
 Small tools keep one descriptive implementation module, such as `analysis.py`,
@@ -162,6 +164,12 @@ arguments, invokes the Python function, and returns its result to the model.
 Each tool should remain bounded, expose side effects and approval requirements,
 and return the common `status`/`data`/`files`/`evidence`/`error` envelope.
 
+Runtime tools such as `ShellTool`, `ApplyPatchTool`, and `ComputerTool` are
+execution primitives, not replacements for domain workflows. A generic shell
+route would bypass pipeline manifests, workspace path checks, job recovery, and
+output collection. Keep those primitives separate from the model-facing
+pipeline tools unless a narrowly scoped diagnostic or editing agent needs one.
+
 For example, a request to search AlphaFold should select `database_lookup` with
 `database="alphafold"`, while a request for sequence similarity should select
 `blast_search`. This is model-based semantic routing, so overlapping tool
@@ -181,11 +189,16 @@ The primary intent boundaries are:
 | File metadata or previews | `file_inspection` |
 | Sequence similarity | `blast_search` |
 | Genome feature image | `genome_map` |
-| Execute a pipeline | `pipeline_runner` |
-| Review completed pipeline outputs | `pipeline_results` |
+| Execute or monitor a pipeline | `pipeline_shell` (`bioagent-pipeline` protocol) |
+| Review completed pipeline outputs | `pipeline_shell results --job-id ID` |
 
 Use a specialist only when the request combines multiple routes in one domain;
 use the direct route for a single operation.
+
+The long-running pipeline migration is described in
+[`docs/pipeline_migration.md`](pipeline_migration.md). It preserves the
+deterministic engine implementations while moving process lifetime and recovery
+to a durable job boundary.
 
 The files under `skills/*/SKILL.md` document workflows for developers, but are
 not loaded automatically by the runtime and do not route requests. Routing
@@ -207,13 +220,13 @@ directly, or expose them only through their specialist.
 
 The workflow wrapper keeps the common envelope at the SDK boundary while
 preserving raw action results inside `BioRunContext` for evidence collection
-and artifact registration.
+and workspace file discovery.
 
 The SDK run context carries:
 
 - the session identifier;
-- run and artifact directories;
-- user context and uploaded artifact references;
+- run and workspace directories;
+- user context and workspace file references;
 - model key;
 - progress callback;
 - per-run workflow results.
@@ -230,6 +243,19 @@ the complete root surface is assembled by `tools.registry.build_all_tools`.
 `SQLiteSession` persists user and assistant messages in
 `runtime/agent_sessions.sqlite3` (configurable with `BIOAGENT_SESSION_DB`).
 Application metadata is persisted in `runtime/session_metadata`.
+
+The SDK session is the single source of truth for conversation history. The
+browser stores only the active session identifier in `localStorage`; it does
+not cache messages or maintain a second conversation database. `GET
+/sessions/<session-id>/messages` reads displayable user and assistant items
+from `SQLiteSession`, while `Runner.run(..., session=sdk_session)` continues
+to append new items. Application metadata remains separate because titles,
+locks, resumable approval snapshots, and workspace lifecycle are application
+concerns rather than conversation history.
+
+The history endpoint returns conversation text and current approval controls.
+Per-run evidence and diagnostic cards remain in memory while the page is open;
+workspace files remain available after reload through the sandbox listing.
 
 The SDK Unix-local sandbox uses the session directory as its workspace. This
 keeps host-side FunctionTools and SDK filesystem capabilities pointed at the
@@ -257,8 +283,8 @@ runtime/sessions/<session-id>/runs/<run-id>/
 ```
 
 The result contains references to files instead of copying large contents into
-conversation history. The web interface continues to serve approved artifact
-suffixes through its existing checks.
+conversation history. The web interface can download any regular workspace
+file; the structure viewer is an optional format-specific presentation.
 
 ### Guardrails and run status
 
@@ -269,7 +295,7 @@ guardrail checks the final answer. The API returns the run `status` directly
 
 Evidence collection lives in `tools/common/evidence.py` beside tool result
 semantics. The harness calls it after a run so the UI can receive citations,
-record IDs, URLs, and artifact paths without making tools import the harness.
+record IDs, URLs, and workspace file paths without making tools import the harness.
 
 High-risk pipeline behavior should remain explicit in tool input and output.
 Pipeline execution pauses with an SDK `RunState` interruption and returns an
@@ -299,8 +325,29 @@ print(result["answer"])
 The synchronous wrapper is used by CLI, HTTP, and ordinary Python callers. Use
 `async_run_bioagent` in an application that already owns an asyncio event loop.
 
-Uploads, session listing, artifact downloads, and deletion remain application
-operations; they do not create a second agent runtime.
+The web workspace is a thin adapter over the SDK sandbox session. It exposes
+one session-scoped workspace resource for listing, upload, read/download, and
+delete operations; it does not create a second file registry or agent runtime.
+
+The HTTP contract is deliberately path-based and workspace-root-relative:
+
+| Request | Purpose |
+| --- | --- |
+| `GET /workspace?session_id=...` | List every regular file in the session workspace. |
+| `POST /workspace/files` | Upload multipart files into `uploads/`. |
+| `GET /workspace/file?session_id=...&path=...` | Read or download one workspace file. |
+| `DELETE /workspace/files/<path>?session_id=...` | Delete one workspace file. |
+
+Session history uses the SDK session contract:
+
+| Request | Purpose |
+| --- | --- |
+| `GET /sessions` | List application session metadata and message counts. |
+| `GET /sessions/<session-id>/messages` | Read conversation messages from the SDK `SQLiteSession`. |
+
+The browser receives file metadata from the sandbox listing and uses the
+workspace-relative path for later operations. There are no upload-only APIs,
+generated file IDs, or host-path reads in the web contract.
 
 ## Configuration
 

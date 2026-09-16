@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
-from agents import Model, OpenAIChatCompletionsModel
+from agents import Model
 from agents.sandbox import Manifest, SandboxAgent
 from openai import AsyncOpenAI
 
 from models.config import get_default_model_id
 from models.openrouter_client import create_async_client
+from models.local_shell import LocalShellChatCompletionsModel
+from tools.runtime_tools.pipeline_tool import PIPELINE_INSTRUCTIONS
 
 from .guardrails import INPUT_GUARDRAIL, OUTPUT_GUARDRAIL
 from tools.registry import build_all_tools
@@ -26,11 +28,11 @@ responsibility for the final answer, including work delegated to specialists.
 - Answer general conceptual questions directly. Use tools for new database
   retrieval, citations, measurements, analysis of supplied data, and files.
 - Reuse inputs and results already available in the conversation or tool
-  outputs. Use a documented session artifact reference when supported; never
+  outputs. Use a documented session workspace file path; never
   guess a file path or assume local run context is visible to you.
 - The SDK provides a per-session Unix-local sandbox rooted at the session
   workspace. Use its filesystem tools for workspace inspection and edits. Use
-  the approval-controlled pipeline_runner for biological command execution;
+  the local pipeline_shell runtime tool for biological command execution;
   never use a filesystem capability to bypass that route.
 - Ask a concise question only when a missing input or ambiguity materially
   affects the result and cannot be resolved from available information.
@@ -51,8 +53,9 @@ responsibility for the final answer, including work delegated to specialists.
   and previews, and blast_search for sequence similarity.
 - Use genome_map for a feature image; use species_report for a cited narrative
   about an organism's genome.
-- Use pipeline_runner for execution and pipeline_results for existing outputs.
-  Reviewing results alone does not authorize another pipeline run.
+- Use pipeline_shell for pipeline discovery, execution, status, and collection,
+  or pipeline_specialist for a multi-step pipeline task. Reviewing results alone
+  does not authorize another pipeline run.
 
 ## Delegate bounded tasks
 - Use a specialist whose description covers the requested combination of
@@ -93,9 +96,9 @@ responsibility for the final answer, including work delegated to specialists.
 ## Final response
 - Answer in the user's language, using concise explanations and useful units.
 - Lead with the requested result. Include relevant source links or identifiers
-  and actual artifact paths. State material limitations and incomplete work.
+  and actual workspace file paths. State material limitations and incomplete work.
 - Summarize findings rather than dumping raw tool JSON unless the user asks.
-"""
+  """
 
 
 def create_agent(
@@ -104,13 +107,13 @@ def create_agent(
     client: AsyncOpenAI | None = None,
     sandbox_root: str | None = None,
 ) -> SandboxAgent:
-    model = model or OpenAIChatCompletionsModel(
+    model = model or LocalShellChatCompletionsModel(
         model=get_default_model_id(model_key), openai_client=client or create_async_client()
     )
     default_manifest = Manifest(root=sandbox_root) if sandbox_root else None
     return SandboxAgent(
         name="BioAgent",
-        instructions=INSTRUCTIONS,
+        instructions=INSTRUCTIONS + PIPELINE_INSTRUCTIONS,
         model=model,
         tools=build_all_tools(model),
         input_guardrails=[INPUT_GUARDRAIL],

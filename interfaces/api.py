@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any, Callable
 
+from agents import SQLiteSession
+
+from harness import runtime
 from harness.runtime import delete_session, list_sessions, resume_bioagent, run_bioagent
 from harness.sandbox import delete_file, list_files, open_workspace, read_file, upload_file
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_SKILL_STEPS
@@ -30,6 +34,63 @@ def handle_approval(
     return resume_bioagent(session_id, approved, approval_id, log_fn=log_fn)
 
 
+def list_session_messages(session_id: str) -> dict[str, Any]:
+    """Read displayable conversation items from the SDK session store."""
+    import asyncio
+
+    identifier = str(session_id or "").strip()
+    if not identifier:
+        return {"session_id": None, "messages": []}
+    metadata = runtime.STATE_STORE.get_session(identifier)
+
+    async def _list() -> dict[str, Any]:
+        items = []
+        if Path(runtime.SESSION_DB).exists():
+            session = SQLiteSession(identifier, db_path=runtime.SESSION_DB)
+            try:
+                items = await session.get_items()
+            finally:
+                session.close()
+        messages = []
+        for item in items:
+            role = str(item.get("role") or "") if isinstance(item, dict) else ""
+            if role not in {"user", "assistant"}:
+                continue
+            text = _session_item_text(item.get("content"))
+            if text:
+                messages.append({"role": role, "text": text})
+        pending = metadata.metadata.get("pending_run") if metadata else None
+        return {
+            "session_id": identifier,
+            "messages": messages,
+            "pending_approval": {
+                "session_id": identifier,
+                "answer": "Review the requested tool arguments and approve or reject each pending call.",
+                "status": "pending_approval",
+                "approval_required": True,
+                "approvals": pending["approvals"],
+            } if pending else None,
+        }
+
+    return asyncio.run(_list())
+
+
+def _session_item_text(content: Any) -> str:
+    """Extract readable text while ignoring tool-call metadata."""
+    if isinstance(content, str):
+        return content.strip()
+    if isinstance(content, list):
+        parts = [_session_item_text(item) for item in content]
+        return "\n".join(part for part in parts if part).strip()
+    if isinstance(content, dict):
+        for key in ("text", "output_text", "content"):
+            if key in content:
+                value = _session_item_text(content[key])
+                if value:
+                    return value
+    return ""
+
+
 def write_workspace_file(
     session_id: str | None,
     filename: str,
@@ -47,7 +108,8 @@ def write_workspace_file(
             result["session_id"] = identifier
             return result
 
-    return asyncio.run(_store())
+    with runtime.STATE_STORE.locked_session(identifier):
+        return asyncio.run(_store())
 
 
 def list_workspace_files(session_id: str | None) -> dict[str, Any]:

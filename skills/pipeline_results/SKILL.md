@@ -7,9 +7,9 @@ the user explicitly requests a review.
 
 ## Workflow
 
-1. Use session workspace files from completed `pipeline_runner` calls.
+1. Use session workspace files from completed `pipeline_shell` jobs.
 2. Select the latest run, optionally filtered by pipeline name.
-3. Call `pipeline_results_collect` to build a ZIP and structured previews.
+3. Call `bioagent-pipeline results --job-id ID` to build a ZIP and structured previews.
 4. Return key metrics, table previews, an output manifest, and result figures.
 
 ## Rules

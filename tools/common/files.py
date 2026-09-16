@@ -165,6 +165,15 @@ RESULT_COUNT_KEYS = (
 RESULT_ID_KEYS = ("collection_name", "rid", "pdb_id", "file_format")
 RESULT_PATH_KEYS = tuple(ARTIFACT_KIND_BY_KEY)
 COMPACT_RESULT_KEYS = (
+    "job_id",
+    "plan_id",
+    "logs",
+    "bundle_path",
+    "metrics",
+    "tables",
+    "needs_parameters",
+    "required_parameters",
+    "parameter_errors",
     "tool",
     "status",
     "summary",
@@ -270,5 +279,3 @@ def artifact_suffix_config() -> dict[str, list[str]]:
 
 def allowed_artifact_suffix_message() -> str:
     return "viewable artifact suffixes: " + ", ".join(SERVABLE_ARTIFACT_SUFFIXES)
-
-

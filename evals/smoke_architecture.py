@@ -11,6 +11,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from agents.testing import ModelStep, ScriptedModel, assistant_message, function_call
+from openai.types.responses.response_function_shell_tool_call import ResponseFunctionShellToolCall
 from harness import runtime
 from harness.agent import create_agent
 from tools.function_tools import FUNCTION_TOOLS
@@ -20,7 +21,7 @@ def main() -> int:
     tools = list(FUNCTION_TOOLS)
     agent = create_agent("gpt-oss", model=ScriptedModel())
     names = {tool.name for tool in agent.tools}
-    expected = {"sequence_analysis", "database_lookup", "pdb_download", "file_inspection", "pipeline_runner", "species_report", "sequence_specialist", "retrieval_specialist", "pipeline_specialist"}
+    expected = {"sequence_analysis", "database_lookup", "pdb_download", "file_inspection", "pipeline_shell", "species_report", "sequence_specialist", "retrieval_specialist", "pipeline_specialist"}
     assert expected <= names
     assert agent.name == "BioAgent"
 
@@ -55,9 +56,11 @@ def main() -> int:
     assert any(event["event"] == "guardrail_blocked" for event in blocked["trace"])
 
     approval_model = ScriptedModel([
-        ModelStep(output=[function_call("pipeline_runner", {
-            "pipeline_name": "generic_shell", "input_path": "input.fa", "dry_run": True,
-        }, call_id="approval-call")]),
+        ModelStep(output=[ResponseFunctionShellToolCall(
+            id="approval-item", call_id="approval-call", type="shell_call", status="completed",
+            action={"commands": ["bioagent-pipeline cancel --job-id " + "a" * 32],
+                    "timeout_ms": None, "max_output_length": None},
+        )]),
         ModelStep(output=[assistant_message("Pipeline approval completed.")]),
     ])
     pending = asyncio.run(runtime.async_run_bioagent(

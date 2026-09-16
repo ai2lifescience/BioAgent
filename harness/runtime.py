@@ -33,24 +33,34 @@ set_default_openai_api("chat_completions")
 configure_tracing()
 
 
-def _approval_details(items: list[Any]) -> list[dict[str, Any]]:
+def _approval_details(items: list[Any], context: BioRunContext | None = None) -> list[dict[str, Any]]:
     details = []
     for item in items:
         raw = item.raw_item
         raw = raw.model_dump() if hasattr(raw, "model_dump") else raw
-        arguments = raw.get("arguments", {})
+        arguments = raw.get("action", {}) if raw.get("type") == "shell_call" else raw.get("arguments", {})
         if isinstance(arguments, str):
             try:
                 arguments = json.loads(arguments)
             except json.JSONDecodeError:
                 pass
-        details.append({
+        detail = {
             "approval_id": uuid4().hex,
             "call_id": raw.get("call_id"),
             "agent": item.agent.name,
             "tool_name": item.tool_name,
             "arguments": arguments,
-        })
+        }
+        if item.tool_name == "pipeline_shell" and context and isinstance(arguments, dict):
+            from tools.runtime_tools.pipeline_runtime.commands import parse_command
+            from tools.runtime_tools.pipeline_runtime.store import JobStore
+            try:
+                args = parse_command(arguments["commands"][0])
+                identifier = args.plan_id if args.operation == "run" else args.job_id
+                detail["plan"] = JobStore(session_root(context.session_id)).get(identifier)["plan"]
+            except (ValueError, KeyError, AttributeError, IndexError):
+                pass
+        details.append(detail)
     return details
 
 
@@ -169,7 +179,7 @@ async def _execute(
             context.files = await list_files(sandbox_session)
         if result.interruptions:
             snapshot = result.to_state().to_json(context_serializer=lambda _context: {})
-            approvals = _approval_details(result.interruptions)
+            approvals = _approval_details(result.interruptions, context)
             answer = "Review the requested tool arguments and approve or reject each pending call."
             status = "pending_approval"
         else:
@@ -264,5 +274,31 @@ def delete_session(session_id: str) -> bool:
     return deleted
 
 
+async def async_list_sessions() -> list[dict[str, Any]]:
+    """List metadata with message counts read from the SDK session store."""
+    sessions = STATE_STORE.list_sessions()
+    if not Path(SESSION_DB).exists():
+        for item in sessions:
+            item["message_count"] = 0
+        return sessions
+
+    for item in sessions:
+        sdk_session = SQLiteSession(item["session_id"], db_path=SESSION_DB)
+        try:
+            history = await sdk_session.get_items()
+        finally:
+            sdk_session.close()
+        item["message_count"] = sum(
+            isinstance(entry, dict) and entry.get("role") in {"user", "assistant"}
+            for entry in history
+        )
+    return sessions
+
+
 def list_sessions() -> list[dict[str, Any]]:
-    return STATE_STORE.list_sessions()
+    """Synchronous wrapper for :func:`async_list_sessions`."""
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        return asyncio.run(async_list_sessions())
+    raise RuntimeError("An event loop is already running; await async_list_sessions instead.")

@@ -1,0 +1,51 @@
+name: generic_shell
+description: Join sequence IDs with metadata subtypes and produce normalized sequence text, assignments
+  and metrics.
+engine: shell
+entrypoint: run.sh
+timeout: 120
+params:
+  normalize_mode: whitespace
+  uppercase: false
+  sequence_id_column: sequence_id
+  subtype_column: subtype
+  missing_subtype: unassigned
+inputs:
+  reads:
+    label: Sequence data
+    config_key: input_path
+    required: true
+    accepts:
+    - .txt
+    - .fastq
+    - .fq
+    - .fasta
+    - .fa
+  metadata:
+    label: Subtype metadata
+    config_key: metadata_path
+    required: true
+    accepts:
+    - .tsv
+    - .csv
+outputs:
+  report:
+    label: Report
+    config_key: report_path
+    default: report.md
+    kind: report
+  metrics:
+    label: Metrics
+    config_key: metrics_path
+    default: metrics.json
+    kind: metrics
+  normalized_text:
+    label: Normalized text
+    config_key: normalized_path
+    default: normalized.txt
+    kind: text
+  subtype_assignments:
+    label: Sequence subtype assignments
+    config_key: subtype_path
+    default: subtypes.tsv
+    kind: table

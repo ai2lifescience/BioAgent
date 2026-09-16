@@ -17,14 +17,14 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from tools.common.files import artifact_content_type, can_serve_artifact
-from tools.function_tools.pipeline_runner.config_io import load_yaml_config, write_yaml_config
-from tools.function_tools.pipeline_runner.engine.config import write_runtime_config
-from tools.function_tools.pipeline_runner.engine.runner import prepare_pipeline_context
-from tools.function_tools.pipeline_runner.engine.outputs import finalize_output_records
+from tools.runtime_tools.pipeline_runtime.config_io import load_yaml_config, write_yaml_config
+from tools.runtime_tools.pipeline_runtime.engine.config import write_runtime_config
+from tools.runtime_tools.pipeline_runtime.engine.runner import prepare_pipeline_context
+from tools.runtime_tools.pipeline_runtime.engine.outputs import finalize_output_records
 
 
 def _load_workflow_module():
-    workflow_path = PROJECT_ROOT / "pipelines" / "bacterial_annotation" / "workflow.py"
+    workflow_path = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "bacterial_annotation" / "workflow.py"
     spec = spec_from_file_location("bioagent_bacterial_annotation_workflow", workflow_path)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"Unable to load workflow module: {workflow_path}")
@@ -87,13 +87,13 @@ def _write_bakta_outputs(command: list[str], genome_path: Path) -> None:
 
 
 def main() -> int:
-    if not (PROJECT_ROOT / "pipelines" / "bacterial_annotation" / "workflow.py").exists():
+    if not (PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "bacterial_annotation" / "workflow.py").exists():
         print("SKIP: bacterial_annotation pipeline is not present in this checkout.")
         return 0
     workflow = _load_workflow_module()
     with TemporaryDirectory(prefix="bioagent-bacterial-annotation-") as temporary_dir:
         temporary_path = Path(temporary_dir)
-        pipeline_dir = PROJECT_ROOT / "pipelines" / "bacterial_annotation"
+        pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "bacterial_annotation"
         genome_path = pipeline_dir / "data" / "input" / "example_contigs.fasta"
         bakta_db_path = temporary_path / "bakta-db-light"
         bakta_db_path.mkdir()

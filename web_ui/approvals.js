@@ -8,7 +8,7 @@ window.mountToolApprovals = function (container, result, options) {
     const title = document.createElement("strong");
     title.textContent = `Review ${item.tool_name}`;
     const args = document.createElement("pre");
-    args.textContent = JSON.stringify(item.arguments, null, 2);
+    args.textContent = JSON.stringify(item.plan ? { action: item.arguments, plan: item.plan } : item.arguments, null, 2);
     row.append(title, args);
     for (const approved of [true, false]) {
       const button = document.createElement("button");

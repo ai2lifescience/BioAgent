@@ -18,12 +18,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from agents import SQLiteSession
 from agents.testing import ModelStep, ScriptedModel, assistant_message, function_call
+from openai.types.responses.response_function_shell_tool_call import ResponseFunctionShellToolCall
 from harness import runtime
 from harness import sandbox
 from harness.sessions import SessionMetadataStore
 from interfaces import web
 
-pipeline_module = importlib.import_module("tools.function_tools.pipeline_runner")
+pipeline_module = importlib.import_module("tools.runtime_tools.pipeline_tool")
 
 
 def response(text="Completed."):
@@ -31,7 +32,11 @@ def response(text="Completed."):
 
 
 def pipeline(call_id="pipeline-1"):
-    return function_call("pipeline_runner", {"pipeline_name": "generic_shell"}, call_id=call_id)
+    return ResponseFunctionShellToolCall(
+        id=f"item-{call_id}", call_id=call_id, type="shell_call", status="completed",
+        action={"commands": ["bioagent-pipeline cancel --job-id " + "a" * 32],
+                "timeout_ms": None, "max_output_length": None},
+    )
 
 
 class ApprovalTests(unittest.TestCase):
@@ -50,7 +55,7 @@ class ApprovalTests(unittest.TestCase):
         patcher = patch.object(sandbox, "WORKSPACES_DIR", self.root / "sessions")
         patcher.start()
         self.addCleanup(patcher.stop)
-        patcher = patch.object(pipeline_module, "_workflow", return_value={"status": "ok", "value": "fixture"})
+        patcher = patch.object(pipeline_module, "dispatch", return_value={"status": "ok", "value": "fixture"})
         self.workflow = patcher.start()
         self.addCleanup(patcher.stop)
 
@@ -71,7 +76,8 @@ class ApprovalTests(unittest.TestCase):
     def test_restart_approval_executes_once_and_preserves_history(self):
         pending = self.pause()
         self.workflow.assert_not_called()
-        self.assertEqual(pending["approvals"][0]["arguments"], {"pipeline_name": "generic_shell"})
+        self.assertEqual(pending["approvals"][0]["tool_name"], "pipeline_shell")
+        self.assertEqual(pending["approvals"][0]["arguments"]["commands"][0].split()[0], "bioagent-pipeline")
         # Recreate the metadata store, context, agents, and model as after restart.
         runtime.STATE_STORE = SessionMetadataStore(self.root / "metadata")
         result = self.resume(pending)
@@ -87,7 +93,7 @@ class ApprovalTests(unittest.TestCase):
         finally:
             sdk_session.close()
         self.assertEqual(sum(i.get("role") == "user" for i in items), 1)
-        self.assertEqual(sum(i.get("type") == "function_call_output" for i in items), 1)
+        self.assertEqual(sum(i.get("type") == "shell_call_output" for i in items), 1)
         with self.assertRaises(ValueError):
             self.resume(pending)
         self.workflow.assert_called_once()
@@ -130,7 +136,7 @@ class ApprovalTests(unittest.TestCase):
         self.assertEqual(done["answer"], "Root finished.")
         self.workflow.assert_called_once()
         self.assertTrue(any(e["event"] == "approval_decision" for e in done["trace"]))
-        self.assertIn("pipeline_runner", done["evidence"]["skills"])
+        self.assertIn("pipeline_shell", done["evidence"]["skills"])
 
     def test_http_requires_explicit_boolean_and_can_reject(self):
         pending = self.pause()

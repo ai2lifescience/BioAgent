@@ -1,8 +1,6 @@
 """Agent-facing OpenAI Agents SDK FunctionTool definitions."""
 
 from .example_skill import example_skill
-from .pipeline_runner import pipeline_runner
-from .pipeline_results import pipeline_results
 from .species_report import species_report
 from .ncbi_retrieval import ncbi_retrieval
 from .bio_database_search import database_lookup
@@ -15,8 +13,6 @@ from .file_inspection import file_inspection
 
 FUNCTION_TOOLS = [
     example_skill,
-    pipeline_runner,
-    pipeline_results,
     species_report,
     ncbi_retrieval,
     database_lookup,
@@ -31,8 +27,6 @@ FUNCTION_TOOLS = [
 __all__ = [
     "FUNCTION_TOOLS",
     "example_skill",
-    "pipeline_runner",
-    "pipeline_results",
     "species_report",
     "ncbi_retrieval",
     "database_lookup",

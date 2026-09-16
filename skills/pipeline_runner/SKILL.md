@@ -1,26 +1,29 @@
-# Pipeline Runner Skill
+# Pipeline Runner Skill (local runtime)
 
-Use this skill to run an approved pipeline folder under `pipelines/`.
+Use the `pipeline_shell` Agents SDK local runtime tool to run an approved
+pipeline folder under `tools/runtime_tools/pipelines/`. The retired
+function-tool wrappers have been removed; pipeline execution uses the local runtime.
 
 Each pipeline folder must contain:
 
 ```text
 runner.yaml  # BioAgent runner metadata
-config.yaml  # default base config; can be renamed with runner.yaml config:
+run.sh, Snakefile, main.nf, or workflow.wdl  # selected by the engine
 ```
 
-`runner.yaml` selects the engine and file names:
+`runner.yaml` selects the engine and is the preferred place for ordinary
+defaults:
 
 ```yaml
-config: config.yaml
 engine: shell
 entrypoint: run.sh
+params:
+  mode: example
 ```
 
 or:
 
 ```yaml
-config: config.yaml
 engine: snakemake
 snakefile: Snakefile
 ```
@@ -28,7 +31,6 @@ snakefile: Snakefile
 or:
 
 ```yaml
-config: config.yaml
 engine: nextflow
 workflow: main.nf
 nextflow_config: nextflow.config  # optional
@@ -39,8 +41,8 @@ or:
 ```yaml
 engine: wdl
 workflow: workflow.wdl
-inputs_json: inputs.json
-options_json: options.json
+inputs_json: inputs.json   # optional native file
+options_json: options.json # optional native file
 ```
 
 For multi-input pipelines, `runner.yaml` may also declare named input slots:
@@ -59,8 +61,9 @@ inputs:
     accepts: [".tsv", ".csv"]
 ```
 
-The skill calls only the registered `pipeline_runner` tool. It must not execute
-arbitrary shell commands, arbitrary Snakefiles, arbitrary Nextflow workflows,
+The skill calls only the registered `pipeline_shell` tool and its
+`bioagent-pipeline` command protocol. It must not execute arbitrary shell
+commands, arbitrary Snakefiles, arbitrary Nextflow workflows,
 arbitrary WDL workflows, or paths outside the selected pipeline folder.
 
 Before calling the tool, the skill checks required `runner.yaml` inputs against:
@@ -70,8 +73,8 @@ Before calling the tool, the skill checks required `runner.yaml` inputs against:
 2. user-provided named input slots, such as sequence: or metadata:
 ```
 
-The BioAgent skill intentionally does not use default input files from
-`config.yaml`; the user must choose the runtime input explicitly. If a required
+The BioAgent skill intentionally does not use bundled input files as runtime
+inputs; the user must choose the runtime input explicitly. If a required
 input is missing or invalid, the skill returns a user-facing question and does
 not call the tool.
 
@@ -92,38 +95,47 @@ inputs without treating them as required:
 ]
 ```
 
-By default, the tool uses `input_path` directly. Uploaded web files already live
+The `plan` command uses workspace-relative paths. Uploaded web files already live
 in the current session workspace file directory:
 
 ```text
 runtime/sessions/<session_id>/uploads/
 ```
 
-The runtime config passed to Shell, Snakemake, Nextflow, or WDL starts from the
-configured base config/input file, then BioAgent replaces input paths with the
-selected session input paths and resolves declared outputs inside the per-run
-pipeline workspace output directory. Use this simple base config shape for Shell,
-Snakemake, and Nextflow plug-and-play pipelines:
+The runtime config passed to Shell, Snakemake, or Nextflow starts from
+`runner.yaml` defaults and any explicitly referenced native config, then
+BioAgent replaces input paths with selected session inputs and resolves
+declared outputs inside the per-run workspace. Use this manifest shape:
 
 ```yaml
-label: my_pipeline
-input_path: path/to/default/input.file
-output_dir: output
+name: my_pipeline
+engine: shell
+entrypoint: run.sh
 params:
   min_length: 0
   mode: example
+inputs:
+  sequence: {config_key: input_path, required: true, accepts: [.fasta]}
+outputs:
+  report: {config_key: report_path, default: report.md, kind: report}
 ```
 
-Keys under `params` may be changed through `config_overrides`.
+Keys under `params` may be changed through `plan --param NAME=VALUE`.
+Native files remain optional: use `config: filename.yaml` or
+`inputs_json: inputs.json` to load one, and `defaults` for extra native settings.
+The merge order is native file, manifest `defaults`, then manifest `params`;
+runtime input and parameter selections are applied afterward. Existing
+`config.yaml` files are also detected automatically. Explicit file references
+must exist inside the pipeline folder.
 
 Default examples:
 
 ```text
-pipelines/generic_bio/
-pipelines/generic_shell/
-pipelines/generic_snakemake/
-pipelines/generic_nextflow/
-pipelines/generic_wdl/
+tools/runtime_tools/pipelines/generic_bio/
+tools/runtime_tools/pipelines/generic_shell/
+tools/runtime_tools/pipelines/generic_snakemake/
+tools/runtime_tools/pipelines/generic_nextflow/
+tools/runtime_tools/pipelines/generic_wdl/
 ```
 
 Nextflow workflows receive the generated YAML through `-params-file`, plus the

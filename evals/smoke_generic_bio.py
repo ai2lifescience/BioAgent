@@ -11,12 +11,12 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.function_tools.pipeline_runner.engine.runner import run_pipeline
+from tools.runtime_tools.pipeline_runtime.engine.runner import run_pipeline
 from tools.common.files import artifact_content_type, can_serve_artifact
 
 
 def main() -> int:
-    pipeline_dir = PROJECT_ROOT / "pipelines" / "generic_bio"
+    pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "generic_bio"
     with TemporaryDirectory(prefix="bioagent-generic-bio-") as artifact_dir:
         result = run_pipeline(
             pipeline_name="generic_bio",

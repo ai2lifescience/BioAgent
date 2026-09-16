@@ -29,14 +29,14 @@ const activeSession = document.getElementById("activeSession");
 const uploadButton = document.getElementById("uploadButton");
 const uploadInput = document.getElementById("uploadInput");
 const uploadList = document.getElementById("uploadList");
-const uploadCount = document.getElementById("uploadCount");
+const workspaceCount = document.getElementById("workspaceCount");
+const workspaceSummary = document.getElementById("workspaceSummary");
+const workspaceRefresh = document.getElementById("workspaceRefresh");
+const workspaceSearch = document.getElementById("workspaceSearch");
+const workspaceFilter = document.getElementById("workspaceFilter");
 const uploadInputLabel = document.getElementById("uploadInputLabel");
 
-const LEGACY_CHAT_STORAGE_KEY = "bioagent.web.chat.v1";
-const SESSION_STORAGE_KEY = "bioagent.web.sessions.v1";
 const ACTIVE_SESSION_KEY = "bioagent.web.active_session_id.v1";
-const MAX_STORED_MESSAGES = 80;
-const MAX_SESSIONS = 50;
 const DEFAULT_UPLOAD_INPUT_LABEL = "input_path";
 let structureSuffixes = [".cif", ".mmcif", ".pdb"];
 let imageSuffixes = [".svg"];
@@ -46,10 +46,11 @@ let runtimeStartedAt = 0;
 let activeAbortController = null;
 let requestStopped = false;
 let isRunning = false;
+let isSessionLoading = false;
 let thinkingLogLines = [];
 let sessions = [];
 let activeSessionId = "";
-let uploads = [];
+let workspaceFiles = [];
 let lastAutoUploadInputLabel = DEFAULT_UPLOAD_INPUT_LABEL;
 
 async function loadConfig() {
@@ -130,7 +131,7 @@ function formatSessionTime(value) {
 
 function formatSessionMeta(session) {
   const time = formatSessionTime(session.updated_at) || "No activity";
-  const count = Array.isArray(session.messages) ? session.messages.length : 0;
+  const count = Number(session.message_count || 0);
   const messageText = count === 1 ? "1 message" : `${count} messages`;
   return `${time} · ${messageText}`;
 }
@@ -149,77 +150,73 @@ function createSession(title = "New chat") {
     id: generateSessionId(),
     title,
     messages: [],
+    message_count: 0,
     created_at: timestamp,
     updated_at: timestamp,
   };
 }
 
 function normalizeSession(raw) {
-  if (!raw || !raw.id) return null;
+  const id = raw?.session_id;
+  if (!id) return null;
   return {
-    id: String(raw.id),
+    id: String(id),
     title: String(raw.title || "New chat"),
-    messages: Array.isArray(raw.messages) ? raw.messages.slice(-MAX_STORED_MESSAGES) : [],
+    messages: [],
+    message_count: Number(raw.message_count || 0),
     created_at: raw.created_at || nowIso(),
     updated_at: raw.updated_at || raw.created_at || nowIso(),
   };
 }
 
-function migrateLegacyChat() {
-  const raw = localStorage.getItem(LEGACY_CHAT_STORAGE_KEY);
-  if (!raw) return null;
-  try {
-    const parsed = JSON.parse(raw);
-    const messages = Array.isArray(parsed?.messages) ? parsed.messages : [];
-    if (!messages.length) return null;
-    const session = createSession("Previous chat");
-    session.messages = messages
-      .filter((message) => message && ["assistant", "user"].includes(message.role))
-      .slice(-MAX_STORED_MESSAGES);
-    const firstUser = session.messages.find((message) => message.role === "user");
-    session.title = firstUser ? titleFromText(firstUser.text) : "Previous chat";
-    return session;
-  } catch (error) {
-    console.warn("Failed to migrate old chat history.", error);
-    return null;
-  } finally {
-    localStorage.removeItem(LEGACY_CHAT_STORAGE_KEY);
+async function loadSessions() {
+  const response = await fetch("/sessions");
+  if (!response.ok) {
+    throw new Error(`Failed to load sessions: HTTP ${response.status}`);
   }
-}
-
-function loadSessions() {
-  try {
-    const raw = localStorage.getItem(SESSION_STORAGE_KEY);
-    const parsed = raw ? JSON.parse(raw) : {};
-    sessions = (Array.isArray(parsed?.sessions) ? parsed.sessions : [])
-      .map(normalizeSession)
-      .filter(Boolean);
-  } catch (error) {
-    console.warn("Failed to load sessions.", error);
-    sessions = [];
-    localStorage.removeItem(SESSION_STORAGE_KEY);
-  }
-
-  if (!sessions.length) {
-    const migrated = migrateLegacyChat();
-    sessions = migrated ? [migrated] : [createSession()];
-  }
+  const payload = await response.json();
+  sessions = (Array.isArray(payload.sessions) ? payload.sessions : [])
+    .map(normalizeSession)
+    .filter(Boolean);
+  if (!sessions.length) sessions = [createSession()];
 
   activeSessionId = localStorage.getItem(ACTIVE_SESSION_KEY) || sessions[0].id;
   if (!sessions.some((session) => session.id === activeSessionId)) {
     activeSessionId = sessions[0].id;
   }
-  saveSessions();
+  rememberActiveSession();
 }
 
-function saveSessions() {
-  sessions = sessions
-    .map(normalizeSession)
-    .filter(Boolean)
-    .sort((left, right) => String(right.updated_at).localeCompare(String(left.updated_at)))
-    .slice(0, MAX_SESSIONS);
-  localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify({ sessions }));
+function rememberActiveSession() {
   localStorage.setItem(ACTIVE_SESSION_KEY, activeSessionId);
+}
+
+async function loadConversation(sessionId) {
+  if (!sessionId) return;
+  const response = await fetch(`/sessions/${encodeURIComponent(sessionId)}/messages`);
+  if (!response.ok) {
+    throw new Error(`Failed to load conversation: HTTP ${response.status}`);
+  }
+  const payload = await response.json();
+  if (sessionId !== activeSessionId) return;
+  const session = sessions.find((item) => item.id === sessionId);
+  if (!session) return;
+  session.messages = (Array.isArray(payload.messages) ? payload.messages : [])
+    .filter((message) => message && ["assistant", "user"].includes(message.role))
+    .map((message) => ({
+      role: message.role,
+      text: String(message.text || ""),
+      result: null,
+      created_at: message.created_at || null,
+    }));
+  session.message_count = session.messages.length;
+  if (payload.pending_approval) {
+    session.messages.push({
+      role: "assistant",
+      text: payload.pending_approval.answer,
+      result: payload.pending_approval,
+    });
+  }
 }
 
 function currentSession() {
@@ -228,7 +225,7 @@ function currentSession() {
     session = createSession();
     sessions.unshift(session);
     activeSessionId = session.id;
-    saveSessions();
+    rememberActiveSession();
   }
   return session;
 }
@@ -236,9 +233,9 @@ function currentSession() {
 function updateCurrentSession(updater) {
   const session = currentSession();
   updater(session);
-  session.messages = session.messages.slice(-MAX_STORED_MESSAGES);
+  session.message_count = session.messages.length;
   session.updated_at = nowIso();
-  saveSessions();
+  rememberActiveSession();
   renderSessionList();
   updateActiveSession();
 }
@@ -302,103 +299,169 @@ function updateActiveSession() {
   activeSession.textContent = currentSession().title || "New chat";
 }
 
-function switchSession(sessionId) {
-  if (isRunning || !sessionId || sessionId === activeSessionId) return;
+function setSessionLoading(loading) {
+  isSessionLoading = loading;
+  sendButton.disabled = loading || isRunning;
+  uploadButton.disabled = loading || isRunning;
+  newChatButton.disabled = loading || isRunning;
+}
+
+async function loadActiveSession() {
+  setSessionLoading(true);
+  workspaceFiles = [];
+  renderWorkspace();
+  chat.textContent = "Loading conversation…";
+  try {
+    await Promise.all([loadConversation(activeSessionId), loadWorkspace()]);
+    renderCurrentChat();
+    renderSessionList();
+    updateActiveSession();
+    resetThinkingBar();
+  } catch (error) {
+    renderCurrentChat();
+    renderMessage("assistant", `Could not load this chat: ${error.message}`);
+  } finally {
+    setSessionLoading(false);
+  }
+}
+
+async function switchSession(sessionId) {
+  if (isRunning || isSessionLoading || !sessionId || sessionId === activeSessionId) return;
   activeSessionId = sessionId;
-  saveSessions();
+  rememberActiveSession();
   renderSessionList();
-  renderCurrentChat();
-  updateActiveSession();
-  loadUploads().catch((error) => console.warn("Failed to load uploads.", error));
-  resetThinkingBar();
+  await loadActiveSession();
   promptInput.focus();
 }
 
 async function deleteSessionById(sessionId) {
-  if (isRunning || !sessionId) return;
-  sessions = sessions.filter((session) => session.id !== sessionId);
+  if (isRunning || isSessionLoading || !sessionId) return;
+  setSessionLoading(true);
   try {
-    await fetch(`/sessions/${encodeURIComponent(sessionId)}`, { method: "DELETE" });
+    const response = await fetch(`/sessions/${encodeURIComponent(sessionId)}`, { method: "DELETE" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    sessions = sessions.filter((session) => session.id !== sessionId);
+    if (!sessions.length) sessions = [createSession()];
+    if (!sessions.some((session) => session.id === activeSessionId)) activeSessionId = sessions[0].id;
+    rememberActiveSession();
+    renderSessionList();
+    await loadActiveSession();
   } catch (error) {
-    console.warn("Failed to delete server session.", error);
+    renderMessage("assistant", `Could not delete this chat: ${error.message}`);
+  } finally {
+    setSessionLoading(false);
   }
-  if (!sessions.length) {
-    sessions = [createSession()];
-  }
-  if (activeSessionId === sessionId) {
-    activeSessionId = sessions[0].id;
-  }
-  saveSessions();
-  renderSessionList();
-  renderCurrentChat();
-  updateActiveSession();
-  loadUploads().catch((error) => console.warn("Failed to load uploads.", error));
-  resetThinkingBar();
 }
 
 function startNewChat() {
-  if (isRunning) return;
+  if (isRunning || isSessionLoading) return;
   const session = createSession();
   sessions.unshift(session);
   activeSessionId = session.id;
-  saveSessions();
+  rememberActiveSession();
   renderSessionList();
+  workspaceFiles = [];
+  renderWorkspace();
   renderCurrentChat();
   updateActiveSession();
-  loadUploads().catch((error) => console.warn("Failed to load uploads.", error));
+  loadWorkspace().catch((error) => console.warn("Failed to load workspace.", error));
   resetThinkingBar();
   hideExampleParamPrompt();
   promptInput.focus();
 }
 
-function renderUploadList() {
-  uploadCount.textContent = String(uploads.length);
+function renderWorkspace() {
+  workspaceCount.textContent = String(workspaceFiles.length);
   uploadList.innerHTML = "";
-  if (!uploads.length) {
+  if (!workspaceFiles.length) {
+    workspaceSummary.textContent = "Add files or ask BioAgent to create outputs.";
     uploadList.innerHTML = `<div class="upload-empty">No files in this chat workspace.</div>`;
     return;
   }
-  for (const upload of uploads) {
-    const item = document.createElement("div");
-    item.className = "upload-item";
-    item.dataset.workspacePath = upload.workspace_path || "";
-    item.dataset.path = upload.path || "";
-    const name = upload.name || fileNameFromPath(upload.path);
-    item.innerHTML = `
-      <div class="upload-main">
-        <div class="upload-name" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
-        <div class="upload-meta">${escapeHtml(formatBytes(upload.size))}</div>
-      </div>
-      <div class="upload-actions">
-        <button class="upload-use" type="button" data-upload-use>Use</button>
-        <a class="upload-open" href="${escapeHtml(artifactUrl(upload.path))}" target="_blank" rel="noopener noreferrer">Open</a>
-        <button class="upload-delete" type="button" data-upload-delete title="Delete file">&times;</button>
-      </div>
-    `;
-    uploadList.appendChild(item);
+  const totalBytes = workspaceFiles.reduce((sum, file) => sum + Number(file.size || 0), 0);
+  workspaceSummary.textContent = `${formatBytes(totalBytes)} · inputs and outputs for this chat`;
+  const query = workspaceSearch.value.trim().toLowerCase();
+  const filter = workspaceFilter.value;
+  const visibleFiles = workspaceFiles.filter((file) => {
+    const path = String(file.workspace_path || file.path || "");
+    if (query && !path.toLowerCase().includes(query)) return false;
+    if (filter === "uploads") return path.startsWith("uploads/");
+    if (filter === "outputs") return !path.startsWith("uploads/");
+    return true;
+  });
+  if (!visibleFiles.length) {
+    uploadList.innerHTML = `<div class="upload-empty">No matching files.</div>`;
+    return;
+  }
+  const folders = new Map();
+  for (const file of visibleFiles) {
+    const workspacePath = file.workspace_path || file.path || "";
+    const directory = workspacePath.includes("/")
+      ? workspacePath.slice(0, workspacePath.lastIndexOf("/"))
+      : "workspace root";
+    if (!folders.has(directory)) folders.set(directory, []);
+    folders.get(directory).push(file);
+  }
+  for (const [directory, files] of folders) {
+    const folder = document.createElement("details");
+    folder.className = "workspace-folder";
+    folder.open = true;
+    const heading = document.createElement("summary");
+    heading.textContent = `${directory} (${files.length})`;
+    heading.title = directory;
+    const contents = document.createElement("div");
+    contents.className = "workspace-folder-files";
+    for (const file of files) {
+      const item = document.createElement("div");
+      item.className = "upload-item";
+      item.dataset.workspacePath = file.workspace_path || "";
+      item.dataset.path = file.path || "";
+      const name = file.name || fileNameFromPath(file.path);
+      const workspacePath = file.workspace_path || file.path || "";
+      item.innerHTML = `
+        <div class="upload-main">
+          <div class="upload-name" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
+          <div class="upload-meta">${escapeHtml(formatBytes(file.size))} · <span class="workspace-file-kind">${escapeHtml(file.kind || "file")}</span></div>
+          <div class="upload-meta workspace-path" title="${escapeHtml(workspacePath)}">${escapeHtml(workspacePath)}</div>
+        </div>
+        <div class="upload-actions">
+          <button class="upload-use" type="button" data-upload-use>Use</button>
+          <a class="upload-open" href="${escapeHtml(workspaceFileUrl(file.path))}" target="_blank" rel="noopener noreferrer">Open</a>
+          <a class="upload-open" href="${escapeHtml(workspaceFileUrl(file.path))}" download>Save</a>
+          <button class="upload-delete" type="button" data-upload-delete title="Delete file">&times;</button>
+        </div>
+      `;
+      contents.appendChild(item);
+    }
+    folder.append(heading, contents);
+    uploadList.appendChild(folder);
   }
 }
 
-async function loadUploads() {
+async function loadWorkspace() {
   if (!activeSessionId) {
-    uploads = [];
-    renderUploadList();
+    workspaceFiles = [];
+    renderWorkspace();
     return;
   }
-  const response = await fetch(`/files?session_id=${encodeURIComponent(activeSessionId)}`);
+  const sessionId = activeSessionId;
+  const response = await fetch(`/workspace?session_id=${encodeURIComponent(sessionId)}`);
   if (!response.ok) {
-    throw new Error(`Upload list failed: HTTP ${response.status}`);
+    throw new Error(`Workspace load failed: HTTP ${response.status}`);
   }
   const payload = await response.json();
-  uploads = Array.isArray(payload.files) ? payload.files : [];
-  renderUploadList();
+  if (sessionId !== activeSessionId) return;
+  workspaceFiles = Array.isArray(payload.workspace?.files) ? payload.workspace.files : [];
+  workspaceFiles.sort((left, right) => String(left.workspace_path || "").localeCompare(String(right.workspace_path || "")));
+  renderWorkspace();
 }
 
 async function uploadSelectedFiles(files) {
   const selected = Array.from(files || []);
-  if (!selected.length || isRunning) return;
+  if (!selected.length || isRunning || isSessionLoading) return;
+  const sessionId = activeSessionId;
   const formData = new FormData();
-  formData.append("session_id", activeSessionId);
+  formData.append("session_id", sessionId);
   for (const file of selected) {
     formData.append("files", file, file.name);
   }
@@ -406,7 +469,7 @@ async function uploadSelectedFiles(files) {
   uploadButton.disabled = true;
   uploadButton.textContent = "Uploading";
   try {
-    const response = await fetch("/upload", {
+    const response = await fetch("/workspace/files", {
       method: "POST",
       body: formData,
     });
@@ -414,22 +477,15 @@ async function uploadSelectedFiles(files) {
     if (!response.ok) {
       throw new Error(payload.error || `Upload failed: HTTP ${response.status}`);
     }
-    if (payload.session_id && payload.session_id !== activeSessionId) {
-      const session = currentSession();
-      session.id = payload.session_id;
-      activeSessionId = payload.session_id;
-      saveSessions();
-      renderSessionList();
-      updateActiveSession();
+    if (sessionId === activeSessionId) {
+      await loadWorkspace();
     }
-    uploads = Array.isArray(payload.files) ? payload.files : [];
-    await loadUploads();
   } catch (error) {
-    addMessage("assistant", `Upload failed: ${error.message}`);
+    if (sessionId === activeSessionId) addMessage("assistant", `Upload failed: ${error.message}`);
   } finally {
     uploadInput.value = "";
-    uploadButton.disabled = false;
-    uploadButton.textContent = "Upload";
+    uploadButton.disabled = isSessionLoading || isRunning;
+    uploadButton.textContent = "Add files";
   }
 }
 
@@ -475,7 +531,7 @@ function pipelineInputRequestFromResult(result) {
   if (!Array.isArray(outputs)) return null;
   for (let index = outputs.length - 1; index >= 0; index -= 1) {
     const output = outputs[index];
-    if (!output || output.skill !== "pipeline_runner" || !output.needs_input) continue;
+    if (!output || !["pipeline_shell"].includes(output.skill) || !output.needs_input) continue;
     const requestedInputs = Array.isArray(output.requested_inputs)
       ? output.requested_inputs.filter((item) => item && item.slot)
       : [];
@@ -582,16 +638,16 @@ function useUploadPath(path) {
 }
 
 async function deleteWorkspaceFile(workspacePath) {
-  if (!workspacePath || isRunning) return;
+  if (!workspacePath || isRunning || isSessionLoading) return;
   const response = await fetch(
-    `/files/${encodeURIComponent(workspacePath)}?session_id=${encodeURIComponent(activeSessionId)}`,
+    `/workspace/files/${encodeURIComponent(workspacePath)}?session_id=${encodeURIComponent(activeSessionId)}`,
     { method: "DELETE" },
   );
   const payload = await response.json();
   if (!response.ok || !payload.deleted) {
     throw new Error(payload.error || "File was not deleted.");
   }
-  await loadUploads();
+  await loadWorkspace();
 }
 
 function formatElapsed(seconds) {
@@ -708,11 +764,12 @@ function finishThinking(result) {
     session.id = result.session_id;
     activeSessionId = result.session_id;
   }
+  workspaceFiles = Array.isArray(result?.files) ? result.files : workspaceFiles;
   const runtime = result?.runtime || {};
   const status = runtime.status || result?.status || "ok";
   const state = status === "error" ? "error" : status === "blocked" ? "warning" : "done";
   setThinkingDisplay(state, runtimeMeta(runtime), result);
-  loadUploads().catch((error) => console.warn("Failed to load uploads.", error));
+  loadWorkspace().catch((error) => console.warn("Failed to load workspace.", error));
 }
 
 function failThinking(error) {
@@ -891,12 +948,14 @@ function collectFigureArtifacts(result) {
   return artifacts;
 }
 
-function artifactUrl(path, options = {}) {
-  const params = new URLSearchParams({ path: String(path || "") });
+function workspaceFileUrl(path, options = {}) {
+  const file = workspaceFiles.find((item) => item.path === path || item.workspace_path === path);
+  const params = new URLSearchParams({ path: String(file?.workspace_path || path || "") });
+  if (activeSessionId) params.set("session_id", activeSessionId);
   if (options.viewer) {
     params.set("viewer", options.viewer);
   }
-  return `/file?${params.toString()}`;
+  return `/workspace/file?${params.toString()}`;
 }
 
 function collectPipelineOutputRecords(result) {
@@ -909,7 +968,7 @@ function collectPipelineOutputRecords(result) {
   ];
 
   for (const candidate of candidates) {
-    const isPipeline = candidate?.skill === "pipeline_runner" || candidate?.tool === "pipeline_runner";
+    const isPipeline = ["pipeline_shell"].includes(candidate?.skill) || ["pipeline_shell"].includes(candidate?.tool);
     if (!isPipeline || !Array.isArray(candidate.output_records)) continue;
     for (const record of candidate.output_records) {
       const path = String(record?.path || "").trim();
@@ -928,7 +987,7 @@ function collectPipelineOutputRecords(result) {
   for (const artifact of result?.files || []) {
     const path = String(artifact?.path || "").trim();
     if (
-      artifact?.source_skill !== "pipeline_runner" ||
+      !["pipeline_shell"].includes(artifact?.source_skill) ||
       !path ||
       excludedKinds.has(String(artifact?.kind || "")) ||
       seen.has(path)
@@ -947,7 +1006,7 @@ function pipelineNameFromResult(result) {
   const outputs = result?.evidence?.outputs;
   if (Array.isArray(outputs)) {
     for (let index = outputs.length - 1; index >= 0; index -= 1) {
-      if (outputs[index]?.skill === "pipeline_runner" && outputs[index]?.pipeline_name) {
+      if (["pipeline_shell"].includes(outputs[index]?.skill) && outputs[index]?.pipeline_name) {
         return String(outputs[index].pipeline_name);
       }
     }
@@ -960,7 +1019,7 @@ function pipelineDownloadsHtml(result, records = collectPipelineOutputRecords(re
   const pipelineName = pipelineNameFromResult(result);
   const links = records.map((record) => {
     const filename = fileNameFromPath(record.path);
-    const url = artifactUrl(record.path);
+    const url = workspaceFileUrl(record.path);
     return `
       <a class="pipeline-download" href="${escapeHtml(url)}" download="${escapeHtml(filename)}"
         title="${escapeHtml(record.path)}">
@@ -986,7 +1045,7 @@ function pipelineDownloadsHtml(result, records = collectPipelineOutputRecords(re
 
 function collectedBundleHtml(result) {
   const bundles = (result?.files || []).filter((artifact) => (
-    artifact?.source_skill === "pipeline_results" &&
+    artifact?.source_skill === "pipeline_shell" &&
     artifact?.kind === "compressed" &&
     String(artifact?.path || "").toLowerCase().endsWith(".zip")
   ));
@@ -997,7 +1056,7 @@ function collectedBundleHtml(result) {
       <section class="pipeline-downloads" aria-label="Collected result bundle">
         <div class="pipeline-downloads-heading"><strong>Collected result bundle</strong></div>
         <div class="pipeline-download-grid">
-          <a class="pipeline-download" href="${escapeHtml(artifactUrl(artifact.path))}"
+          <a class="pipeline-download" href="${escapeHtml(workspaceFileUrl(artifact.path))}"
             download="${escapeHtml(filename)}">
             <span>Download all collected results</span>
             <small>${escapeHtml(filename)} · ZIP archive</small>
@@ -1015,7 +1074,7 @@ function figureArtifactsHtml(result) {
     const title = artifact.label && artifact.label !== artifact.path
       ? artifact.label
       : fileNameFromPath(artifact.path);
-    const url = artifactUrl(artifact.path);
+    const url = workspaceFileUrl(artifact.path);
     return `
       <figure class="artifact-figure">
         <div class="artifact-figure-frame">
@@ -1092,20 +1151,6 @@ function resultDetails(result) {
   `;
 }
 
-function compactStoredResult(result) {
-  if (!result) return null;
-  return {
-    session_id: result.session_id || null,
-    run: result.run || null,
-    runtime: result.runtime || null,
-    files: result.files || null,
-    evidence: result.evidence || null,
-    status: result.status || null,
-    approvals: result.approvals || null,
-    trace: result.trace || null,
-  };
-}
-
 function renderMessageText(role, text) {
   if (role === "assistant" && typeof window.renderMarkdown === "function") {
     return window.renderMarkdown(text);
@@ -1129,9 +1174,15 @@ function renderMessage(role, text, result = null) {
   if (approvalHost && window.mountToolApprovals) {
     window.mountToolApprovals(approvalHost, result, {
       url: "/approve",
-      isBusy: () => isRunning,
-      onBusy: (busy) => { sendButton.disabled = busy; },
-      onResult: (next) => addMessage("assistant", next.answer || "", next),
+      isBusy: () => isRunning || isSessionLoading,
+      onBusy: (busy) => {
+        isRunning = busy;
+        sendButton.disabled = busy || isSessionLoading;
+      },
+      onResult: (next) => {
+        finishThinking(next);
+        addMessage("assistant", next.answer || "", next);
+      },
     });
   }
   initializeStructureViewers(message);
@@ -1180,7 +1231,7 @@ async function loadStructureViewer(details) {
   const pdbId = viewerElement.dataset.pdbId || "";
   try {
     container.innerHTML = "";
-    const response = await fetch(artifactUrl(path, { viewer: "pdb" }));
+    const response = await fetch(workspaceFileUrl(path, { viewer: "pdb" }));
     if (!response.ok) {
       const text = await response.text();
       throw new Error(`Local artifact request failed: HTTP ${response.status} ${text.slice(0, 160)}`);
@@ -1343,24 +1394,22 @@ function applyStructureStyle(details, style) {
   }
 }
 
-function addMessage(role, text, result = null, options = {}) {
+function addMessage(role, text, result = null) {
   if (chat.querySelector(".empty-state")) {
     chat.innerHTML = "";
   }
   renderMessage(role, text, result);
-  if (options.persist !== false) {
-    updateCurrentSession((session) => {
-      if (role === "user" && session.messages.filter((message) => message.role === "user").length === 0) {
-        session.title = titleFromText(text);
-      }
-      session.messages.push({
-        role,
-        text: String(text || ""),
-        result: compactStoredResult(result),
-        created_at: nowIso(),
-      });
+  updateCurrentSession((session) => {
+    if (role === "user" && session.messages.filter((message) => message.role === "user").length === 0) {
+      session.title = titleFromText(text);
+    }
+    session.messages.push({
+      role,
+      text: String(text || ""),
+      result,
+      created_at: nowIso(),
     });
-  }
+  });
   renderUploadInsertOptions();
   scrollBottom();
 }
@@ -1455,7 +1504,7 @@ async function runAgent(request, signal) {
 
 async function submitPrompt(event) {
   event.preventDefault();
-  if (isRunning) return;
+  if (isRunning || isSessionLoading) return;
   const text = promptInput.value.trim();
   if (!text) return;
 
@@ -1573,6 +1622,11 @@ function bindEvents() {
       uploadInput.click();
     }
   });
+  workspaceRefresh.addEventListener("click", () => {
+    loadWorkspace().catch((error) => addMessage("assistant", `Workspace refresh failed: ${error.message}`));
+  });
+  workspaceSearch.addEventListener("input", renderWorkspace);
+  workspaceFilter.addEventListener("change", renderWorkspace);
   uploadInput.addEventListener("change", () => {
     uploadSelectedFiles(uploadInput.files);
   });
@@ -1602,15 +1656,19 @@ function bindEvents() {
 }
 
 async function init() {
-  loadSessions();
+  setSessionLoading(true);
+  try {
+    await loadSessions();
+  } catch (error) {
+    console.warn("Failed to load sessions.", error);
+    sessions = [createSession()];
+    activeSessionId = sessions[0].id;
+    rememberActiveSession();
+  }
   bindEvents();
   renderSessionList();
-  renderCurrentChat();
-  updateActiveSession();
-  resetThinkingBar();
-  renderUploadList();
+  await loadActiveSession();
   renderUploadInsertOptions();
-  loadUploads().catch((error) => console.warn("Failed to load uploads.", error));
   try {
     await loadConfig();
   } catch (error) {

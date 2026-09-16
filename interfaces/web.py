@@ -16,11 +16,9 @@ from urllib.parse import parse_qs, unquote, urlparse
 from Bio.PDB import MMCIFParser, PDBIO
 
 from tools.common.files import (
-    allowed_artifact_suffix_message,
     artifact_content_type,
     artifact_suffix_config,
     can_view_structure_artifact,
-    can_serve_artifact,
 )
 from interfaces.api import (
     delete_session,
@@ -28,11 +26,12 @@ from interfaces.api import (
     handle_approval,
     handle_request,
     list_sessions,
+    list_session_messages,
     list_workspace_files,
     read_workspace_file,
     write_workspace_file,
 )
-from harness.sandbox import WORKSPACES_DIR
+from harness.sandbox import relative_file_path
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_SKILL_STEPS, DEFAULT_MODELS
 
 
@@ -145,18 +144,21 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
         if path == "/sessions":
             self._send_json({"sessions": list_sessions()})
             return
-        if path == "/files":
-            self._handle_files()
+        if path.startswith("/sessions/") and path.endswith("/messages"):
+            self._handle_session_messages(path)
             return
-        if path == "/file":
-            self._handle_file()
+        if path == "/workspace":
+            self._handle_workspace()
+            return
+        if path == "/workspace/file":
+            self._handle_workspace_file()
             return
         self._send_json({"error": "not found"}, status=404)
 
     def do_POST(self) -> None:
         path = urlparse(self.path).path
-        if path == "/upload":
-            self._handle_upload()
+        if path == "/workspace/files":
+            self._handle_workspace_upload()
             return
         if path == "/run_stream":
             self._handle_run_stream()
@@ -197,8 +199,8 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
 
     def do_DELETE(self) -> None:
         path = urlparse(self.path).path
-        if path.startswith("/files/"):
-            self._handle_delete_file(path)
+        if path.startswith("/workspace/files/"):
+            self._handle_delete_workspace_file(path)
             return
         prefix = "/sessions/"
         if not path.startswith(prefix):
@@ -325,14 +327,35 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
                 },
             )
 
-    def _handle_files(self) -> None:
+    def _handle_workspace(self) -> None:
         parsed = urlparse(self.path)
         values = parse_qs(parsed.query)
         session_id = (values.get("session_id") or [""])[0].strip() or None
         result = list_workspace_files(session_id)
-        self._send_json({"session_id": session_id, "files": result.get("files", [])})
+        files = result.get("files", [])
+        self._send_json(
+            {
+                "session_id": session_id,
+                "workspace": {
+                    "file_count": len(files),
+                    "files": files,
+                    "capabilities": ["list", "upload", "read", "download", "delete"],
+                },
+            }
+        )
 
-    def _handle_upload(self) -> None:
+    def _handle_session_messages(self, path: str) -> None:
+        prefix = "/sessions/"
+        session_id = unquote(path[len(prefix):-len("/messages")])
+        if not session_id:
+            self._send_json({"error": "session_id is required"}, status=400)
+            return
+        try:
+            self._send_json(list_session_messages(session_id))
+        except ValueError as exc:
+            self._send_json({"error": str(exc)}, status=400)
+
+    def _handle_workspace_upload(self) -> None:
         try:
             length = int(self.headers.get("Content-Length", "0"))
             if length <= 0:
@@ -385,8 +408,8 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
                 status=400,
             )
 
-    def _handle_delete_file(self, path: str) -> None:
-        workspace_path = unquote(path[len("/files/"):]).strip()
+    def _handle_delete_workspace_file(self, path: str) -> None:
+        workspace_path = unquote(path[len("/workspace/files/"):]).strip()
         if not workspace_path:
             self._send_json({"error": "workspace file path is required"}, status=400)
             return
@@ -405,22 +428,22 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
             return {}
         return json.loads(raw.decode("utf-8"))
 
-    def _handle_file(self) -> None:
+    def _handle_workspace_file(self) -> None:
         parsed = urlparse(self.path)
         values = parse_qs(parsed.query)
         requested_path = (values.get("path") or [""])[0].strip()
+        session_id = (values.get("session_id") or [""])[0].strip()
         viewer_format = (values.get("viewer") or [""])[0].strip().lower()
+        if not session_id:
+            self._send_json({"error": "session_id is required"}, status=400)
+            return
         try:
-            file_path = _resolve_file_path(requested_path)
+            file_path = relative_file_path(requested_path)
         except ValueError as exc:
             self._send_json({"error": str(exc)}, status=400)
             return
-        relative = file_path.relative_to(WORKSPACES_DIR)
-        if len(relative.parts) < 2:
-            self._send_json({"error": "workspace file path is required"}, status=400)
-            return
         try:
-            data = read_workspace_file(relative.parts[0], Path(*relative.parts[1:]).as_posix())
+            data = read_workspace_file(session_id, file_path.as_posix())
         except Exception as exc:
             self._send_json({"error": str(exc)}, status=404)
             return
@@ -513,21 +536,6 @@ def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
     server = ThreadingHTTPServer((host, port), BioAgentRequestHandler)
     print(f"BioAgent web UI running at http://{host}:{port}")
     server.serve_forever()
-
-
-def _resolve_file_path(requested_path: str) -> Path:
-    if not requested_path:
-        raise ValueError("path is required")
-    raw_path = Path(requested_path)
-    candidate = raw_path if raw_path.is_absolute() else PROJECT_ROOT / raw_path
-    resolved = candidate.resolve()
-    try:
-        resolved.relative_to(WORKSPACES_DIR)
-    except ValueError as exc:
-        raise ValueError("file path must be inside the session workspace") from exc
-    if not can_serve_artifact(resolved):
-        raise ValueError(allowed_artifact_suffix_message())
-    return resolved
 
 
 def _structure_viewer_pdb_text(data: bytes, path: Path) -> str:

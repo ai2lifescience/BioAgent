@@ -207,21 +207,23 @@ The web page works like a chat interface:
 5. Check the answer, evidence, status, trace, and generated files below
    the response.
 
-The left session sidebar lets you create a new chat, switch between saved local
-browser sessions, and delete sessions.
+The left session sidebar lets you create a new chat, switch between server-side
+SDK sessions, and delete sessions. The browser keeps only the active session ID;
+conversation messages are loaded from the server's `SQLiteSession` when a chat
+opens, so another browser tab or page reload sees the same history.
 
 The same session can reuse downloaded files. For example, you can download a
 FASTA file in one message and then ask BioAgent to analyze the latest FASTA in a
 later message.
 
-## Upload Files
+## Manage Workspace Files
 
-Use the `Uploads` panel in the sidebar when you want the web session to keep
-input files that can be reused by skills or pipelines.
+Use the `Workspace` panel in the sidebar when you want the web session to keep
+input files, inspect generated outputs, and reuse files across turns.
 
-1. Click `Upload`.
+1. Click `Add files`.
 2. Select one or more files.
-3. The uploaded files appear in the current chat session's upload list.
+3. The files appear in the current chat session's SDK sandbox workspace.
 4. Set `Input label` to the pipeline slot or tool argument name, for example
    `input_path`, `sequence`, or `metadata`.
 5. Click `Use` beside a file to insert the labeled path into the message box.
@@ -252,14 +254,15 @@ Run the shell pipeline with input_path: "runtime/sessions/<session_id>/uploads/r
 Inspect file input_path: "runtime/sessions/<session_id>/uploads/metadata.tsv"
 ```
 
-Uploaded files are stored as immutable session files:
+Workspace files are stored in the active SDK sandbox session:
 
 ```text
 runtime/sessions/<session_id>/uploads/
 ```
 
 If the same filename is uploaded more than once, BioAgent avoids overwriting by
-adding a suffix, for example:
+adding a unique prefix to the stored name. Generated outputs appear in the same
+workspace listing and can be opened or deleted from the Workspace panel.
 
 ```text
 reads.fastq
@@ -271,7 +274,7 @@ Keep this distinction:
 
 ```text
 uploads/   original files provided through the web UI
-pipelines/ pipeline outputs and generated runtime configs
+outputs/   pipeline outputs and generated runtime files
 ```
 
 Pipeline runners use uploaded files directly from `uploads/`.
@@ -548,12 +551,12 @@ Narrative answer
 Source summaries
 Citation/evidence details
 Markdown report path
-Verification warnings if evidence is incomplete
+Evidence caveats if the source material is incomplete
 ```
 
 ### Pipeline Runner
 
-Use this to run approved pipeline folders under `pipelines/`.
+Use this to run approved pipeline folders under `tools/runtime_tools/pipelines/`.
 
 Default shell pipeline:
 
@@ -594,7 +597,7 @@ Run pipeline with pipeline_name: generic_nextflow sequence: "runtime/sessions/<s
 For uploaded inputs:
 
 ```text
-1. Upload files in the Uploads panel.
+1. Add files in the Workspace panel.
 2. Set `Input label` to the requested slot name, or let BioAgent fill it from
    the latest missing-input answer.
 3. Click Use to insert the selected input label and file path.
@@ -605,8 +608,9 @@ For uploaded inputs:
 
 If a selected pipeline requires input files and no valid path is provided in the
 request, BioAgent asks for the missing paths instead of starting the pipeline.
-The skill does not use default input files from `config.yaml`; those defaults
-are only examples for the raw pipeline.
+The skill does not use bundled input files as runtime inputs; native defaults
+are only configuration for the raw pipeline. Example data is staged only when
+the user requests it.
 
 For `generic_snakemake`, use named input paths:
 
@@ -620,7 +624,7 @@ variants VCF, multiple TSV tables, three PNG figures, metrics JSON, and
 Markdown and HTML reports:
 
 ```text
-Run pipeline with pipeline_name: generic_bio reads: "pipelines/generic_bio/data/input/example_reads.fastq" reference: "pipelines/generic_bio/data/input/example_reference.fasta" metadata: "pipelines/generic_bio/data/input/example_samples.tsv"
+Run generic_bio with its bundled example data and summarize the results.
 ```
 
 Completed pipelines are presented as download links. The web UI does not
@@ -635,18 +639,20 @@ Pipeline outputs may be conditional. `generic_bio` emits a Newick phylogenetic
 tree and PNG preview by default. To disable those two outputs:
 
 ```text
-Run pipeline with pipeline_name: generic_bio reads: "pipelines/generic_bio/data/input/example_reads.fastq" reference: "pipelines/generic_bio/data/input/example_reference.fasta" metadata: "pipelines/generic_bio/data/input/example_samples.tsv" emit_phylogenetic_tree false
+Run generic_bio with its bundled example data, but disable the phylogenetic tree outputs.
 ```
 
 Pipeline folder contract:
 
 ```text
-pipelines/<pipeline_name>/runner.yaml
-pipelines/<pipeline_name>/config.yaml   # default, or runner.yaml config:
-pipelines/<pipeline_name>/run.sh        # shell default, or runner.yaml entrypoint:
-pipelines/<pipeline_name>/Snakefile     # snakemake default, or runner.yaml snakefile:
-pipelines/<pipeline_name>/main.nf       # nextflow default, or runner.yaml workflow:
-pipelines/<pipeline_name>/nextflow.config # optional runner.yaml nextflow_config:
+tools/runtime_tools/pipelines/<pipeline_name>/runner.yaml
+tools/runtime_tools/pipelines/<pipeline_name>/run.sh        # shell default, or runner.yaml entrypoint:
+tools/runtime_tools/pipelines/<pipeline_name>/Snakefile     # snakemake default, or runner.yaml snakefile:
+tools/runtime_tools/pipelines/<pipeline_name>/main.nf       # nextflow default, or runner.yaml workflow:
+tools/runtime_tools/pipelines/<pipeline_name>/nextflow.config # optional runner.yaml nextflow_config:
+tools/runtime_tools/pipelines/<pipeline_name>/workflow.wdl   # WDL workflow, when selected
+# optional native files explicitly referenced by runner.yaml:
+# config.yaml, inputs.json, options.json
 ```
 
 For multi-input pipelines, `runner.yaml` can declare named input slots:
@@ -665,62 +671,65 @@ inputs:
     accepts: [".tsv", ".csv"]
 ```
 
-Use a simple base config shape for plug-and-play agent execution:
+Put ordinary defaults in `runner.yaml` for plug-and-play agent execution:
 
 ```yaml
-label: my_pipeline
-input_path: path/to/default/input.file
-output_dir: output
-report_path: output/report.md
-metrics_path: output/metrics.json
+name: my_pipeline
+engine: shell
+entrypoint: run.sh
 params:
   min_length: 0
   mode: example
+outputs:
+  report: {config_key: report_path, default: report.md, kind: report}
+  metrics: {config_key: metrics_path, default: metrics.json, kind: metrics}
 ```
 
-BioAgent generates `config.runtime.yaml` from this base config, replaces input
-paths with uploaded/session files, and resolves declared output file keys such
-as `report_path` and `metrics_path` inside the per-run pipeline directory. Web
+BioAgent generates `config.runtime.yaml` from the manifest and any explicitly
+referenced native file, replaces input paths with uploaded/session files, and
+resolves declared output keys inside the per-run pipeline directory. Web
 requests can override keys under `params`:
 
 ```text
 Run pipeline generic_snakemake with input_path: "runtime/sessions/<session_id>/uploads/sequences.fasta" min_length 50
 ```
 
-For `engine: shell`, `pipeline_runner` uses:
+The local `pipeline_shell` runtime creates a validated plan and starts a durable
+job with:
 
 ```text
-bash pipelines/<pipeline_name>/run.sh <run_dir>/config.runtime.yaml
+bioagent-pipeline plan --pipeline <pipeline_name> --input <slot>=<workspace_path>
+bioagent-pipeline run --plan-id <plan_id>
 ```
 
-For `engine: snakemake`, `pipeline_runner` uses:
+The worker dispatches the selected engine locally. The engine commands are:
 
 ```text
-snakemake --cores <cores> --snakefile pipelines/<pipeline_name>/Snakefile --configfile <run_dir>/config.runtime.yaml
+shell:     bash tools/runtime_tools/pipelines/<pipeline_name>/run.sh <run_dir>/config.runtime.yaml
+snakemake: snakemake --cores <cores> --snakefile tools/runtime_tools/pipelines/<pipeline_name>/Snakefile --configfile <run_dir>/config.runtime.yaml
+nextflow:  nextflow ... -params-file <run_dir>/config.runtime.yaml
+wdl:       miniwdl run --dir <run_dir>/wdl_engine ...
 ```
 
-For `engine: nextflow`, `pipeline_runner` uses:
+Check or collect a local job with:
 
 ```text
-nextflow -c pipelines/<pipeline_name>/nextflow.config run pipelines/<pipeline_name>/main.nf -params-file <run_dir>/config.runtime.yaml -work-dir <run_dir>/nextflow_work
+bioagent-pipeline status --job-id <job_id>
+bioagent-pipeline wait --job-id <job_id> --seconds 10
+bioagent-pipeline results --job-id <job_id>
 ```
 
-The workflow publishes final files into the runtime `nextflow_output_dir`.
+The workflow publishes final files into the job's output directory.
 `runner.yaml.outputs[*].nextflow_output` maps those relative published names to
 BioAgent's stable file paths. Dry run uses Nextflow `-preview`.
-
-For `engine: wdl`, `pipeline_runner` uses miniwdl:
-
-```text
-miniwdl run --dir <run_dir>/wdl_engine -o <run_dir>/wdl.outputs.json pipelines/<pipeline_name>/workflow.wdl -i <run_dir>/inputs.runtime.json
-```
 
 miniwdl uses your local miniwdl runtime configuration. By default, miniwdl
 expects Docker unless your environment is configured otherwise.
 
-If the pipeline has `options.json`, BioAgent writes `options.runtime.json` in
-the run directory. This keeps Cromwell-style output options compatible for later
-use, while `runner.yaml.outputs` remains the output contract for the web UI.
+If the manifest references `options.json`, BioAgent writes `options.runtime.json`
+in the run directory. This preserves Cromwell-style options for provenance;
+miniwdl does not consume them. `runner.yaml.outputs` remains the output contract
+for the web UI. Native input and options files are left unchanged.
 
 Typical output:
 
@@ -755,7 +764,7 @@ Please test skill calling by running the example skill with message hello and ta
 Run the example skill with message hello world and tag uppercase-test uppercase.
 ```
 
-## Multi-Turn Artifact Usage
+## Multi-Turn Workspace Usage
 
 The web UI is the best interface for workflows that reuse files across turns.
 Examples:
@@ -782,7 +791,7 @@ Then:
 Analyze the latest structure
 ```
 
-This works because the web session keeps a session file list. Separate CLI
+This works because the web session keeps the SDK sandbox workspace. Separate CLI
 commands do not automatically share the same session unless you explicitly use
 the same API session.
 

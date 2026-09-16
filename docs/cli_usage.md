@@ -60,7 +60,7 @@ loop.
 | Workflow | Main tool or actions |
 | --- | --- |
 | `example_skill` | `echo` |
-| `pipeline_runner` | `pipeline_runner` |
+| `pipeline_shell` | `bioagent-pipeline plan/run/status/wait/results/cancel` |
 | `ncbi_retrieval` | `ncbi_fetch` |
 | `database_lookup` | database search actions |
 | `pdb_download` | `pdb_download` |
@@ -82,24 +82,46 @@ same `session_id`, `approval_id`, and boolean `approved` to `/approve`.
 
 ## Pipeline requests
 
-Pipeline execution is restricted to approved folders under `pipelines/`. Each
-folder contains a `runner.yaml`, a base config, and an entrypoint such as
-`run.sh`:
+Pipeline execution is restricted to approved folders under `tools/runtime_tools/pipelines/`. Each
+folder contains a `runner.yaml` and an entrypoint such as `run.sh`. Native
+workflow files are optional and remain available when an engine needs them:
 
 ```text
-pipelines/<pipeline_name>/
+tools/runtime_tools/pipelines/<pipeline_name>/
   runner.yaml
-  config.yaml
   run.sh
+  # optional: config.yaml, nextflow.config, inputs.json, options.json
 ```
 
-For example:
+### Examples
 
-```bash
-python -m interfaces.cli "Run the shell pipeline with pipeline_name: generic_shell."
-```
+1. Discover the registered pipelines before choosing one:
 
-Runtime configs and logs are written below the session artifact directory. An
+   ```bash
+   python -m interfaces.cli "Use pipeline_shell to list the available pipelines."
+   ```
+
+2. Run the bundled demonstration and collect its results:
+
+   ```bash
+   python -m interfaces.cli "Run the example_sequence_qc example and summarize its metrics."
+   ```
+
+   The agent stages the example inputs, creates a validated plan, requests
+   approval for execution, waits for the job, and collects the output bundle.
+
+3. Run a pipeline with files uploaded to the current session:
+
+   ```bash
+   python -m interfaces.cli --session-id demo \
+     "Use my uploaded reads.fastq and metadata.tsv as the reads and metadata inputs for example_sequence_qc, run it, and return the results."
+   ```
+
+   The agent discovers workspace-relative file paths and passes them explicitly
+   to `bioagent-pipeline plan`; it does not guess paths or substitute example
+   data for missing user inputs.
+
+Runtime configs and logs are written below the session workspace directory. An
 uploaded input path is recorded in the run manifest; arbitrary script paths
 are not accepted.
 
@@ -131,7 +153,7 @@ network access:
 ```bash
 python evals/smoke_architecture.py
 python evals/smoke_session_artifacts.py
-python evals/smoke_pipeline_results.py
+python evals/smoke_pipeline_runtime.py
 ```
 
 The OpenRouter check runs only when `OPENROUTER_API_KEY` is present:

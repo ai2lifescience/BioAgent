@@ -86,14 +86,16 @@
     } else {
       body.textContent = text;
     }
-    const artifacts = Array.isArray(result?.files) ? result.files : [];
-    const paths = [...new Set(artifacts.map((item) => item.path).filter((path) => typeof path === "string" && path))];
+    const resultFiles = Array.isArray(result?.files) ? result.files : [];
+    const paths = [...new Map(resultFiles
+      .map((item) => [item?.workspace_path || item?.path, item])
+      .filter(([path]) => typeof path === "string" && path)).entries()];
     if (paths.length) {
       const files = document.createElement("div");
       files.className = "message-files";
-      for (const path of paths) {
+      for (const [path] of paths) {
         const link = document.createElement("a");
-        link.href = apiUrl(`file?path=${encodeURIComponent(path)}`);
+        link.href = apiUrl(`workspace/file?path=${encodeURIComponent(path)}&session_id=${encodeURIComponent(state.sessionId)}`);
         link.textContent = path.split("/").pop();
         link.target = "_blank";
         link.rel = "noopener noreferrer";
@@ -278,7 +280,7 @@
     setBusy(true);
     status.textContent = "Uploading files…";
     try {
-      const response = await fetch(apiUrl("upload"), { method: "POST", body: data });
+      const response = await fetch(apiUrl("workspace/files"), { method: "POST", body: data });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
       state.sessionId = result.session_id || state.sessionId;

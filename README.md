@@ -228,9 +228,9 @@ the task container images.
 through the web UI.
 - The bacterial annotation pipeline supports Prokka or Bakta; Bakta also
   requires a compatible database. See
-  [its environment guide](pipelines/bacterial_annotation/README.md).
+  [its environment guide](tools/runtime_tools/pipelines/bacterial_annotation/README.md).
 - The RNA secondary-structure pipeline requires ViennaRNA `RNAfold`. See
-  [its environment guide](pipelines/rna_secondary_structure/README.md).
+  [its environment guide](tools/runtime_tools/pipelines/rna_secondary_structure/README.md).
 
 
 
