@@ -7,7 +7,7 @@ from typing import Annotated, Literal
 from agents import RunContextWrapper
 from pydantic import Field
 
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from tools.common.results import run_workflow
 from tools.common.tooling import bio_function_tool
 
@@ -16,7 +16,7 @@ from .workflow import biology_analysis as _workflow
 
 @bio_function_tool()
 async def biology_analysis(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     operation: Annotated[
         Literal["reverse_complement", "translate", "genbank_features"],
         Field(description="Biopython transformation or GenBank feature operation to run.")

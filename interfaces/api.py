@@ -1,4 +1,4 @@
-"""Programmatic API interface for BioAgent."""
+"""Programmatic API interface for Pipeline2Agent."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from typing import Any, Callable
 from agents import SQLiteSession
 
 from harness import runtime
-from harness.runtime import delete_session, list_sessions, resume_bioagent, run_bioagent, update_session
+from harness.runtime import delete_session, list_sessions, resume_agent, run_agent, update_session
 from harness.sandbox import delete_file, list_files, open_workspace, read_file, upload_file
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 
@@ -20,8 +20,8 @@ def handle_request(
     max_turns: int = DEFAULT_MAX_TURNS,
     log_fn: Callable[[str], None] | None = None,
 ) -> dict[str, Any]:
-    """Run BioAgent from application code."""
-    return run_bioagent(request, session_id, model_key, max_turns, log_fn)
+    """Run Pipeline2Agent from application code."""
+    return run_agent(request, session_id, model_key, max_turns, log_fn)
 
 
 def handle_approval(
@@ -31,7 +31,7 @@ def handle_approval(
     log_fn: Callable[[str], None] | None = None,
 ) -> dict[str, Any]:
     """Approve or reject the pending SDK tool call for a session."""
-    return resume_bioagent(session_id, approved, approval_id, log_fn=log_fn)
+    return resume_agent(session_id, approved, approval_id, log_fn=log_fn)
 
 
 def update_session_metadata(

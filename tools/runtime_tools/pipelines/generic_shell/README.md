@@ -12,14 +12,14 @@ The pipeline runtime requires:
 It does not require Docker, network access, or external bioinformatics command
 line tools.
 
-## BioAgent environment
+## Pipeline2Agent environment
 
 The project environment already includes the required dependency. From the
 repository root:
 
 ```bash
-conda create -n bioagent python=3.12 -y
-conda activate bioagent
+conda create -n agent python=3.12 -y
+conda activate agent
 python -m pip install -r requirements.txt
 ```
 
@@ -46,7 +46,7 @@ python -c "import yaml; print(yaml.__version__)"
 
 This pipeline joins sequence records with a TSV or CSV metadata table and
 writes the subtype assigned to each sequence. It is a small shell-based
-BioAgent pipeline example that can also run directly from Bash.
+Pipeline2Agent pipeline example that can also run directly from Bash.
 
 The processing flow is:
 
@@ -89,7 +89,7 @@ The pipeline produces:
 - `report.md`: a human-readable run summary.
 
 The runtime writes declared outputs into the per-job output directory and
-returns them through `bioagent-pipeline results --job-id <job_id>`.
+returns them through `agent-pipeline results --job-id <job_id>`.
 
 Example subtype output:
 

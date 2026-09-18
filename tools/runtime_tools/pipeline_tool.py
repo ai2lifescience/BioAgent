@@ -1,4 +1,4 @@
-"""Agents SDK local ShellTool for the BioAgent pipeline command protocol."""
+"""Agents SDK local ShellTool for the Pipeline2Agent pipeline command protocol."""
 from __future__ import annotations
 
 import asyncio
@@ -13,26 +13,26 @@ from .pipeline_runtime.store import JobStore
 
 PIPELINE_INSTRUCTIONS = """
 Use pipeline_shell (the SDK local shell tool) for pipeline operations. Its only
-command is bioagent-pipeline; Bash expressions, arbitrary commands, and redirects
+command is agent-pipeline; Bash expressions, arbitrary commands, and redirects
 are not supported. Issue ONE command per call. Shell action timeout_ms is in
 milliseconds; --timeout is the pipeline deadline in seconds.
 
 Commands:
-- bioagent-pipeline catalog : discover pipeline manifests, inputs, parameters.
-- bioagent-pipeline files : discover session workspace-relative input paths.
-- bioagent-pipeline example --pipeline example_sequence_qc : stage bundled example
+- agent-pipeline catalog : discover pipeline manifests, inputs, parameters.
+- agent-pipeline files : discover session workspace-relative input paths.
+- agent-pipeline example --pipeline example_sequence_qc : stage bundled example
   data, only when the user requested a demonstration/example.
-- bioagent-pipeline plan --pipeline NAME --input SLOT=WORKSPACE_PATH
+- agent-pipeline plan --pipeline NAME --input SLOT=WORKSPACE_PATH
   [--input OTHER_SLOT=PATH] [--param NAME=JSON_OR_TEXT] [--cores N]
   [--timeout SECONDS] [--dry-run]. Quote tokens containing spaces. For array inputs,
   pass a JSON array, e.g. --input 'reads=["uploads/a.fa","uploads/b.fa"]'.
-- bioagent-pipeline run --plan-id ID : start the exact saved plan (SDK approval).
-- bioagent-pipeline jobs : list previous jobs in this session.
-- bioagent-pipeline status --job-id ID : status and log paths.
-- bioagent-pipeline wait --job-id ID --seconds 5 : bounded wait, at most 30 seconds.
-- bioagent-pipeline results --job-id ID [--max-table-rows 10] : verified outputs,
+- agent-pipeline run --plan-id ID : start the exact saved plan (SDK approval).
+- agent-pipeline jobs : list previous jobs in this session.
+- agent-pipeline status --job-id ID : status and log paths.
+- agent-pipeline wait --job-id ID --seconds 5 : bounded wait, at most 30 seconds.
+- agent-pipeline results --job-id ID [--max-table-rows 10] : verified outputs,
   metrics, table previews, and a ZIP bundle, without rerunning.
-- bioagent-pipeline cancel --job-id ID : stop the local process group (SDK approval).
+- agent-pipeline cancel --job-id ID : stop the local process group (SDK approval).
 
 Inspect catalog and session files, reuse known paths, then plan. Resolve missing
 inputs or parameters before run. Use the returned plan ID; never invent an ID.
@@ -97,7 +97,7 @@ async def execute_local_pipeline_command(request: ShellCommandRequest) -> ShellR
     command = commands[0] if len(commands) == 1 else ""
     try:
         if len(commands) != 1:
-            raise ValueError("Send exactly one bioagent-pipeline command per shell call.")
+            raise ValueError("Send exactly one agent-pipeline command per shell call.")
         args = parse_command(command)
         # Bounded wait is capped by the shell action budget as well as its own flag.
         timeout = request.data.action.timeout_ms

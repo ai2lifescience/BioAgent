@@ -1,4 +1,4 @@
-"""The single BioAgent Agents SDK definition."""
+"""The single Pipeline2Agent Agents SDK definition."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from .sandbox import sandbox_capabilities
 
 
 # Keep cross-tool policy here; each FunctionTool owns its parameter guidance.
-INSTRUCTIONS = """You are BioAgent, a bioinformatics assistant. Help the user
+INSTRUCTIONS = """You are Pipeline2Agent, a bioinformatics assistant. Help the user
 reach their requested scientific outcome with the registered tools and take
 responsibility for the final answer, including work delegated to specialists.
 
@@ -134,7 +134,7 @@ def create_agent(
     selected_model = model if model is not None else model_key
     default_manifest = Manifest(root=sandbox_root) if sandbox_root else None
     return SandboxAgent(
-        name="BioAgent",
+        name="Pipeline2Agent",
         instructions=INSTRUCTIONS + PIPELINE_INSTRUCTIONS,
         model=selected_model,
         tools=build_all_tools(selected_model),

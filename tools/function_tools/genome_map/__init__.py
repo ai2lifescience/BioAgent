@@ -12,14 +12,14 @@ from agents import RunContextWrapper
 from pydantic import Field
 
 from .workflow import genome_map as _workflow
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from tools.common.results import run_workflow
 from tools.common.tooling import bio_function_tool
 
 
 @bio_function_tool()
 async def genome_map(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     fasta_path: Annotated[str | None, Field(description='Local FASTA file path.')] = None,
     genbank_path: Annotated[str | None, Field(description='Local GenBank .gb/.gbk file path.')] = None,
     gff_path: Annotated[str | None, Field(description='Optional local GFF/GFF3 annotation path.')] = None,

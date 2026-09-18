@@ -1,10 +1,15 @@
-# BioAgent architecture
+# Pipeline2Agent architecture
 
-BioAgent uses one OpenAI Agents SDK runtime. The SDK owns model turns, tool
-calling, sessions, guardrails, and tracing. BioAgent supplies typed biological
+Pipeline2Agent uses one OpenAI Agents SDK runtime. The SDK owns model turns,
+tool calling, sessions, guardrails, and tracing. Pipeline2Agent supplies typed biological
 function tools and deterministic implementations for scientific operations.
 
-![BioAgent current system architecture](images/system_architecture.png)
+Internal names use `agent`: the Python entry points are `run_agent`,
+`async_run_agent`, `resume_agent`, and `async_resume_agent`; pipeline commands
+use `agent-pipeline`, and environment variables use the `AGENT_` prefix.
+The public browser embedding API is `Pipeline2AgentDrawer`.
+
+![Pipeline2Agent current system architecture](images/system_architecture.png)
 
 ## Runtime flow
 
@@ -12,7 +17,7 @@ function tools and deterministic implementations for scientific operations.
 Web / CLI / API / notebook
         |
         v
-harness.run_bioagent()
+harness.run_agent()
         |
         v
 Agents SDK Agent + Runner
@@ -23,7 +28,7 @@ Agents SDK Agent + Runner
 RunConfig.model_provider -> OpenAI Chat Completions client -> OpenRouter
         |
         v
-BioAgent function, specialist, and runtime tools
+Pipeline2Agent function, specialist, and runtime tools
         |
         +-- biological databases and literature
         +-- sequence, BLAST, genome, and structure analysis
@@ -46,7 +51,7 @@ live under `tools/function_tools/species_report/reporting/`.
 
 ### Agents SDK harness
 
-- `harness/agent.py` defines the single `BioAgent` and its instructions.
+- `harness/agent.py` defines the single `Pipeline2Agent` and its instructions.
 - `harness/runtime.py` creates the `Runner`, supplies run context, and returns
   the application result.
 - `tools/function_tools/` contains the public biological `FunctionTool`
@@ -70,7 +75,7 @@ live under `tools/function_tools/species_report/reporting/`.
 
 ### Models and provider ownership
 
-BioAgent uses the SDK's per-run `ModelProvider` integration: agents declare a
+Pipeline2Agent uses the SDK's per-run `ModelProvider` integration: agents declare a
 model alias, and `RunConfig(model_provider=provider)` resolves it to an SDK
 `Model`. This follows the [SDK model integration guide](https://openai.github.io/openai-agents-python/models/#non-openai-models).
 The application owns the provider's lifetime and closes it after the run, as
@@ -104,7 +109,7 @@ credentials.
 On completion, failure, or approval pause, the harness closes the provider and
 its owned client. Resuming a saved `RunState` builds agent definitions and a
 fresh provider. An explicitly injected client remains owned by its caller.
-BioAgent supplies the model provider on each run without changing the SDK's
+Pipeline2Agent supplies the model provider on each run without changing the SDK's
 global default model API or client.
 
 `models/config.py` maps UI/CLI keys such as `gpt-oss` to native OpenRouter IDs.
@@ -120,7 +125,7 @@ check that the selected model supports the tools used by its agents.
 - `OPENROUTER_API_KEY` for authentication;
 - `OPENROUTER_API_BASE`, defaulting to `https://openrouter.ai/api/v1`;
 - optional `HTTP-Referer` and `X-OpenRouter-Title` headers;
-- HTTPX2 clients with explicit proxy selection from `BIOAGENT_PROXY`, falling
+- HTTPX2 clients with explicit proxy selection from `AGENT_PROXY`, falling
   back to `ALL_PROXY`/`all_proxy`.
 
 SDK model runs and embeddings use this OpenRouter transport. Credentials are
@@ -141,14 +146,14 @@ an error containing the attempted models' failures.
 Reporting instructions and prompts belong to the species-report package.
 `Agent`, `ModelSettings`, `Runner`, and `RunConfig` control each reporting call.
 The reporting provider closes after the batch, and SDK spans are recorded
-locally in the calling run's trace when its `BioRunContext` is supplied.
+locally in the calling run's trace when its `AgentRunContext` is supplied.
 
 ### Tool categories
 
 The SDK tool surface is organized by execution semantics:
 
 - `tools/function_tools/` — local Python `FunctionTool` wrappers for biological
-  and general assistant workflows. This is BioAgent's primary category.
+  and general assistant workflows. This is Pipeline2Agent's primary category.
 - `tools/agent_tools/` — focused agents exposed through `Agent.as_tool()`.
 - `tools/hosted_tools/` — extension point for tools executed by OpenAI-hosted
   infrastructure. It is empty until the configured model/runtime supports one.
@@ -252,7 +257,7 @@ Biological function tools return the common
 `status`/`data`/`files`/`evidence`/`error` envelope. The local ShellTool returns
 command JSON inside an SDK `ShellResult`.
 
-The local `pipeline_shell` ShellTool accepts the `bioagent-pipeline` command
+The local `pipeline_shell` ShellTool accepts the `agent-pipeline` command
 protocol. Its executor parses the command and dispatches validated operations
 to the pipeline service. SDK filesystem capabilities provide workspace file
 inspection and editing; biological command execution uses `pipeline_shell`.
@@ -289,8 +294,8 @@ The primary intent boundaries are:
 | Multi-step data analysis | `data_analysis_specialist` |
 | Multi-source web research | `web_research_specialist` |
 | Multi-step coding task | `coding_specialist` |
-| Execute or monitor a pipeline | `pipeline_shell` (`bioagent-pipeline` protocol) |
-| Review completed pipeline outputs | `pipeline_shell` with `bioagent-pipeline results --job-id ID` |
+| Execute or monitor a pipeline | `pipeline_shell` (`agent-pipeline` protocol) |
+| Review completed pipeline outputs | `pipeline_shell` with `agent-pipeline results --job-id ID` |
 
 Use a specialist only when the request combines multiple routes in one domain;
 use the direct route for a single operation.
@@ -335,7 +340,7 @@ SQLite conversation history; the root supplies the goal, paths, constraints,
 and relevant prior results in the delegated request.
 
 The workflow wrapper keeps the common envelope at the SDK boundary while
-preserving raw action results inside `BioRunContext` for evidence collection
+preserving raw action results inside `AgentRunContext` for evidence collection
 and workspace file discovery.
 
 The SDK run context carries:
@@ -353,7 +358,7 @@ the complete root surface is assembled by `tools.registry.build_all_tools`.
 ### Sessions and workspace files
 
 `SQLiteSession` persists user and assistant messages in
-`runtime/agent_sessions.sqlite3` (configurable with `BIOAGENT_SESSION_DB`).
+`runtime/agent_sessions.sqlite3` (configurable with `AGENT_SESSION_DB`).
 Application metadata is persisted in `runtime/session_metadata`.
 
 The SDK session is the single source of truth for conversation history. The
@@ -389,7 +394,7 @@ needed.
 The web Workspace panel is a thin view over this sandbox listing. Uploads are
 written to `uploads/`, generated files are grouped as outputs, and the panel
 offers search, download, and removal. It does not assign pipeline slot labels
-or copy paths into chat messages; the agent uses `bioagent-pipeline files` and
+or copy paths into chat messages; the agent uses `agent-pipeline files` and
 the workspace-relative paths already returned by the sandbox.
 
 PDF uploads can be summarized through the `document_read` FunctionTool. The
@@ -434,13 +439,13 @@ original model request.
 
 The SDK creates traces and spans for agent, model, tool, handoff, and guardrail
 operations. `LocalTraceProcessor` records redacted lifecycle metadata for the
-current run. `BioAgentHooks` sends progress messages to CLI and streaming HTTP
+current run. `AgentHooks` sends progress messages to CLI and streaming HTTP
 callers. External trace export is disabled by default because OpenRouter is the
 model endpoint and does not provide the OpenAI trace destination.
 
 ## Pipeline runtime
 
-BioAgent runs registered Shell, Snakemake, Nextflow, and miniwdl workflows
+Pipeline2Agent runs registered Shell, Snakemake, Nextflow, and miniwdl workflows
 through the SDK local ShellTool named `pipeline_shell`. Pipeline definitions
 live under `tools/runtime_tools/pipelines/<pipeline_name>/`. The service scans
 folders containing `runner.yaml` whenever the agent requests the catalog.
@@ -490,16 +495,16 @@ that the pipeline is scientifically appropriate for the user's question.
 For example, `generic_bio` describes an educational positional-comparison demo,
 not a validated alignment or variant-calling workflow.
 
-### The bioagent-pipeline command protocol
+### The agent-pipeline command protocol
 
-`bioagent-pipeline` is the project-defined command prefix accepted by
+`agent-pipeline` is the project-defined command prefix accepted by
 `pipeline_shell`. In the agent flow it is a string parsed by Python using
 `shlex` and `argparse`, rather than a command evaluated by Bash. Each tool call
 accepts exactly one command; arbitrary programs, pipes, redirects, and
 workspace overrides are not supported.
 
 ```text
-pipeline_shell receives "bioagent-pipeline catalog"
+pipeline_shell receives "agent-pipeline catalog"
     -> execute_local_pipeline_command()
     -> parse_command() / dispatch()
     -> service.catalog()
@@ -508,16 +513,16 @@ pipeline_shell receives "bioagent-pipeline catalog"
 
 | Command | Purpose |
 | --- | --- |
-| `bioagent-pipeline catalog` | Discover manifest descriptions, input/output slots, parameters, and engines. |
-| `bioagent-pipeline files` | List workspace-relative file paths, names, and sizes. |
-| `bioagent-pipeline example --pipeline NAME` | Copy bundled `data/input/` files into the workspace for a requested demonstration. |
-| `bioagent-pipeline plan --pipeline NAME --input SLOT=PATH` | Validate inputs and settings and save a plan without executing it. |
-| `bioagent-pipeline run --plan-id ID` | Start the exact saved plan, subject to SDK approval. |
-| `bioagent-pipeline jobs` | List jobs in the current session. |
-| `bioagent-pipeline status --job-id ID` | Read the job state and log paths. |
-| `bioagent-pipeline wait --job-id ID --seconds 5` | Wait for a bounded interval, at most 30 seconds. |
-| `bioagent-pipeline results --job-id ID` | Verify outputs and return file records, metrics, table previews, and a ZIP bundle. |
-| `bioagent-pipeline cancel --job-id ID` | Cancel a job and stop its local process group, subject to SDK approval. |
+| `agent-pipeline catalog` | Discover manifest descriptions, input/output slots, parameters, and engines. |
+| `agent-pipeline files` | List workspace-relative file paths, names, and sizes. |
+| `agent-pipeline example --pipeline NAME` | Copy bundled `data/input/` files into the workspace for a requested demonstration. |
+| `agent-pipeline plan --pipeline NAME --input SLOT=PATH` | Validate inputs and settings and save a plan without executing it. |
+| `agent-pipeline run --plan-id ID` | Start the exact saved plan, subject to SDK approval. |
+| `agent-pipeline jobs` | List jobs in the current session. |
+| `agent-pipeline status --job-id ID` | Read the job state and log paths. |
+| `agent-pipeline wait --job-id ID --seconds 5` | Wait for a bounded interval, at most 30 seconds. |
+| `agent-pipeline results --job-id ID` | Verify outputs and return file records, metrics, table previews, and a ZIP bundle. |
+| `agent-pipeline cancel --job-id ID` | Cancel a job and stop its local process group, subject to SDK approval. |
 
 `plan` supports repeated `--input` and `--param NAME=VALUE` arguments, `--cores`,
 `--timeout` in seconds, and `--dry-run` for Snakemake, Nextflow, or WDL. Shell
@@ -533,7 +538,7 @@ python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace ca
 python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace example --pipeline example_sequence_qc
 ```
 
-This module constructs the `bioagent-pipeline` prefix internally. SDK approval
+This module constructs the `agent-pipeline` prefix internally. SDK approval
 controls apply to agent calls; this direct operator CLI executes requested
 operations without that approval UI. Agent calls obtain the workspace from the
 active session and cannot supply `--workspace`.
@@ -793,7 +798,7 @@ runs are unsupported; Snakemake uses its dry-run mode, Nextflow uses preview,
 and WDL uses `miniwdl check`. Adding a different engine requires runtime code
 changes in addition to a manifest.
 
-For a runnable demonstration of the full protocol, ask BioAgent:
+For a runnable demonstration of the full protocol, ask Pipeline2Agent:
 
 > Use the example_sequence_qc example data, run it, and summarize the results.
 
@@ -809,14 +814,14 @@ regressions; they do not replace an execution test of the new workflow.
 All interfaces call the same runtime:
 
 ```python
-from harness import run_bioagent
+from harness import run_agent
 
-result = run_bioagent("Analyze this FASTA sequence", session_id="chat-1")
+result = run_agent("Analyze this FASTA sequence", session_id="chat-1")
 print(result["answer"])
 ```
 
 The synchronous wrapper is used by CLI, HTTP, and ordinary Python callers. Use
-`async_run_bioagent` in an application that already owns an asyncio event loop.
+`async_run_agent` in an application that already owns an asyncio event loop.
 
 The web workspace is a thin adapter over the SDK sandbox session. It exposes
 one session-scoped workspace resource for listing, upload, read/download, and
@@ -858,25 +863,25 @@ Set the provider key before a live run:
 export OPENROUTER_API_KEY="..."
 ```
 
-For OpenRouter traffic, set `BIOAGENT_PROXY` in the terminal before starting
+For OpenRouter traffic, set `AGENT_PROXY` in the terminal before starting
 the server:
 
 ```bash
 conda activate openaisdk
-export BIOAGENT_PROXY=socks5h://127.0.0.1:10801
+export AGENT_PROXY=socks5h://127.0.0.1:10801
 python -B -m interfaces.web --host 0.0.0.0 --port 8000
 ```
 
-`BIOAGENT_PROXY` takes priority over `ALL_PROXY`/`all_proxy`; neither setting
+`AGENT_PROXY` takes priority over `ALL_PROXY`/`all_proxy`; neither setting
 requires clearing `HTTP_PROXY` or `HTTPS_PROXY` for these clients. Set
-`BIOAGENT_DISABLE_PROXY=1` to force direct OpenRouter connections regardless
+`AGENT_DISABLE_PROXY=1` to force direct OpenRouter connections regardless
 of proxy settings. Unset that variable before switching back to a proxy.
 Database and pipeline clients retain their own proxy settings.
 
-Choose a configured model with `BIOAGENT_AGENT_MODEL_KEY`. Set
-`BIOAGENT_MAX_TURNS` to bound the SDK run turns. Set
-`BIOAGENT_SESSION_DB` and `BIOAGENT_RUNS_DIR` when the application needs
-non-default storage locations.
+Choose a configured model with `AGENT_MODEL_KEY`. Set
+`AGENT_MAX_TURNS` to bound the SDK run turns. Set
+`AGENT_SESSION_DB` for the conversation database and `AGENT_SESSIONS_DIR`
+for session workspaces, including their per-run directories.
 
 ## Testing
 

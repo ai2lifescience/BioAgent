@@ -11,7 +11,7 @@ from .results import tool_error
 
 
 def bio_function_tool(*, timeout: int = 300, needs_approval: bool = False) -> Any:
-    """Return the standard BioAgent FunctionTool decorator.
+    """Return the standard Pipeline2Agent FunctionTool decorator.
 
     Every public tool gets the same strict schema, error envelope, and
     boundary guardrails.  Callers only specify the timeout and whether an

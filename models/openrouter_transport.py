@@ -16,28 +16,28 @@ def client_options() -> dict[str, Any]:
     api_key = os.getenv("OPENROUTER_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError("OPENROUTER_API_KEY is required for model requests.")
-    headers = {"X-OpenRouter-Title": "BioAgent"}
-    if os.getenv("BIOAGENT_SITE_URL"):
-        headers["HTTP-Referer"] = os.environ["BIOAGENT_SITE_URL"]
+    headers = {"X-OpenRouter-Title": "Pipeline2Agent"}
+    if os.getenv("AGENT_SITE_URL"):
+        headers["HTTP-Referer"] = os.environ["AGENT_SITE_URL"]
     return {
         "api_key": api_key,
         "base_url": os.getenv("OPENROUTER_API_BASE", DEFAULT_OPENROUTER_API_BASE),
         "default_headers": headers,
-        "timeout": float(os.getenv("BIOAGENT_MODEL_TIMEOUT_SECONDS", "120")),
-        "max_retries": int(os.getenv("BIOAGENT_MODEL_MAX_RETRIES", "2")),
+        "timeout": float(os.getenv("AGENT_MODEL_TIMEOUT_SECONDS", "120")),
+        "max_retries": int(os.getenv("AGENT_MODEL_MAX_RETRIES", "2")),
     }
 
 
 def _transport_options() -> dict[str, Any]:
     """Choose a proxy without accidentally inheriting a broken shell proxy.
 
-    ``BIOAGENT_PROXY`` is the explicit override. Otherwise an ``ALL_PROXY``
+    ``AGENT_PROXY`` is the explicit override. Otherwise an ``ALL_PROXY``
     value is honored, which supports the common SOCKS-only launch command.
-    Set ``BIOAGENT_DISABLE_PROXY=1`` to force a direct connection.
+    Set ``AGENT_DISABLE_PROXY=1`` to force a direct connection.
     """
-    if os.getenv("BIOAGENT_DISABLE_PROXY", "").strip().lower() in {"1", "true", "yes"}:
+    if os.getenv("AGENT_DISABLE_PROXY", "").strip().lower() in {"1", "true", "yes"}:
         return {"trust_env": False}
-    proxy = os.getenv("BIOAGENT_PROXY", "").strip()
+    proxy = os.getenv("AGENT_PROXY", "").strip()
     if not proxy:
         proxy = os.getenv("ALL_PROXY", os.getenv("all_proxy", "")).strip()
     if proxy:

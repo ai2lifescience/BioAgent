@@ -12,13 +12,13 @@ The host runtime requires:
 The task image supplies Python and the standard-library modules used by the
 workflow. No additional bioinformatics tools are required.
 
-## BioAgent environment
+## Pipeline2Agent environment
 
 From the repository root:
 
 ```bash
-conda create -n bioagent python=3.12 -y
-conda activate bioagent
+conda create -n agent python=3.12 -y
+conda activate agent
 python -m pip install -r requirements.txt
 docker pull python:3.11-slim
 ```
@@ -45,7 +45,7 @@ docker image inspect python:3.11-slim
 ### Function
 
 This WDL 1.0 pipeline demonstrates sequence normalization and basic FASTA
-metrics through BioAgent's WDL runner.
+metrics through Pipeline2Agent's WDL runner.
 
 ```text
 FASTA
@@ -68,9 +68,9 @@ FASTA
 - `metrics.json`: sequence length, GC percentage, and minimum-length result.
 - `report.md`: human-readable metric summary.
 
-BioAgent copies these WDL outputs to the per-job output directory as declared in
+Pipeline2Agent copies these WDL outputs to the per-job output directory as declared in
 `runner.yaml`. The bundled `inputs.json` and `options.json` are optional native
 workflow files; session inputs still have to be selected explicitly.
-BioAgent generates `inputs.runtime.json` and `options.runtime.json` in the job
+Pipeline2Agent generates `inputs.runtime.json` and `options.runtime.json` in the job
 directory without changing these source files. miniwdl consumes the generated
 inputs; the options copy is retained for provenance and is not consumed by miniwdl.

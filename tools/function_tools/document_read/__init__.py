@@ -7,7 +7,7 @@ from typing import Annotated
 from agents import RunContextWrapper
 from pydantic import Field
 
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from tools.common.results import run_workflow
 from tools.common.tooling import bio_function_tool
 
@@ -16,7 +16,7 @@ from .workflow import document_read as _workflow
 
 @bio_function_tool()
 async def document_read(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     path: Annotated[
         str | None,
         Field(

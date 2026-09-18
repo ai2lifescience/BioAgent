@@ -25,6 +25,7 @@ from tools.runtime_tools.pipeline_runtime.engine.config import load_pipeline_con
 def _fake_nextflow_run(command: list[str], **_kwargs: object) -> subprocess.CompletedProcess[str]:
     params_path = Path(command[command.index("-params-file") + 1])
     config = yaml.safe_load(params_path.read_text(encoding="utf-8")) or {}
+    assert Path(config["agent_config_path"]) == params_path
     output_dir = Path(config["nextflow_output_dir"])
     output_dir.mkdir(parents=True, exist_ok=True)
     if "-preview" not in command:
@@ -57,7 +58,7 @@ def main() -> int:
         "metadata": str(pipeline_dir / "data/input/metadata.tsv"),
     }
 
-    with TemporaryDirectory(prefix="bioagent-nextflow-step-") as step_dir:
+    with TemporaryDirectory(prefix="agent-nextflow-step-") as step_dir:
         previous_dir = Path.cwd()
         try:
             os.chdir(step_dir)
@@ -77,7 +78,7 @@ def main() -> int:
         finally:
             os.chdir(previous_dir)
 
-    with TemporaryDirectory(prefix="bioagent-nextflow-runner-") as artifact_dir:
+    with TemporaryDirectory(prefix="agent-nextflow-runner-") as artifact_dir:
         with patch(
             "tools.runtime_tools.pipeline_runtime.engine.nextflow._nextflow_command",
             return_value=["nextflow-test-double"],

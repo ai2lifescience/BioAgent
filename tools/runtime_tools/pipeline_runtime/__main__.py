@@ -13,7 +13,7 @@ def main():
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
     try:
-        print(json.dumps(dispatch(args.workspace.resolve(), shlex.join(["bioagent-pipeline", *args.command])), indent=2))
+        print(json.dumps(dispatch(args.workspace.resolve(), shlex.join(["agent-pipeline", *args.command])), indent=2))
     except Exception as exc:
         print(json.dumps({"status": "error", "error": str(exc)}))
         return 1

@@ -10,14 +10,14 @@ invokes no external bioinformatics programs.
 
 ## Run the included example
 
-Ask BioAgent to use the bundled example data. It stages the three inputs and
+Ask Pipeline2Agent to use the bundled example data. It stages the three inputs and
 writes outputs into the job workspace:
 
 ```text
 Run generic_bio with its bundled example data and collect the results.
 ```
 
-## Run through BioAgent
+## Run through Pipeline2Agent
 
 In the web UI or CLI, provide all three named inputs when using your own files:
 

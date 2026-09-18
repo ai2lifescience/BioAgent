@@ -1,4 +1,4 @@
-"""Context shared by Agents SDK tools during one BioAgent run."""
+"""Context shared by Agents SDK tools during one Pipeline2Agent run."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ def _now() -> str:
 
 
 @dataclass
-class BioRunContext:
+class AgentRunContext:
     """Small run context; the Agents SDK owns orchestration and sessions."""
 
     session: Any
@@ -37,7 +37,7 @@ class BioRunContext:
         return {
             "session_id": self.session_id,
             "files": [dict(item) for item in self.files],
-            "_bio_context": self,
+            "_agent_context": self,
             **self.run,
         }
 

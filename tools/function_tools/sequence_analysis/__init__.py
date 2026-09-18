@@ -13,14 +13,14 @@ from agents import RunContextWrapper
 from pydantic import Field
 
 from .workflow import sequence_analysis as _workflow
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from tools.common.results import run_workflow
 from tools.common.tooling import bio_function_tool
 
 
 @bio_function_tool()
 async def sequence_analysis(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     sequence: Annotated[str | None, Field(description='Raw sequence or FASTA text to analyze. Use this, fasta_path, or a session artifact as the input source.')] = None,
     fasta_path: Annotated[str | None, Field(description='Existing local FASTA file to analyze when sequence text is not supplied.')] = None,
     artifact_ref: Annotated[Literal['latest_fasta'] | None, Field(description='Use latest_fasta to analyze the newest FASTA artifact in this session.')] = None,

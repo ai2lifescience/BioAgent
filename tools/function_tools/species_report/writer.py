@@ -16,7 +16,7 @@ def _slugify(text: str, max_length: int = 48) -> str:
 def write_markdown_report(
     markdown: str,
     entity_name: str,
-    output_dir: str = os.getenv("BIOAGENT_REPORT_DIR", "runtime/reports"),
+    output_dir: str = os.getenv("AGENT_REPORT_DIR", "runtime/reports"),
     suffix: str = "knowledge",
 ) -> dict[str, Any]:
     if not markdown.strip():

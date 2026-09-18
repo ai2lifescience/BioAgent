@@ -178,7 +178,7 @@ def copy_declared_outputs(
     output_records: list[dict[str, Any]],
     output_map: dict[str, Any],
 ) -> None:
-    """Copy WDL outputs into the BioAgent-declared artifact paths."""
+    """Copy WDL outputs into the Pipeline2Agent-declared artifact paths."""
     for record in output_records:
         target = Path(str(record.get("path") or ""))
         if not target or target.exists():

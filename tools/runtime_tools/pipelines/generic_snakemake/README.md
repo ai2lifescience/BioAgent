@@ -12,13 +12,13 @@ The workflow uses only Python standard-library modules for its analysis and
 does not require Docker, network access, workflow-managed Conda environments,
 or external bioinformatics tools.
 
-## BioAgent environment
+## Pipeline2Agent environment
 
 From the repository root:
 
 ```bash
-conda create -n bioagent python=3.12 -y
-conda activate bioagent
+conda create -n agent python=3.12 -y
+conda activate agent
 python -m pip install -r requirements.txt
 ```
 
@@ -70,4 +70,4 @@ and the resulting sequence is converted to uppercase.
 - `report.md`: human-readable summary of the metrics.
 
 The runtime writes declared outputs into the per-job output directory and
-returns them through `bioagent-pipeline results --job-id <job_id>`.
+returns them through `agent-pipeline results --job-id <job_id>`.

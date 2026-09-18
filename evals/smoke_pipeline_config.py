@@ -22,7 +22,7 @@ from tools.runtime_tools.pipeline_runtime import service
 
 class PipelineConfigChecks(unittest.TestCase):
     def setUp(self) -> None:
-        temporary = TemporaryDirectory(prefix="bioagent-config-")
+        temporary = TemporaryDirectory(prefix="agent-config-")
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
 

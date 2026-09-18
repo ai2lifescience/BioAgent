@@ -23,7 +23,7 @@ def work(root: Path, job_id: str) -> int:
     if record["status"] != "running":
         return 1
     directory = store.directory(job_id)
-    os.environ["BIOAGENT_LOCAL_JOB_DIR"] = str(directory)
+    os.environ["AGENT_LOCAL_JOB_DIR"] = str(directory)
     for name in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
         os.environ[name] = str(record["plan"]["cores"])
     # Linux address-space limit is inherited by engine processes. It is per process,

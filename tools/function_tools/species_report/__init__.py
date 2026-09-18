@@ -13,14 +13,14 @@ from agents import RunContextWrapper
 from pydantic import Field
 
 from .workflow import species_report as _workflow
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from tools.common.results import run_workflow
 from tools.common.tooling import bio_function_tool
 
 
 @bio_function_tool()
 async def species_report(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     species_name: Annotated[str | None, Field(description="Species, organism, virus, phage, or biological entity name to research, for example 'PhiX174' or 'SARS-CoV-2'.")] = None,
     species: Annotated[str | None, Field(description='Alias for species_name.')] = None,
     question: Annotated[str | None, Field(description='Specific research question or concern.')] = None,

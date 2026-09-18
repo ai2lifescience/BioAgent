@@ -13,11 +13,11 @@ class Parser(argparse.ArgumentParser):
 
 def parse_command(command: str) -> argparse.Namespace:
     if len(command) > 32000 or any(c in command for c in "\n\r\x00"):
-        raise ValueError("Expected one bounded bioagent-pipeline command.")
+        raise ValueError("Expected one bounded agent-pipeline command.")
     tokens = shlex.split(command)
-    if not tokens or tokens[0] != "bioagent-pipeline":
-        raise ValueError("Only bioagent-pipeline commands are supported.")
-    parser = Parser(prog="bioagent-pipeline", add_help=False, allow_abbrev=False)
+    if not tokens or tokens[0] != "agent-pipeline":
+        raise ValueError("Only agent-pipeline commands are supported.")
+    parser = Parser(prog="agent-pipeline", add_help=False, allow_abbrev=False)
     subs = parser.add_subparsers(dest="operation", required=True, parser_class=Parser)
     for name in ("catalog", "files", "jobs"):
         subs.add_parser(name, add_help=False, allow_abbrev=False)

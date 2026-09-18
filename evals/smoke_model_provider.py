@@ -41,7 +41,7 @@ def tool_call(name, arguments, call_id):
 
 class ProviderTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
-        temporary = TemporaryDirectory(prefix="bioagent-provider-")
+        temporary = TemporaryDirectory(prefix="agent-provider-")
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
         for module, name, value in (
@@ -91,7 +91,7 @@ class ProviderTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_injected_model_needs_no_provider_client(self):
         with patch("models.openrouter_provider.create_async_client", side_effect=AssertionError("Unexpected client")) as factory:
-            result = await runtime.async_run_bioagent(
+            result = await runtime.async_run_agent(
                 "Hello", session_id="injected",
                 model=ScriptedModel([ModelStep(output=[assistant_message("Hello back.")])]),
             )
@@ -108,7 +108,7 @@ class ProviderTests(unittest.IsolatedAsyncioTestCase):
         messages = [
             tool_call("pipeline_specialist", {"input": "Cancel the fixture job"}, "specialist"),
             tool_call("pipeline_shell", {
-                "commands": ["bioagent-pipeline cancel --job-id " + "a" * 32],
+                "commands": ["agent-pipeline cancel --job-id " + "a" * 32],
                 "timeout_ms": None, "max_output_length": None,
             }, "cancel"),
             {"role": "assistant", "content": "The fixture job was cancelled."},
@@ -123,7 +123,7 @@ class ProviderTests(unittest.IsolatedAsyncioTestCase):
         pipeline = importlib.import_module("tools.runtime_tools.pipeline_tool")
         with patch("models.openrouter_provider.create_async_client", side_effect=lambda: self.make_client(respond)) as factory:
             with patch.object(pipeline, "dispatch", return_value={"status": "ok"}) as dispatch:
-                pending = await runtime.async_run_bioagent(
+                pending = await runtime.async_run_agent(
                     "Ask the pipeline specialist to cancel the fixture job", session_id="approval", model_key="gpt-oss",
                 )
                 self.assertEqual(pending["status"], "pending_approval", pending["answer"])
@@ -131,7 +131,7 @@ class ProviderTests(unittest.IsolatedAsyncioTestCase):
                 factory.assert_called_once()
                 self.assertTrue(self.clients[0].is_closed())
                 runtime.STATE_STORE = SessionMetadataStore(self.root / "metadata")
-                result = await runtime.async_resume_bioagent(
+                result = await runtime.async_resume_agent(
                     "approval", True, pending["approvals"][0]["approval_id"],
                 )
                 self.assertEqual(result["status"], "ok", result["answer"])
@@ -150,7 +150,7 @@ class ProviderTests(unittest.IsolatedAsyncioTestCase):
 
         client = self.make_client(respond)
         with patch("models.openrouter_provider.create_async_client", return_value=client):
-            result = await runtime.async_run_bioagent("Hello", session_id="failure", model_key="gpt-oss")
+            result = await runtime.async_run_agent("Hello", session_id="failure", model_key="gpt-oss")
         self.assertEqual(result["status"], "error")
         self.assertIn("Offline model failure", result["answer"])
         self.assertTrue(client.is_closed())

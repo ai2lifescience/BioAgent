@@ -13,7 +13,7 @@ from .prompts import build_report_synthesis_messages
 
 
 async def _synthesize(
-    messages: list[dict[str, Any]], candidate_keys: list[str], bio_context: Any,
+    messages: list[dict[str, Any]], candidate_keys: list[str], agent_context: Any,
 ) -> tuple[str, str]:
     errors: list[str] = []
     async with OpenRouterProvider() as provider:
@@ -22,7 +22,7 @@ async def _synthesize(
                 continue
             try:
                 markdown = await run_reporting_agent(
-                    messages, candidate_key, provider, temperature=0.15, bio_context=bio_context,
+                    messages, candidate_key, provider, temperature=0.15, agent_context=agent_context,
                 )
                 return candidate_key, markdown
             except Exception as exc:
@@ -37,7 +37,7 @@ def synthesize_species_markdown_report(
     sources: list[dict[str, Any]],
     retrieval_context: str | None = None,
     model_key: str | None = None,
-    bio_context: Any = None,
+    agent_context: Any = None,
 ) -> dict[str, Any]:
     """Synchronous workflow entry point with sequential model fallback."""
     model_labels = {
@@ -60,7 +60,7 @@ def synthesize_species_markdown_report(
             if key != (model_key or DEFAULT_SYNTHESIS_MODEL_KEY)
         ],
     ]
-    selected_key, markdown = asyncio.run(_synthesize(messages, candidate_keys, bio_context))
+    selected_key, markdown = asyncio.run(_synthesize(messages, candidate_keys, agent_context))
     return {
         "status": "ok",
         "species_name": species_name,

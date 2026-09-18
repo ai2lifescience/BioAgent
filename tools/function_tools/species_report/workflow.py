@@ -16,8 +16,8 @@ from tools.function_tools.species_report.research import build_research_question
 DEFAULT_MAX_PUBMED = 6
 DEFAULT_MAX_WEB_PAGES = 6
 DEFAULT_TOP_K = 6
-DEFAULT_CHROMA_PATH = os.getenv('BIOAGENT_CHROMA_PATH', 'runtime/chroma')
-DEFAULT_OUTPUT_DIR = os.getenv('BIOAGENT_REPORT_DIR', 'runtime/reports')
+DEFAULT_CHROMA_PATH = os.getenv('AGENT_CHROMA_PATH', 'runtime/chroma')
+DEFAULT_OUTPUT_DIR = os.getenv('AGENT_REPORT_DIR', 'runtime/reports')
 
 def _emit(log_fn: Callable[[str], None] | None, message: str) -> None:
     if log_fn:
@@ -64,10 +64,10 @@ def species_report(species_name: str | None=None, species: str | None=None, ques
     citation_result = context.call('rag_citations', _action_rag_citations, {'chunks': retrieve_result.get('chunks', [])})['result']
     retrieval_context = citation_result.get('context') or retrieve_result.get('context', '')
     _emit(log_fn, 'Requesting parallel direct LLM opinions.')
-    model_opinion_result = context.call('species_model_opinions', _action_species_model_opinions, {'species_name': resolved_species, 'question': research_question, 'bio_context': context.user_context.get('_bio_context')})['result']
+    model_opinion_result = context.call('species_model_opinions', _action_species_model_opinions, {'species_name': resolved_species, 'question': research_question, 'agent_context': context.user_context.get('_agent_context')})['result']
     sources = source_summary(records)
     _emit(log_fn, 'Synthesizing final Markdown report.')
-    synthesis_result = context.call('species_report_synthesis', _action_species_report_synthesis, {'species_name': resolved_species, 'question': research_question, 'retrieval_context': retrieval_context, 'model_answers': model_opinion_result['model_answers'], 'sources': sources, 'bio_context': context.user_context.get('_bio_context')})['result']
+    synthesis_result = context.call('species_report_synthesis', _action_species_report_synthesis, {'species_name': resolved_species, 'question': research_question, 'retrieval_context': retrieval_context, 'model_answers': model_opinion_result['model_answers'], 'sources': sources, 'agent_context': context.user_context.get('_agent_context')})['result']
     writer_result = context.call('markdown_report_writer', _action_markdown_report_writer, {'markdown': synthesis_result['markdown'], 'entity_name': resolved_species, 'output_dir': output_dir, 'suffix': 'knowledge'})['result']
     _emit(log_fn, f"Report saved to {writer_result['report_path']}.")
     return {'workflow': 'species_report', 'species': resolved_species, 'species_name': resolved_species, 'question': research_question, 'answer': synthesis_result['markdown'], 'report_path': writer_result['report_path'], 'collection_name': resolved_collection_name, 'chroma_path': chroma_path, 'source_count': len(records), 'chunk_count': len(chunks), 'sources': sources, 'retrieval_context': retrieval_context, 'retrieved_chunks': retrieve_result.get('chunks', []), 'citations': citation_result.get('citations', []), 'model_answers': model_opinion_result['model_answers']}

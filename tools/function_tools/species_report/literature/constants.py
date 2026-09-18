@@ -4,7 +4,7 @@ EUTILS_BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 PUBMED_BASE_URL = "https://pubmed.ncbi.nlm.nih.gov"
 REQUEST_TIMEOUT = 30
 REQUEST_RETRIES = 1
-DEFAULT_USER_AGENT = "BioAgent/1.0 (+https://example.local; pubmed collection)"
+DEFAULT_USER_AGENT = "Pipeline2Agent/1.0 (+https://example.local; pubmed collection)"
 STOPWORDS = {
     "about",
     "according",

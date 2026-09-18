@@ -14,15 +14,15 @@ async def run_reporting_agent(
     provider: ModelProvider,
     *,
     temperature: float,
-    bio_context: Any = None,
+    agent_context: Any = None,
 ) -> str:
     """Run one opinion or synthesis using the batch's shared provider."""
     from harness.tracing import LOCAL_TRACES, configure_tracing
 
     configure_tracing()
     trace_id = gen_trace_id()
-    if bio_context is not None:
-        LOCAL_TRACES.bind(trace_id, bio_context)
+    if agent_context is not None:
+        LOCAL_TRACES.bind(trace_id, agent_context)
     try:
         agent = Agent(
             name=f"reporting_{model_key.replace('-', '_')}",
@@ -37,7 +37,7 @@ async def run_reporting_agent(
             agent, messages,
             run_config=RunConfig(
                 model_provider=provider,
-                workflow_name="BioAgent reporting", trace_id=trace_id,
+                workflow_name="Pipeline2Agent reporting", trace_id=trace_id,
                 trace_include_sensitive_data=False,
             ),
         )
@@ -46,5 +46,5 @@ async def run_reporting_agent(
             raise RuntimeError(f"Model '{model_key}' returned an empty response.")
         return content
     finally:
-        if bio_context is not None:
+        if agent_context is not None:
             LOCAL_TRACES.unbind(trace_id)

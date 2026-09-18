@@ -125,7 +125,7 @@ def main() -> int:
             "pdbUrl": "https://alphafold.ebi.ac.uk/files/AF-P0A7V8-F1-model_v4.pdb",
         }
     ]
-    with TemporaryDirectory(prefix="bioagent-alphafold-") as temporary_dir:
+    with TemporaryDirectory(prefix="agent-alphafold-") as temporary_dir:
         responses = [
             FakeResponse(payload=alphafold_payload),
             FakeResponse(content=b"data_mock\n#\n"),

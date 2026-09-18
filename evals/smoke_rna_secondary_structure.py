@@ -22,7 +22,7 @@ from tools.runtime_tools.pipeline_runtime.engine.runner import prepare_pipeline_
 
 def _load_workflow_module():
     workflow_path = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "rna_secondary_structure" / "workflow.py"
-    spec = spec_from_file_location("bioagent_rna_secondary_structure_workflow", workflow_path)
+    spec = spec_from_file_location("agent_rna_secondary_structure_workflow", workflow_path)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"Unable to load workflow module: {workflow_path}")
     module = module_from_spec(spec)
@@ -35,7 +35,7 @@ def main() -> int:
         print("SKIP: rna_secondary_structure pipeline is not present in this checkout.")
         return 0
     workflow = _load_workflow_module()
-    with TemporaryDirectory(prefix="bioagent-rna-secondary-") as temporary_dir:
+    with TemporaryDirectory(prefix="agent-rna-secondary-") as temporary_dir:
         temporary_path = Path(temporary_dir)
         pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "rna_secondary_structure"
         rna_path = pipeline_dir / "data" / "input" / "example_rna.fasta"

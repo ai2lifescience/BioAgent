@@ -31,7 +31,7 @@ class SessionHistoryTests(unittest.TestCase):
             self.addCleanup(patcher.stop)
 
     def test_sdk_history_survives_application_restart_and_stays_session_scoped(self):
-        result = runtime.run_bioagent(
+        result = runtime.run_agent(
             "Hello", session_id="first",
             model=ScriptedModel([ModelStep(output=[assistant_message("Hello back.")])]),
         )

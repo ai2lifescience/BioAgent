@@ -1,6 +1,6 @@
 """WDL engine options helpers.
 
-BioAgent keeps `runner.yaml` as the output contract. This module only prepares
+Pipeline2Agent keeps `runner.yaml` as the output contract. This module only prepares
 engine-specific options files, such as Cromwell `options.json`, for runtime use.
 """
 
@@ -27,7 +27,7 @@ def rewrite_cromwell_output_dir(
     options: dict[str, Any],
     run_dir: Path,
 ) -> dict[str, Any]:
-    """Rewrite relative Cromwell output directories under the BioAgent run dir."""
+    """Rewrite relative Cromwell output directories under the Pipeline2Agent run dir."""
     rewritten = copy.deepcopy(options)
     output_dir = rewritten.get(CROMWELL_OUTPUT_DIR_KEY)
     if not isinstance(output_dir, str) or not output_dir.strip():

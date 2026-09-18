@@ -1,4 +1,4 @@
-"""Cromwell Server REST backend for BioAgent WDL pipelines."""
+"""Cromwell Server REST backend for Pipeline2Agent WDL pipelines."""
 
 from __future__ import annotations
 

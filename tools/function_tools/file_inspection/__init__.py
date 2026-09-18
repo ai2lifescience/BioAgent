@@ -12,14 +12,14 @@ from agents import RunContextWrapper
 from pydantic import Field
 
 from .workflow import file_inspection as _workflow
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from tools.common.results import run_workflow
 from tools.common.tooling import bio_function_tool
 
 
 @bio_function_tool()
 async def file_inspection(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     path: Annotated[str, Field(description='Existing local file path from the user or a tool artifact. Do not invent a path or supply a database ID.')],
     max_preview_lines: Annotated[int, Field(ge=0, le=200)] = 20,
 ) -> str:

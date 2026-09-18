@@ -1,7 +1,7 @@
-# BioAgent TODO
+# Pipeline2Agent TODO
 
 The follow-up list records deployment hardening and product improvements for
-the current BioAgent runtime.
+the current Pipeline2Agent runtime.
 
 ## Follow-up work
 
@@ -15,7 +15,7 @@ the current BioAgent runtime.
 
 ## Current guarantees
 
-- `harness.run_bioagent` is the single application entry point.
+- `harness.run_agent` is the single application entry point.
 - Model resolution uses a run-scoped SDK `ModelProvider`; the harness closes
   its client on completion, failure, or approval pause.
 - Biological workflows are SDK function tools; pipelines use the local

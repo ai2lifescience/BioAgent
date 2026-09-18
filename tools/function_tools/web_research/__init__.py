@@ -7,7 +7,7 @@ from typing import Annotated
 from agents import RunContextWrapper
 from pydantic import Field
 
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from tools.common.results import run_workflow
 from tools.common.tooling import bio_function_tool
 
@@ -16,7 +16,7 @@ from .workflow import web_research as _workflow
 
 @bio_function_tool()
 async def web_research(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     query: Annotated[str, Field(min_length=3, max_length=500, description="Current topic or question to research on public web pages.")],
     domains: Annotated[list[str] | None, Field(description="Optional domains to restrict results, such as ncbi.nlm.nih.gov.")] = None,
     max_sources: Annotated[int, Field(ge=1, le=10, description="Maximum sources to collect.")] = 5,

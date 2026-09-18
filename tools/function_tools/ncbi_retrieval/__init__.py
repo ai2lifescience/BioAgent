@@ -14,14 +14,14 @@ from agents import RunContextWrapper
 from pydantic import Field
 
 from .workflow import ncbi_retrieval as _workflow
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from tools.common.results import run_workflow
 from tools.common.tooling import bio_function_tool
 
 
 @bio_function_tool()
 async def ncbi_retrieval(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     term: Annotated[str | None, Field(description='NCBI Entrez query for the requested organism, gene, or sequence. Use accessions for known record IDs.')] = None,
     terms: Annotated[list[str] | None, Field(description='Multiple independent Entrez queries for a batch retrieval.')] = None,
     genes: Annotated[list[str] | None, Field(description='Gene names to retrieve for the organism specified in term.')] = None,

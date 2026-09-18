@@ -17,7 +17,7 @@ from agents.sandbox import SandboxRunConfig
 
 from harness import sandbox
 from harness.agent import create_agent
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from harness.sessions import SessionMetadata
 from models.config import resolve_model_id
 from models.openrouter_provider import OpenRouterProvider
@@ -29,7 +29,7 @@ class LocalTransportTests(unittest.IsolatedAsyncioTestCase):
         calls = [
             {"id": "shell-1", "type": "function", "function": {
                 "name": "pipeline_shell", "arguments": json.dumps({
-                    "commands": ["bioagent-pipeline catalog"],
+                    "commands": ["agent-pipeline catalog"],
                     "timeout_ms": None, "max_output_length": None})}},
             {"id": "patch-1", "type": "function", "function": {
                 "name": "apply_patch", "arguments": json.dumps({
@@ -64,7 +64,7 @@ class LocalTransportTests(unittest.IsolatedAsyncioTestCase):
             data = "".join("data: " + json.dumps(chunk) + "\n\n" for chunk in chunks) + "data: [DONE]\n\n"
             return httpx2.Response(200, text=data, headers={"content-type": "text/event-stream"})
 
-        with TemporaryDirectory(prefix="bioagent-transport-") as directory:
+        with TemporaryDirectory(prefix="agent-transport-") as directory:
             with patch.object(sandbox, "WORKSPACES_DIR", Path(directory)):
                 async with AsyncOpenAI(api_key="offline-fixture", base_url="https://offline.invalid/v1",
                         http_client=httpx2.AsyncClient(transport=httpx2.MockTransport(respond), trust_env=False)) as client:
@@ -72,7 +72,7 @@ class LocalTransportTests(unittest.IsolatedAsyncioTestCase):
                     self.addAsyncCleanup(provider.aclose)
                     session = SessionMetadata(session_id="transport")
                     sandbox.prepare_run(session)
-                    context = BioRunContext(session=session, model_key="gpt-oss")
+                    context = AgentRunContext(session=session, model_key="gpt-oss")
                     async with sandbox.open_workspace(session.session_id) as workspace:
                         context.sandbox_session = workspace
                         agent = create_agent("gpt-oss", sandbox_root=str(sandbox.session_root(session.session_id)))

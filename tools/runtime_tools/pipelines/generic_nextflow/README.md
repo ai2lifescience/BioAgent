@@ -15,7 +15,7 @@ java -version
 python3 -c "import yaml; print(yaml.__version__)"
 ```
 
-From the BioAgent repository root, run the example through the CLI:
+From the Pipeline2Agent repository root, run the example through the CLI:
 
 ```bash
 python -m interfaces.cli 'Run generic_nextflow with its bundled example data and collect the results.'
@@ -24,14 +24,14 @@ python -m interfaces.cli 'Run generic_nextflow with its bundled example data and
 `runner.yaml` holds parameter defaults and input/output declarations.
 `nextflow.config` remains the native Nextflow configuration file.
 
-On Windows, run BioAgent and Nextflow inside WSL because Nextflow processes use
+On Windows, run Pipeline2Agent and Nextflow inside WSL because Nextflow processes use
 a POSIX shell.
 
 ## Workflow
 
 ### Function
 
-This pipeline demonstrates BioAgent's Nextflow engine with a small local
+This pipeline demonstrates Pipeline2Agent's Nextflow engine with a small local
 sequence-analysis workflow. It normalizes a FASTA sequence, calculates basic
 metrics, and creates a Markdown report.
 
@@ -54,6 +54,6 @@ FASTA + metadata
 - `metrics.json`: sequence, metadata, and configured analysis metrics.
 - `report.md`: human-readable metric summary.
 
-Nextflow first publishes these files to BioAgent's engine staging directory.
+Nextflow first publishes these files to Pipeline2Agent's engine staging directory.
 The runner then maps each `nextflow_output` declared in `runner.yaml` to the
 stable per-run artifact path declared by that output record.

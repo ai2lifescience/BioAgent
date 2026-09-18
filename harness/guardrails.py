@@ -8,7 +8,7 @@ from typing import Any
 from agents import Agent, InputGuardrail, OutputGuardrail, RunContextWrapper
 from agents.guardrail import GuardrailFunctionOutput
 
-from .context import BioRunContext
+from .context import AgentRunContext
 
 
 SENSITIVE = re.compile(
@@ -33,8 +33,8 @@ def _input_text(value: Any) -> str:
 
 
 async def input_check(
-    context: RunContextWrapper[BioRunContext],
-    _agent: Agent[BioRunContext],
+    context: RunContextWrapper[AgentRunContext],
+    _agent: Agent[AgentRunContext],
     input_data: Any,
 ) -> GuardrailFunctionOutput:
     text = _input_text(input_data)
@@ -48,8 +48,8 @@ async def input_check(
 
 
 async def output_check(
-    context: RunContextWrapper[BioRunContext],
-    _agent: Agent[BioRunContext],
+    context: RunContextWrapper[AgentRunContext],
+    _agent: Agent[AgentRunContext],
     output: Any,
 ) -> GuardrailFunctionOutput:
     text = str(output or "")

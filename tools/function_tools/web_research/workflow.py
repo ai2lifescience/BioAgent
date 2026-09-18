@@ -18,7 +18,7 @@ from .parsing import extract_html_text, parse_duckduckgo_results
 
 
 SEARCH_URL = "https://html.duckduckgo.com/html/?q={}"
-USER_AGENT = "BioAgent/1.0 (+https://github.com/ai2lifescience/BioAgent)"
+USER_AGENT = "Pipeline2Agent/1.0 (+https://github.com/ai2lifescience/BioAgent)"
 MAX_RESPONSE_BYTES = 1_500_000
 MAX_EXCERPT_CHARS = 900
 

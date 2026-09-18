@@ -13,14 +13,14 @@ from agents import RunContextWrapper
 from pydantic import Field
 
 from .workflow import blast_search as _workflow
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from tools.common.results import run_workflow
 from tools.common.tooling import bio_function_tool
 
 
 @bio_function_tool()
 async def blast_search(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     sequence: Annotated[str | None, Field(description='Sequence or FASTA text to submit for similarity search. Provide rid instead to poll an existing request.')] = None,
     rid: Annotated[str | None, Field(description='Existing BLAST request ID to poll.')] = None,
     program: Literal['blastn', 'blastp', 'blastx', 'tblastn', 'tblastx'] = 'blastn',

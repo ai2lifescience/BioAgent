@@ -78,7 +78,7 @@
     message.className = `message ${role}`;
     const label = document.createElement("span");
     label.className = "message-label";
-    label.textContent = role === "user" ? "You" : role === "error" ? "Request failed" : "BioAgent";
+    label.textContent = role === "user" ? "You" : role === "error" ? "Request failed" : "Pipeline2Agent";
     const body = document.createElement("div");
     body.className = "message-body";
     if (role === "assistant" && window.renderMarkdown) {
@@ -128,7 +128,7 @@
     state.ready = false;
     setBusy(false);
     byId("retryConfig").hidden = true;
-    status.textContent = "Connecting to BioAgent…";
+    status.textContent = "Connecting to Pipeline2Agent…";
     try {
       const response = await fetch(apiUrl("config"));
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -305,7 +305,7 @@
     byId("progressDetails").hidden = true;
     byId("progressLog").textContent = "";
     renderUploads();
-    status.textContent = state.ready ? "Ready" : "Connect to BioAgent before sending.";
+    status.textContent = state.ready ? "Ready" : "Connect to Pipeline2Agent before sending.";
     prompt.focus();
   }
 
@@ -314,13 +314,13 @@
   // Accept context only from the immediate embedding window at its named origin.
   window.addEventListener("message", (event) => {
     if (window.parent === window || event.source !== window.parent || event.origin !== parentOrigin) return;
-    if (!event.data || event.data.type !== "bioagent-context" || !event.data.context) return;
+    if (!event.data || event.data.type !== "agent-context" || !event.data.context) return;
     setContext(event.data.context);
   });
-  if (window.parent !== window) window.parent.postMessage({ type: "bioagent-ready" }, parentOrigin);
+  if (window.parent !== window) window.parent.postMessage({ type: "agent-ready" }, parentOrigin);
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && window.parent !== window) {
-      window.parent.postMessage({ type: "bioagent-close" }, parentOrigin);
+      window.parent.postMessage({ type: "agent-close" }, parentOrigin);
     }
   });
   byId("composer").addEventListener("submit", submitPrompt);

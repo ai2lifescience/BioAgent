@@ -44,7 +44,7 @@ def run_nextflow_pipeline(
         context,
         {
             "cores": resolved_cores,
-            "bioagent_config_path": str(context.run_dir / "config.runtime.yaml"),
+            "agent_config_path": str(context.run_dir / "config.runtime.yaml"),
             "nextflow_output_dir": str(engine_output_dir),
         },
     )
@@ -165,7 +165,7 @@ def _copy_declared_outputs(
     output_records: list[dict[str, Any]],
     engine_output_dir: Path,
 ) -> None:
-    """Copy published Nextflow outputs into BioAgent's declared artifact paths."""
+    """Copy published Nextflow outputs into Pipeline2Agent's declared artifact paths."""
     for record in output_records:
         target = Path(str(record.get("path") or ""))
         source_name = str(record.get("nextflow_output") or target.name).strip()

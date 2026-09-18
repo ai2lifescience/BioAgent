@@ -16,7 +16,7 @@ def tail(path: Path, limit: int = 16000) -> str:
 
 
 def run(command, **kwargs):
-    job = os.environ.get("BIOAGENT_LOCAL_JOB_DIR")
+    job = os.environ.get("AGENT_LOCAL_JOB_DIR")
     if not job:
         return subprocess.run(command, **kwargs)
     directory = Path(job)

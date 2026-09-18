@@ -1,14 +1,17 @@
-# BioAgent
+# Pipeline2Agent
 
-BioAgent is a bioinformatics agent for biological question answering, public
+Pipeline2Agent is a bioinformatics agent for biological question answering, public
 database retrieval, sequence and structure analysis, evidence-backed reporting,
 file inspection, and pipeline execution. It exposes deterministic biological operations as typed Agents SDK function tools behind a chat-style web UI, CLI, API, and Python interface.
 
-## What BioAgent Does
+The Python entry point is `harness.run_agent`; pipeline tools use the
+`agent-pipeline` command protocol and configuration uses `AGENT_*` variables.
 
-![BioAgent functions](docs/images/system_functions.png)
+## What Pipeline2Agent Does
 
-BioAgent can:
+![Pipeline2Agent functions](docs/images/system_functions.png)
+
+Pipeline2Agent can:
 
 - answer biology questions and explain biological concepts;
 - retrieve records from NCBI, PubMed, UniProt, InterPro, KEGG, QuickGO, PDB,
@@ -29,8 +32,8 @@ BioAgent can:
 ### 1. Get The Project
 
 ```bash
-git clone https://github.com/ai2lifescience/BioAgent.git
-cd BioAgent
+git clone https://github.com/ai2lifescience/BioAgent.git Pipeline2Agent
+cd Pipeline2Agent
 ```
 
 
@@ -57,7 +60,7 @@ export OPENROUTER_API_KEY="your-openrouter-api-key"
 ```
 
 Replace the placeholder with your real key. The variable is available to
-BioAgent commands started from the current terminal session.
+Pipeline2Agent commands started from the current terminal session.
 
 Every natural-language request is handled by the Agents SDK; deterministic functions run after the agent selects their registered tools. Offline smoke tests use a scripted model and do not need an API key.
 
@@ -75,16 +78,16 @@ If OpenRouter needs a SOCKS proxy, set it in the same terminal before starting
 the server:
 
 ```bash
-export BIOAGENT_PROXY=socks5h://127.0.0.1:10801
+export AGENT_PROXY=socks5h://127.0.0.1:10801
 ```
 
-`ALL_PROXY` is not required when `BIOAGENT_PROXY` is set. See the
+`ALL_PROXY` is not required when `AGENT_PROXY` is set. See the
 [web usage guide](docs/web_usage.md#start-for-local-network-access) for the
 complete launch command and direct-connection option.
 
-![BioAgent web interface](docs/images/web_ui.png)
+![Pipeline2Agent web interface](docs/images/web_ui.png)
 
-### 5. Use BioAgent
+### 5. Use Pipeline2Agent
 
 Select a model, enter a request in the message box, and send it. Example
 requests:
@@ -137,7 +140,7 @@ Get KEGG query: eco:b0002
 Download AlphaFold structure for P0A7V8 as cif
 ```
 
-Use the Uploads panel for local input files. BioAgent stores uploads and outputs
+Use the Uploads panel for local input files. Pipeline2Agent stores uploads and outputs
 under the active session so later requests in the same chat can reuse them.
 
 To allow access from another computer on a trusted local network, run:
@@ -150,7 +153,7 @@ Then open `http://<SERVER_LAN_IP>:8000` from the other computer.
 
 ## Architecture
 
-BioAgent is implemented as a single OpenAI Agents SDK harness. The SDK owns the
+Pipeline2Agent is implemented as a single OpenAI Agents SDK harness. The SDK owns the
 agent loop, function-tool dispatch, guardrails, sessions, and tracing. The tools
 call deterministic biological libraries and registered external APIs.
 
@@ -158,14 +161,14 @@ call deterministic biological libraries and registered external APIs.
 User / App
   -> Agent + Runner (OpenAI Agents SDK)
      -> RunConfig.model_provider -> OpenAI Python client -> OpenRouter
-     -> BioAgent function tools
+     -> Pipeline2Agent function tools
         -> databases, sequence/structure tools, files, RAG, pipelines
      -> SDK sessions (SQLite)
      -> SDK guardrails, tracing, and per-session Unix-local sandbox
   -> structured answer, evidence, status, and workspace files
 ```
 
-The public entry point is `harness.run_bioagent`. Each run returns the answer,
+The public entry point is `harness.run_agent`. Each run returns the answer,
 SDK session ID, tool evidence, run status, trace events, and workspace file
 paths. Uploads and generated files remain in per-session sandboxes.
 
@@ -203,9 +206,9 @@ curl -X POST http://127.0.0.1:8000/run \
 ### Python
 
 ```python
-from interfaces.notebook import run_bioagent
+from interfaces.notebook import run_agent
 
-result = run_bioagent("Analyze PhiX174")
+result = run_agent("Analyze PhiX174")
 print(result["answer"])
 ```
 
@@ -217,7 +220,7 @@ print(result["answer"])
 - Snakemake pipelines require the `snakemake` package included in
 `requirements.txt`.
 - Nextflow pipelines require a local `nextflow` executable, Java 17 or newer,
-  and a POSIX shell. On Windows, run BioAgent and Nextflow inside WSL.
+  and a POSIX shell. On Windows, run Pipeline2Agent and Nextflow inside WSL.
 - WDL pipelines use `miniwdl` and require a working Docker daemon plus access to
 the task container images.
 - Pipeline inputs should be supplied explicitly through the request or uploaded

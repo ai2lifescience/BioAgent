@@ -13,8 +13,8 @@ from tools.function_tools.species_report.literature.constants import DEFAULT_USE
 
 def base_ncbi_params(email: str | None = None, api_key: str | None = None) -> dict[str, str]:
     params = {
-        "tool": "bio_agent_species_knowledge",
-        "email": email or os.getenv("NCBI_EMAIL", "bio_agent@example.local"),
+        "tool": "agent_species_knowledge",
+        "email": email or os.getenv("NCBI_EMAIL", "agent@example.local"),
     }
     resolved_api_key = api_key or os.getenv("NCBI_API_KEY")
     if resolved_api_key:

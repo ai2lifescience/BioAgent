@@ -1,4 +1,4 @@
-"""Application entry point for the single Agents SDK BioAgent runtime."""
+"""Application entry point for the single Agents SDK Pipeline2Agent runtime."""
 
 from __future__ import annotations
 
@@ -19,20 +19,20 @@ from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 from models.openrouter_provider import OpenRouterProvider
 
 from .agent import create_agent
-from .context import BioRunContext
+from .context import AgentRunContext
 from .sessions import SessionMetadata, SessionMetadataStore
 from .sandbox import delete_workspace, list_files, open_workspace, prepare_run, session_root
-from .tracing import BioAgentHooks, LOCAL_TRACES, configure_tracing
+from .tracing import AgentHooks, LOCAL_TRACES, configure_tracing
 
 
 STATE_STORE = SessionMetadataStore()
-SESSION_DB = Path(os.getenv("BIOAGENT_SESSION_DB", "runtime/agent_sessions.sqlite3"))
+SESSION_DB = Path(os.getenv("AGENT_SESSION_DB", "runtime/agent_sessions.sqlite3"))
 
 # SDK tracing stays local; each run supplies its own model provider.
 configure_tracing()
 
 
-def _approval_details(items: list[Any], context: BioRunContext | None = None) -> list[dict[str, Any]]:
+def _approval_details(items: list[Any], context: AgentRunContext | None = None) -> list[dict[str, Any]]:
     details = []
     for item in items:
         raw = item.raw_item
@@ -63,7 +63,7 @@ def _approval_details(items: list[Any], context: BioRunContext | None = None) ->
     return details
 
 
-async def async_run_bioagent(
+async def async_run_agent(
     request: str,
     session_id: str | None = None,
     model_key: str = DEFAULT_AGENT_MODEL_KEY,
@@ -82,7 +82,7 @@ async def async_run_bioagent(
         return await _execute(session, request, model_key, max_turns, log_fn, model)
 
 
-async def async_resume_bioagent(
+async def async_resume_agent(
     session_id: str,
     approved: bool,
     approval_id: str,
@@ -121,7 +121,7 @@ async def _execute(
     decision: tuple[int, bool] | None = None,
 ) -> dict[str, Any]:
     """Run or resume through the same SDK and result-collection path."""
-    context = BioRunContext(
+    context = AgentRunContext(
         session=session, model_key=model_key, log_fn=log_fn,
         tool_results=list(pending.get("tool_results", [])) if pending else [],
         events=list(pending.get("events", [])) if pending else [],
@@ -165,10 +165,10 @@ async def _execute(
             context.files = await list_files(sandbox_session)
             result = await Runner.run(
                 agent, run_input, context=context, max_turns=max(1, int(max_turns)),
-                hooks=BioAgentHooks(),
+                hooks=AgentHooks(),
                 run_config=RunConfig(
                     model_provider=provider,
-                    workflow_name="BioAgent", trace_id=trace_id, group_id=session.session_id,
+                    workflow_name="Pipeline2Agent", trace_id=trace_id, group_id=session.session_id,
                     trace_include_sensitive_data=False,
                     tool_execution=ToolExecutionConfig(max_function_tool_concurrency=4),
                     sandbox=SandboxRunConfig(session=sandbox_session, cwd="."),
@@ -225,7 +225,7 @@ async def _execute(
     }
 
 
-def run_bioagent(
+def run_agent(
     request: str,
     session_id: str | None = None,
     model_key: str = DEFAULT_AGENT_MODEL_KEY,
@@ -237,20 +237,20 @@ def run_bioagent(
     try:
         asyncio.get_running_loop()
     except RuntimeError:
-        return asyncio.run(async_run_bioagent(request, session_id, model_key, max_turns, log_fn, model))
-    raise RuntimeError("An event loop is already running; await async_run_bioagent instead.")
+        return asyncio.run(async_run_agent(request, session_id, model_key, max_turns, log_fn, model))
+    raise RuntimeError("An event loop is already running; await async_run_agent instead.")
 
 
-def resume_bioagent(
+def resume_agent(
     session_id: str, approved: bool, approval_id: str, *,
     log_fn: Callable[[str], None] | None = None,
 ) -> dict[str, Any]:
-    """Synchronous wrapper for :func:`async_resume_bioagent`."""
+    """Synchronous wrapper for :func:`async_resume_agent`."""
     try:
         asyncio.get_running_loop()
     except RuntimeError:
-        return asyncio.run(async_resume_bioagent(session_id, approved, approval_id, log_fn=log_fn))
-    raise RuntimeError("An event loop is already running; await async_resume_bioagent instead.")
+        return asyncio.run(async_resume_agent(session_id, approved, approval_id, log_fn=log_fn))
+    raise RuntimeError("An event loop is already running; await async_resume_agent instead.")
 
 
 def delete_session(session_id: str) -> bool:

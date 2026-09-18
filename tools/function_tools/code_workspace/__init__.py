@@ -7,7 +7,7 @@ from typing import Annotated, Literal
 from agents import RunContextWrapper
 from pydantic import Field
 
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from tools.common.results import run_workflow
 from tools.common.tooling import bio_function_tool
 
@@ -18,7 +18,7 @@ from .workflow import code_test as _test_workflow
 
 @bio_function_tool()
 async def code_inspection(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     operation: Annotated[Literal["tree", "read", "search"], Field(description="Read-only workspace inspection operation.")],
     path: Annotated[str | None, Field(description="Workspace-relative path for tree or read.")] = None,
     query: Annotated[str | None, Field(description="Text to find when operation is search.")] = None,
@@ -35,7 +35,7 @@ async def code_inspection(
 
 @bio_function_tool(needs_approval=True)
 async def code_edit(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     path: Annotated[str, Field(description="Workspace-relative file to create or replace.")],
     content: Annotated[str, Field(max_length=1000000, description="Complete replacement text for the file.")],
     expected_sha256: Annotated[str | None, Field(description="Optional hash from a prior read to prevent stale edits.")] = None,
@@ -50,7 +50,7 @@ async def code_edit(
 
 @bio_function_tool(timeout=180, needs_approval=True)
 async def code_test(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     command: Annotated[Literal["python -m pytest", "python -m unittest", "python -m compileall ."], Field(description="Bounded test command.")] = "python -m compileall .",
 ) -> str:
     """Run one approved, bounded test command in the workspace."""

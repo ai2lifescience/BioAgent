@@ -11,16 +11,16 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from harness import run_bioagent
+from harness import run_agent
 
 
 def main() -> int:
     if not os.getenv("OPENROUTER_API_KEY", "").strip():
         print("SKIP: set OPENROUTER_API_KEY to run the live smoke test")
         return 0
-    model_key = os.getenv("BIOAGENT_SMOKE_MODEL_KEY", "gpt-oss")
+    model_key = os.getenv("AGENT_SMOKE_MODEL_KEY", "gpt-oss")
     session_id = f"smoke-openrouter-{uuid4().hex[:8]}"
-    result = run_bioagent(
+    result = run_agent(
         "Analyze this DNA sequence and report its GC content: ACGTACGT.",
         model_key=model_key,
         session_id=session_id,

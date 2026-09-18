@@ -12,14 +12,14 @@ from agents import RunContextWrapper
 from pydantic import Field
 
 from .workflow import protein_structure_analysis as _workflow
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from tools.common.results import run_workflow
 from tools.common.tooling import bio_function_tool
 
 
 @bio_function_tool()
 async def protein_structure_analysis(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     structure_path: Annotated[str | None, Field(description='Local .cif, .mmcif, or .pdb path.')] = None,
     artifact_ref: Annotated[Literal['latest_structure'] | None, Field(description='Use latest_structure to analyze the newest structure artifact in this session.')] = None,
 ) -> str:

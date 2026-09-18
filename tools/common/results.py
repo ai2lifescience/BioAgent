@@ -1,7 +1,7 @@
 """Typed tool results and application evidence capture around ordinary functions.
 
 The SDK decorator owns schemas, input validation, invocation and failures. This
-module only formats BioAgent output and records files/evidence for the UI.
+module only formats Pipeline2Agent output and records files/evidence for the UI.
 """
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from agents import RunContextWrapper
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
-    from harness.context import BioRunContext
+    from harness.context import AgentRunContext
 
 
 class ToolError(BaseModel):
@@ -61,7 +61,7 @@ def tool_error(ctx: RunContextWrapper[Any], error: Exception) -> str:
 
 
 async def run_workflow(
-    context: BioRunContext,
+    context: AgentRunContext,
     name: str,
     handler: Callable[..., dict[str, Any]],
     arguments: dict[str, Any],

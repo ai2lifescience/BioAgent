@@ -12,8 +12,8 @@ from tools.function_tools.ncbi_retrieval.entrez.spec import EUTILS_BASE_URL, REQ
 
 def _base_params(email: str | None = None, api_key: str | None = None) -> dict[str, str]:
     params = {
-        "tool": "bio_agent_ncbi_retrieval",
-        "email": email or os.getenv("NCBI_EMAIL", "bio_agent@example.local"),
+        "tool": "agent_ncbi_retrieval",
+        "email": email or os.getenv("NCBI_EMAIL", "agent@example.local"),
     }
     resolved_api_key = api_key or os.getenv("NCBI_API_KEY")
     if resolved_api_key:

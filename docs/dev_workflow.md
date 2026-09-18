@@ -1,4 +1,4 @@
-# BioAgent Development Workflow
+# Pipeline2Agent Development Workflow
 
 Use one short-lived branch and one pull request for each task. This example
 updates `README.md`.
@@ -8,8 +8,8 @@ updates `README.md`.
 Clone the repository once:
 
 ```bash
-git clone https://github.com/ai2lifescience/BioAgent.git
-cd BioAgent
+git clone https://github.com/ai2lifescience/BioAgent.git Pipeline2Agent
+cd Pipeline2Agent
 ```
 
 Before each task, update the stable branch:
@@ -145,7 +145,7 @@ gh pr close "$(git branch --show-current)" --delete-branch
 
 ## 7. Merge The Pull Request
 
-> **BioAgent policy:** Only the principal repository administrator merges pull
+> **Pipeline2Agent policy:** Only the principal repository administrator merges pull
 > requests into `main`. Contributors create branches, open PRs, and review
 > changes, but they do not run the merge command.
 

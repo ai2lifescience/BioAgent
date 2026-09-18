@@ -34,7 +34,7 @@ def response(text="Completed."):
 def pipeline(call_id="pipeline-1"):
     return ResponseFunctionShellToolCall(
         id=f"item-{call_id}", call_id=call_id, type="shell_call", status="completed",
-        action={"commands": ["bioagent-pipeline cancel --job-id " + "a" * 32],
+        action={"commands": ["agent-pipeline cancel --job-id " + "a" * 32],
                 "timeout_ms": None, "max_output_length": None},
     )
 
@@ -60,7 +60,7 @@ class ApprovalTests(unittest.TestCase):
         self.addCleanup(patcher.stop)
 
     def pause(self, calls=None, session="test", steps=None):
-        result = asyncio.run(runtime.async_run_bioagent(
+        result = asyncio.run(runtime.async_run_agent(
             "Run the fixture pipeline", session_id=session,
             model=ScriptedModel(steps or [ModelStep(output=calls or [pipeline()])]),
         ))
@@ -68,7 +68,7 @@ class ApprovalTests(unittest.TestCase):
         return result
 
     def resume(self, pending, approved=True, steps=None):
-        return asyncio.run(runtime.async_resume_bioagent(
+        return asyncio.run(runtime.async_resume_agent(
             pending["session_id"], approved, pending["approvals"][0]["approval_id"],
             model=ScriptedModel(steps or [response()]),
         ))
@@ -77,7 +77,7 @@ class ApprovalTests(unittest.TestCase):
         pending = self.pause()
         self.workflow.assert_not_called()
         self.assertEqual(pending["approvals"][0]["tool_name"], "pipeline_shell")
-        self.assertEqual(pending["approvals"][0]["arguments"]["commands"][0].split()[0], "bioagent-pipeline")
+        self.assertEqual(pending["approvals"][0]["arguments"]["commands"][0].split()[0], "agent-pipeline")
         # Recreate the metadata store, context, agents, and model as after restart.
         runtime.STATE_STORE = SessionMetadataStore(self.root / "metadata")
         result = self.resume(pending)
@@ -108,9 +108,9 @@ class ApprovalTests(unittest.TestCase):
         token = pending["approvals"][0]["approval_id"]
         for session, approved, approval_id in [("test", True, "wrong"), ("other", True, token), ("test", "false", token)]:
             with self.assertRaises(ValueError):
-                asyncio.run(runtime.async_resume_bioagent(session, approved, approval_id, model=ScriptedModel()))
+                asyncio.run(runtime.async_resume_agent(session, approved, approval_id, model=ScriptedModel()))
         with self.assertRaises(ValueError):
-            asyncio.run(runtime.async_run_bioagent("New request", session_id="test", model=ScriptedModel()))
+            asyncio.run(runtime.async_run_agent("New request", session_id="test", model=ScriptedModel()))
         self.assertIn("pending_run", self.store.get_session("test").metadata)
         self.workflow.assert_not_called()
         self.assertEqual(self.resume(pending)["status"], "ok")
@@ -140,7 +140,7 @@ class ApprovalTests(unittest.TestCase):
 
     def test_http_requires_explicit_boolean_and_can_reject(self):
         pending = self.pause()
-        server = ThreadingHTTPServer(("127.0.0.1", 0), web.BioAgentRequestHandler)
+        server = ThreadingHTTPServer(("127.0.0.1", 0), web.AgentRequestHandler)
         thread = Thread(target=server.serve_forever, daemon=True)
         thread.start()
         self.addCleanup(server.server_close)
@@ -158,7 +158,7 @@ class ApprovalTests(unittest.TestCase):
                 post(bad)
             self.assertEqual(failure.exception.code, 400)
         def handler(session_id, approved, approval_id, **kwargs):
-            return asyncio.run(runtime.async_resume_bioagent(session_id, approved, approval_id, model=ScriptedModel([response()])))
+            return asyncio.run(runtime.async_resume_agent(session_id, approved, approval_id, model=ScriptedModel([response()])))
         with patch.object(web, "handle_approval", side_effect=handler):
             result = post({**payload, "approved": False})
         self.assertEqual(result["status"], "ok")

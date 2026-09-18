@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Full-artifact, dependency-light DNA sequencing pipeline demo for BioAgent."""
+"""Full-artifact, dependency-light DNA sequencing pipeline demo for Pipeline2Agent."""
 
 from __future__ import annotations
 

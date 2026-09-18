@@ -34,7 +34,7 @@ def wire_tools(tools):
         if tool.environment.get("type") != "local":
             raise UserError("The Chat Completions shell bridge only supports local executors.")
         result.append(FunctionTool(name=tool.name,
-            description="Execute one bioagent-pipeline command using the local runtime. Follow the pipeline command protocol in your instructions.",
+            description="Execute one agent-pipeline command using the local runtime. Follow the pipeline command protocol in your instructions.",
             params_json_schema={"type": "object", "additionalProperties": False,
                 "properties": {"commands": {"type": "array", "items": {"type": "string"}, "minItems": 1, "maxItems": 1},
                     "timeout_ms": {"anyOf": [{"type": "integer"}, {"type": "null"}]},

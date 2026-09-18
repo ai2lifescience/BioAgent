@@ -156,7 +156,7 @@ def plan(root: Path, name: str, inputs: dict, params: dict, cores: int = 1,
         "max_memory_mb": memory_mb, "dry_run": dry_run,
         "definition_sha256": definition_hash(directory), "outputs": outputs})
     return {**summary(record), "plan": record["plan"],
-            "command": f"bioagent-pipeline run --plan-id {record['plan_id']}"}
+            "command": f"agent-pipeline run --plan-id {record['plan_id']}"}
 
 
 def verify(root: Path, plan: dict) -> None:

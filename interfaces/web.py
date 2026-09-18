@@ -1,4 +1,4 @@
-"""Small stdlib HTTP web UI and API for BioAgent."""
+"""Small stdlib HTTP web UI and API for Pipeline2Agent."""
 
 from __future__ import annotations
 
@@ -38,7 +38,7 @@ from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MO
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 WEB_UI_DIR = PROJECT_ROOT / "web_ui"
-MAX_UPLOAD_BYTES = int(os.getenv("BIOAGENT_MAX_UPLOAD_BYTES", str(256 * 1024 * 1024)))
+MAX_UPLOAD_BYTES = int(os.getenv("AGENT_MAX_UPLOAD_BYTES", str(256 * 1024 * 1024)))
 STATIC_FILES = {
     "/static/approvals.js": (WEB_UI_DIR / "approvals.js", "application/javascript; charset=utf-8"),
     "/static/app.css": (WEB_UI_DIR / "app.css", "text/css; charset=utf-8"),
@@ -101,10 +101,10 @@ def _runtime_info(
     }
 
 
-class BioAgentRequestHandler(BaseHTTPRequestHandler):
+class AgentRequestHandler(BaseHTTPRequestHandler):
     """Browser UI and JSON API handler."""
 
-    server_version = "BioAgentHTTP/1.1"
+    server_version = "Pipeline2AgentHTTP/1.1"
 
     def log_message(self, format: str, *args: Any) -> None:
         return
@@ -570,8 +570,8 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
 
 
 def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
-    server = ThreadingHTTPServer((host, port), BioAgentRequestHandler)
-    print(f"BioAgent web UI running at http://{host}:{port}")
+    server = ThreadingHTTPServer((host, port), AgentRequestHandler)
+    print(f"Pipeline2Agent web UI running at http://{host}:{port}")
     server.serve_forever()
 
 
@@ -661,7 +661,7 @@ def _parse_header_params(value: str) -> dict[str, str]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Run the BioAgent HTTP web UI.")
+    parser = argparse.ArgumentParser(description="Run the Pipeline2Agent HTTP web UI.")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()

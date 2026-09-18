@@ -7,7 +7,7 @@ from typing import Annotated, Literal
 from agents import RunContextWrapper
 from pydantic import Field
 
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from tools.common.results import run_workflow
 from tools.common.tooling import bio_function_tool
 
@@ -16,7 +16,7 @@ from .workflow import data_analysis as _workflow
 
 @bio_function_tool()
 async def data_analysis(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     operation: Annotated[Literal["profile", "describe", "missing", "group", "plot"], Field(description="Bounded table operation to run.")],
     path: Annotated[str | None, Field(description="Optional uploaded CSV, TSV, or Excel workspace path.")] = None,
     column: Annotated[str | None, Field(description="Numeric or aggregate column for group or plot operations.")] = None,

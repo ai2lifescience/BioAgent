@@ -10,21 +10,24 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from tools.runtime_tools.pipeline_runtime import service
+from tools.runtime_tools.pipeline_runtime.commands import dispatch, parse_command
 
 
 def main() -> int:
-    with TemporaryDirectory(prefix="bioagent-local-pipeline-") as temporary:
+    with TemporaryDirectory(prefix="agent-local-pipeline-") as temporary:
         root = Path(temporary)
-        staged = service.stage_example(root, "example_sequence_qc")
+        staged = dispatch(root, "agent-pipeline example --pipeline example_sequence_qc")
         inputs = {"reads" if item["workspace_path"].endswith(".fastq") else "metadata": item["workspace_path"] for item in staged["files"]}
         plan = service.plan(root, "example_sequence_qc", inputs, {})
         assert plan["status"] == "planned"
-        first = service.start(root, plan["plan_id"])
+        parsed = parse_command(plan["command"])
+        assert parsed.operation == "run" and parsed.plan_id == plan["plan_id"]
+        first = dispatch(root, plan["command"])
         second = service.start(root, plan["plan_id"])
         assert first["job_id"] == second["job_id"]
-        completed = service.wait(root, first["job_id"], 15)
+        completed = dispatch(root, f"agent-pipeline wait --job-id {first['job_id']} --seconds 15")
         assert completed["status"] == "succeeded", completed
-        result = service.results(root, first["job_id"])
+        result = dispatch(root, f"agent-pipeline results --job-id {first['job_id']}")
         assert result["metrics"]["input_read_count"] == 4
         assert result["metrics"]["passed_read_count"] == 2
         assert len(result["tables"][0]["rows"]) == 4

@@ -1,4 +1,4 @@
-"""Runtime model configuration for BioAgent."""
+"""Runtime model configuration for Pipeline2Agent."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ DEFAULT_MODELS: dict[str, dict[str, Any]] = {
         "deployment": "OpenRouter",
         "cost_tier": "Free",
         "model": os.getenv(
-            "BIOAGENT_NEMOTRON_MODEL",
+            "AGENT_NEMOTRON_MODEL",
             "nvidia/nemotron-3-super-120b-a12b:free",
         ),
     },
@@ -20,20 +20,20 @@ DEFAULT_MODELS: dict[str, dict[str, Any]] = {
         "label": "GPT-OSS",
         "deployment": "OpenRouter",
         "cost_tier": "Low-cost",
-        "model": os.getenv("BIOAGENT_GPT_OSS_MODEL", "openai/gpt-oss-120b"),
+        "model": os.getenv("AGENT_GPT_OSS_MODEL", "openai/gpt-oss-120b"),
     },
     "deepseek-v4-flash": {
         "label": "DeepSeek V4 Flash",
         "deployment": "OpenRouter",
         "cost_tier": "Standard",
-        "model": os.getenv("BIOAGENT_DEEPSEEK_V4_FLASH_MODEL", "deepseek/deepseek-v4-flash"),
+        "model": os.getenv("AGENT_DEEPSEEK_V4_FLASH_MODEL", "deepseek/deepseek-v4-flash"),
     },
     "gpt-5.6-luna": {
         "label": "GPT-5.6 Luna",
         "deployment": "OpenRouter",
         "cost_tier": "Low-cost",
         "model": os.getenv(
-            "BIOAGENT_GPT_56_LUNA_MODEL",
+            "AGENT_GPT_56_LUNA_MODEL",
             "openai/gpt-5.6-luna",
         ),
     },
@@ -42,7 +42,7 @@ DEFAULT_MODELS: dict[str, dict[str, Any]] = {
         "deployment": "OpenRouter",
         "cost_tier": "Premium",
         "model": os.getenv(
-            "BIOAGENT_GPT_56_SOL_MODEL",
+            "AGENT_GPT_56_SOL_MODEL",
             "openai/gpt-5.6-sol",
         ),
     },
@@ -51,16 +51,16 @@ DEFAULT_MODELS: dict[str, dict[str, Any]] = {
         "deployment": "OpenRouter",
         "cost_tier": "Standard",
         "model": os.getenv(
-            "BIOAGENT_GEMINI_38_FLASH_MODEL",
+            "AGENT_GEMINI_38_FLASH_MODEL",
             "google/gemini-3.8-flash",
         ),
     },
 }
 
-DEFAULT_AGENT_MODEL_KEY = os.getenv("BIOAGENT_AGENT_MODEL_KEY", "gpt-5.6-luna")
+DEFAULT_AGENT_MODEL_KEY = os.getenv("AGENT_MODEL_KEY", "gpt-5.6-luna")
 DEFAULT_MODEL_KEYS = tuple(DEFAULT_MODELS)
-DEFAULT_MAX_TURNS = int(os.getenv("BIOAGENT_MAX_TURNS", "5"))
-DEFAULT_SYNTHESIS_MODEL_KEY = os.getenv("BIOAGENT_SYNTHESIS_MODEL_KEY", DEFAULT_AGENT_MODEL_KEY)
+DEFAULT_MAX_TURNS = int(os.getenv("AGENT_MAX_TURNS", "5"))
+DEFAULT_SYNTHESIS_MODEL_KEY = os.getenv("AGENT_SYNTHESIS_MODEL_KEY", DEFAULT_AGENT_MODEL_KEY)
 DEFAULT_OPENROUTER_API_BASE = os.getenv(
     "OPENROUTER_API_BASE",
     "https://openrouter.ai/api/v1",

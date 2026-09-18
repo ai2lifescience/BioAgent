@@ -1,4 +1,4 @@
-# BioAgent CLI
+# Pipeline2Agent CLI
 
 Run the command line interface with:
 
@@ -11,11 +11,11 @@ python -m interfaces.cli "<request>"
 To use a SOCKS proxy for OpenRouter requests, set this once in the same terminal:
 
 ```bash
-export BIOAGENT_PROXY=socks5h://127.0.0.1:10801
+export AGENT_PROXY=socks5h://127.0.0.1:10801
 ```
 
-`ALL_PROXY` is not required when `BIOAGENT_PROXY` is set, and there is no need
-to unset other proxy variables for OpenRouter. Use `BIOAGENT_DISABLE_PROXY=1`
+`ALL_PROXY` is not required when `AGENT_PROXY` is set, and there is no need
+to unset other proxy variables for OpenRouter. Use `AGENT_DISABLE_PROXY=1`
 to force a direct OpenRouter connection; unset it before switching back to a
 proxy.
 
@@ -58,7 +58,7 @@ ShellTool exported by `tools/runtime_tools`.
 
 | Workflow | Main tool or actions |
 | --- | --- |
-| `pipeline_shell` | `bioagent-pipeline plan/run/status/wait/results/cancel` |
+| `pipeline_shell` | `agent-pipeline plan/run/status/wait/results/cancel` |
 | `ncbi_retrieval` | `ncbi_fetch` |
 | `database_lookup` | database search actions |
 | `pdb_download` | `pdb_download` |
@@ -131,7 +131,7 @@ tools/runtime_tools/pipelines/<pipeline_name>/
    ```
 
    The agent discovers workspace-relative file paths and passes them explicitly
-   to `bioagent-pipeline plan`; it does not guess paths or substitute example
+   to `agent-pipeline plan`; it does not guess paths or substitute example
    data for missing user inputs.
 
 Runtime configs and logs are written below the session workspace directory. An
@@ -140,7 +140,7 @@ are not accepted.
 
 ## Structured output and sessions
 
-`--json` exposes the same structure returned by `harness.run_bioagent`:
+`--json` exposes the same structure returned by `harness.run_agent`:
 
 ```json
 {

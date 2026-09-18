@@ -25,7 +25,7 @@ from tools.runtime_tools.pipeline_runtime.engine.outputs import finalize_output_
 
 def _load_workflow_module():
     workflow_path = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "bacterial_annotation" / "workflow.py"
-    spec = spec_from_file_location("bioagent_bacterial_annotation_workflow", workflow_path)
+    spec = spec_from_file_location("agent_bacterial_annotation_workflow", workflow_path)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"Unable to load workflow module: {workflow_path}")
     module = module_from_spec(spec)
@@ -91,7 +91,7 @@ def main() -> int:
         print("SKIP: bacterial_annotation pipeline is not present in this checkout.")
         return 0
     workflow = _load_workflow_module()
-    with TemporaryDirectory(prefix="bioagent-bacterial-annotation-") as temporary_dir:
+    with TemporaryDirectory(prefix="agent-bacterial-annotation-") as temporary_dir:
         temporary_path = Path(temporary_dir)
         pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "bacterial_annotation"
         genome_path = pipeline_dir / "data" / "input" / "example_contigs.fasta"

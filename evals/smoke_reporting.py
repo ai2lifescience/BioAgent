@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import httpx2
 from openai import AsyncOpenAI, OpenAI
 
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from harness.sessions import SessionMetadata
 from harness.tracing import LOCAL_TRACES
 from models.config import DEFAULT_MODEL_KEYS, resolve_model_id
@@ -54,7 +54,7 @@ class ReportingTests(unittest.IsolatedAsyncioTestCase):
                 return httpx2.Response(400, json={"error": {"message": "Fixture unavailable", "type": "invalid_request_error"}})
             return completion("A cautious opinion.")
 
-        context = BioRunContext(session=SessionMetadata(session_id="report"), model_key=keys[0])
+        context = AgentRunContext(session=SessionMetadata(session_id="report"), model_key=keys[0])
         client = self.make_client(respond)
         with patch("models.openrouter_provider.create_async_client", return_value=client) as factory:
             result = await asyncio.to_thread(

@@ -29,7 +29,7 @@ def _pdf_bytes() -> bytes:
             }
         )
     )
-    for message in ("BioAgent PDF page one", "BioAgent PDF page two"):
+    for message in ("Pipeline2Agent PDF page one", "Pipeline2Agent PDF page two"):
         page = writer.add_blank_page(width=612, height=792)
         page[NameObject("/Resources")] = DictionaryObject(
             {NameObject("/Font"): DictionaryObject({NameObject("/F1"): font})}
@@ -61,7 +61,7 @@ def main() -> int:
         assert result["status"] == "ok"
         assert result["page_count"] == 2
         assert "[Page 1]" in result["text"]
-        assert "BioAgent PDF page two" in result["text"]
+        assert "Pipeline2Agent PDF page two" in result["text"]
         latest = document_read(None, context=context)
         assert latest["source_path"] == "uploads/paper.pdf"
         try:

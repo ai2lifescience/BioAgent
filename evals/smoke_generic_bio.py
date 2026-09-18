@@ -17,7 +17,7 @@ from tools.workspace import artifact_content_type, can_serve_artifact
 
 def main() -> int:
     pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "generic_bio"
-    with TemporaryDirectory(prefix="bioagent-generic-bio-") as artifact_dir:
+    with TemporaryDirectory(prefix="agent-generic-bio-") as artifact_dir:
         result = run_pipeline(
             pipeline_name="generic_bio",
             artifact_dir=artifact_dir,

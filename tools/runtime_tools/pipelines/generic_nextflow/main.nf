@@ -33,16 +33,16 @@ workflow {
     if (!params.metadata_path) {
         error 'Missing required parameter: metadata_path'
     }
-    if (!params.bioagent_config_path) {
-        error 'Missing BioAgent runtime parameter: bioagent_config_path'
+    if (!params.agent_config_path) {
+        error 'Missing Pipeline2Agent runtime parameter: agent_config_path'
     }
     if (!params.nextflow_output_dir) {
-        error 'Missing BioAgent runtime parameter: nextflow_output_dir'
+        error 'Missing Pipeline2Agent runtime parameter: nextflow_output_dir'
     }
 
     sequence_ch = Channel.value(file(params.input_path, checkIfExists: true))
     metadata_ch = Channel.value(file(params.metadata_path, checkIfExists: true))
-    runtime_config_ch = Channel.value(file(params.bioagent_config_path, checkIfExists: true))
+    runtime_config_ch = Channel.value(file(params.agent_config_path, checkIfExists: true))
 
     ANALYZE_SEQUENCE(sequence_ch, metadata_ch, runtime_config_ch)
 }

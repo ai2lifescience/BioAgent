@@ -1,4 +1,4 @@
-"""Shared execution helpers for BioAgent SDK tools."""
+"""Shared execution helpers for Pipeline2Agent SDK tools."""
 
 from .guardrails import TOOL_INPUT_GUARDRAIL, TOOL_OUTPUT_GUARDRAIL
 from .evidence import EvidenceCollector

@@ -14,14 +14,14 @@ from agents import RunContextWrapper
 from pydantic import Field
 
 from .workflow import database_lookup as _workflow
-from harness.context import BioRunContext
+from harness.context import AgentRunContext
 from tools.common.results import run_workflow
 from tools.common.tooling import bio_function_tool
 
 
 @bio_function_tool()
 async def database_lookup(
-    ctx: RunContextWrapper[BioRunContext],
+    ctx: RunContextWrapper[AgentRunContext],
     database: Annotated[Literal['uniprot', 'interpro', 'kegg', 'quickgo', 'pdb', 'alphafold'], Field(description='Database source for metadata. Use pdb_download or alphafold_download for structure files.')],
     query: Annotated[str, Field(description='Database identifier, accession, protein name, pathway, ontology term, or structure ID to search.')],
     max_results: Annotated[int, Field(ge=1, le=25)] = 5,

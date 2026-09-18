@@ -20,7 +20,7 @@ import requests
 REQUEST_TIMEOUT = 30
 MAX_RESPONSE_BYTES = 10 * 1024 * 1024
 RETRY_STATUS_CODES = {429, 500, 502, 503, 504}
-DEFAULT_USER_AGENT = "BioAgent/1.0"
+DEFAULT_USER_AGENT = "Pipeline2Agent/1.0"
 
 
 def validate_https_url(url: str, *, allowed_hosts: Collection[str]) -> str:

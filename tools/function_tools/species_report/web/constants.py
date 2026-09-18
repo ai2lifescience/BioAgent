@@ -3,7 +3,7 @@
 DUCKDUCKGO_HTML_URL = "https://html.duckduckgo.com/html/"
 REQUEST_TIMEOUT = 30
 REQUEST_RETRIES = 1
-DEFAULT_USER_AGENT = "BioAgent/1.0 (+https://example.local; trusted web collection)"
+DEFAULT_USER_AGENT = "Pipeline2Agent/1.0 (+https://example.local; trusted web collection)"
 TRUSTED_WEB_DOMAINS = (
     "cdc.gov",
     "who.int",

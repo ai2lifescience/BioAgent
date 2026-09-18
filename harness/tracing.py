@@ -1,4 +1,4 @@
-"""SDK lifecycle hooks mapped to BioAgent's local progress events."""
+"""SDK lifecycle hooks mapped to Pipeline2Agent's local progress events."""
 
 from __future__ import annotations
 
@@ -10,23 +10,23 @@ from agents.run_context import AgentHookContext, RunContextWrapper
 from agents.tracing import TracingProcessor, set_trace_provider
 from agents.tracing.provider import DefaultTraceProvider
 
-from .context import BioRunContext
+from .context import AgentRunContext
 
 
-class BioAgentHooks(RunHooks[BioRunContext]):
-    async def on_agent_start(self, context: AgentHookContext[BioRunContext], agent: Agent[Any]) -> None:
+class AgentHooks(RunHooks[AgentRunContext]):
+    async def on_agent_start(self, context: AgentHookContext[AgentRunContext], agent: Agent[Any]) -> None:
         context.context.record("agent_started", agent=agent.name, message=f"Agent started: {agent.name}.")
 
-    async def on_agent_end(self, context: AgentHookContext[BioRunContext], agent: Agent[Any], output: Any) -> None:
+    async def on_agent_end(self, context: AgentHookContext[AgentRunContext], agent: Agent[Any], output: Any) -> None:
         context.context.record("agent_finished", agent=agent.name, message=f"Agent finished: {agent.name}.")
 
-    async def on_tool_start(self, context: RunContextWrapper[BioRunContext], _agent: Agent[Any], tool: Any) -> None:
+    async def on_tool_start(self, context: RunContextWrapper[AgentRunContext], _agent: Agent[Any], tool: Any) -> None:
         context.context.record("sdk_tool_started", tool=getattr(tool, "name", str(tool)))
 
-    async def on_tool_end(self, context: RunContextWrapper[BioRunContext], _agent: Agent[Any], tool: Any, result: Any) -> None:
+    async def on_tool_end(self, context: RunContextWrapper[AgentRunContext], _agent: Agent[Any], tool: Any, result: Any) -> None:
         context.context.record("sdk_tool_finished", tool=getattr(tool, "name", str(tool)))
 
-    async def on_handoff(self, context: RunContextWrapper[BioRunContext], from_agent: Agent[Any], to_agent: Agent[Any]) -> None:
+    async def on_handoff(self, context: RunContextWrapper[AgentRunContext], from_agent: Agent[Any], to_agent: Agent[Any]) -> None:
         context.context.record("handoff", from_agent=from_agent.name, to_agent=to_agent.name)
 
     async def on_llm_start(self, context, agent, system_prompt, input_items) -> None:
@@ -41,10 +41,10 @@ class LocalTraceProcessor(TracingProcessor):
     """Consume real SDK spans locally, without creating an OpenAI exporter."""
 
     def __init__(self) -> None:
-        self.contexts: dict[str, BioRunContext] = {}
+        self.contexts: dict[str, AgentRunContext] = {}
         self.lock = RLock()
 
-    def bind(self, trace_id: str, context: BioRunContext) -> None:
+    def bind(self, trace_id: str, context: AgentRunContext) -> None:
         with self.lock:
             self.contexts[trace_id] = context
 

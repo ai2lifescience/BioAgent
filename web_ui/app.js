@@ -32,8 +32,8 @@ const workspaceSearch = document.getElementById("workspaceSearch");
 const workspaceFilter = document.getElementById("workspaceFilter");
 const workspaceDropzone = document.getElementById("workspaceDropzone");
 
-const ACTIVE_SESSION_KEY = "bioagent.web.active_session_id.v1";
-const SIDEBAR_COLLAPSED_KEY = "bioagent.web.sidebar_collapsed.v3";
+const ACTIVE_SESSION_KEY = "agent.web.active_session_id.v1";
+const SIDEBAR_COLLAPSED_KEY = "agent.web.sidebar_collapsed.v3";
 let structureSuffixes = [".cif", ".mmcif", ".pdb"];
 let imageSuffixes = [".svg"];
 
@@ -57,7 +57,7 @@ const PAUSE_ICON = `
     <rect x="7" y="6" width="3.5" height="12" rx="1" fill="currentColor"/>
     <rect x="13.5" y="6" width="3.5" height="12" rx="1" fill="currentColor"/>
   </svg>`;
-const BIOAGENT_ICON = `
+const AGENT_ICON = `
   <svg class="avatar-icon" viewBox="0 0 512 512" fill="none" aria-hidden="true">
     <defs><linearGradient id="bsod-screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#159BEA"/><stop offset="1" stop-color="#1486D8"/></linearGradient></defs>
     <path d="M256 112c-4-38 10-58 34-67" stroke="#25283A" stroke-width="10" stroke-linecap="round"/>
@@ -361,7 +361,7 @@ function emptyStateHtml() {
           </div>
           <ol class="workflow-steps">
             <li><span>1</span><div><strong>Ask</strong><small>Describe the biology task in plain language.</small></div></li>
-            <li><span>2</span><div><strong>Work</strong><small>BioAgent selects tools and inspects your files.</small></div></li>
+            <li><span>2</span><div><strong>Work</strong><small>Pipeline2Agent selects tools and inspects your files.</small></div></li>
             <li><span>3</span><div><strong>Review</strong><small>Approve pipelines and download verified outputs.</small></div></li>
           </ol>
         </section>
@@ -1476,7 +1476,7 @@ function renderMessageText(role, text) {
 function renderMessage(role, text, result = null) {
   const message = document.createElement("article");
   message.className = `message ${role}`;
-  const avatar = role === "assistant" ? BIOAGENT_ICON : "You";
+  const avatar = role === "assistant" ? AGENT_ICON : "You";
   message.innerHTML = `
     <div class="avatar">${avatar}</div>
     <div class="bubble">
@@ -1580,7 +1580,7 @@ function renderStructureText(details, container, structureText, format) {
   if (!model) {
     throw new Error(`3Dmol could not parse ${format} structure text.`);
   }
-  details._bioagentViewer = viewer;
+  details._agentViewer = viewer;
   details.dataset.loaded = "true";
   applyStructureStyle(details, activeStructureStyle(details));
 }
@@ -1615,7 +1615,7 @@ function renderStructureFromPdbId(details, container, pdbId) {
           reject(new Error(`3Dmol PDB fallback returned no model for ${pdbId}.`));
           return;
         }
-        details._bioagentViewer = viewer;
+        details._agentViewer = viewer;
         details.dataset.loaded = "true";
         applyStructureStyle(details, activeStructureStyle(details));
         settled = true;
@@ -1677,7 +1677,7 @@ function activeStructureStyle(details) {
 }
 
 function applyStructureStyle(details, style) {
-  const viewer = details._bioagentViewer;
+  const viewer = details._agentViewer;
   details.querySelectorAll("[data-style]").forEach((button) => {
     button.classList.toggle("active", button.dataset.style === style);
   });

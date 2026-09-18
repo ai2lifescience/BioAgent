@@ -28,7 +28,7 @@ from .tracing import configure_tracing
 if TYPE_CHECKING:
     from .sessions import SessionMetadata
 
-WORKSPACES_DIR = Path(os.getenv("BIOAGENT_SESSIONS_DIR", "runtime/sessions")).resolve()
+WORKSPACES_DIR = Path(os.getenv("AGENT_SESSIONS_DIR", "runtime/sessions")).resolve()
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 configure_tracing()
 

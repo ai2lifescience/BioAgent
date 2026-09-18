@@ -1,4 +1,4 @@
-"""Command-line interface for BioAgent."""
+"""Command-line interface for Pipeline2Agent."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import argparse
 import json
 import sys
 
-from harness.runtime import resume_bioagent, run_bioagent
+from harness.runtime import resume_agent, run_agent
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODEL_KEYS
 
 
@@ -15,7 +15,7 @@ def _log_progress(message: str) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run the BioAgent Agents SDK harness.")
+    parser = argparse.ArgumentParser(description="Run the Pipeline2Agent Agents SDK harness.")
     parser.add_argument("request", nargs="*", help="User request for the agent.")
     decision = parser.add_mutually_exclusive_group()
     decision.add_argument("--approve", metavar="ID", help="Approve a pending tool call by approval_id.")
@@ -48,12 +48,12 @@ def main() -> int:
     args = parse_args()
     try:
         if args.approve or args.reject:
-            result = resume_bioagent(
+            result = resume_agent(
                 args.session_id, bool(args.approve), args.approve or args.reject,
                 log_fn=_log_progress if args.verbose else None,
             )
         else:
-            result = run_bioagent(
+            result = run_agent(
                 request=" ".join(args.request), session_id=args.session_id,
                 model_key=args.model_key, max_turns=args.max_turns,
                 log_fn=_log_progress if args.verbose else None,
