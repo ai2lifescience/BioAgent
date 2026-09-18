@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="/static/app.css">
 </head>
 <body>
-  <div class="app sidebar-collapsed">
+  <div class="app sidebar-expanded">
     <aside id="leftSidebar" class="left-sidebar">
       <div class="brand">
         <div class="brand-mark">BA</div>
@@ -183,25 +183,30 @@
             <div class="sidebar-hint"><span id="workspaceCount">0</span> in this workspace</div>
           </div>
           <div class="workspace-toolbar">
+            <button id="workspaceToggle" class="icon-button workspace-toggle" type="button" aria-expanded="true" aria-controls="workspaceContents" title="Collapse workspace" aria-label="Collapse workspace">
+              <span class="workspace-toggle-icon" aria-hidden="true"></span>
+            </button>
             <button id="workspaceRefresh" class="icon-button" type="button" title="Refresh workspace" aria-label="Refresh workspace">↻</button>
             <button id="uploadButton" class="new-chat-button" type="button">Upload</button>
           </div>
         </div>
-        <input id="uploadInput" type="file" multiple hidden>
-        <div id="workspaceDropzone" class="workspace-dropzone" role="button" tabindex="0" aria-label="Upload files to this workspace">
-          <strong>Drop files here</strong>
-          <span>or choose Upload</span>
+        <div id="workspaceContents" class="workspace-contents">
+          <input id="uploadInput" type="file" multiple hidden>
+          <div id="workspaceDropzone" class="workspace-dropzone" role="button" tabindex="0" aria-label="Upload files to this workspace">
+            <strong>Drop files here</strong>
+            <span>or choose Upload</span>
+          </div>
+          <div id="workspaceSummary" class="workspace-summary">Files are shared with this chat and its tools.</div>
+          <div class="workspace-filters">
+            <input id="workspaceSearch" type="text" placeholder="Find a file" aria-label="Find a workspace file">
+            <select id="workspaceFilter" aria-label="Filter workspace files">
+              <option value="all">All files</option>
+              <option value="uploads">Inputs</option>
+              <option value="outputs">Outputs</option>
+            </select>
+          </div>
+          <div id="uploadList" class="workspace-file-list"></div>
         </div>
-        <div id="workspaceSummary" class="workspace-summary">Files are shared with this chat and its tools.</div>
-        <div class="workspace-filters">
-          <input id="workspaceSearch" type="text" placeholder="Find a file" aria-label="Find a workspace file">
-          <select id="workspaceFilter" aria-label="Filter workspace files">
-            <option value="all">All files</option>
-            <option value="uploads">Inputs</option>
-            <option value="outputs">Outputs</option>
-          </select>
-        </div>
-        <div id="uploadList" class="workspace-file-list"></div>
       </div>
     </aside>
   </div>

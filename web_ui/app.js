@@ -31,13 +31,16 @@ const uploadInput = document.getElementById("uploadInput");
 const uploadList = document.getElementById("uploadList");
 const workspaceCount = document.getElementById("workspaceCount");
 const workspaceSummary = document.getElementById("workspaceSummary");
+const workspacePanel = document.querySelector(".workspace-panel");
+const workspaceToggleButton = document.getElementById("workspaceToggle");
 const workspaceRefresh = document.getElementById("workspaceRefresh");
 const workspaceSearch = document.getElementById("workspaceSearch");
 const workspaceFilter = document.getElementById("workspaceFilter");
 const workspaceDropzone = document.getElementById("workspaceDropzone");
 
 const ACTIVE_SESSION_KEY = "bioagent.web.active_session_id.v1";
-const SIDEBAR_COLLAPSED_KEY = "bioagent.web.sidebar_collapsed.v1";
+const SIDEBAR_COLLAPSED_KEY = "bioagent.web.sidebar_collapsed.v3";
+const WORKSPACE_COLLAPSED_KEY = "bioagent.web.workspace_collapsed.v1";
 let structureSuffixes = [".cif", ".mmcif", ".pdb"];
 let imageSuffixes = [".svg"];
 
@@ -107,7 +110,25 @@ function setSidebarCollapsed(collapsed) {
 
 function initializeSidebar() {
   const stored = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
-  setSidebarCollapsed(stored === null ? true : stored === "true");
+  const phoneDefault = window.matchMedia("(max-width: 700px)").matches;
+  setSidebarCollapsed(stored === null ? phoneDefault : stored === "true");
+}
+
+function setWorkspaceCollapsed(collapsed) {
+  const nextState = Boolean(collapsed);
+  appShell.classList.toggle("workspace-collapsed", nextState);
+  workspacePanel.classList.toggle("workspace-collapsed", nextState);
+  workspaceToggleButton.setAttribute("aria-expanded", String(!nextState));
+  const label = nextState ? "Expand workspace" : "Collapse workspace";
+  workspaceToggleButton.setAttribute("aria-label", label);
+  workspaceToggleButton.title = label;
+  localStorage.setItem(WORKSPACE_COLLAPSED_KEY, String(nextState));
+}
+
+function initializeWorkspace() {
+  const stored = localStorage.getItem(WORKSPACE_COLLAPSED_KEY);
+  const phoneDefault = window.matchMedia("(max-width: 700px)").matches;
+  setWorkspaceCollapsed(stored === null ? phoneDefault : stored === "true");
 }
 
 function generateSessionId() {
@@ -1523,6 +1544,9 @@ function bindEvents() {
   toggleSidebarButton.addEventListener("click", () => {
     setSidebarCollapsed(!appShell.classList.contains("sidebar-collapsed"));
   });
+  workspaceToggleButton.addEventListener("click", () => {
+    setWorkspaceCollapsed(!workspacePanel.classList.contains("workspace-collapsed"));
+  });
   stopButton.addEventListener("click", stopCurrentRequest);
   newChatButton.addEventListener("click", startNewChat);
   uploadButton.addEventListener("click", () => {
@@ -1585,6 +1609,7 @@ function bindEvents() {
 
 async function init() {
   initializeSidebar();
+  initializeWorkspace();
   setSessionLoading(true);
   try {
     await loadSessions();
