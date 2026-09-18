@@ -339,6 +339,12 @@ shares the host OS, so it is a development workspace rather than a strong
 security boundary. Use a container-backed SDK sandbox when process isolation is
 needed.
 
+The web Workspace panel is a thin view over this sandbox listing. Uploads are
+written to `uploads/`, generated files are grouped as outputs, and the panel
+offers search, download, and removal. It does not assign pipeline slot labels
+or copy paths into chat messages; the agent uses `bioagent-pipeline files` and
+the workspace-relative paths already returned by the sandbox.
+
 Run-specific temporary files use the same workspace:
 
 ```text

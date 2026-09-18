@@ -262,7 +262,7 @@
       button.textContent = name;
       button.title = `Ask about ${name}`;
       button.addEventListener("click", () => {
-        const reference = `Use the attached file ${JSON.stringify(name)}.`;
+        const reference = `Analyze the attached file ${JSON.stringify(name)}.`;
         prompt.value = prompt.value ? `${prompt.value}\n${reference}` : reference;
         prompt.focus();
       });

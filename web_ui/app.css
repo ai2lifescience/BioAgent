@@ -285,6 +285,36 @@ aside {
   line-height: 1.35;
 }
 
+.workspace-dropzone {
+  display: grid;
+  gap: 2px;
+  justify-items: center;
+  padding: 12px 10px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 8px;
+  background: var(--surface-soft);
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: center;
+  transition: border-color 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.workspace-dropzone strong {
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.workspace-dropzone:hover,
+.workspace-dropzone:focus-visible,
+.workspace-dropzone.dragging {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  outline: none;
+}
+
 .workspace-filters {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 90px;
@@ -298,70 +328,33 @@ aside {
   font-size: 12px;
 }
 
-.upload-insert-control {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 6px;
-  padding: 9px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface-soft);
-}
-
-.upload-insert-control label {
-  font-size: 11px;
-}
-
-.upload-insert-control input,
-.upload-insert-control select {
-  min-height: 34px;
-  padding: 0 9px;
-  font-size: 13px;
-}
-
-.upload-list {
-  display: grid;
-  gap: 7px;
-  max-height: 220px;
-  overflow-y: auto;
-  padding-right: 2px;
-}
-
 .workspace-file-list {
   display: grid;
-  gap: 7px;
+  gap: 9px;
   max-height: min(42vh, 420px);
   overflow-y: auto;
   padding-right: 2px;
 }
 
-.workspace-directory {
+.workspace-group {
+  display: grid;
+  gap: 5px;
+}
+
+.workspace-group-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
   color: var(--muted);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  overflow: hidden;
-  padding: 4px 4px 0;
-  text-overflow: ellipsis;
   text-transform: uppercase;
-  white-space: nowrap;
 }
 
-.workspace-folder > summary {
-  color: var(--muted);
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 700;
-  overflow: hidden;
-  padding: 4px 3px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.workspace-folder-files {
+.workspace-group-files {
   display: grid;
-  gap: 7px;
-  padding-top: 4px;
+  gap: 6px;
 }
 
 .workspace-file-kind {
@@ -370,13 +363,15 @@ aside {
   text-transform: capitalize;
 }
 
-.workspace-path {
+.workspace-file-path {
+  color: var(--muted);
+  font-size: 12px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.upload-item {
+.workspace-file {
   display: grid;
   gap: 7px;
   padding: 9px;
@@ -385,13 +380,13 @@ aside {
   background: #fff;
 }
 
-.upload-main {
+.workspace-file-main {
   display: grid;
   gap: 3px;
   min-width: 0;
 }
 
-.upload-name {
+.workspace-file-name {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -400,20 +395,19 @@ aside {
   font-weight: 700;
 }
 
-.upload-meta {
+.workspace-file-meta {
   color: var(--muted);
   font-size: 12px;
 }
 
-.upload-actions {
+.workspace-file-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 30px;
+  grid-template-columns: 1fr 1fr;
   gap: 5px;
 }
 
-.upload-use,
-.upload-open,
-.upload-delete {
+.workspace-download,
+.workspace-remove {
   min-height: 30px;
   border: 1px solid var(--line);
   border-radius: 7px;
@@ -428,26 +422,17 @@ aside {
   place-items: center;
 }
 
-.upload-use {
-  color: var(--accent-strong);
-  background: var(--accent-soft);
-  border-color: #a7d8d0;
-}
-
-.upload-delete {
+.workspace-remove {
   color: var(--error);
-  font-size: 18px;
-  line-height: 1;
 }
 
-.upload-use:hover,
-.upload-open:hover,
-.upload-delete:hover {
+.workspace-download:hover,
+.workspace-remove:hover {
   border-color: var(--line-strong);
   background: var(--surface-soft);
 }
 
-.upload-empty {
+.workspace-empty {
   border: 1px dashed var(--line);
   border-radius: 8px;
   padding: 10px;

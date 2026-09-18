@@ -34,10 +34,9 @@ const workspaceSummary = document.getElementById("workspaceSummary");
 const workspaceRefresh = document.getElementById("workspaceRefresh");
 const workspaceSearch = document.getElementById("workspaceSearch");
 const workspaceFilter = document.getElementById("workspaceFilter");
-const uploadInputLabel = document.getElementById("uploadInputLabel");
+const workspaceDropzone = document.getElementById("workspaceDropzone");
 
 const ACTIVE_SESSION_KEY = "bioagent.web.active_session_id.v1";
-const DEFAULT_UPLOAD_INPUT_LABEL = "input_path";
 let structureSuffixes = [".cif", ".mmcif", ".pdb"];
 let imageSuffixes = [".svg"];
 
@@ -51,7 +50,6 @@ let thinkingLogLines = [];
 let sessions = [];
 let activeSessionId = "";
 let workspaceFiles = [];
-let lastAutoUploadInputLabel = DEFAULT_UPLOAD_INPUT_LABEL;
 
 async function loadConfig() {
   const response = await fetch("/config");
@@ -263,13 +261,11 @@ function renderCurrentChat() {
   if (!messages.length) {
     chat.innerHTML = emptyStateHtml();
     bindExampleButtons(chat);
-    renderUploadInsertOptions();
     return;
   }
   for (const message of messages) {
     renderMessage(message.role, message.text || "", message.result || null);
   }
-  renderUploadInsertOptions();
   scrollBottom();
 }
 
@@ -374,68 +370,71 @@ function renderWorkspace() {
   workspaceCount.textContent = String(workspaceFiles.length);
   uploadList.innerHTML = "";
   if (!workspaceFiles.length) {
-    workspaceSummary.textContent = "Add files or ask BioAgent to create outputs.";
-    uploadList.innerHTML = `<div class="upload-empty">No files in this chat workspace.</div>`;
+    workspaceSummary.textContent = "Files are shared with this chat and its tools.";
+    uploadList.innerHTML = `<div class="workspace-empty">No files in this workspace yet.</div>`;
     return;
   }
   const totalBytes = workspaceFiles.reduce((sum, file) => sum + Number(file.size || 0), 0);
-  workspaceSummary.textContent = `${formatBytes(totalBytes)} · inputs and outputs for this chat`;
+  workspaceSummary.textContent = `${formatBytes(totalBytes)} · available to this chat and its tools`;
   const query = workspaceSearch.value.trim().toLowerCase();
   const filter = workspaceFilter.value;
   const visibleFiles = workspaceFiles.filter((file) => {
     const path = String(file.workspace_path || file.path || "");
     if (query && !path.toLowerCase().includes(query)) return false;
-    if (filter === "uploads") return path.startsWith("uploads/");
-    if (filter === "outputs") return !path.startsWith("uploads/");
+    const category = workspaceFileCategory(file).key;
+    if (filter === "uploads") return category === "uploads";
+    if (filter === "outputs") return category === "outputs";
     return true;
   });
   if (!visibleFiles.length) {
-    uploadList.innerHTML = `<div class="upload-empty">No matching files.</div>`;
+    uploadList.innerHTML = `<div class="workspace-empty">No matching files.</div>`;
     return;
   }
-  const folders = new Map();
+  const groups = new Map();
   for (const file of visibleFiles) {
-    const workspacePath = file.workspace_path || file.path || "";
-    const directory = workspacePath.includes("/")
-      ? workspacePath.slice(0, workspacePath.lastIndexOf("/"))
-      : "workspace root";
-    if (!folders.has(directory)) folders.set(directory, []);
-    folders.get(directory).push(file);
+    const category = workspaceFileCategory(file);
+    if (!groups.has(category.key)) groups.set(category.key, { ...category, files: [] });
+    groups.get(category.key).files.push(file);
   }
-  for (const [directory, files] of folders) {
-    const folder = document.createElement("details");
-    folder.className = "workspace-folder";
-    folder.open = true;
-    const heading = document.createElement("summary");
-    heading.textContent = `${directory} (${files.length})`;
-    heading.title = directory;
+  const orderedGroups = ["uploads", "outputs"]
+    .map((key) => groups.get(key))
+    .filter(Boolean);
+  for (const group of orderedGroups) {
+    const section = document.createElement("section");
+    section.className = "workspace-group";
+    const heading = document.createElement("div");
+    heading.className = "workspace-group-heading";
+    heading.innerHTML = `<span>${escapeHtml(group.label)}</span><span>${group.files.length}</span>`;
     const contents = document.createElement("div");
-    contents.className = "workspace-folder-files";
-    for (const file of files) {
+    contents.className = "workspace-group-files";
+    for (const file of group.files) {
       const item = document.createElement("div");
-      item.className = "upload-item";
-      item.dataset.workspacePath = file.workspace_path || "";
-      item.dataset.path = file.path || "";
-      const name = file.name || fileNameFromPath(file.path);
+      item.className = "workspace-file";
+      item.dataset.workspacePath = file.workspace_path || file.path || "";
+      const name = file.name || fileNameFromPath(file.workspace_path || file.path);
       const workspacePath = file.workspace_path || file.path || "";
       item.innerHTML = `
-        <div class="upload-main">
-          <div class="upload-name" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
-          <div class="upload-meta">${escapeHtml(formatBytes(file.size))} · <span class="workspace-file-kind">${escapeHtml(file.kind || "file")}</span></div>
-          <div class="upload-meta workspace-path" title="${escapeHtml(workspacePath)}">${escapeHtml(workspacePath)}</div>
+        <div class="workspace-file-main">
+          <div class="workspace-file-name" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
+          <div class="workspace-file-meta">${escapeHtml(formatBytes(file.size))} · <span class="workspace-file-kind">${escapeHtml(file.kind || "file")}</span></div>
+          <div class="workspace-file-path" title="${escapeHtml(workspacePath)}">${escapeHtml(workspacePath)}</div>
         </div>
-        <div class="upload-actions">
-          <button class="upload-use" type="button" data-upload-use>Use</button>
-          <a class="upload-open" href="${escapeHtml(workspaceFileUrl(file.path))}" target="_blank" rel="noopener noreferrer">Open</a>
-          <a class="upload-open" href="${escapeHtml(workspaceFileUrl(file.path))}" download>Save</a>
-          <button class="upload-delete" type="button" data-upload-delete title="Delete file">&times;</button>
+        <div class="workspace-file-actions">
+          <a class="workspace-download" href="${escapeHtml(workspaceFileUrl(workspacePath))}" download>Download</a>
+          <button class="workspace-remove" type="button" data-workspace-delete aria-label="Remove ${escapeHtml(name)}">Remove</button>
         </div>
       `;
       contents.appendChild(item);
     }
-    folder.append(heading, contents);
-    uploadList.appendChild(folder);
+    section.append(heading, contents);
+    uploadList.appendChild(section);
   }
+}
+
+function workspaceFileCategory(file) {
+  const path = String(file?.workspace_path || file?.path || "");
+  if (path.startsWith("uploads/")) return { key: "uploads", label: "Inputs" };
+  return { key: "outputs", label: "Outputs" };
 }
 
 async function loadWorkspace() {
@@ -485,156 +484,8 @@ async function uploadSelectedFiles(files) {
   } finally {
     uploadInput.value = "";
     uploadButton.disabled = isSessionLoading || isRunning;
-    uploadButton.textContent = "Add files";
+    uploadButton.textContent = "Upload";
   }
-}
-
-function insertTextAtCursor(value) {
-  const text = String(value || "");
-  const start = promptInput.selectionStart ?? promptInput.value.length;
-  const end = promptInput.selectionEnd ?? promptInput.value.length;
-  const before = promptInput.value.slice(0, start);
-  const after = promptInput.value.slice(end);
-  const needsSpaceBefore = before && !/\s$/.test(before);
-  const needsSpaceAfter = after && !/^\s/.test(after);
-  promptInput.value = `${before}${needsSpaceBefore ? " " : ""}${text}${needsSpaceAfter ? " " : ""}${after}`;
-  const cursor = before.length + (needsSpaceBefore ? 1 : 0) + text.length;
-  promptInput.focus();
-  promptInput.setSelectionRange(cursor, cursor);
-}
-
-function latestPipelineInputRequest() {
-  const messages = currentSession().messages || [];
-  for (let index = messages.length - 1; index >= 0; index -= 1) {
-    const message = messages[index];
-    if (message.role !== "assistant") continue;
-    const structured = pipelineInputRequestFromResult(message.result);
-    if (structured) {
-      return structured;
-    }
-    const text = String(message.text || "");
-    const match = text.match(/Pipeline\s+`([^`]+)`\s+needs input file information/i);
-    if (match) {
-      return {
-        pipelineName: match[1],
-        text,
-        requestedInputs: [],
-      };
-    }
-    return null;
-  }
-  return null;
-}
-
-function pipelineInputRequestFromResult(result) {
-  const outputs = result?.evidence?.outputs;
-  if (!Array.isArray(outputs)) return null;
-  for (let index = outputs.length - 1; index >= 0; index -= 1) {
-    const output = outputs[index];
-    if (!output || !["pipeline_shell"].includes(output.tool) || !output.needs_input) continue;
-    const requestedInputs = Array.isArray(output.requested_inputs)
-      ? output.requested_inputs.filter((item) => item && item.slot)
-      : [];
-    return {
-      pipelineName: String(output.pipeline_name || ""),
-      text: "",
-      requestedInputs,
-      configOverrides: output.config_overrides || {},
-    };
-  }
-  return null;
-}
-
-function pipelineInputSlotsFromText(text) {
-  const slots = [];
-  const seen = new Set();
-  const pattern = /^-\s+.+?\(`([^`]+)`(?:,\s*(?:config|key)\s+`([^`]+)`)?\):/gim;
-  let match;
-  while ((match = pattern.exec(String(text || ""))) !== null) {
-    const clean = String(match[1] || "").trim();
-    if (!clean || seen.has(clean)) continue;
-    seen.add(clean);
-    slots.push(clean);
-  }
-  return slots;
-}
-
-function pipelineInputSlotsFromRequest(request) {
-  if (!request) return [];
-  if (Array.isArray(request.requestedInputs) && request.requestedInputs.length) {
-    return request.requestedInputs
-      .map((item) => String(item.slot || "").trim())
-      .filter(Boolean);
-  }
-  return pipelineInputSlotsFromText(request.text);
-}
-
-function renderUploadInsertOptions() {
-  if (!uploadInputLabel) return;
-  const selected = uploadInputLabel.value.trim();
-  const pending = latestPipelineInputRequest();
-  const requestedSlots = pipelineInputSlotsFromRequest(pending);
-  const options = requestedSlots.length ? requestedSlots : [DEFAULT_UPLOAD_INPUT_LABEL];
-  const seen = new Set();
-  const uniqueOptions = options.filter((option) => {
-    if (seen.has(option)) return false;
-    seen.add(option);
-    return true;
-  });
-
-  uploadInputLabel.innerHTML = [
-    ...uniqueOptions.map((option) => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`),
-    '<option value="">raw path</option>',
-  ].join("");
-
-  if (
-    requestedSlots.length &&
-    (!selected || selected === DEFAULT_UPLOAD_INPUT_LABEL || selected === lastAutoUploadInputLabel)
-  ) {
-    uploadInputLabel.value = requestedSlots[0];
-    lastAutoUploadInputLabel = requestedSlots[0];
-  } else if (!selected && !requestedSlots.length) {
-    uploadInputLabel.value = DEFAULT_UPLOAD_INPUT_LABEL;
-    lastAutoUploadInputLabel = DEFAULT_UPLOAD_INPUT_LABEL;
-  } else if (uniqueOptions.includes(selected)) {
-    uploadInputLabel.value = selected;
-  } else {
-    uploadInputLabel.value = uniqueOptions[0] || "";
-  }
-}
-
-function requestPrefixForPendingPipeline() {
-  const pending = latestPipelineInputRequest();
-  if (!pending?.pipelineName) return "";
-  const parameters = Object.entries(pending.configOverrides || {}).map(
-    ([key, value]) => `${key}: ${String(value)}`,
-  );
-  return [`Run pipeline with pipeline_name: ${pending.pipelineName}`, ...parameters].join(" ");
-}
-
-function uploadPathSnippet(path) {
-  const cleanPath = String(path || "").trim();
-  if (!cleanPath) return "";
-  const label = uploadInputLabel?.value.trim() || "";
-  if (!label) {
-    return `"${cleanPath}"`;
-  }
-  return `${label}: "${cleanPath}"`;
-}
-
-function useUploadPath(path) {
-  const snippet = uploadPathSnippet(path);
-  if (!snippet) return;
-  if (!promptInput.value.trim()) {
-    const prefix = requestPrefixForPendingPipeline();
-    if (prefix) {
-      promptInput.value = `${prefix} ${snippet}`;
-      promptInput.focus();
-      promptInput.setSelectionRange(promptInput.value.length, promptInput.value.length);
-      return;
-    }
-  }
-  insertTextAtCursor(snippet);
 }
 
 async function deleteWorkspaceFile(workspacePath) {
@@ -1410,7 +1261,6 @@ function addMessage(role, text, result = null) {
       created_at: nowIso(),
     });
   });
-  renderUploadInsertOptions();
   scrollBottom();
 }
 
@@ -1630,16 +1480,36 @@ function bindEvents() {
   uploadInput.addEventListener("change", () => {
     uploadSelectedFiles(uploadInput.files);
   });
-  uploadList.addEventListener("click", (event) => {
-    const item = event.target.closest(".upload-item");
-    if (!item) return;
-    if (event.target.closest("[data-upload-use]")) {
-      useUploadPath(item.dataset.path);
-      return;
+  workspaceDropzone.addEventListener("click", () => {
+    if (!isRunning && !isSessionLoading) uploadInput.click();
+  });
+  workspaceDropzone.addEventListener("keydown", (event) => {
+    if ((event.key === "Enter" || event.key === " ") && !isRunning && !isSessionLoading) {
+      event.preventDefault();
+      uploadInput.click();
     }
-    if (event.target.closest("[data-upload-delete]")) {
+  });
+  for (const eventName of ["dragenter", "dragover"]) {
+    workspaceDropzone.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      if (!isRunning && !isSessionLoading) workspaceDropzone.classList.add("dragging");
+    });
+  }
+  for (const eventName of ["dragleave", "drop"]) {
+    workspaceDropzone.addEventListener(eventName, (event) => {
+      event.preventDefault();
+      workspaceDropzone.classList.remove("dragging");
+    });
+  }
+  workspaceDropzone.addEventListener("drop", (event) => {
+    if (!isRunning && !isSessionLoading) uploadSelectedFiles(event.dataTransfer?.files);
+  });
+  uploadList.addEventListener("click", (event) => {
+    const item = event.target.closest(".workspace-file");
+    if (!item) return;
+    if (event.target.closest("[data-workspace-delete]")) {
       deleteWorkspaceFile(item.dataset.workspacePath).catch((error) => {
-        addMessage("assistant", `Delete file failed: ${error.message}`);
+        addMessage("assistant", `Remove file failed: ${error.message}`);
       });
     }
   });
@@ -1668,7 +1538,6 @@ async function init() {
   bindEvents();
   renderSessionList();
   await loadActiveSession();
-  renderUploadInsertOptions();
   try {
     await loadConfig();
   } catch (error) {

@@ -218,46 +218,21 @@ later message.
 
 ## Manage Workspace Files
 
-Use the `Workspace` panel in the sidebar when you want the web session to keep
-input files, inspect generated outputs, and reuse files across turns.
+The `Workspace` panel is the file browser for the active SDK sandbox session.
+The agent and its tools see the same workspace, so an uploaded file is already
+available to pipeline tools; there is no separate input label or path insertion
+step.
 
-1. Click `Add files`.
-2. Select one or more files.
-3. The files appear in the current chat session's SDK sandbox workspace.
-4. Set `Input label` to the pipeline slot or tool argument name, for example
-   `input_path`, `sequence`, or `metadata`.
-5. Click `Use` beside a file to insert the labeled path into the message box.
-
-```text
-input_path: "<path inserted by Use>"
-```
-
-`Use` inserts the file's returned `path`. The panel also shows its
-workspace-relative path. The agent discovers the corresponding `workspace_path`
-before passing it to a pipeline command; users do not need to construct these
-paths themselves.
-
-When BioAgent asks for missing pipeline inputs, the `Input label` box is filled
-from the requested slot names in that answer, such as `reads`, `sequence`, or
-`metadata`. The web UI uses structured `requested_inputs` from the agent result
-when available, so it does not depend on parsing the displayed Markdown text.
-
-If BioAgent just asked for missing pipeline input and the message box is empty,
-`Use` prefills a complete pipeline request:
-
-```text
-Run pipeline with pipeline_name: generic_shell reads: "<path inserted by Use>"
-```
-
-Then combine that path with a normal request:
-
-```text
-Run generic_shell with reads: "<reads file path>" metadata: "<metadata file path>"
-```
-
-```text
-Inspect file "<metadata file path>"
-```
+- Choose `Upload`, or drop files into the upload area. Files are stored under
+  `uploads/` in the current session.
+- Use the search box or the `All files`, `Inputs`, and `Outputs` filter to find a
+  file. The panel shows each file's name, type, size, and workspace-relative
+  path.
+- Use `Download` when you need a local copy. Use `Remove` to delete a file from
+  the session workspace.
+- Refer to a file by name in your message, for example `Analyze reads.fastq`
+  or `Run generic_shell on metadata.csv`. BioAgent resolves the workspace file
+  and supplies the path required by the selected tool.
 
 Workspace files are stored in the active SDK sandbox session:
 
@@ -267,7 +242,7 @@ runtime/sessions/<session_id>/uploads/
 
 If the same filename is uploaded more than once, BioAgent avoids overwriting by
 adding a unique prefix to the stored name. Generated outputs appear in the same
-workspace listing and can be opened or deleted from the Workspace panel.
+workspace listing and can be downloaded or removed from the Workspace panel.
 
 ```text
 a1b2c3d4e5f6_reads.fastq
@@ -580,12 +555,12 @@ For a demonstration using bundled synthetic data:
 Run the example_sequence_qc example and summarize its metrics.
 ```
 
-For your own data, upload files to the current session, use the Workspace panel
-to insert their actual paths, and specify the pipeline input roles. For example,
-replace the placeholders below with the returned workspace-relative paths:
+For your own data, upload files to the current session and mention the filenames
+and their roles in the request. The agent discovers the matching workspace
+paths before it creates the validated plan:
 
 ```text
-Run example_sequence_qc with reads: "uploads/<stored-reads-name>.fastq" metadata: "uploads/<stored-metadata-name>.tsv" and min_length 8. Return the results.
+Run example_sequence_qc with my reads.fastq as reads and metadata.tsv as metadata, with min_length 8. Return the results.
 ```
 
 The agent discovers paths, selects inputs, and creates a validated plan. Missing

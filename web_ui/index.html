@@ -48,11 +48,15 @@
           </div>
           <div class="workspace-toolbar">
             <button id="workspaceRefresh" class="icon-button" type="button" title="Refresh workspace" aria-label="Refresh workspace">↻</button>
-            <button id="uploadButton" class="new-chat-button" type="button">Add files</button>
+            <button id="uploadButton" class="new-chat-button" type="button">Upload</button>
           </div>
         </div>
         <input id="uploadInput" type="file" multiple hidden>
-        <div id="workspaceSummary" class="workspace-summary">Files available to this chat</div>
+        <div id="workspaceDropzone" class="workspace-dropzone" role="button" tabindex="0" aria-label="Upload files to this workspace">
+          <strong>Drop files here</strong>
+          <span>or choose Upload</span>
+        </div>
+        <div id="workspaceSummary" class="workspace-summary">Files are shared with this chat and its tools.</div>
         <div class="workspace-filters">
           <input id="workspaceSearch" type="text" placeholder="Find a file" aria-label="Find a workspace file">
           <select id="workspaceFilter" aria-label="Filter workspace files">
@@ -60,14 +64,6 @@
             <option value="uploads">Inputs</option>
             <option value="outputs">Outputs</option>
           </select>
-        </div>
-        <div class="upload-insert-control">
-          <label for="uploadInputLabel">Input label</label>
-          <select id="uploadInputLabel">
-            <option value="input_path">input_path</option>
-            <option value="">raw path</option>
-          </select>
-          <div class="sidebar-hint">Choose a requested slot name. Use raw path to insert only the file path.</div>
         </div>
         <div id="uploadList" class="workspace-file-list"></div>
       </div>
