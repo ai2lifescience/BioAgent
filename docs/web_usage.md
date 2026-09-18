@@ -96,9 +96,11 @@ disconnects the response stream; work already started on the server may continue
 
 ## Runtime Panel
 
-Each completed request includes four compact rows below the answer: **Runtime**,
-**Plan & execution**, **Evidence**, and **Trace**. Open a row when you need to
-inspect that part of the run:
+Each completed request includes a compact tab row below the answer: **Runtime**,
+**Plan & execution**, **Evidence**, and **Trace**. Select one tab at a time; the
+selected diagnostic view uses one shared content area:
+
+Click the selected tab again to hide the diagnostic area.
 
 - **Runtime** shows status, model, elapsed time, tool count, file count, and the
   configured maximum turns.

@@ -3,15 +3,18 @@
 
   const EMBED_STYLE = `
     :host { all: initial; }
-    .bioagent-launcher { position: fixed; right: 20px; bottom: 20px; z-index: 2147483000; border: 0; border-radius: 999px; padding: 12px 16px; color: #fff; background: #0f766e; box-shadow: 0 8px 24px #172e3240; font: 650 14px/1.2 system-ui,sans-serif; cursor: pointer; }
-    .bioagent-launcher:hover { background: #115e59; }
-    .bioagent-panel { position: fixed; z-index: 2147483001; inset: 0 0 0 auto; display: grid; grid-template-rows: auto minmax(0,1fr); width: min(440px,100vw); background: #fff; box-shadow: -12px 0 32px #172e3226; transition: transform .2s ease; }
-    .bioagent-panel[hidden] { display: grid; transform: translateX(102%); pointer-events: none; }
-    .bioagent-panel-header { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 10px 14px; border-bottom: 1px solid #dce6e6; color: #172e32; background: #fff; font: 650 14px/1.2 system-ui,sans-serif; }
+    .bioagent-launcher { position: fixed; right: 22px; bottom: 22px; z-index: 2147483000; display: inline-flex; align-items: center; gap: 8px; border: 1px solid #0d655e; border-radius: 999px; padding: 11px 16px; color: #fff; background: linear-gradient(145deg, #159487, #115e59); box-shadow: 0 10px 26px #17343835; font: 700 13px/1.2 system-ui,sans-serif; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease; }
+    .bioagent-launcher::before { display: grid; width: 20px; height: 20px; place-items: center; border: 1px solid #ffffff70; border-radius: 7px; content: "BA"; font-size: 8px; font-weight: 800; }
+    .bioagent-launcher:hover { transform: translateY(-2px); box-shadow: 0 14px 30px #17343845; }
+    .bioagent-panel { position: fixed; z-index: 2147483001; inset: 0 0 0 auto; display: grid; grid-template-rows: auto minmax(0,1fr); width: min(460px,100vw); overflow: hidden; border-left: 1px solid #d9e5e4; background: #f4f8f8; box-shadow: -16px 0 40px #17343826; transition: transform .22s ease, box-shadow .22s ease; }
+    .bioagent-panel[hidden] { display: grid; transform: translateX(102%); pointer-events: none; box-shadow: none; }
+    .bioagent-panel-header { display: flex; align-items: center; gap: 10px; min-height: 58px; padding: 11px 16px; border-bottom: 1px solid #d9e5e4; color: #173438; background: #ffffffed; backdrop-filter: blur(12px); font: 700 14px/1.2 system-ui,sans-serif; }
+    .bioagent-panel-header::before { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 9px; color: #fff; background: linear-gradient(145deg, #159487, #115e59); content: "BA"; font-size: 9px; }
     .bioagent-panel-header span { margin-right: auto; }
-    .bioagent-close { width: 30px; height: 30px; border: 0; border-radius: 7px; color: #62777b; background: #f5f8f8; font-size: 22px; line-height: 1; cursor: pointer; }
+    .bioagent-close { display: grid; width: 30px; height: 30px; place-items: center; border: 1px solid #d9e5e4; border-radius: 8px; color: #62777b; background: #f4f8f8; font-size: 20px; line-height: 1; cursor: pointer; }
+    .bioagent-close:hover { color: #115e59; background: #e7f4f1; }
     .bioagent-frame { display: block; width: 100%; height: 100%; border: 0; }
-    @media (max-width: 480px) { .bioagent-launcher { right: 12px; bottom: 12px; } .bioagent-panel { width: 100vw; } }
+    @media (max-width: 480px) { .bioagent-launcher { right: 12px; bottom: 12px; padding: 10px 13px; } .bioagent-panel { width: 100vw; } }
   `;
 
   function mount(options = {}) {

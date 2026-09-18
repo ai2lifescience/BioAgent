@@ -1288,32 +1288,60 @@ function resultDetails(result) {
     ${pipelineOutputs.length ? "" : figureArtifactsHtml(result)}
     ${pipelineOutputs.length ? "" : structureViewerHtml(result)}
     <div class="run-debug" aria-label="Runtime details">
-      <details class="run-section run-runtime">
-        <summary>
-          <span>Runtime</span>
-          <span class="run-inline-meta"><span class="run-status-chip ${status.tone}">${escapeHtml(status.label)}</span><small>${escapeHtml(formatElapsed(runtime.elapsed_seconds))}</small></span>
-        </summary>
-        <div class="run-section-content">${runtimePanel(result, runtime, status)}</div>
-      </details>
-      <details class="run-section run-plan">
-        <summary><span>Plan &amp; execution</span><small>${(result.trace || []).length} observable events</small></summary>
-        <div class="run-section-content">
-          <p class="run-debug-note">This shows the agent’s registered operations and runtime events, without exposing private model reasoning.</p>
-          ${runOutline(result)}
-          ${executionTimeline(result)}
-        </div>
-      </details>
-      <details class="run-section">
-        <summary><span>Evidence</span><small>${(result.evidence?.citations || []).length} sources · ${(result.evidence?.files || []).length} files</small></summary>
-        <div class="run-section-content"><div class="evidence-panel">${evidencePanel(result)}</div></div>
-      </details>
-      <details class="run-section">
-        <summary><span>Trace</span><small>technical event stream</small></summary>
-        <div class="run-section-content"><div class="trace-technical">${technicalTrace(result)}</div></div>
-      </details>
+      <div class="run-tabs" role="tablist" aria-label="Runtime detail sections">
+        <button type="button" class="run-tab" role="tab" aria-selected="false" data-runtime-tab="runtime">
+          <span>Runtime</span><small>${escapeHtml(status.label)} · ${escapeHtml(formatElapsed(runtime.elapsed_seconds))}</small>
+        </button>
+        <button type="button" class="run-tab" role="tab" aria-selected="false" data-runtime-tab="plan">
+          <span>Plan &amp; execution</span><small>${(result.trace || []).length} events</small>
+        </button>
+        <button type="button" class="run-tab" role="tab" aria-selected="false" data-runtime-tab="evidence">
+          <span>Evidence</span><small>${(result.evidence?.citations || []).length} sources</small>
+        </button>
+        <button type="button" class="run-tab" role="tab" aria-selected="false" data-runtime-tab="trace">
+          <span>Trace</span><small>technical</small>
+        </button>
+      </div>
+      <section class="run-panel" role="tabpanel" data-runtime-panel="runtime" hidden>
+        ${runtimePanel(result, runtime, status)}
+      </section>
+      <section class="run-panel" role="tabpanel" data-runtime-panel="plan" hidden>
+        <p class="run-debug-note">This shows the agent’s registered operations and runtime events, without exposing private model reasoning.</p>
+        ${runOutline(result)}
+        ${executionTimeline(result)}
+      </section>
+      <section class="run-panel" role="tabpanel" data-runtime-panel="evidence" hidden>
+        <div class="evidence-panel">${evidencePanel(result)}</div>
+      </section>
+      <section class="run-panel" role="tabpanel" data-runtime-panel="trace" hidden>
+        <div class="trace-technical">${technicalTrace(result)}</div>
+      </section>
       <div class="approval-controls"></div>
     </div>
   `;
+}
+
+function initializeRuntimeTabs(root = document) {
+  root.querySelectorAll(".run-debug").forEach((group) => {
+    if (group.dataset.tabsBound === "true") return;
+    group.dataset.tabsBound = "true";
+    const tabs = [...group.querySelectorAll("[data-runtime-tab]")];
+    const panels = [...group.querySelectorAll("[data-runtime-panel]")];
+    let activeKey = null;
+    const select = (key) => {
+      activeKey = activeKey === key ? null : key;
+      tabs.forEach((tab) => {
+        const active = activeKey === tab.dataset.runtimeTab;
+        tab.classList.toggle("is-active", active);
+        tab.setAttribute("aria-selected", String(active));
+      });
+      panels.forEach((panel) => {
+        panel.hidden = activeKey !== panel.dataset.runtimePanel;
+      });
+    };
+    tabs.forEach((tab) => tab.addEventListener("click", () => select(tab.dataset.runtimeTab)));
+    select(null);
+  });
 }
 
 function renderMessageText(role, text) {
@@ -1350,6 +1378,7 @@ function renderMessage(role, text, result = null) {
       },
     });
   }
+  initializeRuntimeTabs(message);
   initializeStructureViewers(message);
 }
 

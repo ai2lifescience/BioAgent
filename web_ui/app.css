@@ -3328,3 +3328,98 @@ main {
     white-space: normal;
   }
 }
+
+/* Runtime tabs share one content panel. The tab labels stay compact while the
+   selected diagnostic view gets the full message width. */
+.run-debug {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  gap: 0;
+  margin-top: 16px;
+}
+
+.run-tabs {
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.run-tab {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 6px;
+  min-height: 29px;
+  max-width: 220px;
+  padding: 4px 9px;
+  border: 1px solid #e1e9eb;
+  border-radius: 7px;
+  color: #52636d;
+  background: #f4f8f8;
+  font-size: 11px;
+  font-weight: 740;
+  box-shadow: 0 1px 1px #172e3208;
+  white-space: nowrap;
+}
+
+.run-tab:hover {
+  color: var(--blue);
+  background: #eef6f5;
+}
+
+.run-tab.is-active {
+  border-color: var(--accent);
+  color: #fff;
+  background: var(--accent);
+  box-shadow: 0 2px 5px #0f766e26;
+}
+
+.run-tab > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.run-tab small {
+  max-width: 120px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.run-tab.is-active small {
+  color: #d7f5ef;
+}
+
+.run-panel {
+  grid-row: 2;
+  min-width: 0;
+  margin-top: 6px;
+  border: 1px solid #a8d8d1;
+  border-radius: 9px;
+  background: #fbfcfd;
+  padding: 12px 0 14px;
+}
+
+.run-panel[hidden] {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .run-tab {
+    max-width: 180px;
+    padding: 4px 8px;
+  }
+
+  .run-tab small {
+    max-width: 72px;
+  }
+}

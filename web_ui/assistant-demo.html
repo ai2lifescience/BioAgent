@@ -5,32 +5,123 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BioAgent Drawer Preview</title>
   <style>
-    :root { color: #173438; background: #f3f7f7; font: 16px/1.5 system-ui, sans-serif; }
-    body { max-width: 980px; margin: 0 auto; padding: 52px 24px; }
-    header { display: flex; align-items: center; gap: 18px; margin-bottom: 38px; }
-    h1 { margin: 0; font-size: clamp(28px, 5vw, 44px); letter-spacing: -.04em; }
+    :root {
+      color: #173438;
+      background: #f4f8f8;
+      font: 14px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(circle at 12% -12%, #e1f3ef 0, transparent 38%),
+        #f4f8f8;
+    }
+    .shell { max-width: 1120px; margin: 0 auto; padding: 34px 28px 80px; }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 12px;
+      color: #fff;
+      background: linear-gradient(145deg, #159487, #115e59);
+      box-shadow: 0 7px 18px #0f766e26;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    h1 { margin: 0; font-size: clamp(27px, 5vw, 42px); letter-spacing: -.05em; line-height: 1.05; }
     .muted { color: #62777b; }
-    .workspace { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .card { min-height: 130px; padding: 18px; border: 1px solid #dce6e6; border-radius: 12px; background: #fff; }
-    .card strong { display: block; margin-bottom: 8px; }
-    @media (max-width: 680px) { .workspace { grid-template-columns: 1fr; } body { padding: 32px 16px; } }
+    .subtitle { max-width: 650px; margin: 9px 0 0; color: #62777b; font-size: 14px; }
+    .demo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+      padding: 5px 9px;
+      border: 1px solid #cde2df;
+      border-radius: 999px;
+      color: #0f766e;
+      background: #effaf8;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .demo-badge::before { width: 6px; height: 6px; border-radius: 50%; background: #2eaa88; content: ""; }
+    .workspace {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card {
+      min-height: 142px;
+      padding: 18px;
+      border: 1px solid #dce6e6;
+      border-radius: 14px;
+      background: #ffffffd9;
+      box-shadow: 0 8px 24px #1734380b;
+    }
+    .card:hover { border-color: #b9d9d4; transform: translateY(-1px); transition: .18s ease; }
+    .card-icon {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      margin-bottom: 18px;
+      border-radius: 9px;
+      color: #0f766e;
+      background: #e7f4f1;
+      font-weight: 800;
+    }
+    .card strong { display: block; margin-bottom: 4px; font-size: 13px; }
+    .card span { font-size: 13px; }
+    .drawer-hint {
+      margin: 22px 0 0;
+      padding: 14px 16px;
+      border: 1px dashed #c6dcda;
+      border-radius: 12px;
+      color: #62777b;
+      background: #ffffff80;
+      font-size: 12px;
+    }
+    @media (max-width: 680px) {
+      .shell { padding: 24px 16px 64px; }
+      header { align-items: flex-start; }
+      .demo-badge { display: none; }
+      .workspace { grid-template-columns: 1fr; gap: 10px; }
+      .card { min-height: 106px; }
+      .card-icon { margin-bottom: 12px; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div><h1>Workspace</h1><div class="muted">This page demonstrates a host website with BioAgent in a right-side drawer.</div></div>
-  </header>
+  <main class="shell">
+    <header>
+      <span class="brand-mark" aria-hidden="true">BA</span>
+      <div>
+        <h1>Workspace</h1>
+        <p class="subtitle">A small host page demonstrating BioAgent in a focused right-side assistant.</p>
+      </div>
+      <span class="demo-badge">Interactive demo</span>
+    </header>
   <section class="workspace" aria-label="Example workspace">
-    <article class="card"><strong>Project</strong><span class="muted">Respiratory surveillance</span></article>
-    <article class="card"><strong>Sample</strong><span class="muted">sample-2026-0914</span></article>
-    <article class="card"><strong>Result</strong><span class="muted">Metagenomic summary</span></article>
+    <article class="card"><span class="card-icon" aria-hidden="true">P</span><strong>Project</strong><span class="muted">Respiratory surveillance</span></article>
+    <article class="card"><span class="card-icon" aria-hidden="true">S</span><strong>Sample</strong><span class="muted">sample-2026-0914</span></article>
+    <article class="card"><span class="card-icon" aria-hidden="true">R</span><strong>Result</strong><span class="muted">Metagenomic summary</span></article>
   </section>
+  <p class="drawer-hint">Use the BioAgent button to ask questions, attach files, or inspect a result without leaving this workspace.</p>
   <div id="bioagent-drawer"></div>
+  </main>
   <script src="./static/assistant-embed.js"></script>
   <script>
     BioAgentDrawer.mount({
       target: document.getElementById("bioagent-drawer"),
-      context: { project_id: "respiratory-surveillance", sample_id: "sample-2026-0914", result_type: "metagenomic summary" },
     });
   </script>
 </body>
