@@ -10,13 +10,9 @@ const chat = document.getElementById("chat");
 const chatScroll = document.getElementById("chatScroll");
 const promptInput = document.getElementById("prompt");
 const sendButton = document.getElementById("send");
-const stopButton = document.getElementById("stop");
-const statusPill = document.getElementById("status");
-const thinkingBar = document.getElementById("thinkingBar");
-const thinkingMeta = document.getElementById("thinkingMeta");
-const thinkingDetails = document.getElementById("thinkingDetails");
-const thinkingLogs = document.getElementById("thinkingLogs");
 const composer = document.getElementById("composer");
+const composerAttach = document.getElementById("composerAttach");
+const composerFileHint = document.getElementById("composerFileHint");
 const exampleParamPrompt = document.getElementById("exampleParamPrompt");
 const exampleParamPromptLabel = document.getElementById("exampleParamPromptLabel");
 const exampleParamPromptOptions = document.getElementById("exampleParamPromptOptions");
@@ -31,8 +27,6 @@ const uploadInput = document.getElementById("uploadInput");
 const uploadList = document.getElementById("uploadList");
 const workspaceCount = document.getElementById("workspaceCount");
 const workspaceSummary = document.getElementById("workspaceSummary");
-const workspacePanel = document.querySelector(".workspace-panel");
-const workspaceToggleButton = document.getElementById("workspaceToggle");
 const workspaceRefresh = document.getElementById("workspaceRefresh");
 const workspaceSearch = document.getElementById("workspaceSearch");
 const workspaceFilter = document.getElementById("workspaceFilter");
@@ -40,7 +34,6 @@ const workspaceDropzone = document.getElementById("workspaceDropzone");
 
 const ACTIVE_SESSION_KEY = "bioagent.web.active_session_id.v1";
 const SIDEBAR_COLLAPSED_KEY = "bioagent.web.sidebar_collapsed.v3";
-const WORKSPACE_COLLAPSED_KEY = "bioagent.web.workspace_collapsed.v1";
 let structureSuffixes = [".cif", ".mmcif", ".pdb"];
 let imageSuffixes = [".svg"];
 
@@ -54,6 +47,16 @@ let thinkingLogLines = [];
 let sessions = [];
 let activeSessionId = "";
 let workspaceFiles = [];
+
+const SEND_ICON = `
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+const PAUSE_ICON = `
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <rect x="7" y="6" width="3.5" height="12" rx="1" fill="currentColor"/>
+    <rect x="13.5" y="6" width="3.5" height="12" rx="1" fill="currentColor"/>
+  </svg>`;
 
 async function loadConfig() {
   const response = await fetch("/config");
@@ -112,23 +115,6 @@ function initializeSidebar() {
   const stored = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
   const phoneDefault = window.matchMedia("(max-width: 700px)").matches;
   setSidebarCollapsed(stored === null ? phoneDefault : stored === "true");
-}
-
-function setWorkspaceCollapsed(collapsed) {
-  const nextState = Boolean(collapsed);
-  appShell.classList.toggle("workspace-collapsed", nextState);
-  workspacePanel.classList.toggle("workspace-collapsed", nextState);
-  workspaceToggleButton.setAttribute("aria-expanded", String(!nextState));
-  const label = nextState ? "Expand workspace" : "Collapse workspace";
-  workspaceToggleButton.setAttribute("aria-label", label);
-  workspaceToggleButton.title = label;
-  localStorage.setItem(WORKSPACE_COLLAPSED_KEY, String(nextState));
-}
-
-function initializeWorkspace() {
-  const stored = localStorage.getItem(WORKSPACE_COLLAPSED_KEY);
-  const phoneDefault = window.matchMedia("(max-width: 700px)").matches;
-  setWorkspaceCollapsed(stored === null ? phoneDefault : stored === "true");
 }
 
 function generateSessionId() {
@@ -377,9 +363,24 @@ function renderSessionList() {
 
 function setSessionLoading(loading) {
   isSessionLoading = loading;
-  sendButton.disabled = loading || isRunning;
+  sendButton.disabled = loading;
   uploadButton.disabled = loading || isRunning;
   newChatButton.disabled = loading || isRunning;
+  setComposerControlsDisabled(loading || isRunning);
+}
+
+function setSendButtonState(running) {
+  sendButton.classList.toggle("is-running", running);
+  sendButton.setAttribute("aria-label", running ? "Pause current request" : "Send message");
+  sendButton.title = running ? "Pause current request" : "Send message";
+  sendButton.innerHTML = running ? PAUSE_ICON : SEND_ICON;
+}
+
+function setComposerControlsDisabled(disabled) {
+  const nextState = Boolean(disabled);
+  modelSelect.disabled = nextState;
+  maxTurnsInput.disabled = nextState;
+  composerAttach.disabled = nextState;
 }
 
 async function loadActiveSession() {
@@ -446,6 +447,12 @@ function startNewChat() {
 
 function renderWorkspace() {
   workspaceCount.textContent = String(workspaceFiles.length);
+  if (composerFileHint) {
+    composerFileHint.textContent = workspaceFiles.length
+      ? `${workspaceFiles.length} file${workspaceFiles.length === 1 ? "" : "s"} attached`
+      : "Add files";
+  }
+  uploadList.classList.toggle("single-file", workspaceFiles.length === 1);
   uploadList.innerHTML = "";
   if (!workspaceFiles.length) {
     workspaceSummary.textContent = "Files are shared with this chat and its tools.";
@@ -596,15 +603,11 @@ function compactList(values, emptyText = "none", limit = 3) {
 
 function appendThinkingLog(message) {
   thinkingLogLines.push(String(message || ""));
-  thinkingLogs.textContent = thinkingLogLines.length
-    ? thinkingLogLines.join("\n")
-    : "No thinking log yet.";
 }
 
 function renderThinkingPanel(payload = {}) {
   const runtime = payload.runtime || payload;
-  const logs = runtime.logs || thinkingLogLines;
-  thinkingLogs.textContent = logs.length ? logs.join("\n") : "No thinking log yet.";
+  thinkingLogLines = Array.isArray(runtime.logs) ? runtime.logs : thinkingLogLines;
 }
 
 function runtimeMeta(runtime = {}) {
@@ -616,22 +619,6 @@ function runtimeMeta(runtime = {}) {
 }
 
 function setThinkingDisplay(state, metaItems = [], payload = null) {
-  thinkingBar.className = `thinking-bar ${state}`;
-  statusPill.className = "status-pill";
-  if (state === "running") statusPill.classList.add("busy");
-  if (state === "done") statusPill.classList.add("done");
-  if (state === "warning") statusPill.classList.add("warning");
-  if (state === "error") statusPill.classList.add("error");
-  if (state === "stopped") statusPill.classList.add("stopped");
-  statusPill.textContent = {
-    ready: "Ready",
-    running: "Running",
-    done: "Done",
-    warning: "Warning",
-    error: "Error",
-    stopped: "Stopped",
-  }[state] || "Ready";
-  thinkingMeta.innerHTML = metaItems.map((item) => `<span>${escapeHtml(item)}</span>`).join("");
   if (payload) {
     renderThinkingPanel(payload);
   }
@@ -639,17 +626,13 @@ function setThinkingDisplay(state, metaItems = [], payload = null) {
 
 function resetThinkingBar() {
   thinkingLogLines = [];
-  thinkingDetails.open = false;
-  setThinkingDisplay("ready", runtimeMeta({ elapsed_seconds: 0 }), {
-    runtime: { logs: [] },
-  });
 }
 
 function startThinking(request) {
   isRunning = true;
-  sendButton.disabled = true;
-  stopButton.disabled = false;
-  thinkingDetails.open = false;
+  setSendButtonState(true);
+  sendButton.disabled = false;
+  setComposerControlsDisabled(true);
   thinkingLogLines = [];
   appendThinkingLog("Browser request started.");
   runtimeStartedAt = Date.now();
@@ -685,8 +668,9 @@ function finishThinking(result) {
     runtimeTimer = null;
   }
   isRunning = false;
-  sendButton.disabled = false;
-  stopButton.disabled = true;
+  setSendButtonState(false);
+  sendButton.disabled = isSessionLoading;
+  setComposerControlsDisabled(isSessionLoading);
   if (result?.session_id && result.session_id !== activeSessionId) {
     const session = currentSession();
     session.id = result.session_id;
@@ -706,8 +690,9 @@ function failThinking(error) {
     runtimeTimer = null;
   }
   isRunning = false;
-  sendButton.disabled = false;
-  stopButton.disabled = true;
+  setSendButtonState(false);
+  sendButton.disabled = isSessionLoading;
+  setComposerControlsDisabled(isSessionLoading);
   const runtime = error?.result?.runtime || {};
   setThinkingDisplay("error", runtimeMeta(runtime), error?.result || { runtime });
 }
@@ -718,8 +703,9 @@ function stopThinking() {
     runtimeTimer = null;
   }
   isRunning = false;
-  sendButton.disabled = false;
-  stopButton.disabled = true;
+  setSendButtonState(false);
+  sendButton.disabled = isSessionLoading;
+  setComposerControlsDisabled(isSessionLoading);
   const elapsed = runtimeStartedAt ? (Date.now() - runtimeStartedAt) / 1000 : 0;
   setThinkingDisplay(
     "stopped",
@@ -762,10 +748,6 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
-}
-
-function prettyJson(value) {
-  return escapeHtml(JSON.stringify(value ?? {}, null, 2));
 }
 
 function statusClass(result) {
@@ -1047,34 +1029,289 @@ function structureViewerHtml(result) {
   }).join("");
 }
 
+function modelLabelForKey(modelKey) {
+  const key = String(modelKey || "").trim();
+  const model = (config.models || []).find((item) => item.key === key);
+  return model ? formatModelLabel(model) : (key || "Unknown model");
+}
+
+function debugStatus(result) {
+  const status = String(result?.runtime?.status || result?.status || "ok");
+  const labels = {
+    ok: "Completed",
+    pending_approval: "Waiting for approval",
+    blocked: "Blocked by guardrail",
+    error: "Failed",
+    stopped: "Stopped",
+  };
+  const tone = status === "ok"
+    ? "ok"
+    : status === "pending_approval" || status === "stopped"
+      ? "warning"
+      : "error";
+  return { status, label: labels[status] || status, tone };
+}
+
+function toolLabel(tool) {
+  const labels = {
+    database_lookup: "Database lookup",
+    document_read: "Read document",
+    file_inspection: "Inspect file",
+    genome_map: "Create genome map",
+    ncbi_retrieval: "Retrieve NCBI records",
+    pdb_download: "Download PDB structure",
+    pipeline_shell: "Run pipeline command",
+    pipeline_specialist: "Pipeline specialist",
+    protein_structure_analysis: "Analyze protein structure",
+    sequence_analysis: "Analyze sequence",
+    sequence_specialist: "Sequence specialist",
+    retrieval_specialist: "Retrieval specialist",
+    species_report: "Write species report",
+    blast_search: "BLAST search",
+  };
+  return labels[String(tool || "")] || String(tool || "Agent operation").replaceAll("_", " ");
+}
+
+function evidenceOutputForTool(result, tool) {
+  const evidence = result?.evidence || {};
+  const records = [
+    ...(Array.isArray(evidence.outputs) ? evidence.outputs : []),
+    ...(Array.isArray(evidence.tool_outputs) ? evidence.tool_outputs : []),
+  ];
+  for (let index = records.length - 1; index >= 0; index -= 1) {
+    if (records[index]?.tool === tool) return records[index];
+  }
+  return null;
+}
+
+function evidenceOutputSummary(result, tool) {
+  const output = evidenceOutputForTool(result, tool);
+  if (!output) return "No compact result summary was returned.";
+  if (output.error) return String(output.error);
+  if (output.summary) return String(output.summary);
+  if (output.answer) return String(output.answer);
+  if (output.status) return `Status: ${String(output.status)}`;
+  return "Result returned.";
+}
+
+function traceEventDetail(event, result) {
+  const data = event?.data || {};
+  const tool = data.tool;
+  if (tool) {
+    const summary = evidenceOutputSummary(result, tool);
+    return event.event === "tool_finished" || event.event === "sdk_tool_finished"
+      ? summary
+      : `Registered operation: ${tool}`;
+  }
+  if (event.event === "model_responded") {
+    const input = Number(data.input_tokens || 0);
+    const output = Number(data.output_tokens || 0);
+    return input || output ? `Tokens: ${input.toLocaleString()} in · ${output.toLocaleString()} out` : "Decision received.";
+  }
+  if (event.event === "handoff") return `${data.from_agent || "Agent"} → ${data.to_agent || "specialist"}`;
+  if (event.event === "run_blocked") return `Reason: ${data.reason || "request blocked"}.`;
+  if (event.event === "run_paused") return "Approval is required before execution can continue.";
+  if (event.event === "tool_failed") return String(data.error_type || "Tool execution failed.");
+  if (event.event === "pipeline_command_finished") return `Status: ${data.status || "unknown"}.`;
+  if (event.event === "guardrail_completed") {
+    const warnings = Array.isArray(data.warnings) ? data.warnings : [];
+    return warnings.length ? warnings.join(" ") : "No warnings.";
+  }
+  if (event.event === "run_finished") return `Tools used: ${data.tool_count || 0}.`;
+  if (event.event === "run_failed") return String(data.error || "Run failed.");
+  return String(data.message || "");
+}
+
+function traceEventTitle(event, result) {
+  const data = event?.data || {};
+  switch (event?.event) {
+    case "run_started": return "Request accepted";
+    case "agent_started": return `Agent started${data.agent ? ` · ${data.agent}` : ""}`;
+    case "agent_finished": return `Agent finished${data.agent ? ` · ${data.agent}` : ""}`;
+    case "model_requested": return "Agent selected the next step";
+    case "model_responded": return "Agent decision received";
+    case "handoff": return `Delegated to ${data.to_agent || "specialist"}`;
+    case "tool_started":
+    case "sdk_tool_started": return `Started · ${toolLabel(data.tool)}`;
+    case "tool_finished":
+    case "sdk_tool_finished": return `Finished · ${toolLabel(data.tool)}`;
+    case "tool_failed": return `Tool failed · ${toolLabel(data.tool)}`;
+    case "pipeline_command_finished": return "Pipeline command finished";
+    case "guardrail_completed": return "Output safety check completed";
+    case "guardrail_blocked": return "Safety guardrail blocked the request";
+    case "run_blocked": return "Request blocked by a guardrail";
+    case "approval_decision": return data.approved ? "Tool approval granted" : "Tool approval rejected";
+    case "run_paused": return "Run paused for approval";
+    case "run_finished": return "Run completed";
+    case "run_failed": return "Run failed";
+    default: return String(event?.event || "Activity").replaceAll("_", " ");
+  }
+}
+
+function executionTimeline(result) {
+  const trace = Array.isArray(result?.trace) ? result.trace : [];
+  const explicitTools = new Set(
+    trace.filter((event) => event?.event === "tool_started").map((event) => event?.data?.tool).filter(Boolean),
+  );
+  const visible = trace.filter((event) => {
+    const name = event?.event;
+    if (["sdk_span_finished", "sdk_trace_started", "sdk_trace_finished"].includes(name)) return false;
+    if (["sdk_tool_started", "sdk_tool_finished"].includes(name) && explicitTools.has(event?.data?.tool)) return false;
+    return true;
+  });
+  if (!visible.length) {
+    return `<div class="run-empty">No execution events were returned by the runtime.</div>`;
+  }
+  return `<ol class="run-timeline">${visible.map((event, index) => {
+    const detail = traceEventDetail(event, result);
+    const tone = event.event === "run_failed" || event.event === "guardrail_blocked"
+      ? "error"
+      : event.event === "tool_finished" && evidenceOutputForTool(result, event.data?.tool)?.status === "error"
+        ? "error"
+        : event.event === "run_finished" || event.event === "agent_finished"
+          ? "done"
+          : "";
+    return `
+      <li class="run-step ${tone}">
+        <span class="run-step-index">${index + 1}</span>
+        <div class="run-step-body">
+          <strong>${escapeHtml(traceEventTitle(event, result))}</strong>
+          ${detail ? `<span>${escapeHtml(detail)}</span>` : ""}
+        </div>
+      </li>`;
+  }).join("")}</ol>`;
+}
+
+function technicalTrace(result) {
+  const trace = Array.isArray(result?.trace) ? result.trace : [];
+  if (!trace.length) return `<div class="run-empty">No trace events were returned.</div>`;
+  return `<div class="trace-log">${trace.map((event) => {
+    const data = event?.data || {};
+    const details = Object.entries(data)
+      .filter(([key, value]) => value !== null && value !== "" && key !== "timestamp")
+      .slice(0, 6)
+      .map(([key, value]) => `${key}=${typeof value === "object" ? JSON.stringify(value) : String(value)}`)
+      .join(" · ");
+    return `
+      <div class="trace-row">
+        <time>${escapeHtml(formatTraceTime(event?.timestamp))}</time>
+        <code>${escapeHtml(event?.event || "event")}</code>
+        <span>${escapeHtml(details || "No event details")}</span>
+      </div>`;
+  }).join("")}</div>`;
+}
+
+function formatTraceTime(timestamp) {
+  if (!timestamp) return "—";
+  const value = new Date(timestamp);
+  if (Number.isNaN(value.getTime())) return String(timestamp);
+  return value.toLocaleTimeString([], { hour12: false });
+}
+
+function runOutline(result) {
+  const tools = [...new Set((result?.evidence?.tools || []).filter(Boolean).map(String))];
+  const steps = [
+    "Interpret the request and check the available session context.",
+    tools.length
+      ? `Run the selected operation${tools.length > 1 ? "s" : ""}: ${tools.map(toolLabel).join(", ")}.`
+      : "Answer directly without a registered data operation.",
+    "Check the returned status, evidence, and workspace files before composing the answer.",
+  ];
+  return `<ol class="run-outline">${steps.map((step) => `<li>${escapeHtml(step)}</li>`).join("")}</ol>`;
+}
+
+function evidenceList(title, values, renderItem = (value) => escapeHtml(value)) {
+  if (!Array.isArray(values) || !values.length) return "";
+  return `
+    <section class="evidence-group">
+      <h4>${escapeHtml(title)}</h4>
+      <ul>${values.map((value) => `<li>${renderItem(value)}</li>`).join("")}</ul>
+    </section>`;
+}
+
+function evidencePanel(result) {
+  const evidence = result?.evidence || {};
+  const citationItems = Array.isArray(evidence.citations) ? evidence.citations : [];
+  const citations = citationItems.map((item) => {
+    if (typeof item === "string") return escapeHtml(item);
+    const title = item?.title || item?.name || item?.id || "Citation";
+    const source = item?.source || item?.pmid || item?.year || "";
+    const label = `${title}${source ? ` · ${source}` : ""}`;
+    return item?.url
+      ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`
+      : escapeHtml(label);
+  });
+  const files = (evidence.files || []).map((path) => {
+    const value = String(path || "");
+    return `<a href="${escapeHtml(workspaceFileUrl(value))}" title="${escapeHtml(value)}">${escapeHtml(fileNameFromPath(value))}</a>`;
+  });
+  const outputs = Array.isArray(evidence.outputs) ? evidence.outputs : [];
+  const outputCards = outputs.map((item) => `
+    <li><strong>${escapeHtml(toolLabel(item?.tool))}</strong><span>${escapeHtml(item?.summary || item?.status || "Result returned.")}</span></li>
+  `).join("");
+  const groups = [
+    evidenceList("Tools used", evidence.tools, (value) => escapeHtml(toolLabel(value))),
+    evidenceList("Databases", evidence.databases),
+    evidenceList("Queries", evidence.query_terms),
+    evidenceList("Records", evidence.record_ids),
+    evidenceList("Files", files, (value) => value),
+    evidenceList("Sources", citations, (value) => value),
+    evidenceList("Links", evidence.urls, (value) => `<a href="${escapeHtml(value)}" target="_blank" rel="noopener noreferrer">${escapeHtml(value)}</a>`),
+    evidenceList("Errors", evidence.tool_errors, (value) => escapeHtml(value?.error || value?.tool || value)),
+  ].filter(Boolean).join("");
+  return `${groups || `<div class="run-empty">No structured evidence was returned.</div>`}
+    ${outputCards ? `<section class="evidence-group evidence-outputs"><h4>Tool results</h4><ul>${outputCards}</ul></section>` : ""}`;
+}
+
+function runtimePanel(result, runtime, status) {
+  const metrics = [
+    ["Status", status.label],
+    ["Model", modelLabelForKey(runtime.model_key || result.model_key)],
+    ["Elapsed", formatElapsed(runtime.elapsed_seconds)],
+    ["Tools", String(runtime.tool_count ?? (result.evidence?.tools || []).length)],
+    ["Files", String(runtime.file_count ?? (result.evidence?.files || []).length)],
+    ["Max turns", runtime.max_turns == null ? "—" : String(runtime.max_turns)],
+  ];
+  return `<div class="run-metrics">${metrics.map(([label, value]) => `
+    <div class="run-metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>
+  `).join("")}</div>`;
+}
+
 function resultDetails(result) {
   if (!result) return "";
   const runtime = result.runtime || {};
+  const status = debugStatus(result);
   const pipelineOutputs = collectPipelineOutputRecords(result);
   return `
     ${pipelineDownloadsHtml(result, pipelineOutputs)}
     ${pipelineOutputs.length ? "" : collectedBundleHtml(result)}
     ${pipelineOutputs.length ? "" : figureArtifactsHtml(result)}
     ${pipelineOutputs.length ? "" : structureViewerHtml(result)}
-    ${resultSummaryTags(result)}
-    <div class="result-diagnostics">
-      <details>
-        <summary>Runtime</summary>
-        <pre>${prettyJson(runtime)}</pre>
+    <div class="run-debug" aria-label="Runtime details">
+      <details class="run-section run-runtime">
+        <summary>
+          <span>Runtime</span>
+          <span class="run-inline-meta"><span class="run-status-chip ${status.tone}">${escapeHtml(status.label)}</span><small>${escapeHtml(formatElapsed(runtime.elapsed_seconds))}</small></span>
+        </summary>
+        <div class="run-section-content">${runtimePanel(result, runtime, status)}</div>
       </details>
-      <details>
-        <summary>Evidence</summary>
-        <pre>${prettyJson(result.evidence)}</pre>
+      <details class="run-section run-plan">
+        <summary><span>Plan &amp; execution</span><small>${(result.trace || []).length} observable events</small></summary>
+        <div class="run-section-content">
+          <p class="run-debug-note">This shows the agent’s registered operations and runtime events, without exposing private model reasoning.</p>
+          ${runOutline(result)}
+          ${executionTimeline(result)}
+        </div>
       </details>
-      <details>
-        <summary>Status</summary>
-        <pre>${prettyJson({ status: result.status })}</pre>
+      <details class="run-section">
+        <summary><span>Evidence</span><small>${(result.evidence?.citations || []).length} sources · ${(result.evidence?.files || []).length} files</small></summary>
+        <div class="run-section-content"><div class="evidence-panel">${evidencePanel(result)}</div></div>
+      </details>
+      <details class="run-section">
+        <summary><span>Trace</span><small>technical event stream</small></summary>
+        <div class="run-section-content"><div class="trace-technical">${technicalTrace(result)}</div></div>
       </details>
       <div class="approval-controls"></div>
-      <details>
-        <summary>Trace</summary>
-        <pre>${prettyJson(result.trace)}</pre>
-      </details>
     </div>
   `;
 }
@@ -1435,7 +1672,13 @@ async function submitPrompt(event) {
   const text = promptInput.value.trim();
   if (!text) return;
 
+  // On a phone, give the active request the full-height chat surface. The
+  // navigation remains available through the expand button after sending.
+  if (window.matchMedia("(max-width: 700px)").matches) {
+    setSidebarCollapsed(true);
+  }
   promptInput.value = "";
+  resizeComposer();
   hideExampleParamPrompt();
   addMessage("user", text);
   requestStopped = false;
@@ -1460,8 +1703,16 @@ async function submitPrompt(event) {
 
 function fillExamplePrompt(text) {
   promptInput.value = text;
+  resizeComposer();
   promptInput.focus();
   promptInput.setSelectionRange(text.length, text.length);
+}
+
+function resizeComposer() {
+  promptInput.style.height = "auto";
+  const minimum = window.matchMedia("(max-width: 700px)").matches ? 64 : 82;
+  const height = Math.min(Math.max(promptInput.scrollHeight, minimum), 180);
+  promptInput.style.height = `${height}px`;
 }
 
 function formatParamOptionLabel(value) {
@@ -1530,6 +1781,12 @@ function bindExampleButtons(root = document) {
 
 function bindEvents() {
   composer.addEventListener("submit", submitPrompt);
+  sendButton.addEventListener("click", (event) => {
+    if (!isRunning) return;
+    event.preventDefault();
+    stopCurrentRequest();
+  });
+  promptInput.addEventListener("input", resizeComposer);
   promptInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
@@ -1544,11 +1801,12 @@ function bindEvents() {
   toggleSidebarButton.addEventListener("click", () => {
     setSidebarCollapsed(!appShell.classList.contains("sidebar-collapsed"));
   });
-  workspaceToggleButton.addEventListener("click", () => {
-    setWorkspaceCollapsed(!workspacePanel.classList.contains("workspace-collapsed"));
-  });
-  stopButton.addEventListener("click", stopCurrentRequest);
   newChatButton.addEventListener("click", startNewChat);
+  composerAttach.addEventListener("click", () => {
+    if (!isRunning && !isSessionLoading) {
+      uploadInput.click();
+    }
+  });
   uploadButton.addEventListener("click", () => {
     if (!isRunning) {
       uploadInput.click();
@@ -1609,7 +1867,6 @@ function bindEvents() {
 
 async function init() {
   initializeSidebar();
-  initializeWorkspace();
   setSessionLoading(true);
   try {
     await loadSessions();

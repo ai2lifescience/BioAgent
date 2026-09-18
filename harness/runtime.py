@@ -217,6 +217,7 @@ async def _execute(
     return {
         "answer": answer, "status": status, "approval_required": bool(approvals),
         "approvals": approvals, "session_id": session.session_id,
+        "max_turns": max_turns,
         "messages": [{"role": "user", "content": request}, {"role": "assistant", "content": answer}],
         "evidence": evidence, "trace": context.events,
         "run": run, "files": context.files,

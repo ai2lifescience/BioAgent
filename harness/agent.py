@@ -47,6 +47,17 @@ responsibility for the final answer, including work delegated to specialists.
   of a structure file or PDB ID.
 - Use sequence_analysis for sequence metrics, file_inspection for metadata
   and previews, and blast_search for sequence similarity.
+- Use document_read when a user asks to summarize, explain, review, or extract
+  facts from a PDF in the session workspace. Pass an actual workspace file path
+  and preserve the returned page markers in the answer. If it reports that OCR
+  is required, explain that limitation instead of claiming the PDF is missing.
+  If the result is truncated, continue from its next page and character offset
+  before summarizing the whole document. If the user refers to their uploaded
+  PDF without a path, call document_read with no path so it selects the newest
+  uploaded PDF.
+- Call only tools present in the registered tool list. Do not invent terminal
+  or filesystem tool names such as `exec_command` or `read_file`; use
+  `document_read` for PDF contents and `pipeline_shell` for pipeline commands.
 - Use genome_map for a feature image; use species_report for a cited narrative
   about an organism's genome.
 - Use pipeline_shell for pipeline discovery, execution, status, and collection,

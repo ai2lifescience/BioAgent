@@ -94,6 +94,27 @@ The separate page keeps its conversation while it is open. Reloading or choosing
 **New chat** starts a new session; context labels stay on screen. **Stop waiting**
 disconnects the response stream; work already started on the server may continue.
 
+## Runtime Panel
+
+Each completed request includes four compact rows below the answer: **Runtime**,
+**Plan & execution**, **Evidence**, and **Trace**. Open a row when you need to
+inspect that part of the run:
+
+- **Runtime** shows status, model, elapsed time, tool count, file count, and the
+  configured maximum turns.
+- **Plan & execution** shows the registered operations and the ordered agent,
+  model, handoff, tool, guardrail, approval, and completion events returned by
+  the Agents SDK. It reports observable actions and does not expose private
+  model reasoning.
+- **Evidence** groups tools, databases, queries, records, sources, links, files,
+  and tool errors. Workspace files link to their downloads.
+- **Trace** shows the timestamped technical event stream in a compact readable
+  form so the useful diagnostic details stay visible.
+
+The report remains useful for direct answers, database lookups, document reads,
+and pipeline requests. Pipeline outputs and structure or figure previews still
+appear above the report when a tool produces them.
+
 ## Start For Local Network Access
 
 Use this when another PC on the same LAN should open the BioAgent page:
@@ -233,6 +254,9 @@ step.
 - Refer to a file by name in your message, for example `Analyze reads.fastq`
   or `Run generic_shell on metadata.csv`. BioAgent resolves the workspace file
   and supplies the path required by the selected tool.
+- For a text-based PDF, ask `Summarize my uploaded paper.pdf` or ask a question
+  about the paper. BioAgent extracts the document in page-aware chunks and
+  cites page numbers in the answer. A scanned PDF reports that OCR is needed.
 
 Workspace files are stored in the active SDK sandbox session:
 
@@ -507,6 +531,19 @@ Line count
 Record or row count
 Preview lines
 ```
+
+### PDF Document Reading
+
+Upload a selectable-text PDF to the current workspace, then ask a question
+about it or request a summary:
+
+```text
+Summarize my uploaded Paper2Agent.pdf and cite the relevant pages
+```
+
+BioAgent extracts the PDF in bounded, page-aware chunks and uses the page
+markers in its answer. Long documents may require several extraction calls.
+Scanned PDFs need OCR before their contents can be summarized.
 
 ### Species Report
 

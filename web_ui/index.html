@@ -37,24 +37,6 @@
         <div id="sessionList" class="session-list"></div>
       </div>
 
-      <div class="sidebar-panel settings-panel">
-        <div class="panel-title-row">
-          <label>Run settings</label>
-          <span class="panel-title-note">For the next request</span>
-        </div>
-        <div class="settings-fields">
-          <div class="control-group">
-            <label for="model">Model</label>
-            <select id="model"></select>
-          </div>
-
-          <div class="control-group">
-            <label for="maxTurns">Max turns</label>
-            <input id="maxTurns" type="number" min="1" max="20">
-          </div>
-        </div>
-      </div>
-
     </aside>
 
     <main>
@@ -129,23 +111,6 @@
       </section>
 
       <section class="composer-wrap">
-        <section id="thinkingBar" class="thinking-bar ready" aria-live="polite">
-          <div class="thinking-inner">
-            <div class="thinking-main">
-              <div id="status" class="status-pill">Ready</div>
-            </div>
-            <div id="thinkingMeta" class="thinking-meta" hidden></div>
-            <details id="thinkingDetails" class="thinking-details">
-              <summary>Thinking log</summary>
-              <div class="thinking-panel">
-                <div class="thinking-section">
-                  <div class="thinking-section-title">CLI Progress</div>
-                  <pre id="thinkingLogs">No thinking log yet.</pre>
-                </div>
-              </div>
-            </details>
-          </div>
-        </section>
         <div id="exampleParamPrompt" class="example-param-prompt" hidden>
           <div class="example-param-prompt-main">
             <div id="exampleParamPromptLabel" class="example-param-prompt-label"></div>
@@ -154,24 +119,39 @@
           <button id="exampleParamPromptDismiss" class="example-param-prompt-dismiss" type="button" aria-label="Dismiss parameter prompt">Dismiss</button>
         </div>
         <form id="composer" class="composer">
-          <textarea id="prompt" placeholder="Message BioAgent"></textarea>
-          <div class="composer-actions">
-            <button id="stop" class="stop-button" type="button" aria-label="Stop current request" title="Stop current request" disabled>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor"/>
-              </svg>
-            </button>
-            <button id="send" class="send-button" type="submit" aria-label="Send">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
+          <textarea id="prompt" placeholder="Ask BioAgent... (attach data when needed)" aria-label="Message BioAgent"></textarea>
+          <div class="composer-toolbar">
+            <div class="composer-tools">
+              <button id="composerAttach" class="composer-tool-button" type="button" aria-label="Attach files" title="Attach files">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="m20.5 11.5-7.9 7.9a5 5 0 0 1-7.1-7.1l8.6-8.6a3.5 3.5 0 1 1 5 5l-8.6 8.6a2 2 0 0 1-2.8-2.8l7.9-7.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <input id="uploadInput" type="file" multiple hidden>
+              <span id="composerFileHint" class="composer-file-hint">Add files</span>
+              <div class="composer-settings" aria-label="Run settings">
+                <label class="composer-setting" for="model">
+                  <span>Model</span>
+                  <select id="model" aria-label="Model"></select>
+                </label>
+                <label class="composer-setting composer-turns" for="maxTurns">
+                  <span>Turns</span>
+                  <input id="maxTurns" type="number" min="1" max="20" aria-label="Maximum agent turns">
+                </label>
+              </div>
+            </div>
+            <div class="composer-toolbar-right">
+              <span class="composer-shortcut">Enter to send · Shift + Enter for a new line</span>
+              <div class="composer-actions">
+                <button id="send" class="send-button" type="submit" aria-label="Send message" title="Send message">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
         </form>
-        <div class="composer-footer">
-          <span>BioAgent can inspect files, call tools, and run approved pipelines.</span>
-          <span>Enter to send · Shift + Enter for a new line</span>
-        </div>
       </section>
     </main>
 
@@ -183,30 +163,24 @@
             <div class="sidebar-hint"><span id="workspaceCount">0</span> in this workspace</div>
           </div>
           <div class="workspace-toolbar">
-            <button id="workspaceToggle" class="icon-button workspace-toggle" type="button" aria-expanded="true" aria-controls="workspaceContents" title="Collapse workspace" aria-label="Collapse workspace">
-              <span class="workspace-toggle-icon" aria-hidden="true"></span>
-            </button>
             <button id="workspaceRefresh" class="icon-button" type="button" title="Refresh workspace" aria-label="Refresh workspace">↻</button>
             <button id="uploadButton" class="new-chat-button" type="button">Upload</button>
           </div>
         </div>
-        <div id="workspaceContents" class="workspace-contents">
-          <input id="uploadInput" type="file" multiple hidden>
-          <div id="workspaceDropzone" class="workspace-dropzone" role="button" tabindex="0" aria-label="Upload files to this workspace">
-            <strong>Drop files here</strong>
-            <span>or choose Upload</span>
-          </div>
-          <div id="workspaceSummary" class="workspace-summary">Files are shared with this chat and its tools.</div>
-          <div class="workspace-filters">
-            <input id="workspaceSearch" type="text" placeholder="Find a file" aria-label="Find a workspace file">
-            <select id="workspaceFilter" aria-label="Filter workspace files">
-              <option value="all">All files</option>
-              <option value="uploads">Inputs</option>
-              <option value="outputs">Outputs</option>
-            </select>
-          </div>
-          <div id="uploadList" class="workspace-file-list"></div>
+        <div id="workspaceDropzone" class="workspace-dropzone" role="button" tabindex="0" aria-label="Upload files to this workspace">
+          <strong>Drop files here</strong>
+          <span>or choose Upload</span>
         </div>
+        <div id="workspaceSummary" class="workspace-summary">Files are shared with this chat and its tools.</div>
+        <div class="workspace-filters">
+          <input id="workspaceSearch" type="text" placeholder="Find a file" aria-label="Find a workspace file">
+          <select id="workspaceFilter" aria-label="Filter workspace files">
+            <option value="all">All files</option>
+            <option value="uploads">Inputs</option>
+            <option value="outputs">Outputs</option>
+          </select>
+        </div>
+        <div id="uploadList" class="workspace-file-list"></div>
       </div>
     </aside>
   </div>

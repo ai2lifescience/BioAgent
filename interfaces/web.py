@@ -73,6 +73,7 @@ def _runtime_info(
     logs: list[str],
     status: str = "done",
     model_key: str | None = None,
+    max_turns: int | None = None,
 ) -> dict[str, Any]:
     evidence = result.get("evidence") or {}
     trace = result.get("trace") or []
@@ -88,9 +89,12 @@ def _runtime_info(
         "run_id": run.get("run_id"),
         "runtime_dir": run.get("runtime_dir"),
         "runtime": result.get("runtime", "agents_sdk"),
+        "max_turns": max_turns,
         "tools": tools,
         "files": files,
         "file_count": len(files),
+        "tool_count": len(tools),
+        "trace_count": len(trace),
         "last_event": last_event.get("event"),
         "logs": logs,
     }
@@ -189,7 +193,11 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
             start = perf_counter()
             result = handle_approval(session_id, approved, approval_id, log_fn=logs.append)
             result["runtime"] = _runtime_info(
-                result, perf_counter() - start, logs, model_key=result.get("model_key"),
+                result,
+                perf_counter() - start,
+                logs,
+                model_key=result.get("model_key"),
+                max_turns=result.get("max_turns"),
             )
             self._send_json(result)
         except Exception as exc:
@@ -238,6 +246,7 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
                 elapsed_seconds=perf_counter() - start,
                 logs=logs,
                 model_key=model_key,
+                max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
             )
             self._send_json(result)
         except Exception as exc:
@@ -300,6 +309,7 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
                 elapsed_seconds=perf_counter() - start,
                 logs=logs,
                 model_key=model_key,
+                max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
             )
             self._send_stream_event("result", result)
         except ConnectionAbortedError:

@@ -15,6 +15,7 @@ BioAgent can:
   and AlphaFold DB;
 - analyze nucleotide sequences, genome maps, and protein structures;
 - inspect FASTA, CSV, TSV, JSON, Markdown, and text files;
+- read and summarize selectable-text PDF documents with page references;
 - create species reports with sources, citations, and generated files;
 - run Shell, Snakemake, Nextflow, and WDL pipelines; and
 - retain uploads and generated files within a chat session.

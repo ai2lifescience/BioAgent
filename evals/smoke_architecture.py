@@ -26,7 +26,7 @@ def main() -> int:
     tools = list(FUNCTION_TOOLS)
     agent = create_agent("gpt-oss", model=ScriptedModel())
     names = {tool.name for tool in agent.tools}
-    expected = {"sequence_analysis", "database_lookup", "pdb_download", "file_inspection", "pipeline_shell", "species_report", "sequence_specialist", "retrieval_specialist", "pipeline_specialist"}
+    expected = {"sequence_analysis", "database_lookup", "pdb_download", "file_inspection", "document_read", "pipeline_shell", "species_report", "sequence_specialist", "retrieval_specialist", "pipeline_specialist"}
     assert expected <= names
     assert agent.name == "BioAgent"
     specialist_builders = {

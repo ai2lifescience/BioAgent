@@ -10,6 +10,7 @@ from .genome_map import genome_map
 from .protein_structure_analysis import protein_structure_analysis
 from .blast_search import blast_search
 from .file_inspection import file_inspection
+from .document_read import document_read
 
 FUNCTION_TOOLS = [
     example_tool,
@@ -22,6 +23,7 @@ FUNCTION_TOOLS = [
     protein_structure_analysis,
     blast_search,
     file_inspection,
+    document_read,
 ]
 
 __all__ = [
@@ -36,4 +38,5 @@ __all__ = [
     "protein_structure_analysis",
     "blast_search",
     "file_inspection",
+    "document_read",
 ]

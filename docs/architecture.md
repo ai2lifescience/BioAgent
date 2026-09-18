@@ -249,6 +249,7 @@ The primary intent boundaries are:
 | File metadata or previews | `file_inspection` |
 | Sequence similarity | `blast_search` |
 | Genome feature image | `genome_map` |
+| Read or summarize a workspace PDF | `document_read` |
 | Execute or monitor a pipeline | `pipeline_shell` (`bioagent-pipeline` protocol) |
 | Review completed pipeline outputs | `pipeline_shell` with `bioagent-pipeline results --job-id ID` |
 
@@ -344,6 +345,15 @@ written to `uploads/`, generated files are grouped as outputs, and the panel
 offers search, download, and removal. It does not assign pipeline slot labels
 or copy paths into chat messages; the agent uses `bioagent-pipeline files` and
 the workspace-relative paths already returned by the sandbox.
+
+PDF uploads can be summarized through the `document_read` FunctionTool. The
+tool validates the requested path against the active workspace, extracts
+selectable text page by page with `pypdf`, and returns bounded text with page
+markers. The agent uses those markers when answering questions about the paper.
+Scanned PDFs that contain no selectable text return an OCR-required result;
+they are not treated as empty or summarized from invented content. Large
+documents are read in page ranges so the complete PDF is not copied into one
+model message.
 
 Run-specific temporary files use the same workspace:
 
