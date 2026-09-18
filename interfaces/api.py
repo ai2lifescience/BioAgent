@@ -10,18 +10,18 @@ from agents import SQLiteSession
 from harness import runtime
 from harness.runtime import delete_session, list_sessions, resume_bioagent, run_bioagent
 from harness.sandbox import delete_file, list_files, open_workspace, read_file, upload_file
-from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_SKILL_STEPS
+from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 
 
 def handle_request(
     request: str,
     session_id: str | None = None,
     model_key: str = DEFAULT_AGENT_MODEL_KEY,
-    max_skill_steps: int = DEFAULT_MAX_SKILL_STEPS,
+    max_turns: int = DEFAULT_MAX_TURNS,
     log_fn: Callable[[str], None] | None = None,
 ) -> dict[str, Any]:
     """Run BioAgent from application code."""
-    return run_bioagent(request, session_id, model_key, max_skill_steps, log_fn)
+    return run_bioagent(request, session_id, model_key, max_turns, log_fn)
 
 
 def handle_approval(

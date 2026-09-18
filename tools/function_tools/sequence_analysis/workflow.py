@@ -18,7 +18,7 @@ def sequence_analysis(sequence: str | None=None, fasta_path: str | None=None, ar
         lines.append(f"- {item.get('id')}: length {item.get('length')}, type {item.get('type')}, GC {item.get('gc_content_percent')}")
         if item.get('orfs'):
             lines.append(f"  ORFs: {len(item['orfs'])}")
-    return {'skill': 'sequence_analysis', 'tool': 'sequence_analyze', 'answer': '\n'.join(lines), 'summary': f"Analyzed {result['record_count']} record(s), {result['total_length']} total symbols.", 'source_artifact': source_artifact, **result}
+    return {'workflow': 'sequence_analysis', 'tool': 'sequence_analyze', 'answer': '\n'.join(lines), 'summary': f"Analyzed {result['record_count']} record(s), {result['total_length']} total symbols.", 'source_artifact': source_artifact, **result}
 
 def _should_use_latest_fasta(sequence: str | None, fasta_path: str | None, artifact_ref: str | None) -> bool:
     if sequence:

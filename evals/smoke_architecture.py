@@ -14,6 +14,11 @@ from agents.testing import ModelStep, ScriptedModel, assistant_message, function
 from openai.types.responses.response_function_shell_tool_call import ResponseFunctionShellToolCall
 from harness import runtime
 from harness.agent import create_agent
+from tools.agent_tools import (
+    build_pipeline_specialist,
+    build_retrieval_specialist,
+    build_sequence_specialist,
+)
 from tools.function_tools import FUNCTION_TOOLS
 
 
@@ -24,6 +29,12 @@ def main() -> int:
     expected = {"sequence_analysis", "database_lookup", "pdb_download", "file_inspection", "pipeline_shell", "species_report", "sequence_specialist", "retrieval_specialist", "pipeline_specialist"}
     assert expected <= names
     assert agent.name == "BioAgent"
+    specialist_builders = {
+        build_sequence_specialist: "sequence_specialist",
+        build_retrieval_specialist: "retrieval_specialist",
+        build_pipeline_specialist: "pipeline_specialist",
+    }
+    assert {builder(ScriptedModel()).name for builder in specialist_builders} == set(specialist_builders.values())
 
     runtime.SESSION_DB = PROJECT_ROOT / "runtime" / "smoke_agents.sqlite3"
     model = ScriptedModel([

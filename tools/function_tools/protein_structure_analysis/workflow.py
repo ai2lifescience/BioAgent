@@ -25,7 +25,7 @@ def protein_structure_analysis(structure_path: str | None=None, pdb_id: str | No
         lines.append(f"Method: {result['experimental_method']}")
     if result.get('resolution_angstrom') is not None:
         lines.append(f"Resolution: {result['resolution_angstrom']} A")
-    return {'skill': 'protein_structure_analysis', 'tool': 'protein_structure_analyze', 'answer': '\n'.join(lines), 'summary': result.get('summary'), 'source_artifact': source_artifact, 'download': download_result, 'pdb_id': (download_result or {}).get('pdb_id', pdb_id), **result}
+    return {'workflow': 'protein_structure_analysis', 'tool': 'protein_structure_analyze', 'answer': '\n'.join(lines), 'summary': result.get('summary'), 'source_artifact': source_artifact, 'download': download_result, 'pdb_id': (download_result or {}).get('pdb_id', pdb_id), **result}
 
 def _should_use_latest_structure(structure_path: str | None, artifact_ref: str | None) -> bool:
     if artifact_ref == 'latest_structure':

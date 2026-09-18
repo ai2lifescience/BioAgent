@@ -8,4 +8,4 @@ def file_inspection(path: str, max_preview_lines: int=20, context: WorkflowConte
     context = ensure_workflow_context(context, 'file_inspection')
     result = context.call('file_inspect', _action_file_inspect, {'path': path, 'max_preview_lines': max_preview_lines})['result']
     answer = f"File inspection completed.\nPath: {result.get('path')}\nType: {result.get('file_type')}\nLines: {result.get('line_count')}\nBytes: {result.get('bytes')}\nRecords/rows: {result.get('record_count', result.get('row_count', 'n/a'))}"
-    return {'skill': 'file_inspection', 'tool': 'file_inspect', 'answer': answer, 'summary': f"Inspected {result['file_type']} file with {result.get('record_count', result.get('row_count', result['line_count']))} item(s).", **result}
+    return {'workflow': 'file_inspection', 'tool': 'file_inspect', 'answer': answer, 'summary': f"Inspected {result['file_type']} file with {result.get('record_count', result.get('row_count', result['line_count']))} item(s).", **result}

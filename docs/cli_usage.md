@@ -29,7 +29,7 @@ the SDK session when a `--session-id` is supplied.
 ```text
 --model-key KEY          Model key from models/config.py (default: configured default)
 --session-id ID          Continue a persistent SDK conversation
---max-skill-steps N      Compatibility name; limits SDK turns (default: 8)
+--max-turns N            Maximum SDK turns (default: 5; configurable through the environment)
 --json                   Print the complete structured result as JSON
 --verbose                Include progress messages on stderr
 --approve ID             Approve a pending pipeline tool call (with --session-id)
@@ -52,14 +52,13 @@ different key with `--model-key`.
 
 ## Registered workflows
 
-Each row is an SDK `FunctionTool` exported by `tools/function_tools`. Workflows
-call deterministic implementations in their corresponding
-`tools/function_tools/<tool_name>/` package and do not start another agent
-loop.
+Biological workflows are SDK `FunctionTool` objects exported by
+`tools/function_tools`. Pipeline operations use the local `pipeline_shell`
+ShellTool exported by `tools/runtime_tools`.
 
 | Workflow | Main tool or actions |
 | --- | --- |
-| `example_skill` | `echo` |
+| `example_tool` | `echo` |
 | `pipeline_shell` | `bioagent-pipeline plan/run/status/wait/results/cancel` |
 | `ncbi_retrieval` | `ncbi_fetch` |
 | `database_lookup` | database search actions |
@@ -71,16 +70,23 @@ loop.
 | `file_inspection` | `file_inspect` |
 | `species_report` | literature retrieval, RAG, and report actions |
 
-The SDK chooses tools from their generated function signatures and annotations.
-Most workflows remain deterministic and do not make model calls themselves;
-`species_report` is the documented exception until its reporting services are
-converted to SDK reporting agents run through `Runner`.
+The model selects tools from their descriptions and schemas. Biological
+calculations run in the workflow implementations; report synthesis uses SDK
+reporting agents in `tools/function_tools/species_report/reporting/`.
+The root and specialist agents share the run's SDK model provider. See the
+[model architecture](architecture.md#models-and-provider-ownership) for model
+resolution, client ownership, and reporting behavior.
 
-Pipeline execution pauses before the pipeline tool runs. The JSON result includes
-an `approval_id`; approve or reject it with the CLI options above, or POST the
-same `session_id`, `approval_id`, and boolean `approved` to `/approve`.
+Pipeline execution and cancellation pause for SDK approval. The JSON result's
+`approvals` list includes an `approval_id`; approve or reject it with the CLI
+options above, or POST the same `session_id`, `approval_id`, and boolean
+`approved` to `/approve`. Discovery, planning, status, result collection, and
+supported engine dry runs do not require execution approval.
 
 ## Pipeline requests
+
+The [pipeline architecture reference](architecture.md#pipeline-runtime) covers
+the command protocol, input roles, parameters, outputs, and adding workflows.
 
 Pipeline execution is restricted to approved folders under `tools/runtime_tools/pipelines/`. Each
 folder contains a `runner.yaml` and an entrypoint such as `run.sh`. Native
@@ -135,7 +141,7 @@ are not accepted.
   "session_id": "demo",
   "evidence": {"items": []},
   "status": "ok",
-  "trace": {"events": []},
+  "trace": [],
   "files": [],
   "runtime": "agents_sdk"
 }
@@ -147,11 +153,13 @@ Conversation messages are stored by the SDK `SQLiteSession` in
 
 ## Offline checks
 
-The repository smoke checks use a scripted Agents SDK model and do not require
-network access:
+The repository smoke checks use scripted Agents SDK models or mock HTTP
+transports and do not require network access:
 
 ```bash
 python evals/smoke_architecture.py
+python evals/smoke_model_provider.py
+python evals/smoke_reporting.py
 python evals/smoke_session_artifacts.py
 python evals/smoke_pipeline_runtime.py
 ```

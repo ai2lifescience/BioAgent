@@ -4,11 +4,7 @@ from __future__ import annotations
 
 from agents import Model
 from agents.sandbox import Manifest, SandboxAgent
-from openai import AsyncOpenAI
 
-from models.config import get_default_model_id
-from models.openrouter_client import create_async_client
-from models.local_shell import LocalShellChatCompletionsModel
 from tools.runtime_tools.pipeline_tool import PIPELINE_INSTRUCTIONS
 
 from .guardrails import INPUT_GUARDRAIL, OUTPUT_GUARDRAIL
@@ -104,18 +100,16 @@ responsibility for the final answer, including work delegated to specialists.
 def create_agent(
     model_key: str,
     model: Model | None = None,
-    client: AsyncOpenAI | None = None,
     sandbox_root: str | None = None,
 ) -> SandboxAgent:
-    model = model or LocalShellChatCompletionsModel(
-        model=get_default_model_id(model_key), openai_client=client or create_async_client()
-    )
+    """Build agent definitions; resolve model aliases through the run's provider."""
+    selected_model = model if model is not None else model_key
     default_manifest = Manifest(root=sandbox_root) if sandbox_root else None
     return SandboxAgent(
         name="BioAgent",
         instructions=INSTRUCTIONS + PIPELINE_INSTRUCTIONS,
-        model=model,
-        tools=build_all_tools(model),
+        model=selected_model,
+        tools=build_all_tools(selected_model),
         input_guardrails=[INPUT_GUARDRAIL],
         output_guardrails=[OUTPUT_GUARDRAIL],
         default_manifest=default_manifest,

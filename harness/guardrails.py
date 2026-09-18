@@ -54,7 +54,7 @@ async def output_check(
 ) -> GuardrailFunctionOutput:
     text = str(output or "")
     warnings: list[str] = []
-    if BIOLOGICAL.search(text) and not context.context.skill_results:
+    if BIOLOGICAL.search(text) and not context.context.tool_results:
         warnings.append("Biological claims were returned without a registered evidence tool.")
     if not text.strip():
         warnings.append("The agent returned an empty answer.")

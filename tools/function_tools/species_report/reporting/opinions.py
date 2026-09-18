@@ -1,13 +1,35 @@
-"""Direct model-opinion service for species reports."""
+"""Concurrent reporting-agent opinions for species reports."""
 
 from __future__ import annotations
 
+import asyncio
 from typing import Any
 
-from models.config import DEFAULT_MODEL_KEYS
-from models.multi_model import run_multi_model_messages
+from models.config import DEFAULT_MODEL_KEYS, DEFAULT_MODELS
+from models.openrouter_provider import OpenRouterProvider
 
+from .agents import run_reporting_agent
 from .prompts import build_model_opinion_messages
+
+
+async def _collect_answers(
+    species_name: str, question: str, model_keys: tuple[str, ...], bio_context: Any,
+) -> dict[str, str]:
+    async with OpenRouterProvider() as provider:
+        async def run_one(model_key: str) -> str:
+            try:
+                messages = build_model_opinion_messages(
+                    species_name=species_name, question=question,
+                    model_label=str(DEFAULT_MODELS[model_key]["label"]),
+                )
+                return await run_reporting_agent(
+                    messages, model_key, provider, temperature=0.2, bio_context=bio_context,
+                )
+            except Exception as exc:
+                return f"Model call failed: {exc}"
+
+        answers = await asyncio.gather(*(run_one(key) for key in model_keys))
+    return dict(zip(model_keys, answers))
 
 
 def collect_species_model_opinions(
@@ -16,20 +38,10 @@ def collect_species_model_opinions(
     model_keys: list[str] | None = None,
     bio_context: Any = None,
 ) -> dict[str, Any]:
+    """Synchronous workflow entry point, called from the tool's worker thread."""
     selected_model_keys = tuple(model_keys or DEFAULT_MODEL_KEYS)
-
-    def _messages(_model_key: str, config: dict[str, Any]) -> list[dict[str, str]]:
-        return build_model_opinion_messages(
-            species_name=species_name,
-            question=question,
-            model_label=str(config["label"]),
-        )
-
-    model_answers = run_multi_model_messages(
-        message_builder=_messages,
-        model_keys=selected_model_keys,
-        temperature=0.2,
-        bio_context=bio_context,
+    model_answers = asyncio.run(
+        _collect_answers(species_name, question, selected_model_keys, bio_context)
     )
     return {
         "status": "ok",

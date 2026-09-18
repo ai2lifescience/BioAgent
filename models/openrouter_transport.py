@@ -52,12 +52,7 @@ def create_client() -> OpenAI:
 
 
 def create_async_client() -> AsyncOpenAI:
-    """Create a client owned and closed by one Agents SDK run."""
+    """Create a client owned and closed by one run-scoped model provider."""
     options = client_options()
     options["http_client"] = httpx2.AsyncClient(timeout=options.pop("timeout"), **_transport_options())
     return AsyncOpenAI(**options)
-
-
-def normalize_model_id(model: str) -> str:
-    """Accept an old configuration value while sending a native model ID."""
-    return model.removeprefix("openrouter/")

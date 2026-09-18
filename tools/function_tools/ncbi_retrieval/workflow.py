@@ -15,7 +15,7 @@ def ncbi_retrieval(context: WorkflowContext | None=None, **kwargs: Any) -> dict[
         kwargs['output_dir'] = context.workspace_path('downloads', output_name)
     result = context.call('ncbi_fetch', _action_ncbi_fetch, kwargs)['result']
     answer = format_ncbi_result(result=result, fetch_args=kwargs)
-    return {'skill': 'ncbi_retrieval', 'tool': 'ncbi_fetch', 'answer': answer, **result}
+    return {'workflow': 'ncbi_retrieval', 'tool': 'ncbi_fetch', 'answer': answer, **result}
 
 def _is_default_output_dir(output_dir: Any) -> bool:
     if not output_dir:

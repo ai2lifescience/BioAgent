@@ -78,7 +78,7 @@ def native_item(item, shell_names, custom_names):
     return item
 
 
-class LocalShellChatCompletionsModel(OpenAIChatCompletionsModel):
+class LocalToolsChatCompletionsModel(OpenAIChatCompletionsModel):
     async def get_response(self, system_instructions, input, model_settings, tools,
                            output_schema, handoffs, tracing, previous_response_id=None,
                            conversation_id=None, prompt=None):

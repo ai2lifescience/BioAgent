@@ -7,7 +7,7 @@ import json
 import sys
 
 from harness.runtime import resume_bioagent, run_bioagent
-from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_SKILL_STEPS, DEFAULT_MODEL_KEYS
+from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODEL_KEYS
 
 
 def _log_progress(message: str) -> None:
@@ -27,10 +27,10 @@ def parse_args() -> argparse.Namespace:
         help=f"Model key from models.config.DEFAULT_MODELS. Default: {DEFAULT_AGENT_MODEL_KEY}.",
     )
     parser.add_argument(
-        "--max-skill-steps",
+        "--max-turns",
         type=int,
-        default=DEFAULT_MAX_SKILL_STEPS,
-        help=f"Maximum Agents SDK model turns. Default: {DEFAULT_MAX_SKILL_STEPS}.",
+        default=DEFAULT_MAX_TURNS,
+        help=f"Maximum Agents SDK model turns. Default: {DEFAULT_MAX_TURNS}.",
     )
     parser.add_argument("--session-id", help="Continue a persistent SDK conversation.")
     parser.add_argument("--json", action="store_true", dest="as_json", help="Print the complete structured result.")
@@ -55,7 +55,7 @@ def main() -> int:
         else:
             result = run_bioagent(
                 request=" ".join(args.request), session_id=args.session_id,
-                model_key=args.model_key, max_skill_steps=args.max_skill_steps,
+                model_key=args.model_key, max_turns=args.max_turns,
                 log_fn=_log_progress if args.verbose else None,
             )
     except (KeyError, RuntimeError, ValueError) as exc:

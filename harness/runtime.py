@@ -9,14 +9,14 @@ from pathlib import Path
 from typing import Any, Callable
 from uuid import uuid4
 
-from agents import Model, Runner, RunConfig, RunState, SQLiteSession, ToolExecutionConfig, set_default_openai_api
+from agents import Model, Runner, RunConfig, RunState, SQLiteSession, ToolExecutionConfig
 from agents.sandbox import SandboxRunConfig
 from agents.exceptions import InputGuardrailTripwireTriggered
 from agents.tracing import gen_trace_id
 
 from tools.common.evidence import EvidenceCollector
-from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_SKILL_STEPS
-from models.openrouter_client import create_async_client
+from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
+from models.openrouter_provider import OpenRouterProvider
 
 from .agent import create_agent
 from .context import BioRunContext
@@ -28,8 +28,7 @@ from .tracing import BioAgentHooks, LOCAL_TRACES, configure_tracing
 STATE_STORE = SessionMetadataStore()
 SESSION_DB = Path(os.getenv("BIOAGENT_SESSION_DB", "runtime/agent_sessions.sqlite3"))
 
-# OpenRouter exposes Chat Completions; SDK tracing stays local.
-set_default_openai_api("chat_completions")
+# SDK tracing stays local; each run supplies its own model provider.
 configure_tracing()
 
 
@@ -68,7 +67,7 @@ async def async_run_bioagent(
     request: str,
     session_id: str | None = None,
     model_key: str = DEFAULT_AGENT_MODEL_KEY,
-    max_skill_steps: int = DEFAULT_MAX_SKILL_STEPS,
+    max_turns: int = DEFAULT_MAX_TURNS,
     log_fn: Callable[[str], None] | None = None,
     model: Model | None = None,
 ) -> dict[str, Any]:
@@ -80,7 +79,7 @@ async def async_run_bioagent(
         if session.metadata.get("pending_run"):
             raise ValueError("Resolve the pending tool approval before sending another request in this session.")
         prepare_run(session)
-        return await _execute(session, request, model_key, max_skill_steps, log_fn, model)
+        return await _execute(session, request, model_key, max_turns, log_fn, model)
 
 
 async def async_resume_bioagent(
@@ -124,7 +123,7 @@ async def _execute(
     """Run or resume through the same SDK and result-collection path."""
     context = BioRunContext(
         session=session, model_key=model_key, log_fn=log_fn,
-        skill_results=list(pending.get("skill_results", [])) if pending else [],
+        tool_results=list(pending.get("tool_results", [])) if pending else [],
         events=list(pending.get("events", [])) if pending else [],
     )
     trace_id = pending["trace_id"] if pending else gen_trace_id()
@@ -133,20 +132,19 @@ async def _execute(
     session_db = Path(SESSION_DB)
     session_db.parent.mkdir(parents=True, exist_ok=True)
     sdk_session = SQLiteSession(session.session_id, db_path=session_db)
-    client = None
+    provider = OpenRouterProvider()
     approvals: list[dict[str, Any]] = []
     snapshot = None
     LOCAL_TRACES.bind(trace_id, context)
     try:
-        client = create_async_client() if model is None else None
         sandbox_root = session_root(session.session_id)
         agent = create_agent(
-            model_key, model=model, client=client, sandbox_root=str(sandbox_root),
+            model_key, model=model, sandbox_root=str(sandbox_root),
         )
         run_input: str | RunState = request
         if pending:
-            # Rebuild agents with a fresh client. Never retain an agent whose
-            # provider client was closed at the end of the previous HTTP call.
+            # Restore agent definitions; this run resolves models through a fresh
+            # provider instead of retaining clients from the approval pause.
             run_input = await RunState.from_json(
                 agent, pending["state"], context_deserializer=lambda _data: context,
             )
@@ -169,6 +167,7 @@ async def _execute(
                 agent, run_input, context=context, max_turns=max(1, int(max_turns)),
                 hooks=BioAgentHooks(),
                 run_config=RunConfig(
+                    model_provider=provider,
                     workflow_name="BioAgent", trace_id=trace_id, group_id=session.session_id,
                     trace_include_sensitive_data=False,
                     tool_execution=ToolExecutionConfig(max_function_tool_concurrency=4),
@@ -200,19 +199,18 @@ async def _execute(
     finally:
         LOCAL_TRACES.unbind(trace_id)
         sdk_session.close()
-        if client is not None:
-            await client.close()
+        await provider.aclose()
 
-    evidence = EvidenceCollector().collect(context.skill_results)
+    evidence = EvidenceCollector().collect(context.tool_results)
     if snapshot is not None:
         context.record("run_paused", reason="tool_approval", tool_names=[i["tool_name"] for i in approvals])
         session.metadata["pending_run"] = {
             "state": snapshot, "request": request, "model_key": model_key,
             "max_turns": max_turns, "trace_id": trace_id, "approvals": approvals,
-            "skill_results": context.skill_results, "events": context.events,
+            "tool_results": context.tool_results, "events": context.events,
         }
     else:
-        context.record("run_finished", status=status, skill_count=len(context.skill_results))
+        context.record("run_finished", status=status, tool_count=len(context.tool_results))
         # Pauses are not additional conversational exchanges.
         STATE_STORE.record_exchange(session, request, answer)
     run = dict(session.metadata.get("run") or {})
@@ -230,7 +228,7 @@ def run_bioagent(
     request: str,
     session_id: str | None = None,
     model_key: str = DEFAULT_AGENT_MODEL_KEY,
-    max_skill_steps: int = DEFAULT_MAX_SKILL_STEPS,
+    max_turns: int = DEFAULT_MAX_TURNS,
     log_fn: Callable[[str], None] | None = None,
     model: Model | None = None,
 ) -> dict[str, Any]:
@@ -238,7 +236,7 @@ def run_bioagent(
     try:
         asyncio.get_running_loop()
     except RuntimeError:
-        return asyncio.run(async_run_bioagent(request, session_id, model_key, max_skill_steps, log_fn, model))
+        return asyncio.run(async_run_bioagent(request, session_id, model_key, max_turns, log_fn, model))
     raise RuntimeError("An event loop is already running; await async_run_bioagent instead.")
 
 

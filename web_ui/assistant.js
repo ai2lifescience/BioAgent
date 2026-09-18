@@ -19,7 +19,7 @@
     uploads: [],
     logs: [],
     context: {},
-    maxSteps: 5,
+    maxTurns: 5,
   };
 
   function getParentOrigin() {
@@ -142,7 +142,7 @@
         option.selected = item.key === config.default_model_key;
         model.appendChild(option);
       }
-      state.maxSteps = Math.min(20, Math.max(1, Math.floor(Number(config.default_max_skill_steps) || 5)));
+      state.maxTurns = Math.min(20, Math.max(1, Math.floor(Number(config.default_max_turns) || 5)));
       state.ready = true;
       status.textContent = "Ready";
     } catch (error) {
@@ -182,7 +182,7 @@
         request,
         session_id: state.sessionId,
         model_key: model.value,
-        max_skill_steps: steps,
+        max_turns: steps,
       }),
       signal,
     });
@@ -219,7 +219,7 @@
     event.preventDefault();
     const text = prompt.value.trim();
     if (!text || state.busy || !state.ready) return;
-    const steps = state.maxSteps;
+    const steps = state.maxTurns;
     const request = requestText(text);
     prompt.value = "";
     addMessage("user", text);

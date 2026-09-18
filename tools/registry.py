@@ -8,7 +8,7 @@ from .hosted_tools import HOSTED_TOOLS
 from .runtime_tools import RUNTIME_TOOLS
 
 
-def build_all_tools(model: Model):
+def build_all_tools(model: Model | str):
     """Return all enabled SDK tool categories for one root agent."""
     return [
         *FUNCTION_TOOLS,

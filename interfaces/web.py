@@ -32,7 +32,7 @@ from interfaces.api import (
     write_workspace_file,
 )
 from harness.sandbox import relative_file_path
-from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_SKILL_STEPS, DEFAULT_MODELS
+from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODELS
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -78,7 +78,6 @@ def _runtime_info(
     trace = result.get("trace") or []
     run = result.get("run") or {}
     last_event = trace[-1] if trace else {}
-    skills = evidence.get("skills") or []
     tools = evidence.get("tools") or []
     files = evidence.get("files") or []
     return {
@@ -89,7 +88,6 @@ def _runtime_info(
         "run_id": run.get("run_id"),
         "runtime_dir": run.get("runtime_dir"),
         "runtime": result.get("runtime", "agents_sdk"),
-        "skills": skills,
         "tools": tools,
         "files": files,
         "file_count": len(files),
@@ -135,7 +133,7 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
             self._send_json(
                 {
                     "default_model_key": DEFAULT_AGENT_MODEL_KEY,
-                    "default_max_skill_steps": DEFAULT_MAX_SKILL_STEPS,
+                    "default_max_turns": DEFAULT_MAX_TURNS,
                     "models": _model_options(),
                     "files": artifact_suffix_config(),
                 }
@@ -232,7 +230,7 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
                 request=request,
                 session_id=session_id,
                 model_key=model_key,
-                max_skill_steps=int(payload.get("max_skill_steps", DEFAULT_MAX_SKILL_STEPS)),
+                max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
                 log_fn=log_progress,
             )
             result["runtime"] = _runtime_info(
@@ -287,14 +285,14 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
                     "message": "Agent request started.",
                     "model_key": model_key,
                     "session_id": session_id,
-                    "max_skill_steps": int(payload.get("max_skill_steps", DEFAULT_MAX_SKILL_STEPS)),
+                    "max_turns": int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
                 },
             )
             result = handle_request(
                 request=request,
                 session_id=session_id,
                 model_key=model_key,
-                max_skill_steps=int(payload.get("max_skill_steps", DEFAULT_MAX_SKILL_STEPS)),
+                max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
                 log_fn=log_stream,
             )
             result["runtime"] = _runtime_info(

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Any, Iterable
 
-from .config import DEFAULT_EMBEDDING_MODEL
-from .openrouter_client import create_client, normalize_model_id
+from models.config import DEFAULT_EMBEDDING_MODEL
+from models.openrouter_transport import create_client
 
 
 def embed_texts(
@@ -17,7 +17,7 @@ def embed_texts(
         return []
     with create_client() as client:
         response = client.embeddings.create(
-            model=normalize_model_id(model), input=payload, encoding_format="float"
+            model=model, input=payload, encoding_format="float"
         )
     items = sorted(response.data, key=lambda item: item.index)
     if len(items) != len(payload):

@@ -136,7 +136,7 @@ class ApprovalTests(unittest.TestCase):
         self.assertEqual(done["answer"], "Root finished.")
         self.workflow.assert_called_once()
         self.assertTrue(any(e["event"] == "approval_decision" for e in done["trace"]))
-        self.assertIn("pipeline_shell", done["evidence"]["skills"])
+        self.assertIn("pipeline_shell", done["evidence"]["tools"])
 
     def test_http_requires_explicit_boolean_and_can_reject(self):
         pending = self.pause()

@@ -2,12 +2,32 @@
 
 from __future__ import annotations
 
+import asyncio
 from typing import Any
 
 from models.config import DEFAULT_MODEL_KEYS, DEFAULT_MODELS, DEFAULT_SYNTHESIS_MODEL_KEY
-from models.text_generation import generate_from_messages
+from models.openrouter_provider import OpenRouterProvider
 
+from .agents import run_reporting_agent
 from .prompts import build_report_synthesis_messages
+
+
+async def _synthesize(
+    messages: list[dict[str, Any]], candidate_keys: list[str], bio_context: Any,
+) -> tuple[str, str]:
+    errors: list[str] = []
+    async with OpenRouterProvider() as provider:
+        for candidate_key in candidate_keys:
+            if candidate_key not in DEFAULT_MODELS:
+                continue
+            try:
+                markdown = await run_reporting_agent(
+                    messages, candidate_key, provider, temperature=0.15, bio_context=bio_context,
+                )
+                return candidate_key, markdown
+            except Exception as exc:
+                errors.append(f"{candidate_key}: {exc}")
+    raise RuntimeError("All report synthesis models failed:\n" + "\n".join(errors))
 
 
 def synthesize_species_markdown_report(
@@ -19,6 +39,7 @@ def synthesize_species_markdown_report(
     model_key: str | None = None,
     bio_context: Any = None,
 ) -> dict[str, Any]:
+    """Synchronous workflow entry point with sequential model fallback."""
     model_labels = {
         key: str(config["label"])
         for key, config in DEFAULT_MODELS.items()
@@ -39,24 +60,11 @@ def synthesize_species_markdown_report(
             if key != (model_key or DEFAULT_SYNTHESIS_MODEL_KEY)
         ],
     ]
-    errors: list[str] = []
-    for candidate_key in candidate_keys:
-        if candidate_key not in DEFAULT_MODELS:
-            continue
-        try:
-            markdown = generate_from_messages(
-                messages=messages,
-                model_key=candidate_key,
-                temperature=0.15,
-                bio_context=bio_context,
-            )
-            return {
-                "status": "ok",
-                "species_name": species_name,
-                "question": question,
-                "model_key": candidate_key,
-                "markdown": markdown,
-            }
-        except Exception as exc:
-            errors.append(f"{candidate_key}: {exc}")
-    raise RuntimeError("All report synthesis models failed:\n" + "\n".join(errors))
+    selected_key, markdown = asyncio.run(_synthesize(messages, candidate_keys, bio_context))
+    return {
+        "status": "ok",
+        "species_name": species_name,
+        "question": question,
+        "model_key": selected_key,
+        "markdown": markdown,
+    }

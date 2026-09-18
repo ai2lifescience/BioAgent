@@ -21,7 +21,7 @@ class BioRunContext:
     model_key: str
     sandbox_session: Any = None
     log_fn: Callable[[str], None] | None = None
-    skill_results: list[dict[str, Any]] = field(default_factory=list)
+    tool_results: list[dict[str, Any]] = field(default_factory=list)
     events: list[dict[str, Any]] = field(default_factory=list)
     files: list[dict[str, Any]] = field(default_factory=list)
 

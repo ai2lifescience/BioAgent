@@ -62,7 +62,7 @@ class WorkflowContext:
         """
         if self.log_fn:
             self.log_fn(f'[action] Started {name}.')
-        record = {'skill': self.workflow_name, 'tool': name, 'arguments': arguments}
+        record = {'workflow': self.workflow_name, 'tool': name, 'arguments': arguments}
         try:
             value = handler(**arguments)
             result = value if isinstance(value, dict) else {'value': value}

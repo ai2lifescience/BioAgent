@@ -20,4 +20,4 @@ def database_lookup(database: str, query: str, max_results: int=5, operation: st
         label = item.get('name') or item.get('protein_name') or item.get('title') or item.get('definition') or item.get('value') or item.get('organism') or ''
         url = item.get('url') or ''
         lines.append(f'- {record_id}: {label} {url}'.strip())
-    return {'skill': 'database_lookup', 'tool': 'bio_database_search', 'answer': '\n'.join(lines), **result}
+    return {'workflow': 'database_lookup', 'tool': 'bio_database_search', 'answer': '\n'.join(lines), **result}

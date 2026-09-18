@@ -123,19 +123,18 @@ def _collect_evidence_items(result: dict[str, Any], evidence: dict[str, Any]) ->
                 _append_unique(evidence["query_terms"], str(query_translation))
 
 
-def _output_record(skill: str, arguments: dict[str, Any], result: dict[str, Any]) -> dict[str, Any]:
-    output = {"skill": skill}
+def _output_record(tool: str, arguments: dict[str, Any], result: dict[str, Any]) -> dict[str, Any]:
+    output = {"tool": tool}
     for key in COMPACT_RESULT_KEYS:
         if key in result:
             output[key] = result[key]
-    if not output.keys() - {"skill"} and arguments:
+    if not output.keys() - {"tool"} and arguments:
         output["arguments"] = arguments
     return output
 
 
 def _tool_output_record(tool_call: dict[str, Any]) -> dict[str, Any]:
     output = {
-        "skill": tool_call.get("skill"),
         "tool": tool_call.get("tool"),
         "status": tool_call.get("status"),
         "category": tool_call.get("category"),
@@ -175,7 +174,6 @@ def _collect_tool_call(tool_call: dict[str, Any], evidence: dict[str, Any]) -> N
         _append_unique(
             evidence["tool_errors"],
             {
-                "skill": tool_call.get("skill"),
                 "tool": tool,
                 "error": tool_call.get("error"),
                 "error_type": tool_call.get("error_type"),
@@ -199,10 +197,10 @@ class EvidenceCollector:
 
     retrieval_date: str = field(default_factory=lambda: date.today().isoformat())
 
-    def collect(self, skill_results: list[dict[str, Any]]) -> dict[str, Any]:
+    def collect(self, tool_results: list[dict[str, Any]]) -> dict[str, Any]:
         evidence: dict[str, Any] = {
             "retrieval_date": self.retrieval_date,
-            "skills": [],
+            "tools": [],
             "databases": [],
             "query_terms": [],
             "record_ids": [],
@@ -210,23 +208,22 @@ class EvidenceCollector:
             "urls": [],
             "files": [],
             "outputs": [],
-            "tools": [],
             "tool_outputs": [],
             "tool_errors": [],
         }
 
-        for record in skill_results:
-            skill = str(record.get("skill") or "")
+        for record in tool_results:
+            tool = str(record.get("tool") or "")
             arguments = record.get("arguments") or {}
             result = record.get("result") or {}
-            if skill:
-                _append_unique(evidence["skills"], skill)
+            if tool:
+                _append_unique(evidence["tools"], tool)
             if isinstance(arguments, dict):
                 _collect_file_paths(arguments, evidence["files"])
                 _collect_query_terms(arguments, evidence)
                 _collect_databases(arguments, evidence)
             if not isinstance(result, dict):
-                evidence["outputs"].append({"skill": skill, "result": result})
+                evidence["outputs"].append({"tool": tool, "result": result})
                 _collect_record_tool_calls(record, evidence)
                 continue
 
@@ -235,7 +232,7 @@ class EvidenceCollector:
             _collect_query_terms(result, evidence)
             _collect_databases(result, evidence)
             _collect_evidence_items(result, evidence)
-            evidence["outputs"].append(_output_record(skill, arguments, result))
+            evidence["outputs"].append(_output_record(tool, arguments, result))
             _collect_record_tool_calls(record, evidence)
 
         return evidence

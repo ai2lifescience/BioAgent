@@ -19,5 +19,7 @@ For a standalone run, create a small runtime YAML with `input_path`,
 `config.yaml` is bundled; the runtime service creates this file in the per-job
 directory from `runner.yaml`.
 
-For the runtime CLI, see `docs/pipeline_migration.md`. Examples are only staged
-when explicitly requested; uploaded data takes precedence for real tasks.
+For the runtime CLI, see the
+[pipeline architecture guide](../../../../docs/architecture.md#pipeline-runtime).
+Examples are only staged when explicitly requested; uploaded data takes
+precedence for real tasks.

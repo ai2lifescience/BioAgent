@@ -7,7 +7,7 @@ from typing import Any
 
 import chromadb
 
-from models.embedding_client import embed_records, embed_texts
+from .embeddings import embed_records, embed_texts
 from rag.documents import make_hit
 
 

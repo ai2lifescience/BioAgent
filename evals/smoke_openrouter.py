@@ -24,7 +24,7 @@ def main() -> int:
         "Analyze this DNA sequence and report its GC content: ACGTACGT.",
         model_key=model_key,
         session_id=session_id,
-        max_skill_steps=6,
+        max_turns=6,
     )
     if result.get("runtime") != "agents_sdk":
         print(f"FAIL: unexpected runtime {result.get('runtime')!r}")

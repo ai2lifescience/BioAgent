@@ -73,4 +73,4 @@ BioAgent copies these WDL outputs to the per-job output directory as declared in
 workflow files; session inputs still have to be selected explicitly.
 BioAgent generates `inputs.runtime.json` and `options.runtime.json` in the job
 directory without changing these source files. miniwdl consumes the generated
-inputs; the options copy records Cromwell-style settings for provenance.
+inputs; the options copy is retained for provenance and is not consumed by miniwdl.

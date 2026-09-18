@@ -54,8 +54,8 @@ def tool_error(ctx: RunContextWrapper[Any], error: Exception) -> str:
     result = {'error': str(error), 'error_type': type(error).__name__}
     context = ctx.context
     name = getattr(ctx, 'tool_name', 'unknown_tool')
-    if hasattr(context, 'skill_results'):
-        context.skill_results.append({'skill': name, 'arguments': {}, 'result': result, 'tool_calls': []})
+    if hasattr(context, 'tool_results'):
+        context.tool_results.append({'tool': name, 'arguments': {}, 'result': result, 'tool_calls': []})
         context.record('tool_failed', tool=name, error_type=type(error).__name__)
     return result_envelope(result).model_dump_json()
 
@@ -78,9 +78,9 @@ async def run_workflow(
         result = await asyncio.to_thread(handler, **kwargs)
     except Exception as exc:
         result = {'error': str(exc), 'error_type': type(exc).__name__}
-    record = {'skill': name, 'category': category, 'arguments': arguments,
+    record = {'workflow': name, 'category': category, 'arguments': arguments,
               'result': result, 'tool_calls': workflow_context.action_calls}
-    context.skill_results.append(record)
+    context.tool_results.append(record)
     envelope = result_envelope(result)
     if getattr(context, "sandbox_session", None) is not None:
         from harness.sandbox import list_files

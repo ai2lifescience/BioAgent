@@ -109,10 +109,10 @@ async def execute_local_pipeline_command(request: ShellCommandRequest) -> ShellR
     except Exception as exc:
         value = {"status": "error", "error": str(exc), "error_type": type(exc).__name__}
         code = 1
-    record = {"skill": "pipeline_shell", "arguments": {"command": command}, "result": value,
+    record = {"tool": "pipeline_shell", "arguments": {"command": command}, "result": value,
               "tool_calls": [{"tool": "pipeline_shell", "arguments": {"command": command}, "result": value,
                               "status": "error" if code else "ok", "error": value.get("error")}]}
-    context.skill_results.append(record)
+    context.tool_results.append(record)
     context.record("pipeline_command_finished", command=command, status=value["status"])
     if context.sandbox_session is not None:
         from harness.sandbox import list_files

@@ -20,10 +20,10 @@ Agents SDK Agent + Runner
         |                     SDK tracing and lifecycle hooks
         |                     per-session Unix-local sandbox
         v
-OpenAI Chat Completions client -> OpenRouter
+RunConfig.model_provider -> OpenAI Chat Completions client -> OpenRouter
         |
         v
-Typed BioAgent function tools
+BioAgent function, specialist, and runtime tools
         |
         +-- biological databases and literature
         +-- sequence, BLAST, genome, and structure analysis
@@ -35,13 +35,11 @@ Typed BioAgent function tools
 SDK guardrails -> structured result -> user interface
 ```
 
-There is no second router, planner, model loop, or custom agent-facing tool
-system. SDK-native `Agent.as_tool()` specialists are the only delegated agent
-surface.
-Each function tool owns its workflow and deterministic implementation under
-`tools/function_tools/<tool_name>/`, so database retrieval, file access,
-sequence calculations, and pipeline execution remain reproducible and easy to
-trace from the model-facing tool.
+The root agent selects tools through the SDK model loop. Domain specialists
+are exposed through `Agent.as_tool()`. Function-tool workflows and their
+implementations live under `tools/function_tools/<tool_name>/`; pipeline
+execution lives under `tools/runtime_tools/pipeline_runtime/`. Reporting agents
+live under `tools/function_tools/species_report/reporting/`.
 
 ## Components
 
@@ -58,7 +56,7 @@ trace from the model-facing tool.
 - `harness/guardrails.py` contains input safety and output evidence checks.
 - `harness/sandbox.py` configures the SDK Unix-local sandbox around the
   per-session workspace. The SDK supplies filesystem capabilities; the
-  approval-controlled pipeline FunctionTool remains the command-execution
+  approval-controlled `pipeline_shell` ShellTool is the command-execution
   boundary.
 - `harness/tracing.py` consumes SDK lifecycle hooks and spans locally without
   sending traces to OpenAI. The hooks provide UI progress; the SDK remains the
@@ -66,10 +64,54 @@ trace from the model-facing tool.
 - `harness/sessions.py` stores application metadata; conversation history is
   stored by the SDK `SQLiteSession`.
 
-### OpenRouter client
+### Models and provider ownership
 
-`models/openrouter_client.py` is the only provider client. It constructs the
-OpenAI `OpenAI` and `AsyncOpenAI` clients with:
+BioAgent uses the SDK's per-run `ModelProvider` integration: agents declare a
+model alias, and `RunConfig(model_provider=provider)` resolves it to an SDK
+`Model`. This follows the [SDK model integration guide](https://openai.github.io/openai-agents-python/models/#non-openai-models).
+The application owns the provider's lifetime and closes it after the run, as
+specified by the [SDK provider interface](https://openai.github.io/openai-agents-python/ref/models/interface/).
+
+```text
+models/
+├── config.py             # model aliases, native IDs, labels, environment defaults
+├── openrouter_provider.py           # OpenRouterProvider: SDK ModelProvider and client lifetime
+├── openrouter_transport.py  # OpenAI / AsyncOpenAI transport configuration
+└── local_tools_model.py   # local shell/custom-tool wire adapter
+
+harness/agent.py          # root Agent definition and specialist assembly
+tools/function_tools/species_report/reporting/
+├── agents.py             # reporting Agent + Runner invocation
+├── opinions.py           # concurrent model opinions
+├── synthesis.py          # report synthesis and ordered fallback
+└── prompts.py            # scientific reporting instructions
+
+rag/embeddings.py         # embeddings for retrieval records and queries
+```
+
+`harness/runtime.py` creates an `OpenRouterProvider` for each run or approval
+resume. The provider creates one `AsyncOpenAI` client lazily when the SDK first
+resolves a model. It caches model instances by native model ID. Root and
+specialist agents share this provider through the nested SDK run configuration;
+agent construction itself opens no network client. Explicitly injected SDK
+`Model` instances, including offline `ScriptedModel` fixtures, need no provider
+credentials.
+
+On completion, failure, or approval pause, the harness closes the provider and
+its owned client. Resuming a saved `RunState` builds agent definitions and a
+fresh provider. An explicitly injected client remains owned by its caller.
+BioAgent supplies the model provider on each run without changing the SDK's
+global default model API or client.
+
+`models/config.py` maps UI/CLI keys such as `gpt-oss` to native OpenRouter IDs.
+The provider also accepts an explicit native ID; prefixes such as `openai/` and
+`openrouter/` are preserved. Change a catalog entry's `model` value or its
+documented environment override to select a deployment. Adding a catalog
+entry exposes it in the model selector and the default report opinion set;
+check that the selected model supports the tools used by its agents.
+
+`models/openrouter_transport.py` constructs the official OpenAI `OpenAI` and
+`AsyncOpenAI` clients with:
 
 - `OPENROUTER_API_KEY` for authentication;
 - `OPENROUTER_API_BASE`, defaulting to `https://openrouter.ai/api/v1`;
@@ -77,8 +119,25 @@ OpenAI `OpenAI` and `AsyncOpenAI` clients with:
 - HTTPX2 clients with explicit proxy selection from `BIOAGENT_PROXY`, falling
   back to `ALL_PROXY`/`all_proxy`.
 
-SDK model runs and embeddings use this OpenRouter transport. LiteLLM is not part
-of the project dependencies.
+SDK model runs and embeddings use this OpenRouter transport. Credentials are
+read when a client is created. Embeddings use `client.embeddings.create()` in
+`rag/embeddings.py`, which closes the client after each batch and matches
+returned vectors to inputs by their provider indexes.
+
+### Reporting agents
+
+The species-report workflow runs in the function tool's worker thread. Its
+reporting services run SDK agents with `asyncio.run()` at that synchronous
+boundary. Opinion requests use `asyncio.gather()` and share one provider per
+batch; a failed request is recorded alongside successful opinions. Synthesis
+tries the requested or configured synthesis model, then the remaining catalog
+models in order. An empty response counts as a failure, and exhaustion raises
+an error containing the attempted models' failures.
+
+Reporting instructions and prompts belong to the species-report package.
+`Agent`, `ModelSettings`, `Runner`, and `RunConfig` control each reporting call.
+The reporting provider closes after the batch, and SDK spans are recorded
+locally in the calling run's trace when its `BioRunContext` is supplied.
 
 ### Tool categories
 
@@ -104,7 +163,7 @@ Import tools and helpers directly from their category packages:
 
 ```python
 from tools.function_tools.file_inspection import file_inspection
-from tools.agent_tools.specialists import build_specialist_tools
+from tools.agent_tools import build_specialist_tools
 from tools.common.results import ToolResult
 ```
 
@@ -114,16 +173,16 @@ Function-tool packages use a consistent layout:
 tools/function_tools/<tool_name>/
 ├── __init__.py       # public SDK FunctionTool
 ├── workflow.py       # run-context and result presentation
-├── analysis.py        # deterministic domain implementation
-├── adapters/         # optional external database clients
-└── engine/           # internal execution backends used by pipeline_shell
+├── analysis.py       # deterministic domain implementation
+└── adapters/         # optional external database clients
 ```
 
 Small tools keep one descriptive implementation module, such as `analysis.py`,
 `inspection.py`, or `diagnostics.py`, and `workflow.py` only when they need
 run context or result presentation. A
 package should add a subpackage only for a real subsystem, such as NCBI
-Entrez, species-report literature/web/RAG collection, or pipeline engines.
+Entrez or species-report literature/web/RAG collection. Pipeline engine adapters
+live separately under `tools/runtime_tools/pipeline_runtime/engine/`.
 Shared context, result envelopes, guardrails, and HTTP transport belong under
 `tools/common/`. Cross-tool imports are limited to explicit reusable domain
 adapters, such as structure download code reused when a PDB ID must be
@@ -136,8 +195,9 @@ Every agent-facing workflow in `tools/function_tools/` is an OpenAI Agents SDK
 `FunctionTool`. The SDK `@function_tool` decorator owns its name, description,
 argument schema, validation, invocation, and failure handling. The same
 function-tool package contains the workflow and its deterministic adapters,
-clients, and domain code. These implementations do not create another agent
-loop or require a second tool registry.
+clients, and domain code. Scientific calculations run in those implementations;
+workflows that synthesize reports call SDK reporting agents through
+`tools/function_tools/species_report/reporting/agents.py`.
 
 ### Tool routing contract
 
@@ -159,16 +219,16 @@ Routing-critical information belongs in five places:
 5. **Agent instructions** — define cross-tool policy, safety rules, and how
    the agent should use the available tools.
 
-The SDK derives the tool schema from these definitions, validates the model's
-arguments, invokes the Python function, and returns its result to the model.
-Each tool should remain bounded, expose side effects and approval requirements,
-and return the common `status`/`data`/`files`/`evidence`/`error` envelope.
+The SDK derives function-tool schemas from these definitions, validates the
+model's arguments, and returns the invoked function's result to the model.
+Biological function tools return the common
+`status`/`data`/`files`/`evidence`/`error` envelope. The local ShellTool returns
+command JSON inside an SDK `ShellResult`.
 
-Runtime tools such as `ShellTool`, `ApplyPatchTool`, and `ComputerTool` are
-execution primitives, not replacements for domain workflows. A generic shell
-route would bypass pipeline manifests, workspace path checks, job recovery, and
-output collection. Keep those primitives separate from the model-facing
-pipeline tools unless a narrowly scoped diagnostic or editing agent needs one.
+The local `pipeline_shell` ShellTool accepts the `bioagent-pipeline` command
+protocol. Its executor parses the command and dispatches validated operations
+to the pipeline service. SDK filesystem capabilities provide workspace file
+inspection and editing; biological command execution uses `pipeline_shell`.
 
 For example, a request to search AlphaFold should select `database_lookup` with
 `database="alphafold"`, while a request for sequence similarity should select
@@ -190,33 +250,42 @@ The primary intent boundaries are:
 | Sequence similarity | `blast_search` |
 | Genome feature image | `genome_map` |
 | Execute or monitor a pipeline | `pipeline_shell` (`bioagent-pipeline` protocol) |
-| Review completed pipeline outputs | `pipeline_shell results --job-id ID` |
+| Review completed pipeline outputs | `pipeline_shell` with `bioagent-pipeline results --job-id ID` |
 
 Use a specialist only when the request combines multiple routes in one domain;
 use the direct route for a single operation.
 
-The long-running pipeline migration is described in
-[`docs/pipeline_migration.md`](pipeline_migration.md). It preserves the
-deterministic engine implementations while moving process lifetime and recovery
-to a durable job boundary.
+See [Pipeline runtime](#pipeline-runtime) for pipeline discovery, input mapping,
+execution, result collection, and adding new pipelines.
 
-The files under `skills/*/SKILL.md` document workflows for developers, but are
-not loaded automatically by the runtime and do not route requests. Routing
-information that the model must see belongs in the FunctionTool name,
-docstring, schema descriptions, or agent instructions.
+Routing information that the model must see belongs in the FunctionTool name,
+docstring, schema descriptions, or agent instructions. Executable workflows
+live under `tools/function_tools/`. Developer guidance lives in this architecture
+reference; user examples are in the [web usage guide](web_usage.md#usage-examples)
+and [CLI guide](cli_usage.md).
 
 ### Specialist agents
 
-`tools/agent_tools/specialists.py` defines focused agents for sequence, retrieval, and
-pipeline domains. Each specialist owns a smaller set of FunctionTools and is
-exposed to the root agent with `Agent.as_tool()`. This is useful when a domain
-requires several related tools and its own instructions; the root agent keeps
-control of the user-facing answer.
+`tools/agent_tools/` defines focused agents for sequence, retrieval, and pipeline
+domains. Each `*_specialist.py` module owns its instructions and smaller tool
+set; `registry.py` assembles them and exposes each one to the root agent
+with `Agent.as_tool()`. This keeps domain changes and tests isolated while the
+root agent retains control of the user-facing answer.
 
-The root agent exposes both `FUNCTION_TOOLS` and these specialist tools, so some
-requests have direct and delegated routes. If routing becomes ambiguous as the
-tool catalog grows, choose one boundary per domain: expose the underlying tools
-directly, or expose them only through their specialist.
+```text
+tools/agent_tools/
+├── __init__.py             # root-agent integration
+├── sequence_specialist.py  # sequence, genome, BLAST, and structure tasks
+├── retrieval_specialist.py # NCBI, database, and species-report tasks
+├── pipeline_specialist.py  # pipeline planning, execution, and collection
+└── registry.py             # ordered specialist registry
+```
+
+The root agent exposes direct tools and specialist tools. The pipeline
+specialist uses the same `pipeline_shell` tool as the root. Specialists share
+application context and tracing, but do not automatically receive the root's
+SQLite conversation history; the root supplies the goal, paths, constraints,
+and relevant prior results in the delegated request.
 
 The workflow wrapper keeps the common envelope at the SDK boundary while
 preserving raw action results inside `BioRunContext` for evidence collection
@@ -231,11 +300,7 @@ The SDK run context carries:
 - progress callback;
 - per-run workflow results.
 
-The same function-tool package contains each workflow and its deterministic
-adapters, clients, and domain code. These implementations do not create
-another agent loop or require a second tool registry. The direct public
-FunctionTools are listed by
-`tools.function_tools.FUNCTION_TOOLS`;
+The direct public FunctionTools are listed by `tools.function_tools.FUNCTION_TOOLS`;
 the complete root surface is assembled by `tools.registry.build_all_tools`.
 
 ### Sessions and workspace files
@@ -297,9 +362,9 @@ Evidence collection lives in `tools/common/evidence.py` beside tool result
 semantics. The harness calls it after a run so the UI can receive citations,
 record IDs, URLs, and workspace file paths without making tools import the harness.
 
-High-risk pipeline behavior should remain explicit in tool input and output.
-Pipeline execution pauses with an SDK `RunState` interruption and returns an
-approval identifier. Call `interfaces.api.handle_approval` (or POST `/approve`)
+Pipeline execution and cancellation use SDK approval. A request pauses with an
+SDK `RunState` interruption and returns an approval identifier. Call
+`interfaces.api.handle_approval` (or POST `/approve`)
 to approve or reject it; approval resumes the saved state without replaying the
 original model request.
 
@@ -310,6 +375,372 @@ operations. `LocalTraceProcessor` records redacted lifecycle metadata for the
 current run. `BioAgentHooks` sends progress messages to CLI and streaming HTTP
 callers. External trace export is disabled by default because OpenRouter is the
 model endpoint and does not provide the OpenAI trace destination.
+
+## Pipeline runtime
+
+BioAgent runs registered Shell, Snakemake, Nextflow, and miniwdl workflows
+through the SDK local ShellTool named `pipeline_shell`. Pipeline definitions
+live under `tools/runtime_tools/pipelines/<pipeline_name>/`. The service scans
+folders containing `runner.yaml` whenever the agent requests the catalog.
+
+| Component | Responsibility |
+| --- | --- |
+| [Agent instructions](../harness/agent.py) | Interpret the user's goal and choose direct tools or a specialist. |
+| [Pipeline tool](../tools/runtime_tools/pipeline_tool.py) | Teach the command protocol, resolve the session workspace, handle SDK approval, and return command results. |
+| [Command parser](../tools/runtime_tools/pipeline_runtime/commands.py) | Parse allowed commands and dispatch operations to the service. |
+| [Service](../tools/runtime_tools/pipeline_runtime/service.py) | Discover pipelines, validate plans, start jobs, and collect results. |
+| [Job store](../tools/runtime_tools/pipeline_runtime/store.py) | Persist plans and job state in SQLite and write job snapshots. |
+| [Worker](../tools/runtime_tools/pipeline_runtime/worker.py) | Execute a job independently of the agent request and record its outcome. |
+| [Engine adapters](../tools/runtime_tools/pipeline_runtime/engine/) | Prepare runtime configurations and invoke the selected engine. |
+
+### From user intent to pipeline selection
+
+The model receives the request, conversation history, agent instructions, and
+registered tool descriptions. The instructions distinguish explanations,
+planning requests, execution requests, and review of existing results. The
+model chooses `pipeline_shell` directly or delegates a multi-step task to
+`pipeline_specialist`, which uses the same tool.
+
+For execution, the instructed sequence is:
+
+```text
+user request and conversation
+    -> catalog: inspect descriptions, inputs, parameters, outputs, and engine
+    -> files: discover uploaded, downloaded, or previously generated inputs
+       (or example: stage explicitly requested demonstration data)
+    -> model selects a pipeline, maps input slots, and supplies parameter overrides
+    -> plan: validate and save the proposed job
+    -> SDK approval for execution
+    -> run: start the saved plan
+    -> wait/status: inspect progress
+    -> results: collect verified outputs and summarize them
+```
+
+The catalog contains manifest metadata; the model does not automatically read
+all workflow source files or pipeline READMEs. Accurate `description`, input
+labels, and input descriptions therefore help selection. An explicit pipeline
+name and known input paths reduce ambiguity. The agent is instructed to ask
+when missing information materially changes the result.
+
+Pipeline selection is a model decision. Runtime checks establish that inputs
+and settings satisfy the implemented execution contract; they do not prove
+that the pipeline is scientifically appropriate for the user's question.
+For example, `generic_bio` describes an educational positional-comparison demo,
+not a validated alignment or variant-calling workflow.
+
+### The bioagent-pipeline command protocol
+
+`bioagent-pipeline` is the project-defined command prefix accepted by
+`pipeline_shell`. In the agent flow it is a string parsed by Python using
+`shlex` and `argparse`, rather than a command evaluated by Bash. Each tool call
+accepts exactly one command; arbitrary programs, pipes, redirects, and
+workspace overrides are not supported.
+
+```text
+pipeline_shell receives "bioagent-pipeline catalog"
+    -> execute_local_pipeline_command()
+    -> parse_command() / dispatch()
+    -> service.catalog()
+    -> JSON result returned to the model
+```
+
+| Command | Purpose |
+| --- | --- |
+| `bioagent-pipeline catalog` | Discover manifest descriptions, input/output slots, parameters, and engines. |
+| `bioagent-pipeline files` | List workspace-relative file paths, names, and sizes. |
+| `bioagent-pipeline example --pipeline NAME` | Copy bundled `data/input/` files into the workspace for a requested demonstration. |
+| `bioagent-pipeline plan --pipeline NAME --input SLOT=PATH` | Validate inputs and settings and save a plan without executing it. |
+| `bioagent-pipeline run --plan-id ID` | Start the exact saved plan, subject to SDK approval. |
+| `bioagent-pipeline jobs` | List jobs in the current session. |
+| `bioagent-pipeline status --job-id ID` | Read the job state and log paths. |
+| `bioagent-pipeline wait --job-id ID --seconds 5` | Wait for a bounded interval, at most 30 seconds. |
+| `bioagent-pipeline results --job-id ID` | Verify outputs and return file records, metrics, table previews, and a ZIP bundle. |
+| `bioagent-pipeline cancel --job-id ID` | Cancel a job and stop its local process group, subject to SDK approval. |
+
+`plan` supports repeated `--input` and `--param NAME=VALUE` arguments, `--cores`,
+`--timeout` in seconds, and `--dry-run` for Snakemake, Nextflow, or WDL. Shell
+pipelines use `plan` for pre-execution validation and do not support dry runs.
+The ShellTool action's `timeout_ms` is in milliseconds and is separate from the
+pipeline deadline. Use returned plan and job IDs in subsequent calls.
+
+Terminal users invoke the same service through its administrative CLI from the
+project root:
+
+```bash
+python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace catalog
+python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace example --pipeline example_sequence_qc
+```
+
+This module constructs the `bioagent-pipeline` prefix internally. SDK approval
+controls apply to agent calls; this direct operator CLI executes requested
+operations without that approval UI. Agent calls obtain the workspace from the
+active session and cannot supply `--workspace`.
+
+The OpenRouter transport adapter in `models/local_tools_model.py` presents local
+shell and custom tools as function schemas to Chat Completions. It converts
+returned calls into native SDK shell/custom items and translates their history
+for later requests. Streaming calls are converted once their arguments are
+complete. The SDK owns execution, approval interruptions, tracing, and saved
+`RunState` resumption; the adapter only translates transport representations.
+
+### Input files and their roles
+
+The agent discovers files through `files`, workspace inspection, and prior tool
+results. Uploads have unique filename prefixes under `uploads/`; downloaded
+files and earlier outputs can also be selected when they are in the session
+workspace. It must reuse actual returned paths. Bundled examples are staged
+only for an explicitly requested example.
+
+The catalog exposes named slots with `label`, `description`, `config_key`,
+`required`, `accepts`, and `multiple`. The model maps selected files to these
+slots, for example `--input reads=uploads/abc_reads.fastq`. The runtime checks
+required slots, file existence, accepted filename suffixes, cardinality, and
+workspace confinement. It returns `needs_input` with `requested_inputs` when a
+required slot is missing. Once the plan is saved, it records input hashes and
+verifies them again before execution and while staging copies into the job.
+
+**There is no built-in R1/R2 or metadata-role classifier.** The model can infer
+roles from names such as `sample_R1.fastq`, user-provided mappings, and manifest
+descriptions. File inspection can supply text previews and table columns, but
+it does not provide a paired-read validator. A `.tsv` suffix establishes neither
+metadata semantics nor the presence of the columns a workflow needs.
+
+`example_sequence_qc` and `generic_bio` each declare one `reads` slot. They do
+not declare a paired-end interface. A workflow designed for two mates can
+expose the following slots, provided its implementation consumes both paths:
+
+```yaml
+inputs:
+  reads_r1:
+    label: Read 1 FASTQ
+    description: First mate file for the selected sample.
+    config_key: reads_r1_path
+    required: true
+    accepts: [.fastq, .fq, .fastq.gz, .fq.gz]
+  reads_r2:
+    label: Read 2 FASTQ
+    description: Second mate file for the same sample.
+    config_key: reads_r2_path
+    required: true
+    accepts: [.fastq, .fq, .fastq.gz, .fq.gz]
+  metadata:
+    label: Sample metadata
+    description: TSV or CSV table with a sample_id column.
+    config_key: metadata_path
+    required: true
+    accepts: [.tsv, .csv]
+```
+
+These declarations describe the interface; the workflow must implement gzip
+reading, pair consistency checks, metadata-column checks, and other content
+validation it requires. The runtime does not interpret proposed fields such as
+`role`, `mate`, or `required_columns`. In the bundled QC example, metadata
+columns and FASTQ record structure are checked by `workflow.py` during execution.
+
+For a slot whose workflow accepts several files, declare `multiple: true` and
+pass a JSON array:
+
+```text
+--input 'reads=["uploads/a.fastq","uploads/b.fastq"]'
+```
+
+An array does not establish pairing or resolve uncertain assignments. When
+several files could fill the same role, the agent needs evidence or a user
+mapping before it can choose reliably.
+
+### Parameters and runtime configuration
+
+`runner.yaml` defines ordinary parameter defaults under `params`. Optional
+native configuration can be declared with `config` (or `config_file`); a
+`config.yaml` in the pipeline directory is also loaded when present. Precedence
+is native configuration, then manifest `defaults`, then manifest `params`,
+followed by explicit input and parameter overrides for the job. Declared native
+files must exist.
+
+The model can translate a request such as "minimum length 8" into
+`--param min_length=8`; omitted values retain their configured defaults. The
+runtime accepts declared parameter names and performs basic value coercion
+using configured defaults. This is not a complete parameter-schema validator;
+workflows must check types, scientific ranges, and relationships, such as a
+fraction being between zero and one.
+
+For top-level or engine-specific config fields, manifests can use
+`param_overrides` to map parameter names to `config_key` or `wdl_key`. When that
+mapping is present it defines the allowed override names. A missing parameter
+marked `required: true` returns `needs_parameters`. Manifests can also declare
+`preset_param` and `presets` for named bundles of settings.
+
+For shell jobs the engine writes `config.runtime.yaml` and calls
+`bash <entrypoint> <runtime-config-path>`. Inputs are mapped through their
+`config_key`; ordinary parameters remain under `config["params"]`; declared
+output keys contain paths in the job's output directory. The workflow reads
+this generated configuration instead of hardcoding session paths.
+
+### Plans, approvals, and jobs
+
+A valid plan stores the selected pipeline, input paths and hashes, supplied
+parameter overrides, engine, output declarations, timeout, resource limits,
+and a fingerprint of the pipeline definition. Planning does not run the
+workflow or perform every content check that the workflow will perform.
+Changed input files or definitions require a new plan before execution.
+
+The SDK pauses real `run` and `cancel` calls for approval. Planning, reading
+status, and collecting outputs do not require approval; supported engine dry
+runs also skip execution approval. Approved execution starts a detached worker.
+The worker copies and verifies inputs, invokes the engine, checks required
+outputs, and records a terminal state.
+
+```text
+planned -> queued -> running -> succeeded / failed / timed_out / interrupted
+    cancellation can end an unfinished job as cancelled
+```
+
+An already-started plan returns its existing state instead of launching a
+second worker. Jobs can continue after the originating HTTP request ends. If a
+worker disappears, status becomes `interrupted`; the runtime does not
+restart jobs after a host reboot or automatically retry failed jobs. For long
+jobs the agent returns the job ID and current status so later requests can
+inspect them. It does not promise unsolicited completion messages.
+
+The local worker enforces a deadline and an inherited per-process address-space
+limit; core settings are passed to supported engines and thread environments.
+Manifest `resources.max_cores` and `resources.max_memory_mb` bound resources,
+and `timeout` bounds the requested deadline. These are not aggregate cgroup
+quotas. The local backend runs trusted registered code on the host OS.
+
+### Output files and result collection
+
+Each output declaration specifies a `config_key` or an engine output mapping,
+a relative filename (`default` or `target`), a `kind`, and optionally
+`required: false`. Outputs are required by default. The runtime allocates paths
+under the job's `outputs/` directory and verifies the declared files after
+execution. A normal run missing a required output fails; optional outputs may
+be absent.
+
+```text
+runtime/sessions/<session-id>/
+├── uploads/
+├── .pipeline/jobs.sqlite3     # authoritative job state
+└── runs/<job-id>/
+    ├── job.json
+    ├── plan.json
+    ├── inputs.json
+    ├── inputs/               # verified input copies
+    ├── stdout.log
+    ├── stderr.log
+    ├── outputs/              # runtime configuration and workflow outputs
+    ├── output-manifest.json  # paths, kinds, sizes, and hashes
+    └── results.zip           # created by results
+```
+
+`results` requires `succeeded` and rechecks output hashes, file existence, and
+confinement to the job directory. It returns file records, small JSON metrics,
+and bounded CSV/TSV previews (10 rows by default, configurable up to 50 with
+`--max-table-rows`). It builds `results.zip` with declared outputs, logs, the
+plan, and the output manifest. Reviewing outputs never launches another run.
+
+### Adding a pipeline
+
+A new definition is discovered on the next `catalog` call when its folder and
+`runner.yaml` are present on the running server. For an existing engine, no
+changes to the tool registry or command parser are needed. Discovery does not
+install dependencies or prove that the workflow executes successfully.
+
+1. Create a uniquely named folder under `tools/runtime_tools/pipelines/`. Use
+   letters, numbers, underscores, hyphens, or dots, beginning with a letter or
+   number. Keep the manifest name consistent with the folder name.
+2. Declare a clear description, engine entrypoint, input slots, parameter
+   defaults, output files, timeout, and resource limits in `runner.yaml`.
+3. Implement the workflow against the generated configuration. Validate input
+   contents and parameter ranges, write the declared outputs, and fail with an
+   informative error when a requirement is not met.
+4. Install the engine and scientific dependencies in the execution environment.
+   Add a README describing them and optional `data/input/` examples.
+5. Verify discovery, then plan and execute the new workflow with representative
+   inputs and collect its results. Check missing or malformed inputs as well as
+   successful execution.
+
+A shell pipeline can follow this layout:
+
+```text
+tools/runtime_tools/pipelines/my_pipeline/
+├── runner.yaml
+├── run.sh
+├── workflow.py             # if run.sh invokes Python
+├── README.md
+└── data/input/              # optional demonstration files
+```
+
+Example manifest (the analysis itself must be implemented in the workflow):
+
+```yaml
+name: my_pipeline
+description: Calculate a length summary for a single FASTQ file.
+engine: shell
+entrypoint: run.sh
+timeout: 120
+resources:
+  max_cores: 1
+  max_memory_mb: 1024
+params:
+  min_length: 10
+inputs:
+  reads:
+    label: FASTQ reads
+    description: One uncompressed FASTQ file.
+    config_key: input_path
+    required: true
+    accepts: [.fastq, .fq]
+outputs:
+  report:
+    config_key: report_path
+    default: report.md
+    kind: report
+  metrics:
+    config_key: metrics_path
+    default: metrics.json
+    kind: metrics
+```
+
+A Bash entrypoint can pass the configuration to Python:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+config_path="${1:?Usage: bash run.sh CONFIG_YAML}"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec python3 "${script_dir}/workflow.py" "${config_path}"
+```
+
+`workflow.py` loads the YAML path from `sys.argv[1]`, reads `input_path` and
+`params.min_length`, and writes `report_path` and `metrics_path`. Choose accepted
+suffixes and output kinds that the implementation actually supports. The
+[synthetic QC example](../tools/runtime_tools/pipelines/example_sequence_qc/)
+provides a complete shell/Python implementation.
+
+| Engine | Manifest entrypoint | Runtime requirements and output mapping |
+| --- | --- | --- |
+| `shell` | `entrypoint: run.sh` | Bash and programs invoked by the script; write configured output paths. |
+| `snakemake` | `snakefile: Snakefile` | Snakemake and rule dependencies; consume the generated config. |
+| `nextflow` | `workflow: main.nf`, optional `nextflow_config` | Nextflow and its Java runtime; consume the generated params file and map published names with `nextflow_output`. |
+| `wdl` | `workflow: workflow.wdl`, optional `inputs_json` | miniwdl and its configured container runtime; use `wdl_key` for inputs and `wdl_output` for outputs. |
+
+The local WDL protocol uses miniwdl. Optional `options_json` produces an
+`options.runtime.json` record; miniwdl does not consume that file. Shell dry
+runs are unsupported; Snakemake uses its dry-run mode, Nextflow uses preview,
+and WDL uses `miniwdl check`. Adding a different engine requires runtime code
+changes in addition to a manifest.
+
+For a runnable demonstration of the full protocol, ask BioAgent:
+
+> Use the example_sequence_qc example data, run it, and summarize the results.
+
+The agent stages the bundled synthetic data, plans, requests approval, runs,
+and collects `filtered.fastq`, `assignments.tsv`, `metrics.json`, and `report.md`.
+Default settings retain 2 of 4 reads and 16 of 28 bases. To exercise your own
+pipeline, request its name and supply its declared inputs, or explicitly ask
+for its bundled examples. Use the [offline checks](#testing) for shared runtime
+regressions; they do not replace an execution test of the new workflow.
 
 ## Interfaces
 
@@ -381,17 +812,36 @@ of proxy settings. Unset that variable before switching back to a proxy.
 Database and pipeline clients retain their own proxy settings.
 
 Choose a configured model with `BIOAGENT_AGENT_MODEL_KEY`. Set
-`BIOAGENT_MAX_SKILL_STEPS` to bound the SDK run turns. Set
+`BIOAGENT_MAX_TURNS` to bound the SDK run turns. Set
 `BIOAGENT_SESSION_DB` and `BIOAGENT_RUNS_DIR` when the application needs
 non-default storage locations.
 
 ## Testing
 
-Offline harness tests use `agents.testing.ScriptedModel` and verify tool
-selection, tool execution, guardrails, SDK spans, sessions, workspace files,
-and pipeline results without an API key. Live tests should use a temporary
+Offline harness tests use `agents.testing.ScriptedModel` and mock HTTP
+transports to verify tool execution, guardrails, SDK spans, sessions,
+workspace files, and pipeline results without an API key. Provider and reporting
+checks cover client ownership, nested approval resumption, concurrent opinions,
+synthesis fallback, and embedding order. Live tests should use a temporary
 OpenRouter key and a model that supports Chat Completions and tool calls.
 
-Offline migration checks and the approval-resumption regression suite pass in
-the `openaisdk` environment. A controlled live OpenRouter run remains an
-environment-dependent check and requires a separately supplied temporary key.
+Run the relevant offline checks from the project root:
+
+```bash
+python evals/smoke_architecture.py
+python evals/smoke_local_transport.py
+python evals/smoke_model_provider.py
+python evals/smoke_reporting.py
+python evals/smoke_approvals.py
+python evals/smoke_session_artifacts.py
+python evals/smoke_session_history.py
+python evals/smoke_pipeline_config.py
+python evals/smoke_pipeline_runtime.py
+python evals/smoke_generic_bio.py
+python evals/smoke_nextflow_runner.py
+```
+
+The Nextflow smoke check uses a test double. These checks do not establish that
+external engines or a newly added pipeline work in the deployment environment;
+exercise those workflows with representative inputs. Live provider checks use
+`evals/smoke_openrouter.py` with a configured API key.

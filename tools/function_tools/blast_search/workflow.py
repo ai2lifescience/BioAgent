@@ -8,7 +8,7 @@ def blast_search(sequence: str | None=None, rid: str | None=None, program: str='
     context = ensure_workflow_context(context, 'blast_search')
     result = context.call('blast_search', _action_blast_search, {'sequence': sequence, 'rid': rid, 'program': program, 'database': database, 'hitlist_size': hitlist_size, 'expect': expect, 'wait': wait, 'timeout_seconds': timeout_seconds})['result']
     answer = _format_blast_answer(result)
-    return {'skill': 'blast_search', 'tool': 'blast_search', 'answer': answer, **result}
+    return {'workflow': 'blast_search', 'tool': 'blast_search', 'answer': answer, **result}
 
 def _format_blast_answer(result: dict[str, Any]) -> str:
     lines = ['BLAST request completed.', f"Program: {result.get('program')}", f"Database: {result.get('database')}", f"RID: {result.get('rid')}", f"Status: {result.get('status')}"]

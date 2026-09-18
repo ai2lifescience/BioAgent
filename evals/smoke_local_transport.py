@@ -19,7 +19,8 @@ from harness import sandbox
 from harness.agent import create_agent
 from harness.context import BioRunContext
 from harness.sessions import SessionMetadata
-from models.local_shell import LocalShellChatCompletionsModel
+from models.config import resolve_model_id
+from models.openrouter_provider import OpenRouterProvider
 
 
 class LocalTransportTests(unittest.IsolatedAsyncioTestCase):
@@ -67,14 +68,15 @@ class LocalTransportTests(unittest.IsolatedAsyncioTestCase):
             with patch.object(sandbox, "WORKSPACES_DIR", Path(directory)):
                 async with AsyncOpenAI(api_key="offline-fixture", base_url="https://offline.invalid/v1",
                         http_client=httpx2.AsyncClient(transport=httpx2.MockTransport(respond), trust_env=False)) as client:
-                    model = LocalShellChatCompletionsModel(model="offline-model", openai_client=client)
+                    provider = OpenRouterProvider(client=client)
+                    self.addAsyncCleanup(provider.aclose)
                     session = SessionMetadata(session_id="transport")
                     sandbox.prepare_run(session)
                     context = BioRunContext(session=session, model_key="gpt-oss")
                     async with sandbox.open_workspace(session.session_id) as workspace:
                         context.sandbox_session = workspace
-                        agent = create_agent("gpt-oss", model=model, sandbox_root=str(sandbox.session_root(session.session_id)))
-                        config = RunConfig(sandbox=SandboxRunConfig(session=workspace, cwd="."))
+                        agent = create_agent("gpt-oss", sandbox_root=str(sandbox.session_root(session.session_id)))
+                        config = RunConfig(model_provider=provider, sandbox=SandboxRunConfig(session=workspace, cwd="."))
                         arguments = dict(context=context, run_config=config, max_turns=3)
                         if streaming:
                             result = Runner.run_streamed(agent, "List local pipelines, write a note, and analyze ACGT.", **arguments)
@@ -89,6 +91,7 @@ class LocalTransportTests(unittest.IsolatedAsyncioTestCase):
                     self.assertTrue({"shell_call", "shell_call_output", "custom_tool_call", "custom_tool_call_output"} <= types)
 
         self.assertEqual(len(requests), 2)
+        self.assertTrue(all(request["model"] == resolve_model_id("gpt-oss") for request in requests))
         tools = {item["function"]["name"]: item["function"] for item in requests[0]["tools"]}
         self.assertIn("pipeline_shell", tools)
         self.assertIn("input", tools["apply_patch"]["parameters"]["properties"])

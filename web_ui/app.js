@@ -1,11 +1,11 @@
 let config = {
   default_model_key: "",
-  default_max_skill_steps: 5,
+  default_max_turns: 5,
   models: [],
 };
 
 const modelSelect = document.getElementById("model");
-const maxStepsInput = document.getElementById("maxSteps");
+const maxTurnsInput = document.getElementById("maxTurns");
 const chat = document.getElementById("chat");
 const chatScroll = document.getElementById("chatScroll");
 const promptInput = document.getElementById("prompt");
@@ -86,7 +86,7 @@ function renderModelOptions() {
     }
     modelSelect.appendChild(option);
   }
-  maxStepsInput.value = config.default_max_skill_steps || 5;
+  maxTurnsInput.value = config.default_max_turns || 5;
   updateActiveModel();
 }
 
@@ -251,7 +251,7 @@ function emptyStateHtml() {
         <button class="example-button" data-example="Analyze the structure of 3GOU">Analyze PDB 3GOU</button>
         <button class="example-button" data-example="Compare PhiX174 and M13 genome structure, host range, and applications.">Compare biology</button>
         <button class="example-button" data-example="Inspect file runtime/downloads/ncbi_phix174/phix174_A.fasta">Inspect file</button>
-        <button class="example-button" data-example="Please test skill calling by running the example skill with message hello and tag smoke.">Test skill calling</button>
+        <button class="example-button" data-example="Please test tool calling by running the example tool with message hello and tag smoke.">Test tool calling</button>
       </div>
     </div>
   `;
@@ -531,7 +531,7 @@ function pipelineInputRequestFromResult(result) {
   if (!Array.isArray(outputs)) return null;
   for (let index = outputs.length - 1; index >= 0; index -= 1) {
     const output = outputs[index];
-    if (!output || !["pipeline_shell"].includes(output.skill) || !output.needs_input) continue;
+    if (!output || !["pipeline_shell"].includes(output.tool) || !output.needs_input) continue;
     const requestedInputs = Array.isArray(output.requested_inputs)
       ? output.requested_inputs.filter((item) => item && item.slot)
       : [];
@@ -681,7 +681,7 @@ function renderThinkingPanel(payload = {}) {
 function runtimeMeta(runtime = {}) {
   return [
     `Elapsed: ${formatElapsed(runtime.elapsed_seconds)}`,
-    `Skills: ${compactList(runtime.skills)}`,
+    `Tools: ${compactList(runtime.tools)}`,
     `Tools: ${compactList(runtime.tools)}`,
     `Files: ${runtime.file_count || 0}`,
   ];
@@ -738,7 +738,7 @@ function startThinking(request) {
           model_key: modelSelect.value || "default",
           session_id: activeSessionId,
           request,
-          max_skill_steps: Number(maxStepsInput.value || config.default_max_skill_steps || 5),
+          max_turns: Number(maxTurnsInput.value || config.default_max_turns || 5),
           logs: thinkingLogLines,
         },
         trace: [],
@@ -904,12 +904,12 @@ function collectStructureArtifacts(result) {
 
   const evidence = result?.evidence || {};
   for (const item of evidence.outputs || []) {
-    if (item?.skill === "protein_structure_analysis") {
+    if (item?.tool === "protein_structure_analysis") {
       addStructureArtifact(artifacts, seen, item?.structure_path, item?.pdb_id || item?.summary);
     }
   }
   for (const item of evidence.tool_outputs || []) {
-    if (item?.skill === "protein_structure_analysis" && item?.tool === "protein_structure_analyze") {
+    if (item?.tool === "protein_structure_analysis" && item?.tool === "protein_structure_analyze") {
       addStructureArtifact(artifacts, seen, item?.structure_path, item?.pdb_id || item?.summary);
     }
   }
@@ -938,8 +938,8 @@ function collectFigureArtifacts(result) {
 
   const evidence = result?.evidence || {};
   for (const item of evidence.outputs || []) {
-    addFigureArtifact(artifacts, seen, item?.image_path, item?.label || item?.summary || item?.skill);
-    addFigureArtifact(artifacts, seen, item?.genome_map_path, item?.label || item?.summary || item?.skill);
+    addFigureArtifact(artifacts, seen, item?.image_path, item?.label || item?.summary || item?.tool);
+    addFigureArtifact(artifacts, seen, item?.genome_map_path, item?.label || item?.summary || item?.tool);
   }
   for (const item of evidence.tool_outputs || []) {
     addFigureArtifact(artifacts, seen, item?.image_path, item?.label || item?.summary || item?.tool);
@@ -968,7 +968,7 @@ function collectPipelineOutputRecords(result) {
   ];
 
   for (const candidate of candidates) {
-    const isPipeline = ["pipeline_shell"].includes(candidate?.skill) || ["pipeline_shell"].includes(candidate?.tool);
+    const isPipeline = ["pipeline_shell"].includes(candidate?.tool) || ["pipeline_shell"].includes(candidate?.tool);
     if (!isPipeline || !Array.isArray(candidate.output_records)) continue;
     for (const record of candidate.output_records) {
       const path = String(record?.path || "").trim();
@@ -1006,7 +1006,7 @@ function pipelineNameFromResult(result) {
   const outputs = result?.evidence?.outputs;
   if (Array.isArray(outputs)) {
     for (let index = outputs.length - 1; index >= 0; index -= 1) {
-      if (["pipeline_shell"].includes(outputs[index]?.skill) && outputs[index]?.pipeline_name) {
+      if (["pipeline_shell"].includes(outputs[index]?.tool) && outputs[index]?.pipeline_name) {
         return String(outputs[index].pipeline_name);
       }
     }
@@ -1459,7 +1459,7 @@ async function runAgent(request, signal) {
     request,
     session_id: activeSessionId,
     model_key: modelSelect.value,
-    max_skill_steps: Number(maxStepsInput.value || config.default_max_skill_steps || 5),
+    max_turns: Number(maxTurnsInput.value || config.default_max_turns || 5),
   };
   const response = await fetch("/run_stream", {
     method: "POST",

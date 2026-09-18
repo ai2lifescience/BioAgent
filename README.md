@@ -53,7 +53,6 @@ On Linux Bash:
 
 ```bash
 export OPENROUTER_API_KEY="your-openrouter-api-key"
-export CROMWELL_URL=http://192.168.164.39:39000
 ```
 
 Replace the placeholder with your real key. The variable is available to
@@ -106,27 +105,19 @@ Download PDB structure 1A3N as cif
 ```
 
 ```text
-Run pipeline with pipeline_name: generic_snakemake
+Run generic_snakemake with its bundled example data and summarize the results.
 ```
 
 ```text
-Run pipeline with pipeline_name: generic_nextflow
+Run generic_nextflow with its bundled example data and summarize the results.
 ```
 
 ```text
-Run pipeline with pipeline_name: generic_bio
+Run generic_bio with its bundled example data and summarize the results.
 ```
 
 ```text
-Run pipeline with pipeline_name: bacterial_annotation genome: "path/to/contigs.fasta" genus Escherichia species coli strain "K-12" cpus 4
-```
-
-```text
-annotate_bacterial_genome genome: "path/to/contigs.fasta" annotator bakta bakta_db_path: "/opt/bakta-db/db" translation_table 11 gram - cpus 8
-```
-
-```text
-Predict RNA secondary structure rna: "path/to/sequences.fasta" temperature_c 37
+Run the example_sequence_qc example and summarize its metrics.
 ```
 
 ```text
@@ -165,7 +156,7 @@ call deterministic biological libraries and registered external APIs.
 ```text
 User / App
   -> Agent + Runner (OpenAI Agents SDK)
-     -> OpenAI Python client -> OpenRouter
+     -> RunConfig.model_provider -> OpenAI Python client -> OpenRouter
      -> BioAgent function tools
         -> databases, sequence/structure tools, files, RAG, pipelines
      -> SDK sessions (SQLite)
@@ -177,8 +168,12 @@ The public entry point is `harness.run_bioagent`. Each run returns the answer,
 SDK session ID, tool evidence, run status, trace events, and workspace file
 paths. Uploads and generated files remain in per-session sandboxes.
 
-OpenRouter model IDs are configured in `models/config.py` and are sent directly
-through the OpenAI client.
+OpenRouter model IDs are configured in `models/config.py`. A run-scoped SDK
+`ModelProvider` resolves these aliases and owns the shared client for root and
+specialist agents. Reporting agents live with the species-report tool;
+embeddings live in `rag/`. See the
+[model architecture](docs/architecture.md#models-and-provider-ownership) for
+configuration and client lifecycle details.
 
 ## Other Interfaces
 
@@ -226,11 +221,9 @@ print(result["answer"])
 the task container images.
 - Pipeline inputs should be supplied explicitly through the request or uploaded
 through the web UI.
-- The bacterial annotation pipeline supports Prokka or Bakta; Bakta also
-  requires a compatible database. See
-  [its environment guide](tools/runtime_tools/pipelines/bacterial_annotation/README.md).
-- The RNA secondary-structure pipeline requires ViennaRNA `RNAfold`. See
-  [its environment guide](tools/runtime_tools/pipelines/rna_secondary_structure/README.md).
+- Use the pipeline catalog to discover the workflows available in this checkout.
+  See [pipeline architecture](docs/architecture.md#pipeline-runtime) for file
+  handling, execution, and adding pipelines.
 
 
 
@@ -238,6 +231,7 @@ through the web UI.
 
 - [System architecture](docs/architecture.md)
 - [Web UI usage and examples](docs/web_usage.md)
+- [Pipeline runtime, file handling, and adding pipelines](docs/architecture.md#pipeline-runtime)
 - [CLI usage and examples](docs/cli_usage.md)
 - [Team development workflow](docs/dev_workflow.md)
 - [Planned improvements](docs/todo.md)

@@ -15,21 +15,18 @@ DEFAULT_MODELS: dict[str, dict[str, Any]] = {
             "BIOAGENT_NEMOTRON_MODEL",
             "nvidia/nemotron-3-super-120b-a12b:free",
         ),
-        "answer_instruction": "Be concise and structured.",
     },
     "gpt-oss": {
         "label": "GPT-OSS",
         "deployment": "OpenRouter",
         "cost_tier": "Low-cost",
         "model": os.getenv("BIOAGENT_GPT_OSS_MODEL", "openai/gpt-oss-120b"),
-        "answer_instruction": "Return concise bullet points.",
     },
     "deepseek-v4-flash": {
         "label": "DeepSeek V4 Flash",
         "deployment": "OpenRouter",
         "cost_tier": "Standard",
         "model": os.getenv("BIOAGENT_DEEPSEEK_V4_FLASH_MODEL", "deepseek/deepseek-v4-flash"),
-        "answer_instruction": "Be concise and structured.",
     },
     "gpt-5.6-luna": {
         "label": "GPT-5.6 Luna",
@@ -39,7 +36,6 @@ DEFAULT_MODELS: dict[str, dict[str, Any]] = {
             "BIOAGENT_GPT_56_LUNA_MODEL",
             "openai/gpt-5.6-luna",
         ),
-        "answer_instruction": "Be concise and structured.",
     },
     "gpt-5.6-sol": {
         "label": "GPT-5.6 Sol",
@@ -49,7 +45,6 @@ DEFAULT_MODELS: dict[str, dict[str, Any]] = {
             "BIOAGENT_GPT_56_SOL_MODEL",
             "openai/gpt-5.6-sol",
         ),
-        "answer_instruction": "Use careful multi-step reasoning and return a structured answer.",
     },
     "gemini-3.8-flash": {
         "label": "Gemini 3.8 Flash",
@@ -59,13 +54,12 @@ DEFAULT_MODELS: dict[str, dict[str, Any]] = {
             "BIOAGENT_GEMINI_38_FLASH_MODEL",
             "google/gemini-3.8-flash",
         ),
-        "answer_instruction": "Be concise and structured.",
     },
 }
 
 DEFAULT_AGENT_MODEL_KEY = os.getenv("BIOAGENT_AGENT_MODEL_KEY", "nemotron-3-super")
 DEFAULT_MODEL_KEYS = tuple(DEFAULT_MODELS)
-DEFAULT_MAX_SKILL_STEPS = int(os.getenv("BIOAGENT_MAX_SKILL_STEPS", "5"))
+DEFAULT_MAX_TURNS = int(os.getenv("BIOAGENT_MAX_TURNS", "5"))
 DEFAULT_SYNTHESIS_MODEL_KEY = os.getenv("BIOAGENT_SYNTHESIS_MODEL_KEY", DEFAULT_AGENT_MODEL_KEY)
 DEFAULT_OPENROUTER_API_BASE = os.getenv(
     "OPENROUTER_API_BASE",
@@ -77,13 +71,11 @@ DEFAULT_EMBEDDING_MODEL = os.getenv(
 )
 
 
-def get_default_model(model_key: str) -> dict[str, Any]:
-    try:
-        return DEFAULT_MODELS[model_key]
-    except KeyError as exc:
-        available = ", ".join(sorted(DEFAULT_MODELS))
-        raise KeyError(f"Unknown model key '{model_key}'. Available models: {available}") from exc
-
-
-def get_default_model_id(model_key: str) -> str:
-    return str(get_default_model(model_key)["model"]).removeprefix("openrouter/")
+def resolve_model_id(model_name: str | None) -> str:
+    """Resolve a catalog alias or preserve an explicit provider-native model ID."""
+    name = DEFAULT_AGENT_MODEL_KEY if model_name is None else model_name
+    if not name.strip():
+        raise ValueError("A model alias or provider-native model ID is required.")
+    if name in DEFAULT_MODELS:
+        return str(DEFAULT_MODELS[name]["model"])
+    return name
