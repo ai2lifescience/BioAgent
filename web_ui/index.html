@@ -13,22 +13,33 @@
         <div class="brand-mark">BA</div>
         <div>
           <div class="brand-title">BioAgent</div>
-          <div class="brand-subtitle">Local agent console</div>
+          <div class="brand-subtitle">Bioinformatics workspace</div>
         </div>
+        <span class="brand-badge">Local</span>
+      </div>
+
+      <div class="sidebar-primary-action">
+        <button id="newChat" class="new-chat-button" type="button">
+          <span class="button-plus" aria-hidden="true">+</span>
+          <span>New chat</span>
+        </button>
       </div>
 
       <div class="sidebar-panel session-panel">
         <div class="sidebar-heading">
           <div>
-            <label>Sessions</label>
-            <div class="sidebar-hint"><span id="sessionCount">0</span> saved chats</div>
+            <label>Conversations</label>
+            <div class="sidebar-hint"><span id="sessionCount">0</span> saved</div>
           </div>
-          <button id="newChat" class="new-chat-button" type="button">New</button>
         </div>
         <div id="sessionList" class="session-list"></div>
       </div>
 
       <div class="sidebar-panel settings-panel">
+        <div class="panel-title-row">
+          <label>Run settings</label>
+          <span class="panel-title-note">For the next request</span>
+        </div>
         <div class="control-group">
           <label for="model">Model</label>
           <select id="model"></select>
@@ -43,8 +54,8 @@
       <div class="sidebar-panel workspace-panel">
         <div class="sidebar-heading">
           <div>
-            <label>Workspace</label>
-            <div class="sidebar-hint"><span id="workspaceCount">0</span> session files</div>
+            <label>Files</label>
+            <div class="sidebar-hint"><span id="workspaceCount">0</span> in this workspace</div>
           </div>
           <div class="workspace-toolbar">
             <button id="workspaceRefresh" class="icon-button" type="button" title="Refresh workspace" aria-label="Refresh workspace">↻</button>
@@ -73,24 +84,28 @@
     <main>
       <header>
         <div class="header-title">
-          <strong>Bioinformatics Agent</strong>
+          <span class="header-kicker">BioAgent workspace</span>
+          <strong id="activeSession">New chat</strong>
+        </div>
+        <div class="header-status">
+          <span class="online-dot" aria-hidden="true"></span>
           <span id="activeModel">Loading model</span>
-          <span id="activeSession">New chat</span>
         </div>
       </header>
 
       <section id="chatScroll" class="chat-scroll">
         <div id="chat" class="chat">
           <div id="emptyState" class="empty-state">
-            <div>
-              <h1>Ask BioAgent</h1>
+            <div class="empty-intro">
+              <span class="empty-kicker">A focused workspace for biology</span>
+              <h1>What are you working on?</h1>
+              <p>Ask a question, upload data, or run a reproducible pipeline. Results and files stay together in this chat.</p>
             </div>
             <div class="empty-grid">
-              <button class="example-button" data-example="Download 10 NCBI records for PhiX174 genes A G">NCBI retrieval</button>
-              <button class="example-button" data-example="Analyze the structure of 3GOU">Analyze PDB 3GOU</button>
-              <button class="example-button" data-example="Compare PhiX174 and M13 genome structure, host range, and applications.">Compare biology</button>
-              <button class="example-button" data-example="Inspect file runtime/downloads/ncbi_phix174/phix174_A.fasta">Inspect file</button>
-              <button class="example-button" data-example="Please test tool calling by running the example tool with message hello and tag smoke.">Test tool calling</button>
+              <button class="example-button" data-example="What is the GC content of this sequence?">Analyze a sequence</button>
+              <button class="example-button" data-example="Analyze the structure of 3GOU">Inspect a structure</button>
+              <button class="example-button" data-example="Download 10 NCBI records for PhiX174 genes A G">Retrieve public data</button>
+              <button class="example-button" data-example="List the files in my workspace and describe what they contain.">Explore workspace files</button>
             </div>
           </div>
         </div>
@@ -104,7 +119,6 @@
             </div>
             <div id="thinkingMeta" class="thinking-meta">
               <span>Elapsed: 0s</span>
-              <span>Tools: none</span>
               <span>Tools: none</span>
               <span>Files: 0</span>
             </div>
@@ -141,14 +155,19 @@
             </button>
           </div>
         </form>
+        <div class="composer-footer">
+          <span>BioAgent can inspect files, call tools, and run approved pipelines.</span>
+          <span>Enter to send · Shift + Enter for a new line</span>
+        </div>
       </section>
     </main>
 
     <aside class="right-sidebar">
       <div class="sidebar-panel examples-panel">
-        <div>
-          <label>Examples</label>
-          <div class="sidebar-hint">Click one to fill the message box. Pipelines with options will ask in the composer.</div>
+        <div class="panel-intro">
+          <span class="panel-eyebrow">Quick starts</span>
+          <h2>Try a task</h2>
+          <p>Pick a starting point, then adjust the request in the composer.</p>
         </div>
         <div class="examples">
           <button class="example-button" data-example="What is GC content?">What is GC content?</button>
@@ -156,29 +175,45 @@
           <button class="example-button" data-example="Analyze the structure of 3GOU">Analyze PDB 3GOU</button>
           <button class="example-button" data-example="Search UniProt for BRCA1 human">Search UniProt</button>
           <button class="example-button" data-example="Summarize genome structure and host range of PhiX174 with trusted sources.">Species report</button>
-          <button class="example-button" data-example="Run pipeline with pipeline_name: generic_bio">Run generic bio pipeline</button>
-          <button class="example-button" data-example="Run pipeline with pipeline_name: generic_shell">Run shell pipeline</button>
-          <button class="example-button" data-example="Run pipeline with pipeline_name: generic_snakemake">Run Snakemake pipeline</button>
-          <button class="example-button" data-example="Run pipeline with pipeline_name: generic_nextflow">Run Nextflow pipeline</button>
-          <button class="example-button" data-example="Run pipeline with pipeline_name: generic_wdl">Run WDL pipeline</button>
-          <button class="example-button" data-example="Run pipeline with pipeline_name: metagenomic_qc">Run Metagenomic QC</button>
-          <button class="example-button" data-example="Run pipeline with pipeline_name: alignment_based_Identification">Run Alignment-based Identification</button>
-          <button
-            class="example-button"
-            data-example-template="Run pipeline with pipeline_name: molecular_typing pathogen: {pathogen}"
-            data-param-name="pathogen"
-            data-param-label="Choose pathogen for Molecular Typing"
-            data-param-options="H1N1,H3N2,SARS_CoV_2"
-          >Run Molecular Typing</button>
-          <button class="example-button" data-example="Run pipeline with pipeline_name: de_novo_assembly">Run de novo Assembly</button>
-          <button
-            class="example-button"
-            data-example-template="Run pipeline with pipeline_name: risk_assessment pathogen: {pathogen}"
-            data-param-name="pathogen"
-            data-param-label="Choose pathogen for Risk Assessment"
-            data-param-options="H1N1,H3N2,SARS_CoV_2"
-          >Run Risk Assessment</button>
         </div>
+        <details class="more-examples">
+          <summary>More pipelines</summary>
+          <div class="examples">
+            <button class="example-button" data-example="Run pipeline with pipeline_name: generic_bio">Generic bio pipeline</button>
+            <button class="example-button" data-example="Run pipeline with pipeline_name: generic_shell">Shell pipeline</button>
+            <button class="example-button" data-example="Run pipeline with pipeline_name: generic_snakemake">Snakemake pipeline</button>
+            <button class="example-button" data-example="Run pipeline with pipeline_name: generic_nextflow">Nextflow pipeline</button>
+            <button class="example-button" data-example="Run pipeline with pipeline_name: generic_wdl">WDL pipeline</button>
+            <button class="example-button" data-example="Run pipeline with pipeline_name: metagenomic_qc">Metagenomic QC</button>
+            <button class="example-button" data-example="Run pipeline with pipeline_name: alignment_based_Identification">Alignment-based identification</button>
+            <button
+              class="example-button"
+              data-example-template="Run pipeline with pipeline_name: molecular_typing pathogen: {pathogen}"
+              data-param-name="pathogen"
+              data-param-label="Choose pathogen for Molecular Typing"
+              data-param-options="H1N1,H3N2,SARS_CoV_2"
+            >Molecular typing</button>
+            <button class="example-button" data-example="Run pipeline with pipeline_name: de_novo_assembly">De novo assembly</button>
+            <button
+              class="example-button"
+              data-example-template="Run pipeline with pipeline_name: risk_assessment pathogen: {pathogen}"
+              data-param-name="pathogen"
+              data-param-label="Choose pathogen for Risk Assessment"
+              data-param-options="H1N1,H3N2,SARS_CoV_2"
+            >Risk assessment</button>
+          </div>
+        </details>
+      </div>
+      <div class="sidebar-panel guide-panel">
+        <div class="panel-intro">
+          <span class="panel-eyebrow">Simple workflow</span>
+          <h2>How it works</h2>
+        </div>
+        <ol class="workflow-steps">
+          <li><span>1</span><div><strong>Ask</strong><small>Describe the biology task in plain language.</small></div></li>
+          <li><span>2</span><div><strong>Work</strong><small>BioAgent selects tools and inspects your files.</small></div></li>
+          <li><span>3</span><div><strong>Review</strong><small>Approve pipelines and download verified outputs.</small></div></li>
+        </ol>
       </div>
     </aside>
   </div>

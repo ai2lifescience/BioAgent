@@ -241,15 +241,16 @@ function updateCurrentSession(updater) {
 function emptyStateHtml() {
   return `
     <div class="empty-state">
-      <div>
-        <h1>Ask BioAgent</h1>
+      <div class="empty-intro">
+        <span class="empty-kicker">A focused workspace for biology</span>
+        <h1>What are you working on?</h1>
+        <p>Ask a question, upload data, or run a reproducible pipeline. Results and files stay together in this chat.</p>
       </div>
       <div class="empty-grid">
-        <button class="example-button" data-example="Download 10 NCBI records for PhiX174 genes A G">NCBI retrieval</button>
-        <button class="example-button" data-example="Analyze the structure of 3GOU">Analyze PDB 3GOU</button>
-        <button class="example-button" data-example="Compare PhiX174 and M13 genome structure, host range, and applications.">Compare biology</button>
-        <button class="example-button" data-example="Inspect file runtime/downloads/ncbi_phix174/phix174_A.fasta">Inspect file</button>
-        <button class="example-button" data-example="Please test tool calling by running the example tool with message hello and tag smoke.">Test tool calling</button>
+        <button class="example-button" data-example="What is the GC content of this sequence?">Analyze a sequence</button>
+        <button class="example-button" data-example="Analyze the structure of 3GOU">Inspect a structure</button>
+        <button class="example-button" data-example="Download 10 NCBI records for PhiX174 genes A G">Retrieve public data</button>
+        <button class="example-button" data-example="List the files in my workspace and describe what they contain.">Explore workspace files</button>
       </div>
     </div>
   `;
@@ -532,7 +533,6 @@ function renderThinkingPanel(payload = {}) {
 function runtimeMeta(runtime = {}) {
   return [
     `Elapsed: ${formatElapsed(runtime.elapsed_seconds)}`,
-    `Tools: ${compactList(runtime.tools)}`,
     `Tools: ${compactList(runtime.tools)}`,
     `Files: ${runtime.file_count || 0}`,
   ];
