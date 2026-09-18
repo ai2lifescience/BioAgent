@@ -35,7 +35,6 @@ const workspaceRefresh = document.getElementById("workspaceRefresh");
 const workspaceSearch = document.getElementById("workspaceSearch");
 const workspaceFilter = document.getElementById("workspaceFilter");
 const workspaceDropzone = document.getElementById("workspaceDropzone");
-const newSessionGuide = document.getElementById("newSessionGuide");
 
 const ACTIVE_SESSION_KEY = "bioagent.web.active_session_id.v1";
 let structureSuffixes = [".cif", ".mmcif", ".pdb"];
@@ -247,11 +246,63 @@ function emptyStateHtml() {
         <h1>What are you working on?</h1>
         <p>Ask a question, upload data, or run a reproducible pipeline. Results and files stay together in this chat.</p>
       </div>
-      <div class="empty-grid">
-        <button class="example-button" data-example="What is the GC content of this sequence?">Analyze a sequence</button>
-        <button class="example-button" data-example="Analyze the structure of 3GOU">Inspect a structure</button>
-        <button class="example-button" data-example="Download 10 NCBI records for PhiX174 genes A G">Retrieve public data</button>
-        <button class="example-button" data-example="List the files in my workspace and describe what they contain.">Explore workspace files</button>
+      <div class="empty-onboarding">
+        <section class="empty-section">
+          <div class="empty-section-header">
+            <div>
+              <span class="panel-eyebrow">Quick starts</span>
+              <span class="empty-section-note">Choose a starting point</span>
+            </div>
+          </div>
+          <div class="empty-grid">
+            <button class="example-button" data-example="What is the GC content of this sequence?">Analyze a sequence</button>
+            <button class="example-button" data-example="Analyze the structure of 3GOU">Inspect a structure</button>
+            <button class="example-button" data-example="Download 10 NCBI records for PhiX174 genes A G">Retrieve public data</button>
+            <button class="example-button" data-example="List the files in my workspace and describe what they contain.">Explore workspace files</button>
+            <button class="example-button" data-example="Search UniProt for BRCA1 human">Search UniProt</button>
+            <button class="example-button" data-example="Summarize genome structure and host range of PhiX174 with trusted sources.">Species report</button>
+          </div>
+          <details class="more-examples">
+            <summary>More pipelines</summary>
+            <div class="examples">
+              <button class="example-button" data-example="Run pipeline with pipeline_name: generic_bio">Generic bio pipeline</button>
+              <button class="example-button" data-example="Run pipeline with pipeline_name: generic_shell">Shell pipeline</button>
+              <button class="example-button" data-example="Run pipeline with pipeline_name: generic_snakemake">Snakemake pipeline</button>
+              <button class="example-button" data-example="Run pipeline with pipeline_name: generic_nextflow">Nextflow pipeline</button>
+              <button class="example-button" data-example="Run pipeline with pipeline_name: generic_wdl">WDL pipeline</button>
+              <button class="example-button" data-example="Run pipeline with pipeline_name: metagenomic_qc">Metagenomic QC</button>
+              <button class="example-button" data-example="Run pipeline with pipeline_name: alignment_based_Identification">Alignment-based identification</button>
+              <button
+                class="example-button"
+                data-example-template="Run pipeline with pipeline_name: molecular_typing pathogen: {pathogen}"
+                data-param-name="pathogen"
+                data-param-label="Choose pathogen for Molecular Typing"
+                data-param-options="H1N1,H3N2,SARS_CoV_2"
+              >Molecular typing</button>
+              <button class="example-button" data-example="Run pipeline with pipeline_name: de_novo_assembly">De novo assembly</button>
+              <button
+                class="example-button"
+                data-example-template="Run pipeline with pipeline_name: risk_assessment pathogen: {pathogen}"
+                data-param-name="pathogen"
+                data-param-label="Choose pathogen for Risk Assessment"
+                data-param-options="H1N1,H3N2,SARS_CoV_2"
+              >Risk assessment</button>
+            </div>
+          </details>
+        </section>
+        <section class="empty-section empty-workflow">
+          <div class="empty-section-header">
+            <div>
+              <span class="panel-eyebrow">Simple workflow</span>
+              <span class="empty-section-note">From question to result</span>
+            </div>
+          </div>
+          <ol class="workflow-steps">
+            <li><span>1</span><div><strong>Ask</strong><small>Describe the biology task in plain language.</small></div></li>
+            <li><span>2</span><div><strong>Work</strong><small>BioAgent selects tools and inspects your files.</small></div></li>
+            <li><span>3</span><div><strong>Review</strong><small>Approve pipelines and download verified outputs.</small></div></li>
+          </ol>
+        </section>
       </div>
     </div>
   `;
@@ -260,7 +311,6 @@ function emptyStateHtml() {
 function renderCurrentChat() {
   chat.innerHTML = "";
   const messages = currentSession().messages || [];
-  updateNewSessionGuide(messages);
   if (!messages.length) {
     chat.innerHTML = emptyStateHtml();
     bindExampleButtons(chat);
@@ -270,11 +320,6 @@ function renderCurrentChat() {
     renderMessage(message.role, message.text || "", message.result || null);
   }
   scrollBottom();
-}
-
-function updateNewSessionGuide(messages) {
-  if (!newSessionGuide) return;
-  newSessionGuide.hidden = Array.isArray(messages) && messages.length > 0;
 }
 
 function renderSessionList() {
@@ -1268,7 +1313,6 @@ function addMessage(role, text, result = null) {
       created_at: nowIso(),
     });
   });
-  updateNewSessionGuide(currentSession().messages || []);
   scrollBottom();
 }
 

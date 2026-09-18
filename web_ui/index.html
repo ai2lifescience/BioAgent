@@ -73,11 +73,63 @@
               <h1>What are you working on?</h1>
               <p>Ask a question, upload data, or run a reproducible pipeline. Results and files stay together in this chat.</p>
             </div>
-            <div class="empty-grid">
-              <button class="example-button" data-example="What is the GC content of this sequence?">Analyze a sequence</button>
-              <button class="example-button" data-example="Analyze the structure of 3GOU">Inspect a structure</button>
-              <button class="example-button" data-example="Download 10 NCBI records for PhiX174 genes A G">Retrieve public data</button>
-              <button class="example-button" data-example="List the files in my workspace and describe what they contain.">Explore workspace files</button>
+            <div class="empty-onboarding">
+              <section class="empty-section">
+                <div class="empty-section-header">
+                  <div>
+                    <span class="panel-eyebrow">Quick starts</span>
+                    <span class="empty-section-note">Choose a starting point</span>
+                  </div>
+                </div>
+                <div class="empty-grid">
+                  <button class="example-button" data-example="What is the GC content of this sequence?">Analyze a sequence</button>
+                  <button class="example-button" data-example="Analyze the structure of 3GOU">Inspect a structure</button>
+                  <button class="example-button" data-example="Download 10 NCBI records for PhiX174 genes A G">Retrieve public data</button>
+                  <button class="example-button" data-example="List the files in my workspace and describe what they contain.">Explore workspace files</button>
+                  <button class="example-button" data-example="Search UniProt for BRCA1 human">Search UniProt</button>
+                  <button class="example-button" data-example="Summarize genome structure and host range of PhiX174 with trusted sources.">Species report</button>
+                </div>
+                <details class="more-examples">
+                  <summary>More pipelines</summary>
+                  <div class="examples">
+                    <button class="example-button" data-example="Run pipeline with pipeline_name: generic_bio">Generic bio pipeline</button>
+                    <button class="example-button" data-example="Run pipeline with pipeline_name: generic_shell">Shell pipeline</button>
+                    <button class="example-button" data-example="Run pipeline with pipeline_name: generic_snakemake">Snakemake pipeline</button>
+                    <button class="example-button" data-example="Run pipeline with pipeline_name: generic_nextflow">Nextflow pipeline</button>
+                    <button class="example-button" data-example="Run pipeline with pipeline_name: generic_wdl">WDL pipeline</button>
+                    <button class="example-button" data-example="Run pipeline with pipeline_name: metagenomic_qc">Metagenomic QC</button>
+                    <button class="example-button" data-example="Run pipeline with pipeline_name: alignment_based_Identification">Alignment-based identification</button>
+                    <button
+                      class="example-button"
+                      data-example-template="Run pipeline with pipeline_name: molecular_typing pathogen: {pathogen}"
+                      data-param-name="pathogen"
+                      data-param-label="Choose pathogen for Molecular Typing"
+                      data-param-options="H1N1,H3N2,SARS_CoV_2"
+                    >Molecular typing</button>
+                    <button class="example-button" data-example="Run pipeline with pipeline_name: de_novo_assembly">De novo assembly</button>
+                    <button
+                      class="example-button"
+                      data-example-template="Run pipeline with pipeline_name: risk_assessment pathogen: {pathogen}"
+                      data-param-name="pathogen"
+                      data-param-label="Choose pathogen for Risk Assessment"
+                      data-param-options="H1N1,H3N2,SARS_CoV_2"
+                    >Risk assessment</button>
+                  </div>
+                </details>
+              </section>
+              <section class="empty-section empty-workflow">
+                <div class="empty-section-header">
+                  <div>
+                    <span class="panel-eyebrow">Simple workflow</span>
+                    <span class="empty-section-note">From question to result</span>
+                  </div>
+                </div>
+                <ol class="workflow-steps">
+                  <li><span>1</span><div><strong>Ask</strong><small>Describe the biology task in plain language.</small></div></li>
+                  <li><span>2</span><div><strong>Work</strong><small>BioAgent selects tools and inspects your files.</small></div></li>
+                  <li><span>3</span><div><strong>Review</strong><small>Approve pipelines and download verified outputs.</small></div></li>
+                </ol>
+              </section>
             </div>
           </div>
         </div>
@@ -131,60 +183,6 @@
     </main>
 
     <aside class="right-sidebar">
-      <div id="newSessionGuide" class="new-session-guide">
-        <div class="sidebar-panel examples-panel">
-        <div class="panel-intro">
-          <span class="panel-eyebrow">Quick starts</span>
-          <h2>Try a task</h2>
-          <p>Pick a starting point, then adjust the request in the composer.</p>
-        </div>
-        <div class="examples">
-          <button class="example-button" data-example="What is GC content?">What is GC content?</button>
-          <button class="example-button" data-example="Analyze PhiX174 segment sequence GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT">Analyze PhiX174</button>
-          <button class="example-button" data-example="Analyze the structure of 3GOU">Analyze PDB 3GOU</button>
-          <button class="example-button" data-example="Search UniProt for BRCA1 human">Search UniProt</button>
-          <button class="example-button" data-example="Summarize genome structure and host range of PhiX174 with trusted sources.">Species report</button>
-        </div>
-        <details class="more-examples">
-          <summary>More pipelines</summary>
-          <div class="examples">
-            <button class="example-button" data-example="Run pipeline with pipeline_name: generic_bio">Generic bio pipeline</button>
-            <button class="example-button" data-example="Run pipeline with pipeline_name: generic_shell">Shell pipeline</button>
-            <button class="example-button" data-example="Run pipeline with pipeline_name: generic_snakemake">Snakemake pipeline</button>
-            <button class="example-button" data-example="Run pipeline with pipeline_name: generic_nextflow">Nextflow pipeline</button>
-            <button class="example-button" data-example="Run pipeline with pipeline_name: generic_wdl">WDL pipeline</button>
-            <button class="example-button" data-example="Run pipeline with pipeline_name: metagenomic_qc">Metagenomic QC</button>
-            <button class="example-button" data-example="Run pipeline with pipeline_name: alignment_based_Identification">Alignment-based identification</button>
-            <button
-              class="example-button"
-              data-example-template="Run pipeline with pipeline_name: molecular_typing pathogen: {pathogen}"
-              data-param-name="pathogen"
-              data-param-label="Choose pathogen for Molecular Typing"
-              data-param-options="H1N1,H3N2,SARS_CoV_2"
-            >Molecular typing</button>
-            <button class="example-button" data-example="Run pipeline with pipeline_name: de_novo_assembly">De novo assembly</button>
-            <button
-              class="example-button"
-              data-example-template="Run pipeline with pipeline_name: risk_assessment pathogen: {pathogen}"
-              data-param-name="pathogen"
-              data-param-label="Choose pathogen for Risk Assessment"
-              data-param-options="H1N1,H3N2,SARS_CoV_2"
-            >Risk assessment</button>
-          </div>
-        </details>
-        </div>
-        <div class="sidebar-panel guide-panel">
-        <div class="panel-intro">
-          <span class="panel-eyebrow">Simple workflow</span>
-          <h2>How it works</h2>
-        </div>
-        <ol class="workflow-steps">
-          <li><span>1</span><div><strong>Ask</strong><small>Describe the biology task in plain language.</small></div></li>
-          <li><span>2</span><div><strong>Work</strong><small>BioAgent selects tools and inspects your files.</small></div></li>
-          <li><span>3</span><div><strong>Review</strong><small>Approve pipelines and download verified outputs.</small></div></li>
-        </ol>
-        </div>
-      </div>
       <div class="sidebar-panel workspace-panel">
         <div class="sidebar-heading">
           <div>
