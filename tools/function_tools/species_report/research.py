@@ -3,8 +3,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-def normalize_text(text: str) -> str:
-    return re.sub('\\s+', ' ', text or '').strip()
+from tools.function_tools.species_report.web.parse import normalize_text
 
 def slugify(text: str, max_length: int=48) -> str:
     slug = re.sub('[^a-zA-Z0-9._-]+', '-', text.strip().lower()).strip('-._')

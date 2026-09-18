@@ -11,9 +11,6 @@ from typing import Any
 
 from Bio import SeqIO
 
-from tools.function_tools.sequence_analysis.analysis import find_orfs, parse_fasta_text
-
-
 FEATURE_COLORS = {
     "gene": "#2563eb",
     "CDS": "#0f766e",
@@ -107,7 +104,7 @@ def _load_genome_features(
 
 def _load_fasta(path: str) -> tuple[str, str]:
     text = Path(path).read_text(encoding="utf-8", errors="replace")
-    records = parse_fasta_text(text)
+    records = _parse_fasta_text(text)
     if not records:
         raise ValueError(f"No FASTA records found in {path}.")
     record = records[0]
@@ -157,7 +154,7 @@ def _load_gff(path: str) -> list[GenomeFeature]:
 
 def _predict_orf_features(sequence: str, min_orf_length: int) -> list[GenomeFeature]:
     features = []
-    for index, orf in enumerate(find_orfs(sequence, min_length=min_orf_length), start=1):
+    for index, orf in enumerate(_find_orfs(sequence, min_length=min_orf_length), start=1):
         features.append(
             GenomeFeature(
                 start=int(orf["start"]),
@@ -168,6 +165,53 @@ def _predict_orf_features(sequence: str, min_orf_length: int) -> list[GenomeFeat
             )
         )
     return features
+
+
+def _parse_fasta_text(text: str) -> list[dict[str, str]]:
+    """Parse FASTA locally because genome mapping is an independent plug-in."""
+    records: list[dict[str, str]] = []
+    record_id = "sequence_1"
+    sequence: list[str] = []
+    seen_header = False
+    for line in text.splitlines():
+        clean = line.strip()
+        if not clean:
+            continue
+        if clean.startswith(">"):
+            if seen_header or sequence:
+                records.append({"id": record_id, "sequence": "".join(sequence).upper()})
+            seen_header = True
+            record_id = clean[1:].split(None, 1)[0] or f"sequence_{len(records) + 1}"
+            sequence = []
+        else:
+            sequence.append("".join(clean.split()))
+    if seen_header or sequence:
+        records.append({"id": record_id, "sequence": "".join(sequence).upper()})
+    return records
+
+
+def _find_orfs(sequence: str, min_length: int = 90) -> list[dict[str, int | str]]:
+    clean = re.sub(r"[^ACGT]", "", sequence.upper().replace("U", "T"))
+    stop_codons = {"TAA", "TAG", "TGA"}
+    orfs: list[dict[str, int | str]] = []
+    for frame in range(3):
+        start_index: int | None = None
+        for index in range(frame, len(clean) - 2, 3):
+            codon = clean[index : index + 3]
+            if codon == "ATG" and start_index is None:
+                start_index = index
+            elif codon in stop_codons and start_index is not None:
+                length = index + 3 - start_index
+                if length >= min_length:
+                    orfs.append({
+                        "frame": frame + 1,
+                        "start": start_index + 1,
+                        "end": index + 3,
+                        "length": length,
+                        "stop_codon": codon,
+                    })
+                start_index = None
+    return orfs
 
 
 def _render_circular_svg(title: str, genome_length: int, features: list[GenomeFeature]) -> str:

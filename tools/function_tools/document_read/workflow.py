@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from tools.common.context import WorkflowContext, ensure_workflow_context
+from tools.workspace import select_workspace_file
 
 from .extraction import read_pdf_text
 
@@ -50,47 +51,15 @@ def document_read(
 
 def _resolve_workspace_file(path: str | None, context: WorkflowContext):
     requested = str(path or "").strip()
-    candidates = context.files
-    if requested:
-        exact = []
-        named = []
-        for item in candidates:
-            item_candidates = {
-                str(item.get("workspace_path") or ""),
-                str(item.get("path") or ""),
-            }
-            if requested in item_candidates:
-                exact.append(item)
-            elif requested == str(item.get("name") or ""):
-                named.append(item)
-        matches = exact or named
-    else:
-        matches = [
-            item for item in candidates
-            if str(item.get("workspace_path") or item.get("path") or "").lower().endswith(".pdf")
-        ]
-    if not matches:
+    try:
+        return select_workspace_file(context, path, suffixes=(".pdf",))
+    except (FileNotFoundError, ValueError) as exc:
         if requested:
             raise ValueError(
                 "The requested path is not a PDF in the active workspace. "
                 "Use an exact workspace_path from the workspace listing."
-            )
-        raise ValueError("No uploaded PDF is available in the active workspace.")
-
-    item = max(matches, key=lambda value: int(value.get("modified_at") or 0))
-    selected_path = str(item.get("workspace_path") or item.get("path") or "")
-    display_path = str(item.get("workspace_path") or selected_path)
-    source = str(item.get("path") or "")
-    if not source:
-        raise ValueError(f"Workspace file is not available: {display_path}")
-    from pathlib import Path
-
-    resolved = Path(source).expanduser().resolve()
-    if not resolved.is_file():
-        raise FileNotFoundError(f"Workspace file is not available: {display_path}")
-    if resolved.suffix.lower() != ".pdf":
-        raise ValueError("document_read accepts PDF files only.")
-    return resolved, display_path
+            ) from exc
+        raise ValueError("No uploaded PDF is available in the active workspace.") from exc
 
 
 def _answer(result: dict[str, Any], path: str) -> str:

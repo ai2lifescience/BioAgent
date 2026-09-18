@@ -18,9 +18,6 @@ def search_bio_database_tool(
     max_results: int = 5,
     operation: str | None = None,
     taxid: int | None = None,
-    download: bool = False,
-    file_format: str = "cif",
-    output_dir: str | None = None,
 ) -> dict[str, Any]:
     clean_database = database.strip().lower()
     clean_query = query.strip()
@@ -44,17 +41,11 @@ def search_bio_database_tool(
             clean_query,
             max_results=max_results,
             operation=operation,
-            download=download,
-            file_format=file_format,
-            output_dir=output_dir,
         )
     if clean_database == "alphafold":
         return query_alphafold(
             clean_query,
             max_results=max_results,
-            download=download,
-            output_dir=output_dir,
-            file_format=file_format,
         )
     allowed = "alphafold, interpro, kegg, pdb, quickgo, uniprot"
     raise ValueError(f"database must be one of: {allowed}.")

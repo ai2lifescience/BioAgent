@@ -1,4 +1,4 @@
-"""Evidence collection for biological agent outputs."""
+"""Evidence collection and bounded result projection for agent outputs."""
 
 from __future__ import annotations
 
@@ -6,8 +6,116 @@ from dataclasses import dataclass, field
 from datetime import date
 from typing import Any
 
-from .files import COMPACT_RESULT_KEYS, collect_output_paths
+RESULT_COUNT_KEYS = (
+    "matched_count",
+    "downloaded_count",
+    "record_count",
+    "source_count",
+    "chunk_count",
+    "citation_count",
+    "hit_count",
+    "atom_count",
+    "chain_count",
+    "residue_count",
+    "ligand_count",
+    "model_count",
+    "genome_length",
+    "feature_count",
+    "gene_count",
+    "cds_count",
+    "orf_count",
+    "bytes",
+    "returncode",
+)
+RESULT_ID_KEYS = ("collection_name", "rid", "pdb_id", "file_format")
+RESULT_PATH_KEYS = (
+    "fasta_path",
+    "fasta_paths",
+    "structure_path",
+    "structure_paths",
+    "metadata_path",
+    "metadata_paths",
+    "report_path",
+    "image_path",
+    "image_paths",
+    "genome_map_path",
+    "session_input_path",
+    "upload_path",
+    "runner_config_path",
+    "raw_config_path",
+    "config_path",
+    "metrics_path",
+    "bakta_json_path",
+    "inference_path",
+    "hypotheticals_path",
+    "plot_svg_path",
+    "plot_png_path",
+    "plot_path",
+    "output_dir",
+)
+COMPACT_RESULT_KEYS = (
+    "job_id",
+    "plan_id",
+    "logs",
+    "bundle_path",
+    "metrics",
+    "tables",
+    "needs_parameters",
+    "required_parameters",
+    "parameter_errors",
+    "tool",
+    "status",
+    "summary",
+    "needs_input",
+    "pipeline_name",
+    "presentation",
+    "requested_inputs",
+    "output_records",
+    "config_overrides",
+    "staged_config_paths",
+    "workspace_paths",
+    "sources",
+    "matches",
+    "groups",
+    "missing_values",
+    "dtypes",
+    "sample",
+    "changed_files",
+    "test_result",
+    "command",
+    "operation",
+    "source_count",
+    *RESULT_COUNT_KEYS,
+    *RESULT_ID_KEYS,
+    *RESULT_PATH_KEYS,
+)
 
+
+def collect_output_paths(value: Any) -> list[str]:
+    """Collect path-like output values for evidence summaries."""
+
+    paths: list[str] = []
+
+    def append(path: str) -> None:
+        if path and path not in paths:
+            paths.append(path)
+
+    def visit(item: Any, key: str = "") -> None:
+        if isinstance(item, dict):
+            for subkey, subitem in item.items():
+                visit(subitem, str(subkey))
+            return
+        if isinstance(item, list):
+            for subitem in item:
+                visit(subitem, key)
+            return
+        if isinstance(item, str) and (
+            key.endswith("_path") or key.endswith("_paths") or key in {"output_dir", "changed_files"}
+        ):
+            append(item)
+
+    visit(value)
+    return paths
 
 QUERY_KEYS = (
     "term",

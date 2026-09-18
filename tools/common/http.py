@@ -1,7 +1,13 @@
-"""Shared HTTP helpers for allowlisted biological database APIs."""
+"""Bounded HTTP transport shared by external tool adapters.
+
+This module owns transport mechanics only: HTTPS validation, retries, response
+size limits, and provenance timestamps. Each adapter supplies its own host
+allowlist and therefore keeps ownership of its external service policy.
+"""
 
 from __future__ import annotations
 
+from collections.abc import Collection
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 import time
@@ -14,44 +20,39 @@ import requests
 REQUEST_TIMEOUT = 30
 MAX_RESPONSE_BYTES = 10 * 1024 * 1024
 RETRY_STATUS_CODES = {429, 500, 502, 503, 504}
-ALLOWED_API_HOSTS = {
-    "alphafold.ebi.ac.uk",
-    "data.rcsb.org",
-    "files.rcsb.org",
-    "ftp.ebi.ac.uk",
-    "rest.kegg.jp",
-    "search.rcsb.org",
-    "www.alphafold.ebi.ac.uk",
-    "www.ebi.ac.uk",
-}
-USER_AGENT = "BioAgent/1.0 (biological database client)"
+DEFAULT_USER_AGENT = "BioAgent/1.0"
 
 
-def validate_api_url(url: str) -> str:
-    """Reject non-HTTPS and non-allowlisted API URLs."""
+def validate_https_url(url: str, *, allowed_hosts: Collection[str]) -> str:
+    """Reject non-HTTPS URLs and hosts outside the caller's policy."""
+
     parsed = urlparse(url)
-    hostname = (parsed.hostname or "").lower()
+    hostname = (parsed.hostname or "").lower().rstrip(".")
+    normalized_hosts = {str(host).lower().rstrip(".") for host in allowed_hosts}
     if parsed.scheme != "https":
-        raise ValueError("Biological database API URLs must use HTTPS.")
-    if hostname not in ALLOWED_API_HOSTS:
-        raise ValueError(f"Biological database API host is not allowlisted: {hostname or 'missing host'}.")
+        raise ValueError("External API URLs must use HTTPS.")
+    if hostname not in normalized_hosts:
+        raise ValueError(f"External API host is not allowlisted: {hostname or 'missing host'}.")
     return url
 
 
-def request_api(
+def request_http(
     method: str,
     url: str,
     *,
+    allowed_hosts: Collection[str],
     params: dict[str, Any] | None = None,
     json_data: dict[str, Any] | None = None,
     accept: str = "application/json",
+    user_agent: str = DEFAULT_USER_AGENT,
     timeout: int = REQUEST_TIMEOUT,
     retries: int = 2,
     max_response_bytes: int = MAX_RESPONSE_BYTES,
 ) -> requests.Response:
-    """Call an official API with bounded retries and response size."""
-    validate_api_url(url)
-    headers = {"Accept": accept, "User-Agent": USER_AGENT}
+    """Call an allowlisted HTTPS endpoint with bounded retries and size."""
+
+    validate_https_url(url, allowed_hosts=allowed_hosts)
+    headers = {"Accept": accept, "User-Agent": user_agent}
     response: requests.Response | None = None
     for attempt in range(retries + 1):
         response = requests.request(
@@ -67,17 +68,17 @@ def request_api(
         time.sleep(_retry_delay(response, attempt))
 
     if response is None:  # pragma: no cover - defensive guard
-        raise RuntimeError("Biological database API request produced no response.")
+        raise RuntimeError("HTTP request produced no response.")
     response.raise_for_status()
     content_length = response.headers.get("Content-Length")
     if content_length:
         try:
             if int(content_length) > max_response_bytes:
-                raise RuntimeError("Biological database API response exceeded the configured size limit.")
+                raise RuntimeError("HTTP response exceeded the configured size limit.")
         except ValueError:
             pass
     if len(response.content) > max_response_bytes:
-        raise RuntimeError("Biological database API response exceeded the configured size limit.")
+        raise RuntimeError("HTTP response exceeded the configured size limit.")
     return response
 
 
@@ -96,8 +97,21 @@ def _retry_delay(response: requests.Response, attempt: int) -> float:
 
 
 def response_provenance(url: str, operation: str) -> dict[str, str]:
+    """Return a common source record for an adapter response."""
+
     return {
         "endpoint": url,
         "operation": operation,
         "retrieved_at": datetime.now(timezone.utc).isoformat(),
     }
+
+
+__all__ = [
+    "DEFAULT_USER_AGENT",
+    "MAX_RESPONSE_BYTES",
+    "REQUEST_TIMEOUT",
+    "RETRY_STATUS_CODES",
+    "request_http",
+    "response_provenance",
+    "validate_https_url",
+]

@@ -58,17 +58,24 @@ ShellTool exported by `tools/runtime_tools`.
 
 | Workflow | Main tool or actions |
 | --- | --- |
-| `example_tool` | `echo` |
 | `pipeline_shell` | `bioagent-pipeline plan/run/status/wait/results/cancel` |
 | `ncbi_retrieval` | `ncbi_fetch` |
 | `database_lookup` | database search actions |
 | `pdb_download` | `pdb_download` |
+| `alphafold_download` | Download an AlphaFold structure file |
 | `sequence_analysis` | `sequence_analyze` |
 | `genome_map` | `genome_map` |
 | `protein_structure_analysis` | `protein_structure_analyze` |
 | `blast_search` | `blast_search` |
 | `file_inspection` | `file_inspect` |
+| `workspace_search` | Search uploaded text and PDF files |
+| `document_read` | Read selectable PDF pages |
+| `data_analysis` | Profile, describe, group, or plot tables |
+| `web_research` | Search public web pages with bounded excerpts |
+| `code_inspection` | Inspect or search workspace code |
+| `code_edit` / `code_test` | Approval-controlled workspace changes and tests |
 | `species_report` | literature retrieval, RAG, and report actions |
+| `biology_analysis` | Biopython transformations and GenBank features |
 
 The model selects tools from their descriptions and schemas. Biological
 calculations run in the workflow implementations; report synthesis uses SDK

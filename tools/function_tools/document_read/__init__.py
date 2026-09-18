@@ -4,23 +4,17 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from agents import RunContextWrapper, function_tool
+from agents import RunContextWrapper
 from pydantic import Field
 
 from harness.context import BioRunContext
-from tools.common.guardrails import TOOL_INPUT_GUARDRAIL, TOOL_OUTPUT_GUARDRAIL
-from tools.common.results import run_workflow, tool_error
+from tools.common.results import run_workflow
+from tools.common.tooling import bio_function_tool
 
 from .workflow import document_read as _workflow
 
 
-@function_tool(
-    strict_mode=True,
-    failure_error_function=tool_error,
-    tool_input_guardrails=[TOOL_INPUT_GUARDRAIL],
-    tool_output_guardrails=[TOOL_OUTPUT_GUARDRAIL],
-    timeout=300,
-)
+@bio_function_tool()
 async def document_read(
     ctx: RunContextWrapper[BioRunContext],
     path: Annotated[

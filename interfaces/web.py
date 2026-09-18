@@ -15,7 +15,7 @@ from urllib.parse import parse_qs, unquote, urlparse
 
 from Bio.PDB import MMCIFParser, PDBIO
 
-from tools.common.files import (
+from tools.workspace import (
     artifact_content_type,
     artifact_suffix_config,
     can_view_structure_artifact,
@@ -29,6 +29,7 @@ from interfaces.api import (
     list_session_messages,
     list_workspace_files,
     read_workspace_file,
+    update_session_metadata,
     write_workspace_file,
 )
 from harness.sandbox import relative_file_path
@@ -173,6 +174,34 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
             return
 
         self._handle_run()
+
+    def do_PATCH(self) -> None:
+        path = urlparse(self.path).path
+        prefix = "/sessions/"
+        if not path.startswith(prefix):
+            self._send_json({"error": "not found"}, status=404)
+            return
+        session_id = unquote(path[len(prefix):]).strip()
+        if not session_id or "/" in session_id:
+            self._send_json({"error": "session_id is required"}, status=400)
+            return
+        try:
+            payload = self._read_json()
+            title = payload.get("title") if "title" in payload else None
+            pinned = payload.get("pinned") if "pinned" in payload else None
+            if title is not None and not isinstance(title, str):
+                self._send_json({"error": "title must be a string"}, status=400)
+                return
+            if pinned is not None and type(pinned) is not bool:
+                self._send_json({"error": "pinned must be a boolean"}, status=400)
+                return
+            if title is None and pinned is None:
+                self._send_json({"error": "title or pinned is required"}, status=400)
+                return
+            result = update_session_metadata(session_id, title=title, pinned=pinned)
+            self._send_json(result)
+        except Exception as exc:
+            self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
 
     def _handle_approval(self) -> None:
         try:

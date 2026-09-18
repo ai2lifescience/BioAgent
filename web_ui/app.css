@@ -40,6 +40,10 @@ textarea {
   font: inherit;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .app {
   display: grid;
   grid-template-columns: 316px minmax(0, 1fr) 286px;
@@ -79,12 +83,24 @@ aside {
   width: 42px;
   height: 42px;
   border-radius: 8px;
-  background: var(--accent);
-  color: white;
+  background: transparent;
+  color: inherit;
   display: grid;
   place-items: center;
   font-weight: 780;
   font-size: 15px;
+}
+
+.brand-mark svg {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+.avatar-icon {
+  width: 33px;
+  height: 33px;
+  display: block;
 }
 
 .brand-title {
@@ -165,8 +181,7 @@ aside {
   gap: 5px;
 }
 
-.session-select,
-.session-delete {
+.session-select {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fff;
@@ -202,33 +217,14 @@ aside {
   gap: 6px;
 }
 
-.session-delete {
-  width: 34px;
-  min-height: 34px;
-  align-self: center;
-  padding: 0;
-  color: var(--error);
-  font-size: 19px;
-  font-weight: 720;
-  line-height: 1;
-  opacity: 0;
-}
-
 .session-item.active .session-select {
   border-color: #a7d8d0;
   background: var(--accent-soft);
 }
 
-.session-select:hover,
-.session-delete:hover {
+.session-select:hover {
   border-color: var(--line-strong);
   background: var(--surface-soft);
-}
-
-.session-item:hover .session-delete,
-.session-item.active .session-delete,
-.session-delete:focus-visible {
-  opacity: 1;
 }
 
 .session-empty {
@@ -842,8 +838,8 @@ header {
 }
 
 .assistant .avatar {
-  background: var(--accent);
-  color: white;
+  background: transparent;
+  color: inherit;
 }
 
 .bubble {
@@ -1502,12 +1498,6 @@ pre {
   }
 }
 
-@media (hover: none) {
-  .session-delete {
-    opacity: 1;
-  }
-}
-
 @media (max-width: 560px) {
   body {
     font-size: 15px;
@@ -1595,8 +1585,8 @@ aside {
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: linear-gradient(145deg, #0d9684 0%, #05655d 100%);
-  box-shadow: 0 7px 14px rgba(8, 127, 114, 0.2);
+  background: transparent;
+  box-shadow: none;
   letter-spacing: -0.04em;
 }
 
@@ -1673,8 +1663,7 @@ label {
   gap: 3px;
 }
 
-.session-select,
-.session-delete {
+.session-select {
   border-color: transparent;
   background: transparent;
 }
@@ -1685,8 +1674,7 @@ label {
   border-radius: 9px;
 }
 
-.session-select:hover,
-.session-delete:hover {
+.session-select:hover {
   border-color: var(--line);
   background: var(--surface-soft);
 }
@@ -1704,10 +1692,115 @@ label {
   font-size: 11px;
 }
 
-.session-delete {
-  width: 28px;
-  min-height: 28px;
-  font-size: 17px;
+/* Session actions stay quiet until a row is focused, keeping the list readable. */
+.session-item {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.session-title-row {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 5px;
+}
+
+.session-pinned-badge {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: var(--accent);
+}
+
+.session-pinned-badge svg {
+  width: 13px;
+  height: 13px;
+}
+
+.session-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.session-more {
+  display: grid;
+  width: 29px;
+  height: 29px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.session-more svg {
+  display: block;
+}
+
+.session-more:hover,
+.session-more:focus-visible,
+.session-more[aria-expanded="true"] {
+  border-color: var(--line);
+  color: var(--ink);
+  background: var(--surface-soft);
+}
+
+.session-menu {
+  position: fixed;
+  z-index: 30;
+  display: grid;
+  min-width: 148px;
+  gap: 2px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 12px 28px rgba(22, 42, 54, 0.16);
+}
+
+/* The menu has an explicit display mode, so preserve the native hidden state. */
+.session-menu[hidden] {
+  display: none !important;
+}
+
+.session-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  width: 100%;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 7px;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  text-align: left;
+}
+
+.session-menu-item svg {
+  flex: 0 0 auto;
+}
+
+.session-menu-item:hover,
+.session-menu-item:focus-visible {
+  background: var(--surface-soft);
+}
+
+.session-menu-delete {
+  color: var(--error);
+}
+
+.session-menu-x {
+  display: grid;
+  width: 15px;
+  height: 15px;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 720;
+  line-height: 1;
 }
 
 .panel-title-row {

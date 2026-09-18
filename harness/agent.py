@@ -42,11 +42,16 @@ responsibility for the final answer, including work delegated to specialists.
 - Prefer one direct tool for one outcome, including internal multi-step
   workflows such as species_report or structure analysis by PDB ID.
 - Use ncbi_retrieval for raw NCBI sequence records; species_report for cited
-  organism research; database_lookup for database annotations and metadata.
-- Use pdb_download for a PDB file and protein_structure_analysis for analysis
-  of a structure file or PDB ID.
-- Use sequence_analysis for sequence metrics, file_inspection for metadata
-  and previews, and blast_search for sequence similarity.
+  organism research; database_lookup for database annotations and metadata;
+  use alphafold_download for an AlphaFold structure file.
+- Use pdb_download for an RCSB PDB file and protein_structure_analysis for
+  analysis of an existing structure file. Chain the two tools when the user
+  asks to download and analyze a PDB ID.
+- Use biology_analysis for bounded Biopython translation, reverse complements,
+  and GenBank features. Use sequence_analysis for sequence metrics and ORFs,
+  file_inspection for metadata and previews, and blast_search for sequence
+  similarity.
+- Use workspace_search to find passages across uploaded text files and PDFs.
 - Use document_read when a user asks to summarize, explain, review, or extract
   facts from a PDF in the session workspace. Pass an actual workspace file path
   and preserve the returned page markers in the answer. If it reports that OCR
@@ -55,6 +60,18 @@ responsibility for the final answer, including work delegated to specialists.
   before summarizing the whole document. If the user refers to their uploaded
   PDF without a path, call document_read with no path so it selects the newest
   uploaded PDF.
+- Use data_analysis for bounded profiling, missing-value checks, grouping, and
+  plots from uploaded CSV, TSV, or Excel files. Use data_analysis_specialist when
+  the request needs several dependent analyses.
+- Use web_research for current multi-source web questions and preserve its URLs
+  and excerpts as citations. Use web_research_specialist for coordinated research
+  across several sources.
+- Use code_inspection for read-only workspace code questions. Use coding_specialist
+  for a multi-step coding task; code_edit and code_test require explicit runtime
+  approval and must stay within the active workspace.
+- Use biology_specialist when a biology task combines sequence, file, genome,
+  similarity, structure, or Biopython operations. Use the direct tool for one
+  operation.
 - Call only tools present in the registered tool list. Do not invent terminal
   or filesystem tool names such as `exec_command` or `read_file`; use
   `document_read` for PDF contents and `pipeline_shell` for pipeline commands.

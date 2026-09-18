@@ -8,10 +8,13 @@ from typing import Any
 
 import requests
 
-from tools.common.http import request_api, response_provenance, validate_api_url
+from tools.common.http import request_http, response_provenance, validate_https_url
 
 
 ALPHAFOLD_API_BASE = "https://alphafold.ebi.ac.uk/api"
+ALPHAFOLD_ALLOWED_HOSTS = frozenset(
+    {"alphafold.ebi.ac.uk", "www.alphafold.ebi.ac.uk", "ftp.ebi.ac.uk"}
+)
 ACCESSION_PATTERN = re.compile(
     r"^(?:[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9](?:[A-Z][A-Z0-9]{2}[0-9]){1,2})$",
     re.IGNORECASE,
@@ -36,7 +39,7 @@ def query_alphafold(
 
     url = f"{ALPHAFOLD_API_BASE}/prediction/{accession}"
     try:
-        payload = request_api("GET", url).json()
+        payload = request_http("GET", url, allowed_hosts=ALPHAFOLD_ALLOWED_HOSTS).json()
     except requests.HTTPError as exc:
         if exc.response is not None and exc.response.status_code == 404:
             return {
@@ -58,8 +61,13 @@ def query_alphafold(
         selected_url = records[0].get(f"{clean_format}_url")
         if not selected_url:
             raise RuntimeError(f"AlphaFold entry did not provide a {clean_format.upper()} download URL.")
-        validate_api_url(str(selected_url))
-        response = request_api("GET", str(selected_url), accept="application/octet-stream")
+        validate_https_url(str(selected_url), allowed_hosts=ALPHAFOLD_ALLOWED_HOSTS)
+        response = request_http(
+            "GET",
+            str(selected_url),
+            allowed_hosts=ALPHAFOLD_ALLOWED_HOSTS,
+            accept="application/octet-stream",
+        )
         destination = Path(output_dir or "runtime/alphafold")
         destination.mkdir(parents=True, exist_ok=True)
         entry_id = re.sub(r"[^A-Za-z0-9_.-]", "_", str(records[0].get("entry_id") or accession))

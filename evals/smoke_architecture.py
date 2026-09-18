@@ -15,9 +15,13 @@ from openai.types.responses.response_function_shell_tool_call import ResponseFun
 from harness import runtime
 from harness.agent import create_agent
 from tools.agent_tools import (
+    build_coding_specialist,
+    build_data_analysis_specialist,
+    build_document_specialist,
     build_pipeline_specialist,
     build_retrieval_specialist,
-    build_sequence_specialist,
+    build_biology_specialist,
+    build_web_research_specialist,
 )
 from tools.function_tools import FUNCTION_TOOLS
 
@@ -26,13 +30,17 @@ def main() -> int:
     tools = list(FUNCTION_TOOLS)
     agent = create_agent("gpt-oss", model=ScriptedModel())
     names = {tool.name for tool in agent.tools}
-    expected = {"sequence_analysis", "database_lookup", "pdb_download", "file_inspection", "document_read", "pipeline_shell", "species_report", "sequence_specialist", "retrieval_specialist", "pipeline_specialist"}
+    expected = {"sequence_analysis", "biology_analysis", "database_lookup", "pdb_download", "alphafold_download", "file_inspection", "document_read", "workspace_search", "data_analysis", "web_research", "code_inspection", "code_edit", "code_test", "pipeline_shell", "species_report", "biology_specialist", "retrieval_specialist", "pipeline_specialist", "document_specialist", "data_analysis_specialist", "web_research_specialist", "coding_specialist"}
     assert expected <= names
     assert agent.name == "BioAgent"
     specialist_builders = {
-        build_sequence_specialist: "sequence_specialist",
+        build_biology_specialist: "biology_specialist",
         build_retrieval_specialist: "retrieval_specialist",
         build_pipeline_specialist: "pipeline_specialist",
+        build_document_specialist: "document_specialist",
+        build_data_analysis_specialist: "data_analysis_specialist",
+        build_web_research_specialist: "web_research_specialist",
+        build_coding_specialist: "coding_specialist",
     }
     assert {builder(ScriptedModel()).name for builder in specialist_builders} == set(specialist_builders.values())
 
@@ -49,13 +57,13 @@ def main() -> int:
     assert any(event["event"] == "guardrail_completed" for event in result["trace"])
 
     specialist_model = ScriptedModel([
-        ModelStep(output=[function_call("sequence_specialist", {"input": "Analyze ACGT"}, call_id="specialist-1")]),
+        ModelStep(output=[function_call("biology_specialist", {"input": "Analyze ACGT"}, call_id="specialist-1")]),
         ModelStep(output=[function_call("sequence_analysis", {"sequence": "ACGT"}, call_id="specialist-2")]),
         ModelStep(output=[assistant_message("The sequence has 50% GC content.")]),
         ModelStep(output=[assistant_message("Specialist report: 50% GC content.")]),
     ])
     specialist_result = asyncio.run(runtime.async_run_bioagent(
-        "Use the sequence specialist for ACGT", session_id="smoke_specialist", model=specialist_model
+        "Use the biology specialist for ACGT", session_id="smoke_specialist", model=specialist_model
     ))
     assert specialist_result["answer"] == "Specialist report: 50% GC content."
     assert specialist_result["evidence"]["tools"] == ["sequence_analyze"]

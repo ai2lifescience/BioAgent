@@ -57,6 +57,42 @@ const PAUSE_ICON = `
     <rect x="7" y="6" width="3.5" height="12" rx="1" fill="currentColor"/>
     <rect x="13.5" y="6" width="3.5" height="12" rx="1" fill="currentColor"/>
   </svg>`;
+const BIOAGENT_ICON = `
+  <svg class="avatar-icon" viewBox="0 0 512 512" fill="none" aria-hidden="true">
+    <defs><linearGradient id="bsod-screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#159BEA"/><stop offset="1" stop-color="#1486D8"/></linearGradient></defs>
+    <path d="M256 112c-4-38 10-58 34-67" stroke="#25283A" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="300" cy="40" r="18" fill="#159BEA" stroke="#25283A" stroke-width="8"/>
+    <rect x="79" y="164" width="35" height="118" rx="17" fill="#D3D2D1" stroke="#25283A" stroke-width="9"/>
+    <rect x="398" y="164" width="35" height="118" rx="17" fill="#D3D2D1" stroke="#25283A" stroke-width="9"/>
+    <rect x="101" y="126" width="310" height="213" rx="48" fill="url(#bsod-screen)" stroke="#25283A" stroke-width="10"/>
+    <path d="M128 162c23-19 52-27 87-27h94c34 0 62 8 77 25" stroke="#63C6F3" stroke-width="9" stroke-linecap="round" opacity=".7"/>
+    <rect x="181" y="204" width="13" height="52" rx="6.5" fill="#202332"/>
+    <rect x="318" y="204" width="13" height="52" rx="6.5" fill="#202332"/>
+    <ellipse cx="166" cy="275" rx="23" ry="12" fill="#F58FAE"/>
+    <ellipse cx="346" cy="275" rx="23" ry="12" fill="#F58FAE"/>
+    <path d="M241 275c7 9 23 9 30 0" stroke="#63D2F5" stroke-width="8" stroke-linecap="round"/>
+    <path d="M104 319c-23 17-28 44-14 61 9 11 23 11 30 1l20-31" fill="#D3D2D1" stroke="#25283A" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M408 319c23 17 28 44 14 61-9 11-23 11-30 1l-20-31" fill="#D3D2D1" stroke="#25283A" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="171" y="331" width="170" height="105" rx="25" fill="#F1F0ED" stroke="#25283A" stroke-width="9"/>
+    <rect x="224" y="352" width="64" height="53" rx="8" fill="#168EDC" stroke="#25283A" stroke-width="7"/>
+    <rect x="244" y="368" width="24" height="18" rx="3" fill="#82D8F5"/>
+    <path d="M190 433v39c0 9 7 16 16 16h31v-55" fill="#C9C8C6" stroke="#25283A" stroke-width="9" stroke-linejoin="round"/>
+    <path d="M322 433v39c0 9-7 16-16 16h-31v-55" fill="#C9C8C6" stroke="#25283A" stroke-width="9" stroke-linejoin="round"/>
+  </svg>`;
+const PIN_ICON = `
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="m9 4 6 0 1 5 3 3v1H5v-1l3-3 1-5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M12 13v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+  </svg>`;
+const EDIT_ICON = `
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="m4 16.5-.8 4.3 4.3-.8L19 8.5 15.5 5 4 16.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="m13.8 6.7 3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+  </svg>`;
+const MORE_ICON = `
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/>
+  </svg>`;
 
 async function loadConfig() {
   const response = await fetch("/config");
@@ -169,6 +205,7 @@ function createSession(title = "New chat") {
     message_count: 0,
     created_at: timestamp,
     updated_at: timestamp,
+    pinned: false,
   };
 }
 
@@ -182,7 +219,15 @@ function normalizeSession(raw) {
     message_count: Number(raw.message_count || 0),
     created_at: raw.created_at || nowIso(),
     updated_at: raw.updated_at || raw.created_at || nowIso(),
+    pinned: Boolean(raw.pinned),
   };
+}
+
+function sortedSessions() {
+  return [...sessions].sort((left, right) => {
+    if (left.pinned !== right.pinned) return left.pinned ? -1 : 1;
+    return new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime();
+  });
 }
 
 async function loadSessions() {
@@ -273,7 +318,7 @@ function emptyStateHtml() {
           </div>
           <div class="empty-grid">
             <button class="example-button" data-example="What is the GC content of this sequence?">Analyze a sequence</button>
-            <button class="example-button" data-example="Analyze the structure of 3GOU">Inspect a structure</button>
+            <button class="example-button" data-example="Download and analyze PDB structure 3GOU">Inspect a structure</button>
             <button class="example-button" data-example="Download 10 NCBI records for PhiX174 genes A G">Retrieve public data</button>
             <button class="example-button" data-example="List the files in my workspace and describe what they contain.">Explore workspace files</button>
             <button class="example-button" data-example="Search UniProt for BRCA1 human">Search UniProt</button>
@@ -346,16 +391,26 @@ function renderSessionList() {
     sessionList.innerHTML = `<div class="session-empty">No saved chats.</div>`;
     return;
   }
-  for (const session of sessions) {
+  for (const session of sortedSessions()) {
     const item = document.createElement("div");
-    item.className = `session-item ${session.id === activeSessionId ? "active" : ""}`;
+    item.className = `session-item ${session.id === activeSessionId ? "active" : ""} ${session.pinned ? "pinned" : ""}`;
     item.dataset.sessionId = session.id;
     item.innerHTML = `
       <button class="session-select" type="button">
-        <span class="session-title">${escapeHtml(session.title || "New chat")}</span>
+        <span class="session-title-row">
+          <span class="session-title">${escapeHtml(session.title || "New chat")}</span>
+          ${session.pinned ? `<span class="session-pinned-badge" aria-label="Pinned">${PIN_ICON}</span>` : ""}
+        </span>
         <span class="session-meta">${escapeHtml(formatSessionMeta(session))}</span>
       </button>
-      <button class="session-delete" type="button" aria-label="Delete ${escapeHtml(session.title || "session")}" title="Delete session">&times;</button>
+      <div class="session-actions">
+        <button class="session-more" type="button" data-session-menu aria-haspopup="menu" aria-expanded="false" aria-label="Actions for ${escapeHtml(session.title || "session")}" title="Session actions">${MORE_ICON}</button>
+        <div class="session-menu" role="menu" hidden>
+          <button class="session-menu-item" type="button" role="menuitem" data-session-pin aria-pressed="${session.pinned ? "true" : "false"}">${PIN_ICON}<span>${session.pinned ? "Unpin chat" : "Pin chat"}</span></button>
+          <button class="session-menu-item" type="button" role="menuitem" data-session-rename>${EDIT_ICON}<span>Rename chat</span></button>
+          <button class="session-menu-item session-menu-delete" type="button" role="menuitem" data-session-delete><span class="session-menu-x" aria-hidden="true">&times;</span><span>Delete chat</span></button>
+        </div>
+      </div>
     `;
     sessionList.appendChild(item);
   }
@@ -427,6 +482,71 @@ async function deleteSessionById(sessionId) {
   } finally {
     setSessionLoading(false);
   }
+}
+
+async function updateSessionById(sessionId, changes) {
+  if (isRunning || isSessionLoading || !sessionId) return;
+  const session = sessions.find((item) => item.id === sessionId);
+  if (!session) return;
+  setSessionLoading(true);
+  try {
+    const response = await fetch(`/sessions/${encodeURIComponent(sessionId)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(changes),
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(payload.error || `HTTP ${response.status}`);
+    if (Object.prototype.hasOwnProperty.call(changes, "title")) session.title = String(payload.title || "New chat");
+    if (Object.prototype.hasOwnProperty.call(changes, "pinned")) session.pinned = Boolean(payload.pinned);
+    session.updated_at = payload.updated_at || nowIso();
+    renderSessionList();
+  } catch (error) {
+    renderMessage("assistant", `Could not update this chat: ${error.message}`);
+  } finally {
+    setSessionLoading(false);
+  }
+}
+
+async function renameSessionById(sessionId) {
+  const session = sessions.find((item) => item.id === sessionId);
+  if (!session || isRunning || isSessionLoading) return;
+  const title = window.prompt("Rename chat", session.title || "New chat");
+  if (title === null) return;
+  const cleaned = title.replace(/\s+/g, " ").trim().slice(0, 80);
+  if (!cleaned || cleaned === session.title) return;
+  await updateSessionById(sessionId, { title: cleaned });
+}
+
+async function toggleSessionPin(sessionId) {
+  const session = sessions.find((item) => item.id === sessionId);
+  if (!session) return;
+  await updateSessionById(sessionId, { pinned: !session.pinned });
+}
+
+function closeSessionMenus() {
+  sessionList.querySelectorAll(".session-menu:not([hidden])").forEach((menu) => {
+    menu.hidden = true;
+    const button = menu.parentElement?.querySelector("[data-session-menu]");
+    button?.setAttribute("aria-expanded", "false");
+  });
+}
+
+function openSessionMenu(item, button) {
+  const menu = item.querySelector(".session-menu");
+  if (!menu) return;
+  const wasOpen = !menu.hidden;
+  closeSessionMenus();
+  if (wasOpen) return;
+  menu.hidden = false;
+  const buttonRect = button.getBoundingClientRect();
+  const menuRect = menu.getBoundingClientRect();
+  const left = Math.max(8, Math.min(buttonRect.right - menuRect.width, window.innerWidth - menuRect.width - 8));
+  const top = Math.max(8, Math.min(buttonRect.bottom + 4, window.innerHeight - menuRect.height - 8));
+  menu.style.left = `${left}px`;
+  menu.style.top = `${top}px`;
+  button.setAttribute("aria-expanded", "true");
+  menu.querySelector("[role=menuitem]")?.focus();
 }
 
 function startNewChat() {
@@ -1055,6 +1175,9 @@ function debugStatus(result) {
 function toolLabel(tool) {
   const labels = {
     database_lookup: "Database lookup",
+    biology_analysis: "Transform sequence / GenBank",
+    alphafold_download: "Download AlphaFold structure",
+    biology_specialist: "Biology specialist",
     document_read: "Read document",
     file_inspection: "Inspect file",
     genome_map: "Create genome map",
@@ -1064,7 +1187,6 @@ function toolLabel(tool) {
     pipeline_specialist: "Pipeline specialist",
     protein_structure_analysis: "Analyze protein structure",
     sequence_analysis: "Analyze sequence",
-    sequence_specialist: "Sequence specialist",
     retrieval_specialist: "Retrieval specialist",
     species_report: "Write species report",
     blast_search: "BLAST search",
@@ -1354,7 +1476,7 @@ function renderMessageText(role, text) {
 function renderMessage(role, text, result = null) {
   const message = document.createElement("article");
   message.className = `message ${role}`;
-  const avatar = role === "assistant" ? "BA" : "You";
+  const avatar = role === "assistant" ? BIOAGENT_ICON : "You";
   message.innerHTML = `
     <div class="avatar">${avatar}</div>
     <div class="bubble">
@@ -1886,11 +2008,32 @@ function bindEvents() {
     const item = event.target.closest(".session-item");
     if (!item) return;
     const sessionId = item.dataset.sessionId;
-    if (event.target.closest(".session-delete")) {
+    if (event.target.closest("[data-session-menu]")) {
+      openSessionMenu(item, event.target.closest("[data-session-menu]"));
+      return;
+    }
+    if (event.target.closest("[data-session-pin]")) {
+      closeSessionMenus();
+      toggleSessionPin(sessionId);
+      return;
+    }
+    if (event.target.closest("[data-session-rename]")) {
+      closeSessionMenus();
+      renameSessionById(sessionId);
+      return;
+    }
+    if (event.target.closest("[data-session-delete]")) {
+      closeSessionMenus();
       deleteSessionById(sessionId);
       return;
     }
     switchSession(sessionId);
+  });
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".session-item")) closeSessionMenus();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeSessionMenus();
   });
 }
 

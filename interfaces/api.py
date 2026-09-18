@@ -8,7 +8,7 @@ from typing import Any, Callable
 from agents import SQLiteSession
 
 from harness import runtime
-from harness.runtime import delete_session, list_sessions, resume_bioagent, run_bioagent
+from harness.runtime import delete_session, list_sessions, resume_bioagent, run_bioagent, update_session
 from harness.sandbox import delete_file, list_files, open_workspace, read_file, upload_file
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 
@@ -32,6 +32,16 @@ def handle_approval(
 ) -> dict[str, Any]:
     """Approve or reject the pending SDK tool call for a session."""
     return resume_bioagent(session_id, approved, approval_id, log_fn=log_fn)
+
+
+def update_session_metadata(
+    session_id: str,
+    *,
+    title: str | None = None,
+    pinned: bool | None = None,
+) -> dict[str, Any]:
+    """Rename or pin a conversation in the application session index."""
+    return update_session(session_id, title=title, pinned=pinned)
 
 
 def list_session_messages(session_id: str) -> dict[str, Any]:

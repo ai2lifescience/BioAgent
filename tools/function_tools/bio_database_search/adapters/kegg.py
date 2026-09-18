@@ -8,10 +8,11 @@ import time
 from typing import Any
 from urllib.parse import quote
 
-from tools.common.http import request_api, response_provenance
+from tools.common.http import request_http, response_provenance
 
 
 KEGG_BASE_URL = "https://rest.kegg.jp"
+KEGG_ALLOWED_HOSTS = frozenset({"rest.kegg.jp"})
 ALLOWED_OPERATIONS = {"info", "list", "find", "get", "conv", "link"}
 _SAFE_COMPONENT = re.compile(r"^[A-Za-z0-9_.:+\- ]+$")
 _RATE_LOCK = Lock()
@@ -39,7 +40,12 @@ def query_kegg(
     url = f"{KEGG_BASE_URL}/{clean_operation}/{encoded}"
 
     _throttle()
-    response = request_api("GET", url, accept="text/plain")
+    response = request_http(
+        "GET",
+        url,
+        allowed_hosts=KEGG_ALLOWED_HOSTS,
+        accept="text/plain",
+    )
     raw_text = response.text
     limit = max(1, min(int(max_results), 100))
     records = _parse_kegg_response(clean_operation, raw_text, limit)

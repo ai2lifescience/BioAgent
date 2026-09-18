@@ -1,6 +1,3 @@
-- prompt: "Please test tool calling by running the example tool with message hello and tag smoke."
-  expected_workflow: example_tool
-
 - prompt: "download 10 records phiX174 genes A G"
   expected_workflow: ncbi_retrieval
 
@@ -31,10 +28,10 @@
     - pdb_download
     - database_lookup
 
-- prompt: "Analyze the structure of 3GOU"
-  expected_workflow: protein_structure_analysis
+- prompt: "Download PDB structure 3GOU"
+  expected_workflow: pdb_download
   forbidden_workflows:
-    - pdb_download
+    - protein_structure_analysis
 
 - prompt: "Calculate GC content and detect ORFs in this FASTA file"
   expected_workflow: sequence_analysis

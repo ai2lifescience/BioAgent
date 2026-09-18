@@ -2,10 +2,26 @@
 
 from agents import FunctionTool, Model
 
-from .pipeline_specialist import build_pipeline_specialist
 from .registry import SPECIALIST_BUILDERS, SPECIALIST_GROUPS, build_specialist_tools
-from .retrieval_specialist import build_retrieval_specialist
-from .sequence_specialist import build_sequence_specialist
+from .specialist import (
+    build_coding,
+    build_data_analysis,
+    build_document,
+    build_pipeline,
+    build_retrieval,
+    build_biology,
+    build_web_research,
+)
+
+# Stable public aliases for callers that already use the SDK tool-oriented
+# names. New code can use the shorter builders above.
+build_coding_specialist = build_coding
+build_data_analysis_specialist = build_data_analysis
+build_document_specialist = build_document
+build_pipeline_specialist = build_pipeline
+build_retrieval_specialist = build_retrieval
+build_biology_specialist = build_biology
+build_web_research_specialist = build_web_research
 
 
 def build_agent_tools(model: Model | str) -> list[FunctionTool]:
@@ -18,7 +34,18 @@ __all__ = [
     "SPECIALIST_GROUPS",
     "build_agent_tools",
     "build_pipeline_specialist",
+    "build_coding_specialist",
+    "build_data_analysis_specialist",
+    "build_document_specialist",
     "build_retrieval_specialist",
-    "build_sequence_specialist",
+    "build_biology_specialist",
+    "build_web_research_specialist",
+    "build_coding",
+    "build_data_analysis",
+    "build_document",
+    "build_pipeline",
+    "build_retrieval",
+    "build_biology",
+    "build_web_research",
     "build_specialist_tools",
 ]

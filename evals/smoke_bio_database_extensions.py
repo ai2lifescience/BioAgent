@@ -16,7 +16,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from tools.function_tools.bio_database_search.adapters.alphafold import query_alphafold
-from tools.common.http import request_api, validate_api_url
+from tools.common.http import request_http, validate_https_url
 from tools.function_tools.bio_database_search.adapters.interpro import query_interpro
 from tools.function_tools.bio_database_search.adapters.kegg import query_kegg
 from tools.function_tools.pdb_download.client import query_pdb
@@ -146,14 +146,14 @@ def main() -> int:
     assert missing["warnings"]
 
     try:
-        validate_api_url("http://www.ebi.ac.uk/not-https")
+        validate_https_url("http://www.ebi.ac.uk/not-https", allowed_hosts={"www.ebi.ac.uk"})
     except ValueError as exc:
         assert "HTTPS" in str(exc)
     else:
         raise AssertionError("Non-HTTPS database URL was accepted.")
 
     try:
-        validate_api_url("https://example.invalid/api")
+        validate_https_url("https://example.invalid/api", allowed_hosts={"www.ebi.ac.uk"})
     except ValueError as exc:
         assert "allowlisted" in str(exc)
     else:
@@ -162,7 +162,12 @@ def main() -> int:
     oversized = FakeResponse(content=b"12345")
     with _single_response(oversized):
         try:
-            request_api("GET", "https://www.ebi.ac.uk/test", max_response_bytes=4)
+            request_http(
+                "GET",
+                "https://www.ebi.ac.uk/test",
+                allowed_hosts={"www.ebi.ac.uk"},
+                max_response_bytes=4,
+            )
         except RuntimeError as exc:
             assert "size limit" in str(exc)
         else:

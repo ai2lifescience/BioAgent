@@ -1,4 +1,10 @@
-"""Assemble the tool surface supplied to the root Agents SDK Agent."""
+"""Assemble the complete tool surface supplied to the root SDK Agent.
+
+This is the application-level registry.  The narrower
+``tools.agent_tools.registry`` only assembles nested specialists; keeping the
+two boundaries explicit prevents specialist construction from being mixed
+with function, hosted, or runtime tool registration.
+"""
 
 from agents import Model
 

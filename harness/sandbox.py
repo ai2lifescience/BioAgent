@@ -22,7 +22,7 @@ from agents.sandbox.sandboxes.unix_local import UnixLocalSandboxClient
 from agents.sandbox.session.base_sandbox_session import BaseSandboxSession
 from agents.sandbox.snapshot import NoopSnapshotSpec
 
-from tools.common.files import artifact_content_type, artifact_kind
+from tools.workspace import workspace_file_metadata
 from .tracing import configure_tracing
 
 if TYPE_CHECKING:
@@ -106,8 +106,7 @@ async def list_files(session: BaseSandboxSession) -> list[dict]:
                     "name": path.name,
                     "size": entry.size,
                     "modified_at": path.stat().st_mtime_ns,
-                    "kind": "upload" if relative.startswith("uploads/") else artifact_kind(str(path), "path") or "file",
-                    "content_type": artifact_content_type(path),
+                    **workspace_file_metadata(path, uploaded=relative.startswith("uploads/")),
                 })
     return sorted(files, key=lambda item: (item["modified_at"], item["path"]))
 
@@ -125,9 +124,13 @@ async def upload_file(session: BaseSandboxSession, filename: str, data: bytes) -
         if project_path.is_relative_to(PROJECT_ROOT)
         else str(project_path)
     )
-    return {"path": display_path,
-            "workspace_path": path.as_posix(), "name": name, "size": len(data),
-            "kind": "upload", "content_type": artifact_content_type(path)}
+    return {
+        "path": display_path,
+        "workspace_path": path.as_posix(),
+        "name": name,
+        "size": len(data),
+        **workspace_file_metadata(path, uploaded=True),
+    }
 
 
 async def read_file(session: BaseSandboxSession, path: str) -> bytes:

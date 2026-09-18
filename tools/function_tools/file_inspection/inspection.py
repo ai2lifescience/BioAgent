@@ -6,9 +6,6 @@ import csv
 from pathlib import Path
 from typing import Any
 
-from tools.function_tools.sequence_analysis.analysis import parse_fasta_text
-
-
 def inspect_bio_file(path: str, max_preview_lines: int = 20) -> dict[str, Any]:
     file_path = Path(path)
     if not file_path.exists():
@@ -28,13 +25,12 @@ def inspect_bio_file(path: str, max_preview_lines: int = 20) -> dict[str, Any]:
     }
 
     if suffix in {".fasta", ".fa", ".fna", ".faa"} or text.lstrip().startswith(">"):
-        records = parse_fasta_text(text)
+        records = _parse_fasta_text(text)
         result.update(
             {
                 "file_type": "fasta",
                 "record_count": len(records),
                 "sequence_ids": [record["id"] for record in records[:50]],
-                "total_sequence_length": sum(len(record["sequence"]) for record in records),
             }
         )
     elif suffix in {".csv", ".tsv"}:
@@ -52,3 +48,25 @@ def inspect_bio_file(path: str, max_preview_lines: int = 20) -> dict[str, Any]:
 
     return result
 
+
+def _parse_fasta_text(text: str) -> list[dict[str, str]]:
+    """Parse only enough FASTA structure for metadata inspection."""
+    records: list[dict[str, str]] = []
+    record_id = "sequence_1"
+    sequence: list[str] = []
+    seen_header = False
+    for line in text.splitlines():
+        clean = line.strip()
+        if not clean:
+            continue
+        if clean.startswith(">"):
+            if seen_header or sequence:
+                records.append({"id": record_id, "sequence": "".join(sequence)})
+            seen_header = True
+            record_id = clean[1:].split(None, 1)[0] or f"sequence_{len(records) + 1}"
+            sequence = []
+        else:
+            sequence.append("".join(clean.split()))
+    if seen_header or sequence:
+        records.append({"id": record_id, "sequence": "".join(sequence)})
+    return records

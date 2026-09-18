@@ -273,6 +273,16 @@ def delete_session(session_id: str) -> bool:
     return deleted
 
 
+def update_session(
+    session_id: str,
+    *,
+    title: str | None = None,
+    pinned: bool | None = None,
+) -> dict[str, Any]:
+    """Update a session title or pin state in application metadata."""
+    return STATE_STORE.update_session(session_id, title=title, pinned=pinned)
+
+
 async def async_list_sessions() -> list[dict[str, Any]]:
     """List metadata with message counts read from the SDK session store."""
     sessions = STATE_STORE.list_sessions()

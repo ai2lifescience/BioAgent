@@ -5,10 +5,11 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from tools.common.http import request_api, response_provenance
+from tools.common.http import request_http, response_provenance
 
 
 INTERPRO_BASE_URL = "https://www.ebi.ac.uk/interpro/api"
+INTERPRO_ALLOWED_HOSTS = frozenset({"www.ebi.ac.uk"})
 INTERPRO_ACCESSION = re.compile(r"^IPR\d{6}$", re.IGNORECASE)
 PROTEIN_ACCESSION = re.compile(
     r"^(?:[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9](?:[A-Z][A-Z0-9]{2}[0-9]){1,2})$",
@@ -46,7 +47,12 @@ def query_interpro(
         params = {"search": clean_query, "page_size": limit}
         operation_name = "entry_search"
 
-    payload = request_api("GET", url, params=params).json()
+    payload = request_http(
+        "GET",
+        url,
+        allowed_hosts=INTERPRO_ALLOWED_HOSTS,
+        params=params,
+    ).json()
     raw_results = payload.get("results", []) if isinstance(payload, dict) else []
     if isinstance(payload, dict) and not raw_results and payload.get("metadata"):
         raw_results = [payload]

@@ -27,6 +27,7 @@ BioAgent function, specialist, and runtime tools
         |
         +-- biological databases and literature
         +-- sequence, BLAST, genome, and structure analysis
+        +-- workspace documents, bounded data analysis, web research, and coding
         +-- file inspection and report writing
         +-- RAG and OpenRouter embeddings
         +-- approved pipeline execution and result collection
@@ -58,6 +59,9 @@ live under `tools/function_tools/species_report/reporting/`.
   per-session workspace. The SDK supplies filesystem capabilities; the
   approval-controlled `pipeline_shell` ShellTool is the command-execution
   boundary.
+- `tools/workspace/` owns safe workspace paths and small file metadata helpers
+  for the SDK sandbox listing and browser adapter; the SDK sandbox remains the
+  source of truth for files and their lifecycle.
 - `harness/tracing.py` consumes SDK lifecycle hooks and spans locally without
   sending traces to OpenAI. The hooks provide UI progress; the SDK remains the
   source of trace/span creation.
@@ -144,7 +148,7 @@ locally in the calling run's trace when its `BioRunContext` is supplied.
 The SDK tool surface is organized by execution semantics:
 
 - `tools/function_tools/` — local Python `FunctionTool` wrappers for biological
-  workflows. This is BioAgent's primary category.
+  and general assistant workflows. This is BioAgent's primary category.
 - `tools/agent_tools/` — focused agents exposed through `Agent.as_tool()`.
 - `tools/hosted_tools/` — extension point for tools executed by OpenAI-hosted
   infrastructure. It is empty until the configured model/runtime supports one.
@@ -152,9 +156,12 @@ The SDK tool surface is organized by execution semantics:
   allowlisted command protocol. It runs all declared pipeline engines locally.
 - `tools/runtime_tools/pipeline_runtime/` — declarative pipeline planning, durable jobs,
   bounded waiting, cancellation, and result collection behind `pipeline_shell`.
-- `tools/common/` — shared context, result envelopes, evidence and artifact
-  classification, guardrails, and bounded HTTP transport; these are
-  implementation helpers, not model-facing tools.
+- `tools/common/` — shared context, result envelopes,
+  evidence and generic result-path handling, guardrails, FunctionTool setup,
+  and generic bounded HTTP transport. These are implementation helpers, not
+  model-facing tools. Domain parsers, external-service allowlists, web
+  collection policy stay in the owning package. Workspace file metadata lives
+  under `tools/workspace/`; the SDK sandbox remains the file owner.
 
 `harness/agent.py` calls `tools.registry.build_all_tools(model)` so the root
 agent receives one SDK tool list assembled from these categories.
@@ -177,17 +184,28 @@ tools/function_tools/<tool_name>/
 └── adapters/         # optional external database clients
 ```
 
-Small tools keep one descriptive implementation module, such as `analysis.py`,
-`inspection.py`, or `diagnostics.py`, and `workflow.py` only when they need
+Each function tool is a self-contained plug-in. Its package owns the public
+schema, workflow, domain implementation, external adapters, and tool-specific
+validation. It may use generic services from `tools/common/`, but it must not
+import another public FunctionTool or depend on another tool's biological
+implementation. Adding or removing a tool should require only its package and
+the explicit registry entry; unrelated tools must continue to work unchanged.
+
+Small tools keep one descriptive implementation module, such as `analysis.py`
+or `inspection.py`, and `workflow.py` only when they need
 run context or result presentation. A
 package should add a subpackage only for a real subsystem, such as NCBI
 Entrez or species-report literature/web/RAG collection. Pipeline engine adapters
 live separately under `tools/runtime_tools/pipeline_runtime/engine/`.
-Shared context, result envelopes, guardrails, and HTTP transport belong under
-`tools/common/`. Cross-tool imports are limited to explicit reusable domain
-adapters, such as structure download code reused when a PDB ID must be
-analyzed; public FunctionTool wrappers are never imported as implementation
-dependencies.
+Shared context, result envelopes, guardrails, generic result-path handling, and
+generic HTTP transport belong under `tools/common/`. Workspace path safety and
+file metadata belong under `tools/workspace/`. The HTTP layer supplies
+bounded transport only; every adapter passes its own HTTPS host allowlist.
+HTML/search parsers, endpoint policies, biological implementations, and the
+host's file-serving policy stay outside `tools/common/` under
+`tools/workspace/`. There is no central sequence or biology adapter. Public
+FunctionTool wrappers are never imported as implementation dependencies, so a
+tool can be added, removed, or tested independently.
 
 ### Function tools and workflows
 
@@ -198,6 +216,15 @@ function-tool package contains the workflow and its deterministic adapters,
 clients, and domain code. Scientific calculations run in those implementations;
 workflows that synthesize reports call SDK reporting agents through
 `tools/function_tools/species_report/reporting/agents.py`.
+
+The general assistant tools follow the same boundary. `workspace_search` reads
+only listed session files and returns bounded excerpts with file or PDF-page
+sources. `data_analysis` accepts bounded pandas operations and writes plots into
+the session output directory. `web_research` uses bounded HTTP requests,
+preserves source URLs, and rejects local or private fetched hosts. The coding
+tools keep inspection read-only; `code_edit` and `code_test` are SDK approval
+tools, restrict paths to the active workspace, and allow only fixed test
+commands.
 
 ### Tool routing contract
 
@@ -230,10 +257,11 @@ protocol. Its executor parses the command and dispatches validated operations
 to the pipeline service. SDK filesystem capabilities provide workspace file
 inspection and editing; biological command execution uses `pipeline_shell`.
 
-For example, a request to search AlphaFold should select `database_lookup` with
-`database="alphafold"`, while a request for sequence similarity should select
-`blast_search`. This is model-based semantic routing, so overlapping tool
-descriptions make selection less reliable; deterministic routing should be
+For example, a request to search AlphaFold metadata should select
+`database_lookup` with `database="alphafold"`, while a request to download an
+AlphaFold structure should select `alphafold_download`. A request for sequence
+similarity should select `blast_search`. This is model-based semantic routing,
+so overlapping tool descriptions make selection less reliable; deterministic routing should be
 implemented in code when a workflow requires predictable dispatch.
 
 The primary intent boundaries are:
@@ -244,12 +272,23 @@ The primary intent boundaries are:
 | Cited organism research or Markdown report | `species_report` |
 | Database annotations or metadata | `database_lookup` |
 | Download an RCSB PDB file | `pdb_download` |
-| Analyze a structure | `protein_structure_analysis` |
+| Download an AlphaFold structure | `alphafold_download` |
+| Analyze an existing structure file | `protein_structure_analysis` |
 | Sequence metrics or ORFs | `sequence_analysis` |
 | File metadata or previews | `file_inspection` |
 | Sequence similarity | `blast_search` |
 | Genome feature image | `genome_map` |
+| Search uploaded documents | `workspace_search` |
 | Read or summarize a workspace PDF | `document_read` |
+| Profile or plot a table | `data_analysis` |
+| Current multi-source web question | `web_research` |
+| Read-only workspace code question | `code_inspection` |
+| Biopython transformation or GenBank feature read | `biology_analysis` |
+| Multi-step biology work | `biology_specialist` |
+| Multi-step document work | `document_specialist` |
+| Multi-step data analysis | `data_analysis_specialist` |
+| Multi-source web research | `web_research_specialist` |
+| Multi-step coding task | `coding_specialist` |
 | Execute or monitor a pipeline | `pipeline_shell` (`bioagent-pipeline` protocol) |
 | Review completed pipeline outputs | `pipeline_shell` with `bioagent-pipeline results --job-id ID` |
 
@@ -267,19 +306,26 @@ and [CLI guide](cli_usage.md).
 
 ### Specialist agents
 
-`tools/agent_tools/` defines focused agents for sequence, retrieval, and pipeline
-domains. Each `*_specialist.py` module owns its instructions and smaller tool
-set; `registry.py` assembles them and exposes each one to the root agent
-with `Agent.as_tool()`. This keeps domain changes and tests isolated while the
-root agent retains control of the user-facing answer.
+`tools/agent_tools/specialist/` defines focused agents for biology, retrieval,
+pipeline, document, data-analysis, web-research, and coding domains. Each
+domain module owns its instructions and smaller tool set; the parent
+`registry.py` assembles them and exposes each one to the root agent with
+`Agent.as_tool()`. This keeps domain changes and tests isolated while the root
+agent retains control of the user-facing answer.
 
 ```text
 tools/agent_tools/
 ├── __init__.py             # root-agent integration
-├── sequence_specialist.py  # sequence, genome, BLAST, and structure tasks
-├── retrieval_specialist.py # NCBI, database, and species-report tasks
-├── pipeline_specialist.py  # pipeline planning, execution, and collection
-└── registry.py             # ordered specialist registry
+├── registry.py             # ordered specialist registry
+└── specialist/
+    ├── __init__.py         # specialist builders
+    ├── biology.py          # sequence, Biopython, genome, BLAST, and structure tasks
+    ├── retrieval.py        # NCBI, database, and species-report tasks
+    ├── pipeline.py         # pipeline planning, execution, and collection
+    ├── document.py         # uploaded document search and reading
+    ├── data_analysis.py    # bounded table analysis and plots
+    ├── web_research.py     # current public web research
+    └── coding.py           # workspace inspection, edits, and tests
 ```
 
 The root agent exposes direct tools and specialist tools. The pipeline

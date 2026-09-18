@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-from agents import Agent, FunctionTool, Model
+from agents import FunctionTool, Model
 
-from harness.guardrails import INPUT_GUARDRAIL, OUTPUT_GUARDRAIL
 from tools.runtime_tools import RUNTIME_TOOLS
 from tools.runtime_tools.pipeline_tool import PIPELINE_INSTRUCTIONS
+
+from .factory import build_specialist
 
 
 NAME = "pipeline_specialist"
@@ -23,14 +24,14 @@ INSTRUCTIONS = (
 TOOL_NAMES = frozenset({"pipeline_shell"})
 
 
-def build_pipeline_specialist(model: Model | str) -> FunctionTool:
+def build_pipeline(model: Model | str) -> FunctionTool:
     """Build the pipeline-domain agent as a callable SDK tool."""
-    specialist = Agent(
+    return build_specialist(
+        model,
         name=NAME,
+        description=DESCRIPTION,
         instructions=INSTRUCTIONS,
-        model=model,
-        tools=[tool for tool in RUNTIME_TOOLS if tool.name in TOOL_NAMES],
-        input_guardrails=[INPUT_GUARDRAIL],
-        output_guardrails=[OUTPUT_GUARDRAIL],
+        tool_names=TOOL_NAMES,
+        available_tools=RUNTIME_TOOLS,
+        max_turns=12,
     )
-    return specialist.as_tool(tool_name=NAME, tool_description=DESCRIPTION, max_turns=12)

@@ -94,6 +94,10 @@ The separate page keeps its conversation while it is open. Reloading or choosing
 **New chat** starts a new session; context labels stay on screen. **Stop waiting**
 disconnects the response stream; work already started on the server may continue.
 
+On the main page, use the session actions beside a conversation to rename it or
+pin it. Pinned conversations stay at the top of the list and the title and pin
+state are stored with the server-side session metadata.
+
 ## Runtime Panel
 
 Each completed request includes a compact tab row below the answer: **Runtime**,
@@ -258,7 +262,32 @@ step.
   and supplies the path required by the selected tool.
 - For a text-based PDF, ask `Summarize my uploaded paper.pdf` or ask a question
   about the paper. BioAgent extracts the document in page-aware chunks and
-  cites page numbers in the answer. A scanned PDF reports that OCR is needed.
+  `workspace_search` can find a phrase across several uploaded documents before
+  `document_read` reads the relevant PDF pages. Scanned PDFs still require OCR;
+  extracted text includes page markers so answers can cite page numbers.
+
+## Common assistant applications
+
+The current tool surface supports four general assistant workflows alongside
+the biology tools:
+
+- **Document assistant:** search uploaded text/PDF files with `workspace_search`,
+  then read selectable PDF pages with `document_read` and cite the workspace
+  path and page markers.
+- **Data analyst:** use `data_analysis` for bounded profiles, missing-value
+  checks, grouped summaries, and distribution plots from CSV, TSV, or Excel
+  files. The tool returns measured values and created plot paths.
+- **Web research:** use `web_research` for current multi-source questions. It
+  preserves source URLs and bounded excerpts for citations; curated NCBI and
+  database requests still use their dedicated tools.
+- **Coding assistant:** use `code_inspection` for read-only workspace questions.
+  `code_edit` and `code_test` are approval-controlled and limited to the active
+  session workspace and bounded commands.
+
+For a task combining several operations, the root agent can delegate to
+`document_specialist`, `data_analysis_specialist`, `web_research_specialist`,
+or `coding_specialist`. Each specialist shares the session workspace and returns
+the same runtime evidence used by the main chat.
 
 Workspace files are stored in the active SDK sandbox session:
 
@@ -387,10 +416,24 @@ Fetch PDB 3GOU as cif
 Downloaded structures are stored in the active session file directory by
 default. They can be reused later in the same web chat session.
 
-### Sequence / Genome Analysis
+### Biology / Sequence / Genome Analysis
 
-Use this for deterministic sequence statistics, GC content, base counts, FASTA
-summaries, and ORF detection.
+Use the regular sequence workflow for deterministic sequence statistics, GC
+content, base counts, FASTA summaries, and ORF detection. Use the Biopython
+workflow for reverse complements, translation, and GenBank feature summaries.
+It accepts FASTA input but does not replace the sequence metrics workflow.
+
+```text
+Translate the uploaded sample.fasta in reading frame 1
+```
+
+```text
+Show the GenBank features in uploads/record.gb
+```
+
+```text
+Find the reverse complement of ATGCGTAA
+```
 
 ```text
 Analyze PhiX174 segment sequence GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT
@@ -450,13 +493,14 @@ SVG genome map shown in the answer
 
 ### Protein Structure Analysis
 
-Use this to analyze local or downloaded PDB/mmCIF files for atoms, chains,
-residues, ligands, water, models, method, and resolution.
+Use this to analyze local or already downloaded PDB/mmCIF files for atoms,
+chains, residues, ligands, water, models, method, and resolution. A PDB ID is
+downloaded with `pdb_download` first, then passed to this analysis tool.
 
-Analyze a PDB ID directly:
+Download and analyze a PDB ID:
 
 ```text
-Analyze the structure of 3GOU
+Download and analyze PDB structure 3GOU
 ```
 
 Analyze a local structure file:
@@ -645,18 +689,6 @@ engine-specific validation modes described in the architecture reference.
 `generic_bio` is an educational demo: its alignment and variant outputs use a
 positional comparison. Its tree outputs are optional; ask to disable them or
 set `emit_phylogenetic_tree=false` when planning.
-
-### Example Tool / Smoke Test
-
-Use this when you want to confirm tool calling works.
-
-```text
-Please test tool calling by running the example tool with message hello and tag smoke.
-```
-
-```text
-Run the example tool with message hello world and tag uppercase-test uppercase.
-```
 
 ## Multi-Turn Workspace Usage
 

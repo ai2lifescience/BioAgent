@@ -6,15 +6,14 @@ from pathlib import Path
 import re
 from typing import Any
 
-import requests
-
-from tools.common.http import request_api, response_provenance
+from tools.common.http import request_http, response_provenance
 
 
 RCSB_SEARCH_URL = "https://search.rcsb.org/rcsbsearch/v2/query"
 RCSB_DATA_URL_TEMPLATE = "https://data.rcsb.org/rest/v1/core/entry/{pdb_id}"
 RCSB_DOWNLOAD_URL_TEMPLATE = "https://files.rcsb.org/download/{pdb_id}.{file_format}"
 REQUEST_TIMEOUT = 30
+RCSB_ALLOWED_HOSTS = frozenset({"search.rcsb.org", "data.rcsb.org", "files.rcsb.org"})
 SUPPORTED_STRUCTURE_FORMATS = {"cif", "pdb", "bcif"}
 PDB_QUERY_OPERATIONS = {"search", "entry", "entry_details", "details"}
 
@@ -49,8 +48,13 @@ def search_pdb(query: str, max_results: int = 5) -> dict[str, Any]:
         },
         "return_type": "entry",
     }
-    response = requests.post(RCSB_SEARCH_URL, json=payload, timeout=REQUEST_TIMEOUT)
-    response.raise_for_status()
+    response = request_http(
+        "POST",
+        RCSB_SEARCH_URL,
+        allowed_hosts=RCSB_ALLOWED_HOSTS,
+        json_data=payload,
+        timeout=REQUEST_TIMEOUT,
+    )
     data = response.json()
     records = []
     for item in data.get("result_set", []):
@@ -75,7 +79,7 @@ def get_pdb_entry(pdb_id: str) -> dict[str, Any]:
     """Retrieve normalized metadata for one exact PDB identifier."""
     clean_id = normalize_pdb_id(pdb_id)
     url = RCSB_DATA_URL_TEMPLATE.format(pdb_id=clean_id)
-    payload = request_api("GET", url).json()
+    payload = request_http("GET", url, allowed_hosts=RCSB_ALLOWED_HOSTS).json()
     entry_info = payload.get("rcsb_entry_info", {})
     accession_info = payload.get("rcsb_accession_info", {})
     struct = payload.get("struct", {})
@@ -155,8 +159,13 @@ def download_pdb_structure(
         pdb_id=clean_id,
         file_format=clean_format,
     )
-    response = requests.get(url, timeout=REQUEST_TIMEOUT)
-    response.raise_for_status()
+    response = request_http(
+        "GET",
+        url,
+        allowed_hosts=RCSB_ALLOWED_HOSTS,
+        accept="application/octet-stream",
+        timeout=REQUEST_TIMEOUT,
+    )
     if not response.content:
         raise RuntimeError(f"RCSB PDB returned an empty file for {clean_id}.{clean_format}.")
 

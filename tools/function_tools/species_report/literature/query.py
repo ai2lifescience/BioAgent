@@ -5,10 +5,7 @@ from __future__ import annotations
 import re
 
 from tools.function_tools.species_report.literature.constants import STOPWORDS
-
-
-def normalize_text(text: str) -> str:
-    return re.sub(r"\s+", " ", text or "").strip()
+from tools.function_tools.species_report.web.parse import normalize_text
 
 
 def species_aliases(species_name: str) -> list[str]:

@@ -14,7 +14,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.common.files import artifact_content_type, can_serve_artifact
+from tools.workspace import artifact_content_type, can_serve_artifact
 from tools.runtime_tools.pipeline_runtime.config_io import load_yaml_config
 from tools.runtime_tools.pipeline_runtime.engine.config import write_runtime_config
 from tools.runtime_tools.pipeline_runtime.engine.runner import prepare_pipeline_context

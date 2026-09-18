@@ -6,10 +6,11 @@ import re
 from typing import Any
 from urllib.parse import quote
 
-from tools.common.http import request_api, response_provenance
+from tools.common.http import request_http, response_provenance
 
 
 QUICKGO_BASE_URL = "https://www.ebi.ac.uk/QuickGO/services"
+QUICKGO_ALLOWED_HOSTS = frozenset({"www.ebi.ac.uk"})
 GO_ID = re.compile(r"^GO:\d{7}$", re.IGNORECASE)
 ALLOWED_OPERATIONS = {"term_search", "term_details", "annotation_search", "gene_product_search"}
 
@@ -53,7 +54,12 @@ def query_quickgo(
         url = f"{QUICKGO_BASE_URL}/ontology/go/search"
         params = {"query": clean_query, "limit": limit}
 
-    payload = request_api("GET", url, params=params).json()
+    payload = request_http(
+        "GET",
+        url,
+        allowed_hosts=QUICKGO_ALLOWED_HOSTS,
+        params=params,
+    ).json()
     raw_results = payload.get("results", []) if isinstance(payload, dict) else []
     records = [_normalize_quickgo_record(item) for item in raw_results[:limit] if isinstance(item, dict)]
     return {

@@ -133,10 +133,43 @@ class SessionMetadataStore:
                 {"session_id": s.session_id, "title": s.metadata.get("title", "New chat"),
                  "created_at": s.created_at, "updated_at": s.updated_at,
                  "message_count": s.metadata.get("message_count", 0),
-                 "last_message": s.metadata.get("last_message", "")}
+                 "last_message": s.metadata.get("last_message", ""),
+                 "pinned": bool(s.metadata.get("pinned", False))}
                 for s in self._sessions.values()
             ]
-        return sorted(sessions, key=lambda item: item["updated_at"], reverse=True)
+        return sorted(
+            sessions,
+            key=lambda item: (bool(item.get("pinned")), item["updated_at"]),
+            reverse=True,
+        )
+
+    def update_session(
+        self,
+        session_id: str,
+        *,
+        title: str | None = None,
+        pinned: bool | None = None,
+    ) -> dict[str, Any]:
+        """Update user-editable session metadata and return its sidebar summary."""
+        identifier = str(session_id or "").strip()
+        session, _ = self.get_or_create_session(identifier)
+        with self._session_lock(identifier):
+            if title is not None:
+                cleaned = " ".join(str(title).split())[:80]
+                session.metadata["title"] = cleaned or "New chat"
+            if pinned is not None:
+                session.metadata["pinned"] = bool(pinned)
+            session.updated_at = now()
+            self.save(session)
+        return {
+            "session_id": session.session_id,
+            "title": session.metadata.get("title", "New chat"),
+            "created_at": session.created_at,
+            "updated_at": session.updated_at,
+            "message_count": session.metadata.get("message_count", 0),
+            "last_message": session.metadata.get("last_message", ""),
+            "pinned": bool(session.metadata.get("pinned", False)),
+        }
 
     def delete_session(self, session_id: str) -> bool:
         lock = self._session_lock(session_id)
