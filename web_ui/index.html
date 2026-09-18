@@ -51,34 +51,6 @@
         </div>
       </div>
 
-      <div class="sidebar-panel workspace-panel">
-        <div class="sidebar-heading">
-          <div>
-            <label>Files</label>
-            <div class="sidebar-hint"><span id="workspaceCount">0</span> in this workspace</div>
-          </div>
-          <div class="workspace-toolbar">
-            <button id="workspaceRefresh" class="icon-button" type="button" title="Refresh workspace" aria-label="Refresh workspace">↻</button>
-            <button id="uploadButton" class="new-chat-button" type="button">Upload</button>
-          </div>
-        </div>
-        <input id="uploadInput" type="file" multiple hidden>
-        <div id="workspaceDropzone" class="workspace-dropzone" role="button" tabindex="0" aria-label="Upload files to this workspace">
-          <strong>Drop files here</strong>
-          <span>or choose Upload</span>
-        </div>
-        <div id="workspaceSummary" class="workspace-summary">Files are shared with this chat and its tools.</div>
-        <div class="workspace-filters">
-          <input id="workspaceSearch" type="text" placeholder="Find a file" aria-label="Find a workspace file">
-          <select id="workspaceFilter" aria-label="Filter workspace files">
-            <option value="all">All files</option>
-            <option value="uploads">Inputs</option>
-            <option value="outputs">Outputs</option>
-          </select>
-        </div>
-        <div id="uploadList" class="workspace-file-list"></div>
-      </div>
-
     </aside>
 
     <main>
@@ -117,11 +89,7 @@
             <div class="thinking-main">
               <div id="status" class="status-pill">Ready</div>
             </div>
-            <div id="thinkingMeta" class="thinking-meta">
-              <span>Elapsed: 0s</span>
-              <span>Tools: none</span>
-              <span>Files: 0</span>
-            </div>
+            <div id="thinkingMeta" class="thinking-meta" hidden></div>
             <details id="thinkingDetails" class="thinking-details">
               <summary>Thinking log</summary>
               <div class="thinking-panel">
@@ -163,7 +131,8 @@
     </main>
 
     <aside class="right-sidebar">
-      <div class="sidebar-panel examples-panel">
+      <div id="newSessionGuide" class="new-session-guide">
+        <div class="sidebar-panel examples-panel">
         <div class="panel-intro">
           <span class="panel-eyebrow">Quick starts</span>
           <h2>Try a task</h2>
@@ -203,8 +172,8 @@
             >Risk assessment</button>
           </div>
         </details>
-      </div>
-      <div class="sidebar-panel guide-panel">
+        </div>
+        <div class="sidebar-panel guide-panel">
         <div class="panel-intro">
           <span class="panel-eyebrow">Simple workflow</span>
           <h2>How it works</h2>
@@ -214,6 +183,34 @@
           <li><span>2</span><div><strong>Work</strong><small>BioAgent selects tools and inspects your files.</small></div></li>
           <li><span>3</span><div><strong>Review</strong><small>Approve pipelines and download verified outputs.</small></div></li>
         </ol>
+        </div>
+      </div>
+      <div class="sidebar-panel workspace-panel">
+        <div class="sidebar-heading">
+          <div>
+            <label>Files</label>
+            <div class="sidebar-hint"><span id="workspaceCount">0</span> in this workspace</div>
+          </div>
+          <div class="workspace-toolbar">
+            <button id="workspaceRefresh" class="icon-button" type="button" title="Refresh workspace" aria-label="Refresh workspace">↻</button>
+            <button id="uploadButton" class="new-chat-button" type="button">Upload</button>
+          </div>
+        </div>
+        <input id="uploadInput" type="file" multiple hidden>
+        <div id="workspaceDropzone" class="workspace-dropzone" role="button" tabindex="0" aria-label="Upload files to this workspace">
+          <strong>Drop files here</strong>
+          <span>or choose Upload</span>
+        </div>
+        <div id="workspaceSummary" class="workspace-summary">Files are shared with this chat and its tools.</div>
+        <div class="workspace-filters">
+          <input id="workspaceSearch" type="text" placeholder="Find a file" aria-label="Find a workspace file">
+          <select id="workspaceFilter" aria-label="Filter workspace files">
+            <option value="all">All files</option>
+            <option value="uploads">Inputs</option>
+            <option value="outputs">Outputs</option>
+          </select>
+        </div>
+        <div id="uploadList" class="workspace-file-list"></div>
       </div>
     </aside>
   </div>

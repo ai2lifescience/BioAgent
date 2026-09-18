@@ -35,6 +35,7 @@ const workspaceRefresh = document.getElementById("workspaceRefresh");
 const workspaceSearch = document.getElementById("workspaceSearch");
 const workspaceFilter = document.getElementById("workspaceFilter");
 const workspaceDropzone = document.getElementById("workspaceDropzone");
+const newSessionGuide = document.getElementById("newSessionGuide");
 
 const ACTIVE_SESSION_KEY = "bioagent.web.active_session_id.v1";
 let structureSuffixes = [".cif", ".mmcif", ".pdb"];
@@ -259,6 +260,7 @@ function emptyStateHtml() {
 function renderCurrentChat() {
   chat.innerHTML = "";
   const messages = currentSession().messages || [];
+  updateNewSessionGuide(messages);
   if (!messages.length) {
     chat.innerHTML = emptyStateHtml();
     bindExampleButtons(chat);
@@ -268,6 +270,11 @@ function renderCurrentChat() {
     renderMessage(message.role, message.text || "", message.result || null);
   }
   scrollBottom();
+}
+
+function updateNewSessionGuide(messages) {
+  if (!newSessionGuide) return;
+  newSessionGuide.hidden = Array.isArray(messages) && messages.length > 0;
 }
 
 function renderSessionList() {
@@ -1261,6 +1268,7 @@ function addMessage(role, text, result = null) {
       created_at: nowIso(),
     });
   });
+  updateNewSessionGuide(currentSession().messages || []);
   scrollBottom();
 }
 

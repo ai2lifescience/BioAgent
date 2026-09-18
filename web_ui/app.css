@@ -2317,3 +2317,85 @@ textarea {
     justify-content: flex-end;
   }
 }
+
+.new-session-guide[hidden],
+.thinking-meta[hidden] {
+  display: none !important;
+}
+
+.thinking-inner {
+  grid-template-columns: auto;
+}
+
+.thinking-meta {
+  display: none !important;
+}
+
+.thinking-details {
+  grid-column: auto;
+}
+
+.right-sidebar .workspace-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  grid-template-rows: auto auto auto auto minmax(0, 1fr);
+}
+
+.right-sidebar .workspace-file-list {
+  min-height: 0;
+  max-height: none;
+}
+
+.new-session-guide {
+  display: grid;
+  gap: 12px;
+  min-height: 0;
+}
+
+@media (max-width: 980px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 26dvh) minmax(0, 1fr) minmax(220px, 28dvh);
+  }
+
+  .left-sidebar {
+    max-height: none;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .right-sidebar {
+    display: flex;
+    max-height: none;
+    overflow-y: auto;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .app {
+    grid-template-rows: minmax(0, 20dvh) minmax(0, 1fr) minmax(210px, 25dvh);
+  }
+
+  .left-sidebar {
+    padding: 10px;
+  }
+
+  .left-sidebar .session-panel {
+    min-height: 100px;
+  }
+
+  .right-sidebar {
+    padding: 10px;
+  }
+
+  .right-sidebar .new-session-guide {
+    display: none;
+  }
+
+  .right-sidebar .workspace-panel {
+    width: 100%;
+  }
+}
