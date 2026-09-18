@@ -7,15 +7,17 @@
   <link rel="stylesheet" href="/static/app.css">
 </head>
 <body>
-  <div class="app">
-    <aside class="left-sidebar">
+  <div class="app sidebar-collapsed">
+    <aside id="leftSidebar" class="left-sidebar">
       <div class="brand">
         <div class="brand-mark">BA</div>
-        <div>
+        <div class="brand-copy">
           <div class="brand-title">BioAgent</div>
           <div class="brand-subtitle">Bioinformatics workspace</div>
         </div>
-        <span class="brand-badge">Local</span>
+        <button id="toggleSidebar" class="sidebar-toggle" type="button" aria-expanded="false" aria-controls="leftSidebar" aria-label="Expand sidebar" title="Expand sidebar">
+          <span class="sidebar-toggle-icon" aria-hidden="true"></span>
+        </button>
       </div>
 
       <div class="sidebar-primary-action">
@@ -40,31 +42,22 @@
           <label>Run settings</label>
           <span class="panel-title-note">For the next request</span>
         </div>
-        <div class="control-group">
-          <label for="model">Model</label>
-          <select id="model"></select>
-        </div>
+        <div class="settings-fields">
+          <div class="control-group">
+            <label for="model">Model</label>
+            <select id="model"></select>
+          </div>
 
-        <div class="control-group">
-          <label for="maxTurns">Max turns</label>
-          <input id="maxTurns" type="number" min="1" max="20">
+          <div class="control-group">
+            <label for="maxTurns">Max turns</label>
+            <input id="maxTurns" type="number" min="1" max="20">
+          </div>
         </div>
       </div>
 
     </aside>
 
     <main>
-      <header>
-        <div class="header-title">
-          <span class="header-kicker">BioAgent workspace</span>
-          <strong id="activeSession">New chat</strong>
-        </div>
-        <div class="header-status">
-          <span class="online-dot" aria-hidden="true"></span>
-          <span id="activeModel">Loading model</span>
-        </div>
-      </header>
-
       <section id="chatScroll" class="chat-scroll">
         <div id="chat" class="chat">
           <div id="emptyState" class="empty-state">

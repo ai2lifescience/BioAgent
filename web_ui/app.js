@@ -22,10 +22,10 @@ const exampleParamPromptLabel = document.getElementById("exampleParamPromptLabel
 const exampleParamPromptOptions = document.getElementById("exampleParamPromptOptions");
 const exampleParamPromptDismiss = document.getElementById("exampleParamPromptDismiss");
 const newChatButton = document.getElementById("newChat");
+const appShell = document.querySelector(".app");
+const toggleSidebarButton = document.getElementById("toggleSidebar");
 const sessionList = document.getElementById("sessionList");
 const sessionCount = document.getElementById("sessionCount");
-const activeModel = document.getElementById("activeModel");
-const activeSession = document.getElementById("activeSession");
 const uploadButton = document.getElementById("uploadButton");
 const uploadInput = document.getElementById("uploadInput");
 const uploadList = document.getElementById("uploadList");
@@ -37,6 +37,7 @@ const workspaceFilter = document.getElementById("workspaceFilter");
 const workspaceDropzone = document.getElementById("workspaceDropzone");
 
 const ACTIVE_SESSION_KEY = "bioagent.web.active_session_id.v1";
+const SIDEBAR_COLLAPSED_KEY = "bioagent.web.sidebar_collapsed.v1";
 let structureSuffixes = [".cif", ".mmcif", ".pdb"];
 let imageSuffixes = [".svg"];
 
@@ -85,7 +86,6 @@ function renderModelOptions() {
     modelSelect.appendChild(option);
   }
   maxTurnsInput.value = config.default_max_turns || 5;
-  updateActiveModel();
 }
 
 function formatModelLabel(model) {
@@ -94,9 +94,20 @@ function formatModelLabel(model) {
   return `${label} (${cost})`;
 }
 
-function updateActiveModel() {
-  const selected = (config.models || []).find((model) => model.key === modelSelect.value);
-  activeModel.textContent = selected ? formatModelLabel(selected) : "Model ready";
+function setSidebarCollapsed(collapsed) {
+  const nextState = Boolean(collapsed);
+  appShell.classList.toggle("sidebar-collapsed", nextState);
+  appShell.classList.toggle("sidebar-expanded", !nextState);
+  toggleSidebarButton.setAttribute("aria-expanded", String(!nextState));
+  const label = nextState ? "Expand sidebar" : "Collapse sidebar";
+  toggleSidebarButton.setAttribute("aria-label", label);
+  toggleSidebarButton.title = label;
+  localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(nextState));
+}
+
+function initializeSidebar() {
+  const stored = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
+  setSidebarCollapsed(stored === null ? true : stored === "true");
 }
 
 function generateSessionId() {
@@ -235,7 +246,6 @@ function updateCurrentSession(updater) {
   session.updated_at = nowIso();
   rememberActiveSession();
   renderSessionList();
-  updateActiveSession();
 }
 
 function emptyStateHtml() {
@@ -344,10 +354,6 @@ function renderSessionList() {
   }
 }
 
-function updateActiveSession() {
-  activeSession.textContent = currentSession().title || "New chat";
-}
-
 function setSessionLoading(loading) {
   isSessionLoading = loading;
   sendButton.disabled = loading || isRunning;
@@ -364,7 +370,6 @@ async function loadActiveSession() {
     await Promise.all([loadConversation(activeSessionId), loadWorkspace()]);
     renderCurrentChat();
     renderSessionList();
-    updateActiveSession();
     resetThinkingBar();
   } catch (error) {
     renderCurrentChat();
@@ -412,7 +417,6 @@ function startNewChat() {
   workspaceFiles = [];
   renderWorkspace();
   renderCurrentChat();
-  updateActiveSession();
   loadWorkspace().catch((error) => console.warn("Failed to load workspace.", error));
   resetThinkingBar();
   hideExampleParamPrompt();
@@ -1516,7 +1520,9 @@ function bindEvents() {
   if (exampleParamPromptDismiss) {
     exampleParamPromptDismiss.addEventListener("click", hideExampleParamPrompt);
   }
-  modelSelect.addEventListener("change", updateActiveModel);
+  toggleSidebarButton.addEventListener("click", () => {
+    setSidebarCollapsed(!appShell.classList.contains("sidebar-collapsed"));
+  });
   stopButton.addEventListener("click", stopCurrentRequest);
   newChatButton.addEventListener("click", startNewChat);
   uploadButton.addEventListener("click", () => {
@@ -1578,6 +1584,7 @@ function bindEvents() {
 }
 
 async function init() {
+  initializeSidebar();
   setSessionLoading(true);
   try {
     await loadSessions();

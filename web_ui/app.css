@@ -1615,20 +1615,6 @@ aside {
   letter-spacing: 0.01em;
 }
 
-.brand-badge {
-  margin-left: auto;
-  align-self: flex-start;
-  border: 1px solid #c5e4dc;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent-strong);
-  padding: 4px 7px;
-  font-size: 10px;
-  font-weight: 760;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
 .sidebar-primary-action {
   padding: 0 2px;
 }
@@ -2454,5 +2440,207 @@ textarea {
   .empty-section .more-examples .examples,
   .empty-workflow .workflow-steps {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Keep navigation available without taking space from the work area. */
+.app {
+  grid-template-columns: 72px minmax(0, 1fr) 292px;
+}
+
+main {
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.left-sidebar {
+  padding: 12px 10px;
+}
+
+.left-sidebar .brand {
+  justify-content: center;
+  gap: 8px;
+  padding: 0 0 10px;
+}
+
+.brand-copy {
+  display: none;
+}
+
+.sidebar-toggle {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.sidebar-toggle:hover {
+  border-color: var(--line-strong);
+  background: var(--surface-soft);
+  color: var(--ink);
+}
+
+.sidebar-toggle-icon::before {
+  content: "›";
+  display: block;
+  font-size: 21px;
+  line-height: 1;
+}
+
+.sidebar-primary-action,
+.left-sidebar .session-panel,
+.left-sidebar .settings-panel {
+  display: none;
+}
+
+.app.sidebar-expanded {
+  grid-template-columns: 286px minmax(0, 1fr) 292px;
+}
+
+.app.sidebar-expanded .left-sidebar {
+  padding: 20px 15px;
+}
+
+.app.sidebar-expanded .left-sidebar .brand {
+  justify-content: flex-start;
+  gap: 11px;
+  padding: 2px 7px 16px;
+}
+
+.app.sidebar-expanded .brand-copy,
+.app.sidebar-expanded .sidebar-primary-action,
+.app.sidebar-expanded .left-sidebar .session-panel,
+.app.sidebar-expanded .left-sidebar .settings-panel {
+  display: grid;
+}
+
+.app.sidebar-expanded .sidebar-primary-action {
+  padding: 0 2px;
+}
+
+.app.sidebar-expanded .sidebar-toggle {
+  margin-left: auto;
+}
+
+.app.sidebar-expanded .sidebar-toggle-icon::before {
+  content: "‹";
+}
+
+.left-sidebar .settings-panel {
+  grid-template-columns: 1fr;
+}
+
+.settings-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 88px;
+  gap: 10px;
+  min-width: 0;
+}
+
+@media (max-width: 1180px) {
+  .app {
+    grid-template-columns: 72px minmax(0, 1fr) 255px;
+  }
+
+  .app.sidebar-expanded {
+    grid-template-columns: 260px minmax(0, 1fr) 255px;
+  }
+}
+
+@media (max-width: 980px) {
+  .app,
+  .app.sidebar-collapsed,
+  .app.sidebar-expanded {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr) minmax(220px, 28dvh);
+  }
+
+  .left-sidebar,
+  .app.sidebar-expanded .left-sidebar {
+    min-height: 0;
+    max-height: none;
+    padding: 10px 14px;
+    flex-direction: row;
+    align-items: center;
+    overflow: hidden;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .left-sidebar .brand,
+  .app.sidebar-expanded .left-sidebar .brand {
+    width: 100%;
+    flex: 0 1 auto;
+    justify-content: flex-start;
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .app.sidebar-expanded .left-sidebar {
+    max-height: 38dvh;
+    padding: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    overflow-y: auto;
+  }
+
+  .app.sidebar-expanded .left-sidebar .brand {
+    flex: 0 0 auto;
+    padding: 2px 7px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .app.sidebar-expanded .sidebar-primary-action,
+  .app.sidebar-expanded .left-sidebar .session-panel,
+  .app.sidebar-expanded .left-sidebar .settings-panel {
+    display: grid;
+  }
+
+  .right-sidebar {
+    display: flex;
+    max-height: none;
+    overflow-y: auto;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .app,
+  .app.sidebar-collapsed {
+    grid-template-rows: auto minmax(0, 1fr) minmax(210px, 25dvh);
+  }
+
+  .app.sidebar-expanded {
+    grid-template-rows: minmax(0, 36dvh) minmax(0, 1fr) minmax(210px, 25dvh);
+  }
+
+  .left-sidebar,
+  .app.sidebar-expanded .left-sidebar {
+    padding: 10px;
+  }
+
+  .app.sidebar-expanded .left-sidebar {
+    max-height: 36dvh;
+  }
+
+  .settings-fields {
+    grid-template-columns: minmax(0, 1fr) 82px;
+    gap: 8px;
+  }
+
+  .right-sidebar {
+    padding: 10px;
+  }
+
+  .right-sidebar .workspace-panel {
+    width: 100%;
   }
 }
