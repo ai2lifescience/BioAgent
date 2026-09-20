@@ -78,7 +78,7 @@
     message.className = `message ${role}`;
     const label = document.createElement("span");
     label.className = "message-label";
-    label.textContent = role === "user" ? "You" : role === "error" ? "Request failed" : "Pipeline2Agent";
+    label.textContent = role === "user" ? "You" : role === "error" ? "Request failed" : "Assistant";
     const body = document.createElement("div");
     body.className = "message-body";
     if (role === "assistant" && window.renderMarkdown) {
@@ -128,7 +128,7 @@
     state.ready = false;
     setBusy(false);
     byId("retryConfig").hidden = true;
-    status.textContent = "Connecting to Pipeline2Agent…";
+    status.textContent = "Connecting to assistant…";
     try {
       const response = await fetch(apiUrl("config"));
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -305,7 +305,7 @@
     byId("progressDetails").hidden = true;
     byId("progressLog").textContent = "";
     renderUploads();
-    status.textContent = state.ready ? "Ready" : "Connect to Pipeline2Agent before sending.";
+    status.textContent = state.ready ? "Ready" : "Connect to assistant before sending.";
     prompt.focus();
   }
 

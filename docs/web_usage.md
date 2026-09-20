@@ -32,7 +32,7 @@ The original interface remains at `/`. The assistant page is a compact chat
 surface intended to fill a host website's right-side drawer. It includes model
 selection, file attachments, streamed activity, and a small context summary.
 
-Open `/assistant-demo` to see a sample workspace with Pipeline2Agent mounted as a
+Open `/assistant-demo` to see a sample workspace with the Assistant mounted as a
 collapsible drawer:
 
 ```text
@@ -56,7 +56,7 @@ For a host website, include the reusable drawer helper and mount it once:
 <div id="agent-drawer"></div>
 <script src="https://pipeline2agent.example.org/static/assistant-embed.js"></script>
 <script>
-  const drawer = Pipeline2AgentDrawer.mount({
+  const drawer = AssistantDrawer.mount({
     target: document.getElementById("agent-drawer"),
     src: "https://pipeline2agent.example.org/assistant",
     context: { project_id: "123", sample_id: "456", result_type: "summary" }
@@ -67,6 +67,9 @@ For a host website, include the reusable drawer helper and mount it once:
 The helper creates the launcher, right-side panel, close button, iframe, and
 context messaging. Call `drawer.updateContext(nextContext)` when the user
 changes projects or samples.
+
+`AssistantDrawer` is the preferred embed API name. `Pipeline2AgentDrawer` is
+kept as a compatibility alias for existing host pages.
 
 A custom embedding can update the assistant after loading with `postMessage`:
 

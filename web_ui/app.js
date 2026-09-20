@@ -2,6 +2,7 @@ let config = {
   default_model_key: "",
   default_max_turns: 5,
   models: [],
+  pipelines: [],
 };
 
 const modelSelect = document.getElementById("model");
@@ -94,6 +95,46 @@ const MORE_ICON = `
     <circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/>
   </svg>`;
 
+// Keep the empty state useful while /config is loading or when the UI is
+// served by an older backend that does not expose the pipeline catalog yet.
+const PIPELINE_FALLBACKS = [
+  { name: "antimicrobial_resistance_detection", display_name: "Antimicrobial resistance detection" },
+  { name: "bacterial_functional_annotation", display_name: "Bacterial functional annotation" },
+  { name: "bacterial_genome_annotation", display_name: "Bacterial genome annotation" },
+  { name: "bacterial_genome_mutation_analysis", display_name: "Bacterial genome mutation analysis" },
+  { name: "bacterial_read_variant_analysis", display_name: "Bacterial read variant analysis" },
+  { name: "bacterial_virulence_factor_detection", display_name: "Bacterial virulence-factor detection" },
+  { name: "metagenomic_de_novo_assembly", display_name: "Metagenomic de novo assembly" },
+  { name: "metagenomic_pathogen_identification", display_name: "Metagenomic pathogen identification" },
+  { name: "metagenomic_read_quality_control", display_name: "Metagenomic read quality control" },
+  {
+    name: "pathogen_variant_risk_assessment",
+    display_name: "Pathogen variant risk assessment",
+    parameters: { pathogen: { required: true, choices: ["H1N1", "H3N2", "SARS_CoV_2"] } },
+  },
+  { name: "rna_secondary_structure_prediction", display_name: "RNA secondary-structure prediction" },
+  { name: "template_bio", display_name: "DNA analysis template" },
+  { name: "template_nextflow", display_name: "Nextflow pipeline template" },
+  { name: "template_shell", display_name: "Shell metadata assignment template" },
+  { name: "template_snakemake", display_name: "Snakemake pipeline template" },
+  { name: "template_wdl", display_name: "WDL pipeline template" },
+  { name: "viral_genome_mutation_analysis", display_name: "Viral genome mutation analysis" },
+  { name: "viral_molecular_typing", display_name: "Viral molecular typing" },
+];
+
+const PIPELINE_PARAMETER_CHOICES = {
+  viral_molecular_typing: {
+    name: "pathogen",
+    label: "Choose pathogen for Molecular Typing",
+    options: ["H1N1", "H3N2", "SARS_CoV_2"],
+  },
+  pathogen_variant_risk_assessment: {
+    name: "pathogen",
+    label: "Choose pathogen for Risk Assessment",
+    options: ["H1N1", "H3N2", "SARS_CoV_2"],
+  },
+};
+
 async function loadConfig() {
   const response = await fetch("/config");
   if (!response.ok) {
@@ -102,6 +143,7 @@ async function loadConfig() {
   config = await response.json();
   applyArtifactConfig(config.files || {});
   renderModelOptions();
+  renderPipelineExamples();
 }
 
 function applyArtifactConfig(artifactConfig) {
@@ -300,6 +342,50 @@ function updateCurrentSession(updater) {
   renderSessionList();
 }
 
+function pipelineCatalogForExamples() {
+  const catalog = Array.isArray(config.pipelines) && config.pipelines.length
+    ? config.pipelines
+    : PIPELINE_FALLBACKS;
+  return catalog.filter((entry) => entry && entry.name && !entry.error);
+}
+
+function pipelineExampleButtonHtml(entry) {
+  const name = String(entry.name);
+  const label = String(entry.display_name || name);
+  const override = PIPELINE_PARAMETER_CHOICES[name];
+  let parameterName = override?.name || "";
+  let options = override?.options || [];
+
+  if (!options.length) {
+    for (const [candidateName, spec] of Object.entries(entry.parameters || {})) {
+      if (spec && spec.required && Array.isArray(spec.choices) && spec.choices.length) {
+        parameterName = candidateName;
+        options = spec.choices;
+        break;
+      }
+    }
+  }
+
+  if (parameterName && options.length) {
+    const template = `Run pipeline with pipeline_name: ${name} ${parameterName}: {${parameterName}}`;
+    const parameterLabel = override?.label || `Choose ${label} ${parameterName}`;
+    return `<button class="example-button" data-example-template="${escapeHtml(template)}" data-param-name="${escapeHtml(parameterName)}" data-param-label="${escapeHtml(parameterLabel)}" data-param-options="${escapeHtml(options.join(","))}">${escapeHtml(label)}</button>`;
+  }
+
+  return `<button class="example-button" data-example="Run pipeline with pipeline_name: ${escapeHtml(name)}">${escapeHtml(label)}</button>`;
+}
+
+function pipelineExamplesHtml() {
+  return pipelineCatalogForExamples().map(pipelineExampleButtonHtml).join("");
+}
+
+function renderPipelineExamples(root = document) {
+  root.querySelectorAll(".more-examples .examples").forEach((container) => {
+    container.innerHTML = pipelineExamplesHtml();
+  });
+  bindExampleButtons(root);
+}
+
 function emptyStateHtml() {
   return `
     <div class="empty-state">
@@ -324,31 +410,10 @@ function emptyStateHtml() {
             <button class="example-button" data-example="Search UniProt for BRCA1 human">Search UniProt</button>
             <button class="example-button" data-example="Summarize genome structure and host range of PhiX174 with trusted sources.">Species report</button>
           </div>
-          <details class="more-examples">
+          <details class="more-examples" open>
             <summary>More pipelines</summary>
             <div class="examples">
-              <button class="example-button" data-example="Run pipeline with pipeline_name: template_bio">DNA analysis template</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: template_shell">Shell metadata template</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: template_snakemake">Snakemake template</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: template_nextflow">Nextflow template</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: template_wdl">WDL template</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: metagenomic_read_quality_control">Metagenomic read quality control</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: metagenomic_pathogen_identification">Metagenomic pathogen identification</button>
-              <button
-                class="example-button"
-                data-example-template="Run pipeline with pipeline_name: viral_molecular_typing pathogen: {pathogen}"
-                data-param-name="pathogen"
-                data-param-label="Choose pathogen for Molecular Typing"
-                data-param-options="H1N1,H3N2,SARS_CoV_2"
-              >Molecular typing</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: metagenomic_de_novo_assembly">Metagenomic de novo assembly</button>
-              <button
-                class="example-button"
-                data-example-template="Run pipeline with pipeline_name: pathogen_variant_risk_assessment pathogen: {pathogen}"
-                data-param-name="pathogen"
-                data-param-label="Choose pathogen for Risk Assessment"
-                data-param-options="H1N1,H3N2,SARS_CoV_2"
-              >Risk assessment</button>
+              ${pipelineExamplesHtml()}
             </div>
           </details>
         </section>

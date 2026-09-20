@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pipeline2Agent Drawer Preview</title>
+  <title>Assistant Drawer Preview</title>
   <style>
     :root {
       color: #173438;
       background: #f4f8f8;
-      font: 14px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      font: 14px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     * { box-sizing: border-box; }
     body {
@@ -103,7 +103,7 @@
 <body>
   <main class="shell">
     <header>
-      <span class="brand-mark" role="img" aria-label="Pipeline2Agent">
+      <span class="brand-mark" role="img" aria-label="Assistant">
         <svg viewBox="0 0 512 512" fill="none" aria-hidden="true" width="38" height="38">
           <defs><linearGradient id="bsod-screen-demo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#159BEA"/><stop offset="1" stop-color="#1486D8"/></linearGradient></defs>
           <path d="M256 112c-4-38 10-58 34-67" stroke="#25283A" stroke-width="10" stroke-linecap="round"/>
@@ -128,7 +128,7 @@
       </span>
       <div>
         <h1>Workspace</h1>
-        <p class="subtitle">A small host page demonstrating Pipeline2Agent in a focused right-side assistant.</p>
+        <p class="subtitle">A small host page demonstrating the Assistant in a focused right-side drawer.</p>
       </div>
       <span class="demo-badge">Interactive demo</span>
     </header>
@@ -137,12 +137,12 @@
     <article class="card"><span class="card-icon" aria-hidden="true">S</span><strong>Sample</strong><span class="muted">sample-2026-0914</span></article>
     <article class="card"><span class="card-icon" aria-hidden="true">R</span><strong>Result</strong><span class="muted">Metagenomic summary</span></article>
   </section>
-  <p class="drawer-hint">Use the Pipeline2Agent button to ask questions, attach files, or inspect a result without leaving this workspace.</p>
+  <p class="drawer-hint">Use the Assistant button to ask questions, attach files, or inspect a result without leaving this workspace.</p>
   <div id="agent-drawer"></div>
   </main>
   <script src="./static/assistant-embed.js"></script>
   <script>
-    Pipeline2AgentDrawer.mount({
+    AssistantDrawer.mount({
       target: document.getElementById("agent-drawer"),
     });
   </script>

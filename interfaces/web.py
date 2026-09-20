@@ -34,6 +34,7 @@ from interfaces.api import (
 )
 from harness.sandbox import relative_file_path
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODELS
+from tools.runtime_tools.pipeline_runtime import service as pipeline_service
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -141,6 +142,7 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                     "default_max_turns": DEFAULT_MAX_TURNS,
                     "models": _model_options(),
                     "files": artifact_suffix_config(),
+                    "pipelines": pipeline_service.catalog(compact=True),
                 }
             )
             return

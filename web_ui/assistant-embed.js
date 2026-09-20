@@ -26,13 +26,13 @@
 
   const EMBED_STYLE = `
     :host { all: initial; }
-    .agent-launcher { position: fixed; right: 22px; bottom: 22px; z-index: 2147483000; display: inline-flex; align-items: center; gap: 8px; border: 1px solid #0d655e; border-radius: 999px; padding: 11px 16px; color: #fff; background: linear-gradient(145deg, #159487, #115e59); box-shadow: 0 10px 26px #17343835; font: 700 13px/1.2 system-ui,sans-serif; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease; }
+    .agent-launcher { position: fixed; right: 22px; bottom: 22px; z-index: 2147483000; display: inline-flex; align-items: center; gap: 8px; border: 1px solid #0d655e; border-radius: 999px; padding: 11px 16px; color: #fff; background: linear-gradient(145deg, #159487, #115e59); box-shadow: 0 10px 26px #17343835; font: 700 13px/1.2 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease; }
     .agent-icon { display: grid; width: 30px; height: 30px; place-items: center; color: #fff; }
     .agent-icon svg { width: 100%; height: 100%; display: block; }
     .agent-launcher:hover { transform: translateY(-2px); box-shadow: 0 14px 30px #17343845; }
     .agent-panel { position: fixed; z-index: 2147483001; inset: 0 0 0 auto; display: grid; grid-template-rows: auto minmax(0,1fr); width: min(460px,100vw); overflow: hidden; border-left: 1px solid #d9e5e4; background: #f4f8f8; box-shadow: -16px 0 40px #17343826; transition: transform .22s ease, box-shadow .22s ease; }
     .agent-panel[hidden] { display: grid; transform: translateX(102%); pointer-events: none; box-shadow: none; }
-    .agent-panel-header { display: flex; align-items: center; gap: 10px; min-height: 58px; padding: 11px 16px; border-bottom: 1px solid #d9e5e4; color: #173438; background: #ffffffed; backdrop-filter: blur(12px); font: 700 14px/1.2 system-ui,sans-serif; }
+    .agent-panel-header { display: flex; align-items: center; gap: 10px; min-height: 58px; padding: 11px 16px; border-bottom: 1px solid #d9e5e4; color: #173438; background: #ffffffed; backdrop-filter: blur(12px); font: 700 14px/1.2 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
     .agent-panel-header .agent-icon { width: 42px; height: 42px; border-radius: 9px; background: transparent; }
     .agent-panel-header span { margin-right: auto; }
     .agent-close { display: grid; width: 30px; height: 30px; place-items: center; border: 1px solid #d9e5e4; border-radius: 8px; color: #62777b; background: #f4f8f8; font-size: 20px; line-height: 1; cursor: pointer; }
@@ -56,27 +56,27 @@
     const launcherIcon = document.createElement("span");
     launcherIcon.className = "agent-icon";
     launcherIcon.innerHTML = AGENT_ICON;
-    launcher.append(launcherIcon, document.createTextNode(options.launcherLabel || "Ask Pipeline2Agent"));
+    launcher.append(launcherIcon, document.createTextNode(options.launcherLabel || "Ask assistant"));
     launcher.setAttribute("aria-expanded", "false");
     const panel = document.createElement("aside");
     panel.className = "agent-panel";
     panel.hidden = true;
-    panel.setAttribute("aria-label", options.title || "Pipeline2Agent assistant");
+    panel.setAttribute("aria-label", options.title || "Assistant");
     const panelHeader = document.createElement("div");
     panelHeader.className = "agent-panel-header";
     const headerIcon = document.createElement("span");
     headerIcon.className = "agent-icon";
     headerIcon.innerHTML = AGENT_ICON;
     const panelTitle = document.createElement("span");
-    panelTitle.textContent = options.title || "Pipeline2Agent";
+    panelTitle.textContent = options.title || "Assistant";
     const close = document.createElement("button");
     close.className = "agent-close";
     close.type = "button";
     close.textContent = "×";
-    close.setAttribute("aria-label", "Close Pipeline2Agent");
+    close.setAttribute("aria-label", "Close assistant");
     const frame = document.createElement("iframe");
     frame.className = "agent-frame";
-    frame.title = options.title || "Pipeline2Agent assistant";
+    frame.title = options.title || "Assistant";
     frame.src = src.toString();
     panelHeader.append(headerIcon, panelTitle, close);
     panel.append(panelHeader, frame);
@@ -127,5 +127,8 @@
     };
   }
 
-  window.Pipeline2AgentDrawer = { mount };
+  const AssistantDrawer = { mount };
+  window.AssistantDrawer = AssistantDrawer;
+  // Preserve the original integration name for existing host pages.
+  window.Pipeline2AgentDrawer = AssistantDrawer;
 })();
