@@ -60,11 +60,24 @@ def catalog() -> list[dict]:
             continue
         try:
             _, manifest, config = definition(path.name)
-            entries.append({"name": path.name, "engine": manifest.get("engine"),
-                            "description": manifest.get("description", ""),
-                            "inputs": pipeline_input_specs(manifest), "outputs": pipeline_output_specs(manifest),
-                            "parameters": manifest.get("param_overrides") or config.get("params", {}),
-                            "timeout_seconds": manifest.get("timeout", 300)})
+            entries.append({
+                "name": path.name,
+                "display_name": manifest.get("display_name") or path.name,
+                "visibility": manifest.get("visibility", "public"),
+                "description": manifest.get("description", ""),
+                "use_when": manifest.get("use_when", []),
+                "avoid_when": manifest.get("avoid_when", []),
+                "input_summary": manifest.get("input_summary", ""),
+                "output_summary": manifest.get("output_summary", ""),
+                "limitations": manifest.get("limitations", ""),
+                "examples": manifest.get("examples", []),
+                "execution": manifest.get("execution", {}),
+                "engine": manifest.get("engine"),
+                "inputs": pipeline_input_specs(manifest),
+                "outputs": pipeline_output_specs(manifest),
+                "parameters": manifest.get("param_overrides") or config.get("params", {}),
+                "timeout_seconds": manifest.get("timeout", 300),
+            })
         except (ValueError, OSError) as exc:
             entries.append({"name": path.name, "error": str(exc)})
     return entries

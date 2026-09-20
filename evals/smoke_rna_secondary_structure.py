@@ -21,7 +21,7 @@ from tools.runtime_tools.pipeline_runtime.engine.runner import prepare_pipeline_
 
 
 def _load_workflow_module():
-    workflow_path = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "rna_secondary_structure" / "workflow.py"
+    workflow_path = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "rna_secondary_structure_prediction" / "workflow.py"
     spec = spec_from_file_location("agent_rna_secondary_structure_workflow", workflow_path)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"Unable to load workflow module: {workflow_path}")
@@ -31,16 +31,16 @@ def _load_workflow_module():
 
 
 def main() -> int:
-    if not (PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "rna_secondary_structure" / "workflow.py").exists():
-        print("SKIP: rna_secondary_structure pipeline is not present in this checkout.")
+    if not (PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "rna_secondary_structure_prediction" / "workflow.py").exists():
+        print("SKIP: rna_secondary_structure_prediction pipeline is not present in this checkout.")
         return 0
     workflow = _load_workflow_module()
     with TemporaryDirectory(prefix="agent-rna-secondary-") as temporary_dir:
         temporary_path = Path(temporary_dir)
-        pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "rna_secondary_structure"
+        pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "rna_secondary_structure_prediction"
         rna_path = pipeline_dir / "data" / "input" / "example_rna.fasta"
         context = prepare_pipeline_context(
-            pipeline_name="rna_secondary_structure",
+            pipeline_name="rna_secondary_structure_prediction",
             artifact_dir=temporary_path / "artifacts",
             run_id="smoke",
             input_overrides={"rna": str(rna_path)},

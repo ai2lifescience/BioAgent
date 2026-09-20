@@ -16,9 +16,9 @@ from tools.runtime_tools.pipeline_runtime.commands import dispatch, parse_comman
 def main() -> int:
     with TemporaryDirectory(prefix="agent-local-pipeline-") as temporary:
         root = Path(temporary)
-        staged = dispatch(root, "agent-pipeline example --pipeline example_sequence_qc")
+        staged = dispatch(root, "agent-pipeline example --pipeline sequence_qc_demo")
         inputs = {"reads" if item["workspace_path"].endswith(".fastq") else "metadata": item["workspace_path"] for item in staged["files"]}
-        plan = service.plan(root, "example_sequence_qc", inputs, {})
+        plan = service.plan(root, "sequence_qc_demo", inputs, {})
         assert plan["status"] == "planned"
         parsed = parse_command(plan["command"])
         assert parsed.operation == "run" and parsed.plan_id == plan["plan_id"]

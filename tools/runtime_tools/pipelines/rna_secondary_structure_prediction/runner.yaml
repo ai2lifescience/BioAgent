@@ -1,0 +1,71 @@
+name: rna_secondary_structure_prediction
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 3600
+inputs:
+  rna:
+    label: RNA sequences
+    config_key: rna_path
+    required: true
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    description: One or more RNA or DNA-letter nucleotide sequences in FASTA format.
+outputs:
+  report:
+    label: RNA folding report
+    config_key: report_path
+    default: output/report.md
+    kind: report
+    required: true
+    description: RNA folding report produced by this workflow.
+  metrics:
+    label: RNA folding metrics
+    config_key: metrics_path
+    default: output/metrics.json
+    kind: metrics
+    required: true
+    description: RNA folding metrics produced by this workflow.
+  structures:
+    label: RNA structures table
+    config_key: structures_path
+    default: output/structures.tsv
+    kind: table
+    required: true
+    description: RNA structures table produced by this workflow.
+  dot_bracket:
+    label: Dot-bracket structures
+    config_key: dot_bracket_path
+    default: output/structures.dbn
+    kind: sequence_structure
+    required: true
+    description: Dot-bracket structures produced by this workflow.
+  log:
+    label: RNAfold execution log
+    config_key: log_path
+    default: output/rnafold.log
+    kind: text
+    required: true
+    description: RNAfold execution log produced by this workflow.
+display_name: RNA secondary-structure prediction
+description: Convert nucleotide FASTA records to RNA, predict minimum-free-energy
+  secondary structures with RNAfold, and return structured reports.
+use_when:
+- the user wants secondary-structure predictions for RNA or DNA-letter nucleotide
+  sequences
+avoid_when:
+- the user needs tertiary-structure modeling, pseudoknot prediction, or experimental
+  interpretation
+input_summary: A nucleotide FASTA file within the configured record and length limits.
+output_summary: Structure table, dot-bracket file, metrics, report, and RNAfold log.
+limitations: The workflow predicts equilibrium minimum-free-energy structures and
+  does not model cellular conditions or pseudoknots.
+examples:
+- Predict RNA secondary structures for this FASTA file.
+visibility: public
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: shell

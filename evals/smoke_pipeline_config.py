@@ -84,12 +84,12 @@ class PipelineConfigChecks(unittest.TestCase):
                 load_pipeline_config(self.root)
 
     def test_wdl_native_files_preserved_during_runtime_generation(self) -> None:
-        bundle = PROJECT_ROOT / "tools/runtime_tools/pipelines/generic_wdl"
+        bundle = PROJECT_ROOT / "tools/runtime_tools/pipelines/sequence_normalization_wdl_demo"
         before = {name: (bundle / name).read_bytes() for name in ("inputs.json", "options.json")}
         selected = self.root / "selected.fasta"
         selected.write_text(">synthetic\nACGT\n", encoding="utf-8")
         context = prepare_pipeline_context(
-            pipeline_name="generic_wdl", artifact_dir=str(self.root),
+            pipeline_name="sequence_normalization_wdl_demo", artifact_dir=str(self.root),
             input_overrides={"sequence": str(selected)},
         )
         inputs = json.loads(write_wdl_inputs(context).read_text())
@@ -121,8 +121,8 @@ class PipelineConfigChecks(unittest.TestCase):
     def test_catalog_defaults_and_explicit_inputs(self) -> None:
         catalog = {item["name"]: item for item in service.catalog()}
         self.assertTrue(all("error" not in item for item in catalog.values()), catalog)
-        self.assertEqual(catalog["example_sequence_qc"]["parameters"]["min_length"], 6)
-        for name in ("example_sequence_qc", "generic_wdl"):
+        self.assertEqual(catalog["sequence_qc_demo"]["parameters"]["min_length"], 6)
+        for name in ("sequence_qc_demo", "sequence_normalization_wdl_demo"):
             result = service.plan(self.root, name, {}, {})
             self.assertEqual(result["status"], "needs_input")
 

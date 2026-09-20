@@ -80,6 +80,9 @@ responsibility for the final answer, including work delegated to specialists.
 - Use pipeline_shell for pipeline discovery, execution, status, and collection,
   or pipeline_specialist for a multi-step pipeline task. Reviewing results alone
   does not authorize another pipeline run.
+- For pipeline selection, call `agent-pipeline catalog` first and use each
+  entry's display name, description, use_when, avoid_when, input_summary, and
+  limitations. Treat `visibility: internal` entries as demonstrations only.
 
 ## Delegate bounded tasks
 - Use a specialist whose description covers the requested combination of

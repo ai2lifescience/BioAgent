@@ -1,0 +1,73 @@
+name: sequence_metadata_assignment
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 120
+inputs:
+  reads:
+    label: Sequence data
+    config_key: input_path
+    required: true
+    accepts:
+    - .txt
+    - .fastq
+    - .fq
+    - .fasta
+    - .fa
+    description: Sequence reads supplied to the workflow.
+  metadata:
+    label: Subtype metadata
+    config_key: metadata_path
+    required: true
+    accepts:
+    - .tsv
+    - .csv
+    description: TSV or CSV metadata associated with the sequence input.
+outputs:
+  report:
+    label: Report
+    config_key: report_path
+    default: data/output/report.md
+    kind: report
+    required: true
+    description: Report produced by this workflow.
+  metrics:
+    label: Metrics
+    config_key: metrics_path
+    default: data/output/metrics.json
+    kind: metrics
+    required: true
+    description: Metrics produced by this workflow.
+  normalized_text:
+    label: Normalized text
+    config_key: normalized_path
+    default: data/output/normalized.txt
+    kind: text
+    required: true
+    description: Normalized text produced by this workflow.
+  subtype_assignments:
+    label: Sequence subtype assignments
+    config_key: subtype_path
+    default: data/output/subtypes.tsv
+    kind: table
+    required: true
+    description: Sequence subtype assignments produced by this workflow.
+display_name: Sequence metadata assignment
+description: Join sequence records with a metadata table, normalize the sequence input,
+  and produce subtype assignments and summary metrics.
+use_when:
+- the user wants sequence IDs matched to metadata categories
+avoid_when:
+- the user needs biological classification or sequence similarity analysis
+input_summary: Sequence text, FASTA, or FASTQ plus TSV/CSV metadata with matching
+  identifier and category columns.
+output_summary: Normalized sequence text, assignment table, metrics, and report.
+limitations: The workflow performs deterministic metadata joining and does not infer
+  biological subtypes.
+examples:
+- Assign the metadata subtype to each sequence record.
+visibility: internal
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: shell

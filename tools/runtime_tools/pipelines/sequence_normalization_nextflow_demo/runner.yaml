@@ -1,0 +1,67 @@
+name: sequence_normalization_nextflow_demo
+engine: nextflow
+config: config.yaml
+workflow: main.nf
+nextflow_config: nextflow.config
+cores: 1
+timeout: 300
+inputs:
+  sequence:
+    label: Sequence FASTA
+    config_key: input_path
+    required: true
+    accepts:
+    - .fa
+    - .fasta
+    - .fna
+    description: Sequence FASTA input.
+  metadata:
+    label: Metadata table
+    config_key: metadata_path
+    required: true
+    accepts:
+    - .tsv
+    - .csv
+    description: TSV or CSV metadata associated with the sequence input.
+outputs:
+  report:
+    label: Report
+    config_key: report_path
+    default: data/output/report.md
+    nextflow_output: report.md
+    kind: report
+    required: true
+    description: Report produced by this workflow.
+  metrics:
+    label: Metrics
+    config_key: metrics_path
+    default: data/output/metrics.json
+    nextflow_output: metrics.json
+    kind: metrics
+    required: true
+    description: Metrics produced by this workflow.
+  normalized_sequence:
+    label: Normalized sequence
+    config_key: normalized_fasta_path
+    default: data/output/normalized.fasta
+    nextflow_output: normalized.fasta
+    kind: sequence
+    required: true
+    description: Normalized sequence produced by this workflow.
+display_name: Sequence normalization demonstration (Nextflow)
+description: Demonstrate the Nextflow runtime with FASTA normalization, sequence metrics,
+  metadata counting, and a report.
+use_when:
+- the user requests a Nextflow runtime demonstration
+avoid_when:
+- the user needs a validated production sequence-analysis workflow
+input_summary: FASTA sequence and TSV/CSV metadata.
+output_summary: Normalized FASTA, metrics JSON, and Markdown report.
+limitations: This is an educational workflow for testing the Nextflow engine.
+examples:
+- Run the bundled Nextflow sequence demo.
+visibility: internal
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: nextflow

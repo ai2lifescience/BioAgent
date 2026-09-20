@@ -24,7 +24,7 @@ from tools.runtime_tools.pipeline_runtime.engine.outputs import finalize_output_
 
 
 def _load_workflow_module():
-    workflow_path = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "bacterial_annotation" / "workflow.py"
+    workflow_path = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "bacterial_genome_annotation" / "workflow.py"
     spec = spec_from_file_location("agent_bacterial_annotation_workflow", workflow_path)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"Unable to load workflow module: {workflow_path}")
@@ -87,13 +87,13 @@ def _write_bakta_outputs(command: list[str], genome_path: Path) -> None:
 
 
 def main() -> int:
-    if not (PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "bacterial_annotation" / "workflow.py").exists():
-        print("SKIP: bacterial_annotation pipeline is not present in this checkout.")
+    if not (PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "bacterial_genome_annotation" / "workflow.py").exists():
+        print("SKIP: bacterial_genome_annotation pipeline is not present in this checkout.")
         return 0
     workflow = _load_workflow_module()
     with TemporaryDirectory(prefix="agent-bacterial-annotation-") as temporary_dir:
         temporary_path = Path(temporary_dir)
-        pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "bacterial_annotation"
+        pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "bacterial_genome_annotation"
         genome_path = pipeline_dir / "data" / "input" / "example_contigs.fasta"
         bakta_db_path = temporary_path / "bakta-db-light"
         bakta_db_path.mkdir()
@@ -123,7 +123,7 @@ def main() -> int:
             return f"/mock/bin/{name}"
 
         prokka_context = prepare_pipeline_context(
-            pipeline_name="bacterial_annotation",
+            pipeline_name="bacterial_genome_annotation",
             artifact_dir=temporary_path / "prokka-artifacts",
             run_id="prokka-smoke",
             input_overrides={"genome": str(genome_path)},
@@ -185,7 +185,7 @@ def main() -> int:
             assert "ecoli_prokka.gbk" in archive.namelist()
 
         bakta_context = prepare_pipeline_context(
-            pipeline_name="bacterial_annotation",
+            pipeline_name="bacterial_genome_annotation",
             artifact_dir=temporary_path / "bakta-artifacts",
             run_id="bakta-smoke",
             input_overrides={"genome": str(genome_path)},

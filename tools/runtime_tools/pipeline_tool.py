@@ -16,12 +16,16 @@ Use pipeline_shell (the SDK local shell tool) for pipeline operations. Its only
 command is agent-pipeline; Bash expressions, arbitrary commands, and redirects
 are not supported. Issue ONE command per call. Shell action timeout_ms is in
 milliseconds; --timeout is the pipeline deadline in seconds.
+Pipeline catalog entries declare a container boundary and own their workflow
+dependencies. Do not suggest installing pipeline dependencies into the agent
+environment.
 
 Commands:
-- agent-pipeline catalog : discover pipeline manifests, inputs, parameters.
+- agent-pipeline catalog : discover intent-focused pipeline names, descriptions,
+  use cases, limitations, inputs, parameters, and outputs.
 - agent-pipeline files : discover session workspace-relative input paths.
-- agent-pipeline example --pipeline example_sequence_qc : stage bundled example
-  data, only when the user requested a demonstration/example.
+- agent-pipeline example --pipeline sequence_qc_demo : stage bundled internal
+  demonstration data, only when the user requested a demonstration/example.
 - agent-pipeline plan --pipeline NAME --input SLOT=WORKSPACE_PATH
   [--input OTHER_SLOT=PATH] [--param NAME=JSON_OR_TEXT] [--cores N]
   [--timeout SECONDS] [--dry-run]. Quote tokens containing spaces. For array inputs,
@@ -34,7 +38,10 @@ Commands:
   metrics, table previews, and a ZIP bundle, without rerunning.
 - agent-pipeline cancel --job-id ID : stop the local process group (SDK approval).
 
-Inspect catalog and session files, reuse known paths, then plan. Resolve missing
+Inspect catalog and session files, reuse known paths, then plan. Choose a
+pipeline by its display name, description, use_when, avoid_when, inputs, and
+limitations. Treat entries marked visibility=internal as demonstrations and
+select them only when the user asks for a demo or runtime test. Resolve missing
 inputs or parameters before run. Use the returned plan ID; never invent an ID.
 Do not modify job state or pipeline definitions through filesystem tools.
 Use existing data retrieval tools to obtain requested public data before planning;
@@ -48,9 +55,9 @@ automatically retry failed/interrupted jobs. Preserve logs and explain failures.
 
 Usage examples:
 1. "List the available pipelines" -> catalog.
-2. "Run the example_sequence_qc example and summarize it" -> example, plan,
+2. "Run the sequence QC demonstration and summarize it" -> example, plan,
    approval, run, wait, and results.
-3. "Run example_sequence_qc with my uploaded reads.fastq and metadata.tsv" ->
+3. "Run the sequence QC demonstration with my uploaded reads.fastq and metadata.tsv" ->
    files, explicit slot inputs, plan, approval, run, wait, and results.
 """
 

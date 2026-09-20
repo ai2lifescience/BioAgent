@@ -22,7 +22,7 @@ def parse_command(command: str) -> argparse.Namespace:
     for name in ("catalog", "files", "jobs"):
         subs.add_parser(name, add_help=False, allow_abbrev=False)
     example = subs.add_parser("example", add_help=False, allow_abbrev=False)
-    example.add_argument("--pipeline", default="example_sequence_qc")
+    example.add_argument("--pipeline", default="sequence_qc_demo")
     plan = subs.add_parser("plan", add_help=False, allow_abbrev=False)
     plan.add_argument("--pipeline", required=True)
     plan.add_argument("--input", action="append", default=[])

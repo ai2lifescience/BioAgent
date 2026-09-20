@@ -97,7 +97,7 @@ class LocalTransportTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn("input", tools["apply_patch"]["parameters"]["properties"])
         outputs = {item["tool_call_id"]: item["content"] for item in requests[1]["messages"] if item["role"] == "tool"}
         self.assertEqual(set(outputs), {"shell-1", "patch-1", "function-1"})
-        self.assertIn("example_sequence_qc", outputs["shell-1"])
+        self.assertIn("sequence_qc_demo", outputs["shell-1"])
         self.assertIn("note.txt", outputs["patch-1"])
 
     async def test_native_execution_and_history(self):

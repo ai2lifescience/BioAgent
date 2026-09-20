@@ -1,0 +1,81 @@
+name: antimicrobial_resistance_detection
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 3600
+inputs:
+  input_data:
+    label: Input file or directory
+    config_key: input_path
+    required: true
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    - .fastq
+    - .fq
+    description: Sequence input accepted by this workflow.
+outputs:
+  arg_hits:
+    label: ARG hits table
+    config_key: arg_hits_path
+    default: data/output/arg_hits.tsv
+    kind: table
+    required: true
+    description: ARG hits table produced by this workflow.
+  arg_hits_jsonl:
+    label: ARG hits JSONL
+    config_key: arg_hits_jsonl_path
+    default: data/output/arg_hits.jsonl
+    kind: report
+    required: false
+    description: ARG hits JSONL produced by this workflow.
+  qc:
+    label: Quality-control summary
+    config_key: qc_path
+    default: data/output/qc.json
+    kind: report
+    required: true
+    description: Quality-control summary produced by this workflow.
+  status:
+    label: Pipeline status
+    config_key: status_path
+    default: data/output/status.json
+    kind: report
+    required: true
+    description: Pipeline status produced by this workflow.
+param_overrides:
+  input_type:
+    config_key: input_type
+    default: auto
+  analysis_mode:
+    config_key: analysis_mode
+    default: auto
+  threads:
+    config_key: threads
+    default: 8
+  sample_id:
+    config_key: sample_id
+    default: ''
+display_name: Antimicrobial resistance detection
+description: Identify antimicrobial resistance gene candidates from bacterial or metagenomic
+  sequence data and return normalized hit tables, quality metrics, and run status.
+use_when:
+- the user wants resistance gene or AMR evidence from contigs or reads
+- the user has a supported FASTA or FASTQ input
+avoid_when:
+- the user needs resistance-conferring point mutation interpretation
+- the user asks for phenotype or clinical treatment conclusions
+input_summary: Contigs, single-end reads, paired reads, or a batch directory, plus
+  any configured resistance reference resources.
+output_summary: Resistance hit tables, JSONL records, QC metrics, and a machine-readable
+  status manifest.
+limitations: Reports sequence-homology candidates and does not establish phenotype,
+  abundance, taxonomy, or clinical resistance.
+examples:
+- Find AMR gene candidates in my assembled contigs.
+visibility: public
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: shell

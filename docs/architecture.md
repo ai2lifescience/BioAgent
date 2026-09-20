@@ -445,10 +445,14 @@ model endpoint and does not provide the OpenAI trace destination.
 
 ## Pipeline runtime
 
-Pipeline2Agent runs registered Shell, Snakemake, Nextflow, and miniwdl workflows
+Pipeline2Agent runs registered Shell, Snakemake, Nextflow, and WDL workflows
 through the SDK local ShellTool named `pipeline_shell`. Pipeline definitions
 live under `tools/runtime_tools/pipelines/<pipeline_name>/`. The service scans
 folders containing `runner.yaml` whenever the agent requests the catalog.
+Pipeline bundles own their execution dependencies and declare a container
+boundary in the manifest; the agent environment does not install workflow
+dependencies. The human-readable bundle index is in
+[`tools/runtime_tools/pipelines/README.md`](../tools/runtime_tools/pipelines/README.md).
 
 | Component | Responsibility |
 | --- | --- |
@@ -484,15 +488,17 @@ user request and conversation
 ```
 
 The catalog contains manifest metadata; the model does not automatically read
-all workflow source files or pipeline READMEs. Accurate `description`, input
-labels, and input descriptions therefore help selection. An explicit pipeline
-name and known input paths reduce ambiguity. The agent is instructed to ask
-when missing information materially changes the result.
+all workflow source files or pipeline READMEs. Every manifest therefore gives
+the agent a display name, a user-intent description, `use_when` and
+`avoid_when` guidance, input and output summaries, limitations, examples, and
+the execution boundary. Accurate input labels and descriptions help selection.
+An explicit pipeline name and known input paths reduce ambiguity. The agent is
+instructed to ask when missing information materially changes the result.
 
 Pipeline selection is a model decision. Runtime checks establish that inputs
 and settings satisfy the implemented execution contract; they do not prove
 that the pipeline is scientifically appropriate for the user's question.
-For example, `generic_bio` describes an educational positional-comparison demo,
+For example, `dna_analysis_demo` describes an educational positional-comparison demo,
 not a validated alignment or variant-calling workflow.
 
 ### The agent-pipeline command protocol
@@ -535,7 +541,7 @@ project root:
 
 ```bash
 python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace catalog
-python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace example --pipeline example_sequence_qc
+python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace example --pipeline sequence_qc_demo
 ```
 
 This module constructs the `agent-pipeline` prefix internally. SDK approval
@@ -572,7 +578,7 @@ descriptions. File inspection can supply text previews and table columns, but
 it does not provide a paired-read validator. A `.tsv` suffix establishes neither
 metadata semantics nor the presence of the columns a workflow needs.
 
-`example_sequence_qc` and `generic_bio` each declare one `reads` slot. They do
+`sequence_qc_demo` and `dna_analysis_demo` each declare one `reads` slot. They do
 not declare a paired-end interface. A workflow designed for two mates can
 expose the following slots, provided its implementation consumes both paths:
 
@@ -716,13 +722,17 @@ install dependencies or prove that the workflow executes successfully.
 1. Create a uniquely named folder under `tools/runtime_tools/pipelines/`. Use
    letters, numbers, underscores, hyphens, or dots, beginning with a letter or
    number. Keep the manifest name consistent with the folder name.
-2. Declare a clear description, engine entrypoint, input slots, parameter
-   defaults, output files, timeout, and resource limits in `runner.yaml`.
+2. Declare a clear user-intent description, `display_name`, `use_when`,
+   `avoid_when`, input and output summaries, limitations, engine entrypoint,
+   input slots, parameter defaults, output files, timeout, and resource limits
+   in `runner.yaml`.
 3. Implement the workflow against the generated configuration. Validate input
    contents and parameter ranges, write the declared outputs, and fail with an
    informative error when a requirement is not met.
-4. Install the engine and scientific dependencies in the execution environment.
-   Add a README describing them and optional `data/input/` examples.
+4. Declare `execution.boundary: container`. Keep workflow tools, databases,
+   and engine dependencies inside the pipeline container; do not add them to
+   the Pipeline2Agent environment. Add a README describing the bundle and
+   optional `data/input/` examples.
 5. Verify discovery, then plan and execute the new workflow with representative
    inputs and collect its results. Check missing or malformed inputs as well as
    successful execution.
@@ -742,7 +752,18 @@ Example manifest (the analysis itself must be implemented in the workflow):
 
 ```yaml
 name: my_pipeline
+display_name: Sequence length summary
 description: Calculate a length summary for a single FASTQ file.
+use_when:
+  - the user wants a quick length summary for FASTQ reads
+avoid_when:
+  - the user needs alignment or variant calling
+input_summary: One FASTQ file.
+output_summary: A report and metrics JSON file.
+limitations: This example does not perform alignment.
+execution:
+  boundary: container
+  dependency_scope: pipeline
 engine: shell
 entrypoint: run.sh
 timeout: 120
@@ -782,7 +803,7 @@ exec python3 "${script_dir}/workflow.py" "${config_path}"
 `workflow.py` loads the YAML path from `sys.argv[1]`, reads `input_path` and
 `params.min_length`, and writes `report_path` and `metrics_path`. Choose accepted
 suffixes and output kinds that the implementation actually supports. The
-[synthetic QC example](../tools/runtime_tools/pipelines/example_sequence_qc/)
+[synthetic QC example](../tools/runtime_tools/pipelines/sequence_qc_demo/)
 provides a complete shell/Python implementation.
 
 | Engine | Manifest entrypoint | Runtime requirements and output mapping |
@@ -800,7 +821,7 @@ changes in addition to a manifest.
 
 For a runnable demonstration of the full protocol, ask Pipeline2Agent:
 
-> Use the example_sequence_qc example data, run it, and summarize the results.
+> Use the sequence_qc_demo example data, run it, and summarize the results.
 
 The agent stages the bundled synthetic data, plans, requests approval, runs,
 and collects `filtered.fastq`, `assignments.tsv`, `metrics.json`, and `report.md`.

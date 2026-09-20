@@ -258,7 +258,7 @@ step.
 - Use `Download` when you need a local copy. Use `Remove` to delete a file from
   the session workspace.
 - Refer to a file by name in your message, for example `Analyze reads.fastq`
-  or `Run generic_shell on metadata.csv`. Pipeline2Agent resolves the workspace file
+  or `Run sequence_metadata_assignment on metadata.csv`. Pipeline2Agent resolves the workspace file
   and supplies the path required by the selected tool.
 - For a text-based PDF, ask `Summarize my uploaded paper.pdf` or ask a question
   about the paper. Pipeline2Agent extracts the document in page-aware chunks and
@@ -635,7 +635,7 @@ List the available pipelines and their required inputs.
 For a demonstration using bundled synthetic data:
 
 ```text
-Run the example_sequence_qc example and summarize its metrics.
+Run the sequence_qc_demo example and summarize its metrics.
 ```
 
 For your own data, upload files to the current session and mention the filenames
@@ -643,7 +643,7 @@ and their roles in the request. The agent discovers the matching workspace
 paths before it creates the validated plan:
 
 ```text
-Run example_sequence_qc with my reads.fastq as reads and metadata.tsv as metadata, with min_length 8. Return the results.
+Run sequence_qc_demo with my reads.fastq as reads and metadata.tsv as metadata, with min_length 8. Return the results.
 ```
 
 The agent discovers paths, selects inputs, and creates a validated plan. Missing
@@ -670,23 +670,24 @@ outputs under `runs/<job-id>/outputs/`.
 Other bundled examples can be requested explicitly by name:
 
 ```text
-Run generic_snakemake with its bundled example data as a dry run with 2 cores.
+Run sequence_normalization_snakemake_demo with its bundled example data as a dry run with 2 cores.
 ```
 
 ```text
-Run generic_nextflow with its bundled example data and summarize the results.
+Run sequence_normalization_nextflow_demo with its bundled example data and summarize the results.
 ```
 
 ```text
-Run generic_bio with its bundled example data and summarize the results.
+Run dna_analysis_demo with its bundled example data and summarize the results.
 ```
 
-The corresponding engines and dependencies must be installed. Shell pipelines
-do not support `--dry-run`; planning validates their declared inputs and
-settings without executing the workflow. Snakemake, Nextflow, and miniwdl have
-engine-specific validation modes described in the architecture reference.
+The selected pipeline supplies its execution container and workflow
+dependencies. Shell pipelines do not support `--dry-run`; planning validates
+their declared inputs and settings without executing the workflow. Snakemake,
+Nextflow, and WDL bundles have engine-specific validation modes described in
+the architecture reference.
 
-`generic_bio` is an educational demo: its alignment and variant outputs use a
+`dna_analysis_demo` is an educational demo: its alignment and variant outputs use a
 positional comparison. Its tree outputs are optional; ask to disable them or
 set `emit_phylogenetic_tree=false` when planning.
 

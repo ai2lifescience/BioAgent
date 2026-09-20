@@ -1,0 +1,148 @@
+name: bacterial_genome_annotation
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 3600
+inputs:
+  genome:
+    label: Assembled bacterial genome
+    config_key: genome_path
+    required: true
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    description: Assembled bacterial contigs in FASTA format.
+outputs:
+  report:
+    label: Annotation report
+    config_key: report_path
+    default: output/report.md
+    kind: report
+    required: true
+    description: Annotation report produced by this workflow.
+  metrics:
+    label: Annotation metrics
+    config_key: metrics_path
+    default: output/metrics.json
+    kind: metrics
+    required: true
+    description: Annotation metrics produced by this workflow.
+  gff:
+    label: GFF3 annotation
+    config_key: gff_path
+    default: output/annotation.gff
+    kind: annotation
+    required: true
+    description: GFF3 annotation produced by this workflow.
+  genbank:
+    label: GenBank annotation
+    config_key: gbk_path
+    default: output/annotation.gbk
+    kind: annotation
+    required: true
+    description: GenBank annotation produced by this workflow.
+  proteins:
+    label: Protein sequences
+    config_key: faa_path
+    default: output/annotation.faa
+    kind: sequence
+    required: true
+    description: Protein sequences produced by this workflow.
+  genes:
+    label: Gene nucleotide sequences
+    config_key: ffn_path
+    default: output/annotation.ffn
+    kind: sequence
+    required: true
+    description: Gene nucleotide sequences produced by this workflow.
+  contigs:
+    label: Annotated contigs
+    config_key: fna_path
+    default: output/annotation.fna
+    kind: sequence
+    required: true
+    description: Annotated contigs produced by this workflow.
+  features:
+    label: Feature table
+    config_key: tsv_path
+    default: output/annotation.tsv
+    kind: table
+    required: true
+    description: Feature table produced by this workflow.
+  summary:
+    label: Annotation statistics
+    config_key: summary_path
+    default: output/annotation.txt
+    kind: text
+    required: true
+    description: Annotation statistics produced by this workflow.
+  log:
+    label: Annotation execution log
+    config_key: log_path
+    default: output/annotation.log
+    kind: text
+    required: true
+    description: Annotation execution log produced by this workflow.
+  bundle:
+    label: Complete raw annotation output
+    config_key: bundle_path
+    default: output/annotation_outputs.zip
+    kind: archive
+    required: true
+    description: Complete raw annotation output produced by this workflow.
+  bakta_json:
+    label: Bakta machine-readable annotation
+    config_key: bakta_json_path
+    default: output/annotation.json
+    kind: metadata
+    required: false
+    description: Bakta machine-readable annotation produced by this workflow.
+  inference:
+    label: Bakta inference evidence
+    config_key: inference_path
+    default: output/annotation.inference.tsv
+    kind: table
+    required: false
+    description: Bakta inference evidence produced by this workflow.
+  hypotheticals:
+    label: Bakta hypothetical proteins
+    config_key: hypotheticals_path
+    default: output/annotation.hypotheticals.tsv
+    kind: table
+    required: false
+    description: Bakta hypothetical proteins produced by this workflow.
+  plot_svg:
+    label: Bakta annotation plot (SVG)
+    config_key: plot_svg_path
+    default: output/annotation.svg
+    kind: image
+    required: false
+    description: Bakta annotation plot (SVG) produced by this workflow.
+  plot_png:
+    label: Bakta annotation plot (PNG)
+    config_key: plot_png_path
+    default: output/annotation.png
+    kind: image
+    required: false
+    description: Bakta annotation plot (PNG) produced by this workflow.
+display_name: Bacterial genome annotation
+description: Annotate assembled bacterial contigs with Prokka or Bakta and normalize
+  the results into sequence, feature, report, metrics, and archive artifacts.
+use_when:
+- the user has assembled bacterial contigs and wants gene or feature annotation
+avoid_when:
+- the input is raw reads
+- the user requests comparative variant analysis
+input_summary: One assembled bacterial contigs FASTA file and an annotator selection
+  with optional organism metadata.
+output_summary: GFF, GenBank, protein, nucleotide, feature-table, report, metrics,
+  log, and raw-output archive files.
+limitations: Annotation quality depends on the selected tool and database versions.
+examples:
+- Annotate these bacterial contigs with Bakta.
+visibility: public
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: shell

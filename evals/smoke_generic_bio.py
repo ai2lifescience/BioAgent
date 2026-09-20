@@ -16,10 +16,10 @@ from tools.workspace import artifact_content_type, can_serve_artifact
 
 
 def main() -> int:
-    pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "generic_bio"
+    pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "dna_analysis_demo"
     with TemporaryDirectory(prefix="agent-generic-bio-") as artifact_dir:
         result = run_pipeline(
-            pipeline_name="generic_bio",
+            pipeline_name="dna_analysis_demo",
             artifact_dir=artifact_dir,
             run_id="smoke",
             input_overrides={
@@ -81,7 +81,7 @@ def main() -> int:
         assert output_paths["phylogenetic_tree.png"].stat().st_size > 1_000
 
         no_tree_result = run_pipeline(
-            pipeline_name="generic_bio",
+            pipeline_name="dna_analysis_demo",
             artifact_dir=artifact_dir,
             run_id="smoke-no-tree",
             input_overrides={

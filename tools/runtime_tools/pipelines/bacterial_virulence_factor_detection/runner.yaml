@@ -1,0 +1,78 @@
+name: bacterial_virulence_factor_detection
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 3600
+inputs:
+  input_data:
+    label: Input file or directory
+    config_key: input_path
+    required: true
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    - .fastq
+    - .fq
+    description: Sequence input accepted by this workflow.
+outputs:
+  vf_hits:
+    label: Virulence-factor hits table
+    config_key: vf_hits_path
+    default: data/output/vf_hits.tsv
+    kind: table
+    required: true
+    description: Virulence-factor hits table produced by this workflow.
+  vf_hits_jsonl:
+    label: Virulence-factor hits JSONL
+    config_key: vf_hits_jsonl_path
+    default: data/output/vf_hits.jsonl
+    kind: report
+    required: false
+    description: Virulence-factor hits JSONL produced by this workflow.
+  qc:
+    label: Quality-control summary
+    config_key: qc_path
+    default: data/output/qc.json
+    kind: report
+    required: true
+    description: Quality-control summary produced by this workflow.
+  status:
+    label: Pipeline status
+    config_key: status_path
+    default: data/output/status.json
+    kind: report
+    required: true
+    description: Pipeline status produced by this workflow.
+param_overrides:
+  input_type:
+    config_key: input_type
+    default: auto
+  analysis_mode:
+    config_key: analysis_mode
+    default: auto
+  threads:
+    config_key: threads
+    default: 8
+  sample_id:
+    config_key: sample_id
+    default: ''
+display_name: Bacterial virulence-factor detection
+description: Identify virulence-factor sequence candidates from bacterial or metagenomic
+  data and return normalized evidence tables and QC artifacts.
+use_when:
+- the user wants virulence-factor sequence candidates from contigs or reads
+avoid_when:
+- the user asks for a pathogenicity or clinical risk conclusion
+input_summary: Contigs, reads, or a supported batch directory with configured virulence-factor
+  reference resources.
+output_summary: Virulence-factor hit tables, JSONL records, QC metrics, and run status.
+limitations: Associated-organism metadata is reference provenance and does not prove
+  pathogenicity or sample identity.
+examples:
+- Screen this assembly for virulence-factor candidates.
+visibility: public
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: shell

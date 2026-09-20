@@ -1,0 +1,55 @@
+name: sequence_normalization_wdl_demo
+engine: wdl
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 300
+inputs:
+  sequence:
+    label: Sequence FASTA
+    wdl_key: GenericWdl.input_fasta
+    required: true
+    accepts:
+    - .fa
+    - .fasta
+    - .fna
+    description: Sequence FASTA input.
+outputs:
+  report:
+    label: Report
+    wdl_output: GenericWdl.report
+    target: data/output/report.md
+    kind: report
+    required: true
+    description: Report produced by this workflow.
+  metrics:
+    label: Metrics
+    wdl_output: GenericWdl.metrics
+    target: data/output/metrics.json
+    kind: metrics
+    required: true
+    description: Metrics produced by this workflow.
+  normalized_sequence:
+    label: Normalized sequence
+    wdl_output: GenericWdl.normalized_fasta
+    target: data/output/normalized.fasta
+    kind: sequence
+    required: true
+    description: Normalized sequence produced by this workflow.
+display_name: Sequence normalization demonstration (WDL)
+description: Demonstrate the WDL runtime with FASTA normalization, sequence metrics,
+  and a report.
+use_when:
+- the user requests a WDL runtime demonstration
+avoid_when:
+- the user needs a validated production sequence-analysis workflow
+input_summary: One FASTA sequence and optional WDL parameters.
+output_summary: Normalized FASTA, metrics JSON, and Markdown report.
+limitations: This is an educational workflow for testing WDL execution.
+examples:
+- Run the bundled WDL sequence demo.
+visibility: internal
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl

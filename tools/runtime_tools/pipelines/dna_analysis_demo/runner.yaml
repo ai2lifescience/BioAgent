@@ -1,0 +1,169 @@
+name: dna_analysis_demo
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 120
+inputs:
+  reads:
+    label: Sequencing reads
+    config_key: input_path
+    required: true
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Single-end DNA reads with Phred+33 quality scores.
+  reference:
+    label: Reference genome
+    config_key: reference_path
+    required: true
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    - .fasta.gz
+    - .fa.gz
+    - .fna.gz
+    description: One reference sequence used by the positional comparison demo.
+  metadata:
+    label: Sample metadata
+    config_key: metadata_path
+    required: true
+    accepts:
+    - .tsv
+    - .csv
+    description: Sample sheet containing a sample_id column.
+outputs:
+  report:
+    label: Analysis report
+    config_key: report_path
+    default: data/output/report.md
+    kind: report
+    required: true
+    description: Analysis report produced by this workflow.
+  metrics:
+    label: QC and analysis metrics
+    config_key: metrics_path
+    default: data/output/metrics.json
+    kind: metrics
+    required: true
+    description: QC and analysis metrics produced by this workflow.
+  html_report:
+    label: Interactive-style HTML report
+    config_key: html_report_path
+    default: data/output/report.html
+    kind: report
+    required: true
+    description: Interactive-style HTML report produced by this workflow.
+  filtered_reads:
+    label: Quality-filtered FASTQ
+    config_key: filtered_fastq_path
+    default: data/output/filtered_reads.fastq
+    kind: sequence
+    required: true
+    description: Quality-filtered FASTQ produced by this workflow.
+  read_qc:
+    label: Per-read QC table
+    config_key: read_qc_path
+    default: data/output/read_qc.tsv
+    kind: table
+    required: true
+    description: Per-read QC table produced by this workflow.
+  sample_summary:
+    label: Sample summary table
+    config_key: sample_summary_path
+    default: data/output/sample_summary.tsv
+    kind: table
+    required: true
+    description: Sample summary table produced by this workflow.
+  coverage:
+    label: Per-position coverage table
+    config_key: coverage_path
+    default: data/output/coverage.tsv
+    kind: table
+    required: true
+    description: Per-position coverage table produced by this workflow.
+  alignments:
+    label: Demonstration alignments
+    config_key: alignment_sam_path
+    default: data/output/alignments.sam
+    kind: alignment
+    required: true
+    description: Demonstration alignments produced by this workflow.
+  consensus:
+    label: Consensus sequence
+    config_key: consensus_fasta_path
+    default: data/output/consensus.fasta
+    kind: sequence
+    required: true
+    description: Consensus sequence produced by this workflow.
+  variants:
+    label: Demonstration variants
+    config_key: variants_vcf_path
+    default: data/output/variants.vcf
+    kind: variants
+    required: true
+    description: Demonstration variants produced by this workflow.
+  variant_table:
+    label: Variant summary table
+    config_key: variant_table_path
+    default: data/output/variant_summary.tsv
+    kind: table
+    required: true
+    description: Variant summary table produced by this workflow.
+  qc_figure:
+    label: Read QC overview figure
+    config_key: qc_figure_path
+    default: data/output/qc_overview.png
+    kind: image
+    required: true
+    description: Read QC overview figure produced by this workflow.
+  coverage_figure:
+    label: Coverage profile figure
+    config_key: coverage_figure_path
+    default: data/output/coverage.png
+    kind: image
+    required: true
+    description: Coverage profile figure produced by this workflow.
+  variant_figure:
+    label: Variant allele fraction figure
+    config_key: variant_figure_path
+    default: data/output/variant_allele_fraction.png
+    kind: image
+    required: true
+    description: Variant allele fraction figure produced by this workflow.
+  phylogenetic_tree:
+    label: Optional phylogenetic tree
+    config_key: phylogenetic_tree_path
+    default: data/output/phylogenetic_tree.nwk
+    kind: phylogenetic_tree
+    required: false
+    description: Optional phylogenetic tree produced by this workflow.
+  phylogenetic_tree_figure:
+    label: Optional phylogenetic tree figure
+    config_key: phylogenetic_tree_figure_path
+    default: data/output/phylogenetic_tree.png
+    kind: image
+    required: false
+    description: Optional phylogenetic tree figure produced by this workflow.
+display_name: DNA analysis demonstration
+description: Run an educational DNA workflow that demonstrates read QC, positional
+  comparison, consensus, variant-like records, tables, figures, and reports.
+use_when:
+- the user requests a local demonstration of the pipeline runtime
+- the user wants to inspect example DNA analysis artifacts
+avoid_when:
+- the user needs validated alignment, variant calling, or research-grade interpretation
+input_summary: Single-end reads, one reference FASTA, and sample metadata.
+output_summary: QC metrics, demonstration alignments, consensus, variant-like records,
+  tables, figures, and reports.
+limitations: This is an educational positional-comparison workflow and is not a validated
+  aligner or variant caller.
+examples:
+- Run the DNA pipeline demo on the bundled example data.
+visibility: internal
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: shell
