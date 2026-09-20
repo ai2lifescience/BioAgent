@@ -1,0 +1,49 @@
+name: generic_nextflow
+description: Nextflow example that normalizes FASTA sequences and reports sequence length, GC content
+  and metadata row counts.
+engine: nextflow
+workflow: main.nf
+nextflow_config: nextflow.config
+timeout: 300
+cores: 1
+params:
+  subtype: subtype1
+  segment: segment1
+  time: all-time
+  analysis_mode: example
+  min_length: 0
+inputs:
+  sequence:
+    label: Sequence FASTA
+    config_key: input_path
+    required: true
+    accepts:
+    - .fa
+    - .fasta
+    - .fna
+  metadata:
+    label: Metadata table
+    config_key: metadata_path
+    required: true
+    accepts:
+    - .tsv
+    - .csv
+outputs:
+  report:
+    label: Report
+    config_key: report_path
+    default: report.md
+    nextflow_output: report.md
+    kind: report
+  metrics:
+    label: Metrics
+    config_key: metrics_path
+    default: metrics.json
+    nextflow_output: metrics.json
+    kind: metrics
+  normalized_sequence:
+    label: Normalized sequence
+    config_key: normalized_fasta_path
+    default: normalized.fasta
+    nextflow_output: normalized.fasta
+    kind: sequence

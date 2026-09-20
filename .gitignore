@@ -22,22 +22,19 @@ docs/project_intro/
 # External resources kept locally and excluded from version control.
 /resource/
 
-# Pipeline runtime outputs and test input data.
+# Generated pipeline outputs belong in runtime workspaces.
 **/output/
-!pipelines/*/data/
-!pipelines/*/data/output/
-pipelines/*/data/output/*
-!pipelines/*/data/output/README.md
 
 # Large sequencing and alignment files.
 *.fastq
 *.fastq.gz
 *.fq
 *.fq.gz
-!pipelines/*/data/input/example_*.fastq
-!pipelines/*/data/input/example_*.fastq.gz
-!pipelines/*/data/input/example_*.fq
-!pipelines/*/data/input/example_*.fq.gz
+!tools/runtime_tools/pipelines/*/data/input/example_*.fastq
+!tools/runtime_tools/pipelines/*/data/input/example_*.fastq.gz
+!tools/runtime_tools/pipelines/*/data/input/example_*.fq
+!tools/runtime_tools/pipelines/*/data/input/example_*.fq.gz
+!tools/runtime_tools/pipelines/example_sequence_qc/data/input/reads.fastq
 *.bam
 *.sam
 

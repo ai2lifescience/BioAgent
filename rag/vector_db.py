@@ -7,11 +7,11 @@ from typing import Any
 
 import chromadb
 
-from models.embedding_client import embed_records, embed_texts
+from .embeddings import embed_records, embed_texts
 from rag.documents import make_hit
 
 
-DEFAULT_CHROMA_PATH = os.getenv("BIOAGENT_CHROMA_PATH", "runtime/chroma")
+DEFAULT_CHROMA_PATH = os.getenv("AGENT_CHROMA_PATH", "runtime/chroma")
 DEFAULT_COLLECTION_NAME = "species_kb"
 
 

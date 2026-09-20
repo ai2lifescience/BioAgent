@@ -14,15 +14,15 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from agent_core.artifacts import artifact_content_type, can_serve_artifact
-from tools.pipeline_config import load_yaml_config
-from tools.pipeline_runner.config import write_runtime_config
-from tools.pipeline_runner.core import prepare_pipeline_context
+from tools.workspace import artifact_content_type, can_serve_artifact
+from tools.runtime_tools.pipeline_runtime.config_io import load_yaml_config
+from tools.runtime_tools.pipeline_runtime.engine.config import write_runtime_config
+from tools.runtime_tools.pipeline_runtime.engine.runner import prepare_pipeline_context
 
 
 def _load_workflow_module():
-    workflow_path = PROJECT_ROOT / "pipelines" / "rna_secondary_structure" / "workflow.py"
-    spec = spec_from_file_location("bioagent_rna_secondary_structure_workflow", workflow_path)
+    workflow_path = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "rna_secondary_structure" / "workflow.py"
+    spec = spec_from_file_location("agent_rna_secondary_structure_workflow", workflow_path)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"Unable to load workflow module: {workflow_path}")
     module = module_from_spec(spec)
@@ -31,10 +31,13 @@ def _load_workflow_module():
 
 
 def main() -> int:
+    if not (PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "rna_secondary_structure" / "workflow.py").exists():
+        print("SKIP: rna_secondary_structure pipeline is not present in this checkout.")
+        return 0
     workflow = _load_workflow_module()
-    with TemporaryDirectory(prefix="bioagent-rna-secondary-") as temporary_dir:
+    with TemporaryDirectory(prefix="agent-rna-secondary-") as temporary_dir:
         temporary_path = Path(temporary_dir)
-        pipeline_dir = PROJECT_ROOT / "pipelines" / "rna_secondary_structure"
+        pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "rna_secondary_structure"
         rna_path = pipeline_dir / "data" / "input" / "example_rna.fasta"
         context = prepare_pipeline_context(
             pipeline_name="rna_secondary_structure",

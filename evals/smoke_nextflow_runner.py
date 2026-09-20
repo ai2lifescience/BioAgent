@@ -17,13 +17,15 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from pipelines.generic_nextflow.workflow import run as run_example_step
-from tools.pipeline_runner.core import run_pipeline
+from tools.runtime_tools.pipelines.generic_nextflow.workflow import run as run_example_step
+from tools.runtime_tools.pipeline_runtime.engine.runner import run_pipeline
+from tools.runtime_tools.pipeline_runtime.engine.config import load_pipeline_config
 
 
 def _fake_nextflow_run(command: list[str], **_kwargs: object) -> subprocess.CompletedProcess[str]:
     params_path = Path(command[command.index("-params-file") + 1])
     config = yaml.safe_load(params_path.read_text(encoding="utf-8")) or {}
+    assert Path(config["agent_config_path"]) == params_path
     output_dir = Path(config["nextflow_output_dir"])
     output_dir.mkdir(parents=True, exist_ok=True)
     if "-preview" not in command:
@@ -50,17 +52,17 @@ def _fake_nextflow_run(command: list[str], **_kwargs: object) -> subprocess.Comp
 
 
 def main() -> int:
-    pipeline_dir = PROJECT_ROOT / "pipelines" / "generic_nextflow"
+    pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "generic_nextflow"
     inputs = {
         "sequence": str(pipeline_dir / "data/input/sequences_segment1.fasta"),
         "metadata": str(pipeline_dir / "data/input/metadata.tsv"),
     }
 
-    with TemporaryDirectory(prefix="bioagent-nextflow-step-") as step_dir:
+    with TemporaryDirectory(prefix="agent-nextflow-step-") as step_dir:
         previous_dir = Path.cwd()
         try:
             os.chdir(step_dir)
-            config = yaml.safe_load((pipeline_dir / "config.yaml").read_text(encoding="utf-8"))
+            config, _ = load_pipeline_config(pipeline_dir)
             metrics = run_example_step(
                 config,
                 pipeline_dir / "data/input/sequences_segment1.fasta",
@@ -76,12 +78,12 @@ def main() -> int:
         finally:
             os.chdir(previous_dir)
 
-    with TemporaryDirectory(prefix="bioagent-nextflow-runner-") as artifact_dir:
+    with TemporaryDirectory(prefix="agent-nextflow-runner-") as artifact_dir:
         with patch(
-            "tools.pipeline_runner.nextflow._nextflow_command",
+            "tools.runtime_tools.pipeline_runtime.engine.nextflow._nextflow_command",
             return_value=["nextflow-test-double"],
         ), patch(
-            "tools.pipeline_runner.nextflow.subprocess.run",
+            "tools.runtime_tools.pipeline_runtime.engine.nextflow.subprocess.run",
             side_effect=_fake_nextflow_run,
         ):
             result = run_pipeline(

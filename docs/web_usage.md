@@ -1,13 +1,14 @@
-# BioAgent Web UI Usage
+# Pipeline2Agent Web UI Usage
 
-This guide shows how to run the BioAgent browser interface locally or from
+This guide shows how to run the Pipeline2Agent browser interface locally or from
 another computer on the same local network.
 
 ## Start Local Web UI
 
-Use this when you only need to open BioAgent on the same machine:
+Use this when you only need to open Pipeline2Agent on the same machine:
 
 ```bash
+conda activate openaisdk
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ```
 
@@ -31,7 +32,7 @@ The original interface remains at `/`. The assistant page is a compact chat
 surface intended to fill a host website's right-side drawer. It includes model
 selection, file attachments, streamed activity, and a small context summary.
 
-Open `/assistant-demo` to see a sample workspace with BioAgent mounted as a
+Open `/assistant-demo` to see a sample workspace with Pipeline2Agent mounted as a
 collapsible drawer:
 
 ```text
@@ -52,12 +53,12 @@ values with `URLSearchParams` when building links.
 For a host website, include the reusable drawer helper and mount it once:
 
 ```html
-<div id="bioagent-drawer"></div>
-<script src="https://bioagent.example.org/static/assistant-embed.js"></script>
+<div id="agent-drawer"></div>
+<script src="https://pipeline2agent.example.org/static/assistant-embed.js"></script>
 <script>
-  const drawer = BioAgentDrawer.mount({
-    target: document.getElementById("bioagent-drawer"),
-    src: "https://bioagent.example.org/assistant",
+  const drawer = Pipeline2AgentDrawer.mount({
+    target: document.getElementById("agent-drawer"),
+    src: "https://pipeline2agent.example.org/assistant",
     context: { project_id: "123", sample_id: "456", result_type: "summary" }
   });
 </script>
@@ -72,18 +73,18 @@ A custom embedding can update the assistant after loading with `postMessage`:
 ```js
 assistantFrame.contentWindow.postMessage(
   {
-    type: "bioagent-context",
+    type: "agent-context",
     context: { project_id: "123", sample_id: "456", result_type: "summary" }
   },
-  "https://bioagent.example.org"
+  "https://pipeline2agent.example.org"
 );
 ```
 
-Use the exact BioAgent origin as the second argument and validate `event.origin`
+Use the exact Pipeline2Agent origin as the second argument and validate `event.origin`
 in a custom embedding implementation. The assistant accepts text labels only.
 
-For a proxy mount such as `/bioagent/assistant`, route the whole `/bioagent/`
-prefix to BioAgent and rewrite that prefix before forwarding, including static
+For a proxy mount such as `/agent/assistant`, route the whole `/agent/`
+prefix to Pipeline2Agent and rewrite that prefix before forwarding, including static
 files and API requests. The page resolves these URLs relative to its mount
 point. Disable proxy buffering for streaming responses. Public website
 integration still needs that website's authentication and session permissions;
@@ -93,30 +94,71 @@ The separate page keeps its conversation while it is open. Reloading or choosing
 **New chat** starts a new session; context labels stay on screen. **Stop waiting**
 disconnects the response stream; work already started on the server may continue.
 
+On the main page, use the session actions beside a conversation to rename it or
+pin it. Pinned conversations stay at the top of the list and the title and pin
+state are stored with the server-side session metadata.
+
+## Runtime Panel
+
+Each completed request includes a compact tab row below the answer: **Runtime**,
+**Plan & execution**, **Evidence**, and **Trace**. Select one tab at a time; the
+selected diagnostic view uses one shared content area:
+
+Click the selected tab again to hide the diagnostic area.
+
+- **Runtime** shows status, model, elapsed time, tool count, file count, and the
+  configured maximum turns.
+- **Plan & execution** shows the registered operations and the ordered agent,
+  model, handoff, tool, guardrail, approval, and completion events returned by
+  the Agents SDK. It reports observable actions and does not expose private
+  model reasoning.
+- **Evidence** groups tools, databases, queries, records, sources, links, files,
+  and tool errors. Workspace files link to their downloads.
+- **Trace** shows the timestamped technical event stream in a compact readable
+  form so the useful diagnostic details stay visible.
+
+The report remains useful for direct answers, database lookups, document reads,
+and pipeline requests. Pipeline outputs and structure or figure previews still
+appear above the report when a tool produces them.
+
 ## Start For Local Network Access
 
-Use this when another PC on the same LAN should open the BioAgent page:
+Use this when another PC on the same LAN should open the Pipeline2Agent page:
 
-Choose the launch command that matches your VPN setup.
-
-Without a proxy:
+Set the OpenRouter proxy once in your terminal, then start the server:
 
 ```bash
-env -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY \
-  -u http_proxy -u https_proxy -u all_proxy \
+conda activate openaisdk
+export AGENT_PROXY=socks5h://127.0.0.1:10801
+python -B -m interfaces.web --host 0.0.0.0 --port 8000
+```
+
+`ALL_PROXY` is not required when `AGENT_PROXY` is set. You do not need to
+unset `HTTP_PROXY` or `HTTPS_PROXY` for OpenRouter requests. Use `http://` if
+your proxy provides an HTTP listener; use `socks5h://` for the SOCKS5 listener
+shown above.
+
+Alternatively, set the proxy for just the server process after activating
+`openaisdk`:
+
+```bash
+AGENT_PROXY=socks5h://127.0.0.1:10801 \
   python -B -m interfaces.web --host 0.0.0.0 --port 8000
 ```
 
-With a SOCKS5 proxy:
+For direct OpenRouter connections, use:
 
 ```bash
-python -m pip install "httpx[socks]"
-
-env -u HTTP_PROXY -u HTTPS_PROXY \
-  -u http_proxy -u https_proxy -u all_proxy \
-  ALL_PROXY=socks5h://127.0.0.1:10801 \
+AGENT_DISABLE_PROXY=1 \
   python -B -m interfaces.web --host 0.0.0.0 --port 8000
 ```
+
+`AGENT_DISABLE_PROXY=1` takes priority over proxy settings. If you previously
+exported it, run `unset AGENT_DISABLE_PROXY` before switching back to a
+proxy. Restart a running server after changing its environment.
+
+These Pipeline2Agent settings control OpenRouter model and embedding requests.
+Other database and pipeline clients retain their own proxy settings.
 
 Find this machine's LAN IP:
 
@@ -161,7 +203,7 @@ kill 190933
 
 Replace `190933` with the real PID shown on your machine.
 
-You can also list BioAgent web processes:
+You can also list Pipeline2Agent web processes:
 
 ```bash
 ps -eo pid,cmd | rg 'interfaces\.web|interfaces/web.py'
@@ -189,77 +231,89 @@ The web page works like a chat interface:
 2. Type a biological request in the message box.
 3. Click Send.
 4. Open the Thinking panel if you want to see runtime progress.
-5. Check the answer, evidence, verification, trace, and generated artifacts below
+5. Check the answer, evidence, status, trace, and generated files below
    the response.
 
-The left session sidebar lets you create a new chat, switch between saved local
-browser sessions, and delete sessions.
+The left session sidebar lets you create a new chat, switch between server-side
+SDK sessions, and delete sessions. The browser keeps only the active session ID;
+conversation messages are loaded from the server's `SQLiteSession` when a chat
+opens, so another browser tab or page reload sees the same history.
 
-The same session can reuse downloaded artifacts. For example, you can download a
-FASTA file in one message and then ask BioAgent to analyze the latest FASTA in a
+The same session can reuse downloaded files. For example, you can download a
+FASTA file in one message and then ask Pipeline2Agent to analyze the latest FASTA in a
 later message.
 
-## Upload Files
+## Manage Workspace Files
 
-Use the `Uploads` panel in the sidebar when you want the web session to keep
-input files that can be reused by skills or pipelines.
+The `Workspace` panel is the file browser for the active SDK sandbox session.
+The agent and its tools see the same workspace, so an uploaded file is already
+available to pipeline tools; there is no separate input label or path insertion
+step.
 
-1. Click `Upload`.
-2. Select one or more files.
-3. The uploaded files appear in the current chat session's upload list.
-4. Set `Input label` to the pipeline slot or tool argument name, for example
-   `input_path`, `sequence`, or `metadata`.
-5. Click `Use` beside a file to insert the labeled path into the message box.
+- Choose `Upload`, or drop files into the upload area. Files are stored under
+  `uploads/` in the current session.
+- Use the search box or the `All files`, `Inputs`, and `Outputs` filter to find a
+  file. The panel shows each file's name, type, size, and workspace-relative
+  path.
+- Use `Download` when you need a local copy. Use `Remove` to delete a file from
+  the session workspace.
+- Refer to a file by name in your message, for example `Analyze reads.fastq`
+  or `Run generic_shell on metadata.csv`. Pipeline2Agent resolves the workspace file
+  and supplies the path required by the selected tool.
+- For a text-based PDF, ask `Summarize my uploaded paper.pdf` or ask a question
+  about the paper. Pipeline2Agent extracts the document in page-aware chunks and
+  `workspace_search` can find a phrase across several uploaded documents before
+  `document_read` reads the relevant PDF pages. Scanned PDFs still require OCR;
+  extracted text includes page markers so answers can cite page numbers.
+
+## Common assistant applications
+
+The current tool surface supports four general assistant workflows alongside
+the biology tools:
+
+- **Document assistant:** search uploaded text/PDF files with `workspace_search`,
+  then read selectable PDF pages with `document_read` and cite the workspace
+  path and page markers.
+- **Data analyst:** use `data_analysis` for bounded profiles, missing-value
+  checks, grouped summaries, and distribution plots from CSV, TSV, or Excel
+  files. The tool returns measured values and created plot paths.
+- **Web research:** use `web_research` for current multi-source questions. It
+  preserves source URLs and bounded excerpts for citations; curated NCBI and
+  database requests still use their dedicated tools.
+- **Coding assistant:** use `code_inspection` for read-only workspace questions.
+  `code_edit` and `code_test` are approval-controlled and limited to the active
+  session workspace and bounded commands.
+
+For a task combining several operations, the root agent can delegate to
+`document_specialist`, `data_analysis_specialist`, `web_research_specialist`,
+or `coding_specialist`. Each specialist shares the session workspace and returns
+the same runtime evidence used by the main chat.
+
+Workspace files are stored in the active SDK sandbox session:
 
 ```text
-input_path: "runtime/sessions/<session_id>/artifacts/uploads/<filename>"
+runtime/sessions/<session_id>/uploads/
 ```
 
-When BioAgent asks for missing pipeline inputs, the `Input label` box is filled
-from the requested slot names in that answer, such as `reads`, `sequence`, or
-`metadata`. The web UI uses structured `requested_inputs` from the agent result
-when available, so it does not depend on parsing the displayed Markdown text.
-
-If BioAgent just asked for missing pipeline input and the message box is empty,
-`Use` prefills a complete pipeline request:
+If the same filename is uploaded more than once, Pipeline2Agent avoids overwriting by
+adding a unique prefix to the stored name. Generated outputs appear in the same
+workspace listing and can be downloaded or removed from the Workspace panel.
 
 ```text
-Run pipeline with pipeline_name: generic_shell input_path: "runtime/sessions/<session_id>/artifacts/uploads/reads.fastq"
-```
-
-Then combine that path with a normal request:
-
-```text
-Run the shell pipeline with input_path: "runtime/sessions/<session_id>/artifacts/uploads/reads.fastq"
-```
-
-```text
-Inspect file input_path: "runtime/sessions/<session_id>/artifacts/uploads/metadata.tsv"
-```
-
-Uploaded files are stored as immutable session artifacts:
-
-```text
-runtime/sessions/<session_id>/artifacts/uploads/
-```
-
-If the same filename is uploaded more than once, BioAgent avoids overwriting by
-adding a suffix, for example:
-
-```text
-reads.fastq
-reads_2.fastq
-reads_3.fastq
+a1b2c3d4e5f6_reads.fastq
+b2c3d4e5f6a1_reads.fastq
 ```
 
 Keep this distinction:
 
 ```text
 uploads/   original files provided through the web UI
-pipelines/ pipeline outputs and generated runtime configs
+outputs/   files generated by other tools
+runs/      pipeline job records, input copies, and outputs
 ```
 
-Pipeline runners use uploaded files directly from `uploads/`.
+Pipeline workers stage verified copies of selected uploads under
+`runs/<job-id>/inputs/` before execution.
 
 ## Usage Examples
 
@@ -283,7 +337,7 @@ What is the biological meaning of an open reading frame?
 ```
 
 If you need citations, current records, downloaded files, or deterministic
-analysis, ask for a specific BioAgent skill such as NCBI retrieval, species
+analysis, ask for a specific Pipeline2Agent tool such as NCBI retrieval, species
 report, sequence analysis, or BLAST.
 
 ### NCBI Retrieval
@@ -359,13 +413,27 @@ Download PDB 1A3N as pdb
 Fetch PDB 3GOU as cif
 ```
 
-Downloaded structures are stored in the active session artifact directory by
+Downloaded structures are stored in the active session file directory by
 default. They can be reused later in the same web chat session.
 
-### Sequence / Genome Analysis
+### Biology / Sequence / Genome Analysis
 
-Use this for deterministic sequence statistics, GC content, base counts, FASTA
-summaries, and ORF detection.
+Use the regular sequence workflow for deterministic sequence statistics, GC
+content, base counts, FASTA summaries, and ORF detection. Use the Biopython
+workflow for reverse complements, translation, and GenBank feature summaries.
+It accepts FASTA input but does not replace the sequence metrics workflow.
+
+```text
+Translate the uploaded sample.fasta in reading frame 1
+```
+
+```text
+Show the GenBank features in uploads/record.gb
+```
+
+```text
+Find the reverse complement of ATGCGTAA
+```
 
 ```text
 Analyze PhiX174 segment sequence GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT
@@ -425,19 +493,20 @@ SVG genome map shown in the answer
 
 ### Protein Structure Analysis
 
-Use this to analyze local or downloaded PDB/mmCIF files for atoms, chains,
-residues, ligands, water, models, method, and resolution.
+Use this to analyze local or already downloaded PDB/mmCIF files for atoms,
+chains, residues, ligands, water, models, method, and resolution. A PDB ID is
+downloaded with `pdb_download` first, then passed to this analysis tool.
 
-Analyze a PDB ID directly:
+Download and analyze a PDB ID:
 
 ```text
-Analyze the structure of 3GOU
+Download and analyze PDB structure 3GOU
 ```
 
 Analyze a local structure file:
 
 ```text
-Analyze structure file runtime/sessions/demo/artifacts/structures/1A3N.cif
+Analyze structure file runtime/sessions/demo/outputs/structures/1A3N.cif
 ```
 
 After downloading a structure in the same web session:
@@ -496,7 +565,7 @@ Inspect file data/ncbi_downloads_phix174/phix174_A.metadata.csv
 ```
 
 ```text
-Inspect file runtime/sessions/<session_id>/artifacts/pipelines/generic_shell/<run_id>/report.md
+Inspect file runs/<job-id>/outputs/report.md
 ```
 
 Typical output:
@@ -508,6 +577,19 @@ Line count
 Record or row count
 Preview lines
 ```
+
+### PDF Document Reading
+
+Upload a selectable-text PDF to the current workspace, then ask a question
+about it or request a summary:
+
+```text
+Summarize my uploaded Paper2Agent.pdf and cite the relevant pages
+```
+
+Pipeline2Agent extracts the PDF in bounded, page-aware chunks and uses the page
+markers in its answer. Long documents may require several extraction calls.
+Scanned PDFs need OCR before their contents can be summarized.
 
 ### Species Report
 
@@ -533,214 +615,82 @@ Narrative answer
 Source summaries
 Citation/evidence details
 Markdown report path
-Verification warnings if evidence is incomplete
+Evidence caveats if the source material is incomplete
 ```
 
 ### Pipeline Runner
 
-Use this to run approved pipeline folders under `pipelines/`.
+Pipeline2Agent discovers registered workflows under `tools/runtime_tools/pipelines/`
+and uses `pipeline_shell` to plan, execute, monitor, and collect their results.
+The [pipeline architecture reference](architecture.md#pipeline-runtime) contains
+the command protocol, file-role handling, manifest contract, engine requirements,
+and instructions for [adding a pipeline](architecture.md#adding-a-pipeline).
 
-Default shell pipeline:
-
-```text
-Run the shell pipeline
-```
-
-Specific shell pipeline folder:
+First discover the available workflows:
 
 ```text
-Run the shell pipeline with pipeline_name: generic_shell
+List the available pipelines and their required inputs.
 ```
 
-Default Snakemake pipeline dry run:
+For a demonstration using bundled synthetic data:
 
 ```text
-Run the snakemake pipeline dry-run with 2 cores
+Run the example_sequence_qc example and summarize its metrics.
 ```
 
-Specific Snakemake pipeline folder:
+For your own data, upload files to the current session and mention the filenames
+and their roles in the request. The agent discovers the matching workspace
+paths before it creates the validated plan:
 
 ```text
-Run the snakemake pipeline with pipeline_name: generic_snakemake dry-run with 2 cores
+Run example_sequence_qc with my reads.fastq as reads and metadata.tsv as metadata, with min_length 8. Return the results.
 ```
 
-Default Nextflow pipeline:
+The agent discovers paths, selects inputs, and creates a validated plan. Missing
+inputs lead to a clarification request. Filename conventions can help identify
+roles, but there is no built-in R1/R2 classifier; provide explicit mappings
+when filenames or sample assignments are ambiguous. Bundled files are used only
+when an example is requested.
+
+Real execution pauses for approval of the saved plan. After approval, the job
+runs in a local worker. The agent can wait briefly and collect successful
+outputs, or report the job ID and status for a longer job. Review existing
+outputs in the same chat without rerunning the workflow:
 
 ```text
-Run the Nextflow pipeline
+Check the status of job <job-id> and collect its results if it succeeded.
 ```
 
-For `generic_nextflow`, use named input paths:
+Results provide workspace file paths, metrics, bounded table previews, and a
+ZIP bundle. The agent can summarize these in its answer; the Workspace panel
+provides file downloads. Original uploads remain under `uploads/`; the worker
+uses verified input copies under `runs/<job-id>/inputs/` and writes declared
+outputs under `runs/<job-id>/outputs/`.
+
+Other bundled examples can be requested explicitly by name:
 
 ```text
-Run pipeline with pipeline_name: generic_nextflow sequence: "runtime/sessions/<session_id>/artifacts/uploads/sequences.fasta" metadata: "runtime/sessions/<session_id>/artifacts/uploads/metadata.tsv"
-```
-
-For uploaded inputs:
-
-```text
-1. Upload files in the Uploads panel.
-2. Set `Input label` to the requested slot name, or let BioAgent fill it from
-   the latest missing-input answer.
-3. Click Use to insert the selected input label and file path.
-4. For multiple inputs, change `Input label` to the next slot name and click
-   Use again.
-5. Send the completed pipeline request.
-```
-
-If a selected pipeline requires input files and no valid path is provided in the
-request, BioAgent asks for the missing paths instead of starting the pipeline.
-The skill does not use default input files from `config.yaml`; those defaults
-are only examples for the raw pipeline.
-
-For `generic_snakemake`, use named input paths:
-
-```text
-Run pipeline with pipeline_name: generic_snakemake sequence: "runtime/sessions/<session_id>/artifacts/uploads/sequences.fasta" metadata: "runtime/sessions/<session_id>/artifacts/uploads/metadata.tsv"
-```
-
-The dependency-light `generic_bio` demo accepts three common bioinformatics
-inputs and produces filtered FASTQ, demonstration SAM, consensus FASTA,
-variants VCF, multiple TSV tables, three PNG figures, metrics JSON, and
-Markdown and HTML reports:
-
-```text
-Run pipeline with pipeline_name: generic_bio reads: "pipelines/generic_bio/data/input/example_reads.fastq" reference: "pipelines/generic_bio/data/input/example_reference.fasta" metadata: "pipelines/generic_bio/data/input/example_samples.tsv"
-```
-
-Completed pipelines are presented as download links. The web UI does not
-automatically preview figures, tables, metrics, or report contents. To request
-an interpreted view in the same chat, send:
-
-```text
-Collect and show all results from this pipeline run.
-```
-
-Pipeline outputs may be conditional. `generic_bio` emits a Newick phylogenetic
-tree and PNG preview by default. To disable those two outputs:
-
-```text
-Run pipeline with pipeline_name: generic_bio reads: "pipelines/generic_bio/data/input/example_reads.fastq" reference: "pipelines/generic_bio/data/input/example_reference.fasta" metadata: "pipelines/generic_bio/data/input/example_samples.tsv" emit_phylogenetic_tree false
-```
-
-Pipeline folder contract:
-
-```text
-pipelines/<pipeline_name>/runner.yaml
-pipelines/<pipeline_name>/config.yaml   # default, or runner.yaml config:
-pipelines/<pipeline_name>/run.sh        # shell default, or runner.yaml entrypoint:
-pipelines/<pipeline_name>/Snakefile     # snakemake default, or runner.yaml snakefile:
-pipelines/<pipeline_name>/main.nf       # nextflow default, or runner.yaml workflow:
-pipelines/<pipeline_name>/nextflow.config # optional runner.yaml nextflow_config:
-```
-
-For multi-input pipelines, `runner.yaml` can declare named input slots:
-
-```yaml
-inputs:
-  sequence:
-    label: Sequence FASTA
-    config_key: input_path
-    required: true
-    accepts: [".fa", ".fasta", ".fna"]
-  metadata:
-    label: Metadata table
-    config_key: metadata_path
-    required: true
-    accepts: [".tsv", ".csv"]
-```
-
-Use a simple base config shape for plug-and-play agent execution:
-
-```yaml
-label: my_pipeline
-input_path: path/to/default/input.file
-output_dir: output
-report_path: output/report.md
-metrics_path: output/metrics.json
-params:
-  min_length: 0
-  mode: example
-```
-
-BioAgent generates `config.runtime.yaml` from this base config, replaces input
-paths with uploaded/session files, and resolves declared output file keys such
-as `report_path` and `metrics_path` inside the per-run pipeline directory. Web
-requests can override keys under `params`:
-
-```text
-Run pipeline generic_snakemake with input_path: "runtime/sessions/<session_id>/artifacts/uploads/sequences.fasta" min_length 50
-```
-
-For `engine: shell`, `pipeline_runner` uses:
-
-```text
-bash pipelines/<pipeline_name>/run.sh <run_dir>/config.runtime.yaml
-```
-
-For `engine: snakemake`, `pipeline_runner` uses:
-
-```text
-snakemake --cores <cores> --snakefile pipelines/<pipeline_name>/Snakefile --configfile <run_dir>/config.runtime.yaml
-```
-
-For `engine: nextflow`, `pipeline_runner` uses:
-
-```text
-nextflow -c pipelines/<pipeline_name>/nextflow.config run pipelines/<pipeline_name>/main.nf -params-file <run_dir>/config.runtime.yaml -work-dir <run_dir>/nextflow_work
-```
-
-The workflow publishes final files into the runtime `nextflow_output_dir`.
-`runner.yaml.outputs[*].nextflow_output` maps those relative published names to
-BioAgent's stable artifact paths. Dry run uses Nextflow `-preview`.
-
-For `engine: wdl`, `pipeline_runner` uses miniwdl:
-
-```text
-miniwdl run --dir <run_dir>/wdl_engine -o <run_dir>/wdl.outputs.json pipelines/<pipeline_name>/workflow.wdl -i <run_dir>/inputs.runtime.json
-```
-
-miniwdl uses your local miniwdl runtime configuration. By default, miniwdl
-expects Docker unless your environment is configured otherwise.
-
-If the pipeline has `options.json`, BioAgent writes `options.runtime.json` in
-the run directory. This keeps Cromwell-style output options compatible for later
-use, while `runner.yaml.outputs` remains the output contract for the web UI.
-
-Typical output:
-
-```text
-Pipeline status
-Session input path
-Session artifact output directory
-Runtime config path
-Runner config path
-Raw config path
-Report path
-Metrics path
-Generated files
-```
-
-Pipeline input files from the web UI stay in the current session upload folder
-and are passed directly to the pipeline:
-
-```text
-runtime/sessions/<session_id>/artifacts/uploads/
-```
-
-### Example Skill / Smoke Test
-
-Use this when you want to confirm skill calling works.
-
-```text
-Please test skill calling by running the example skill with message hello and tag smoke.
+Run generic_snakemake with its bundled example data as a dry run with 2 cores.
 ```
 
 ```text
-Run the example skill with message hello world and tag uppercase-test uppercase.
+Run generic_nextflow with its bundled example data and summarize the results.
 ```
 
-## Multi-Turn Artifact Usage
+```text
+Run generic_bio with its bundled example data and summarize the results.
+```
+
+The corresponding engines and dependencies must be installed. Shell pipelines
+do not support `--dry-run`; planning validates their declared inputs and
+settings without executing the workflow. Snakemake, Nextflow, and miniwdl have
+engine-specific validation modes described in the architecture reference.
+
+`generic_bio` is an educational demo: its alignment and variant outputs use a
+positional comparison. Its tree outputs are optional; ask to disable them or
+set `emit_phylogenetic_tree=false` when planning.
+
+## Multi-Turn Workspace Usage
 
 The web UI is the best interface for workflows that reuse files across turns.
 Examples:
@@ -767,7 +717,7 @@ Then:
 Analyze the latest structure
 ```
 
-This works because the web session keeps a session artifact list. Separate CLI
+This works because the web session keeps the SDK sandbox workspace. Separate CLI
 commands do not automatically share the same session unless you explicitly use
 the same API session.
 

@@ -19,7 +19,7 @@
     uploads: [],
     logs: [],
     context: {},
-    maxSteps: 5,
+    maxTurns: 5,
   };
 
   function getParentOrigin() {
@@ -78,7 +78,7 @@
     message.className = `message ${role}`;
     const label = document.createElement("span");
     label.className = "message-label";
-    label.textContent = role === "user" ? "You" : role === "error" ? "Request failed" : "BioAgent";
+    label.textContent = role === "user" ? "You" : role === "error" ? "Request failed" : "Pipeline2Agent";
     const body = document.createElement("div");
     body.className = "message-body";
     if (role === "assistant" && window.renderMarkdown) {
@@ -86,14 +86,16 @@
     } else {
       body.textContent = text;
     }
-    const artifacts = Array.isArray(result?.artifacts) ? result.artifacts : [];
-    const paths = [...new Set(artifacts.map((item) => item.path).filter((path) => typeof path === "string" && path))];
+    const resultFiles = Array.isArray(result?.files) ? result.files : [];
+    const paths = [...new Map(resultFiles
+      .map((item) => [item?.workspace_path || item?.path, item])
+      .filter(([path]) => typeof path === "string" && path)).entries()];
     if (paths.length) {
       const files = document.createElement("div");
       files.className = "message-files";
-      for (const path of paths) {
+      for (const [path] of paths) {
         const link = document.createElement("a");
-        link.href = apiUrl(`artifact?path=${encodeURIComponent(path)}`);
+        link.href = apiUrl(`workspace/file?path=${encodeURIComponent(path)}&session_id=${encodeURIComponent(state.sessionId)}`);
         link.textContent = path.split("/").pop();
         link.target = "_blank";
         link.rel = "noopener noreferrer";
@@ -102,6 +104,17 @@
       body.appendChild(files);
     }
     message.append(label, body);
+    if (result?.approval_required && window.mountToolApprovals) {
+      const approvals = document.createElement("div");
+      approvals.className = "approval-controls";
+      message.appendChild(approvals);
+      window.mountToolApprovals(approvals, result, {
+        url: apiUrl("approve"),
+        isBusy: () => state.busy,
+        onBusy: (busy) => { if (!busy) setBusy(false); else setBusy(true); },
+        onResult: (next) => addMessage("assistant", next.answer || "", next),
+      });
+    }
     messages.appendChild(message);
     messages.scrollTop = messages.scrollHeight;
   }
@@ -115,7 +128,7 @@
     state.ready = false;
     setBusy(false);
     byId("retryConfig").hidden = true;
-    status.textContent = "Connecting to BioAgent…";
+    status.textContent = "Connecting to Pipeline2Agent…";
     try {
       const response = await fetch(apiUrl("config"));
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -129,7 +142,7 @@
         option.selected = item.key === config.default_model_key;
         model.appendChild(option);
       }
-      state.maxSteps = Math.min(20, Math.max(1, Math.floor(Number(config.default_max_skill_steps) || 5)));
+      state.maxTurns = Math.min(20, Math.max(1, Math.floor(Number(config.default_max_turns) || 5)));
       state.ready = true;
       status.textContent = "Ready";
     } catch (error) {
@@ -169,7 +182,7 @@
         request,
         session_id: state.sessionId,
         model_key: model.value,
-        max_skill_steps: steps,
+        max_turns: steps,
       }),
       signal,
     });
@@ -206,7 +219,7 @@
     event.preventDefault();
     const text = prompt.value.trim();
     if (!text || state.busy || !state.ready) return;
-    const steps = state.maxSteps;
+    const steps = state.maxTurns;
     const request = requestText(text);
     prompt.value = "";
     addMessage("user", text);
@@ -249,7 +262,7 @@
       button.textContent = name;
       button.title = `Ask about ${name}`;
       button.addEventListener("click", () => {
-        const reference = `Use the attached file ${JSON.stringify(name)}.`;
+        const reference = `Analyze the attached file ${JSON.stringify(name)}.`;
         prompt.value = prompt.value ? `${prompt.value}\n${reference}` : reference;
         prompt.focus();
       });
@@ -267,11 +280,11 @@
     setBusy(true);
     status.textContent = "Uploading files…";
     try {
-      const response = await fetch(apiUrl("upload"), { method: "POST", body: data });
+      const response = await fetch(apiUrl("workspace/files"), { method: "POST", body: data });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
       state.sessionId = result.session_id || state.sessionId;
-      state.uploads.push(...(result.uploads || []));
+      state.uploads.push(...(result.files || []));
       renderUploads();
       status.textContent = "Files attached. Select a file to ask about it.";
     } catch (error) {
@@ -292,7 +305,7 @@
     byId("progressDetails").hidden = true;
     byId("progressLog").textContent = "";
     renderUploads();
-    status.textContent = state.ready ? "Ready" : "Connect to BioAgent before sending.";
+    status.textContent = state.ready ? "Ready" : "Connect to Pipeline2Agent before sending.";
     prompt.focus();
   }
 
@@ -301,13 +314,13 @@
   // Accept context only from the immediate embedding window at its named origin.
   window.addEventListener("message", (event) => {
     if (window.parent === window || event.source !== window.parent || event.origin !== parentOrigin) return;
-    if (!event.data || event.data.type !== "bioagent-context" || !event.data.context) return;
+    if (!event.data || event.data.type !== "agent-context" || !event.data.context) return;
     setContext(event.data.context);
   });
-  if (window.parent !== window) window.parent.postMessage({ type: "bioagent-ready" }, parentOrigin);
+  if (window.parent !== window) window.parent.postMessage({ type: "agent-ready" }, parentOrigin);
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && window.parent !== window) {
-      window.parent.postMessage({ type: "bioagent-close" }, parentOrigin);
+      window.parent.postMessage({ type: "agent-close" }, parentOrigin);
     }
   });
   byId("composer").addEventListener("submit", submitPrompt);

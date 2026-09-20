@@ -1,0 +1,42 @@
+name: example_sequence_qc
+description: Validate synthetic FASTQ reads, filter by length and ambiguous bases, and join sample metadata.
+engine: shell
+entrypoint: run.sh
+timeout: 120
+resources:
+  max_cores: 1
+  max_memory_mb: 1024
+params:
+  min_length: 6
+  max_n_fraction: 0.25
+inputs:
+  reads:
+    label: FASTQ reads
+    config_key: input_path
+    required: true
+    accepts:
+    - .fastq
+    - .fq
+  metadata:
+    label: Read metadata
+    config_key: metadata_path
+    required: true
+    accepts:
+    - .tsv
+outputs:
+  report:
+    config_key: report_path
+    default: report.md
+    kind: report
+  metrics:
+    config_key: metrics_path
+    default: metrics.json
+    kind: metrics
+  assignments:
+    config_key: assignments_path
+    default: assignments.tsv
+    kind: table
+  filtered_reads:
+    config_key: filtered_path
+    default: filtered.fastq
+    kind: sequence

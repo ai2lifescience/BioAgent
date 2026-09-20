@@ -1,76 +1,162 @@
-"""Programmatic API interface for BioAgent."""
+"""Programmatic API interface for Pipeline2Agent."""
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any, Callable
 
-from agent_core import BioAgentOrchestrator
-from agent_core.artifacts import SessionArtifactStore
-from agent_core.memory import InMemoryStateStore
-from agent_core.trace import InMemoryTraceStore
-from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_SKILL_STEPS
+from agents import SQLiteSession
 
-
-STATE_STORE = InMemoryStateStore()
-TRACE_STORE = InMemoryTraceStore()
-ARTIFACT_STORE = SessionArtifactStore(STATE_STORE)
-ORCHESTRATOR = BioAgentOrchestrator(
-    memory=STATE_STORE,
-    trace_store=TRACE_STORE,
-    artifact_store=ARTIFACT_STORE,
-)
+from harness import runtime
+from harness.runtime import delete_session, list_sessions, resume_agent, run_agent, update_session
+from harness.sandbox import delete_file, list_files, open_workspace, read_file, upload_file
+from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 
 
 def handle_request(
     request: str,
     session_id: str | None = None,
     model_key: str = DEFAULT_AGENT_MODEL_KEY,
-    max_skill_steps: int = DEFAULT_MAX_SKILL_STEPS,
+    max_turns: int = DEFAULT_MAX_TURNS,
     log_fn: Callable[[str], None] | None = None,
 ) -> dict[str, Any]:
-    """Run BioAgent from application code."""
-    return ORCHESTRATOR.run(
-        user_request=request,
-        session_id=session_id,
-        model_key=model_key,
-        max_skill_steps=max_skill_steps,
-        log_fn=log_fn,
-    )
+    """Run Pipeline2Agent from application code."""
+    return run_agent(request, session_id, model_key, max_turns, log_fn)
 
 
-def list_sessions() -> list[dict[str, Any]]:
-    """List in-memory chat sessions for app-scoped interfaces."""
-    return STATE_STORE.list_sessions()
+def handle_approval(
+    session_id: str,
+    approved: bool,
+    approval_id: str,
+    log_fn: Callable[[str], None] | None = None,
+) -> dict[str, Any]:
+    """Approve or reject the pending SDK tool call for a session."""
+    return resume_agent(session_id, approved, approval_id, log_fn=log_fn)
 
 
-def delete_session(session_id: str) -> bool:
-    """Delete one in-memory chat session."""
-    return STATE_STORE.delete_session(session_id)
+def update_session_metadata(
+    session_id: str,
+    *,
+    title: str | None = None,
+    pinned: bool | None = None,
+) -> dict[str, Any]:
+    """Rename or pin a conversation in the application session index."""
+    return update_session(session_id, title=title, pinned=pinned)
 
 
-def store_upload(
+def list_session_messages(session_id: str) -> dict[str, Any]:
+    """Read displayable conversation items from the SDK session store."""
+    import asyncio
+
+    identifier = str(session_id or "").strip()
+    if not identifier:
+        return {"session_id": None, "messages": []}
+    metadata = runtime.STATE_STORE.get_session(identifier)
+
+    async def _list() -> dict[str, Any]:
+        items = []
+        if Path(runtime.SESSION_DB).exists():
+            session = SQLiteSession(identifier, db_path=runtime.SESSION_DB)
+            try:
+                items = await session.get_items()
+            finally:
+                session.close()
+        messages = []
+        for item in items:
+            role = str(item.get("role") or "") if isinstance(item, dict) else ""
+            if role not in {"user", "assistant"}:
+                continue
+            text = _session_item_text(item.get("content"))
+            if text:
+                messages.append({"role": role, "text": text})
+        pending = metadata.metadata.get("pending_run") if metadata else None
+        return {
+            "session_id": identifier,
+            "messages": messages,
+            "pending_approval": {
+                "session_id": identifier,
+                "answer": "Review the requested tool arguments and approve or reject each pending call.",
+                "status": "pending_approval",
+                "approval_required": True,
+                "approvals": pending["approvals"],
+            } if pending else None,
+        }
+
+    return asyncio.run(_list())
+
+
+def _session_item_text(content: Any) -> str:
+    """Extract readable text while ignoring tool-call metadata."""
+    if isinstance(content, str):
+        return content.strip()
+    if isinstance(content, list):
+        parts = [_session_item_text(item) for item in content]
+        return "\n".join(part for part in parts if part).strip()
+    if isinstance(content, dict):
+        for key in ("text", "output_text", "content"):
+            if key in content:
+                value = _session_item_text(content[key])
+                if value:
+                    return value
+    return ""
+
+
+def write_workspace_file(
     session_id: str | None,
     filename: str,
     data: bytes,
     content_type: str = "",
 ) -> dict[str, Any]:
-    """Store one uploaded file in a chat session."""
-    return ARTIFACT_STORE.store_upload(
-        session_id=session_id,
-        filename=filename,
-        data=data,
-        content_type=content_type,
-    )
+    """Store one uploaded file in the SDK sandbox workspace."""
+    import asyncio
+    from uuid import uuid4
+    identifier = str(session_id or "").strip() or str(uuid4())
+
+    async def _store() -> dict[str, Any]:
+        async with open_workspace(identifier) as workspace:
+            result = await upload_file(workspace, filename, data)
+            result["session_id"] = identifier
+            return result
+
+    with runtime.STATE_STORE.locked_session(identifier):
+        return asyncio.run(_store())
 
 
-def list_uploads(session_id: str | None) -> dict[str, Any]:
-    """List uploaded files for one chat session."""
-    return ARTIFACT_STORE.list_uploads(session_id)
+def list_workspace_files(session_id: str | None) -> dict[str, Any]:
+    """List files in one SDK sandbox workspace."""
+    import asyncio
+    identifier = str(session_id or "").strip()
+    if not identifier:
+        return {"session_id": None, "files": []}
+
+    async def _list() -> dict[str, Any]:
+        async with open_workspace(identifier) as workspace:
+            return {"session_id": identifier, "files": await list_files(workspace)}
+
+    return asyncio.run(_list())
 
 
-def delete_upload(session_id: str, upload_id_or_artifact_id: str) -> bool:
-    """Delete one uploaded file from a chat session."""
-    return ARTIFACT_STORE.delete_upload(
-        session_id=session_id,
-        upload_id_or_artifact_id=upload_id_or_artifact_id,
-    )
+def delete_workspace_file(session_id: str, path: str) -> bool:
+    """Delete one workspace file using its workspace-relative path."""
+    import asyncio
+
+    async def _delete() -> bool:
+        try:
+            async with open_workspace(session_id) as workspace:
+                await delete_file(workspace, path)
+            return True
+        except (FileNotFoundError, ValueError):
+            return False
+
+    return asyncio.run(_delete())
+
+
+def read_workspace_file(session_id: str, path: str) -> bytes:
+    """Read one workspace file through the SDK sandbox filesystem."""
+    import asyncio
+
+    async def _read() -> bytes:
+        async with open_workspace(session_id) as workspace:
+            return await read_file(workspace, path)
+
+    return asyncio.run(_read())

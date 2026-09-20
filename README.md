@@ -1,25 +1,27 @@
-# BioAgent
+# Pipeline2Agent
 
-BioAgent is a bioinformatics agent for biological question answering, public
+Pipeline2Agent is a bioinformatics agent for biological question answering, public
 database retrieval, sequence and structure analysis, evidence-backed reporting,
-file inspection, and pipeline execution. It combines deterministic tools with
-reusable skills and model-guided skill selection behind a chat-style web UI,
-CLI, API, and Python interface.
+file inspection, and pipeline execution. It exposes deterministic biological operations as typed Agents SDK function tools behind a chat-style web UI, CLI, API, and Python interface.
 
-## What BioAgent Does
+The Python entry point is `harness.run_agent`; pipeline tools use the
+`agent-pipeline` command protocol and configuration uses `AGENT_*` variables.
 
-![BioAgent functions](docs/images/system_functions.png)
+## What Pipeline2Agent Does
 
-BioAgent can:
+![Pipeline2Agent functions](docs/images/system_functions.png)
+
+Pipeline2Agent can:
 
 - answer biology questions and explain biological concepts;
 - retrieve records from NCBI, PubMed, UniProt, InterPro, KEGG, QuickGO, PDB,
   and AlphaFold DB;
 - analyze nucleotide sequences, genome maps, and protein structures;
 - inspect FASTA, CSV, TSV, JSON, Markdown, and text files;
+- read and summarize selectable-text PDF documents with page references;
 - create species reports with sources, citations, and generated files;
 - run Shell, Snakemake, Nextflow, and WDL pipelines; and
-- retain uploads and generated artifacts within a chat session.
+- retain uploads and generated files within a chat session.
 
 
 
@@ -30,8 +32,8 @@ BioAgent can:
 ### 1. Get The Project
 
 ```bash
-git clone https://github.com/ai2lifescience/BioAgent.git
-cd BioAgent
+git clone https://github.com/ai2lifescience/BioAgent.git Pipeline2Agent
+cd Pipeline2Agent
 ```
 
 
@@ -39,8 +41,8 @@ cd BioAgent
 ### 2. Create An Environment
 
 ```bash
-conda create -n bioagent python=3.12 -y
-conda activate bioagent
+conda create -n openaisdk python=3.11 -y
+conda activate openaisdk
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
@@ -49,34 +51,43 @@ python -m pip install -r requirements.txt
 
 ### 3. Configure A Model
 
-The default model uses OpenRouter. Set an API key before using LLM-backed chat,
-planning, or report generation:
+The harness uses OpenRouter through the OpenAI Python client. Set an API key before running the agent or model-backed reports:
 
 On Linux Bash:
 
 ```bash
 export OPENROUTER_API_KEY="your-openrouter-api-key"
-export CROMWELL_URL=http://192.168.164.39:39000
 ```
 
 Replace the placeholder with your real key. The variable is available to
-BioAgent commands started from the current terminal session.
+Pipeline2Agent commands started from the current terminal session.
 
-Deterministic operations such as sequence analysis and some public database
-requests can run without an LLM key.
+Every natural-language request is handled by the Agents SDK; deterministic functions run after the agent selects their registered tools. Offline smoke tests use a scripted model and do not need an API key.
 
 ### 4. Start The Web UI
 
 ```bash
+conda activate openaisdk
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ```
 
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in a browser. Stop the
 server with `Ctrl+C`.
 
-![BioAgent web interface](docs/images/web_ui.png)
+If OpenRouter needs a SOCKS proxy, set it in the same terminal before starting
+the server:
 
-### 5. Use BioAgent
+```bash
+export AGENT_PROXY=socks5h://127.0.0.1:10801
+```
+
+`ALL_PROXY` is not required when `AGENT_PROXY` is set. See the
+[web usage guide](docs/web_usage.md#start-for-local-network-access) for the
+complete launch command and direct-connection option.
+
+![Pipeline2Agent web interface](docs/images/web_ui.png)
+
+### 5. Use Pipeline2Agent
 
 Select a model, enter a request in the message box, and send it. Example
 requests:
@@ -98,27 +109,19 @@ Download PDB structure 1A3N as cif
 ```
 
 ```text
-Run pipeline with pipeline_name: generic_snakemake
+Run generic_snakemake with its bundled example data and summarize the results.
 ```
 
 ```text
-Run pipeline with pipeline_name: generic_nextflow
+Run generic_nextflow with its bundled example data and summarize the results.
 ```
 
 ```text
-Run pipeline with pipeline_name: generic_bio
+Run generic_bio with its bundled example data and summarize the results.
 ```
 
 ```text
-Run pipeline with pipeline_name: bacterial_annotation genome: "path/to/contigs.fasta" genus Escherichia species coli strain "K-12" cpus 4
-```
-
-```text
-annotate_bacterial_genome genome: "path/to/contigs.fasta" annotator bakta bakta_db_path: "/opt/bakta-db/db" translation_table 11 gram - cpus 8
-```
-
-```text
-Predict RNA secondary structure rna: "path/to/sequences.fasta" temperature_c 37
+Run the example_sequence_qc example and summarize its metrics.
 ```
 
 ```text
@@ -137,7 +140,7 @@ Get KEGG query: eco:b0002
 Download AlphaFold structure for P0A7V8 as cif
 ```
 
-Use the Uploads panel for local input files. BioAgent stores uploads and outputs
+Use the Uploads panel for local input files. Pipeline2Agent stores uploads and outputs
 under the active session so later requests in the same chat can reuse them.
 
 To allow access from another computer on a trusted local network, run:
@@ -150,32 +153,31 @@ Then open `http://<SERVER_LAN_IP>:8000` from the other computer.
 
 ## Architecture
 
-![BioAgent system architecture](docs/images/system_architecture.png)
+Pipeline2Agent is implemented as a single OpenAI Agents SDK harness. The SDK owns the
+agent loop, function-tool dispatch, guardrails, sessions, and tracing. The tools
+call deterministic biological libraries and registered external APIs.
 
 ```text
 User / App
-  -> Interface Layer             CLI, web UI/API, Python, notebook
-  -> Agent Orchestrator          session coordination and execution loop
-     -> Memory / Trace           session state, locks, and runtime events
-  -> Intent Router               deterministic route rules
-  -> Planner                     executable plan templates
-  -> Skill Executor              reusable biological workflows
-  -> Tool Executor               concrete validated actions
-     -> Bio APIs                 NCBI, PubMed, UniProt, InterPro, KEGG,
-                                 QuickGO, PDB, AlphaFold DB
-     -> Bio Tools                sequence, BLAST, structure, genome map
-     -> RAG                      retrieval and evidence-backed answers
-     -> Pipeline Runner          Shell, Snakemake, Nextflow, WDL
-     -> File I/O                 uploads, inspection, and reports
-  -> Evidence Collector          sources, identifiers, citations, files
-  -> Verifier                    result and biosafety checks
-  -> Final Answer
+  -> Agent + Runner (OpenAI Agents SDK)
+     -> RunConfig.model_provider -> OpenAI Python client -> OpenRouter
+     -> Pipeline2Agent function tools
+        -> databases, sequence/structure tools, files, RAG, pipelines
+     -> SDK sessions (SQLite)
+     -> SDK guardrails, tracing, and per-session Unix-local sandbox
+  -> structured answer, evidence, status, and workspace files
 ```
 
-The router selects known workflows directly. When deterministic routing is not
-enough, the LLM may choose from registered skills. Skills call registered tools
-through the central tool executor, while the orchestrator records session state,
-evidence, verification results, artifacts, and runtime trace events.
+The public entry point is `harness.run_agent`. Each run returns the answer,
+SDK session ID, tool evidence, run status, trace events, and workspace file
+paths. Uploads and generated files remain in per-session sandboxes.
+
+OpenRouter model IDs are configured in `models/config.py`. A run-scoped SDK
+`ModelProvider` resolves these aliases and owns the shared client for root and
+specialist agents. Reporting agents live with the species-report tool;
+embeddings live in `rag/`. See the
+[model architecture](docs/architecture.md#models-and-provider-ownership) for
+configuration and client lifecycle details.
 
 ## Other Interfaces
 
@@ -204,9 +206,9 @@ curl -X POST http://127.0.0.1:8000/run \
 ### Python
 
 ```python
-from interfaces.notebook import run_bioagent
+from interfaces.notebook import run_agent
 
-result = run_bioagent("Analyze PhiX174")
+result = run_agent("Analyze PhiX174")
 print(result["answer"])
 ```
 
@@ -218,16 +220,14 @@ print(result["answer"])
 - Snakemake pipelines require the `snakemake` package included in
 `requirements.txt`.
 - Nextflow pipelines require a local `nextflow` executable, Java 17 or newer,
-  and a POSIX shell. On Windows, run BioAgent and Nextflow inside WSL.
+  and a POSIX shell. On Windows, run Pipeline2Agent and Nextflow inside WSL.
 - WDL pipelines use `miniwdl` and require a working Docker daemon plus access to
 the task container images.
 - Pipeline inputs should be supplied explicitly through the request or uploaded
 through the web UI.
-- The bacterial annotation pipeline supports Prokka or Bakta; Bakta also
-  requires a compatible database. See
-  [its environment guide](pipelines/bacterial_annotation/README.md).
-- The RNA secondary-structure pipeline requires ViennaRNA `RNAfold`. See
-  [its environment guide](pipelines/rna_secondary_structure/README.md).
+- Use the pipeline catalog to discover the workflows available in this checkout.
+  See [pipeline architecture](docs/architecture.md#pipeline-runtime) for file
+  handling, execution, and adding pipelines.
 
 
 
@@ -235,6 +235,7 @@ through the web UI.
 
 - [System architecture](docs/architecture.md)
 - [Web UI usage and examples](docs/web_usage.md)
+- [Pipeline runtime, file handling, and adding pipelines](docs/architecture.md#pipeline-runtime)
 - [CLI usage and examples](docs/cli_usage.md)
 - [Team development workflow](docs/dev_workflow.md)
 - [Planned improvements](docs/todo.md)

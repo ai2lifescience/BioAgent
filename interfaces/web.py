@@ -1,4 +1,4 @@
-"""Small stdlib HTTP web UI and API for BioAgent."""
+"""Small stdlib HTTP web UI and API for Pipeline2Agent."""
 
 from __future__ import annotations
 
@@ -11,32 +11,36 @@ from pathlib import Path
 import re
 from time import perf_counter
 from typing import Any
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 
 from Bio.PDB import MMCIFParser, PDBIO
 
-from agent_core.artifacts import (
-    allowed_artifact_suffix_message,
+from tools.workspace import (
     artifact_content_type,
     artifact_suffix_config,
     can_view_structure_artifact,
-    can_serve_artifact,
 )
 from interfaces.api import (
     delete_session,
-    delete_upload,
+    delete_workspace_file,
+    handle_approval,
     handle_request,
     list_sessions,
-    list_uploads,
-    store_upload,
+    list_session_messages,
+    list_workspace_files,
+    read_workspace_file,
+    update_session_metadata,
+    write_workspace_file,
 )
-from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_SKILL_STEPS, DEFAULT_MODELS
+from harness.sandbox import relative_file_path
+from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODELS
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 WEB_UI_DIR = PROJECT_ROOT / "web_ui"
-MAX_UPLOAD_BYTES = int(os.getenv("BIOAGENT_MAX_UPLOAD_BYTES", str(256 * 1024 * 1024)))
+MAX_UPLOAD_BYTES = int(os.getenv("AGENT_MAX_UPLOAD_BYTES", str(256 * 1024 * 1024)))
 STATIC_FILES = {
+    "/static/approvals.js": (WEB_UI_DIR / "approvals.js", "application/javascript; charset=utf-8"),
     "/static/app.css": (WEB_UI_DIR / "app.css", "text/css; charset=utf-8"),
     "/static/assistant.css": (WEB_UI_DIR / "assistant.css", "text/css; charset=utf-8"),
     "/static/markdown.js": (WEB_UI_DIR / "markdown.js", "application/javascript; charset=utf-8"),
@@ -70,38 +74,37 @@ def _runtime_info(
     logs: list[str],
     status: str = "done",
     model_key: str | None = None,
+    max_turns: int | None = None,
 ) -> dict[str, Any]:
     evidence = result.get("evidence") or {}
-    verification = result.get("verification") or {}
     trace = result.get("trace") or []
     run = result.get("run") or {}
     last_event = trace[-1] if trace else {}
-    skills = evidence.get("skills") or []
     tools = evidence.get("tools") or []
     files = evidence.get("files") or []
     return {
-        "status": status,
+        "status": result.get("status", status),
         "elapsed_seconds": round(elapsed_seconds, 2),
         "model_key": model_key,
         "session_id": result.get("session_id"),
         "run_id": run.get("run_id"),
         "runtime_dir": run.get("runtime_dir"),
-        "route": (result.get("route") or {}).get("mode"),
-        "plan": (result.get("plan") or {}).get("mode"),
-        "verification": verification.get("status"),
-        "skills": skills,
+        "runtime": result.get("runtime", "agents_sdk"),
+        "max_turns": max_turns,
         "tools": tools,
         "files": files,
         "file_count": len(files),
+        "tool_count": len(tools),
+        "trace_count": len(trace),
         "last_event": last_event.get("event"),
         "logs": logs,
     }
 
 
-class BioAgentRequestHandler(BaseHTTPRequestHandler):
+class AgentRequestHandler(BaseHTTPRequestHandler):
     """Browser UI and JSON API handler."""
 
-    server_version = "BioAgentHTTP/1.1"
+    server_version = "Pipeline2AgentHTTP/1.1"
 
     def log_message(self, format: str, *args: Any) -> None:
         return
@@ -135,30 +138,36 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
             self._send_json(
                 {
                     "default_model_key": DEFAULT_AGENT_MODEL_KEY,
-                    "default_max_skill_steps": DEFAULT_MAX_SKILL_STEPS,
+                    "default_max_turns": DEFAULT_MAX_TURNS,
                     "models": _model_options(),
-                    "artifacts": artifact_suffix_config(),
+                    "files": artifact_suffix_config(),
                 }
             )
             return
         if path == "/sessions":
             self._send_json({"sessions": list_sessions()})
             return
-        if path == "/uploads":
-            self._handle_uploads()
+        if path.startswith("/sessions/") and path.endswith("/messages"):
+            self._handle_session_messages(path)
             return
-        if path == "/artifact":
-            self._handle_artifact()
+        if path == "/workspace":
+            self._handle_workspace()
+            return
+        if path == "/workspace/file":
+            self._handle_workspace_file()
             return
         self._send_json({"error": "not found"}, status=404)
 
     def do_POST(self) -> None:
         path = urlparse(self.path).path
-        if path == "/upload":
-            self._handle_upload()
+        if path == "/workspace/files":
+            self._handle_workspace_upload()
             return
         if path == "/run_stream":
             self._handle_run_stream()
+            return
+        if path == "/approve":
+            self._handle_approval()
             return
         if path != "/run":
             self._send_json({"error": "not found"}, status=404)
@@ -166,10 +175,67 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
 
         self._handle_run()
 
+    def do_PATCH(self) -> None:
+        path = urlparse(self.path).path
+        prefix = "/sessions/"
+        if not path.startswith(prefix):
+            self._send_json({"error": "not found"}, status=404)
+            return
+        session_id = unquote(path[len(prefix):]).strip()
+        if not session_id or "/" in session_id:
+            self._send_json({"error": "session_id is required"}, status=400)
+            return
+        try:
+            payload = self._read_json()
+            title = payload.get("title") if "title" in payload else None
+            pinned = payload.get("pinned") if "pinned" in payload else None
+            if title is not None and not isinstance(title, str):
+                self._send_json({"error": "title must be a string"}, status=400)
+                return
+            if pinned is not None and type(pinned) is not bool:
+                self._send_json({"error": "pinned must be a boolean"}, status=400)
+                return
+            if title is None and pinned is None:
+                self._send_json({"error": "title or pinned is required"}, status=400)
+                return
+            result = update_session_metadata(session_id, title=title, pinned=pinned)
+            self._send_json(result)
+        except Exception as exc:
+            self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
+
+    def _handle_approval(self) -> None:
+        try:
+            payload = self._read_json()
+            session_id = str(payload.get("session_id", "")).strip()
+            if not session_id:
+                self._send_json({"error": "session_id is required"}, status=400)
+                return
+            approved = payload.get("approved")
+            if type(approved) is not bool:
+                self._send_json({"error": "approved must be an explicit boolean"}, status=400)
+                return
+            approval_id = str(payload.get("approval_id", "")).strip() or None
+            if not approval_id:
+                self._send_json({"error": "approval_id is required"}, status=400)
+                return
+            logs: list[str] = []
+            start = perf_counter()
+            result = handle_approval(session_id, approved, approval_id, log_fn=logs.append)
+            result["runtime"] = _runtime_info(
+                result,
+                perf_counter() - start,
+                logs,
+                model_key=result.get("model_key"),
+                max_turns=result.get("max_turns"),
+            )
+            self._send_json(result)
+        except Exception as exc:
+            self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
+
     def do_DELETE(self) -> None:
         path = urlparse(self.path).path
-        if path.startswith("/uploads/"):
-            self._handle_delete_upload(path)
+        if path.startswith("/workspace/files/"):
+            self._handle_delete_workspace_file(path)
             return
         prefix = "/sessions/"
         if not path.startswith(prefix):
@@ -201,7 +267,7 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
                 request=request,
                 session_id=session_id,
                 model_key=model_key,
-                max_skill_steps=int(payload.get("max_skill_steps", DEFAULT_MAX_SKILL_STEPS)),
+                max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
                 log_fn=log_progress,
             )
             result["runtime"] = _runtime_info(
@@ -209,6 +275,7 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
                 elapsed_seconds=perf_counter() - start,
                 logs=logs,
                 model_key=model_key,
+                max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
             )
             self._send_json(result)
         except Exception as exc:
@@ -256,14 +323,14 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
                     "message": "Agent request started.",
                     "model_key": model_key,
                     "session_id": session_id,
-                    "max_skill_steps": int(payload.get("max_skill_steps", DEFAULT_MAX_SKILL_STEPS)),
+                    "max_turns": int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
                 },
             )
             result = handle_request(
                 request=request,
                 session_id=session_id,
                 model_key=model_key,
-                max_skill_steps=int(payload.get("max_skill_steps", DEFAULT_MAX_SKILL_STEPS)),
+                max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
                 log_fn=log_stream,
             )
             result["runtime"] = _runtime_info(
@@ -271,6 +338,7 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
                 elapsed_seconds=perf_counter() - start,
                 logs=logs,
                 model_key=model_key,
+                max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
             )
             self._send_stream_event("result", result)
         except ConnectionAbortedError:
@@ -296,13 +364,35 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
                 },
             )
 
-    def _handle_uploads(self) -> None:
+    def _handle_workspace(self) -> None:
         parsed = urlparse(self.path)
         values = parse_qs(parsed.query)
         session_id = (values.get("session_id") or [""])[0].strip() or None
-        self._send_json(list_uploads(session_id))
+        result = list_workspace_files(session_id)
+        files = result.get("files", [])
+        self._send_json(
+            {
+                "session_id": session_id,
+                "workspace": {
+                    "file_count": len(files),
+                    "files": files,
+                    "capabilities": ["list", "upload", "read", "download", "delete"],
+                },
+            }
+        )
 
-    def _handle_upload(self) -> None:
+    def _handle_session_messages(self, path: str) -> None:
+        prefix = "/sessions/"
+        session_id = unquote(path[len(prefix):-len("/messages")])
+        if not session_id:
+            self._send_json({"error": "session_id is required"}, status=400)
+            return
+        try:
+            self._send_json(list_session_messages(session_id))
+        except ValueError as exc:
+            self._send_json({"error": str(exc)}, status=400)
+
+    def _handle_workspace_upload(self) -> None:
         try:
             length = int(self.headers.get("Content-Length", "0"))
             if length <= 0:
@@ -322,7 +412,7 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
             boundary = _multipart_boundary(self.headers.get("Content-Type", ""))
             parts = _parse_multipart(raw, boundary)
             session_id = ""
-            uploads: list[dict[str, Any]] = []
+            files: list[dict[str, Any]] = []
 
             for part in parts:
                 if part.get("name") == "session_id" and not part.get("filename"):
@@ -333,19 +423,19 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
                 filename = str(part.get("filename") or "").strip()
                 if not filename:
                     continue
-                artifact = store_upload(
+                file_entry = write_workspace_file(
                     session_id=session_id or None,
                     filename=filename,
                     data=part["data"],
                     content_type=str(part.get("content_type") or ""),
                 )
-                session_id = str(artifact.get("session_id") or session_id)
-                uploads.append(artifact)
+                session_id = str(file_entry.get("session_id") or session_id)
+                files.append(file_entry)
 
-            if not uploads:
+            if not files:
                 self._send_json({"error": "no files were uploaded"}, status=400)
                 return
-            self._send_json({"session_id": session_id, "uploads": uploads})
+            self._send_json({"session_id": session_id, "files": files})
         except Exception as exc:
             self._send_json(
                 {
@@ -355,18 +445,18 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
                 status=400,
             )
 
-    def _handle_delete_upload(self, path: str) -> None:
-        artifact_id = path[len("/uploads/"):].strip()
-        if not artifact_id:
-            self._send_json({"error": "upload artifact id is required"}, status=400)
+    def _handle_delete_workspace_file(self, path: str) -> None:
+        workspace_path = unquote(path[len("/workspace/files/"):]).strip()
+        if not workspace_path:
+            self._send_json({"error": "workspace file path is required"}, status=400)
             return
         values = parse_qs(urlparse(self.path).query)
         session_id = (values.get("session_id") or [""])[0].strip()
         if not session_id:
             self._send_json({"error": "session_id is required"}, status=400)
             return
-        deleted = delete_upload(session_id, artifact_id)
-        self._send_json({"session_id": session_id, "upload_id": artifact_id, "deleted": deleted})
+        deleted = delete_workspace_file(session_id, workspace_path)
+        self._send_json({"session_id": session_id, "path": workspace_path, "deleted": deleted})
 
     def _read_json(self) -> dict[str, Any]:
         length = int(self.headers.get("Content-Length", "0"))
@@ -375,31 +465,37 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
             return {}
         return json.loads(raw.decode("utf-8"))
 
-    def _handle_artifact(self) -> None:
+    def _handle_workspace_file(self) -> None:
         parsed = urlparse(self.path)
         values = parse_qs(parsed.query)
         requested_path = (values.get("path") or [""])[0].strip()
+        session_id = (values.get("session_id") or [""])[0].strip()
         viewer_format = (values.get("viewer") or [""])[0].strip().lower()
+        if not session_id:
+            self._send_json({"error": "session_id is required"}, status=400)
+            return
         try:
-            artifact_path = _resolve_artifact_path(requested_path)
+            file_path = relative_file_path(requested_path)
         except ValueError as exc:
             self._send_json({"error": str(exc)}, status=400)
             return
-        if not artifact_path.exists() or not artifact_path.is_file():
-            self._send_json({"error": "artifact not found"}, status=404)
+        try:
+            data = read_workspace_file(session_id, file_path.as_posix())
+        except Exception as exc:
+            self._send_json({"error": str(exc)}, status=404)
             return
         if viewer_format == "pdb":
-            if not can_view_structure_artifact(artifact_path):
+            if not can_view_structure_artifact(file_path):
                 self._send_json({"error": "viewer=pdb is only available for structure artifacts"}, status=400)
                 return
             try:
-                self._send_text(_structure_viewer_pdb_text(artifact_path), "chemical/x-pdb; charset=utf-8")
+                self._send_text(_structure_viewer_pdb_text(data, file_path), "chemical/x-pdb; charset=utf-8")
             except Exception as exc:
                 self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=500)
             return
-        self._send_file(
-            artifact_path,
-            artifact_content_type(artifact_path),
+        self._send_bytes(
+            data,
+            artifact_content_type(file_path),
             sandbox_html=True,
         )
 
@@ -414,6 +510,11 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
             self._send_json({"error": "not found"}, status=404)
             return
         data = path.read_bytes()
+        self._send_bytes(data, content_type, status, sandbox_html)
+
+    def _send_bytes(
+        self, data: bytes, content_type: str, status: int = 200, sandbox_html: bool = False,
+    ) -> None:
         self.send_response(status)
         self.send_header("Content-Type", content_type)
         if sandbox_html and content_type.startswith("text/html"):
@@ -469,31 +570,16 @@ class BioAgentRequestHandler(BaseHTTPRequestHandler):
 
 
 def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
-    server = ThreadingHTTPServer((host, port), BioAgentRequestHandler)
-    print(f"BioAgent web UI running at http://{host}:{port}")
+    server = ThreadingHTTPServer((host, port), AgentRequestHandler)
+    print(f"Pipeline2Agent web UI running at http://{host}:{port}")
     server.serve_forever()
 
 
-def _resolve_artifact_path(requested_path: str) -> Path:
-    if not requested_path:
-        raise ValueError("path is required")
-    raw_path = Path(requested_path)
-    candidate = raw_path if raw_path.is_absolute() else PROJECT_ROOT / raw_path
-    resolved = candidate.resolve()
-    try:
-        resolved.relative_to(PROJECT_ROOT)
-    except ValueError as exc:
-        raise ValueError("artifact path must be inside the BioAgent project") from exc
-    if not can_serve_artifact(resolved):
-        raise ValueError(allowed_artifact_suffix_message())
-    return resolved
-
-
-def _structure_viewer_pdb_text(path: Path) -> str:
+def _structure_viewer_pdb_text(data: bytes, path: Path) -> str:
     if path.suffix.lower() == ".pdb":
-        return path.read_text(encoding="utf-8", errors="replace")
+        return data.decode("utf-8", errors="replace")
     parser = MMCIFParser(QUIET=True)
-    structure = parser.get_structure(path.stem or "structure", str(path))
+    structure = parser.get_structure(path.stem or "structure", StringIO(data.decode("utf-8", errors="replace")))
     writer = PDBIO()
     writer.set_structure(structure)
     output = StringIO()
@@ -575,7 +661,7 @@ def _parse_header_params(value: str) -> dict[str, str]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Run the BioAgent HTTP web UI.")
+    parser = argparse.ArgumentParser(description="Run the Pipeline2Agent HTTP web UI.")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()
