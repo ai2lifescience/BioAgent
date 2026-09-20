@@ -1,31 +1,26 @@
-> **Runtime boundary:** Pipeline2Agent runs this bundle through its declared container boundary. Workflow tools and databases belong to that container; the agent environment does not install them.
+# Pathogen variant risk assessment
 
-# Variant Risk Assessment Cromwell Pipeline
+> Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
 
-## Runtime requirements
+Align pathogen reads, call and annotate variants, and produce a pathogen-specific risk-assessment report.
 
-- A reachable Cromwell Server. `CROMWELL_URL` overrides the default
-  `http://127.0.0.1:8000` declared in `runner.yaml`.
-- BioAgent and Cromwell must resolve the uploaded FASTQ and output paths
-  through a shared filesystem.
-- Cromwell must be able to read the reference, snpEff, segment, and risk
-  annotation files declared in `inputs.json`.
-- The task backend must provide `cncb/risk-wdl:v1.0` (or an override),
-  including `/app/run_variant_risk.sh` and `/app/lib/docker_bin_paths.sh`.
+## Inputs
 
-Check the service before submitting:
+- `read1` (required, `VariantRisk.fastq_r1`): Read 1 FASTQ input.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
+- `read2` (optional, `VariantRisk.fastq_r2`): Optional read 2 FASTQ input for paired-end processing.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
 
-```bash
-export CROMWELL_URL=http://192.168.164.39:39000
-curl "$CROMWELL_URL/engine/v1/status"
+## Outputs
+
+- `final_report`: `data/output/final_variant_risk_report.tsv` — Final variant risk report produced by this workflow..
+- `segments`: `data/output/segments.tsv` — Segment depth summary produced by this workflow..
+- `output_archive`: `data/output/risk_assessment_output.tar` — Complete risk assessment output produced by this workflow..
+
+## Run
+
+Ask the agent to run `pathogen_variant_risk_assessment` with the inputs above. For the bundled example, say:
+
+```text
+Run pathogen_variant_risk_assessment with its bundled example data and collect the results.
 ```
 
-BioAgent submits `pipeline.wdl`, preserves Cromwell's `Submitted` response,
-polls status until completion, and collects the report, segments table, and
-full output archive. A temporary `Unrecognized workflow ID` is retried for up
-to 300 seconds.
-
-The user must upload clean FASTQ (`fastq_r1`, optional `fastq_r2`) and
-explicitly choose `H1N1`, `H3N2`, or `SARS_CoV_2`. That choice applies the
-matching reference, snpEff database, risk annotations, and default variant
-thresholds from production `variant-risk` settings.
+The `runner.yaml` file is the agent-facing input/output contract. The runtime stages inputs and writes declared outputs inside the per-run workspace.

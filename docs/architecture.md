@@ -498,7 +498,7 @@ instructed to ask when missing information materially changes the result.
 Pipeline selection is a model decision. Runtime checks establish that inputs
 and settings satisfy the implemented execution contract; they do not prove
 that the pipeline is scientifically appropriate for the user's question.
-For example, `dna_analysis_demo` describes an educational positional-comparison demo,
+For example, `template_bio` describes an educational positional-comparison demo,
 not a validated alignment or variant-calling workflow.
 
 ### The agent-pipeline command protocol
@@ -541,7 +541,7 @@ project root:
 
 ```bash
 python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace catalog
-python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace example --pipeline sequence_qc_demo
+python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace example --pipeline template_shell
 ```
 
 This module constructs the `agent-pipeline` prefix internally. SDK approval
@@ -578,8 +578,8 @@ descriptions. File inspection can supply text previews and table columns, but
 it does not provide a paired-read validator. A `.tsv` suffix establishes neither
 metadata semantics nor the presence of the columns a workflow needs.
 
-`sequence_qc_demo` and `dna_analysis_demo` each declare one `reads` slot. They do
-not declare a paired-end interface. A workflow designed for two mates can
+`template_shell` declares `reads` and `metadata` slots. `template_bio` declares
+`reads`, `reference`, and `metadata`; neither template declares a paired-end interface. A workflow designed for two mates can
 expose the following slots, provided its implementation consumes both paths:
 
 ```yaml
@@ -607,8 +607,8 @@ inputs:
 These declarations describe the interface; the workflow must implement gzip
 reading, pair consistency checks, metadata-column checks, and other content
 validation it requires. The runtime does not interpret proposed fields such as
-`role`, `mate`, or `required_columns`. In the bundled QC example, metadata
-columns and FASTQ record structure are checked by `workflow.py` during execution.
+`role`, `mate`, or `required_columns`. In the bundled shell template, metadata columns and sequence record structure are
+checked by `run.sh` during execution.
 
 For a slot whose workflow accepts several files, declare `multiple: true` and
 pass a JSON array:
@@ -800,11 +800,11 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 exec python3 "${script_dir}/workflow.py" "${config_path}"
 ```
 
-`workflow.py` loads the YAML path from `sys.argv[1]`, reads `input_path` and
-`params.min_length`, and writes `report_path` and `metrics_path`. Choose accepted
-suffixes and output kinds that the implementation actually supports. The
-[synthetic QC example](../tools/runtime_tools/pipelines/sequence_qc_demo/)
-provides a complete shell/Python implementation.
+The shell entrypoint loads the generated YAML, reads `input_path`,
+`metadata_path`, and `params.normalize_mode`, and writes the four declared output
+paths. Choose accepted suffixes and output kinds that the implementation actually
+supports. The [shell metadata template](../tools/runtime_tools/pipelines/template_shell/)
+provides a complete minimal implementation.
 
 | Engine | Manifest entrypoint | Runtime requirements and output mapping |
 | --- | --- | --- |
@@ -821,11 +821,11 @@ changes in addition to a manifest.
 
 For a runnable demonstration of the full protocol, ask Pipeline2Agent:
 
-> Use the sequence_qc_demo example data, run it, and summarize the results.
+> Use the template_shell example data, run it, and summarize the results.
 
 The agent stages the bundled synthetic data, plans, requests approval, runs,
-and collects `filtered.fastq`, `assignments.tsv`, `metrics.json`, and `report.md`.
-Default settings retain 2 of 4 reads and 16 of 28 bases. To exercise your own
+and collects `normalized.txt`, `subtypes.tsv`, `metrics.json`, and `report.md`.
+The shell template assigns all three bundled sequence IDs. To exercise your own
 pipeline, request its name and supply its declared inputs, or explicitly ask
 for its bundled examples. Use the [offline checks](#testing) for shared runtime
 regressions; they do not replace an execution test of the new workflow.
@@ -925,7 +925,7 @@ python evals/smoke_session_artifacts.py
 python evals/smoke_session_history.py
 python evals/smoke_pipeline_config.py
 python evals/smoke_pipeline_runtime.py
-python evals/smoke_generic_bio.py
+python evals/smoke_template_bio.py
 python evals/smoke_nextflow_runner.py
 ```
 

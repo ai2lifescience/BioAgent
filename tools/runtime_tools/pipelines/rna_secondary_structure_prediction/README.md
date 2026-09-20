@@ -1,39 +1,27 @@
-> **Runtime boundary:** Pipeline2Agent runs this bundle through its declared container boundary. Workflow tools and databases belong to that container; the agent environment does not install them.
+# RNA secondary-structure prediction
 
-# RNA Secondary Structure Pipeline Environment
+> Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
 
-This pipeline predicts minimum-free-energy RNA secondary structures with the
-ViennaRNA `RNAfold` command and exposes normalized results as BioAgent
-artifacts. It is an independent implementation and does not import Biomni.
+Convert nucleotide FASTA records to RNA, predict minimum-free-energy secondary structures with RNAfold, and return structured reports.
 
-## Requirements
+## Inputs
 
-- Ubuntu with Bash and Python 3.11 or newer.
-- PyYAML, already included in the BioAgent requirements.
-- ViennaRNA with `RNAfold` available on `PATH`.
+- `rna` (required, `rna_path`): One or more RNA or DNA-letter nucleotide sequences in FASTA format.. Accepted: .fasta, .fa, .fna.
 
-A pinned Bioconda environment is recommended:
+## Outputs
 
-```bash
-conda install -c bioconda viennarna=2.7.0
-RNAfold --version
-```
+- `report`: `output/report.md` — RNA folding report produced by this workflow..
+- `metrics`: `output/metrics.json` — RNA folding metrics produced by this workflow..
+- `structures`: `output/structures.tsv` — RNA structures table produced by this workflow..
+- `dot_bracket`: `output/structures.dbn` — Dot-bracket structures produced by this workflow..
+- `log`: `output/rnafold.log` — RNAfold execution log produced by this workflow..
 
-Start BioAgent from the same activated environment so its subprocess can find
-`RNAfold`.
+## Run
 
-## Run through BioAgent
+Ask the agent to run `rna_secondary_structure_prediction` with the inputs above. For the bundled example, say:
 
 ```text
-Predict RNA secondary structure rna: "path/to/sequences.fasta" temperature_c 37
+Run rna_secondary_structure_prediction with its bundled example data and collect the results.
 ```
 
-The explicit equivalent is:
-
-```text
-Run pipeline with pipeline_name: rna_secondary_structure_prediction rna: "path/to/sequences.fasta"
-```
-
-An artificial input and representative synthetic outputs are committed under
-`data/`. They document the file contract and do not claim to be experimentally
-or computationally validated results.
+The `runner.yaml` file is the agent-facing input/output contract. The runtime stages inputs and writes declared outputs inside the per-run workspace.

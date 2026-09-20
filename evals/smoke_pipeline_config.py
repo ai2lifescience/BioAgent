@@ -84,17 +84,17 @@ class PipelineConfigChecks(unittest.TestCase):
                 load_pipeline_config(self.root)
 
     def test_wdl_native_files_preserved_during_runtime_generation(self) -> None:
-        bundle = PROJECT_ROOT / "tools/runtime_tools/pipelines/sequence_normalization_wdl_demo"
+        bundle = PROJECT_ROOT / "tools/runtime_tools/pipelines/template_wdl"
         before = {name: (bundle / name).read_bytes() for name in ("inputs.json", "options.json")}
         selected = self.root / "selected.fasta"
         selected.write_text(">synthetic\nACGT\n", encoding="utf-8")
         context = prepare_pipeline_context(
-            pipeline_name="sequence_normalization_wdl_demo", artifact_dir=str(self.root),
+            pipeline_name="template_wdl", artifact_dir=str(self.root),
             input_overrides={"sequence": str(selected)},
         )
         inputs = json.loads(write_wdl_inputs(context).read_text())
         expected = json.loads(before["inputs.json"])
-        expected["GenericWdl.input_fasta"] = str(selected)
+        expected["TemplateWdl.input_fasta"] = str(selected)
         self.assertEqual(inputs, expected)
         options_path = write_wdl_options(context)
         self.assertIsNotNone(options_path)
@@ -107,12 +107,12 @@ class PipelineConfigChecks(unittest.TestCase):
         # Neither native file is mandatory: WDL defaults can live in the manifest.
         manifest = {key: value for key, value in context.runner_config.items()
                     if key not in {"inputs_json", "options_json"}}
-        manifest["defaults"] = {"GenericWdl.label": "compact"}
+        manifest["defaults"] = {"TemplateWdl.label": "compact"}
         config, source = load_pipeline_config(self.root, manifest)
         optional = replace(context, runner_config=manifest, raw_config=config, raw_config_path=source)
         self.assertIsNone(write_wdl_options(optional))
         self.assertEqual(json.loads(write_wdl_inputs(optional).read_text()), {
-            "GenericWdl.label": "compact", "GenericWdl.input_fasta": str(selected),
+            "TemplateWdl.label": "compact", "TemplateWdl.input_fasta": str(selected),
         })
         missing = replace(context, runner_config={**manifest, "options_json": "missing.json"})
         with self.assertRaises(FileNotFoundError):
@@ -121,8 +121,8 @@ class PipelineConfigChecks(unittest.TestCase):
     def test_catalog_defaults_and_explicit_inputs(self) -> None:
         catalog = {item["name"]: item for item in service.catalog()}
         self.assertTrue(all("error" not in item for item in catalog.values()), catalog)
-        self.assertEqual(catalog["sequence_qc_demo"]["parameters"]["min_length"], 6)
-        for name in ("sequence_qc_demo", "sequence_normalization_wdl_demo"):
+        self.assertEqual(catalog["template_shell"]["parameters"]["normalize_mode"], "whitespace")
+        for name in ("template_shell", "template_wdl"):
             result = service.plan(self.root, name, {}, {})
             self.assertEqual(result["status"], "needs_input")
 

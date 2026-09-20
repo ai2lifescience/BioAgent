@@ -1,0 +1,69 @@
+name: template_snakemake
+engine: snakemake
+snakefile: Snakefile
+cores: 1
+timeout: 300
+inputs:
+  sequence:
+    label: Sequence FASTA
+    config_key: input_path
+    required: true
+    accepts:
+    - .fa
+    - .fasta
+    - .fna
+    description: Sequence FASTA input.
+  metadata:
+    label: Metadata table
+    config_key: metadata_path
+    required: true
+    accepts:
+    - .tsv
+    - .csv
+    description: TSV or CSV metadata associated with the sequence input.
+outputs:
+  report:
+    label: Report
+    config_key: report_path
+    default: report.md
+    kind: report
+    required: true
+    description: Report produced by this workflow.
+  metrics:
+    label: Metrics
+    config_key: metrics_path
+    default: metrics.json
+    kind: metrics
+    required: true
+    description: Metrics produced by this workflow.
+  normalized_sequence:
+    label: Normalized sequence
+    config_key: normalized_fasta_path
+    default: normalized.fasta
+    kind: sequence
+    required: true
+    description: Normalized sequence produced by this workflow.
+display_name: Snakemake pipeline template
+description: Snakemake template that normalizes a FASTA sequence and reports basic
+  sequence and metadata metrics.
+use_when:
+- the user requests a Snakemake runtime demonstration
+avoid_when:
+- the user needs a validated production sequence-analysis workflow
+input_summary: FASTA sequence and TSV/CSV metadata.
+output_summary: Normalized FASTA, metrics JSON, and Markdown report.
+limitations: This is an educational workflow for testing the Snakemake engine.
+examples:
+- Run the bundled Snakemake template.
+visibility: internal
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: snakemake
+label: template_snakemake
+params:
+  subtype: subtype1
+  segment: segment1
+  time: all-time
+  analysis_mode: example
+  min_length: 0

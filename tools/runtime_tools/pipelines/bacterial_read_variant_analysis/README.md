@@ -1,127 +1,34 @@
-> **Runtime boundary:** Pipeline2Agent runs this bundle through its declared container boundary. Workflow tools and databases belong to that container; the agent environment does not install them.
+# Bacterial read variant analysis
 
-# bacterial_read_variant_analysis BioAgent pipeline
+> Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
 
-This folder is self-contained and can be copied directly to BioAgent's
-`pipelines/bacterial_read_variant_analysis/` directory.
+Map bacterial reads to a reference, call and filter variants, build a cross-sample SNP matrix, and optionally infer a phylogeny.
 
-## Dependencies
+## Inputs
 
-- Bash
-- Python 3.9 or newer
-- Conda environment `bactmut` with `minimap2`, `samtools`, and `bcftools`
+- `reads` (required, `input_path`): Sequence reads supplied to the workflow.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
+- `reference` (optional, `reference_path`): Reference sequence or reference resource used for comparison.. Accepted: .fasta, .fa, .fna, .fas.
 
-Create the environment once:
+## Outputs
 
-```bash
-conda create -y -n bactmut -c conda-forge -c bioconda \
-  python=3.11 pyyaml minimap2 samtools bcftools
-```
-- PyYAML (`python3 -m pip install pyyaml`)
-- `minimap2`
-- `samtools`
-- `bcftools`
-- IQ-TREE 2 (`iqtree2`) or IQ-TREE 1 (`iqtree`) for optional phylogeny
+- `report`: `data/output/report.md` — BioAgent Markdown report produced by this workflow..
+- `metrics`: `data/output/metrics.json` — BioAgent metrics produced by this workflow..
+- `matrix`: `data/output/matrix.tsv` — Filtered SNP matrix produced by this workflow..
+- `variants`: `data/output/variants.tsv` — Annotated variants produced by this workflow..
+- `variants_summary`: `data/output/variants_summary.txt` — Variant statistics produced by this workflow..
+- `final_tree`: `data/output/final_tree.nwk` — Final phylogenetic tree produced by this workflow..
+- `tree_alignment`: `data/output/tree.fasta` — Tree alignment produced by this workflow..
+- `treefile`: `data/output/tree.treefile` — IQ-TREE tree produced by this workflow..
+- `iqtree_report`: `data/output/tree.iqtree` — IQ-TREE report produced by this workflow..
+- `iqtree_log`: `data/output/tree.log` — IQ-TREE log produced by this workflow..
+- `pipeline_log`: `data/output/pipeline.log` — Pipeline execution log produced by this workflow..
 
-`minimap2`, `samtools`, and `bcftools` are required and must be on `PATH`.
-IQ-TREE is optional; the required report, metrics, matrix, and variant outputs
-are still generated when a tree cannot be built.
+## Run
 
-For `params.reference_mode: species` or `taxonid`, also define:
+Ask the agent to run `bacterial_read_variant_analysis` with the inputs above. For the bundled example, say:
 
-```bash
-export GTDB_DB_PATH=/path/to/gtdb_representatives.fasta
-export GTDB_METADATA_PATH=/path/to/bac120_metadata.tsv
+```text
+Run bacterial_read_variant_analysis with its bundled example data and collect the results.
 ```
 
-No database is needed for the default `local` reference mode.
-
-## Installation
-
-```bash
-unzip bacterial_read_variant_analysis.zip
-cp -R bacterial_read_variant_analysis /path/to/BioAgent/pipelines/
-chmod +x /path/to/BioAgent/pipelines/bacterial_read_variant_analysis/run.sh
-```
-
-Place one FASTQ file at `data/input/example_reads.fastq`, or place one or more
-FASTQ files in a directory. The local reference is
-`data/input/example_reference.fasta`; BioAgent can replace either input path
-in its generated runtime configuration.
-
-## FASTQ naming
-
-The pipeline accepts single-end reads and common paired-end naming conventions,
-including `_R1`/`_R2`, `.R1`/`.R2`, `_1`/`_2`, and `.1`/`.2`, with optional
-lane/chunk suffixes. Compressed `.gz` inputs are supported.
-
-## Configuration
-
-All input and output paths are top-level keys in `config.yaml`. Only values
-under `params` are runtime algorithm parameters intended for BioAgent
-overrides.
-
-- `reference_mode`: `local`, `species`, or `taxonid`
-- `threads`: CPUs used for mapping, calling, and IQ-TREE
-- `min_coverage`: fraction of samples required to cover a position
-- `window_size`, `step_size`, `sd_threshold`: recombination filter controls
-- `verbose`: detailed logging
-
-The reference input in `runner.yaml` is conditionally required: local-reference
-runs need `reference_path`, while `species` and `taxonid` modes resolve it from
-the configured GTDB database.
-
-## Direct test
-
-BioAgent calls the entrypoint with a generated runtime configuration:
-
-```bash
-./run.sh config.runtime.yaml
-```
-
-For a standalone check, copy `config.yaml` to `config.runtime.yaml`, populate
-the configured input paths, and run the same command.
-
-## Included files
-
-- `runner.yaml`: BioAgent engine, input, output, timeout, and override contract.
-- `config.yaml`: plug-and-play default paths and parameters.
-- `run.sh`: strict shell entrypoint; validates and parses the YAML, then starts
-  the adapter.
-- `workflow.py`: consolidated configuration adapter and BactMut FASTQ
-  implementation; it validates paths, calls variants, and publishes the
-  declared BioAgent outputs.
-- `DESCRIPTION.md`: short pipeline description for users and agents.
-- `README.md`: dependencies, installation, and configuration.
-
-## BioAgent packaged workflow
-
-`reads` accepts either one single-end FASTQ file or a directory containing
-single-end and/or recognizably paired FASTQs. `reference` is required for the
-default `params.reference_mode: local`; `species` and `taxonid` instead require
-the GTDB environment variables documented above.
-
-The entrypoint deliberately uses the dedicated Conda environment named by the
-top-level `environment` field in `config.yaml` (default: `bactmut`). It must
-contain modern `minimap2`, `samtools`, and `bcftools`; the pipeline converts
-SAM to BAM explicitly before sorting, so it does not rely on ambiguous format
-detection.
-
-Run a configured direct job with:
-
-```bash
-./run.sh config.yaml
-```
-
-In BioAgent, provide `pipeline_name: bacterial_read_variant_analysis`, `reads`, and `reference`.
-The adjustable parameters are `threads`, `min_coverage`, `window_size`,
-`step_size`, `sd_threshold`, `reference_mode`, and `verbose`. A single sample
-can validly skip the optional tree while producing the required report,
-metrics, SNP matrix, and variant files.
-
-The normal `local` mode uses the `reference` input and does not need GTDB; GTDB is needed
-only for `species` or `taxonid` reference selection. On the validated server,
-set `GTDB_DB_PATH` to
-`/hpcdisk1/jcyj_group/jiangxq226/pathdect_pipeline/database/pcf/bacterial_reference_res96_v2/representative.fa.filter_sp_mag`
-and `GTDB_METADATA_PATH` to
-`/hpcdisk1/jcyj_group/jiangxq226/pathdect_pipeline/database/pcf/bacterial_reference_res96_v2/bac120_metadata.tsv.deversion`.
+The `runner.yaml` file is the agent-facing input/output contract. The runtime stages inputs and writes declared outputs inside the per-run workspace.

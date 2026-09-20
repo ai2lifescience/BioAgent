@@ -1,29 +1,27 @@
-> **Runtime boundary:** Pipeline2Agent runs this bundle through its declared container boundary. Workflow tools and databases belong to that container; the agent environment does not install them.
+# Metagenomic read quality control
 
-# Metagenomic QC Cromwell Pipeline
+> Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
 
-## Runtime requirements
+Filter metagenomic reads and remove host or vector sequences with fastp, Kraken2, and Bowtie2 before downstream analysis.
 
-- A reachable Cromwell Server. BioAgent uses `CROMWELL_URL` when set and
-  otherwise uses `http://127.0.0.1:8000` from `runner.yaml`.
-- BioAgent and Cromwell must resolve uploaded FASTQ and output paths through a
-  shared filesystem.
-- The Cromwell task runtime must already mount the Kraken2 and Bowtie2 database
-  directories at the paths declared in `inputs.json`.
-- The task backend must provide `mscan-detection-qc:v1.0` (or an overridden
-  image) with `/app/scripts/count_reads.py`, fastp, Kraken2, and Bowtie2.
+## Inputs
 
-Check the service before submitting:
+- `read1` (required, `MetagenomicQc.fastq_r1`): Read 1 FASTQ input.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
+- `read2` (optional, `MetagenomicQc.fastq_r2`): Optional read 2 FASTQ input for paired-end processing.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
 
-```bash
-export CROMWELL_URL=http://192.168.164.39:39000
-curl "$CROMWELL_URL/engine/v1/status"
+## Outputs
+
+- `clean_r1`: `data/output/clean.R1.fq` — Host-filtered read 1 produced by this workflow..
+- `clean_r2`: `data/output/clean.R2.fq` — Host-filtered read 2 produced by this workflow..
+- `qc_counts`: `data/output/qc_counts.tsv` — QC read counts produced by this workflow..
+- `phase1_metrics`: `data/output/phase1_read_overview.tsv` — Phase 1 read overview produced by this workflow..
+
+## Run
+
+Ask the agent to run `metagenomic_read_quality_control` with the inputs above. For the bundled example, say:
+
+```text
+Run metagenomic_read_quality_control with its bundled example data and collect the results.
 ```
 
-BioAgent submits `stage0_qc.wdl`, preserves Cromwell's returned `Submitted`
-response, polls until a terminal status, and then collects the declared files.
-A temporary `Unrecognized workflow ID` is retried for up to 300 seconds.
-
-The Kraken2 and Bowtie2 database inputs intentionally remain `Array[String]`.
-They refer to paths already mounted by the Cromwell task backend and are not
-localized as WDL `File` values.
+The `runner.yaml` file is the agent-facing input/output contract. The runtime stages inputs and writes declared outputs inside the per-run workspace.

@@ -1,0 +1,79 @@
+name: template_shell
+engine: shell
+entrypoint: run.sh
+timeout: 120
+inputs:
+  reads:
+    label: Sequence data
+    config_key: input_path
+    required: true
+    accepts:
+    - .txt
+    - .fastq
+    - .fq
+    - .fasta
+    - .fa
+    description: Sequence reads supplied to the workflow.
+  metadata:
+    label: Subtype metadata
+    config_key: metadata_path
+    required: true
+    accepts:
+    - .tsv
+    - .csv
+    description: TSV or CSV metadata associated with the sequence input.
+outputs:
+  report:
+    label: Report
+    config_key: report_path
+    default: report.md
+    kind: report
+    required: true
+    description: Report produced by this workflow.
+  metrics:
+    label: Metrics
+    config_key: metrics_path
+    default: metrics.json
+    kind: metrics
+    required: true
+    description: Metrics produced by this workflow.
+  normalized_text:
+    label: Normalized text
+    config_key: normalized_path
+    default: normalized.txt
+    kind: text
+    required: true
+    description: Normalized text produced by this workflow.
+  subtype_assignments:
+    label: Sequence subtype assignments
+    config_key: subtype_path
+    default: subtypes.tsv
+    kind: table
+    required: true
+    description: Sequence subtype assignments produced by this workflow.
+display_name: Shell metadata assignment template
+description: Small shell template that joins sequence IDs to metadata and writes normalized
+  text, assignments, metrics, and a report.
+use_when:
+- the user wants sequence IDs matched to metadata categories
+avoid_when:
+- the user needs biological classification or sequence similarity analysis
+input_summary: Sequence text, FASTA, or FASTQ plus TSV/CSV metadata with matching
+  identifier and category columns.
+output_summary: Normalized sequence text, assignment table, metrics, and report.
+limitations: The workflow performs deterministic metadata joining and does not infer
+  biological subtypes.
+examples:
+- Assign sequence metadata with the shell template.
+visibility: internal
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: shell
+label: template_shell
+params:
+  normalize_mode: whitespace
+  uppercase: false
+  sequence_id_column: sequence_id
+  subtype_column: subtype
+  missing_subtype: unassigned

@@ -17,7 +17,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.runtime_tools.pipelines.sequence_normalization_nextflow_demo.workflow import run as run_example_step
+from tools.runtime_tools.pipelines.template_nextflow.workflow import run as run_example_step
 from tools.runtime_tools.pipeline_runtime.engine.runner import run_pipeline
 from tools.runtime_tools.pipeline_runtime.engine.config import load_pipeline_config
 
@@ -31,7 +31,7 @@ def _fake_nextflow_run(command: list[str], **_kwargs: object) -> subprocess.Comp
     if "-preview" not in command:
         metrics = {
             "status": "ok",
-            "pipeline": "sequence_normalization_nextflow_demo",
+            "pipeline": "template_nextflow",
             "sequence_length": 24,
             "min_length": config["params"]["min_length"],
             "passes_min_length": 24 >= config["params"]["min_length"],
@@ -45,14 +45,14 @@ def _fake_nextflow_run(command: list[str], **_kwargs: object) -> subprocess.Comp
             encoding="utf-8",
         )
         (output_dir / "normalized.fasta").write_text(
-            ">sequence_normalization_nextflow_demo|segment1\nACGTACGTNNNNACGTTGCAACGT\n",
+            ">template_nextflow|segment1\nACGTACGTNNNNACGTTGCAACGT\n",
             encoding="utf-8",
         )
     return subprocess.CompletedProcess(command, 0, stdout="nextflow test double\n", stderr="")
 
 
 def main() -> int:
-    pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "sequence_normalization_nextflow_demo"
+    pipeline_dir = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines" / "template_nextflow"
     inputs = {
         "sequence": str(pipeline_dir / "data/input/sequences_segment1.fasta"),
         "metadata": str(pipeline_dir / "data/input/metadata.tsv"),
@@ -87,7 +87,7 @@ def main() -> int:
             side_effect=_fake_nextflow_run,
         ):
             result = run_pipeline(
-                pipeline_name="sequence_normalization_nextflow_demo",
+                pipeline_name="template_nextflow",
                 artifact_dir=artifact_dir,
                 run_id="smoke",
                 cores=2,
@@ -95,7 +95,7 @@ def main() -> int:
                 config_overrides={"min_length": 25},
             )
             preview = run_pipeline(
-                pipeline_name="sequence_normalization_nextflow_demo",
+                pipeline_name="template_nextflow",
                 artifact_dir=artifact_dir,
                 run_id="preview",
                 dry_run=True,

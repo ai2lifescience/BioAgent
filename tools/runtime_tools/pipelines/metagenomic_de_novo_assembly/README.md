@@ -1,54 +1,26 @@
-> **Runtime boundary:** Pipeline2Agent runs this bundle through its declared container boundary. Workflow tools and databases belong to that container; the agent environment does not install them.
+# Metagenomic de novo assembly
 
-# De novo Assembly WDL Pipeline Environment
+> Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
 
-## Host requirements
+Assemble metagenomic reads, identify assembled contigs against configured reference databases, and produce contig- and species-level reports.
 
-The BioAgent host requires:
+## Inputs
 
-- Python 3.9 or newer and the repository dependencies.
-- A reachable Cromwell Server. The default URL is `http://127.0.0.1:8000`;
-  set `CROMWELL_URL` to override it. An address without a scheme, such as
-  `192.168.164.39:39000`, is treated as `http://192.168.164.39:39000`.
-- A filesystem shared by BioAgent and Cromwell, with identical absolute paths
-  for uploaded FASTQ files, databases, and per-run output directories.
-- Access to `cncb/assembly-id:v1.0`, or a compatible image supplied with the
-  `docker_image` override, from the execution backend configured in Cromwell.
-- Read access to the assembly databases declared in `inputs.json` from the
-  Cromwell process and its execution backend.
-- Up to 32 CPU cores, 64 GB memory, and 500 GB working disk with the defaults.
+- `read1` (required, `AssemblyId.fastq_r1`): Read 1 FASTQ input.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
+- `read2` (optional, `AssemblyId.fastq_r2`): Optional read 2 FASTQ input for paired-end processing.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
 
-From the repository root:
+## Outputs
 
-```bash
-conda create -n bioagent python=3.12 -y
-conda activate bioagent
-python -m pip install -r requirements.txt
-export CROMWELL_URL=http://127.0.0.1:8000
+- `contigs`: `data/output/final.contigs.renamed.fa` — Renamed assembled contigs produced by this workflow..
+- `contig_report`: `data/output/contig_report.tsv` — Contig identification report produced by this workflow..
+- `species_report`: `data/output/species_report.tsv` — Species identification report produced by this workflow..
+
+## Run
+
+Ask the agent to run `metagenomic_de_novo_assembly` with the inputs above. For the bundled example, say:
+
+```text
+Run metagenomic_de_novo_assembly with its bundled example data and collect the results.
 ```
 
-The task image must provide the `/app/scripts/run_assembly.sh`,
-`run_read_support.sh`, `run_identify.sh`, and `run_evaluate.sh` entrypoints.
-Their command-line dependencies are documented in `environment.yml`.
-
-The minimap2 indexes, reference FASTA files, and annotation tables are WDL
-`File` inputs. Cromwell localizes them according to its configured backend.
-For a Local/shared-filesystem backend, both services must resolve every input
-and output path identically. If Cromwell launches Docker tasks, that backend
-must also make localized inputs visible inside its task containers.
-
-Verify the host environment and workflow syntax:
-
-```bash
-curl "$CROMWELL_URL/engine/v1/status"
-```
-
-`miniwdl check` remains available as an optional local syntax check when
-BioAgent is invoked with WDL dry-run mode; normal execution uses Cromwell.
-
-After submission, BioAgent polls Cromwell's workflow status API every five
-seconds. A temporary `Unrecognized workflow ID` response is retried for up to
-300 seconds (`cromwell_visibility_timeout` in `runner.yaml`) to allow for
-submission visibility delays or load-balanced Cromwell deployments.
-
-Pipeline behavior, inputs, and outputs are described in `DESCRIPTION.md`.
+The `runner.yaml` file is the agent-facing input/output contract. The runtime stages inputs and writes declared outputs inside the per-run workspace.

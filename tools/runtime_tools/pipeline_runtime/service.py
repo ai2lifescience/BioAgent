@@ -51,7 +51,7 @@ def definition_hash(directory: Path) -> str:
     return hashlib.sha256(json.dumps(values).encode()).hexdigest()
 
 
-def catalog() -> list[dict]:
+def catalog(*, compact: bool = False) -> list[dict]:
     from tools.runtime_tools.pipeline_runtime.engine.inputs import pipeline_input_specs
     from tools.runtime_tools.pipeline_runtime.engine.outputs import pipeline_output_specs
     entries = []
@@ -80,7 +80,62 @@ def catalog() -> list[dict]:
             })
         except (ValueError, OSError) as exc:
             entries.append({"name": path.name, "error": str(exc)})
-    return entries
+    if not compact:
+        return entries
+    return [_compact_catalog_entry(entry) for entry in entries]
+
+
+def _compact_catalog_entry(entry: dict) -> dict:
+    """Return the bounded catalog shape sent through the agent shell tool.
+
+    The full service catalog remains useful to local callers, but serializing every
+    output path and engine-specific field for every workflow is too large for one
+    shell-tool response. The compact view keeps the information needed for intent
+    selection and planning while leaving exact output paths to the saved plan.
+    """
+    if "error" in entry:
+        return entry
+
+    inputs = {}
+    for slot, spec in (entry.get("inputs") or {}).items():
+        inputs[slot] = {
+            key: spec[key]
+            for key in ("label", "required", "accepts", "multiple", "description")
+            if key in spec and spec[key] not in ("", False, [])
+        }
+
+    parameters = {}
+    for name, spec in (entry.get("parameters") or {}).items():
+        if isinstance(spec, dict):
+            parameters[name] = {
+                key: spec[key]
+                for key in ("default", "required", "choices")
+                if key in spec
+            }
+        else:
+            parameters[name] = spec
+
+    execution = entry.get("execution") or {}
+    return {
+        "name": entry.get("name"),
+        "display_name": entry.get("display_name"),
+        "visibility": entry.get("visibility"),
+        "description": entry.get("description"),
+        "use_when": entry.get("use_when", []),
+        "avoid_when": entry.get("avoid_when", []),
+        "input_summary": entry.get("input_summary", ""),
+        "output_summary": entry.get("output_summary", ""),
+        "limitations": entry.get("limitations", ""),
+        "execution": {
+            "boundary": execution.get("boundary"),
+            "engine": execution.get("engine") or entry.get("engine"),
+        },
+        "engine": entry.get("engine"),
+        "inputs": inputs,
+        "outputs": sorted((entry.get("outputs") or {}).keys()),
+        "parameters": parameters,
+        "timeout_seconds": entry.get("timeout_seconds"),
+    }
 
 
 def files(root: Path) -> list[dict]:

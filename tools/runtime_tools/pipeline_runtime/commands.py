@@ -22,7 +22,7 @@ def parse_command(command: str) -> argparse.Namespace:
     for name in ("catalog", "files", "jobs"):
         subs.add_parser(name, add_help=False, allow_abbrev=False)
     example = subs.add_parser("example", add_help=False, allow_abbrev=False)
-    example.add_argument("--pipeline", default="sequence_qc_demo")
+    example.add_argument("--pipeline", default="template_shell")
     plan = subs.add_parser("plan", add_help=False, allow_abbrev=False)
     plan.add_argument("--pipeline", required=True)
     plan.add_argument("--input", action="append", default=[])
@@ -61,7 +61,7 @@ def dispatch(root, command: str) -> dict:
     from . import service
     args = parse_command(command)
     if args.operation == "catalog":
-        return {"pipelines": service.catalog()}
+        return {"pipelines": service.catalog(compact=True)}
     if args.operation == "files":
         return {"files": service.files(root)}
     if args.operation == "example":

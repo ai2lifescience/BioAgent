@@ -1,64 +1,38 @@
-> **Runtime boundary:** Pipeline2Agent runs this bundle through its declared container boundary. Workflow tools and databases belong to that container; the agent environment does not install them.
+# Bacterial genome annotation
 
-# Bacterial Annotation Pipeline Environment
+> Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
 
-This pipeline annotates assembled bacterial genomes with either Prokka or
-Bakta and exposes a stable set of BioAgent artifacts. Prokka remains the
-default for compatibility with the original Biomni-style function. Bakta is
-recommended for new analyses that can use its maintained, versioned database.
+Annotate assembled bacterial contigs with Prokka or Bakta and normalize the results into sequence, feature, report, metrics, and archive artifacts.
 
-## Ubuntu requirements
+## Inputs
 
-- Bash and Python 3.11 or newer.
-- PyYAML, already included in the BioAgent requirements.
-- Prokka and/or Bakta available on `PATH`.
-- A compatible Bakta database when `annotator: bakta` is selected.
+- `genome` (required, `genome_path`): Assembled bacterial contigs in FASTA format.. Accepted: .fasta, .fa, .fna.
 
-One Bioconda environment can provide both executables:
+## Outputs
 
-```bash
-conda create -n bacterial-annotation -c conda-forge -c bioconda \
-  python=3.12 prokka bakta
-conda activate bacterial-annotation
-prokka --version
-bakta --version
-```
+- `report`: `output/report.md` — Annotation report produced by this workflow..
+- `metrics`: `output/metrics.json` — Annotation metrics produced by this workflow..
+- `gff`: `output/annotation.gff` — GFF3 annotation produced by this workflow..
+- `genbank`: `output/annotation.gbk` — GenBank annotation produced by this workflow..
+- `proteins`: `output/annotation.faa` — Protein sequences produced by this workflow..
+- `genes`: `output/annotation.ffn` — Gene nucleotide sequences produced by this workflow..
+- `contigs`: `output/annotation.fna` — Annotated contigs produced by this workflow..
+- `features`: `output/annotation.tsv` — Feature table produced by this workflow..
+- `summary`: `output/annotation.txt` — Annotation statistics produced by this workflow..
+- `log`: `output/annotation.log` — Annotation execution log produced by this workflow..
+- `bundle`: `output/annotation_outputs.zip` — Complete raw annotation output produced by this workflow..
+- `bakta_json`: `output/annotation.json` — Bakta machine-readable annotation produced by this workflow..
+- `inference`: `output/annotation.inference.tsv` — Bakta inference evidence produced by this workflow..
+- `hypotheticals`: `output/annotation.hypotheticals.tsv` — Bakta hypothetical proteins produced by this workflow..
+- `plot_svg`: `output/annotation.svg` — Bakta annotation plot (SVG) produced by this workflow..
+- `plot_png`: `output/annotation.png` — Bakta annotation plot (PNG) produced by this workflow..
 
-Download the Bakta database once, outside pipeline execution:
+## Run
 
-```bash
-bakta_db download --output /opt/bakta-db --type full
-```
-
-Use the exact downloaded database directory as `bakta_db_path`, or export it
-as `BAKTA_DB`. Start BioAgent from the same activated environment.
-
-## Run with Prokka
+Ask the agent to run `bacterial_genome_annotation` with the inputs above. For the bundled example, say:
 
 ```text
-annotate_bacterial_genome genome: "path/to/contigs.fasta" annotator prokka genus Escherichia species coli strain "K-12" cpus 4
+Run bacterial_genome_annotation with its bundled example data and collect the results.
 ```
 
-Because Prokka is the compatibility default, `annotator prokka` can be omitted.
-
-## Run with Bakta
-
-```text
-annotate_bacterial_genome genome: "path/to/contigs.fasta" annotator bakta bakta_db_path: "/opt/bakta-db/db" genus Escherichia species coli strain "K-12" translation_table 11 gram - cpus 8
-```
-
-The natural form `Annotate bacterial genome "contigs.fasta" using Bakta` also
-selects Bakta, but a database must still be supplied in the request or through
-`BAKTA_DB`.
-
-## Example data
-
-The artificial input is located at:
-
-```text
-pipelines/bacterial_genome_annotation/data/input/example_contigs.fasta
-```
-
-Committed outputs under `data/output/` are clearly marked synthetic fixtures.
-The root of that folder documents the Prokka contract; `data/output/bakta/`
-documents Bakta normalization and Bakta-specific artifacts.
+The `runner.yaml` file is the agent-facing input/output contract. The runtime stages inputs and writes declared outputs inside the per-run workspace.

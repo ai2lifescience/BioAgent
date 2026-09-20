@@ -24,7 +24,7 @@ Commands:
 - agent-pipeline catalog : discover intent-focused pipeline names, descriptions,
   use cases, limitations, inputs, parameters, and outputs.
 - agent-pipeline files : discover session workspace-relative input paths.
-- agent-pipeline example --pipeline sequence_qc_demo : stage bundled internal
+- agent-pipeline example --pipeline template_shell : stage bundled internal
   demonstration data, only when the user requested a demonstration/example.
 - agent-pipeline plan --pipeline NAME --input SLOT=WORKSPACE_PATH
   [--input OTHER_SLOT=PATH] [--param NAME=JSON_OR_TEXT] [--cores N]
@@ -55,9 +55,9 @@ automatically retry failed/interrupted jobs. Preserve logs and explain failures.
 
 Usage examples:
 1. "List the available pipelines" -> catalog.
-2. "Run the sequence QC demonstration and summarize it" -> example, plan,
+2. "Run the shell metadata template and summarize it" -> example, plan,
    approval, run, wait, and results.
-3. "Run the sequence QC demonstration with my uploaded reads.fastq and metadata.tsv" ->
+3. "Run the shell metadata template with my uploaded reads.fastq and metadata.tsv" ->
    files, explicit slot inputs, plan, approval, run, wait, and results.
 """
 
@@ -125,7 +125,7 @@ async def execute_local_pipeline_command(request: ShellCommandRequest) -> ShellR
         from harness.sandbox import list_files
         context.files = await list_files(context.sandbox_session)
     return ShellResult(output=[ShellCommandOutput(command=command, stdout=json.dumps(value),
-        outcome=ShellCallOutcome(type="exit", exit_code=code))], max_output_length=24000)
+        outcome=ShellCallOutcome(type="exit", exit_code=code))], max_output_length=32000)
 
 
 pipeline_shell = ShellTool(name="pipeline_shell", executor=execute_local_pipeline_command,

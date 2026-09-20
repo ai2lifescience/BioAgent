@@ -327,11 +327,11 @@ function emptyStateHtml() {
           <details class="more-examples">
             <summary>More pipelines</summary>
             <div class="examples">
-              <button class="example-button" data-example="Run pipeline with pipeline_name: dna_analysis_demo">DNA analysis demonstration</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: sequence_metadata_assignment">Sequence metadata assignment</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: sequence_normalization_snakemake_demo">Sequence normalization (Snakemake)</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: sequence_normalization_nextflow_demo">Sequence normalization (Nextflow)</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: sequence_normalization_wdl_demo">Sequence normalization (WDL)</button>
+              <button class="example-button" data-example="Run pipeline with pipeline_name: template_bio">DNA analysis template</button>
+              <button class="example-button" data-example="Run pipeline with pipeline_name: template_shell">Shell metadata template</button>
+              <button class="example-button" data-example="Run pipeline with pipeline_name: template_snakemake">Snakemake template</button>
+              <button class="example-button" data-example="Run pipeline with pipeline_name: template_nextflow">Nextflow template</button>
+              <button class="example-button" data-example="Run pipeline with pipeline_name: template_wdl">WDL template</button>
               <button class="example-button" data-example="Run pipeline with pipeline_name: metagenomic_read_quality_control">Metagenomic read quality control</button>
               <button class="example-button" data-example="Run pipeline with pipeline_name: metagenomic_pathogen_identification">Metagenomic pathogen identification</button>
               <button

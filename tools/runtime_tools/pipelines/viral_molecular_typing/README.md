@@ -1,53 +1,28 @@
-> **Runtime boundary:** Pipeline2Agent runs this bundle through its declared container boundary. Workflow tools and databases belong to that container; the agent environment does not install them.
+# Viral molecular typing
 
-# Molecular Meta WDL Pipeline Environment
+> Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
 
-## Host requirements
+Process viral reads, generate a consensus and alignment, and run configured Nextclade molecular typing.
 
-The host runtime requires:
+## Inputs
 
-- Python 3.9 or newer.
-- miniwdl 1.12 or newer.
-- A running Docker daemon accessible to the current user.
-- Access to the `cncb/molecular-wdl:v1.0` task image, or a compatible image
-  supplied through the workflow's `docker_image` input.
-- Up to 16 CPU cores and 32 GB memory with the default input settings.
+- `read1` (required, `run_molecular_typing.file1Path`): Read 1 FASTQ input.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
+- `read2` (optional, `run_molecular_typing.file2Path`): Optional read 2 FASTQ input for paired-end processing.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
 
-## BioAgent environment
+## Outputs
 
-From the repository root:
+- `result_csv`: `data/output/result.csv` — Typing result CSV produced by this workflow..
+- `nextclade_tsv`: `data/output/nextclade.tsv` — Nextclade TSV produced by this workflow..
+- `nextclade_json`: `data/output/nextclade.json` — Nextclade JSON produced by this workflow..
+- `consensus_fa`: `data/output/consensus.fa` — HA consensus FASTA produced by this workflow..
+- `final_bam`: `data/output/final.bam` — Final BAM produced by this workflow..
 
-```bash
-conda create -n bioagent python=3.12 -y
-conda activate bioagent
-python -m pip install -r requirements.txt
-docker pull cncb/molecular-wdl:v1.0
+## Run
+
+Ask the agent to run `viral_molecular_typing` with the inputs above. For the bundled example, say:
+
+```text
+Run viral_molecular_typing with its bundled example data and collect the results.
 ```
 
-## Task environment
-
-The WDL tasks require Bash/core utilities, fastp, BWA, SAMtools, BamUtil,
-iVar, Nextclade, and Java. These commands must be present inside the configured
-task image.
-
-[`environment.yml`](environment.yml) documents this tool environment and can
-be resolved separately with:
-
-```bash
-conda env create -f pipelines/viral_molecular_typing/environment.yml
-conda activate viral_molecular_typing
-```
-
-The current WDL `runtime` blocks explicitly select Docker, so activating this
-Conda environment does not replace miniwdl and Docker during a workflow run.
-
-Verify the host environment:
-
-```bash
-miniwdl --version
-docker info
-docker image inspect cncb/molecular-wdl:v1.0
-```
-
-Pipeline function, inputs, and outputs are documented in
-[`DESCRIPTION.md`](DESCRIPTION.md).
+The `runner.yaml` file is the agent-facing input/output contract. The runtime stages inputs and writes declared outputs inside the per-run workspace.

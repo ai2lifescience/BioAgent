@@ -1,77 +1,30 @@
-> **Runtime boundary:** Pipeline2Agent runs this bundle through its declared container boundary. Workflow tools and databases belong to that container; the agent environment does not install them.
+# Viral genome mutation analysis
 
-# viral_genome_mutation_analysis BioAgent pipeline
+> Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
 
-Virmut calls and summarizes nucleotide variants in assembled viral genomes.
-It accepts one single-record query FASTA or a directory of such FASTA files,
-aligns them to a selected reference with `minimap2`, writes per-sample SNP
-calls, builds a SNP matrix, and creates a compact variant summary. When there
-are sufficient samples and variable sites, it also attempts IQ-TREE inference.
+Compare viral genome FASTA files to a reference, call nucleotide variants, and optionally infer a phylogeny.
 
 ## Inputs
 
-- `genomes`: one query FASTA (`.fasta`, `.fa`, or `.fna`) or a directory of
-  query FASTAs. Each FASTA must contain exactly one sequence record.
-- `reference`: local reference FASTA for the default `params.reference_mode:
-  local`.
-- `params.reference_mode`: `local`, `species`, or `taxonid`.
-- `params.threads`: thread count used by the selected execution path.
+- `genomes` (required, `input_path`): One genome FASTA or a directory of genome FASTA files.. Accepted: .fasta, .fa, .fna.
+- `reference` (optional, `reference_path`): Reference sequence or reference resource used for comparison.. Accepted: .fasta, .fa, .fna.
 
-For `species` or `taxonid` reference selection, set `VIRUS_DB` and
-`VIRUS_METADATA` to the local reference FASTA and metadata files. These modes
-are not needed for a normal local-reference analysis.
+## Outputs
 
-## Requirements
-
-- Bash and Python 3.9 or newer;
-- PyYAML and Biopython in the Python environment used by `run.sh`;
-- `minimap2` on `PATH` for genome alignment;
-- IQ-TREE (`iqtree2` or `iqtree`) only when phylogeny is wanted.
-
-The core outputs do not depend on IQ-TREE. One-sample or no-SNP jobs therefore
-remain successful even when no tree is written.
+- `matrix`: `data/output/matrix.tsv` — SNP matrix produced by this workflow..
+- `variants`: `data/output/variants.tsv` — Variants table produced by this workflow..
+- `summary`: `data/output/variants_summary.txt` — Variants summary produced by this workflow..
+- `tree_fasta`: `data/output/tree.fasta` — Tree FASTA produced by this workflow..
+- `treefile`: `data/output/tree.treefile` — IQ-TREE tree produced by this workflow..
+- `iqtree_report`: `data/output/tree.iqtree` — IQ-TREE report produced by this workflow..
+- `iqtree_log`: `data/output/tree.log` — IQ-TREE log produced by this workflow..
 
 ## Run
 
-BioAgent calls `run.sh` with a generated runtime YAML. A direct run uses the
-same format:
+Ask the agent to run `viral_genome_mutation_analysis` with the inputs above. For the bundled example, say:
 
-```bash
-./run.sh config.yaml
+```text
+Run viral_genome_mutation_analysis with its bundled example data and collect the results.
 ```
 
-For BioAgent, provide `pipeline_name: viral_genome_mutation_analysis`, `genomes`, and, for local mode,
-`reference`. The bundled example files are a synthetic 12 kb reference/query
-pair with five introduced SNPs and are intended only as a lightweight
-integration fixture.
-
-## Parameters and outputs
-
-The main parameters are `mode` (`fasta` is the bundled and tested mode),
-`reference_mode`, `species`, `taxonid`, and `threads`. Paths such as
-`input_path`, `reference_path`, and `output_dir` are top-level configuration
-values managed by BioAgent rather than biological tuning parameters.
-
-Required outputs are:
-
-- `matrix.tsv`: cross-sample SNP matrix;
-- `variants.tsv`: called and annotated variants;
-- `variants_summary.txt`: readable aggregate summary.
-
-Optional outputs are `tree.fasta`, `tree.treefile`, `tree.iqtree`, and
-`tree.log`. Their absence alone is not an error when there is insufficient
-signal for tree construction.
-
-## Included layout
-
-- `runner.yaml`: BioAgent input/output contract;
-- `config.yaml`: default paths and runtime parameters;
-- `run.sh`: shell entrypoint;
-- `workflow.py`: consolidated pipeline implementation;
-- `data/input`: small synthetic test inputs;
-- `data/output/README.md`: explanation of runtime-produced files.
-
-For `species` or `taxonid` reference selection, the validated server uses
-`/hpcdisk1/jcyj_group/jiangxq226/pathdect_pipeline/database/pcf/virus_db_reference_merged3/reference.fasta`
-and `/hpcdisk1/jcyj_group/jiangxq226/pathdect_pipeline/database/pcf/virus_db_reference_merged3/meta.tsv`.
-These large server-managed reference files are not included in this package.
+The `runner.yaml` file is the agent-facing input/output contract. The runtime stages inputs and writes declared outputs inside the per-run workspace.

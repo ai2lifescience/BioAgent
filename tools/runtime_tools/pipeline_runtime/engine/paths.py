@@ -10,7 +10,7 @@ from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
 PIPELINES_ROOT = PROJECT_ROOT / "tools" / "runtime_tools" / "pipelines"
-DEFAULT_PIPELINE_NAME = "sequence_metadata_assignment"
+DEFAULT_PIPELINE_NAME = "template_shell"
 PIPELINE_NAME_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*$")
 
 

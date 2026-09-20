@@ -1,109 +1,36 @@
-> **Runtime boundary:** Pipeline2Agent runs this bundle through its declared container boundary. Workflow tools and databases belong to that container; the agent environment does not install them.
+# Bacterial genome mutation analysis
 
-# bacterial_genome_mutation_analysis BioAgent pipeline
+> Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
 
-This folder is self-contained and can be copied directly to BioAgent's
-`pipelines/bacterial_genome_mutation_analysis/` directory.
+Compare assembled bacterial genomes against a reference, call and filter SNPs, and optionally build a phylogeny.
 
-## Dependencies
+## Inputs
 
-- Bash
-- Python 3.9 or newer
-- PyYAML (`python3 -m pip install pyyaml`)
-- `minimap2` for contig assemblies or genomes with indels
-- IQ-TREE 2 (`iqtree2`) or IQ-TREE 1 (`iqtree`) for phylogeny
+- `genomes` (optional, `input_path`): One genome FASTA or a directory of genome FASTA files.. Accepted: .fasta, .fa, .fna, .fas.
+- `reference` (optional, `reference_path`): Reference sequence or reference resource used for comparison.. Accepted: .fasta, .fa, .fna, .fas.
 
-The Python pipeline itself uses only the standard library. With
-`params.aligner: auto`, it uses `minimap2` when available and otherwise falls
-back to the internal aligner. The internal aligner only supports equal-length,
-full-genome FASTA sequences.
+## Outputs
 
-For `params.reference_mode: species` or `taxonid`, also define:
+- `report`: `data/output/report.md` — BioAgent Markdown report produced by this workflow..
+- `metrics`: `data/output/metrics.json` — BioAgent metrics produced by this workflow..
+- `matrix`: `data/output/filtered_snp_matrix.fasta` — Filtered SNP alignment produced by this workflow..
+- `variants`: `data/output/variants.tsv` — Annotated variants produced by this workflow..
+- `variants_summary`: `data/output/variants_summary.txt` — Variant statistics produced by this workflow..
+- `pipeline_summary`: `data/output/summary.txt` — Pipeline summary produced by this workflow..
+- `initial_snps`: `data/output/initial_snp_list.csv` — SNP calls before filtering produced by this workflow..
+- `mutation_report`: `data/output/mutation_report.csv` — Detailed mutation report produced by this workflow..
+- `final_tree`: `data/output/final_tree.nwk` — Final phylogenetic tree produced by this workflow..
+- `treefile`: `data/output/iqtree_run.treefile` — IQ-TREE tree produced by this workflow..
+- `iqtree_report`: `data/output/iqtree_run.iqtree` — IQ-TREE report produced by this workflow..
+- `iqtree_log`: `data/output/iqtree_run.log` — IQ-TREE log produced by this workflow..
+- `pipeline_log`: `data/output/pipeline.log` — Pipeline execution log produced by this workflow..
 
-```bash
-export GTDB_DB_PATH=/path/to/gtdb_representatives.fasta
-export GTDB_METADATA_PATH=/path/to/bac120_metadata.tsv
+## Run
+
+Ask the agent to run `bacterial_genome_mutation_analysis` with the inputs above. For the bundled example, say:
+
+```text
+Run bacterial_genome_mutation_analysis with its bundled example data and collect the results.
 ```
 
-No database is needed for the default `local` reference mode.
-
-## Installation
-
-```bash
-unzip bacterial_genome_mutation_analysis.zip
-cp -R bacterial_genome_mutation_analysis /path/to/BioAgent/pipelines/
-chmod +x /path/to/BioAgent/pipelines/bacterial_genome_mutation_analysis/run.sh
-```
-
-Place one query FASTA file at `data/input/example_genomes.fasta`, or place one
-or more query FASTA files in a directory. BioAgent can replace either input
-path in its generated runtime configuration.
-
-## Configuration
-
-All input and output paths are top-level keys in `config.yaml`. Only values
-under `params` are runtime algorithm parameters intended for BioAgent
-overrides.
-
-- `reference_mode`: `local`, `species`, or `taxonid`
-- `threads`: worker/thread budget
-- `aligner`: `auto`, `minimap2`, or `internal`
-- `min_coverage`: fraction of samples required to cover a position
-- `window_size`, `step_size`, `sd_threshold`: recombination filter controls
-- `simulate`: generate validation genomes instead of reading `input_path`
-- `simulate_snp_rate`, `simulate_samples`, `seed`: simulation controls
-- `verbose`: detailed logging
-
-The input and reference entries in `runner.yaml` are conditionally required:
-real-data runs need `input_path`, local-reference runs need `reference_path`,
-and simulation/database-reference modes intentionally omit one of them.
-
-## Direct test
-
-BioAgent calls the entrypoint with a generated runtime configuration:
-
-```bash
-./run.sh config.runtime.yaml
-```
-
-For a standalone check, copy `config.yaml` to `config.runtime.yaml`, populate
-the configured input paths, and run the same command.
-
-## Included files
-
-- `runner.yaml`: BioAgent engine, input, output, timeout, and override contract.
-- `config.yaml`: plug-and-play default paths and parameters.
-- `run.sh`: strict shell entrypoint; validates and parses the YAML, then starts
-  the adapter.
-- `workflow.py`: consolidated configuration adapter and BactMut FASTA
-  implementation; it validates paths, invokes analysis, and publishes the
-  declared BioAgent outputs.
-- `DESCRIPTION.md`: short pipeline description for users and agents.
-- `README.md`: dependencies, installation, and configuration.
-
-## BioAgent packaged workflow
-
-`genomes` accepts either one FASTA file or a directory of FASTA files; it is
-not restricted to five inputs. `reference` is optional only when
-`params.reference_mode` is `species` or `taxonid`; it is required for the
-default `local` mode. The main parameters are `threads`, `aligner`
-(`auto|minimap2|internal`), `min_coverage`, `window_size`, `step_size`,
-`sd_threshold`, and the optional simulation parameters.
-
-Use the generated runtime configuration through BioAgent, or run directly:
-
-```bash
-./run.sh config.yaml
-```
-
-For a single FASTA comparison in BioAgent, provide `pipeline_name:
-bacterial_genome_mutation_analysis`, `genomes`, and `reference`. A one-sample run can legitimately
-skip phylogeny; `report.md`, `metrics.json`, the SNP matrix, and variant tables
-remain the required outputs.
-
-The normal `local` mode uses the `reference` input and does not need GTDB; GTDB is needed
-only for `species` or `taxonid` reference selection. On the validated server,
-set `GTDB_DB_PATH` to
-`/hpcdisk1/jcyj_group/jiangxq226/pathdect_pipeline/database/pcf/bacterial_reference_res96_v2/representative.fa.filter_sp_mag`
-and `GTDB_METADATA_PATH` to
-`/hpcdisk1/jcyj_group/jiangxq226/pathdect_pipeline/database/pcf/bacterial_reference_res96_v2/bac120_metadata.tsv.deversion`.
+The `runner.yaml` file is the agent-facing input/output contract. The runtime stages inputs and writes declared outputs inside the per-run workspace.
