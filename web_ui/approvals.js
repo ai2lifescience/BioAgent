@@ -1,15 +1,85 @@
 /* Shared approval controls for the full and embedded chat interfaces. */
+
+async function readApprovalResponse(response, onProgress) {
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({}));
+    throw new Error(payload.error || `HTTP ${response.status}`);
+  }
+  if (!response.body) {
+    throw new Error("Approval response streaming is not available in this browser.");
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let result = null;
+  const handleFrame = (frame) => {
+    if (!frame.trim()) return;
+    let event = "message";
+    const dataLines = [];
+    for (const line of frame.split(/\r?\n/)) {
+      if (line.startsWith("event:")) event = line.slice("event:".length).trim();
+      if (line.startsWith("data:")) dataLines.push(line.slice("data:".length).trimStart());
+    }
+    if (!dataLines.length) return;
+    const payload = JSON.parse(dataLines.join("\n"));
+    if (event === "status" || event === "log") {
+      onProgress?.(payload.message || "Resuming the run…");
+    } else if (event === "result") {
+      result = payload;
+    } else if (event === "error") {
+      throw new Error(payload.error || "Approval request failed.");
+    }
+  };
+
+  try {
+    while (true) {
+      const { value, done } = await reader.read();
+      buffer += done ? decoder.decode() : decoder.decode(value, { stream: true });
+      const frames = buffer.split(/\r?\n\r?\n/);
+      buffer = frames.pop() || "";
+      frames.forEach(handleFrame);
+      if (done) break;
+    }
+    if (buffer.trim()) handleFrame(buffer);
+  } finally {
+    await reader.cancel().catch(() => {});
+    reader.releaseLock();
+  }
+  if (!result) throw new Error("Approval stream ended before returning a result.");
+  return result;
+}
+
 window.mountToolApprovals = function (container, result, options) {
   if (!result?.approval_required || !Array.isArray(result.approvals)) return;
   const panel = document.createElement("div");
   panel.className = "tool-approvals";
   for (const item of result.approvals) {
     const row = document.createElement("section");
+    row.className = "approval-item";
     const title = document.createElement("strong");
     title.textContent = `Review ${item.tool_name}`;
-    const args = document.createElement("pre");
-    args.textContent = JSON.stringify(item.plan ? { action: item.arguments, plan: item.plan } : item.arguments, null, 2);
-    row.append(title, args);
+
+    // Keep the requested plan in its own persistent details block. The
+    // decision status below can change after approval without replacing the
+    // plan the user reviewed.
+    const plan = document.createElement("details");
+    plan.className = "approval-plan";
+    plan.open = true;
+    const planSummary = document.createElement("summary");
+    planSummary.textContent = item.plan ? "Pipeline plan" : "Requested operation";
+    const planBody = document.createElement("pre");
+    planBody.textContent = JSON.stringify(item.plan ? { action: item.arguments, plan: item.plan } : item.arguments, null, 2);
+    plan.append(planSummary, planBody);
+
+    const actions = document.createElement("div");
+    actions.className = "approval-actions";
+    const status = document.createElement("p");
+    status.className = "approval-status";
+    status.setAttribute("role", "status");
+    status.hidden = true;
+    row.append(title, plan, actions, status);
+
     for (const approved of [true, false]) {
       const button = document.createElement("button");
       button.type = "button";
@@ -19,11 +89,13 @@ window.mountToolApprovals = function (container, result, options) {
         const buttons = panel.querySelectorAll("button");
         buttons.forEach((control) => { control.disabled = true; });
         options.onBusy(true);
-        const progress = document.createElement("p");
-        progress.textContent = "Submitting decision…";
-        row.appendChild(progress);
+        status.hidden = false;
+        status.dataset.status = "running";
+        status.textContent = approved
+          ? "Approval submitted. Execution is in progress…"
+          : "Rejection submitted. Finishing the request…";
         try {
-          const response = await fetch(options.url, {
+          const response = await fetch(options.streamUrl || options.url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -32,12 +104,34 @@ window.mountToolApprovals = function (container, result, options) {
               approved,
             }),
           });
-          const next = await response.json();
-          if (!response.ok || next.error) throw new Error(next.error || `HTTP ${response.status}`);
-          panel.textContent = approved ? "Approval submitted." : "Rejection submitted.";
-          options.onResult(next);
+          const next = options.streamUrl
+            ? await readApprovalResponse(response, (message) => {
+              status.hidden = false;
+              status.dataset.status = "running";
+              status.textContent = message;
+            })
+            : await response.json();
+          if (!options.streamUrl && (!response.ok || next.error)) {
+            throw new Error(next.error || `HTTP ${response.status}`);
+          }
+          status.dataset.status = approved ? "done" : "rejected";
+          status.textContent = approved
+            ? "Approved. Execution details are shown in the next run panel."
+            : "Rejected. No pipeline execution was started.";
+          plan.open = false;
+          options.onResult({
+            ...next,
+            approval_decision: {
+              approved,
+              approval_id: item.approval_id,
+              tool_name: item.tool_name,
+              arguments: item.arguments || null,
+              plan: item.plan || null,
+            },
+          }, { approved, item });
         } catch (error) {
-          progress.textContent = error.message;
+          status.dataset.status = "error";
+          status.textContent = error.message;
           buttons.forEach((control) => { control.disabled = false; });
         } finally {
           options.onBusy(false);

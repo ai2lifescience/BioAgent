@@ -3025,6 +3025,42 @@ main {
   margin-top: 16px;
 }
 
+.run-plan-record {
+  margin-top: 12px;
+  border: 1px solid #a8d8d1;
+  border-radius: 9px;
+  background: #f7fcfb;
+}
+
+.run-plan-record summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  color: var(--accent-strong);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 760;
+}
+
+.run-plan-record summary span {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.run-plan-record pre {
+  max-height: 260px;
+  margin: 0;
+  padding: 9px 10px 11px;
+  border-top: 1px solid #dcebea;
+  overflow: auto;
+  color: #52636d;
+  font-size: 11px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .run-status-chip {
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -3165,6 +3201,96 @@ main {
 
 .approval-controls {
   grid-column: 1 / -1;
+}
+
+.tool-approvals {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.approval-item {
+  display: grid;
+  gap: 7px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.approval-item > strong {
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.approval-plan {
+  border: 1px solid #e1e9eb;
+  border-radius: 7px;
+  background: #fbfcfd;
+}
+
+.approval-plan summary {
+  padding: 7px 9px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.approval-plan pre {
+  max-height: 260px;
+  margin: 0;
+  padding: 8px 9px 10px;
+  border-top: 1px solid #e1e9eb;
+  overflow: auto;
+  color: #52636d;
+  font-size: 11px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.approval-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.approval-actions button {
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.approval-actions button:first-child {
+  border-color: #9bd5ca;
+  background: #ecfdf3;
+  color: #166534;
+}
+
+.approval-actions button:last-child {
+  color: #991b1b;
+}
+
+.approval-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.approval-status[data-status="done"] {
+  color: #166534;
+}
+
+.approval-status[data-status="rejected"],
+.approval-status[data-status="error"] {
+  color: #991b1b;
 }
 
 .run-section .run-metrics {

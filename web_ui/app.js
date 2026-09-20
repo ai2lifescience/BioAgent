@@ -309,7 +309,7 @@ async function loadConversation(sessionId) {
     .map((message) => ({
       role: message.role,
       text: String(message.text || ""),
-      result: null,
+      result: message.result || null,
       created_at: message.created_at || null,
     }));
   session.message_count = session.messages.length;
@@ -1464,17 +1464,29 @@ function runtimePanel(result, runtime, status) {
   `).join("")}</div>`;
 }
 
+function approvalPlanHtml(result) {
+  const decision = result?.approval_decision;
+  if (!decision || (!decision.plan && !decision.arguments)) return "";
+  const reviewed = decision.plan
+    ? { action: decision.arguments, plan: decision.plan }
+    : decision.arguments;
+  const title = decision.approved ? "Approved pipeline plan" : "Rejected operation plan";
+  return `
+    <details class="run-plan-record" open>
+      <summary>${escapeHtml(title)} <span>${escapeHtml(decision.tool_name || "Tool request")}</span></summary>
+      <pre>${escapeHtml(JSON.stringify(reviewed, null, 2))}</pre>
+    </details>
+  `;
+}
+
 function resultDetails(result) {
   if (!result) return "";
   const runtime = result.runtime || {};
   const status = debugStatus(result);
   const pipelineOutputs = collectPipelineOutputRecords(result);
-  return `
-    ${pipelineDownloadsHtml(result, pipelineOutputs)}
-    ${pipelineOutputs.length ? "" : collectedBundleHtml(result)}
-    ${pipelineOutputs.length ? "" : figureArtifactsHtml(result)}
-    ${pipelineOutputs.length ? "" : structureViewerHtml(result)}
-    <div class="run-debug" aria-label="Runtime details">
+  const hasRuntimeDetails = Boolean(result.runtime || result.trace || result.evidence || result.approval_required);
+  const runtimeDetails = hasRuntimeDetails ? `
+    <div class="run-debug" aria-label="Runtime details"${result.approval_decision ? ' data-default-tab="plan"' : ""}>
       <div class="run-tabs" role="tablist" aria-label="Runtime detail sections">
         <button type="button" class="run-tab" role="tab" aria-selected="false" data-runtime-tab="runtime">
           <span>Runtime</span><small>${escapeHtml(status.label)} · ${escapeHtml(formatElapsed(runtime.elapsed_seconds))}</small>
@@ -1505,6 +1517,14 @@ function resultDetails(result) {
       </section>
       <div class="approval-controls"></div>
     </div>
+  ` : "";
+  return `
+    ${pipelineDownloadsHtml(result, pipelineOutputs)}
+    ${pipelineOutputs.length ? "" : collectedBundleHtml(result)}
+    ${pipelineOutputs.length ? "" : figureArtifactsHtml(result)}
+    ${pipelineOutputs.length ? "" : structureViewerHtml(result)}
+    ${approvalPlanHtml(result)}
+    ${runtimeDetails}
   `;
 }
 
@@ -1527,7 +1547,7 @@ function initializeRuntimeTabs(root = document) {
       });
     };
     tabs.forEach((tab) => tab.addEventListener("click", () => select(tab.dataset.runtimeTab)));
-    select(null);
+    select(group.dataset.defaultTab || null);
   });
 }
 
@@ -1554,6 +1574,7 @@ function renderMessage(role, text, result = null) {
   if (approvalHost && window.mountToolApprovals) {
     window.mountToolApprovals(approvalHost, result, {
       url: "/approve",
+      streamUrl: "/approve_stream",
       isBusy: () => isRunning || isSessionLoading,
       onBusy: (busy) => {
         isRunning = busy;

@@ -110,6 +110,7 @@
       message.appendChild(approvals);
       window.mountToolApprovals(approvals, result, {
         url: apiUrl("approve"),
+        streamUrl: apiUrl("approve_stream"),
         isBusy: () => state.busy,
         onBusy: (busy) => { if (!busy) setBusy(false); else setBusy(true); },
         onResult: (next) => addMessage("assistant", next.answer || "", next),

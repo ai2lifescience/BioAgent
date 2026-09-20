@@ -69,6 +69,12 @@ def list_session_messages(session_id: str) -> dict[str, Any]:
             text = _session_item_text(item.get("content"))
             if text:
                 messages.append({"role": role, "text": text})
+        last_approval = metadata.metadata.get("last_approval") if metadata else None
+        if isinstance(last_approval, dict):
+            for message in reversed(messages):
+                if message.get("role") == "assistant":
+                    message["result"] = {"approval_decision": last_approval}
+                    break
         pending = metadata.metadata.get("pending_run") if metadata else None
         return {
             "session_id": identifier,

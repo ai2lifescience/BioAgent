@@ -134,6 +134,7 @@ async def _execute(
     sdk_session = SQLiteSession(session.session_id, db_path=session_db)
     provider = OpenRouterProvider()
     approvals: list[dict[str, Any]] = []
+    approval_decision: dict[str, Any] | None = None
     snapshot = None
     LOCAL_TRACES.bind(trace_id, context)
     try:
@@ -155,6 +156,15 @@ async def _execute(
                 run_input.approve(item)
             else:
                 run_input.reject(item, rejection_message="The user rejected this tool request.")
+            approval_details = pending.get("approvals") or []
+            approval_detail = approval_details[index] if index < len(approval_details) else {}
+            approval_decision = {
+                "approved": approved,
+                "approval_id": approval_detail.get("approval_id"),
+                "tool_name": approval_detail.get("tool_name", item.tool_name),
+                "arguments": approval_detail.get("arguments"),
+                "plan": approval_detail.get("plan"),
+            }
             context.record("approval_decision", approved=approved, tool_name=item.tool_name)
             # Consume the saved snapshot before execution. Failed or duplicate
             # requests must not replay already-executed side effects.
@@ -211,6 +221,10 @@ async def _execute(
         }
     else:
         context.record("run_finished", status=status, tool_count=len(context.tool_results))
+        if approval_decision:
+            session.metadata["last_approval"] = approval_decision
+        else:
+            session.metadata.pop("last_approval", None)
         # Pauses are not additional conversational exchanges.
         STATE_STORE.record_exchange(session, request, answer)
     run = dict(session.metadata.get("run") or {})
@@ -221,6 +235,7 @@ async def _execute(
         "messages": [{"role": "user", "content": request}, {"role": "assistant", "content": answer}],
         "evidence": evidence, "trace": context.events,
         "run": run, "files": context.files,
+        "approval_decision": approval_decision,
         "runtime": "agents_sdk", "model_key": model_key,
     }
 
