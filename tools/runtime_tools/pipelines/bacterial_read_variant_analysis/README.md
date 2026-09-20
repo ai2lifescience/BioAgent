@@ -1,34 +1,75 @@
 # Bacterial read variant analysis
 
-> Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
+BactMut FASTQ maps bacterial reads to a reference with minimap2, sorts and
+measures coverage with samtools, calls variants with bcftools, filters
+low-coverage/recombination-dense positions, builds a cross-sample SNP matrix,
+and optionally runs IQ-TREE.
 
-Map bacterial reads to a reference, call and filter variants, build a cross-sample SNP matrix, and optionally infer a phylogeny.
+## Requirements
 
-## Inputs
+The entrypoint uses the Conda environment named `bactmut`. Provide Bash, Python
+3.9 or newer with PyYAML, and these required executables:
 
-- `reads` (required, `input_path`): Sequence reads supplied to the workflow.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
-- `reference` (optional, `reference_path`): Reference sequence or reference resource used for comparison.. Accepted: .fasta, .fa, .fna, .fas.
+- `minimap2`, `samtools`, and `bcftools`;
+- `iqtree2` or `iqtree` only for optional phylogeny.
+
+For example:
+
+```bash
+conda create -n bactmut -c conda-forge -c bioconda \
+  python=3.11 pyyaml minimap2 samtools bcftools
+conda install -n bactmut -c bioconda iqtree
+```
+
+The default local-reference mode needs no database. `species` and `taxonid`
+modes require GTDB representative FASTA and metadata paths in
+`GTDB_DB_PATH` and `GTDB_METADATA_PATH`.
+
+## Inputs and parameters
+
+`input_path` accepts one single-end FASTQ or a directory containing single-end
+and paired-end files with `.fastq`, `.fq`, `.fastq.gz`, or `.fq.gz` suffixes.
+Common pair names `_R1`/`_R2`, `.R1`/`.R2`, `_1`/`_2`, and `.1`/`.2` are
+recognized. `reference_path` is required for local mode.
+
+Tune `params.reference_mode`, `threads`, `min_coverage`, `window_size`,
+`step_size`, `sd_threshold`, and `verbose` in the runtime YAML. The pipeline
+converts SAM to BAM explicitly before sorting and does not depend on ambiguous
+format autodetection.
+
+## Standalone installation and run
+
+```bash
+chmod +x run.sh
+cp config.yaml config.local.yaml
+# Edit input_path, reference_path, output_dir, and params.
+./run.sh config.local.yaml
+```
+
+The same configuration can be passed to `workflow.py` directly when the
+`bactmut` environment is already active:
+
+```bash
+conda run --no-capture-output -n bactmut python workflow.py config.local.yaml
+```
 
 ## Outputs
 
-- `report`: `data/output/report.md` — BioAgent Markdown report produced by this workflow..
-- `metrics`: `data/output/metrics.json` — BioAgent metrics produced by this workflow..
-- `matrix`: `data/output/matrix.tsv` — Filtered SNP matrix produced by this workflow..
-- `variants`: `data/output/variants.tsv` — Annotated variants produced by this workflow..
-- `variants_summary`: `data/output/variants_summary.txt` — Variant statistics produced by this workflow..
-- `final_tree`: `data/output/final_tree.nwk` — Final phylogenetic tree produced by this workflow..
-- `tree_alignment`: `data/output/tree.fasta` — Tree alignment produced by this workflow..
-- `treefile`: `data/output/tree.treefile` — IQ-TREE tree produced by this workflow..
-- `iqtree_report`: `data/output/tree.iqtree` — IQ-TREE report produced by this workflow..
-- `iqtree_log`: `data/output/tree.log` — IQ-TREE log produced by this workflow..
-- `pipeline_log`: `data/output/pipeline.log` — Pipeline execution log produced by this workflow..
+Required outputs are `report.md`, `metrics.json`, `matrix.tsv`, `variants.tsv`,
+and `variants_summary.txt`. Per-sample SAM/BAM/VCF files are retained under
+`bcftools`/the work directory. `final_tree.nwk`, `tree.fasta`, IQ-TREE reports,
+and logs are optional; a single sample or no surviving SNPs does not make the
+run fail.
 
-## Run
+## BioAgent use and limits
 
-Ask the agent to run `bacterial_read_variant_analysis` with the inputs above. For the bundled example, say:
+Use `pipeline_name: bacterial_read_variant_analysis` with `reads` and a local
+`reference` when required:
 
 ```text
 Run bacterial_read_variant_analysis with its bundled example data and collect the results.
 ```
 
-The `runner.yaml` file is the agent-facing input/output contract. The runtime stages inputs and writes declared outputs inside the per-run workspace.
+Results depend on read quality, mapping/reference choice, depth, filtering
+thresholds, and database versions. This is a bacterial variant-comparison
+workflow, not a clinical interpretation or resistance call.

@@ -1,26 +1,69 @@
 # Pathogen variant risk assessment
 
-> Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
+This WDL 1.0 workflow aligns clean pathogen reads, calls variants with iVar,
+annotates effects with snpEff, and creates a pathogen-specific risk report. It
+supports the configured influenza and SARS-CoV-2 reference/resource sets.
 
-Align pathogen reads, call and annotate variants, and produce a pathogen-specific risk-assessment report.
+## Requirements
 
-## Inputs
+- Java and a reachable Cromwell Server (`CROMWELL_URL`, default
+  `http://127.0.0.1:8000`), with shared paths between submitter, Cromwell, and
+  task containers;
+- Docker or the configured backend with `cncb/risk-wdl:v1.0` (or a compatible
+  image), including `/app/run_variant_risk.sh` and
+  `/app/lib/docker_bin_paths.sh`;
+- reference FASTA, snpEff config/database/tarball, segment table, and risk
+  annotation files readable by Cromwell;
+- the default profile can require 8 CPUs, 64 GB RAM, 200 GB disk, and Java
+  memory for snpEff.
 
-- `read1` (required, `VariantRisk.fastq_r1`): Read 1 FASTQ input.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
-- `read2` (optional, `VariantRisk.fastq_r2`): Optional read 2 FASTQ input for paired-end processing.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
+All pathogen resources are deployment-managed and omitted from this bundle.
+Do not use the example absolute paths in `inputs.json` without replacing them.
+
+Check Cromwell:
+
+```bash
+export CROMWELL_URL=http://127.0.0.1:8000
+curl "$CROMWELL_URL/engine/v1/status"
+```
+
+## Inputs and analysis
+
+- `VariantRisk.fastq_r1`: required clean FASTQ R1;
+- `VariantRisk.fastq_r2`: optional R2;
+- `sample_id`, `pathogen`, and `log_tag`;
+- `reference_fasta`, `snpeff_config`, `snpeff_db`,
+  `snpeff_data_tarball`, `segments_tsv`, and `reference_label`;
+- iVar/map quality, depth, allele-frequency, trimming, thread, and resource
+  parameters in `inputs.json`;
+- optional influenza H/N or SARS-CoV-2 risk annotation tables.
+
+Processing is `BWA -> filtering/deduplication/trimming -> iVar -> snpEff ->
+risk tables`. Choose `H1N1`, `H3N2`, or `SARS_CoV_2` consistently with the
+matching references and annotation resources.
+
+## Run standalone
+
+```bash
+cp inputs.json inputs.local.json
+# Replace reads and every pathogen-resource path in inputs.local.json.
+java -jar cromwell.jar run pipeline.wdl \
+  -i inputs.local.json -o options.json
+```
+
+A Cromwell REST submission is also supported. BioAgent submits, polls, and
+collects the same outputs after Cromwell reports `Succeeded`.
 
 ## Outputs
 
-- `final_report`: `data/output/final_variant_risk_report.tsv` — Final variant risk report produced by this workflow..
-- `segments`: `data/output/segments.tsv` — Segment depth summary produced by this workflow..
-- `output_archive`: `data/output/risk_assessment_output.tar` — Complete risk assessment output produced by this workflow..
+- `final_variant_risk_report.tsv`;
+- `segments.tsv` with segment mean-depth summaries;
+- `risk_assessment_output.tar` containing the complete task output directory.
 
-## Run
+## BioAgent use and limits
 
-Ask the agent to run `pathogen_variant_risk_assessment` with the inputs above. For the bundled example, say:
-
-```text
-Run pathogen_variant_risk_assessment with its bundled example data and collect the results.
-```
-
-The `runner.yaml` file is the agent-facing input/output contract. The runtime stages inputs and writes declared outputs inside the per-run workspace.
+Use `pipeline_name: pathogen_variant_risk_assessment` with `read1` and optional
+`read2`; configure pathogen-specific resources in the deployment input JSON.
+Risk annotations are reference- and threshold-dependent evidence, not a general
+clinical risk score. Coverage, contamination, reference choice, and database
+versions can change the interpretation.

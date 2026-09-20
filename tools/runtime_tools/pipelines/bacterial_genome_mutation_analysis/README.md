@@ -1,36 +1,72 @@
 # Bacterial genome mutation analysis
 
-> Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
+BactMut FASTA compares one or more assembled bacterial genomes with a reference,
+calls SNPs, filters low-coverage and recombination-dense positions, builds a
+filtered alignment, annotates variants, and optionally runs IQ-TREE.
 
-Compare assembled bacterial genomes against a reference, call and filter SNPs, and optionally build a phylogeny.
+## Requirements
 
-## Inputs
+- Bash and Python 3.9 or newer with PyYAML;
+- `minimap2` when assemblies contain indels or `params.aligner` is `minimap2`;
+- `iqtree2` or `iqtree` only when phylogeny is requested.
 
-- `genomes` (optional, `input_path`): One genome FASTA or a directory of genome FASTA files.. Accepted: .fasta, .fa, .fna, .fas.
-- `reference` (optional, `reference_path`): Reference sequence or reference resource used for comparison.. Accepted: .fasta, .fa, .fna, .fas.
+The internal aligner can handle equal-length full-genome FASTA files, so
+minimap2 is optional for that restricted case. The default local-reference mode
+needs no database. `species` and `taxonid` reference modes require a local GTDB
+representative FASTA and metadata table exposed as `GTDB_DB_PATH` and
+`GTDB_METADATA_PATH`.
+
+## Inputs and parameters
+
+- `input_path`: one FASTA or a directory of FASTA files with `.fasta`, `.fa`,
+  `.fna`, or `.fas` suffixes;
+- `reference_path`: required when `params.reference_mode: local`;
+- `params.reference_mode`: `local`, `species`, or `taxonid`;
+- `threads`, `aligner` (`auto|minimap2|internal`), `min_coverage`,
+  `window_size`, `step_size`, and `sd_threshold`;
+- optional `simulate`, `simulate_snp_rate`, `simulate_samples`, `seed`, and
+  `verbose` controls for validation fixtures.
+
+Simulation mode intentionally does not read `input_path`. Reference selection
+is conditional: local mode needs `reference_path`, while the GTDB modes need the
+environment variables above.
+
+## Standalone installation and run
+
+```bash
+chmod +x run.sh
+cp config.yaml config.local.yaml
+# Edit input_path, reference_path, output_dir, and params.
+./run.sh config.local.yaml
+```
+
+For a direct single comparison, the workflow can also be called through Python:
+
+```bash
+python workflow.py config.local.yaml
+```
+
+A deployment with GTDB reference selection should export its database paths
+before running. No GTDB files are bundled.
 
 ## Outputs
 
-- `report`: `data/output/report.md` — BioAgent Markdown report produced by this workflow..
-- `metrics`: `data/output/metrics.json` — BioAgent metrics produced by this workflow..
-- `matrix`: `data/output/filtered_snp_matrix.fasta` — Filtered SNP alignment produced by this workflow..
-- `variants`: `data/output/variants.tsv` — Annotated variants produced by this workflow..
-- `variants_summary`: `data/output/variants_summary.txt` — Variant statistics produced by this workflow..
-- `pipeline_summary`: `data/output/summary.txt` — Pipeline summary produced by this workflow..
-- `initial_snps`: `data/output/initial_snp_list.csv` — SNP calls before filtering produced by this workflow..
-- `mutation_report`: `data/output/mutation_report.csv` — Detailed mutation report produced by this workflow..
-- `final_tree`: `data/output/final_tree.nwk` — Final phylogenetic tree produced by this workflow..
-- `treefile`: `data/output/iqtree_run.treefile` — IQ-TREE tree produced by this workflow..
-- `iqtree_report`: `data/output/iqtree_run.iqtree` — IQ-TREE report produced by this workflow..
-- `iqtree_log`: `data/output/iqtree_run.log` — IQ-TREE log produced by this workflow..
-- `pipeline_log`: `data/output/pipeline.log` — Pipeline execution log produced by this workflow..
+Required outputs are `report.md`, `metrics.json`,
+`filtered_snp_matrix.fasta`, `variants.tsv`, `variants_summary.txt`, and
+`summary.txt`. Detailed `initial_snp_list.csv` and `mutation_report.csv`,
+execution logs, and optional `final_tree.nwk`/IQ-TREE files are also written.
+A one-sample run or a run with no surviving SNPs can complete successfully
+without a tree.
 
-## Run
+## BioAgent use and limits
 
-Ask the agent to run `bacterial_genome_mutation_analysis` with the inputs above. For the bundled example, say:
+Use `pipeline_name: bacterial_genome_mutation_analysis` with `genomes` and a
+local `reference` when applicable. A bundled request is:
 
 ```text
 Run bacterial_genome_mutation_analysis with its bundled example data and collect the results.
 ```
 
-The `runner.yaml` file is the agent-facing input/output contract. The runtime stages inputs and writes declared outputs inside the per-run workspace.
+This workflow is for assembled-genome comparison. Filtering thresholds,
+reference choice, recombination masking, assembly errors, and optional tree
+availability affect the result; it is not a clinical interpretation workflow.

@@ -1,27 +1,67 @@
 # Metagenomic read quality control
 
-> Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
+This WDL 1.0 workflow performs fastp quality/length filtering followed by
+Kraken2 and Bowtie2 host/vector removal. It produces reads and read-count tables
+for downstream metagenomic analysis.
 
-Filter metagenomic reads and remove host or vector sequences with fastp, Kraken2, and Bowtie2 before downstream analysis.
+## Requirements
 
-## Inputs
+Standalone execution requires:
 
-- `read1` (required, `MetagenomicQc.fastq_r1`): Read 1 FASTQ input.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
-- `read2` (optional, `MetagenomicQc.fastq_r2`): Optional read 2 FASTQ input for paired-end processing.. Accepted: .fastq, .fq, .fastq.gz, .fq.gz.
+- Java and a reachable Cromwell Server (`CROMWELL_URL`, default
+  `http://127.0.0.1:8000`);
+- shared filesystem access for the caller, Cromwell, and task containers;
+- Docker or the configured backend with `cncb/mscan-detection-qc:v1.0` (or a
+  compatible image) containing `fastp`, Kraken2, Bowtie2, and
+  `/app/scripts/count_reads.py`;
+- mounted Kraken2 database files and the complete Bowtie2 host/vector index.
+
+The database files are not bundled. Their paths are intentionally represented
+as `Array[String]` in `inputs.json`; they must already be mounted at the same
+paths inside the task container. The default profile can require 8 CPUs, 64 GB
+RAM, and 500 GB disk.
+
+Verify Cromwell before submission:
+
+```bash
+export CROMWELL_URL=http://127.0.0.1:8000
+curl "$CROMWELL_URL/engine/v1/status"
+```
+
+## Inputs and processing
+
+- `MetagenomicQc.fastq_r1`: required FASTQ/FASTQ.GZ read 1;
+- `MetagenomicQc.fastq_r2`: optional read 2; its presence selects paired mode;
+- `MetagenomicQc.kraken2_db_files`: mounted Kraken2 database files;
+- `MetagenomicQc.host_bowtie2_index_files`: mounted Bowtie2 index files;
+- sample ID, lean-I/O, Docker, and resource settings in `inputs.json`.
+
+The two reads may use different compression suffixes. The workflow runs:
+`fastp -> Kraken2 host filtering -> Bowtie2 host/vector filtering`.
+
+## Run standalone
+
+```bash
+cp inputs.json inputs.local.json
+# Replace FASTQ and mounted database paths in inputs.local.json.
+java -jar cromwell.jar run stage0_qc.wdl \
+  -i inputs.local.json -o options.json
+```
+
+Use a Cromwell service instead if the execution backend is remote. BioAgent
+submits the same WDL, polls it, and copies the declared outputs after success.
 
 ## Outputs
 
-- `clean_r1`: `data/output/clean.R1.fq` — Host-filtered read 1 produced by this workflow..
-- `clean_r2`: `data/output/clean.R2.fq` — Host-filtered read 2 produced by this workflow..
-- `qc_counts`: `data/output/qc_counts.tsv` — QC read counts produced by this workflow..
-- `phase1_metrics`: `data/output/phase1_read_overview.tsv` — Phase 1 read overview produced by this workflow..
+- `clean.R1.fq`: cleaned single-end reads or paired read 1;
+- `clean.R2.fq`: paired read 2, absent for single-end input;
+- `qc_counts.tsv`: input, post-QC, and post-host-removal counts;
+- `phase1_read_overview.tsv`: one-row sample metrics.
 
-## Run
+The workflow also returns `post_host_reads` as an integer WDL output.
 
-Ask the agent to run `metagenomic_read_quality_control` with the inputs above. For the bundled example, say:
+## BioAgent use and limits
 
-```text
-Run metagenomic_read_quality_control with its bundled example data and collect the results.
-```
-
-The `runner.yaml` file is the agent-facing input/output contract. The runtime stages inputs and writes declared outputs inside the per-run workspace.
+Use `pipeline_name: metagenomic_read_quality_control` with `read1` and optional
+`read2`. Database quality and the selected host/vector references control what
+is removed; this pipeline does not identify pathogens.
