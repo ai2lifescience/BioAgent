@@ -5,7 +5,7 @@ from __future__ import annotations
 from agents import Model
 from agents.sandbox import Manifest, SandboxAgent
 
-from tools.runtime_tools.pipeline_tool import PIPELINE_INSTRUCTIONS
+from tools.infrastructure.agent_sdk.pipeline_shell import PIPELINE_INSTRUCTIONS
 
 from .guardrails import INPUT_GUARDRAIL, OUTPUT_GUARDRAIL
 from tools.registry import build_all_tools

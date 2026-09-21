@@ -5,8 +5,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from tools.runtime_tools.pipeline_runtime.engine.paths import resolve_pipeline_output_path, safe_label
-from tools.runtime_tools.pipeline_runtime.engine.types import PipelineContext
+from tools.infrastructure.pipeline_runtime.engine.paths import resolve_pipeline_output_path, safe_label
+from tools.infrastructure.pipeline_runtime.engine.types import PipelineContext
 
 
 def pipeline_output_specs(runner_config: dict[str, Any]) -> dict[str, dict[str, Any]]:

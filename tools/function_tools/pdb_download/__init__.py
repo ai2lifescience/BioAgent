@@ -13,8 +13,8 @@ from pydantic import Field
 
 from .workflow import pdb_download as _workflow
 from harness.context import AgentRunContext
-from tools.common.results import run_workflow
-from tools.common.tooling import bio_function_tool
+from tools.infrastructure.tooling.results import run_workflow
+from tools.infrastructure.tooling.tooling import bio_function_tool
 
 
 @bio_function_tool()
@@ -22,7 +22,7 @@ async def pdb_download(
     ctx: RunContextWrapper[AgentRunContext],
     pdb_id: Annotated[str, Field(description='Four-character PDB ID, for example 1A3N.')],
     file_format: Annotated[Literal['cif', 'pdb', 'bcif'], Field(description='Structure file format to download.')] = 'cif',
-    output_dir: Annotated[str | None, Field(description='Optional output directory.')] = None,
+    output_dir: Annotated[str | None, Field(description='Session-relative output directory; defaults to outputs/structures. Paths outside the session are rejected.')] = None,
 ) -> str:
     """Download one RCSB PDB structure file in the requested format.
 

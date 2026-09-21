@@ -2,17 +2,17 @@
 
 from __future__ import annotations
 
-from tools.runtime_tools.pipeline_runtime import process as subprocess
+from tools.infrastructure.pipeline_runtime import process as subprocess
 from typing import Any
 
-from tools.runtime_tools.pipeline_runtime.engine.config import write_runtime_config
-from tools.runtime_tools.pipeline_runtime.engine.outputs import finalize_output_records, output_path_by_config_key
-from tools.runtime_tools.pipeline_runtime.engine.paths import (
+from tools.infrastructure.pipeline_runtime.engine.config import write_runtime_config
+from tools.infrastructure.pipeline_runtime.engine.outputs import finalize_output_records, output_path_by_config_key
+from tools.infrastructure.pipeline_runtime.engine.paths import (
     PROJECT_ROOT,
     read_json,
     resolve_pipeline_file,
 )
-from tools.runtime_tools.pipeline_runtime.engine.types import PipelineContext
+from tools.infrastructure.pipeline_runtime.engine.types import PipelineContext
 
 
 def run_shell_pipeline(context: PipelineContext) -> dict[str, Any]:

@@ -14,10 +14,10 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.runtime_tools.pipeline_runtime.engine.config import load_pipeline_config
-from tools.runtime_tools.pipeline_runtime.engine.runner import prepare_pipeline_context
-from tools.runtime_tools.pipeline_runtime.engine.wdl import write_wdl_inputs, write_wdl_options
-from tools.runtime_tools.pipeline_runtime import service
+from tools.infrastructure.pipeline_runtime.engine.config import load_pipeline_config
+from tools.infrastructure.pipeline_runtime.engine.runner import prepare_pipeline_context
+from tools.infrastructure.pipeline_runtime.engine.wdl import write_wdl_inputs, write_wdl_options
+from tools.infrastructure.pipeline_runtime import service
 
 
 class PipelineConfigChecks(unittest.TestCase):

@@ -8,8 +8,8 @@ from pathlib import Path
 from agents import ShellTool
 from agents.tool import ShellCommandRequest, ShellCommandOutput, ShellResult, ShellCallOutcome
 
-from .pipeline_runtime.commands import dispatch, parse_command
-from .pipeline_runtime.store import JobStore
+from tools.infrastructure.pipeline_runtime.commands import dispatch, parse_command
+from tools.infrastructure.pipeline_runtime.store import JobStore
 
 PIPELINE_INSTRUCTIONS = """
 Use pipeline_shell (the SDK local shell tool) for pipeline operations. Its only

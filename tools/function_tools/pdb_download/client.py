@@ -6,7 +6,7 @@ from pathlib import Path
 import re
 from typing import Any
 
-from tools.common.http import request_http, response_provenance
+from tools.infrastructure.tooling.http import request_http, response_provenance
 
 
 RCSB_SEARCH_URL = "https://search.rcsb.org/rcsbsearch/v2/query"

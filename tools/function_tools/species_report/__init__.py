@@ -14,8 +14,8 @@ from pydantic import Field
 
 from .workflow import species_report as _workflow
 from harness.context import AgentRunContext
-from tools.common.results import run_workflow
-from tools.common.tooling import bio_function_tool
+from tools.infrastructure.tooling.results import run_workflow
+from tools.infrastructure.tooling.tooling import bio_function_tool
 
 
 @bio_function_tool()
@@ -29,8 +29,8 @@ async def species_report(
     max_web_pages: Annotated[int, Field(description='Maximum trusted web pages to collect.', ge=0)] = 6,
     top_k: Annotated[int, Field(description='Number of Chroma chunks retrieved for RAG.', ge=1)] = 6,
     collection_name: Annotated[str | None, Field(description='Optional Chroma collection name. Defaults to a safe name derived from the species.')] = None,
-    chroma_path: Annotated[str, Field(description='Directory for persistent Chroma storage.')] = 'runtime/chroma',
-    output_dir: Annotated[str, Field(description='Directory where the Markdown report is saved.')] = 'runtime/reports',
+    chroma_path: Annotated[str | None, Field(description='Session-relative Chroma storage directory; defaults to the current run directory. Paths outside the session are rejected.')] = None,
+    output_dir: Annotated[str | None, Field(description='Session-relative report directory; defaults to outputs/reports. Paths outside the session are rejected.')] = None,
 ) -> str:
     """Build a cited species or organism knowledge report.
 

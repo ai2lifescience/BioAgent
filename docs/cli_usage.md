@@ -54,7 +54,7 @@ different key with `--model-key`.
 
 Biological workflows are SDK `FunctionTool` objects exported by
 `tools/function_tools`. Pipeline operations use the local `pipeline_shell`
-ShellTool exported by `tools/runtime_tools`.
+ShellTool exported by `tools/infrastructure/agent_sdk`.
 
 | Workflow | Main tool or actions |
 | --- | --- |

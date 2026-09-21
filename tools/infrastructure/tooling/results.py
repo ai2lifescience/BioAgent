@@ -86,7 +86,7 @@ async def run_workflow(
         from harness.sandbox import list_files
         context.files = await list_files(context.sandbox_session)
         envelope.files = context.files
-    from tools.common.evidence import EvidenceCollector
+    from tools.infrastructure.tooling.evidence import EvidenceCollector
     envelope.evidence = EvidenceCollector().collect([record])['citations']
     context.record('tool_finished', tool=name, status=envelope.status)
     return envelope.model_dump_json()

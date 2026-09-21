@@ -18,8 +18,8 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from tools.runtime_tools.pipelines.template_nextflow.workflow import run as run_example_step
-from tools.runtime_tools.pipeline_runtime.engine.runner import run_pipeline
-from tools.runtime_tools.pipeline_runtime.engine.config import load_pipeline_config
+from tools.infrastructure.pipeline_runtime.engine.runner import run_pipeline
+from tools.infrastructure.pipeline_runtime.engine.config import load_pipeline_config
 
 
 def _fake_nextflow_run(command: list[str], **_kwargs: object) -> subprocess.CompletedProcess[str]:
@@ -80,10 +80,10 @@ def main() -> int:
 
     with TemporaryDirectory(prefix="agent-nextflow-runner-") as artifact_dir:
         with patch(
-            "tools.runtime_tools.pipeline_runtime.engine.nextflow._nextflow_command",
+            "tools.infrastructure.pipeline_runtime.engine.nextflow._nextflow_command",
             return_value=["nextflow-test-double"],
         ), patch(
-            "tools.runtime_tools.pipeline_runtime.engine.nextflow.subprocess.run",
+            "tools.infrastructure.pipeline_runtime.engine.nextflow.subprocess.run",
             side_effect=_fake_nextflow_run,
         ):
             result = run_pipeline(

@@ -15,8 +15,8 @@ from pydantic import Field
 
 from .workflow import database_lookup as _workflow
 from harness.context import AgentRunContext
-from tools.common.results import run_workflow
-from tools.common.tooling import bio_function_tool
+from tools.infrastructure.tooling.results import run_workflow
+from tools.infrastructure.tooling.tooling import bio_function_tool
 
 
 @bio_function_tool()

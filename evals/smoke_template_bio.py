@@ -11,8 +11,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.runtime_tools.pipeline_runtime.engine.runner import run_pipeline
-from tools.workspace import artifact_content_type, can_serve_artifact
+from tools.infrastructure.pipeline_runtime.engine.runner import run_pipeline
+from tools.infrastructure.workspace import artifact_content_type, can_serve_artifact
 
 
 def main() -> int:

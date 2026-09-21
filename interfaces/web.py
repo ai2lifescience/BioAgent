@@ -15,7 +15,7 @@ from urllib.parse import parse_qs, unquote, urlparse
 
 from Bio.PDB import MMCIFParser, PDBIO
 
-from tools.workspace import (
+from tools.infrastructure.workspace import (
     artifact_content_type,
     artifact_suffix_config,
     can_view_structure_artifact,
@@ -34,7 +34,7 @@ from interfaces.api import (
 )
 from harness.sandbox import relative_file_path
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODELS
-from tools.runtime_tools.pipeline_runtime import service as pipeline_service
+from tools.infrastructure.pipeline_runtime import service as pipeline_service
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -42,6 +42,11 @@ WEB_UI_DIR = PROJECT_ROOT / "web_ui"
 MAX_UPLOAD_BYTES = int(os.getenv("AGENT_MAX_UPLOAD_BYTES", str(256 * 1024 * 1024)))
 STATIC_FILES = {
     "/static/approvals.js": (WEB_UI_DIR / "approvals.js", "application/javascript; charset=utf-8"),
+    "/static/ui-utils.js": (WEB_UI_DIR / "ui-utils.js", "application/javascript; charset=utf-8"),
+    "/static/api-client.js": (WEB_UI_DIR / "api-client.js", "application/javascript; charset=utf-8"),
+    "/static/session-state.js": (WEB_UI_DIR / "session-state.js", "application/javascript; charset=utf-8"),
+    "/static/artifact-viewers.js": (WEB_UI_DIR / "artifact-viewers.js", "application/javascript; charset=utf-8"),
+    "/static/message-renderer.js": (WEB_UI_DIR / "message-renderer.js", "application/javascript; charset=utf-8"),
     "/static/app.css": (WEB_UI_DIR / "app.css", "text/css; charset=utf-8"),
     "/static/assistant.css": (WEB_UI_DIR / "assistant.css", "text/css; charset=utf-8"),
     "/static/markdown.js": (WEB_UI_DIR / "markdown.js", "application/javascript; charset=utf-8"),

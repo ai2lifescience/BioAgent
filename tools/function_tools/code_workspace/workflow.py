@@ -9,8 +9,8 @@ import subprocess
 import tempfile
 from typing import Any
 
-from tools.common.context import WorkflowContext, ensure_workflow_context
-from tools.workspace import resolve_session_path, session_root
+from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.workspace import resolve_session_path, session_root
 
 
 MAX_READ_BYTES = 512 * 1024

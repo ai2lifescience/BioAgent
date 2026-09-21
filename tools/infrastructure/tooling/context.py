@@ -38,10 +38,19 @@ class WorkflowContext:
         return [dict(x) for x in (self.user_context or {}).get('files', []) if isinstance(x, dict)]
 
     def runtime_path(self, *parts: str) -> str:
-        return str(Path(self.runtime_dir or 'runtime').joinpath(*parts))
+        from tools.infrastructure.workspace.paths import confined_output_path, session_root
+        root = session_root(self)
+        if self.runtime_dir:
+            raw = Path(self.runtime_dir)
+            runtime = (raw if raw.is_absolute() else root / raw).resolve()
+        else:
+            runtime = root / 'runs'
+        runtime = confined_output_path(root, str(runtime))
+        return str(confined_output_path(runtime, *parts))
 
     def workspace_path(self, *parts: str) -> str:
-        return str(Path(self.workspace_dir or self.runtime_path('outputs')).joinpath(*parts))
+        from tools.infrastructure.workspace.paths import workspace_output_path
+        return str(workspace_output_path(self, *parts))
 
     def latest_file(self, kinds: tuple[str, ...] = (), suffixes: tuple[str, ...] = ()) -> dict[str, Any] | None:
         suffixes = tuple(x.lower() for x in suffixes)

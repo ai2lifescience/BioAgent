@@ -9,26 +9,22 @@ from tools.function_tools.species_report.rag.cite import rag_citations_tool as _
 from tools.function_tools.species_report.reporting.opinions import collect_species_model_opinions as _action_species_model_opinions
 from tools.function_tools.species_report.reporting.synthesis import synthesize_species_markdown_report as _action_species_report_synthesis
 from tools.function_tools.species_report.writer import write_markdown_report as _action_markdown_report_writer
-import os
 from typing import Any, Callable
-from tools.common.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.workspace import session_output_dir, workspace_output_dir
 from tools.function_tools.species_report.research import build_research_question, build_source_query, collection_name_for, normalize_text, source_summary
 DEFAULT_MAX_PUBMED = 6
 DEFAULT_MAX_WEB_PAGES = 6
 DEFAULT_TOP_K = 6
-DEFAULT_CHROMA_PATH = os.getenv('AGENT_CHROMA_PATH', 'runtime/chroma')
-DEFAULT_OUTPUT_DIR = os.getenv('AGENT_REPORT_DIR', 'runtime/reports')
 
 def _emit(log_fn: Callable[[str], None] | None, message: str) -> None:
     if log_fn:
         log_fn(f'[species_report] {message}')
 
-def species_report(species_name: str | None=None, species: str | None=None, question: str | None=None, concerns: list[str] | None=None, max_pubmed: int=DEFAULT_MAX_PUBMED, max_web_pages: int=DEFAULT_MAX_WEB_PAGES, top_k: int=DEFAULT_TOP_K, collection_name: str | None=None, chroma_path: str=DEFAULT_CHROMA_PATH, output_dir: str=DEFAULT_OUTPUT_DIR, context: WorkflowContext | None=None, log_fn: Callable[[str], None] | None=None) -> dict[str, Any]:
+def species_report(species_name: str | None=None, species: str | None=None, question: str | None=None, concerns: list[str] | None=None, max_pubmed: int=DEFAULT_MAX_PUBMED, max_web_pages: int=DEFAULT_MAX_WEB_PAGES, top_k: int=DEFAULT_TOP_K, collection_name: str | None=None, chroma_path: str | None=None, output_dir: str | None=None, context: WorkflowContext | None=None, log_fn: Callable[[str], None] | None=None) -> dict[str, Any]:
     context = ensure_workflow_context(context, 'species_report')
-    if chroma_path == DEFAULT_CHROMA_PATH:
-        chroma_path = context.runtime_path('chroma')
-    if output_dir == DEFAULT_OUTPUT_DIR:
-        output_dir = context.workspace_path('reports')
+    chroma_path = str(session_output_dir(context, chroma_path, 'runs', 'chroma'))
+    output_dir = str(workspace_output_dir(context, output_dir, 'reports'))
     resolved_species = normalize_text(species_name or species or '')
     if not resolved_species:
         raise ValueError('species_name or species is required.')

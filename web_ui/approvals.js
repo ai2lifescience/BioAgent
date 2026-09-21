@@ -50,6 +50,15 @@ async function readApprovalResponse(response, onProgress) {
   return result;
 }
 
+function approvalResultError(result) {
+  if (!result || typeof result !== "object") return "Approval request failed.";
+  if (result.error) return String(result.error);
+  if (result.status === "error" || result.runtime?.status === "error") {
+    return String(result.answer || "Approval request failed.");
+  }
+  return "";
+}
+
 window.mountToolApprovals = function (container, result, options) {
   if (!result?.approval_required || !Array.isArray(result.approvals)) return;
   const panel = document.createElement("div");
@@ -111,23 +120,41 @@ window.mountToolApprovals = function (container, result, options) {
               status.textContent = message;
             })
             : await response.json();
-          if (!options.streamUrl && (!response.ok || next.error)) {
-            throw new Error(next.error || `HTTP ${response.status}`);
+          const resultError = approvalResultError(next);
+          if (!response.ok || resultError) {
+            throw new Error(resultError || `HTTP ${response.status}`);
           }
           status.dataset.status = approved ? "done" : "rejected";
           status.textContent = approved
-            ? "Approved. Execution details are shown in the next run panel."
-            : "Rejected. No pipeline execution was started.";
+            ? (next.approval_required
+              ? "Approved. Reviewing the remaining requested operation…"
+              : "Approved. Execution details are shown in the next run panel.")
+            : (next.approval_required
+              ? "Rejected. Reviewing the remaining requested operation…"
+              : "Rejected. No pipeline execution was started.");
           plan.open = false;
+          const decision = {
+            approved,
+            approval_id: item.approval_id,
+            tool_name: item.tool_name,
+            arguments: item.arguments || null,
+            plan: item.plan || null,
+          };
+
+          // The server may pause again when the original run contained more
+          // than one approval-controlled call. Replace this panel with the
+          // server's remaining approvals so stale buttons cannot be clicked
+          // and the user sees exactly one current approval state.
+          if (next.approval_required && Array.isArray(next.approvals) && next.approvals.length) {
+            options.onResult?.(next, { approved, item, intermediate: true });
+            container.replaceChildren();
+            window.mountToolApprovals(container, next, options);
+            return;
+          }
+
           options.onResult({
             ...next,
-            approval_decision: {
-              approved,
-              approval_id: item.approval_id,
-              tool_name: item.tool_name,
-              arguments: item.arguments || null,
-              plan: item.plan || null,
-            },
+            approval_decision: decision,
           }, { approved, item });
         } catch (error) {
           status.dataset.status = "error";

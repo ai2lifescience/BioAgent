@@ -71,8 +71,17 @@ currently exposed through `Agent.as_tool()`; a handoff can be added when a
 specialist should become the active owner of the remainder of a turn.
 Function-tool workflows and their implementations live under
 `tools/function_tools/<tool_name>/`; pipeline execution lives under
-`tools/runtime_tools/pipeline_runtime/`. Reporting agents live under
+`tools/infrastructure/pipeline_runtime/`. Reporting agents live under
 `tools/function_tools/species_report/reporting/`.
+
+The browser surface keeps the same boundaries. `interfaces/web.py` serves the
+HTTP/SSE contract, while the full-page UI loads focused JavaScript modules:
+`api-client.js` handles transport, `session-state.js` owns session lifecycle,
+`message-renderer.js` renders answers and runtime details, and
+`artifact-viewers.js` handles figures, downloads, and 3D structures.
+`app.js` coordinates page events and request state; `approvals.js` is shared
+with the embedded assistant. This keeps rendering and artifact behavior
+independent from session and network code without introducing a build step.
 
 ## Core concepts
 
@@ -175,7 +184,7 @@ should encode that dispatch in a single tool or in the runtime service.
 
 1. Create `tools/function_tools/<tool_name>/` with a public `__init__.py`, a
    decorated workflow, and deterministic implementation modules. Keep external
-   adapters and validation inside that package; use `tools/common/` only for
+   adapters and validation inside that package; use `tools/infrastructure/tooling/` only for
    generic helpers.
 2. Give the function one clear name and docstring. Describe when to use it,
    when not to use it, input limits, side effects, and the next tool for an
@@ -271,7 +280,7 @@ approval decision, and collected outputs.
   per-session workspace. The SDK supplies filesystem capabilities; the
   approval-controlled `pipeline_shell` ShellTool is the command-execution
   boundary.
-- `tools/workspace/` owns safe workspace paths and small file metadata helpers
+- `tools/infrastructure/workspace/` owns safe workspace paths and small file metadata helpers
   for the SDK sandbox listing and browser adapter; the SDK sandbox remains the
   source of truth for files and their lifecycle.
 - `harness/tracing.py` consumes SDK lifecycle hooks and spans locally without
@@ -363,17 +372,19 @@ The SDK tool surface is organized by execution semantics:
   and general assistant workflows. This is Pipeline2Agent's primary category.
 - `tools/agent_tools/` — focused agents exposed through `Agent.as_tool()`.
 - `tools/hosted_tools/` — extension point for tools executed by OpenAI-hosted
-  infrastructure. It is empty until the configured model/runtime supports one.
-- `tools/runtime_tools/` — the SDK local `pipeline_shell` tool and its
+  infrastructure or an MCP server. It is empty until the configured model/runtime supports one.
+- `tools/infrastructure/agent_sdk/` — the SDK local `pipeline_shell` tool and its
   allowlisted command protocol. It runs all declared pipeline engines locally.
-- `tools/runtime_tools/pipeline_runtime/` — declarative pipeline planning, durable jobs,
+- `tools/infrastructure/pipeline_runtime/` — declarative pipeline planning, durable jobs,
   bounded waiting, cancellation, and result collection behind `pipeline_shell`.
-- `tools/common/` — shared context, result envelopes,
+- `tools/runtime_tools/pipelines/` — model-visible pipeline manifests, workflow
+  bundles, and bundled example inputs discovered by the runtime catalog.
+- `tools/infrastructure/tooling/` — shared context, result envelopes,
   evidence and generic result-path handling, guardrails, FunctionTool setup,
   and generic bounded HTTP transport. These are implementation helpers, not
   model-facing tools. Domain parsers, external-service allowlists, web
   collection policy stay in the owning package. Workspace file metadata lives
-  under `tools/workspace/`; the SDK sandbox remains the file owner.
+  under `tools/infrastructure/workspace/`; the SDK sandbox remains the file owner.
 
 `harness/agent.py` calls `tools.registry.build_all_tools(model)` so the root
 agent receives one SDK tool list assembled from these categories.
@@ -383,7 +394,7 @@ Import tools and helpers directly from their category packages:
 ```python
 from tools.function_tools.file_inspection import file_inspection
 from tools.agent_tools import build_specialist_tools
-from tools.common.results import ToolResult
+from tools.infrastructure.tooling.results import ToolResult
 ```
 
 Function-tool packages use a consistent layout:
@@ -398,7 +409,7 @@ tools/function_tools/<tool_name>/
 
 Each function tool is a self-contained plug-in. Its package owns the public
 schema, workflow, domain implementation, external adapters, and tool-specific
-validation. It may use generic services from `tools/common/`, but it must not
+validation. It may use generic services from `tools/infrastructure/tooling/`, but it must not
 import another public FunctionTool or depend on another tool's biological
 implementation. Adding or removing a tool should require only its package and
 the explicit registry entry; unrelated tools must continue to work unchanged.
@@ -408,14 +419,14 @@ or `inspection.py`, and `workflow.py` only when they need
 run context or result presentation. A
 package should add a subpackage only for a real subsystem, such as NCBI
 Entrez or species-report literature/web/RAG collection. Pipeline engine adapters
-live separately under `tools/runtime_tools/pipeline_runtime/engine/`.
+live separately under `tools/infrastructure/pipeline_runtime/engine/`.
 Shared context, result envelopes, guardrails, generic result-path handling, and
-generic HTTP transport belong under `tools/common/`. Workspace path safety and
-file metadata belong under `tools/workspace/`. The HTTP layer supplies
+generic HTTP transport belong under `tools/infrastructure/tooling/`. Workspace path safety and
+file metadata belong under `tools/infrastructure/workspace/`. The HTTP layer supplies
 bounded transport only; every adapter passes its own HTTPS host allowlist.
 HTML/search parsers, endpoint policies, biological implementations, and the
-host's file-serving policy stay outside `tools/common/` under
-`tools/workspace/`. There is no central sequence or biology adapter. Public
+host's file-serving policy stay outside `tools/infrastructure/tooling/` under
+`tools/infrastructure/workspace/`. There is no central sequence or biology adapter. Public
 FunctionTool wrappers are never imported as implementation dependencies, so a
 tool can be added, removed, or tested independently.
 
@@ -659,7 +670,7 @@ procedures. Tool guardrails validate each FunctionTool envelope, and the output
 guardrail checks the final answer. The API returns the run `status` directly
 (`ok`, `pending_approval`, `blocked`, or `error`).
 
-Evidence collection lives in `tools/common/evidence.py` beside tool result
+Evidence collection lives in `tools/infrastructure/tooling/evidence.py` beside tool result
 semantics. The harness calls it after a run so the UI can receive citations,
 record IDs, URLs, and workspace file paths without making tools import the harness.
 
@@ -708,12 +719,12 @@ compact metadata without loading every source file into the model context.
 | Component | Responsibility |
 | --- | --- |
 | [Agent instructions](../harness/agent.py) | Interpret the user's goal and choose direct tools or a specialist. |
-| [Pipeline tool](../tools/runtime_tools/pipeline_tool.py) | Teach the command protocol, resolve the session workspace, handle SDK approval, and return command results. |
-| [Command parser](../tools/runtime_tools/pipeline_runtime/commands.py) | Parse allowed commands and dispatch operations to the service. |
-| [Service](../tools/runtime_tools/pipeline_runtime/service.py) | Discover pipelines, validate plans, start jobs, and collect results. |
-| [Job store](../tools/runtime_tools/pipeline_runtime/store.py) | Persist plans and job state in SQLite and write job snapshots. |
-| [Worker](../tools/runtime_tools/pipeline_runtime/worker.py) | Execute a job independently of the agent request and record its outcome. |
-| [Engine adapters](../tools/runtime_tools/pipeline_runtime/engine/) | Prepare runtime configurations and invoke the selected engine. |
+| [Pipeline tool](../tools/infrastructure/agent_sdk/pipeline_shell.py) | Teach the command protocol, resolve the session workspace, handle SDK approval, and return command results. |
+| [Command parser](../tools/infrastructure/pipeline_runtime/commands.py) | Parse allowed commands and dispatch operations to the service. |
+| [Service](../tools/infrastructure/pipeline_runtime/service.py) | Discover pipelines, validate plans, start jobs, and collect results. |
+| [Job store](../tools/infrastructure/pipeline_runtime/store.py) | Persist plans and job state in SQLite and write job snapshots. |
+| [Worker](../tools/infrastructure/pipeline_runtime/worker.py) | Execute a job independently of the agent request and record its outcome. |
+| [Engine adapters](../tools/infrastructure/pipeline_runtime/engine/) | Prepare runtime configurations and invoke the selected engine. |
 
 ### From user intent to pipeline selection
 
@@ -791,8 +802,8 @@ Terminal users invoke the same service through its administrative CLI from the
 project root:
 
 ```bash
-python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace catalog
-python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace example --pipeline template_shell
+python -m tools.infrastructure.pipeline_runtime --workspace /path/to/workspace catalog
+python -m tools.infrastructure.pipeline_runtime --workspace /path/to/workspace example --pipeline template_shell
 ```
 
 This module constructs the `agent-pipeline` prefix internally. SDK approval

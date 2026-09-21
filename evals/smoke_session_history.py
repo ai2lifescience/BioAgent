@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from agents.testing import ModelStep, ScriptedModel, assistant_message
+from agents.testing import ModelStep, ScriptedModel, assistant_message, function_call
 from harness import runtime, sandbox
 from harness.sessions import SessionMetadataStore
 from interfaces import api
@@ -61,6 +61,23 @@ class SessionHistoryTests(unittest.TestCase):
         self.assertEqual(runtime.list_sessions()[0]["session_id"], "uploads_only")
         self.assertEqual(api.list_session_messages("uploads_only")["messages"], [])
         self.assertEqual(api.read_workspace_file("uploads_only", uploaded["workspace_path"]), b"Saved input")
+
+    def test_structured_results_restore_after_reload(self):
+        runtime.run_agent(
+            "Hello", session_id="rich_history",
+            model=ScriptedModel([ModelStep(output=[assistant_message("Hi")])]),
+        )
+        runtime.run_agent(
+            "Analyze ACGT", session_id="rich_history",
+            model=ScriptedModel([
+                ModelStep(output=[function_call("sequence_analysis", {"sequence": "ACGT"}, call_id="stats")]),
+                ModelStep(output=[assistant_message("Sequence statistics complete.")]),
+            ]),
+        )
+        runtime.STATE_STORE = SessionMetadataStore(self.root / "metadata")
+        messages = api.list_session_messages("rich_history")["messages"]
+        self.assertIsNone(messages[1].get("result"))
+        self.assertEqual(messages[3]["result"]["evidence"]["tools"], ["sequence_analyze"])
 
 
 if __name__ == "__main__":

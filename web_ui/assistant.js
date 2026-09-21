@@ -113,7 +113,12 @@
         streamUrl: apiUrl("approve_stream"),
         isBusy: () => state.busy,
         onBusy: (busy) => { if (!busy) setBusy(false); else setBusy(true); },
-        onResult: (next) => addMessage("assistant", next.answer || "", next),
+        onResult: (next, meta = {}) => {
+          state.sessionId = next.session_id || state.sessionId;
+          if (!meta.intermediate) {
+            addMessage("assistant", next.answer || "", next);
+          }
+        },
       });
     }
     messages.appendChild(message);

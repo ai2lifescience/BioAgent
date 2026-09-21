@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from tools.common.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.workspace import workspace_output_dir
 from .client import download_alphafold_structure
 
 
@@ -19,7 +20,7 @@ def alphafold_download(
         download_alphafold_structure,
         {
             "accession": accession,
-            "output_dir": context.workspace_path("alphafold"),
+            "output_dir": str(workspace_output_dir(context, None, "alphafold")),
             "file_format": file_format,
         },
     )["result"]

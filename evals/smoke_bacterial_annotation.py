@@ -16,11 +16,11 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.workspace import artifact_content_type, can_serve_artifact
-from tools.runtime_tools.pipeline_runtime.config_io import load_yaml_config, write_yaml_config
-from tools.runtime_tools.pipeline_runtime.engine.config import write_runtime_config
-from tools.runtime_tools.pipeline_runtime.engine.runner import prepare_pipeline_context
-from tools.runtime_tools.pipeline_runtime.engine.outputs import finalize_output_records
+from tools.infrastructure.workspace import artifact_content_type, can_serve_artifact
+from tools.infrastructure.pipeline_runtime.config_io import load_yaml_config, write_yaml_config
+from tools.infrastructure.pipeline_runtime.engine.config import write_runtime_config
+from tools.infrastructure.pipeline_runtime.engine.runner import prepare_pipeline_context
+from tools.infrastructure.pipeline_runtime.engine.outputs import finalize_output_records
 
 
 def _load_workflow_module():

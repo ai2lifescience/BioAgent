@@ -5,21 +5,21 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import shutil
-from tools.runtime_tools.pipeline_runtime import process as subprocess
+from tools.infrastructure.pipeline_runtime import process as subprocess
 from typing import Any
 from urllib.parse import urlparse
 
-from tools.runtime_tools.pipeline_runtime.engine.config import write_runtime_config
-from tools.runtime_tools.pipeline_runtime.engine.inputs import pipeline_input_specs, stringify_input_value
-from tools.runtime_tools.pipeline_runtime.engine.outputs import finalize_output_records
-from tools.runtime_tools.pipeline_runtime.engine.paths import (
+from tools.infrastructure.pipeline_runtime.engine.config import write_runtime_config
+from tools.infrastructure.pipeline_runtime.engine.inputs import pipeline_input_specs, stringify_input_value
+from tools.infrastructure.pipeline_runtime.engine.outputs import finalize_output_records
+from tools.infrastructure.pipeline_runtime.engine.paths import (
     PROJECT_ROOT,
     read_json,
     resolve_pipeline_file,
     resolve_pipeline_input_path,
 )
-from tools.runtime_tools.pipeline_runtime.engine.types import PipelineContext
-from tools.runtime_tools.pipeline_runtime.engine.wdl_options import write_options_runtime_json
+from tools.infrastructure.pipeline_runtime.engine.types import PipelineContext
+from tools.infrastructure.pipeline_runtime.engine.wdl_options import write_options_runtime_json
 
 
 def run_wdl_pipeline(
@@ -29,7 +29,7 @@ def run_wdl_pipeline(
     """Run a WDL pipeline with the backend selected by runner.yaml."""
     selected_engine = str(context.runner_config.get("wdl_engine") or "miniwdl").strip().lower()
     if selected_engine == "cromwell" and not dry_run:
-        from tools.runtime_tools.pipeline_runtime.engine.cromwell import run_cromwell_pipeline
+        from tools.infrastructure.pipeline_runtime.engine.cromwell import run_cromwell_pipeline
 
         return run_cromwell_pipeline(context)
     if selected_engine not in {"miniwdl", "cromwell"}:

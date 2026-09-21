@@ -19,9 +19,23 @@ def now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def _has_renderable_result(result: dict[str, Any]) -> bool:
+    """Return whether a result contains data needed to rebuild rich UI panels."""
+
+    evidence = result.get("evidence")
+    if not isinstance(evidence, dict):
+        evidence = {}
+    return bool(
+        result.get("files")
+        or result.get("approval_decision")
+        or result.get("approval_required")
+        or any(evidence.get(key) for key in ("tools", "files", "outputs", "citations"))
+    )
+
+
 @dataclass
 class SessionMetadata:
-    """Application metadata only. Conversation messages live in SQLiteSession."""
+    """Application metadata plus browser-renderable result projections."""
 
     session_id: str
     user_request: str = ""
@@ -115,13 +129,36 @@ class SessionMetadataStore:
                 if session is not None:
                     self.save(session)
 
-    def record_exchange(self, session: SessionMetadata, request: str, answer: str) -> None:
+    def record_exchange(
+        self,
+        session: SessionMetadata,
+        request: str,
+        answer: str,
+        result: dict[str, Any] | None = None,
+    ) -> None:
+        """Record an exchange and its browser-renderable structured result.
+
+        The SDK conversation stores display text, while the web UI also needs
+        tool files, traces, approval plans, and evidence to rebuild rich result
+        panels after a reload. Keep those projections alongside the session
+        metadata, indexed in assistant-message order.
+        """
         if session.metadata.get("title") in {None, "", "New chat"}:
             session.metadata["title"] = " ".join(request.split())[:64]
         session.metadata["message_count"] = int(session.metadata.get("message_count", 0)) + 2
         session.metadata["last_message"] = answer
         session.user_request = request
         session.updated_at = now()
+        if isinstance(result, dict):
+            history = session.metadata.setdefault("message_results", [])
+            if not isinstance(history, list):
+                history = []
+                session.metadata["message_results"] = history
+            history.append({
+                "request": request,
+                "answer": answer,
+                "result": dict(result) if _has_renderable_result(result) else None,
+            })
         self.save(session)
 
     def list_sessions(self) -> list[dict[str, Any]]:

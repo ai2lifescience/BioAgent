@@ -8,13 +8,13 @@ from pathlib import Path
 import shutil
 from typing import Any
 
-from tools.runtime_tools.pipeline_runtime.engine.paths import (
+from tools.infrastructure.pipeline_runtime.engine.paths import (
     PROJECT_ROOT,
     resolve_pipeline_input_path,
     resolve_project_path,
     safe_label,
 )
-from tools.runtime_tools.pipeline_runtime.engine.types import PipelineContext
+from tools.infrastructure.pipeline_runtime.engine.types import PipelineContext
 
 
 def pipeline_input_specs(runner_config: dict[str, Any]) -> dict[str, dict[str, Any]]:

@@ -14,7 +14,7 @@ from agents.sandbox import SandboxRunConfig
 from agents.exceptions import InputGuardrailTripwireTriggered
 from agents.tracing import gen_trace_id
 
-from tools.common.evidence import EvidenceCollector
+from tools.infrastructure.tooling.evidence import EvidenceCollector
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 from models.openrouter_provider import OpenRouterProvider
 
@@ -51,8 +51,8 @@ def _approval_details(items: list[Any], context: AgentRunContext | None = None) 
             "arguments": arguments,
         }
         if item.tool_name == "pipeline_shell" and context and isinstance(arguments, dict):
-            from tools.runtime_tools.pipeline_runtime.commands import parse_command
-            from tools.runtime_tools.pipeline_runtime.store import JobStore
+            from tools.infrastructure.pipeline_runtime.commands import parse_command
+            from tools.infrastructure.pipeline_runtime.store import JobStore
             try:
                 args = parse_command(arguments["commands"][0])
                 identifier = args.plan_id if args.operation == "run" else args.job_id
@@ -225,10 +225,8 @@ async def _execute(
             session.metadata["last_approval"] = approval_decision
         else:
             session.metadata.pop("last_approval", None)
-        # Pauses are not additional conversational exchanges.
-        STATE_STORE.record_exchange(session, request, answer)
     run = dict(session.metadata.get("run") or {})
-    return {
+    response = {
         "answer": answer, "status": status, "approval_required": bool(approvals),
         "approvals": approvals, "session_id": session.session_id,
         "max_turns": max_turns,
@@ -238,6 +236,12 @@ async def _execute(
         "approval_decision": approval_decision,
         "runtime": "agents_sdk", "model_key": model_key,
     }
+    if snapshot is None:
+        # Pauses are not additional conversational exchanges. Persist the
+        # structured result only after the complete result envelope exists so
+        # the web UI can rebuild plans and visual artifacts after a reload.
+        STATE_STORE.record_exchange(session, request, answer, result=response)
+    return response
 
 
 def run_agent(

@@ -7,15 +7,15 @@ from pathlib import Path
 import re
 from typing import Any
 
-from tools.runtime_tools.pipeline_runtime.config_io import load_yaml_config, write_yaml_config
-from tools.runtime_tools.pipeline_runtime.engine.inputs import (
+from tools.infrastructure.pipeline_runtime.config_io import load_yaml_config, write_yaml_config
+from tools.infrastructure.pipeline_runtime.engine.inputs import (
     rewrite_top_level_path_fields,
     stringify_input_value,
     staged_input_records,
 )
-from tools.runtime_tools.pipeline_runtime.engine.outputs import rewrite_output_config_fields
-from tools.runtime_tools.pipeline_runtime.engine.paths import resolve_pipeline_file
-from tools.runtime_tools.pipeline_runtime.engine.types import PipelineContext, RuntimeConfigWrite
+from tools.infrastructure.pipeline_runtime.engine.outputs import rewrite_output_config_fields
+from tools.infrastructure.pipeline_runtime.engine.paths import resolve_pipeline_file
+from tools.infrastructure.pipeline_runtime.engine.types import PipelineContext, RuntimeConfigWrite
 
 
 def load_pipeline_config(
