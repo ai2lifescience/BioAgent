@@ -54,7 +54,7 @@ different key with `--model-key`.
 
 Biological workflows are SDK `FunctionTool` objects exported by
 `tools/function_tools`. Pipeline operations use the local `pipeline_shell`
-ShellTool exported by `tools/runtime_tools`.
+ShellTool exported by `tools/infrastructure/agent_sdk`.
 
 | Workflow | Main tool or actions |
 | --- | --- |
@@ -117,7 +117,7 @@ tools/runtime_tools/pipelines/<pipeline_name>/
 2. Run the bundled demonstration and collect its results:
 
    ```bash
-   python -m interfaces.cli "Run the example_sequence_qc example and summarize its metrics."
+   python -m interfaces.cli "Run the template_shell example and summarize its assignments and metrics."
    ```
 
    The agent stages the example inputs, creates a validated plan, requests
@@ -127,7 +127,7 @@ tools/runtime_tools/pipelines/<pipeline_name>/
 
    ```bash
    python -m interfaces.cli --session-id demo \
-     "Use my uploaded reads.fastq and metadata.tsv as the reads and metadata inputs for example_sequence_qc, run it, and return the results."
+     "Use my uploaded reads.fastq and metadata.tsv as the reads and metadata inputs for template_shell, run it, and return the results."
    ```
 
    The agent discovers workspace-relative file paths and passes them explicitly

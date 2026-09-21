@@ -8,8 +8,8 @@ from typing import Any
 
 from pypdf import PdfReader
 
-from tools.common.context import WorkflowContext, ensure_workflow_context
-from tools.workspace import resolve_workspace_item
+from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.workspace import resolve_workspace_item
 
 
 TEXT_SUFFIXES = {".txt", ".md", ".markdown", ".csv", ".tsv", ".json", ".yaml", ".yml", ".log", ".html"}

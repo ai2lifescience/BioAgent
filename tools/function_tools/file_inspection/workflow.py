@@ -2,8 +2,8 @@
 from __future__ import annotations
 from tools.function_tools.file_inspection.inspection import inspect_bio_file as _action_file_inspect
 from typing import Any
-from tools.common.context import WorkflowContext, ensure_workflow_context
-from tools.workspace import select_workspace_file
+from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.workspace import select_workspace_file
 
 def file_inspection(path: str, max_preview_lines: int=20, context: WorkflowContext | None=None) -> dict[str, Any]:
     context = ensure_workflow_context(context, 'file_inspection')

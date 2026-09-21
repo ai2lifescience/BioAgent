@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from tools.common.http import request_http, response_provenance
+from tools.infrastructure.tooling.http import request_http, response_provenance
 
 
 INTERPRO_BASE_URL = "https://www.ebi.ac.uk/interpro/api"

@@ -15,8 +15,8 @@ from pydantic import Field
 
 from .workflow import ncbi_retrieval as _workflow
 from harness.context import AgentRunContext
-from tools.common.results import run_workflow
-from tools.common.tooling import bio_function_tool
+from tools.infrastructure.tooling.results import run_workflow
+from tools.infrastructure.tooling.tooling import bio_function_tool
 
 
 @bio_function_tool()
@@ -32,9 +32,9 @@ async def ncbi_retrieval(
     year_start: Annotated[int | None, Field(ge=1)] = None,
     year_end: Annotated[int | None, Field(ge=1)] = None,
     date_field: Literal['PDAT', 'MDAT'] = 'PDAT',
-    output_dir: str | None = None,
-    filename: str | None = None,
-    metadata_filename: str | None = None,
+    output_dir: Annotated[str | None, Field(description='Session-relative output directory; defaults to outputs/downloads/ncbi. Paths outside the session are rejected.')] = None,
+    filename: Annotated[str | None, Field(description='Optional FASTA filename, without directory components.')] = None,
+    metadata_filename: Annotated[str | None, Field(description='Optional metadata filename, without directory components.')] = None,
 ) -> str:
     """Retrieve NCBI Entrez records as FASTA and metadata files.
 

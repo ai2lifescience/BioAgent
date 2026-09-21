@@ -1,0 +1,79 @@
+name: bacterial_functional_annotation
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 28800
+inputs:
+  input_data:
+    label: Input file or directory
+    config_key: input_path
+    required: true
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    - .fastq
+    - .fq
+    description: Sequence input accepted by this workflow.
+outputs:
+  gene_annotations:
+    label: Gene annotations table
+    config_key: gene_annotations_path
+    default: data/output/gene_annotations.tsv
+    kind: table
+    required: true
+    description: Gene annotations table produced by this workflow.
+  annotation_terms:
+    label: Annotation terms table
+    config_key: annotation_terms_path
+    default: data/output/annotation_terms.tsv
+    kind: table
+    required: true
+    description: Annotation terms table produced by this workflow.
+  qc:
+    label: Quality-control summary
+    config_key: qc_path
+    default: data/output/qc.json
+    kind: report
+    required: true
+    description: Quality-control summary produced by this workflow.
+  status:
+    label: Pipeline status
+    config_key: status_path
+    default: data/output/status.json
+    kind: report
+    required: true
+    description: Pipeline status produced by this workflow.
+param_overrides:
+  input_type:
+    config_key: input_type
+    default: auto
+  analysis_mode:
+    config_key: analysis_mode
+    default: auto
+  threads:
+    config_key: threads
+    default: 8
+  sample_id:
+    config_key: sample_id
+    default: ''
+display_name: Bacterial functional annotation
+description: Annotate bacterial genes and assign functional terms from contigs or
+  reads using the bundled functional-annotation workflow.
+use_when:
+- the user wants gene function or orthology annotations from bacterial sequence data
+avoid_when:
+- the user needs a complete taxonomic classification or abundance estimate
+input_summary: Bacterial contigs, reads, or a supported batch directory, with configured
+  functional reference resources.
+output_summary: Gene annotations, functional term assignments, QC metrics, and run
+  status.
+limitations: Provides functional annotation evidence and does not infer abundance,
+  taxonomy, or biological conclusions.
+examples:
+- Annotate the functions of genes in this bacterial assembly.
+visibility: public
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: shell

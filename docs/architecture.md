@@ -11,41 +11,257 @@ The public browser embedding API is `Pipeline2AgentDrawer`.
 
 ![Pipeline2Agent current system architecture](images/system_architecture.png)
 
-## Runtime flow
+## Architecture
+
+Pipeline2Agent follows the small set of primitives in the OpenAI Agents SDK. A
+single root `SandboxAgent` owns the user-facing run; the SDK `Runner` owns the
+turn loop, tool calls, approvals, guardrails, sessions, and trace lifecycle.
+Pipeline2Agent contributes the biology tools, specialist definitions, and a
+durable pipeline runtime for workloads that need more compute or more time than
+one model turn.
 
 ```text
-Web / CLI / API / notebook
-        |
-        v
-harness.run_agent()
-        |
-        v
-Agents SDK Agent + Runner
-        |                    \
-        |                     SDK tracing and lifecycle hooks
-        |                     per-session Unix-local sandbox
-        v
-RunConfig.model_provider -> OpenAI Chat Completions client -> OpenRouter
-        |
-        v
-Pipeline2Agent function, specialist, and runtime tools
-        |
-        +-- biological databases and literature
-        +-- sequence, BLAST, genome, and structure analysis
-        +-- workspace documents, bounded data analysis, web research, and coding
-        +-- file inspection and report writing
-        +-- RAG and OpenRouter embeddings
-        +-- approved pipeline execution and result collection
-        |
-        v
-SDK guardrails -> structured result -> user interface
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ User surfaces: Web UI · CLI · HTTP API · notebook                           │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │ request + session_id
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ harness.run_agent / async_run_agent                                         │
+│   RunConfig + ModelProvider · SQLiteSession · session workspace              │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Pipeline2Agent (SandboxAgent)                                                │
+│   instructions + run context + input/output guardrails                      │
+│   model-driven intent routing and task planning                              │
+└───────────────┬───────────────────┬───────────────────────┬─────────────────┘
+                │                   │                       │
+       direct function/tool   delegated specialist   computational workflow
+                │                   │                       │
+                ▼                   ▼                       ▼
+┌──────────────────────────┐  ┌────────────────────────┐  ┌───────────────────┐
+│ Function / hosted tools  │  │ Agent.as_tool() or     │  │ pipeline_shell    │
+│ databases · files · RAG  │  │ handoff specialists    │  │ agent-pipeline    │
+└──────────────┬───────────┘  └────────────┬───────────┘  └─────────┬─────────┘
+               │                           │                         │
+               │                           │                         ▼
+               │                           │              ┌───────────────────┐
+               │                           │              │ Pipeline runtime  │
+               │                           │              │ catalog → plan →  │
+               │                           │              │ approval → job →  │
+               │                           │              │ results            │
+               │                           │              └─────────┬─────────┘
+               └───────────────────────────┴────────────────────────┘
+                                           │
+                                           ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Result: answer + evidence + status + workspace-relative files                │
+│ Cross-cutting: SDK traces/spans, lifecycle progress, guardrail decisions     │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-The root agent selects tools through the SDK model loop. Domain specialists
-are exposed through `Agent.as_tool()`. Function-tool workflows and their
-implementations live under `tools/function_tools/<tool_name>/`; pipeline
-execution lives under `tools/runtime_tools/pipeline_runtime/`. Reporting agents
-live under `tools/function_tools/species_report/reporting/`.
+The model may loop through `model → tool → observation` several times. For a
+pipeline, that loop plans and supervises the work; it does not execute a large
+workflow inside the model turn. The worker owns the long-running process, while
+the agent later uses the job ID to inspect status and collect verified results.
+The root agent selects tools through the SDK model loop. Domain specialists are
+currently exposed through `Agent.as_tool()`; a handoff can be added when a
+specialist should become the active owner of the remainder of a turn.
+Function-tool workflows and their implementations live under
+`tools/function_tools/<tool_name>/`; pipeline execution lives under
+`tools/infrastructure/pipeline_runtime/`. Reporting agents live under
+`tools/function_tools/species_report/reporting/`.
+
+The browser surface keeps the same boundaries. `interfaces/web.py` serves the
+HTTP/SSE contract, while the full-page UI loads focused JavaScript modules:
+`api-client.js` handles transport, `session-state.js` owns session lifecycle,
+`message-renderer.js` renders answers and runtime details, and
+`artifact-viewers.js` handles figures, downloads, and 3D structures.
+`app.js` coordinates page events and request state; `approvals.js` is shared
+with the embedded assistant. This keeps rendering and artifact behavior
+independent from session and network code without introducing a build step.
+
+## Core concepts
+
+The names below describe both the SDK abstraction and its Pipeline2Agent
+implementation. The SDK's [Agents](https://openai.github.io/openai-agents-python/agents/),
+[tools](https://openai.github.io/openai-agents-python/tools/),
+[orchestration](https://openai.github.io/openai-agents-python/multi_agent/),
+[sandbox](https://openai.github.io/openai-agents-python/sandbox/guide/),
+[guardrails](https://openai.github.io/openai-agents-python/guardrails/),
+[sessions](https://openai.github.io/openai-agents-python/sessions/), and
+[tracing](https://openai.github.io/openai-agents-python/tracing/) guides are the
+reference for the underlying behavior.
+
+### Agents
+
+An agent is an LLM configured with instructions, a model, tools, optional
+structured output, guardrails, and orchestration behavior. `harness/agent.py`
+builds the root `SandboxAgent` and gives it cross-tool policy. It receives an
+`AgentRunContext` containing the session, workspace, model choice, progress
+callback, and accumulated tool results. Reporting agents are ordinary SDK
+`Agent` instances created inside the species-report workflow; they do not
+replace the root agent or own the browser conversation.
+
+The `Runner` repeatedly gives the active agent its conversation and tool
+results until it returns a final answer, reaches the configured turn limit, or
+pauses for approval. `harness/runtime.py` supplies a run-scoped model provider
+so root and nested agents share the same client lifecycle without changing the
+SDK's global defaults.
+
+### Sandbox agents
+
+`SandboxAgent` keeps the normal agent surface and adds a workspace execution
+boundary: a manifest, filesystem capabilities, sandbox session, and optional
+shell or other capabilities. Pipeline2Agent opens one SDK Unix-local sandbox
+per chat session at `runtime/sessions/<session-id>/`. Uploaded inputs,
+generated outputs, and run-specific files are all visible through that same
+workspace.
+
+The sandbox owns file lifecycle and path resolution. The local backend shares
+the host OS, so it is a development workspace rather than a strong process
+isolation boundary. Pipeline manifests declare a container execution boundary
+for workflow dependencies; a container-backed SDK sandbox is the deployment
+option when the host process itself must be isolated for long-horizon work.
+Long-running pipeline processes are detached workers managed by the pipeline
+runtime, not model-generated shell commands.
+
+File management is automatic once a session exists: uploads are written under
+`uploads/`, each run gets `runs/<run-id>/`, and generated artifacts are written
+under `outputs/` or the pipeline job directory. SDK filesystem operations reject
+absolute paths, traversal, hidden runtime files, and resolved paths outside the
+workspace; listings do not follow symlinks. Tools return bounded metadata and
+workspace-relative references, while the sandbox keeps the bytes on disk.
+Pipeline jobs additionally hash inputs, copy verified inputs into the job, and
+emit an output manifest so result collection can check what was actually
+produced.
+
+### Agents as tools and handoffs
+
+The root agent exposes focused specialists as callable tools with
+`specialist.as_tool(...)`. This is the manager pattern: the root keeps control
+of the user-facing answer, passes a bounded goal and known paths to a
+specialist, and combines the returned result with direct tool results. It is
+used for biology, retrieval, pipeline, document, data-analysis, web-research,
+and coding specialists in `tools/agent_tools/specialist/`.
+
+A handoff is the other SDK orchestration pattern. A triage agent transfers the
+active run to a named specialist, and that specialist owns subsequent turns.
+Use a handoff when the specialist should answer directly or maintain its own
+focused instructions for the rest of the turn. Use `Agent.as_tool()` when the
+specialist is a bounded subtask and the root must retain control. Handoffs stay
+inside one SDK run; they are not a second conversation or a background job.
+The current registry uses agent-as-tool specialists, but the same specialist
+builders can be registered as handoff targets when that interaction is needed.
+
+### Tools
+
+Tools are the action surface presented to the model. The registry keeps the
+categories explicit:
+
+- **Function tools** are typed local Python workflows for sequence and
+  structure analysis, database retrieval, documents, web research, coding, and
+  reports. `@bio_function_tool` derives the JSON schema, validates arguments,
+  applies tool guardrails, and normalizes failures.
+- **Agent tools** are specialists exposed through `Agent.as_tool()`.
+- **Runtime tools** currently contain the approval-aware `pipeline_shell`,
+  which accepts the `agent-pipeline` protocol rather than arbitrary shell
+  text.
+- **Hosted tools and MCP tools** are SDK extension points for capabilities
+  executed by OpenAI-hosted infrastructure or an MCP server. They can be added
+  to the registry when the deployment provides them; they do not bypass the
+  same agent instructions, approvals, and evidence requirements.
+
+Tool selection is semantic model routing. Names, descriptions, parameter
+descriptions, type constraints, and agent instructions are the routing
+contract. There is no keyword router. Overlapping descriptions reduce
+selection reliability, so a workflow that requires deterministic dispatch
+should encode that dispatch in a single tool or in the runtime service.
+
+#### Adding a function tool
+
+1. Create `tools/function_tools/<tool_name>/` with a public `__init__.py`, a
+   decorated workflow, and deterministic implementation modules. Keep external
+   adapters and validation inside that package; use `tools/infrastructure/tooling/` only for
+   generic helpers.
+2. Give the function one clear name and docstring. Describe when to use it,
+   when not to use it, input limits, side effects, and the next tool for an
+   adjacent intent. Use typed parameters, `Literal`, and `Field(description=)`
+   for routing and validation.
+3. Accept `RunContextWrapper[AgentRunContext]`, resolve paths through the
+   workspace helpers, and return the common result envelope with status, data,
+   files, evidence, and errors. Keep the scientific operation deterministic
+   and testable outside the wrapper.
+4. Export the tool from `tools/function_tools/__init__.py`. Add it to
+   `FUNCTION_TOOLS`; `tools.registry.build_all_tools()` then supplies it to the
+   root agent. Add it to a specialist's `TOOL_NAMES` only when that specialist
+   should be able to call it.
+5. Add an offline smoke check for schema, validation, guardrails, and the
+   result envelope. Verify the tool with a representative workspace and check
+   that neighboring intents still route to their narrower tools.
+
+Specialists follow the same construction pattern in
+`tools/agent_tools/specialist/`: define a name, description, instructions, and
+small tool set, then expose the built agent as a tool in the specialist
+registry. A new hosted or MCP tool belongs in its category and in the explicit
+root registry; imports alone must never make diagnostics model-facing.
+
+### Guardrails
+
+Guardrails are configurable checks at workflow boundaries. Pipeline2Agent uses
+an input guardrail to block requests for actionable harmful biological
+procedures, tool guardrails to validate every public function-tool envelope,
+and an output guardrail to reject empty answers and flag biological claims that
+have no collected tool evidence. Tool guardrails are the right boundary for
+checks that must run around each function call; agent input/output guardrails
+cover the first input and final output of an agent chain.
+
+A guardrail tripwire stops the SDK run and is returned as `blocked` rather than
+being silently converted into a tool failure. Guardrails complement, rather
+than replace, runtime validation: a pipeline still checks file hashes,
+parameters, output declarations, resource limits, and engine failures.
+
+### Human in the loop
+
+Approval is the explicit human decision point for side effects. Pipeline
+execution and cancellation, as well as workspace code edits and tests, are
+configured as approval-controlled tools. The SDK pauses with a serializable
+`RunState`; the API returns the pending tool arguments and an approval ID. A
+user approves or rejects through `POST /approve`, and `resume_agent` restores
+the state without replaying the original model request or repeating completed
+side effects.
+
+Planning, catalog inspection, status, waiting, and result collection are
+read-only operations and do not need approval. A rejected call remains a
+recorded decision, and the agent reports the unfinished work instead of
+trying an unapproved route.
+
+### Sessions
+
+`SQLiteSession` is the source of truth for conversation history at
+`runtime/agent_sessions.sqlite3` (or `AGENT_SESSION_DB`). Application metadata
+such as titles, locks, approval snapshots, and workspace lifecycle is stored
+separately under `runtime/session_metadata`. The browser keeps only the active
+session ID; it does not maintain a second transcript.
+
+The session ID also selects the sandbox workspace. The SDK session stores
+messages and tool conversation items, while the sandbox stores real files. The
+agent passes workspace-relative paths and bounded summaries through the
+conversation, so large FASTA files, logs, and pipeline outputs are not copied
+into model history. Resuming an approval rebuilds the agent definitions and
+reconnects the saved state to a fresh provider and the same workspace.
+
+### Tracing
+
+The SDK records traces and spans for model generations, agent turns, function
+tools, handoffs, guardrails, and custom events. Pipeline2Agent installs a local
+trace processor and SDK lifecycle hooks to expose redacted progress to the UI
+and CLI without exporting OpenRouter traffic to an OpenAI trace destination by
+default. Trace events are correlated with the run and session IDs, so a failed
+pipeline can be diagnosed alongside the plan, worker status, tool arguments,
+approval decision, and collected outputs.
 
 ## Components
 
@@ -64,7 +280,7 @@ live under `tools/function_tools/species_report/reporting/`.
   per-session workspace. The SDK supplies filesystem capabilities; the
   approval-controlled `pipeline_shell` ShellTool is the command-execution
   boundary.
-- `tools/workspace/` owns safe workspace paths and small file metadata helpers
+- `tools/infrastructure/workspace/` owns safe workspace paths and small file metadata helpers
   for the SDK sandbox listing and browser adapter; the SDK sandbox remains the
   source of truth for files and their lifecycle.
 - `harness/tracing.py` consumes SDK lifecycle hooks and spans locally without
@@ -156,17 +372,19 @@ The SDK tool surface is organized by execution semantics:
   and general assistant workflows. This is Pipeline2Agent's primary category.
 - `tools/agent_tools/` — focused agents exposed through `Agent.as_tool()`.
 - `tools/hosted_tools/` — extension point for tools executed by OpenAI-hosted
-  infrastructure. It is empty until the configured model/runtime supports one.
-- `tools/runtime_tools/` — the SDK local `pipeline_shell` tool and its
+  infrastructure or an MCP server. It is empty until the configured model/runtime supports one.
+- `tools/infrastructure/agent_sdk/` — the SDK local `pipeline_shell` tool and its
   allowlisted command protocol. It runs all declared pipeline engines locally.
-- `tools/runtime_tools/pipeline_runtime/` — declarative pipeline planning, durable jobs,
+- `tools/infrastructure/pipeline_runtime/` — declarative pipeline planning, durable jobs,
   bounded waiting, cancellation, and result collection behind `pipeline_shell`.
-- `tools/common/` — shared context, result envelopes,
+- `tools/runtime_tools/pipelines/` — model-visible pipeline manifests, workflow
+  bundles, and bundled example inputs discovered by the runtime catalog.
+- `tools/infrastructure/tooling/` — shared context, result envelopes,
   evidence and generic result-path handling, guardrails, FunctionTool setup,
   and generic bounded HTTP transport. These are implementation helpers, not
   model-facing tools. Domain parsers, external-service allowlists, web
   collection policy stay in the owning package. Workspace file metadata lives
-  under `tools/workspace/`; the SDK sandbox remains the file owner.
+  under `tools/infrastructure/workspace/`; the SDK sandbox remains the file owner.
 
 `harness/agent.py` calls `tools.registry.build_all_tools(model)` so the root
 agent receives one SDK tool list assembled from these categories.
@@ -176,7 +394,7 @@ Import tools and helpers directly from their category packages:
 ```python
 from tools.function_tools.file_inspection import file_inspection
 from tools.agent_tools import build_specialist_tools
-from tools.common.results import ToolResult
+from tools.infrastructure.tooling.results import ToolResult
 ```
 
 Function-tool packages use a consistent layout:
@@ -191,7 +409,7 @@ tools/function_tools/<tool_name>/
 
 Each function tool is a self-contained plug-in. Its package owns the public
 schema, workflow, domain implementation, external adapters, and tool-specific
-validation. It may use generic services from `tools/common/`, but it must not
+validation. It may use generic services from `tools/infrastructure/tooling/`, but it must not
 import another public FunctionTool or depend on another tool's biological
 implementation. Adding or removing a tool should require only its package and
 the explicit registry entry; unrelated tools must continue to work unchanged.
@@ -201,14 +419,14 @@ or `inspection.py`, and `workflow.py` only when they need
 run context or result presentation. A
 package should add a subpackage only for a real subsystem, such as NCBI
 Entrez or species-report literature/web/RAG collection. Pipeline engine adapters
-live separately under `tools/runtime_tools/pipeline_runtime/engine/`.
+live separately under `tools/infrastructure/pipeline_runtime/engine/`.
 Shared context, result envelopes, guardrails, generic result-path handling, and
-generic HTTP transport belong under `tools/common/`. Workspace path safety and
-file metadata belong under `tools/workspace/`. The HTTP layer supplies
+generic HTTP transport belong under `tools/infrastructure/tooling/`. Workspace path safety and
+file metadata belong under `tools/infrastructure/workspace/`. The HTTP layer supplies
 bounded transport only; every adapter passes its own HTTPS host allowlist.
 HTML/search parsers, endpoint policies, biological implementations, and the
-host's file-serving policy stay outside `tools/common/` under
-`tools/workspace/`. There is no central sequence or biology adapter. Public
+host's file-serving policy stay outside `tools/infrastructure/tooling/` under
+`tools/infrastructure/workspace/`. There is no central sequence or biology adapter. Public
 FunctionTool wrappers are never imported as implementation dependencies, so a
 tool can be added, removed, or tested independently.
 
@@ -231,7 +449,34 @@ tools keep inspection read-only; `code_edit` and `code_test` are SDK approval
 tools, restrict paths to the active workspace, and allow only fixed test
 commands.
 
-### Tool routing contract
+### Intent routing and task planning
+
+The agent plans at the level of the user's requested outcome. On each turn it
+reads the current request, session history, available files, prior tool
+results, and the registered tool schemas. It then decides whether to answer
+directly, call one narrow tool, delegate a bounded subtask, or start a pipeline
+plan. Planning is incremental: the result of one action becomes evidence for
+the next decision, and the agent stops asking questions once the missing
+information can be resolved from the workspace or a safe default.
+
+The general loop is:
+
+```text
+understand outcome and constraints
+    -> identify inputs and missing information
+    -> select the narrowest direct tool or specialist
+    -> inspect the returned status, evidence, and files
+    -> chain independent or dependent actions as appropriate
+    -> verify the requested outcome before answering
+```
+
+For a computationally intensive request, the plan becomes a durable pipeline
+plan rather than an improvised shell command. The agent discovers the catalog,
+maps actual workspace files to named input slots, translates user constraints
+into declared parameters, validates the plan, requests approval for side
+effects, and then supervises a detached job. This lets the model reason about
+which workflow to run while the runtime enforces hashes, paths, resource
+limits, deadlines, engine behavior, and required outputs.
 
 The root agent does not use a separate keyword router. When a request arrives,
 the Agents SDK presents the model with the registered tool names, descriptions,
@@ -425,7 +670,7 @@ procedures. Tool guardrails validate each FunctionTool envelope, and the output
 guardrail checks the final answer. The API returns the run `status` directly
 (`ok`, `pending_approval`, `blocked`, or `error`).
 
-Evidence collection lives in `tools/common/evidence.py` beside tool result
+Evidence collection lives in `tools/infrastructure/tooling/evidence.py` beside tool result
 semantics. The harness calls it after a run so the UI can receive citations,
 record IDs, URLs, and workspace file paths without making tools import the harness.
 
@@ -445,20 +690,41 @@ model endpoint and does not provide the OpenAI trace destination.
 
 ## Pipeline runtime
 
-Pipeline2Agent runs registered Shell, Snakemake, Nextflow, and miniwdl workflows
+The pipeline runtime is the system's main path for complex and computationally
+intensive work. The agent does the intent interpretation and orchestration; a
+durable worker performs the CPU-, memory-, I/O-, or wall-time-heavy workflow.
+This separation keeps model turns responsive, makes approval a concrete step,
+allows jobs to outlive an HTTP request, and gives later turns stable IDs for
+status, cancellation, and result review. A pipeline is considered complete only
+after the runtime verifies its declared outputs and the agent summarizes the
+collected evidence and files.
+
+Pipeline2Agent runs registered Shell, Snakemake, Nextflow, and WDL workflows
 through the SDK local ShellTool named `pipeline_shell`. Pipeline definitions
 live under `tools/runtime_tools/pipelines/<pipeline_name>/`. The service scans
 folders containing `runner.yaml` whenever the agent requests the catalog.
+Pipeline bundles own their execution dependencies and declare a container
+boundary in the manifest; the agent environment does not install workflow
+dependencies. The human-readable bundle index is in
+[`tools/runtime_tools/pipelines/README.md`](../tools/runtime_tools/pipelines/README.md).
+
+A pipeline definition is a self-contained bundle: `runner.yaml` is the
+model-visible and runtime-validated contract, while the engine files implement
+the scientific operation. The manifest describes intent (`use_when` and
+`avoid_when`), inputs, parameters, outputs, limits, and the engine boundary;
+the workflow is responsible for content validation and for writing the
+declared outputs. This separation lets the agent choose among workflows from
+compact metadata without loading every source file into the model context.
 
 | Component | Responsibility |
 | --- | --- |
 | [Agent instructions](../harness/agent.py) | Interpret the user's goal and choose direct tools or a specialist. |
-| [Pipeline tool](../tools/runtime_tools/pipeline_tool.py) | Teach the command protocol, resolve the session workspace, handle SDK approval, and return command results. |
-| [Command parser](../tools/runtime_tools/pipeline_runtime/commands.py) | Parse allowed commands and dispatch operations to the service. |
-| [Service](../tools/runtime_tools/pipeline_runtime/service.py) | Discover pipelines, validate plans, start jobs, and collect results. |
-| [Job store](../tools/runtime_tools/pipeline_runtime/store.py) | Persist plans and job state in SQLite and write job snapshots. |
-| [Worker](../tools/runtime_tools/pipeline_runtime/worker.py) | Execute a job independently of the agent request and record its outcome. |
-| [Engine adapters](../tools/runtime_tools/pipeline_runtime/engine/) | Prepare runtime configurations and invoke the selected engine. |
+| [Pipeline tool](../tools/infrastructure/agent_sdk/pipeline_shell.py) | Teach the command protocol, resolve the session workspace, handle SDK approval, and return command results. |
+| [Command parser](../tools/infrastructure/pipeline_runtime/commands.py) | Parse allowed commands and dispatch operations to the service. |
+| [Service](../tools/infrastructure/pipeline_runtime/service.py) | Discover pipelines, validate plans, start jobs, and collect results. |
+| [Job store](../tools/infrastructure/pipeline_runtime/store.py) | Persist plans and job state in SQLite and write job snapshots. |
+| [Worker](../tools/infrastructure/pipeline_runtime/worker.py) | Execute a job independently of the agent request and record its outcome. |
+| [Engine adapters](../tools/infrastructure/pipeline_runtime/engine/) | Prepare runtime configurations and invoke the selected engine. |
 
 ### From user intent to pipeline selection
 
@@ -484,15 +750,17 @@ user request and conversation
 ```
 
 The catalog contains manifest metadata; the model does not automatically read
-all workflow source files or pipeline READMEs. Accurate `description`, input
-labels, and input descriptions therefore help selection. An explicit pipeline
-name and known input paths reduce ambiguity. The agent is instructed to ask
-when missing information materially changes the result.
+all workflow source files or pipeline READMEs. Every manifest therefore gives
+the agent a display name, a user-intent description, `use_when` and
+`avoid_when` guidance, input and output summaries, limitations, examples, and
+the execution boundary. Accurate input labels and descriptions help selection.
+An explicit pipeline name and known input paths reduce ambiguity. The agent is
+instructed to ask when missing information materially changes the result.
 
 Pipeline selection is a model decision. Runtime checks establish that inputs
 and settings satisfy the implemented execution contract; they do not prove
 that the pipeline is scientifically appropriate for the user's question.
-For example, `generic_bio` describes an educational positional-comparison demo,
+For example, `template_bio` describes an educational positional-comparison demo,
 not a validated alignment or variant-calling workflow.
 
 ### The agent-pipeline command protocol
@@ -534,8 +802,8 @@ Terminal users invoke the same service through its administrative CLI from the
 project root:
 
 ```bash
-python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace catalog
-python -m tools.runtime_tools.pipeline_runtime --workspace /path/to/workspace example --pipeline example_sequence_qc
+python -m tools.infrastructure.pipeline_runtime --workspace /path/to/workspace catalog
+python -m tools.infrastructure.pipeline_runtime --workspace /path/to/workspace example --pipeline template_shell
 ```
 
 This module constructs the `agent-pipeline` prefix internally. SDK approval
@@ -572,8 +840,8 @@ descriptions. File inspection can supply text previews and table columns, but
 it does not provide a paired-read validator. A `.tsv` suffix establishes neither
 metadata semantics nor the presence of the columns a workflow needs.
 
-`example_sequence_qc` and `generic_bio` each declare one `reads` slot. They do
-not declare a paired-end interface. A workflow designed for two mates can
+`template_shell` declares `reads` and `metadata` slots. `template_bio` declares
+`reads`, `reference`, and `metadata`; neither template declares a paired-end interface. A workflow designed for two mates can
 expose the following slots, provided its implementation consumes both paths:
 
 ```yaml
@@ -601,8 +869,8 @@ inputs:
 These declarations describe the interface; the workflow must implement gzip
 reading, pair consistency checks, metadata-column checks, and other content
 validation it requires. The runtime does not interpret proposed fields such as
-`role`, `mate`, or `required_columns`. In the bundled QC example, metadata
-columns and FASTQ record structure are checked by `workflow.py` during execution.
+`role`, `mate`, or `required_columns`. In the bundled shell template, metadata columns and sequence record structure are
+checked by `run.sh` during execution.
 
 For a slot whose workflow accepts several files, declare `multiple: true` and
 pass a JSON array:
@@ -716,13 +984,17 @@ install dependencies or prove that the workflow executes successfully.
 1. Create a uniquely named folder under `tools/runtime_tools/pipelines/`. Use
    letters, numbers, underscores, hyphens, or dots, beginning with a letter or
    number. Keep the manifest name consistent with the folder name.
-2. Declare a clear description, engine entrypoint, input slots, parameter
-   defaults, output files, timeout, and resource limits in `runner.yaml`.
+2. Declare a clear user-intent description, `display_name`, `use_when`,
+   `avoid_when`, input and output summaries, limitations, engine entrypoint,
+   input slots, parameter defaults, output files, timeout, and resource limits
+   in `runner.yaml`.
 3. Implement the workflow against the generated configuration. Validate input
    contents and parameter ranges, write the declared outputs, and fail with an
    informative error when a requirement is not met.
-4. Install the engine and scientific dependencies in the execution environment.
-   Add a README describing them and optional `data/input/` examples.
+4. Declare `execution.boundary: container`. Keep workflow tools, databases,
+   and engine dependencies inside the pipeline container; do not add them to
+   the Pipeline2Agent environment. Add a README describing the bundle and
+   optional `data/input/` examples.
 5. Verify discovery, then plan and execute the new workflow with representative
    inputs and collect its results. Check missing or malformed inputs as well as
    successful execution.
@@ -742,7 +1014,18 @@ Example manifest (the analysis itself must be implemented in the workflow):
 
 ```yaml
 name: my_pipeline
+display_name: Sequence length summary
 description: Calculate a length summary for a single FASTQ file.
+use_when:
+  - the user wants a quick length summary for FASTQ reads
+avoid_when:
+  - the user needs alignment or variant calling
+input_summary: One FASTQ file.
+output_summary: A report and metrics JSON file.
+limitations: This example does not perform alignment.
+execution:
+  boundary: container
+  dependency_scope: pipeline
 engine: shell
 entrypoint: run.sh
 timeout: 120
@@ -779,11 +1062,11 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 exec python3 "${script_dir}/workflow.py" "${config_path}"
 ```
 
-`workflow.py` loads the YAML path from `sys.argv[1]`, reads `input_path` and
-`params.min_length`, and writes `report_path` and `metrics_path`. Choose accepted
-suffixes and output kinds that the implementation actually supports. The
-[synthetic QC example](../tools/runtime_tools/pipelines/example_sequence_qc/)
-provides a complete shell/Python implementation.
+The shell entrypoint loads the generated YAML, reads `input_path`,
+`metadata_path`, and `params.normalize_mode`, and writes the four declared output
+paths. Choose accepted suffixes and output kinds that the implementation actually
+supports. The [shell metadata template](../tools/runtime_tools/pipelines/template_shell/)
+provides a complete minimal implementation.
 
 | Engine | Manifest entrypoint | Runtime requirements and output mapping |
 | --- | --- | --- |
@@ -800,11 +1083,11 @@ changes in addition to a manifest.
 
 For a runnable demonstration of the full protocol, ask Pipeline2Agent:
 
-> Use the example_sequence_qc example data, run it, and summarize the results.
+> Use the template_shell example data, run it, and summarize the results.
 
 The agent stages the bundled synthetic data, plans, requests approval, runs,
-and collects `filtered.fastq`, `assignments.tsv`, `metrics.json`, and `report.md`.
-Default settings retain 2 of 4 reads and 16 of 28 bases. To exercise your own
+and collects `normalized.txt`, `subtypes.tsv`, `metrics.json`, and `report.md`.
+The shell template assigns all three bundled sequence IDs. To exercise your own
 pipeline, request its name and supply its declared inputs, or explicitly ask
 for its bundled examples. Use the [offline checks](#testing) for shared runtime
 regressions; they do not replace an execution test of the new workflow.
@@ -904,7 +1187,7 @@ python evals/smoke_session_artifacts.py
 python evals/smoke_session_history.py
 python evals/smoke_pipeline_config.py
 python evals/smoke_pipeline_runtime.py
-python evals/smoke_generic_bio.py
+python evals/smoke_template_bio.py
 python evals/smoke_nextflow_runner.py
 ```
 

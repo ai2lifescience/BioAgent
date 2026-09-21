@@ -10,8 +10,8 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from tools.common.context import WorkflowContext, ensure_workflow_context
-from tools.workspace import select_workspace_file
+from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.workspace import select_workspace_file
 
 
 FASTA_SUFFIXES = (".fa", ".fasta", ".fna", ".ffn", ".faa")

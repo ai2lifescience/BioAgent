@@ -120,7 +120,7 @@ class ProviderTests(unittest.IsolatedAsyncioTestCase):
             requests.append(json.loads(request.content))
             return completion(messages[len(requests) - 1])
 
-        pipeline = importlib.import_module("tools.runtime_tools.pipeline_tool")
+        pipeline = importlib.import_module("tools.infrastructure.agent_sdk.pipeline_shell")
         with patch("models.openrouter_provider.create_async_client", side_effect=lambda: self.make_client(respond)) as factory:
             with patch.object(pipeline, "dispatch", return_value={"status": "ok"}) as dispatch:
                 pending = await runtime.async_run_agent(

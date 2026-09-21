@@ -14,7 +14,7 @@ from agents.sandbox import SandboxRunConfig
 from agents.exceptions import InputGuardrailTripwireTriggered
 from agents.tracing import gen_trace_id
 
-from tools.common.evidence import EvidenceCollector
+from tools.infrastructure.tooling.evidence import EvidenceCollector
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 from models.openrouter_provider import OpenRouterProvider
 
@@ -51,8 +51,8 @@ def _approval_details(items: list[Any], context: AgentRunContext | None = None) 
             "arguments": arguments,
         }
         if item.tool_name == "pipeline_shell" and context and isinstance(arguments, dict):
-            from tools.runtime_tools.pipeline_runtime.commands import parse_command
-            from tools.runtime_tools.pipeline_runtime.store import JobStore
+            from tools.infrastructure.pipeline_runtime.commands import parse_command
+            from tools.infrastructure.pipeline_runtime.store import JobStore
             try:
                 args = parse_command(arguments["commands"][0])
                 identifier = args.plan_id if args.operation == "run" else args.job_id
@@ -134,6 +134,7 @@ async def _execute(
     sdk_session = SQLiteSession(session.session_id, db_path=session_db)
     provider = OpenRouterProvider()
     approvals: list[dict[str, Any]] = []
+    approval_decision: dict[str, Any] | None = None
     snapshot = None
     LOCAL_TRACES.bind(trace_id, context)
     try:
@@ -155,6 +156,15 @@ async def _execute(
                 run_input.approve(item)
             else:
                 run_input.reject(item, rejection_message="The user rejected this tool request.")
+            approval_details = pending.get("approvals") or []
+            approval_detail = approval_details[index] if index < len(approval_details) else {}
+            approval_decision = {
+                "approved": approved,
+                "approval_id": approval_detail.get("approval_id"),
+                "tool_name": approval_detail.get("tool_name", item.tool_name),
+                "arguments": approval_detail.get("arguments"),
+                "plan": approval_detail.get("plan"),
+            }
             context.record("approval_decision", approved=approved, tool_name=item.tool_name)
             # Consume the saved snapshot before execution. Failed or duplicate
             # requests must not replay already-executed side effects.
@@ -211,18 +221,27 @@ async def _execute(
         }
     else:
         context.record("run_finished", status=status, tool_count=len(context.tool_results))
-        # Pauses are not additional conversational exchanges.
-        STATE_STORE.record_exchange(session, request, answer)
+        if approval_decision:
+            session.metadata["last_approval"] = approval_decision
+        else:
+            session.metadata.pop("last_approval", None)
     run = dict(session.metadata.get("run") or {})
-    return {
+    response = {
         "answer": answer, "status": status, "approval_required": bool(approvals),
         "approvals": approvals, "session_id": session.session_id,
         "max_turns": max_turns,
         "messages": [{"role": "user", "content": request}, {"role": "assistant", "content": answer}],
         "evidence": evidence, "trace": context.events,
         "run": run, "files": context.files,
+        "approval_decision": approval_decision,
         "runtime": "agents_sdk", "model_key": model_key,
     }
+    if snapshot is None:
+        # Pauses are not additional conversational exchanges. Persist the
+        # structured result only after the complete result envelope exists so
+        # the web UI can rebuild plans and visual artifacts after a reload.
+        STATE_STORE.record_exchange(session, request, answer, result=response)
+    return response
 
 
 def run_agent(

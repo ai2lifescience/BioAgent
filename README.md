@@ -109,19 +109,19 @@ Download PDB structure 1A3N as cif
 ```
 
 ```text
-Run generic_snakemake with its bundled example data and summarize the results.
+Run template_snakemake with its bundled example data and summarize the results.
 ```
 
 ```text
-Run generic_nextflow with its bundled example data and summarize the results.
+Run template_nextflow with its bundled example data and summarize the results.
 ```
 
 ```text
-Run generic_bio with its bundled example data and summarize the results.
+Run template_bio with its bundled example data and summarize the results.
 ```
 
 ```text
-Run the example_sequence_qc example and summarize its metrics.
+Run the template_shell example and summarize its assignments and metrics.
 ```
 
 ```text

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from tools.common.context import WorkflowContext, ensure_workflow_context
-from tools.workspace import select_workspace_file
+from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.workspace import select_workspace_file
 
 from .extraction import read_pdf_text
 

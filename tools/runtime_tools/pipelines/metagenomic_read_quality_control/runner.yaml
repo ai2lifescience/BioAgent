@@ -1,0 +1,99 @@
+name: metagenomic_read_quality_control
+engine: wdl
+wdl_engine: cromwell
+cromwell_url: http://127.0.0.1:8000
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: stage0_qc.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 86400
+inputs:
+  read1:
+    label: Read 1 FASTQ
+    wdl_key: MetagenomicQc.fastq_r1
+    required: true
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Read 1 FASTQ input.
+  read2:
+    label: Read 2 FASTQ
+    wdl_key: MetagenomicQc.fastq_r2
+    required: false
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Optional read 2 FASTQ input for paired-end processing.
+param_overrides:
+  sample_id:
+    wdl_key: MetagenomicQc.sample_id
+    default: qc_sample
+  lean_io_mode:
+    wdl_key: MetagenomicQc.lean_io_mode
+    default: true
+  docker_image:
+    wdl_key: MetagenomicQc.docker_image
+    default: mscan-detection-qc:v1.0
+  cpu:
+    wdl_key: MetagenomicQc.cpu
+    default: 8
+  memory_gb:
+    wdl_key: MetagenomicQc.memory_gb
+    default: 64
+  disk_gb:
+    wdl_key: MetagenomicQc.disk_gb
+    default: 500
+outputs:
+  clean_r1:
+    label: Host-filtered read 1
+    wdl_output: MetagenomicQc.clean_r1
+    target: data/output/clean.R1.fq
+    kind: sequence
+    required: true
+    description: Host-filtered read 1 produced by this workflow.
+  clean_r2:
+    label: Host-filtered read 2
+    wdl_output: MetagenomicQc.clean_r2
+    target: data/output/clean.R2.fq
+    kind: sequence
+    required: false
+    description: Host-filtered read 2 produced by this workflow.
+  qc_counts:
+    label: QC read counts
+    wdl_output: MetagenomicQc.qc_counts
+    target: data/output/qc_counts.tsv
+    kind: table
+    required: true
+    description: QC read counts produced by this workflow.
+  phase1_metrics:
+    label: Phase 1 read overview
+    wdl_output: MetagenomicQc.phase1_metrics
+    target: data/output/phase1_read_overview.tsv
+    kind: table
+    required: true
+    description: Phase 1 read overview produced by this workflow.
+display_name: Metagenomic read quality control
+description: Filter metagenomic reads and remove host or vector sequences with fastp,
+  Kraken2, and Bowtie2 before downstream analysis.
+use_when:
+- the user wants quality filtering and host removal from metagenomic reads
+avoid_when:
+- the user wants final pathogen identification or variant interpretation
+input_summary: Required read 1, optional read 2, mounted Kraken2 and Bowtie2 resources,
+  and sample settings.
+output_summary: Cleaned reads, QC read counts, and phase-one read-overview tables.
+limitations: Reference databases, Docker images, and Cromwell service configuration
+  must be available.
+examples:
+- Quality-filter these metagenomic reads and remove host sequences.
+visibility: public
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl

@@ -69,6 +69,42 @@ def list_session_messages(session_id: str) -> dict[str, Any]:
             text = _session_item_text(item.get("content"))
             if text:
                 messages.append({"role": role, "text": text})
+        stored_results = metadata.metadata.get("message_results", []) if metadata else []
+        if not isinstance(stored_results, list):
+            stored_results = []
+        result_index = 0
+        current_request = ""
+        for message in messages:
+            if message.get("role") == "user":
+                current_request = str(message.get("text") or "")
+                continue
+            if message.get("role") != "assistant":
+                continue
+            while result_index < len(stored_results):
+                entry = stored_results[result_index]
+                result_index += 1
+                if not isinstance(entry, dict):
+                    continue
+                # Current metadata stores the request/answer pair so results
+                # still align when a session predates structured-result
+                # persistence. Accept the older direct-result shape too.
+                if "result" in entry:
+                    if (
+                        str(entry.get("request") or "") == current_request
+                        and str(entry.get("answer") or "") == str(message.get("text") or "")
+                    ):
+                        if isinstance(entry.get("result"), dict):
+                            message["result"] = entry["result"]
+                        break
+                    continue
+                message["result"] = entry
+                break
+        last_approval = metadata.metadata.get("last_approval") if metadata else None
+        if isinstance(last_approval, dict):
+            for message in reversed(messages):
+                if message.get("role") == "assistant":
+                    message.setdefault("result", {})["approval_decision"] = last_approval
+                    break
         pending = metadata.metadata.get("pending_run") if metadata else None
         return {
             "session_id": identifier,

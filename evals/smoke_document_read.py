@@ -14,7 +14,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from pypdf import PdfWriter
 from pypdf.generic import DecodedStreamObject, DictionaryObject, NameObject
 
-from tools.common.context import WorkflowContext
+from tools.infrastructure.tooling.context import WorkflowContext
 from tools.function_tools.document_read.workflow import document_read
 
 

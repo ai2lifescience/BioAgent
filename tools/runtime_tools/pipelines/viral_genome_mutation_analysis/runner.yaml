@@ -1,0 +1,100 @@
+name: viral_genome_mutation_analysis
+engine: shell
+config: config.yaml
+entrypoint: run.sh
+timeout: 3600
+inputs:
+  genomes:
+    label: Genome FASTA file or directory
+    config_key: input_path
+    required: true
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    description: One genome FASTA or a directory of genome FASTA files.
+  reference:
+    label: Reference genome FASTA (required when reference_mode is local)
+    config_key: reference_path
+    required: false
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    description: Reference sequence or reference resource used for comparison.
+outputs:
+  matrix:
+    label: SNP matrix
+    config_key: matrix_path
+    default: data/output/matrix.tsv
+    kind: table
+    required: true
+    description: SNP matrix produced by this workflow.
+  variants:
+    label: Variants table
+    config_key: variants_path
+    default: data/output/variants.tsv
+    kind: table
+    required: true
+    description: Variants table produced by this workflow.
+  summary:
+    label: Variants summary
+    config_key: summary_path
+    default: data/output/variants_summary.txt
+    kind: report
+    required: true
+    description: Variants summary produced by this workflow.
+  tree_fasta:
+    label: Tree FASTA
+    config_key: tree_fasta_path
+    default: data/output/tree.fasta
+    kind: fasta
+    required: false
+    description: Tree FASTA produced by this workflow.
+  treefile:
+    label: IQ-TREE tree
+    config_key: treefile_path
+    default: data/output/tree.treefile
+    kind: tree
+    required: false
+    description: IQ-TREE tree produced by this workflow.
+  iqtree_report:
+    label: IQ-TREE report
+    config_key: iqtree_report_path
+    default: data/output/tree.iqtree
+    kind: report
+    required: false
+    description: IQ-TREE report produced by this workflow.
+  iqtree_log:
+    label: IQ-TREE log
+    config_key: iqtree_log_path
+    default: data/output/tree.log
+    kind: report
+    required: false
+    description: IQ-TREE log produced by this workflow.
+param_overrides:
+  mode: {}
+  reference_mode: {}
+  species: {}
+  taxonid: {}
+  threads: {}
+display_name: Viral genome mutation analysis
+description: Compare viral genome FASTA files to a reference, call nucleotide variants,
+  and optionally infer a phylogeny.
+use_when:
+- the user wants mutation comparison across assembled viral genomes
+avoid_when:
+- the user has raw reads
+- the user asks for clinical interpretation of mutations
+input_summary: One genome or a directory of viral genome FASTA files plus a local
+  or database-resolved reference.
+output_summary: SNP matrix, variant table, summary, and optional tree artifacts.
+limitations: Reference resolution and phylogeny depend on configured databases and
+  external tools.
+examples:
+- Compare these viral genomes and summarize their mutations.
+visibility: public
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: shell

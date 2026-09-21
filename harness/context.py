@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Callable
 
-from tools.common.context import WorkflowContext
+from tools.infrastructure.tooling.context import WorkflowContext
 
 
 def _now() -> str:

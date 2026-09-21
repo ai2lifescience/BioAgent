@@ -1,7 +1,22 @@
+import { createApiClient } from "/static/api-client.js";
+import { createSessionState } from "/static/session-state.js";
+import { createArtifactViewers } from "/static/artifact-viewers.js";
+import { createMessageRenderer } from "/static/message-renderer.js";
+import {
+  compactList,
+  escapeHtml,
+  fileNameFromPath,
+  formatBytes,
+  formatElapsed,
+  nowIso,
+  titleFromText,
+} from "/static/ui-utils.js";
+
 let config = {
   default_model_key: "",
   default_max_turns: 5,
   models: [],
+  pipelines: [],
 };
 
 const modelSelect = document.getElementById("model");
@@ -32,7 +47,6 @@ const workspaceSearch = document.getElementById("workspaceSearch");
 const workspaceFilter = document.getElementById("workspaceFilter");
 const workspaceDropzone = document.getElementById("workspaceDropzone");
 
-const ACTIVE_SESSION_KEY = "agent.web.active_session_id.v1";
 const SIDEBAR_COLLAPSED_KEY = "agent.web.sidebar_collapsed.v3";
 let structureSuffixes = [".cif", ".mmcif", ".pdb"];
 let imageSuffixes = [".svg"];
@@ -44,9 +58,10 @@ let requestStopped = false;
 let isRunning = false;
 let isSessionLoading = false;
 let thinkingLogLines = [];
-let sessions = [];
-let activeSessionId = "";
 let workspaceFiles = [];
+
+const api = createApiClient();
+const sessionStore = createSessionState({ api });
 
 const SEND_ICON = `
   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -94,14 +109,76 @@ const MORE_ICON = `
     <circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/>
   </svg>`;
 
+const artifactViewers = createArtifactViewers({
+  getStructureSuffixes: () => structureSuffixes,
+  getImageSuffixes: () => imageSuffixes,
+  workspaceFileUrl: (path, options) => workspaceFileUrl(path, options),
+});
+
+const messageRenderer = createMessageRenderer({
+  chat,
+  agentIcon: AGENT_ICON,
+  artifactViewers,
+  workspaceFileUrl: (path, options) => workspaceFileUrl(path, options),
+  getConfig: () => config,
+  formatModelLabel,
+  getRunning: () => isRunning,
+  getSessionLoading: () => isSessionLoading,
+  onApprovalBusy: (busy) => {
+    isRunning = busy;
+    sendButton.disabled = busy || isSessionLoading;
+  },
+  onApprovalResult: (next, meta = {}) => {
+    finishThinking(next);
+    if (!meta.intermediate) addMessage("assistant", next.answer || "", next);
+  },
+});
+
+// Keep the empty state useful while /config is loading or when the UI is
+// served by an older backend that does not expose the pipeline catalog yet.
+const PIPELINE_FALLBACKS = [
+  { name: "antimicrobial_resistance_detection", display_name: "Antimicrobial resistance detection" },
+  { name: "bacterial_functional_annotation", display_name: "Bacterial functional annotation" },
+  { name: "bacterial_genome_annotation", display_name: "Bacterial genome annotation" },
+  { name: "bacterial_genome_mutation_analysis", display_name: "Bacterial genome mutation analysis" },
+  { name: "bacterial_read_variant_analysis", display_name: "Bacterial read variant analysis" },
+  { name: "bacterial_virulence_factor_detection", display_name: "Bacterial virulence-factor detection" },
+  { name: "metagenomic_de_novo_assembly", display_name: "Metagenomic de novo assembly" },
+  { name: "metagenomic_pathogen_identification", display_name: "Metagenomic pathogen identification" },
+  { name: "metagenomic_read_quality_control", display_name: "Metagenomic read quality control" },
+  {
+    name: "pathogen_variant_risk_assessment",
+    display_name: "Pathogen variant risk assessment",
+    parameters: { pathogen: { required: true, choices: ["H1N1", "H3N2", "SARS_CoV_2"] } },
+  },
+  { name: "rna_secondary_structure_prediction", display_name: "RNA secondary-structure prediction" },
+  { name: "template_bio", display_name: "DNA analysis template" },
+  { name: "template_nextflow", display_name: "Nextflow pipeline template" },
+  { name: "template_shell", display_name: "Shell metadata assignment template" },
+  { name: "template_snakemake", display_name: "Snakemake pipeline template" },
+  { name: "template_wdl", display_name: "WDL pipeline template" },
+  { name: "viral_genome_mutation_analysis", display_name: "Viral genome mutation analysis" },
+  { name: "viral_molecular_typing", display_name: "Viral molecular typing" },
+];
+
+const PIPELINE_PARAMETER_CHOICES = {
+  viral_molecular_typing: {
+    name: "pathogen",
+    label: "Choose pathogen for Molecular Typing",
+    options: ["H1N1", "H3N2", "SARS_CoV_2"],
+  },
+  pathogen_variant_risk_assessment: {
+    name: "pathogen",
+    label: "Choose pathogen for Risk Assessment",
+    options: ["H1N1", "H3N2", "SARS_CoV_2"],
+  },
+};
+
 async function loadConfig() {
-  const response = await fetch("/config");
-  if (!response.ok) {
-    throw new Error(`Failed to load /config: HTTP ${response.status}`);
-  }
-  config = await response.json();
+  config = await api.loadConfig();
   applyArtifactConfig(config.files || {});
   renderModelOptions();
+  renderPipelineExamples();
 }
 
 function applyArtifactConfig(artifactConfig) {
@@ -153,22 +230,6 @@ function initializeSidebar() {
   setSidebarCollapsed(stored === null ? phoneDefault : stored === "true");
 }
 
-function generateSessionId() {
-  if (window.crypto && typeof window.crypto.randomUUID === "function") {
-    return `chat_${window.crypto.randomUUID()}`;
-  }
-  return `chat_${Date.now()}_${Math.random().toString(16).slice(2)}`;
-}
-
-function nowIso() {
-  return new Date().toISOString();
-}
-
-function titleFromText(text) {
-  const title = String(text || "").replace(/\s+/g, " ").trim();
-  return title ? title.slice(0, 64) : "New chat";
-}
-
 function formatSessionTime(value) {
   if (!value) return "";
   const date = new Date(value);
@@ -188,116 +249,55 @@ function formatSessionMeta(session) {
   return `${time} · ${messageText}`;
 }
 
-function formatBytes(value) {
-  const bytes = Number(value || 0);
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
-}
-
-function createSession(title = "New chat") {
-  const timestamp = nowIso();
-  return {
-    id: generateSessionId(),
-    title,
-    messages: [],
-    message_count: 0,
-    created_at: timestamp,
-    updated_at: timestamp,
-    pinned: false,
-  };
-}
-
-function normalizeSession(raw) {
-  const id = raw?.session_id;
-  if (!id) return null;
-  return {
-    id: String(id),
-    title: String(raw.title || "New chat"),
-    messages: [],
-    message_count: Number(raw.message_count || 0),
-    created_at: raw.created_at || nowIso(),
-    updated_at: raw.updated_at || raw.created_at || nowIso(),
-    pinned: Boolean(raw.pinned),
-  };
-}
-
 function sortedSessions() {
-  return [...sessions].sort((left, right) => {
+  return [...sessionStore.sessions].sort((left, right) => {
     if (left.pinned !== right.pinned) return left.pinned ? -1 : 1;
     return new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime();
   });
 }
 
-async function loadSessions() {
-  const response = await fetch("/sessions");
-  if (!response.ok) {
-    throw new Error(`Failed to load sessions: HTTP ${response.status}`);
-  }
-  const payload = await response.json();
-  sessions = (Array.isArray(payload.sessions) ? payload.sessions : [])
-    .map(normalizeSession)
-    .filter(Boolean);
-  if (!sessions.length) sessions = [createSession()];
-
-  activeSessionId = localStorage.getItem(ACTIVE_SESSION_KEY) || sessions[0].id;
-  if (!sessions.some((session) => session.id === activeSessionId)) {
-    activeSessionId = sessions[0].id;
-  }
-  rememberActiveSession();
+function pipelineCatalogForExamples() {
+  const catalog = Array.isArray(config.pipelines) && config.pipelines.length
+    ? config.pipelines
+    : PIPELINE_FALLBACKS;
+  return catalog.filter((entry) => entry && entry.name && !entry.error);
 }
 
-function rememberActiveSession() {
-  localStorage.setItem(ACTIVE_SESSION_KEY, activeSessionId);
+function pipelineExampleButtonHtml(entry) {
+  const name = String(entry.name);
+  const label = String(entry.display_name || name);
+  const override = PIPELINE_PARAMETER_CHOICES[name];
+  let parameterName = override?.name || "";
+  let options = override?.options || [];
+
+  if (!options.length) {
+    for (const [candidateName, spec] of Object.entries(entry.parameters || {})) {
+      if (spec && spec.required && Array.isArray(spec.choices) && spec.choices.length) {
+        parameterName = candidateName;
+        options = spec.choices;
+        break;
+      }
+    }
+  }
+
+  if (parameterName && options.length) {
+    const template = `Run pipeline with pipeline_name: ${name} ${parameterName}: {${parameterName}}`;
+    const parameterLabel = override?.label || `Choose ${label} ${parameterName}`;
+    return `<button class="example-button" data-example-template="${escapeHtml(template)}" data-param-name="${escapeHtml(parameterName)}" data-param-label="${escapeHtml(parameterLabel)}" data-param-options="${escapeHtml(options.join(","))}">${escapeHtml(label)}</button>`;
+  }
+
+  return `<button class="example-button" data-example="Run pipeline with pipeline_name: ${escapeHtml(name)}">${escapeHtml(label)}</button>`;
 }
 
-async function loadConversation(sessionId) {
-  if (!sessionId) return;
-  const response = await fetch(`/sessions/${encodeURIComponent(sessionId)}/messages`);
-  if (!response.ok) {
-    throw new Error(`Failed to load conversation: HTTP ${response.status}`);
-  }
-  const payload = await response.json();
-  if (sessionId !== activeSessionId) return;
-  const session = sessions.find((item) => item.id === sessionId);
-  if (!session) return;
-  session.messages = (Array.isArray(payload.messages) ? payload.messages : [])
-    .filter((message) => message && ["assistant", "user"].includes(message.role))
-    .map((message) => ({
-      role: message.role,
-      text: String(message.text || ""),
-      result: null,
-      created_at: message.created_at || null,
-    }));
-  session.message_count = session.messages.length;
-  if (payload.pending_approval) {
-    session.messages.push({
-      role: "assistant",
-      text: payload.pending_approval.answer,
-      result: payload.pending_approval,
-    });
-  }
+function pipelineExamplesHtml() {
+  return pipelineCatalogForExamples().map(pipelineExampleButtonHtml).join("");
 }
 
-function currentSession() {
-  let session = sessions.find((item) => item.id === activeSessionId);
-  if (!session) {
-    session = createSession();
-    sessions.unshift(session);
-    activeSessionId = session.id;
-    rememberActiveSession();
-  }
-  return session;
-}
-
-function updateCurrentSession(updater) {
-  const session = currentSession();
-  updater(session);
-  session.message_count = session.messages.length;
-  session.updated_at = nowIso();
-  rememberActiveSession();
-  renderSessionList();
+function renderPipelineExamples(root = document) {
+  root.querySelectorAll(".more-examples .examples").forEach((container) => {
+    container.innerHTML = pipelineExamplesHtml();
+  });
+  bindExampleButtons(root);
 }
 
 function emptyStateHtml() {
@@ -324,31 +324,10 @@ function emptyStateHtml() {
             <button class="example-button" data-example="Search UniProt for BRCA1 human">Search UniProt</button>
             <button class="example-button" data-example="Summarize genome structure and host range of PhiX174 with trusted sources.">Species report</button>
           </div>
-          <details class="more-examples">
+          <details class="more-examples" open>
             <summary>More pipelines</summary>
             <div class="examples">
-              <button class="example-button" data-example="Run pipeline with pipeline_name: generic_bio">Generic bio pipeline</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: generic_shell">Shell pipeline</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: generic_snakemake">Snakemake pipeline</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: generic_nextflow">Nextflow pipeline</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: generic_wdl">WDL pipeline</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: metagenomic_qc">Metagenomic QC</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: alignment_based_Identification">Alignment-based identification</button>
-              <button
-                class="example-button"
-                data-example-template="Run pipeline with pipeline_name: molecular_typing pathogen: {pathogen}"
-                data-param-name="pathogen"
-                data-param-label="Choose pathogen for Molecular Typing"
-                data-param-options="H1N1,H3N2,SARS_CoV_2"
-              >Molecular typing</button>
-              <button class="example-button" data-example="Run pipeline with pipeline_name: de_novo_assembly">De novo assembly</button>
-              <button
-                class="example-button"
-                data-example-template="Run pipeline with pipeline_name: risk_assessment pathogen: {pathogen}"
-                data-param-name="pathogen"
-                data-param-label="Choose pathogen for Risk Assessment"
-                data-param-options="H1N1,H3N2,SARS_CoV_2"
-              >Risk assessment</button>
+              ${pipelineExamplesHtml()}
             </div>
           </details>
         </section>
@@ -372,28 +351,28 @@ function emptyStateHtml() {
 
 function renderCurrentChat() {
   chat.innerHTML = "";
-  const messages = currentSession().messages || [];
+  const messages = sessionStore.currentSession().messages || [];
   if (!messages.length) {
     chat.innerHTML = emptyStateHtml();
     bindExampleButtons(chat);
     return;
   }
   for (const message of messages) {
-    renderMessage(message.role, message.text || "", message.result || null);
+    messageRenderer.renderMessage(message.role, message.text || "", message.result || null);
   }
   scrollBottom();
 }
 
 function renderSessionList() {
-  sessionCount.textContent = String(sessions.length);
+  sessionCount.textContent = String(sessionStore.sessions.length);
   sessionList.innerHTML = "";
-  if (!sessions.length) {
+  if (!sessionStore.sessions.length) {
     sessionList.innerHTML = `<div class="session-empty">No saved chats.</div>`;
     return;
   }
   for (const session of sortedSessions()) {
     const item = document.createElement("div");
-    item.className = `session-item ${session.id === activeSessionId ? "active" : ""} ${session.pinned ? "pinned" : ""}`;
+    item.className = `session-item ${session.id === sessionStore.activeSessionId ? "active" : ""} ${session.pinned ? "pinned" : ""}`;
     item.dataset.sessionId = session.id;
     item.innerHTML = `
       <button class="session-select" type="button">
@@ -444,22 +423,22 @@ async function loadActiveSession() {
   renderWorkspace();
   chat.textContent = "Loading conversation…";
   try {
-    await Promise.all([loadConversation(activeSessionId), loadWorkspace()]);
+    await Promise.all([sessionStore.loadConversation(sessionStore.activeSessionId), loadWorkspace()]);
     renderCurrentChat();
     renderSessionList();
     resetThinkingBar();
   } catch (error) {
     renderCurrentChat();
-    renderMessage("assistant", `Could not load this chat: ${error.message}`);
+    messageRenderer.renderMessage("assistant", `Could not load this chat: ${error.message}`);
   } finally {
     setSessionLoading(false);
   }
 }
 
 async function switchSession(sessionId) {
-  if (isRunning || isSessionLoading || !sessionId || sessionId === activeSessionId) return;
-  activeSessionId = sessionId;
-  rememberActiveSession();
+  if (isRunning || isSessionLoading || !sessionId || sessionId === sessionStore.activeSessionId) return;
+  sessionStore.activeSessionId = sessionId;
+  sessionStore.rememberActiveSession();
   renderSessionList();
   await loadActiveSession();
   promptInput.focus();
@@ -469,16 +448,15 @@ async function deleteSessionById(sessionId) {
   if (isRunning || isSessionLoading || !sessionId) return;
   setSessionLoading(true);
   try {
-    const response = await fetch(`/sessions/${encodeURIComponent(sessionId)}`, { method: "DELETE" });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    sessions = sessions.filter((session) => session.id !== sessionId);
-    if (!sessions.length) sessions = [createSession()];
-    if (!sessions.some((session) => session.id === activeSessionId)) activeSessionId = sessions[0].id;
-    rememberActiveSession();
+    await api.deleteSession(sessionId);
+    sessionStore.sessions = sessionStore.sessions.filter((session) => session.id !== sessionId);
+    if (!sessionStore.sessions.length) sessionStore.sessions = [sessionStore.createSession()];
+    if (!sessionStore.sessions.some((session) => session.id === sessionStore.activeSessionId)) sessionStore.activeSessionId = sessionStore.sessions[0].id;
+    sessionStore.rememberActiveSession();
     renderSessionList();
     await loadActiveSession();
   } catch (error) {
-    renderMessage("assistant", `Could not delete this chat: ${error.message}`);
+    messageRenderer.renderMessage("assistant", `Could not delete this chat: ${error.message}`);
   } finally {
     setSessionLoading(false);
   }
@@ -486,30 +464,24 @@ async function deleteSessionById(sessionId) {
 
 async function updateSessionById(sessionId, changes) {
   if (isRunning || isSessionLoading || !sessionId) return;
-  const session = sessions.find((item) => item.id === sessionId);
+  const session = sessionStore.sessions.find((item) => item.id === sessionId);
   if (!session) return;
   setSessionLoading(true);
   try {
-    const response = await fetch(`/sessions/${encodeURIComponent(sessionId)}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(changes),
-    });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(payload.error || `HTTP ${response.status}`);
+    const payload = await api.updateSession(sessionId, changes);
     if (Object.prototype.hasOwnProperty.call(changes, "title")) session.title = String(payload.title || "New chat");
     if (Object.prototype.hasOwnProperty.call(changes, "pinned")) session.pinned = Boolean(payload.pinned);
     session.updated_at = payload.updated_at || nowIso();
     renderSessionList();
   } catch (error) {
-    renderMessage("assistant", `Could not update this chat: ${error.message}`);
+    messageRenderer.renderMessage("assistant", `Could not update this chat: ${error.message}`);
   } finally {
     setSessionLoading(false);
   }
 }
 
 async function renameSessionById(sessionId) {
-  const session = sessions.find((item) => item.id === sessionId);
+  const session = sessionStore.sessions.find((item) => item.id === sessionId);
   if (!session || isRunning || isSessionLoading) return;
   const title = window.prompt("Rename chat", session.title || "New chat");
   if (title === null) return;
@@ -519,7 +491,7 @@ async function renameSessionById(sessionId) {
 }
 
 async function toggleSessionPin(sessionId) {
-  const session = sessions.find((item) => item.id === sessionId);
+  const session = sessionStore.sessions.find((item) => item.id === sessionId);
   if (!session) return;
   await updateSessionById(sessionId, { pinned: !session.pinned });
 }
@@ -551,10 +523,10 @@ function openSessionMenu(item, button) {
 
 function startNewChat() {
   if (isRunning || isSessionLoading) return;
-  const session = createSession();
-  sessions.unshift(session);
-  activeSessionId = session.id;
-  rememberActiveSession();
+  const session = sessionStore.createSession();
+  sessionStore.sessions.unshift(session);
+  sessionStore.activeSessionId = session.id;
+  sessionStore.rememberActiveSession();
   renderSessionList();
   workspaceFiles = [];
   renderWorkspace();
@@ -642,19 +614,23 @@ function workspaceFileCategory(file) {
   return { key: "outputs", label: "Outputs" };
 }
 
+function workspaceFileUrl(path, options = {}) {
+  const file = workspaceFiles.find((item) => item.path === path || item.workspace_path === path);
+  const params = new URLSearchParams({ path: String(file?.workspace_path || path || "") });
+  if (sessionStore.activeSessionId) params.set("session_id", sessionStore.activeSessionId);
+  if (options.viewer) params.set("viewer", options.viewer);
+  return `/workspace/file?${params.toString()}`;
+}
+
 async function loadWorkspace() {
-  if (!activeSessionId) {
+  if (!sessionStore.activeSessionId) {
     workspaceFiles = [];
     renderWorkspace();
     return;
   }
-  const sessionId = activeSessionId;
-  const response = await fetch(`/workspace?session_id=${encodeURIComponent(sessionId)}`);
-  if (!response.ok) {
-    throw new Error(`Workspace load failed: HTTP ${response.status}`);
-  }
-  const payload = await response.json();
-  if (sessionId !== activeSessionId) return;
+  const sessionId = sessionStore.activeSessionId;
+  const payload = await api.loadWorkspace(sessionId);
+  if (sessionId !== sessionStore.activeSessionId) return;
   workspaceFiles = Array.isArray(payload.workspace?.files) ? payload.workspace.files : [];
   workspaceFiles.sort((left, right) => String(left.workspace_path || "").localeCompare(String(right.workspace_path || "")));
   renderWorkspace();
@@ -663,29 +639,16 @@ async function loadWorkspace() {
 async function uploadSelectedFiles(files) {
   const selected = Array.from(files || []);
   if (!selected.length || isRunning || isSessionLoading) return;
-  const sessionId = activeSessionId;
-  const formData = new FormData();
-  formData.append("session_id", sessionId);
-  for (const file of selected) {
-    formData.append("files", file, file.name);
-  }
-
+  const sessionId = sessionStore.activeSessionId;
   uploadButton.disabled = true;
   uploadButton.textContent = "Uploading";
   try {
-    const response = await fetch("/workspace/files", {
-      method: "POST",
-      body: formData,
-    });
-    const payload = await response.json();
-    if (!response.ok) {
-      throw new Error(payload.error || `Upload failed: HTTP ${response.status}`);
-    }
-    if (sessionId === activeSessionId) {
+    await api.uploadFiles(sessionId, selected);
+    if (sessionId === sessionStore.activeSessionId) {
       await loadWorkspace();
     }
   } catch (error) {
-    if (sessionId === activeSessionId) addMessage("assistant", `Upload failed: ${error.message}`);
+    if (sessionId === sessionStore.activeSessionId) addMessage("assistant", `Upload failed: ${error.message}`);
   } finally {
     uploadInput.value = "";
     uploadButton.disabled = isSessionLoading || isRunning;
@@ -695,30 +658,11 @@ async function uploadSelectedFiles(files) {
 
 async function deleteWorkspaceFile(workspacePath) {
   if (!workspacePath || isRunning || isSessionLoading) return;
-  const response = await fetch(
-    `/workspace/files/${encodeURIComponent(workspacePath)}?session_id=${encodeURIComponent(activeSessionId)}`,
-    { method: "DELETE" },
-  );
-  const payload = await response.json();
-  if (!response.ok || !payload.deleted) {
+  const payload = await api.deleteWorkspaceFile(sessionStore.activeSessionId, workspacePath);
+  if (!payload.deleted) {
     throw new Error(payload.error || "File was not deleted.");
   }
   await loadWorkspace();
-}
-
-function formatElapsed(seconds) {
-  const value = Number(seconds || 0);
-  if (value < 60) return `${value.toFixed(value < 10 ? 1 : 0)}s`;
-  const minutes = Math.floor(value / 60);
-  const remainder = Math.round(value % 60);
-  return `${minutes}m ${remainder}s`;
-}
-
-function compactList(values, emptyText = "none", limit = 3) {
-  const items = (values || []).filter(Boolean).map(String);
-  if (!items.length) return emptyText;
-  const shown = items.slice(0, limit).join(", ");
-  return items.length > limit ? `${shown} +${items.length - limit}` : shown;
 }
 
 function appendThinkingLog(message) {
@@ -767,7 +711,7 @@ function startThinking(request) {
           status: "running",
           elapsed_seconds: elapsed,
           model_key: modelSelect.value || "default",
-          session_id: activeSessionId,
+          session_id: sessionStore.activeSessionId,
           request,
           max_turns: Number(maxTurnsInput.value || config.default_max_turns || 5),
           logs: thinkingLogLines,
@@ -791,10 +735,10 @@ function finishThinking(result) {
   setSendButtonState(false);
   sendButton.disabled = isSessionLoading;
   setComposerControlsDisabled(isSessionLoading);
-  if (result?.session_id && result.session_id !== activeSessionId) {
-    const session = currentSession();
+  if (result?.session_id && result.session_id !== sessionStore.activeSessionId) {
+    const session = sessionStore.currentSession();
     session.id = result.session_id;
-    activeSessionId = result.session_id;
+    sessionStore.activeSessionId = result.session_id;
   }
   workspaceFiles = Array.isArray(result?.files) ? result.files : workspaceFiles;
   const runtime = result?.runtime || {};
@@ -835,7 +779,7 @@ function stopThinking() {
         status: "stopped",
         elapsed_seconds: elapsed,
         model_key: modelSelect.value || "default",
-        session_id: activeSessionId,
+        session_id: sessionStore.activeSessionId,
         logs: [
           ...thinkingLogLines,
           "Browser request aborted by user.",
@@ -861,861 +805,12 @@ function scrollBottom() {
   chatScroll.scrollTop = chatScroll.scrollHeight;
 }
 
-function escapeHtml(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function statusClass(result) {
-  const status = result?.status || "ok";
-  if (status === "error") return "error";
-  if (status === "warning") return "warning";
-  return "ok";
-}
-
-function resultSummaryTags(result) {
-  const tags = [];
-  const status = result?.status || "ok";
-  tags.push(`<span class="tag ${statusClass(result)}">status: ${escapeHtml(status)}</span>`);
-  return tags.length ? `<div class="meta-row">${tags.join("")}</div>` : "";
-}
-
-function fileNameFromPath(path) {
-  const clean = String(path || "").split(/[?#]/)[0];
-  return clean.split(/[\\/]/).filter(Boolean).pop() || clean || "structure";
-}
-
-function isStructurePath(path) {
-  const clean = String(path || "").toLowerCase().split(/[?#]/)[0];
-  return structureSuffixes.some((suffix) => clean.endsWith(suffix));
-}
-
-function isImagePath(path) {
-  const clean = String(path || "").toLowerCase().split(/[?#]/)[0];
-  return imageSuffixes.some((suffix) => clean.endsWith(suffix));
-}
-
-function structureFormat(path) {
-  const clean = String(path || "").toLowerCase();
-  return clean.endsWith(".pdb") ? "pdb" : "cif";
-}
-
-function addStructureArtifact(artifacts, seen, path, label = "") {
-  const cleanPath = String(path || "").trim();
-  if (!cleanPath || !isStructurePath(cleanPath) || seen.has(cleanPath)) return;
-  seen.add(cleanPath);
-  artifacts.push({
-    path: cleanPath,
-    label: label || fileNameFromPath(cleanPath),
-    pdbId: pdbIdFromLabelOrPath(label, cleanPath),
-    format: structureFormat(cleanPath),
-  });
-}
-
-function pdbIdFromLabelOrPath(label, path) {
-  const combined = `${label || ""} ${fileNameFromPath(path || "")}`;
-  const match = combined.match(/\b([0-9][A-Za-z0-9]{3})\b/);
-  return match ? match[1].toUpperCase() : "";
-}
-
-function collectStructureArtifacts(result) {
-  const artifacts = [];
-  const seen = new Set();
-  for (const item of result?.files || []) {
-    if (item?.kind === "structure" && item?.source_skill === "protein_structure_analysis") {
-      addStructureArtifact(artifacts, seen, item?.path, item?.label || item?.source_skill);
-    }
-  }
-  if (artifacts.length) return artifacts;
-
-  const evidence = result?.evidence || {};
-  for (const item of evidence.outputs || []) {
-    if (item?.tool === "protein_structure_analysis") {
-      addStructureArtifact(artifacts, seen, item?.structure_path, item?.pdb_id || item?.summary);
-    }
-  }
-  for (const item of evidence.tool_outputs || []) {
-    if (item?.tool === "protein_structure_analysis" && item?.tool === "protein_structure_analyze") {
-      addStructureArtifact(artifacts, seen, item?.structure_path, item?.pdb_id || item?.summary);
-    }
-  }
-  return artifacts;
-}
-
-function addFigureArtifact(artifacts, seen, path, label = "") {
-  const cleanPath = String(path || "").trim();
-  if (!cleanPath || !isImagePath(cleanPath) || seen.has(cleanPath)) return;
-  seen.add(cleanPath);
-  artifacts.push({
-    path: cleanPath,
-    label: label || fileNameFromPath(cleanPath),
-  });
-}
-
-function collectFigureArtifacts(result) {
-  const artifacts = [];
-  const seen = new Set();
-  for (const item of result?.files || []) {
-    if (item?.kind === "image") {
-      addFigureArtifact(artifacts, seen, item?.path, item?.label || item?.source_skill);
-    }
-  }
-  if (artifacts.length) return artifacts;
-
-  const evidence = result?.evidence || {};
-  for (const item of evidence.outputs || []) {
-    addFigureArtifact(artifacts, seen, item?.image_path, item?.label || item?.summary || item?.tool);
-    addFigureArtifact(artifacts, seen, item?.genome_map_path, item?.label || item?.summary || item?.tool);
-  }
-  for (const item of evidence.tool_outputs || []) {
-    addFigureArtifact(artifacts, seen, item?.image_path, item?.label || item?.summary || item?.tool);
-    addFigureArtifact(artifacts, seen, item?.genome_map_path, item?.label || item?.summary || item?.tool);
-  }
-  return artifacts;
-}
-
-function workspaceFileUrl(path, options = {}) {
-  const file = workspaceFiles.find((item) => item.path === path || item.workspace_path === path);
-  const params = new URLSearchParams({ path: String(file?.workspace_path || path || "") });
-  if (activeSessionId) params.set("session_id", activeSessionId);
-  if (options.viewer) {
-    params.set("viewer", options.viewer);
-  }
-  return `/workspace/file?${params.toString()}`;
-}
-
-function collectPipelineOutputRecords(result) {
-  const records = [];
-  const seen = new Set();
-  const evidence = result?.evidence || {};
-  const candidates = [
-    ...(Array.isArray(evidence.outputs) ? evidence.outputs : []),
-    ...(Array.isArray(evidence.tool_outputs) ? evidence.tool_outputs : []),
-  ];
-
-  for (const candidate of candidates) {
-    const isPipeline = ["pipeline_shell"].includes(candidate?.tool) || ["pipeline_shell"].includes(candidate?.tool);
-    if (!isPipeline || !Array.isArray(candidate.output_records)) continue;
-    for (const record of candidate.output_records) {
-      const path = String(record?.path || "").trim();
-      if (!path || record?.exists === false || seen.has(path)) continue;
-      seen.add(path);
-      records.push({
-        path,
-        label: String(record?.label || record?.name || fileNameFromPath(path)),
-        kind: String(record?.kind || "file"),
-      });
-    }
-  }
-
-  if (records.length) return records;
-  const excludedKinds = new Set(["config", "directory", "input", "upload"]);
-  for (const artifact of result?.files || []) {
-    const path = String(artifact?.path || "").trim();
-    if (
-      !["pipeline_shell"].includes(artifact?.source_skill) ||
-      !path ||
-      excludedKinds.has(String(artifact?.kind || "")) ||
-      seen.has(path)
-    ) continue;
-    seen.add(path);
-    records.push({
-      path,
-      label: String(artifact?.label || fileNameFromPath(path)),
-      kind: String(artifact?.kind || "file"),
-    });
-  }
-  return records;
-}
-
-function pipelineNameFromResult(result) {
-  const outputs = result?.evidence?.outputs;
-  if (Array.isArray(outputs)) {
-    for (let index = outputs.length - 1; index >= 0; index -= 1) {
-      if (["pipeline_shell"].includes(outputs[index]?.tool) && outputs[index]?.pipeline_name) {
-        return String(outputs[index].pipeline_name);
-      }
-    }
-  }
-  return "pipeline";
-}
-
-function pipelineDownloadsHtml(result, records = collectPipelineOutputRecords(result)) {
-  if (!records.length) return "";
-  const pipelineName = pipelineNameFromResult(result);
-  const links = records.map((record) => {
-    const filename = fileNameFromPath(record.path);
-    const url = workspaceFileUrl(record.path);
-    return `
-      <a class="pipeline-download" href="${escapeHtml(url)}" download="${escapeHtml(filename)}"
-        title="${escapeHtml(record.path)}">
-        <span>${escapeHtml(record.label)}</span>
-        <small>${escapeHtml(filename)} · ${escapeHtml(record.kind)}</small>
-      </a>
-    `;
-  }).join("");
-  return `
-    <section class="pipeline-downloads" aria-label="Pipeline result downloads">
-      <div class="pipeline-downloads-heading">
-        <strong>Result downloads</strong>
-        <span>${records.length} files</span>
-      </div>
-      <div class="pipeline-download-grid">${links}</div>
-      <p class="pipeline-download-note">
-        Result contents are not previewed automatically.
-        To review them here, ask: <q>Collect and show all results from the ${escapeHtml(pipelineName)} pipeline run.</q>
-      </p>
-    </section>
-  `;
-}
-
-function collectedBundleHtml(result) {
-  const bundles = (result?.files || []).filter((artifact) => (
-    artifact?.source_skill === "pipeline_shell" &&
-    artifact?.kind === "compressed" &&
-    String(artifact?.path || "").toLowerCase().endsWith(".zip")
-  ));
-  if (!bundles.length) return "";
-  return bundles.map((artifact) => {
-    const filename = fileNameFromPath(artifact.path);
-    return `
-      <section class="pipeline-downloads" aria-label="Collected result bundle">
-        <div class="pipeline-downloads-heading"><strong>Collected result bundle</strong></div>
-        <div class="pipeline-download-grid">
-          <a class="pipeline-download" href="${escapeHtml(workspaceFileUrl(artifact.path))}"
-            download="${escapeHtml(filename)}">
-            <span>Download all collected results</span>
-            <small>${escapeHtml(filename)} · ZIP archive</small>
-          </a>
-        </div>
-      </section>
-    `;
-  }).join("");
-}
-
-function figureArtifactsHtml(result) {
-  const artifacts = collectFigureArtifacts(result);
-  if (!artifacts.length) return "";
-  return artifacts.map((artifact) => {
-    const title = artifact.label && artifact.label !== artifact.path
-      ? artifact.label
-      : fileNameFromPath(artifact.path);
-    const url = workspaceFileUrl(artifact.path);
-    return `
-      <figure class="artifact-figure">
-        <div class="artifact-figure-frame">
-          <img src="${escapeHtml(url)}" alt="${escapeHtml(title)}" loading="lazy">
-        </div>
-        <figcaption>
-          <span>${escapeHtml(title)}</span>
-          <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open figure</a>
-        </figcaption>
-      </figure>
-    `;
-  }).join("");
-}
-
-function structureViewerHtml(result) {
-  const artifacts = collectStructureArtifacts(result);
-  if (!artifacts.length) return "";
-  return artifacts.map((artifact, index) => {
-    const title = artifact.label && artifact.label !== artifact.path
-      ? `${artifact.label} · ${fileNameFromPath(artifact.path)}`
-      : fileNameFromPath(artifact.path);
-    return `
-      <details class="structure-viewer-details">
-        <summary>3D structure: ${escapeHtml(title)} <span>Open viewer</span></summary>
-        <div class="structure-viewer"
-          data-structure-path="${escapeHtml(artifact.path)}"
-          data-pdb-id="${escapeHtml(artifact.pdbId)}"
-          data-structure-format="${escapeHtml(artifact.format)}">
-          <div class="structure-toolbar" aria-label="Structure display controls">
-            <button type="button" data-style="cartoon" class="active">Cartoon</button>
-            <button type="button" data-style="stick">Stick</button>
-            <button type="button" data-style="sphere">Sphere</button>
-            <button type="button" data-style="line">Line</button>
-          </div>
-          <div class="structure-canvas" role="img" aria-label="Interactive molecular structure viewer">
-            <div class="structure-loading">Loading 3D viewer...</div>
-          </div>
-          <div class="structure-path">${escapeHtml(artifact.path)}</div>
-        </div>
-      </details>
-    `;
-  }).join("");
-}
-
-function modelLabelForKey(modelKey) {
-  const key = String(modelKey || "").trim();
-  const model = (config.models || []).find((item) => item.key === key);
-  return model ? formatModelLabel(model) : (key || "Unknown model");
-}
-
-function debugStatus(result) {
-  const status = String(result?.runtime?.status || result?.status || "ok");
-  const labels = {
-    ok: "Completed",
-    pending_approval: "Waiting for approval",
-    blocked: "Blocked by guardrail",
-    error: "Failed",
-    stopped: "Stopped",
-  };
-  const tone = status === "ok"
-    ? "ok"
-    : status === "pending_approval" || status === "stopped"
-      ? "warning"
-      : "error";
-  return { status, label: labels[status] || status, tone };
-}
-
-function toolLabel(tool) {
-  const labels = {
-    database_lookup: "Database lookup",
-    biology_analysis: "Transform sequence / GenBank",
-    alphafold_download: "Download AlphaFold structure",
-    biology_specialist: "Biology specialist",
-    document_read: "Read document",
-    file_inspection: "Inspect file",
-    genome_map: "Create genome map",
-    ncbi_retrieval: "Retrieve NCBI records",
-    pdb_download: "Download PDB structure",
-    pipeline_shell: "Run pipeline command",
-    pipeline_specialist: "Pipeline specialist",
-    protein_structure_analysis: "Analyze protein structure",
-    sequence_analysis: "Analyze sequence",
-    retrieval_specialist: "Retrieval specialist",
-    species_report: "Write species report",
-    blast_search: "BLAST search",
-  };
-  return labels[String(tool || "")] || String(tool || "Agent operation").replaceAll("_", " ");
-}
-
-function evidenceOutputForTool(result, tool) {
-  const evidence = result?.evidence || {};
-  const records = [
-    ...(Array.isArray(evidence.outputs) ? evidence.outputs : []),
-    ...(Array.isArray(evidence.tool_outputs) ? evidence.tool_outputs : []),
-  ];
-  for (let index = records.length - 1; index >= 0; index -= 1) {
-    if (records[index]?.tool === tool) return records[index];
-  }
-  return null;
-}
-
-function evidenceOutputSummary(result, tool) {
-  const output = evidenceOutputForTool(result, tool);
-  if (!output) return "No compact result summary was returned.";
-  if (output.error) return String(output.error);
-  if (output.summary) return String(output.summary);
-  if (output.answer) return String(output.answer);
-  if (output.status) return `Status: ${String(output.status)}`;
-  return "Result returned.";
-}
-
-function traceEventDetail(event, result) {
-  const data = event?.data || {};
-  const tool = data.tool;
-  if (tool) {
-    const summary = evidenceOutputSummary(result, tool);
-    return event.event === "tool_finished" || event.event === "sdk_tool_finished"
-      ? summary
-      : `Registered operation: ${tool}`;
-  }
-  if (event.event === "model_responded") {
-    const input = Number(data.input_tokens || 0);
-    const output = Number(data.output_tokens || 0);
-    return input || output ? `Tokens: ${input.toLocaleString()} in · ${output.toLocaleString()} out` : "Decision received.";
-  }
-  if (event.event === "handoff") return `${data.from_agent || "Agent"} → ${data.to_agent || "specialist"}`;
-  if (event.event === "run_blocked") return `Reason: ${data.reason || "request blocked"}.`;
-  if (event.event === "run_paused") return "Approval is required before execution can continue.";
-  if (event.event === "tool_failed") return String(data.error_type || "Tool execution failed.");
-  if (event.event === "pipeline_command_finished") return `Status: ${data.status || "unknown"}.`;
-  if (event.event === "guardrail_completed") {
-    const warnings = Array.isArray(data.warnings) ? data.warnings : [];
-    return warnings.length ? warnings.join(" ") : "No warnings.";
-  }
-  if (event.event === "run_finished") return `Tools used: ${data.tool_count || 0}.`;
-  if (event.event === "run_failed") return String(data.error || "Run failed.");
-  return String(data.message || "");
-}
-
-function traceEventTitle(event, result) {
-  const data = event?.data || {};
-  switch (event?.event) {
-    case "run_started": return "Request accepted";
-    case "agent_started": return `Agent started${data.agent ? ` · ${data.agent}` : ""}`;
-    case "agent_finished": return `Agent finished${data.agent ? ` · ${data.agent}` : ""}`;
-    case "model_requested": return "Agent selected the next step";
-    case "model_responded": return "Agent decision received";
-    case "handoff": return `Delegated to ${data.to_agent || "specialist"}`;
-    case "tool_started":
-    case "sdk_tool_started": return `Started · ${toolLabel(data.tool)}`;
-    case "tool_finished":
-    case "sdk_tool_finished": return `Finished · ${toolLabel(data.tool)}`;
-    case "tool_failed": return `Tool failed · ${toolLabel(data.tool)}`;
-    case "pipeline_command_finished": return "Pipeline command finished";
-    case "guardrail_completed": return "Output safety check completed";
-    case "guardrail_blocked": return "Safety guardrail blocked the request";
-    case "run_blocked": return "Request blocked by a guardrail";
-    case "approval_decision": return data.approved ? "Tool approval granted" : "Tool approval rejected";
-    case "run_paused": return "Run paused for approval";
-    case "run_finished": return "Run completed";
-    case "run_failed": return "Run failed";
-    default: return String(event?.event || "Activity").replaceAll("_", " ");
-  }
-}
-
-function executionTimeline(result) {
-  const trace = Array.isArray(result?.trace) ? result.trace : [];
-  const explicitTools = new Set(
-    trace.filter((event) => event?.event === "tool_started").map((event) => event?.data?.tool).filter(Boolean),
-  );
-  const visible = trace.filter((event) => {
-    const name = event?.event;
-    if (["sdk_span_finished", "sdk_trace_started", "sdk_trace_finished"].includes(name)) return false;
-    if (["sdk_tool_started", "sdk_tool_finished"].includes(name) && explicitTools.has(event?.data?.tool)) return false;
-    return true;
-  });
-  if (!visible.length) {
-    return `<div class="run-empty">No execution events were returned by the runtime.</div>`;
-  }
-  return `<ol class="run-timeline">${visible.map((event, index) => {
-    const detail = traceEventDetail(event, result);
-    const tone = event.event === "run_failed" || event.event === "guardrail_blocked"
-      ? "error"
-      : event.event === "tool_finished" && evidenceOutputForTool(result, event.data?.tool)?.status === "error"
-        ? "error"
-        : event.event === "run_finished" || event.event === "agent_finished"
-          ? "done"
-          : "";
-    return `
-      <li class="run-step ${tone}">
-        <span class="run-step-index">${index + 1}</span>
-        <div class="run-step-body">
-          <strong>${escapeHtml(traceEventTitle(event, result))}</strong>
-          ${detail ? `<span>${escapeHtml(detail)}</span>` : ""}
-        </div>
-      </li>`;
-  }).join("")}</ol>`;
-}
-
-function technicalTrace(result) {
-  const trace = Array.isArray(result?.trace) ? result.trace : [];
-  if (!trace.length) return `<div class="run-empty">No trace events were returned.</div>`;
-  return `<div class="trace-log">${trace.map((event) => {
-    const data = event?.data || {};
-    const details = Object.entries(data)
-      .filter(([key, value]) => value !== null && value !== "" && key !== "timestamp")
-      .slice(0, 6)
-      .map(([key, value]) => `${key}=${typeof value === "object" ? JSON.stringify(value) : String(value)}`)
-      .join(" · ");
-    return `
-      <div class="trace-row">
-        <time>${escapeHtml(formatTraceTime(event?.timestamp))}</time>
-        <code>${escapeHtml(event?.event || "event")}</code>
-        <span>${escapeHtml(details || "No event details")}</span>
-      </div>`;
-  }).join("")}</div>`;
-}
-
-function formatTraceTime(timestamp) {
-  if (!timestamp) return "—";
-  const value = new Date(timestamp);
-  if (Number.isNaN(value.getTime())) return String(timestamp);
-  return value.toLocaleTimeString([], { hour12: false });
-}
-
-function runOutline(result) {
-  const tools = [...new Set((result?.evidence?.tools || []).filter(Boolean).map(String))];
-  const steps = [
-    "Interpret the request and check the available session context.",
-    tools.length
-      ? `Run the selected operation${tools.length > 1 ? "s" : ""}: ${tools.map(toolLabel).join(", ")}.`
-      : "Answer directly without a registered data operation.",
-    "Check the returned status, evidence, and workspace files before composing the answer.",
-  ];
-  return `<ol class="run-outline">${steps.map((step) => `<li>${escapeHtml(step)}</li>`).join("")}</ol>`;
-}
-
-function evidenceList(title, values, renderItem = (value) => escapeHtml(value)) {
-  if (!Array.isArray(values) || !values.length) return "";
-  return `
-    <section class="evidence-group">
-      <h4>${escapeHtml(title)}</h4>
-      <ul>${values.map((value) => `<li>${renderItem(value)}</li>`).join("")}</ul>
-    </section>`;
-}
-
-function evidencePanel(result) {
-  const evidence = result?.evidence || {};
-  const citationItems = Array.isArray(evidence.citations) ? evidence.citations : [];
-  const citations = citationItems.map((item) => {
-    if (typeof item === "string") return escapeHtml(item);
-    const title = item?.title || item?.name || item?.id || "Citation";
-    const source = item?.source || item?.pmid || item?.year || "";
-    const label = `${title}${source ? ` · ${source}` : ""}`;
-    return item?.url
-      ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`
-      : escapeHtml(label);
-  });
-  const files = (evidence.files || []).map((path) => {
-    const value = String(path || "");
-    return `<a href="${escapeHtml(workspaceFileUrl(value))}" title="${escapeHtml(value)}">${escapeHtml(fileNameFromPath(value))}</a>`;
-  });
-  const outputs = Array.isArray(evidence.outputs) ? evidence.outputs : [];
-  const outputCards = outputs.map((item) => `
-    <li><strong>${escapeHtml(toolLabel(item?.tool))}</strong><span>${escapeHtml(item?.summary || item?.status || "Result returned.")}</span></li>
-  `).join("");
-  const groups = [
-    evidenceList("Tools used", evidence.tools, (value) => escapeHtml(toolLabel(value))),
-    evidenceList("Databases", evidence.databases),
-    evidenceList("Queries", evidence.query_terms),
-    evidenceList("Records", evidence.record_ids),
-    evidenceList("Files", files, (value) => value),
-    evidenceList("Sources", citations, (value) => value),
-    evidenceList("Links", evidence.urls, (value) => `<a href="${escapeHtml(value)}" target="_blank" rel="noopener noreferrer">${escapeHtml(value)}</a>`),
-    evidenceList("Errors", evidence.tool_errors, (value) => escapeHtml(value?.error || value?.tool || value)),
-  ].filter(Boolean).join("");
-  return `${groups || `<div class="run-empty">No structured evidence was returned.</div>`}
-    ${outputCards ? `<section class="evidence-group evidence-outputs"><h4>Tool results</h4><ul>${outputCards}</ul></section>` : ""}`;
-}
-
-function runtimePanel(result, runtime, status) {
-  const metrics = [
-    ["Status", status.label],
-    ["Model", modelLabelForKey(runtime.model_key || result.model_key)],
-    ["Elapsed", formatElapsed(runtime.elapsed_seconds)],
-    ["Tools", String(runtime.tool_count ?? (result.evidence?.tools || []).length)],
-    ["Files", String(runtime.file_count ?? (result.evidence?.files || []).length)],
-    ["Max turns", runtime.max_turns == null ? "—" : String(runtime.max_turns)],
-  ];
-  return `<div class="run-metrics">${metrics.map(([label, value]) => `
-    <div class="run-metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>
-  `).join("")}</div>`;
-}
-
-function resultDetails(result) {
-  if (!result) return "";
-  const runtime = result.runtime || {};
-  const status = debugStatus(result);
-  const pipelineOutputs = collectPipelineOutputRecords(result);
-  return `
-    ${pipelineDownloadsHtml(result, pipelineOutputs)}
-    ${pipelineOutputs.length ? "" : collectedBundleHtml(result)}
-    ${pipelineOutputs.length ? "" : figureArtifactsHtml(result)}
-    ${pipelineOutputs.length ? "" : structureViewerHtml(result)}
-    <div class="run-debug" aria-label="Runtime details">
-      <div class="run-tabs" role="tablist" aria-label="Runtime detail sections">
-        <button type="button" class="run-tab" role="tab" aria-selected="false" data-runtime-tab="runtime">
-          <span>Runtime</span><small>${escapeHtml(status.label)} · ${escapeHtml(formatElapsed(runtime.elapsed_seconds))}</small>
-        </button>
-        <button type="button" class="run-tab" role="tab" aria-selected="false" data-runtime-tab="plan">
-          <span>Plan &amp; execution</span><small>${(result.trace || []).length} events</small>
-        </button>
-        <button type="button" class="run-tab" role="tab" aria-selected="false" data-runtime-tab="evidence">
-          <span>Evidence</span><small>${(result.evidence?.citations || []).length} sources</small>
-        </button>
-        <button type="button" class="run-tab" role="tab" aria-selected="false" data-runtime-tab="trace">
-          <span>Trace</span><small>technical</small>
-        </button>
-      </div>
-      <section class="run-panel" role="tabpanel" data-runtime-panel="runtime" hidden>
-        ${runtimePanel(result, runtime, status)}
-      </section>
-      <section class="run-panel" role="tabpanel" data-runtime-panel="plan" hidden>
-        <p class="run-debug-note">This shows the agent’s registered operations and runtime events, without exposing private model reasoning.</p>
-        ${runOutline(result)}
-        ${executionTimeline(result)}
-      </section>
-      <section class="run-panel" role="tabpanel" data-runtime-panel="evidence" hidden>
-        <div class="evidence-panel">${evidencePanel(result)}</div>
-      </section>
-      <section class="run-panel" role="tabpanel" data-runtime-panel="trace" hidden>
-        <div class="trace-technical">${technicalTrace(result)}</div>
-      </section>
-      <div class="approval-controls"></div>
-    </div>
-  `;
-}
-
-function initializeRuntimeTabs(root = document) {
-  root.querySelectorAll(".run-debug").forEach((group) => {
-    if (group.dataset.tabsBound === "true") return;
-    group.dataset.tabsBound = "true";
-    const tabs = [...group.querySelectorAll("[data-runtime-tab]")];
-    const panels = [...group.querySelectorAll("[data-runtime-panel]")];
-    let activeKey = null;
-    const select = (key) => {
-      activeKey = activeKey === key ? null : key;
-      tabs.forEach((tab) => {
-        const active = activeKey === tab.dataset.runtimeTab;
-        tab.classList.toggle("is-active", active);
-        tab.setAttribute("aria-selected", String(active));
-      });
-      panels.forEach((panel) => {
-        panel.hidden = activeKey !== panel.dataset.runtimePanel;
-      });
-    };
-    tabs.forEach((tab) => tab.addEventListener("click", () => select(tab.dataset.runtimeTab)));
-    select(null);
-  });
-}
-
-function renderMessageText(role, text) {
-  if (role === "assistant" && typeof window.renderMarkdown === "function") {
-    return window.renderMarkdown(text);
-  }
-  return escapeHtml(text);
-}
-
-function renderMessage(role, text, result = null) {
-  const message = document.createElement("article");
-  message.className = `message ${role}`;
-  const avatar = role === "assistant" ? AGENT_ICON : "You";
-  message.innerHTML = `
-    <div class="avatar">${avatar}</div>
-    <div class="bubble">
-      <div class="bubble-text markdown-body">${renderMessageText(role, text)}</div>
-      ${resultDetails(result)}
-    </div>
-  `;
-  chat.appendChild(message);
-  const approvalHost = message.querySelector(".approval-controls");
-  if (approvalHost && window.mountToolApprovals) {
-    window.mountToolApprovals(approvalHost, result, {
-      url: "/approve",
-      isBusy: () => isRunning || isSessionLoading,
-      onBusy: (busy) => {
-        isRunning = busy;
-        sendButton.disabled = busy || isSessionLoading;
-      },
-      onResult: (next) => {
-        finishThinking(next);
-        addMessage("assistant", next.answer || "", next);
-      },
-    });
-  }
-  initializeRuntimeTabs(message);
-  initializeStructureViewers(message);
-}
-
-function initializeStructureViewers(root = document) {
-  root.querySelectorAll(".structure-viewer-details").forEach((details) => {
-    if (details.dataset.bound === "true") return;
-    details.dataset.bound = "true";
-    details.addEventListener("toggle", () => {
-      if (details.open) {
-        loadStructureViewer(details);
-      }
-    });
-    details.querySelectorAll("[data-style]").forEach((button) => {
-      button.addEventListener("click", () => {
-        applyStructureStyle(details, button.dataset.style || "cartoon");
-      });
-    });
-  });
-}
-
-async function loadStructureViewer(details) {
-  if (details.dataset.loaded === "true" || details.dataset.loading === "true") return;
-  const container = details.querySelector(".structure-canvas");
-  const viewerElement = details.querySelector(".structure-viewer");
-  if (!container || !viewerElement) return;
-  if (!window.$3Dmol) {
-    container.innerHTML = `<div class="structure-error">3Dmol.js did not load. Check network access to the CDN.</div>`;
-    return;
-  }
-  if (!browserSupportsWebGL()) {
-    container.innerHTML = `
-      <div class="structure-error">
-        <div>
-          WebGL is not available in this browser context, so the 3D viewer cannot start.<br>
-          Try Chrome/Firefox with hardware acceleration enabled, or use the local structure file in PyMOL/ChimeraX.
-        </div>
-      </div>
-    `;
-    return;
-  }
-
-  details.dataset.loading = "true";
-  const path = viewerElement.dataset.structurePath || "";
-  const pdbId = viewerElement.dataset.pdbId || "";
-  try {
-    container.innerHTML = "";
-    const response = await fetch(workspaceFileUrl(path, { viewer: "pdb" }));
-    if (!response.ok) {
-      const text = await response.text();
-      throw new Error(`Local artifact request failed: HTTP ${response.status} ${text.slice(0, 160)}`);
-    }
-    const structureText = await response.text();
-    renderStructureText(details, container, structureText, "pdb");
-  } catch (error) {
-    if (pdbId) {
-      try {
-        await renderStructureFromPdbId(details, container, pdbId);
-        return;
-      } catch (fallbackError) {
-        container.innerHTML = structureLoadErrorHtml(path, error, fallbackError);
-      }
-    } else {
-      container.innerHTML = structureLoadErrorHtml(path, error);
-    }
-  } finally {
-    details.dataset.loading = "false";
-  }
-}
-
-function renderStructureText(details, container, structureText, format) {
-  ensureViewerContainerReady(container);
-  const viewer = window.$3Dmol.createViewer(container, {
-    backgroundColor: "white",
-    antialias: true,
-  });
-  const model = viewer.addModel(structureText, format);
-  if (!model) {
-    throw new Error(`3Dmol could not parse ${format} structure text.`);
-  }
-  details._agentViewer = viewer;
-  details.dataset.loaded = "true";
-  applyStructureStyle(details, activeStructureStyle(details));
-}
-
-function renderStructureFromPdbId(details, container, pdbId) {
-  return new Promise((resolve, reject) => {
-    container.innerHTML = "";
-    let viewer;
-    try {
-      ensureViewerContainerReady(container);
-      viewer = window.$3Dmol.createViewer(container, {
-        backgroundColor: "white",
-        antialias: true,
-      });
-    } catch (error) {
-      reject(error);
-      return;
-    }
-    let settled = false;
-    const timeout = window.setTimeout(() => {
-      if (!settled) {
-        settled = true;
-        reject(new Error(`PDB fallback timed out for ${pdbId}.`));
-      }
-    }, 15000);
-    try {
-      window.$3Dmol.download(`pdb:${pdbId}`, viewer, { format: "pdb" }, (model) => {
-        if (settled) return;
-        window.clearTimeout(timeout);
-        if (!model) {
-          settled = true;
-          reject(new Error(`3Dmol PDB fallback returned no model for ${pdbId}.`));
-          return;
-        }
-        details._agentViewer = viewer;
-        details.dataset.loaded = "true";
-        applyStructureStyle(details, activeStructureStyle(details));
-        settled = true;
-        resolve();
-      });
-    } catch (error) {
-      window.clearTimeout(timeout);
-      settled = true;
-      reject(error);
-    }
-  });
-}
-
-function browserSupportsWebGL() {
-  try {
-    const canvas = document.createElement("canvas");
-    return Boolean(
-      canvas.getContext("webgl2") ||
-      canvas.getContext("webgl") ||
-      canvas.getContext("experimental-webgl")
-    );
-  } catch (error) {
-    return false;
-  }
-}
-
-function ensureViewerContainerReady(container) {
-  const rect = container.getBoundingClientRect();
-  if (rect.width < 20 || rect.height < 20) {
-    throw new Error(
-      `3D viewer container is not ready yet (${Math.round(rect.width)}x${Math.round(rect.height)}).`
-    );
-  }
-}
-
-function errorMessage(error) {
-  if (!error) return "unknown error";
-  return error.message || String(error);
-}
-
-function structureLoadErrorHtml(path, error, fallbackError = null) {
-  const localMessage = errorMessage(error);
-  const fallbackMessage = fallbackError ? `<br>Fallback: ${escapeHtml(errorMessage(fallbackError))}` : "";
-  return `
-    <div class="structure-error">
-      <div>
-        Failed to load structure.<br>
-        Local file: ${escapeHtml(path)}<br>
-        Error: ${escapeHtml(localMessage)}
-        ${fallbackMessage}
-      </div>
-    </div>
-  `;
-}
-
-function activeStructureStyle(details) {
-  const active = details.querySelector("[data-style].active");
-  return active?.dataset?.style || "cartoon";
-}
-
-function applyStructureStyle(details, style) {
-  const viewer = details._agentViewer;
-  details.querySelectorAll("[data-style]").forEach((button) => {
-    button.classList.toggle("active", button.dataset.style === style);
-  });
-  if (!viewer) {
-    if (details.open) {
-      loadStructureViewer(details);
-    }
-    return;
-  }
-
-  viewer.setStyle({}, {});
-  if (style === "stick") {
-    viewer.setStyle({}, { stick: { radius: 0.16, colorscheme: "Jmol" } });
-  } else if (style === "sphere") {
-    viewer.setStyle({}, { sphere: { scale: 0.28, colorscheme: "Jmol" } });
-  } else if (style === "line") {
-    viewer.setStyle({}, { line: { colorscheme: "Jmol" } });
-  } else {
-    viewer.setStyle({ hetflag: false }, { cartoon: { color: "spectrum" } });
-    viewer.setStyle({ hetflag: true }, { stick: { radius: 0.22, colorscheme: "greenCarbon" } });
-    viewer.setStyle({ resn: "HOH" }, {});
-  }
-  viewer.zoomTo();
-  viewer.render();
-  if (typeof viewer.resize === "function") {
-    setTimeout(() => {
-      viewer.resize();
-      viewer.render();
-    }, 0);
-  }
-}
-
 function addMessage(role, text, result = null) {
   if (chat.querySelector(".empty-state")) {
     chat.innerHTML = "";
   }
-  renderMessage(role, text, result);
-  updateCurrentSession((session) => {
+  messageRenderer.renderMessage(role, text, result);
+  sessionStore.updateCurrentSession((session) => {
     if (role === "user" && session.messages.filter((message) => message.role === "user").length === 0) {
       session.title = titleFromText(text);
     }
@@ -1726,6 +821,7 @@ function addMessage(role, text, result = null) {
       created_at: nowIso(),
     });
   });
+  renderSessionList();
   scrollBottom();
 }
 
@@ -1770,51 +866,13 @@ function handleStreamFrame(frame) {
 }
 
 async function runAgent(request, signal) {
-  const payload = {
-    request,
-    session_id: activeSessionId,
-    model_key: modelSelect.value,
-    max_turns: Number(maxTurnsInput.value || config.default_max_turns || 5),
-  };
-  const response = await fetch("/run_stream", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+  return api.run(request, {
+    sessionId: sessionStore.activeSessionId,
+    modelKey: modelSelect.value,
+    maxTurns: Number(maxTurnsInput.value || config.default_max_turns || 5),
     signal,
+    onFrame: handleStreamFrame,
   });
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(text || `HTTP ${response.status}`);
-  }
-  if (!response.body) {
-    throw new Error("Streaming response body is not available in this browser.");
-  }
-
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
-  while (true) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const frames = buffer.split(/\n\n/);
-    buffer = frames.pop() || "";
-    for (const frame of frames) {
-      const parsed = handleStreamFrame(frame);
-      if (parsed.done) {
-        return parsed.result;
-      }
-    }
-  }
-
-  buffer += decoder.decode();
-  if (buffer.trim()) {
-    const parsed = handleStreamFrame(buffer);
-    if (parsed.done) {
-      return parsed.result;
-    }
-  }
-  throw new Error("Agent stream ended before returning a result.");
 }
 
 async function submitPrompt(event) {
@@ -2041,12 +1099,12 @@ async function init() {
   initializeSidebar();
   setSessionLoading(true);
   try {
-    await loadSessions();
+    await sessionStore.loadSessions();
   } catch (error) {
     console.warn("Failed to load sessions.", error);
-    sessions = [createSession()];
-    activeSessionId = sessions[0].id;
-    rememberActiveSession();
+    sessionStore.sessions = [sessionStore.createSession()];
+    sessionStore.activeSessionId = sessionStore.sessions[0].id;
+    sessionStore.rememberActiveSession();
   }
   bindEvents();
   renderSessionList();

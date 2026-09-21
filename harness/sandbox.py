@@ -22,7 +22,7 @@ from agents.sandbox.sandboxes.unix_local import UnixLocalSandboxClient
 from agents.sandbox.session.base_sandbox_session import BaseSandboxSession
 from agents.sandbox.snapshot import NoopSnapshotSpec
 
-from tools.workspace import workspace_file_metadata
+from tools.infrastructure.workspace import workspace_file_metadata
 from .tracing import configure_tracing
 
 if TYPE_CHECKING:

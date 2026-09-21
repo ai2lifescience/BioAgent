@@ -15,7 +15,7 @@ from urllib.parse import parse_qs, unquote, urlparse
 
 from Bio.PDB import MMCIFParser, PDBIO
 
-from tools.workspace import (
+from tools.infrastructure.workspace import (
     artifact_content_type,
     artifact_suffix_config,
     can_view_structure_artifact,
@@ -34,6 +34,7 @@ from interfaces.api import (
 )
 from harness.sandbox import relative_file_path
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODELS
+from tools.infrastructure.pipeline_runtime import service as pipeline_service
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +42,11 @@ WEB_UI_DIR = PROJECT_ROOT / "web_ui"
 MAX_UPLOAD_BYTES = int(os.getenv("AGENT_MAX_UPLOAD_BYTES", str(256 * 1024 * 1024)))
 STATIC_FILES = {
     "/static/approvals.js": (WEB_UI_DIR / "approvals.js", "application/javascript; charset=utf-8"),
+    "/static/ui-utils.js": (WEB_UI_DIR / "ui-utils.js", "application/javascript; charset=utf-8"),
+    "/static/api-client.js": (WEB_UI_DIR / "api-client.js", "application/javascript; charset=utf-8"),
+    "/static/session-state.js": (WEB_UI_DIR / "session-state.js", "application/javascript; charset=utf-8"),
+    "/static/artifact-viewers.js": (WEB_UI_DIR / "artifact-viewers.js", "application/javascript; charset=utf-8"),
+    "/static/message-renderer.js": (WEB_UI_DIR / "message-renderer.js", "application/javascript; charset=utf-8"),
     "/static/app.css": (WEB_UI_DIR / "app.css", "text/css; charset=utf-8"),
     "/static/assistant.css": (WEB_UI_DIR / "assistant.css", "text/css; charset=utf-8"),
     "/static/markdown.js": (WEB_UI_DIR / "markdown.js", "application/javascript; charset=utf-8"),
@@ -141,6 +147,7 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                     "default_max_turns": DEFAULT_MAX_TURNS,
                     "models": _model_options(),
                     "files": artifact_suffix_config(),
+                    "pipelines": pipeline_service.catalog(compact=True),
                 }
             )
             return
@@ -168,6 +175,9 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             return
         if path == "/approve":
             self._handle_approval()
+            return
+        if path == "/approve_stream":
+            self._handle_approval_stream()
             return
         if path != "/run":
             self._send_json({"error": "not found"}, status=404)
@@ -231,6 +241,59 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             self._send_json(result)
         except Exception as exc:
             self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
+
+    def _handle_approval_stream(self) -> None:
+        """Resume an approved run while streaming runtime progress to the UI."""
+        try:
+            payload = self._read_json()
+            session_id = str(payload.get("session_id", "")).strip()
+            if not session_id:
+                self._send_json({"error": "session_id is required"}, status=400)
+                return
+            approved = payload.get("approved")
+            if type(approved) is not bool:
+                self._send_json({"error": "approved must be an explicit boolean"}, status=400)
+                return
+            approval_id = str(payload.get("approval_id", "")).strip() or None
+            if not approval_id:
+                self._send_json({"error": "approval_id is required"}, status=400)
+                return
+
+            self._send_stream_headers()
+            logs: list[str] = []
+            start = perf_counter()
+
+            def log_stream(message: str) -> None:
+                line = _progress_line(start, message)
+                logs.append(line)
+                if not self._send_stream_event("log", {"message": line}):
+                    raise ConnectionAbortedError("Client disconnected from approval stream.")
+
+            self._send_stream_event(
+                "status",
+                {"message": "Approval received. Resuming the run.", "session_id": session_id},
+            )
+            result = handle_approval(session_id, approved, approval_id, log_fn=log_stream)
+            result["runtime"] = _runtime_info(
+                result,
+                perf_counter() - start,
+                logs,
+                model_key=result.get("model_key"),
+                max_turns=result.get("max_turns"),
+            )
+            self._send_stream_event("result", result)
+        except ConnectionAbortedError:
+            return
+        except Exception as exc:
+            runtime = {"status": "error", "elapsed_seconds": 0, "logs": []}
+            if "start" in locals():
+                runtime["elapsed_seconds"] = round(perf_counter() - start, 2)
+            if "logs" in locals():
+                runtime["logs"] = logs[-30:]
+            self._send_stream_event(
+                "error",
+                {"error": str(exc), "error_type": type(exc).__name__, "runtime": runtime},
+            )
 
     def do_DELETE(self) -> None:
         path = urlparse(self.path).path

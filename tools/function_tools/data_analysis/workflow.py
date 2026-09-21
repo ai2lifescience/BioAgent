@@ -8,8 +8,8 @@ from typing import Any
 
 import pandas as pd
 
-from tools.common.context import WorkflowContext, ensure_workflow_context
-from tools.workspace import select_workspace_file, workspace_output_path
+from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.workspace import select_workspace_file, workspace_output_path
 
 
 SUPPORTED_SUFFIXES = (".csv", ".tsv", ".xlsx", ".xls")

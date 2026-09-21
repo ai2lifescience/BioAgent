@@ -2,8 +2,8 @@
 from __future__ import annotations
 from tools.function_tools.sequence_analysis.analysis import analyze_sequence_text as _action_sequence_analyze
 from typing import Any
-from tools.common.context import WorkflowContext, ensure_workflow_context
-from tools.workspace import select_workspace_file
+from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.workspace import select_workspace_file
 
 def sequence_analysis(sequence: str | None=None, fasta_path: str | None=None, artifact_ref: str | None=None, min_orf_length: int=90, context: WorkflowContext | None=None) -> dict[str, Any]:
     context = ensure_workflow_context(context, 'sequence_analysis')
