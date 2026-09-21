@@ -2,8 +2,8 @@
 from __future__ import annotations
 from tools.function_tools.genome_map.mapping import create_genome_map as _action_genome_map
 from typing import Any
-from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
-from tools.infrastructure.workspace import select_workspace_file, workspace_output_dir
+from tools.infrastructure.tool_support.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.workspace import select_workspace_file, workspace_output_dir, resolve_workspace_item
 
 def genome_map(fasta_path: str | None=None, genbank_path: str | None=None, gff_path: str | None=None, artifact_ref: str | None=None, layout: str='circular', label: str | None=None, min_orf_length: int=90, context: WorkflowContext | None=None) -> dict[str, Any]:
     context = ensure_workflow_context(context, 'genome_map')
@@ -12,7 +12,7 @@ def genome_map(fasta_path: str | None=None, genbank_path: str | None=None, gff_p
         source_artifact = context.latest_file(kinds=('fasta',), suffixes=('.fasta', '.fa', '.fna', '.faa'))
         if not source_artifact:
             raise ValueError('No FASTA artifact is available in this session. Download or provide a FASTA/GenBank file path first.')
-        fasta_path = str(source_artifact['path'])
+        fasta_path = str(resolve_workspace_item(context, source_artifact)[0])
     elif fasta_path:
         source, _display_path = select_workspace_file(
             context,

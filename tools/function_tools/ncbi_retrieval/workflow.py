@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from tools.function_tools.ncbi_retrieval.entrez.service import fetch_ncbi as _action_ncbi_fetch
 from typing import Any
-from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.tool_support.context import WorkflowContext, ensure_workflow_context
 from tools.infrastructure.workspace import workspace_output_dir
 from tools.function_tools.ncbi_retrieval.entrez import format_ncbi_result
 from tools.function_tools.ncbi_retrieval.entrez.spec import DEFAULT_OUTPUT_DIR_PREFIX, DEFAULT_OUTPUT_DIR_TEMPLATE

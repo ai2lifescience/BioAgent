@@ -3,7 +3,7 @@
 from .guardrails import TOOL_INPUT_GUARDRAIL, TOOL_OUTPUT_GUARDRAIL
 from .evidence import EvidenceCollector
 from .results import ToolError, ToolResult, result_envelope, run_workflow, tool_error
-from .tooling import bio_function_tool
+from .decorators import bio_function_tool
 
 __all__ = [
     "TOOL_INPUT_GUARDRAIL",

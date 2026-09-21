@@ -201,6 +201,12 @@ curl -X POST http://127.0.0.1:8000/run \
   -d '{"request": "What is GC content?"}'
 ```
 
+The HTTP request is durable: the `202` response contains a `run_id` and queued
+status. Poll `GET /runs/<run_id>` or consume resumable progress from
+`GET /runs/<run_id>/events?after=<sequence>`. The browser uses
+`POST /run_stream`, which exposes the same queued run as an SSE stream;
+`POST /approve_stream` does the same for approval resumes.
+
 
 
 ### Python
@@ -226,7 +232,7 @@ the task container images.
 - Pipeline inputs should be supplied explicitly through the request or uploaded
 through the web UI.
 - Use the pipeline catalog to discover the workflows available in this checkout.
-  See [pipeline architecture](docs/architecture.md#pipeline-runtime) for file
+  See [pipeline architecture](docs/architecture.md#pipeline-engine) for file
   handling, execution, and adding pipelines.
 
 
@@ -235,7 +241,7 @@ through the web UI.
 
 - [System architecture](docs/architecture.md)
 - [Web UI usage and examples](docs/web_usage.md)
-- [Pipeline runtime, file handling, and adding pipelines](docs/architecture.md#pipeline-runtime)
+- [Pipeline engine, file handling, and adding pipelines](docs/architecture.md#pipeline-engine)
 - [CLI usage and examples](docs/cli_usage.md)
 - [Team development workflow](docs/dev_workflow.md)
 - [Planned improvements](docs/todo.md)

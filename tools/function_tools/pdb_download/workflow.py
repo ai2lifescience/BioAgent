@@ -2,7 +2,7 @@
 from __future__ import annotations
 from tools.function_tools.pdb_download.client import download_pdb_structure as _action_pdb_download
 from typing import Any
-from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.tool_support.context import WorkflowContext, ensure_workflow_context
 from tools.infrastructure.workspace import workspace_output_dir
 
 def pdb_download(pdb_id: str, file_format: str='cif', output_dir: str | None=None, context: WorkflowContext | None=None) -> dict[str, Any]:

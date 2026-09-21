@@ -24,7 +24,7 @@ from harness import sandbox
 from harness.sessions import SessionMetadataStore
 from interfaces import web
 
-pipeline_module = importlib.import_module("tools.infrastructure.agent_sdk.pipeline_shell")
+pipeline_module = importlib.import_module("tools.infrastructure.sdk_adapters.pipeline_shell")
 
 
 def response(text="Completed."):

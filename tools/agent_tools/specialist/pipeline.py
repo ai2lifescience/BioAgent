@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from agents import FunctionTool, Model
 
-from tools.infrastructure.agent_sdk import RUNTIME_TOOLS
-from tools.infrastructure.agent_sdk.pipeline_shell import PIPELINE_INSTRUCTIONS
+from tools.infrastructure.sdk_adapters import RUNTIME_TOOLS
+from tools.infrastructure.sdk_adapters.pipeline_shell import PIPELINE_INSTRUCTIONS
 
 from .factory import build_specialist
 

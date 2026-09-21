@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Any, Callable
+from uuid import uuid4
 
 from agents import SQLiteSession
 
@@ -11,6 +12,44 @@ from harness import runtime
 from harness.runtime import delete_session, list_sessions, resume_agent, run_agent, update_session
 from harness.sandbox import delete_file, list_files, open_workspace, read_file, upload_file
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
+from harness.jobs import get_queue, result_status
+
+
+def enqueue_request(
+    request: str,
+    session_id: str | None = None,
+    model_key: str = DEFAULT_AGENT_MODEL_KEY,
+    max_turns: int = DEFAULT_MAX_TURNS,
+) -> dict[str, Any]:
+    """Queue a durable model run and return its stable run identifier."""
+    identifier = str(session_id or "").strip() or str(uuid4())
+    # Create/validate the session before starting a worker. This makes a run
+    # submitted without a browser-generated session ID addressable immediately
+    # and prevents invalid IDs from leaving orphaned queue rows.
+    turns = max(1, min(int(max_turns), 20))
+    with runtime.STATE_STORE.locked_session(identifier, request) as (session, _):
+        if session.metadata.get("pending_run"):
+            raise ValueError("Resolve the pending tool approval before sending another request.")
+        job = get_queue().enqueue(request, identifier, model_key, turns)
+        session.metadata["last_run_id"] = job["run_id"]
+        return job
+
+
+def enqueue_approval(session_id: str, approved: bool, approval_id: str) -> dict[str, Any] | None:
+    """Resume a web job in a detached worker, retaining its existing run ID."""
+    return get_queue().resume(session_id, approved, approval_id)
+
+
+def get_run(run_id: str) -> dict[str, Any]:
+    return get_queue().get(str(run_id or "").strip())
+
+
+def get_run_events(run_id: str, after: int = -1) -> list[dict[str, Any]]:
+    return get_queue().events(str(run_id or "").strip(), int(after))
+
+
+def list_runs(session_id: str | None = None) -> list[dict[str, Any]]:
+    return get_queue().list(str(session_id or "").strip() or None)
 
 
 def handle_request(
@@ -31,7 +70,18 @@ def handle_approval(
     log_fn: Callable[[str], None] | None = None,
 ) -> dict[str, Any]:
     """Approve or reject the pending SDK tool call for a session."""
-    return resume_agent(session_id, approved, approval_id, log_fn=log_fn)
+    result = resume_agent(session_id, approved, approval_id, log_fn=log_fn)
+    queue = get_queue()
+    pending = queue.pending_for_session(session_id)
+    if pending is not None:
+        queue_status = result_status(result)
+        queue.update(
+            pending["run_id"],
+            queue_status,
+            result=result,
+            error=result.get("answer") if queue_status == "failed" else None,
+        )
+    return result
 
 
 def update_session_metadata(

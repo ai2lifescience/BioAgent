@@ -5,12 +5,12 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from tools.infrastructure.pipeline_runtime.engine.config import (
+from tools.infrastructure.pipeline_engine.engine.config import (
     load_pipeline_config,
     load_runner_config,
     normalize_config_overrides,
 )
-from tools.infrastructure.pipeline_runtime.engine.inputs import (
+from tools.infrastructure.pipeline_engine.engine.inputs import (
     default_input_slot,
     normalize_input_overrides,
     pipeline_input_specs,
@@ -19,8 +19,8 @@ from tools.infrastructure.pipeline_runtime.engine.inputs import (
     validate_declared_inputs,
     validate_input_path,
 )
-from tools.infrastructure.pipeline_runtime.engine.outputs import default_pipeline_output_dir
-from tools.infrastructure.pipeline_runtime.engine.paths import (
+from tools.infrastructure.pipeline_engine.engine.outputs import default_pipeline_output_dir
+from tools.infrastructure.pipeline_engine.engine.paths import (
     resolve_optional_artifact_dir,
     resolve_pipeline_dir,
     resolve_pipeline_input_path,
@@ -30,7 +30,7 @@ from tools.infrastructure.pipeline_runtime.engine.paths import (
     resolve_project_path,
     safe_label,
 )
-from tools.infrastructure.pipeline_runtime.engine.types import PipelineContext
+from tools.infrastructure.pipeline_engine.engine.types import PipelineContext
 
 
 def run_pipeline(
@@ -62,7 +62,7 @@ def run_pipeline(
     )
     engine = str(context.runner_config.get("engine") or "").strip().lower()
     if engine == "shell":
-        from tools.infrastructure.pipeline_runtime.engine.shell import run_shell_pipeline
+        from tools.infrastructure.pipeline_engine.engine.shell import run_shell_pipeline
 
         if dry_run:
             raise ValueError(
@@ -70,15 +70,15 @@ def run_pipeline(
             )
         return run_shell_pipeline(context)
     if engine == "snakemake":
-        from tools.infrastructure.pipeline_runtime.engine.snakemake import run_snakemake_pipeline
+        from tools.infrastructure.pipeline_engine.engine.snakemake import run_snakemake_pipeline
 
         return run_snakemake_pipeline(context, cores=cores, dry_run=dry_run)
     if engine == "nextflow":
-        from tools.infrastructure.pipeline_runtime.engine.nextflow import run_nextflow_pipeline
+        from tools.infrastructure.pipeline_engine.engine.nextflow import run_nextflow_pipeline
 
         return run_nextflow_pipeline(context, cores=cores, dry_run=dry_run)
     if engine == "wdl":
-        from tools.infrastructure.pipeline_runtime.engine.wdl import run_wdl_pipeline
+        from tools.infrastructure.pipeline_engine.engine.wdl import run_wdl_pipeline
 
         return run_wdl_pipeline(context, dry_run=dry_run)
     raise ValueError(

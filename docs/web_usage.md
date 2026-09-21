@@ -97,6 +97,8 @@ The separate page keeps its conversation while it is open. Reloading or choosing
 **New chat** starts a new session; context labels stay on screen. **Stop waiting**
 disconnects the response stream; work already started on the server may continue.
 
+Agent requests are durable queued runs. `POST /run` returns a `run_id`; poll `GET /runs/<run_id>` for status, use `GET /runs?session_id=<id>` to list session runs, or read resumable events from `GET /runs/<run_id>/events?after=<sequence>`. `POST /run_stream` and `POST /approve_stream` expose the queued run and approval resume as SSE.
+
 On the main page, use the session actions beside a conversation to rename it or
 pin it. Pinned conversations stay at the top of the list and the title and pin
 state are stored with the server-side session metadata.
@@ -284,7 +286,7 @@ the biology tools:
   preserves source URLs and bounded excerpts for citations; curated NCBI and
   database requests still use their dedicated tools.
 - **Coding assistant:** use `code_inspection` for read-only workspace questions.
-  `code_edit` and `code_test` are approval-controlled and limited to the active
+  `code_edit` and `code_test` are direct and limited to the active
   session workspace and bounded commands.
 
 For a task combining several operations, the root agent can delegate to

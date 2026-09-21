@@ -2,8 +2,8 @@
 from __future__ import annotations
 from tools.function_tools.protein_structure_analysis.analysis import analyze_protein_structure_file as _action_protein_structure_analyze
 from typing import Any
-from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
-from tools.infrastructure.workspace import select_workspace_file
+from tools.infrastructure.tool_support.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.workspace import select_workspace_file, resolve_workspace_item
 
 def protein_structure_analysis(structure_path: str | None=None, artifact_ref: str | None=None, context: WorkflowContext | None=None) -> dict[str, Any]:
     context = ensure_workflow_context(context, 'protein_structure_analysis')
@@ -12,8 +12,8 @@ def protein_structure_analysis(structure_path: str | None=None, artifact_ref: st
         source_artifact = context.latest_file(kinds=('structure',), suffixes=('.cif', '.mmcif', '.pdb'))
         if not source_artifact:
             raise ValueError('No structure artifact is available in this session. Use pdb_download first or provide a structure_path.')
-        structure_path = str(source_artifact['path'])
-        display_path = str(source_artifact.get('workspace_path') or source_artifact.get('path') or structure_path)
+        source, display_path = resolve_workspace_item(context, source_artifact)
+        structure_path = str(source)
     elif structure_path:
         source, display_path = select_workspace_file(
             context,

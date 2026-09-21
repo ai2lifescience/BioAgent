@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from tools.infrastructure.tooling.context import WorkflowContext
+from tools.infrastructure.tool_support.context import WorkflowContext
 
 
 def session_root(context: WorkflowContext) -> Path:

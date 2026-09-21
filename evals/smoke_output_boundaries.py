@@ -14,7 +14,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from tools.function_tools.ncbi_retrieval.workflow import ncbi_retrieval
 from tools.function_tools.pdb_download.workflow import pdb_download
 from tools.function_tools.species_report.workflow import species_report
-from tools.infrastructure.tooling.context import WorkflowContext
+from tools.infrastructure.tool_support.context import WorkflowContext
 from tools.infrastructure.workspace import workspace_output_dir
 
 

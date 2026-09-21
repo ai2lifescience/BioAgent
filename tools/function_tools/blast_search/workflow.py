@@ -2,7 +2,7 @@
 from __future__ import annotations
 from tools.function_tools.blast_search.client import run_blast_search as _action_blast_search
 from typing import Any
-from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.tool_support.context import WorkflowContext, ensure_workflow_context
 
 def blast_search(sequence: str | None=None, rid: str | None=None, program: str='blastn', database: str='nt', hitlist_size: int=10, expect: float=10.0, wait: bool=False, timeout_seconds: int=120, context: WorkflowContext | None=None) -> dict[str, Any]:
     context = ensure_workflow_context(context, 'blast_search')

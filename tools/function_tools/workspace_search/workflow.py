@@ -8,7 +8,7 @@ from typing import Any
 
 from pypdf import PdfReader
 
-from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.tool_support.context import WorkflowContext, ensure_workflow_context
 from tools.infrastructure.workspace import resolve_workspace_item
 
 

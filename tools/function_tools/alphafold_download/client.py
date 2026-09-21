@@ -8,7 +8,7 @@ from typing import Any
 
 import requests
 
-from tools.infrastructure.tooling.http import request_http, response_provenance, validate_https_url
+from tools.infrastructure.tool_support.http import request_http, response_provenance, validate_https_url
 
 
 ALPHAFOLD_API_BASE = "https://alphafold.ebi.ac.uk/api"

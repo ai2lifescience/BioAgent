@@ -8,8 +8,8 @@ from pathlib import Path
 from agents import ShellTool
 from agents.tool import ShellCommandRequest, ShellCommandOutput, ShellResult, ShellCallOutcome
 
-from tools.infrastructure.pipeline_runtime.commands import dispatch, parse_command
-from tools.infrastructure.pipeline_runtime.store import JobStore
+from tools.infrastructure.pipeline_engine.commands import dispatch, parse_command
+from tools.infrastructure.pipeline_engine.store import JobStore
 
 PIPELINE_INSTRUCTIONS = """
 Use pipeline_shell (the SDK local shell tool) for pipeline operations. Its only
@@ -69,13 +69,15 @@ def workspace(context) -> Path:
     workspace override.  The fallback keeps direct operator tests usable, while
     normal Runner calls must agree with the SDK sandbox manifest.
     """
-    from harness.sandbox import session_root
-    expected = session_root(context.session_id).resolve()
     sandbox_session = getattr(context, "sandbox_session", None)
     if sandbox_session is None:
-        return expected
+        session_dir = str(getattr(context, "run", {}).get("session_dir") or "").strip()
+        if not session_dir:
+            raise ValueError("Pipeline workspace is unavailable.")
+        return Path(session_dir).resolve()
     manifest_root = Path(sandbox_session.state.manifest.root).resolve()
-    if manifest_root != expected:
+    session_dir = str(getattr(context, "run", {}).get("session_dir") or "").strip()
+    if session_dir and manifest_root != Path(session_dir).resolve():
         raise ValueError("Pipeline workspace does not match the active SDK sandbox.")
     return manifest_root
 
@@ -116,13 +118,14 @@ async def execute_local_pipeline_command(request: ShellCommandRequest) -> ShellR
     except Exception as exc:
         value = {"status": "error", "error": str(exc), "error_type": type(exc).__name__}
         code = 1
+    value = context.public(value)
     record = {"tool": "pipeline_shell", "arguments": {"command": command}, "result": value,
               "tool_calls": [{"tool": "pipeline_shell", "arguments": {"command": command}, "result": value,
                               "status": "error" if code else "ok", "error": value.get("error")}]}
     context.tool_results.append(record)
     context.record("pipeline_command_finished", command=command, status=value["status"])
     if context.sandbox_session is not None:
-        from harness.sandbox import list_files
+        from tools.infrastructure.workspace.sdk import list_files
         context.files = await list_files(context.sandbox_session)
     return ShellResult(output=[ShellCommandOutput(command=command, stdout=json.dumps(value),
         outcome=ShellCallOutcome(type="exit", exit_code=code))], max_output_length=32000)

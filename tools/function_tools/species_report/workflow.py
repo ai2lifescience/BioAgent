@@ -10,7 +10,7 @@ from tools.function_tools.species_report.reporting.opinions import collect_speci
 from tools.function_tools.species_report.reporting.synthesis import synthesize_species_markdown_report as _action_species_report_synthesis
 from tools.function_tools.species_report.writer import write_markdown_report as _action_markdown_report_writer
 from typing import Any, Callable
-from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.tool_support.context import WorkflowContext, ensure_workflow_context
 from tools.infrastructure.workspace import session_output_dir, workspace_output_dir
 from tools.function_tools.species_report.research import build_research_question, build_source_query, collection_name_for, normalize_text, source_summary
 DEFAULT_MAX_PUBMED = 6

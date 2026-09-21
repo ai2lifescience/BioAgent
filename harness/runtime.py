@@ -14,7 +14,7 @@ from agents.sandbox import SandboxRunConfig
 from agents.exceptions import InputGuardrailTripwireTriggered
 from agents.tracing import gen_trace_id
 
-from tools.infrastructure.tooling.evidence import EvidenceCollector
+from tools.infrastructure.tool_support.evidence import EvidenceCollector
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 from models.openrouter_provider import OpenRouterProvider
 
@@ -51,8 +51,8 @@ def _approval_details(items: list[Any], context: AgentRunContext | None = None) 
             "arguments": arguments,
         }
         if item.tool_name == "pipeline_shell" and context and isinstance(arguments, dict):
-            from tools.infrastructure.pipeline_runtime.commands import parse_command
-            from tools.infrastructure.pipeline_runtime.store import JobStore
+            from tools.infrastructure.pipeline_engine.commands import parse_command
+            from tools.infrastructure.pipeline_engine.store import JobStore
             try:
                 args = parse_command(arguments["commands"][0])
                 identifier = args.plan_id if args.operation == "run" else args.job_id
@@ -63,6 +63,50 @@ def _approval_details(items: list[Any], context: AgentRunContext | None = None) 
     return details
 
 
+def _stream_event_payload(event: Any, context: AgentRunContext) -> tuple[str, dict[str, Any]]:
+    """Project one SDK stream event into a small, public event envelope.
+
+    SDK event objects can contain provider-specific response objects and model
+    arguments. Persist only stable semantic fields so the queue never becomes a
+    second copy of the SDK's private runtime state.
+    """
+    event_type = str(getattr(event, "type", "sdk_event"))
+    payload: dict[str, Any] = {"sdk_type": event_type}
+    if event_type == "raw_response_event":
+        data = getattr(event, "data", None)
+        data_type = str(getattr(data, "type", "raw_response"))
+        payload["data_type"] = data_type
+        if data_type == "response.output_text.delta":
+            payload["delta"] = str(getattr(data, "delta", ""))
+        return "sdk_raw_response", context.public(payload)
+    if event_type == "run_item_stream_event":
+        payload["name"] = str(getattr(event, "name", ""))
+        item = getattr(event, "item", None)
+        if item is not None:
+            payload["item_type"] = str(getattr(item, "type", ""))
+            for key in ("tool_name", "call_id"):
+                value = getattr(item, key, None)
+                if value:
+                    payload[key] = str(value)
+        return "sdk_run_item", context.public(payload)
+    if event_type == "agent_updated_stream_event":
+        agent = getattr(event, "new_agent", None)
+        payload["agent"] = str(getattr(agent, "name", ""))
+        return "sdk_agent_updated", context.public(payload)
+    return "sdk_event", context.public(payload)
+
+
+def _emit_stream_event(
+    event: Any,
+    context: AgentRunContext,
+    event_fn: Callable[[str, dict[str, Any]], None] | None,
+) -> None:
+    if event_fn is None:
+        return
+    name, payload = _stream_event_payload(event, context)
+    event_fn(name, payload)
+
+
 async def async_run_agent(
     request: str,
     session_id: str | None = None,
@@ -70,6 +114,7 @@ async def async_run_agent(
     max_turns: int = DEFAULT_MAX_TURNS,
     log_fn: Callable[[str], None] | None = None,
     model: Model | None = None,
+    event_fn: Callable[[str, dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
     request = str(request or "").strip()
     if not request:
@@ -79,7 +124,7 @@ async def async_run_agent(
         if session.metadata.get("pending_run"):
             raise ValueError("Resolve the pending tool approval before sending another request in this session.")
         prepare_run(session)
-        return await _execute(session, request, model_key, max_turns, log_fn, model)
+        return await _execute(session, request, model_key, max_turns, log_fn, model, event_fn)
 
 
 async def async_resume_agent(
@@ -89,6 +134,7 @@ async def async_resume_agent(
     *,
     log_fn: Callable[[str], None] | None = None,
     model: Model | None = None,
+    event_fn: Callable[[str, dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
     """Apply an explicit decision to a saved SDK interruption and resume it."""
     identifier = str(session_id or "").strip()
@@ -105,7 +151,7 @@ async def async_resume_agent(
             raise ValueError("Unknown or expired approval_id for this session.")
         return await _execute(
             session, pending["request"], pending["model_key"], pending["max_turns"],
-            log_fn, model, pending=pending, decision=(matching[0], approved),
+            log_fn, model, event_fn, pending=pending, decision=(matching[0], approved),
         )
 
 
@@ -116,6 +162,7 @@ async def _execute(
     max_turns: int,
     log_fn: Callable[[str], None] | None,
     model: Model | None,
+    event_fn: Callable[[str, dict[str, Any]], None] | None = None,
     *,
     pending: dict[str, Any] | None = None,
     decision: tuple[int, bool] | None = None,
@@ -173,18 +220,32 @@ async def _execute(
         async with open_workspace(session.session_id) as sandbox_session:
             context.sandbox_session = sandbox_session
             context.files = await list_files(sandbox_session)
-            result = await Runner.run(
-                agent, run_input, context=context, max_turns=max(1, int(max_turns)),
-                hooks=AgentHooks(),
-                run_config=RunConfig(
-                    model_provider=provider,
-                    workflow_name="Pipeline2Agent", trace_id=trace_id, group_id=session.session_id,
-                    trace_include_sensitive_data=False,
-                    tool_execution=ToolExecutionConfig(max_function_tool_concurrency=4),
-                    sandbox=SandboxRunConfig(session=sandbox_session, cwd="."),
-                ),
-                session=sdk_session,
+            run_config = RunConfig(
+                model_provider=provider,
+                workflow_name="Pipeline2Agent", trace_id=trace_id, group_id=session.session_id,
+                trace_include_sensitive_data=False,
+                tool_execution=ToolExecutionConfig(max_function_tool_concurrency=4),
+                sandbox=SandboxRunConfig(session=sandbox_session, cwd="."),
             )
+            # A caller opts into SDK streaming by supplying an event sink. The
+            # durable worker does so; direct library callers retain a compact
+            # non-streaming result unless they explicitly request events. The
+            # SDK test model intentionally uses its non-streaming fixture path.
+            test_model = type(model).__module__.startswith("agents.testing") if model is not None else False
+            use_stream = event_fn is not None and not test_model
+            if not use_stream:
+                result = await Runner.run(
+                    agent, run_input, context=context, max_turns=max(1, int(max_turns)),
+                    hooks=AgentHooks(), run_config=run_config, session=sdk_session,
+                )
+            else:
+                streamed = Runner.run_streamed(
+                    agent, run_input, context=context, max_turns=max(1, int(max_turns)),
+                    hooks=AgentHooks(), run_config=run_config, session=sdk_session,
+                )
+                async for stream_event in streamed.stream_events():
+                    _emit_stream_event(stream_event, context, event_fn)
+                result = streamed
             context.files = await list_files(sandbox_session)
         if result.interruptions:
             snapshot = result.to_state().to_json(context_serializer=lambda _context: {})
@@ -226,7 +287,7 @@ async def _execute(
         else:
             session.metadata.pop("last_approval", None)
     run = dict(session.metadata.get("run") or {})
-    response = {
+    response = context.public({
         "answer": answer, "status": status, "approval_required": bool(approvals),
         "approvals": approvals, "session_id": session.session_id,
         "max_turns": max_turns,
@@ -235,12 +296,12 @@ async def _execute(
         "run": run, "files": context.files,
         "approval_decision": approval_decision,
         "runtime": "agents_sdk", "model_key": model_key,
-    }
+    })
     if snapshot is None:
         # Pauses are not additional conversational exchanges. Persist the
         # structured result only after the complete result envelope exists so
         # the web UI can rebuild plans and visual artifacts after a reload.
-        STATE_STORE.record_exchange(session, request, answer, result=response)
+        STATE_STORE.record_exchange(session, request, response["answer"], result=response)
     return response
 
 
@@ -251,24 +312,26 @@ def run_agent(
     max_turns: int = DEFAULT_MAX_TURNS,
     log_fn: Callable[[str], None] | None = None,
     model: Model | None = None,
+    event_fn: Callable[[str, dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
     """Synchronous wrapper for CLI, HTTP, and notebook callers."""
     try:
         asyncio.get_running_loop()
     except RuntimeError:
-        return asyncio.run(async_run_agent(request, session_id, model_key, max_turns, log_fn, model))
+        return asyncio.run(async_run_agent(request, session_id, model_key, max_turns, log_fn, model, event_fn))
     raise RuntimeError("An event loop is already running; await async_run_agent instead.")
 
 
 def resume_agent(
     session_id: str, approved: bool, approval_id: str, *,
     log_fn: Callable[[str], None] | None = None,
+    event_fn: Callable[[str, dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
     """Synchronous wrapper for :func:`async_resume_agent`."""
     try:
         asyncio.get_running_loop()
     except RuntimeError:
-        return asyncio.run(async_resume_agent(session_id, approved, approval_id, log_fn=log_fn))
+        return asyncio.run(async_resume_agent(session_id, approved, approval_id, log_fn=log_fn, event_fn=event_fn))
     raise RuntimeError("An event loop is already running; await async_resume_agent instead.")
 
 

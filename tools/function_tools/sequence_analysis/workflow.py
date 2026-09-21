@@ -2,8 +2,8 @@
 from __future__ import annotations
 from tools.function_tools.sequence_analysis.analysis import analyze_sequence_text as _action_sequence_analyze
 from typing import Any
-from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
-from tools.infrastructure.workspace import select_workspace_file
+from tools.infrastructure.tool_support.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.workspace import select_workspace_file, resolve_workspace_item
 
 def sequence_analysis(sequence: str | None=None, fasta_path: str | None=None, artifact_ref: str | None=None, min_orf_length: int=90, context: WorkflowContext | None=None) -> dict[str, Any]:
     context = ensure_workflow_context(context, 'sequence_analysis')
@@ -13,8 +13,8 @@ def sequence_analysis(sequence: str | None=None, fasta_path: str | None=None, ar
         source_artifact = context.latest_file(kinds=('fasta',), suffixes=('.fasta', '.fa', '.fna', '.faa'))
         if not source_artifact:
             raise ValueError('No FASTA artifact is available in this session. Download or provide a FASTA file path first.')
-        fasta_path = str(source_artifact['path'])
-        display_path = str(source_artifact.get('workspace_path') or source_artifact.get('path') or fasta_path)
+        source, display_path = resolve_workspace_item(context, source_artifact)
+        fasta_path = str(source)
     elif fasta_path:
         source, display_path = select_workspace_file(
             context,

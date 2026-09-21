@@ -29,8 +29,8 @@ def digest(path: Path) -> str:
 
 
 def definition(name: str):
-    from tools.infrastructure.pipeline_runtime.engine.config import load_runner_config, load_pipeline_config
-    from tools.infrastructure.pipeline_runtime.engine.paths import resolve_pipeline_dir, resolve_pipeline_name
+    from tools.infrastructure.pipeline_engine.engine.config import load_runner_config, load_pipeline_config
+    from tools.infrastructure.pipeline_engine.engine.paths import resolve_pipeline_dir, resolve_pipeline_name
     directory = resolve_pipeline_dir(resolve_pipeline_name(name))
     manifest, _ = load_runner_config(directory)
     config, _ = load_pipeline_config(directory, manifest)
@@ -52,8 +52,8 @@ def definition_hash(directory: Path) -> str:
 
 
 def catalog(*, compact: bool = False) -> list[dict]:
-    from tools.infrastructure.pipeline_runtime.engine.inputs import pipeline_input_specs
-    from tools.infrastructure.pipeline_runtime.engine.outputs import pipeline_output_specs
+    from tools.infrastructure.pipeline_engine.engine.inputs import pipeline_input_specs
+    from tools.infrastructure.pipeline_engine.engine.outputs import pipeline_output_specs
     entries = []
     for path in sorted(PIPELINES_ROOT.iterdir()):
         if not (path / "runner.yaml").is_file():
@@ -168,9 +168,9 @@ def stage_example(root: Path, name: str) -> dict:
 
 def plan(root: Path, name: str, inputs: dict, params: dict, cores: int = 1,
          timeout: int | None = None, dry_run: bool = False) -> dict:
-    from tools.infrastructure.pipeline_runtime.engine.inputs import pipeline_input_specs, validate_input_value
-    from tools.infrastructure.pipeline_runtime.engine.outputs import pipeline_output_specs
-    from tools.infrastructure.pipeline_runtime.engine.config import apply_config_overrides, apply_runner_param_overrides, apply_runner_preset
+    from tools.infrastructure.pipeline_engine.engine.inputs import pipeline_input_specs, validate_input_value
+    from tools.infrastructure.pipeline_engine.engine.outputs import pipeline_output_specs
+    from tools.infrastructure.pipeline_engine.engine.config import apply_config_overrides, apply_runner_param_overrides, apply_runner_preset
     directory, manifest, config = definition(name)
     engine = manifest.get("engine")
     if engine not in {"shell", "snakemake", "nextflow", "wdl"}:
@@ -275,7 +275,7 @@ def start(root: Path, plan_id: str) -> dict:
         env["PATH"] = str(Path(sys.executable).parent) + os.pathsep + env.get("PATH", os.defpath)
         env.update(PYTHONPATH=str(PROJECT_ROOT), PYTHONUNBUFFERED="1")
         with (directory / "stdout.log").open("ab") as stdout, (directory / "stderr.log").open("ab") as stderr:
-            process = subprocess.Popen([sys.executable, "-m", "tools.infrastructure.pipeline_runtime.worker", str(root), plan_id],
+            process = subprocess.Popen([sys.executable, "-m", "tools.infrastructure.pipeline_engine.worker", str(root), plan_id],
                 cwd=PROJECT_ROOT, stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr,
                 env=env, start_new_session=True)
         row.update(status="queued", pid=process.pid, process_identity=identity(process.pid), queued_at=now())
@@ -363,8 +363,8 @@ def results(root: Path, job_id: str, max_rows: int = 10) -> dict:
 
 def execute_engine(root: Path, record: dict) -> dict:
     """Reuse all four engine adapters with immutable input copies and job-local outputs."""
-    from tools.infrastructure.pipeline_runtime.engine.inputs import pipeline_input_specs
-    from tools.infrastructure.pipeline_runtime.engine.runner import prepare_pipeline_context
+    from tools.infrastructure.pipeline_engine.engine.inputs import pipeline_input_specs
+    from tools.infrastructure.pipeline_engine.engine.runner import prepare_pipeline_context
     plan = record["plan"]
     verify(root, plan)
     store = JobStore(root)
@@ -389,16 +389,16 @@ def execute_engine(root: Path, record: dict) -> dict:
     output_dir.mkdir(exist_ok=True)
     context = replace(context, run_dir=output_dir, output_dir=output_dir)
     if plan["engine"] == "shell":
-        from tools.infrastructure.pipeline_runtime.engine.shell import run_shell_pipeline
+        from tools.infrastructure.pipeline_engine.engine.shell import run_shell_pipeline
         result = run_shell_pipeline(context)
     elif plan["engine"] == "snakemake":
-        from tools.infrastructure.pipeline_runtime.engine.snakemake import run_snakemake_pipeline
+        from tools.infrastructure.pipeline_engine.engine.snakemake import run_snakemake_pipeline
         result = run_snakemake_pipeline(context, cores=plan["cores"], dry_run=plan["dry_run"])
     elif plan["engine"] == "nextflow":
-        from tools.infrastructure.pipeline_runtime.engine.nextflow import run_nextflow_pipeline
+        from tools.infrastructure.pipeline_engine.engine.nextflow import run_nextflow_pipeline
         result = run_nextflow_pipeline(context, cores=plan["cores"], dry_run=plan["dry_run"])
     else:
-        from tools.infrastructure.pipeline_runtime.engine.wdl import run_wdl_pipeline
+        from tools.infrastructure.pipeline_engine.engine.wdl import run_wdl_pipeline
         result = run_wdl_pipeline(context, dry_run=plan["dry_run"])
     for item in result["output_records"]:
         path = Path(item["path"]).resolve()

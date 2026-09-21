@@ -54,7 +54,7 @@ different key with `--model-key`.
 
 Biological workflows are SDK `FunctionTool` objects exported by
 `tools/function_tools`. Pipeline operations use the local `pipeline_shell`
-ShellTool exported by `tools/infrastructure/agent_sdk`.
+ShellTool exported by `tools/infrastructure/sdk_adapters`.
 
 | Workflow | Main tool or actions |
 | --- | --- |
@@ -73,7 +73,7 @@ ShellTool exported by `tools/infrastructure/agent_sdk`.
 | `data_analysis` | Profile, describe, group, or plot tables |
 | `web_research` | Search public web pages with bounded excerpts |
 | `code_inspection` | Inspect or search workspace code |
-| `code_edit` / `code_test` | Approval-controlled workspace changes and tests |
+| `code_edit` / `code_test` | Bounded direct workspace changes and tests |
 | `species_report` | literature retrieval, RAG, and report actions |
 | `biology_analysis` | Biopython transformations and GenBank features |
 
@@ -84,7 +84,8 @@ The root and specialist agents share the run's SDK model provider. See the
 [model architecture](architecture.md#models-and-provider-ownership) for model
 resolution, client ownership, and reporting behavior.
 
-Pipeline execution and cancellation pause for SDK approval. The JSON result's
+Pipeline execution and cancellation pause for SDK approval. Agent requests submitted
+through the web API are durable queued runs and expose status/events by run ID. The JSON result's
 `approvals` list includes an `approval_id`; approve or reject it with the CLI
 options above, or POST the same `session_id`, `approval_id`, and boolean
 `approved` to `/approve`. Discovery, planning, status, result collection, and

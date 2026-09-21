@@ -16,7 +16,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from tools.function_tools.bio_database_search.adapters.alphafold import query_alphafold
-from tools.infrastructure.tooling.http import request_http, validate_https_url
+from tools.infrastructure.tool_support.http import request_http, validate_https_url
 from tools.function_tools.bio_database_search.adapters.interpro import query_interpro
 from tools.function_tools.bio_database_search.adapters.kegg import query_kegg
 from tools.function_tools.pdb_download.client import query_pdb
@@ -49,7 +49,7 @@ class FakeResponse:
 
 
 def _single_response(response: FakeResponse):
-    return patch("tools.infrastructure.tooling.http.requests.request", return_value=response)
+    return patch("tools.infrastructure.tool_support.http.requests.request", return_value=response)
 
 
 def main() -> int:
@@ -130,7 +130,7 @@ def main() -> int:
             FakeResponse(payload=alphafold_payload),
             FakeResponse(content=b"data_mock\n#\n"),
         ]
-        with patch("tools.infrastructure.tooling.http.requests.request", side_effect=responses):
+        with patch("tools.infrastructure.tool_support.http.requests.request", side_effect=responses):
             alphafold = query_alphafold(
                 "P0A7V8",
                 download=True,

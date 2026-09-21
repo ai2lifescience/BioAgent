@@ -1,4 +1,4 @@
-"""Read-only inspection and approval-controlled coding actions in a session."""
+"""Read-only inspection, edits, and bounded test commands in a session."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ import subprocess
 import tempfile
 from typing import Any
 
-from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.tool_support.context import WorkflowContext, ensure_workflow_context
 from tools.infrastructure.workspace import resolve_session_path, session_root
 
 

@@ -11,6 +11,8 @@ the current Pipeline2Agent runtime.
   embeddings across OpenRouter providers.
 - Add redacted trace export to a selected observability backend when required.
 - Add retention and cleanup policies for old SQLite sessions and workspaces.
+- Add retention and cleanup policies for completed durable agent-run jobs and
+  their event history.
 - Expand live evaluation coverage with a temporary OpenRouter key.
 
 ## Current guarantees

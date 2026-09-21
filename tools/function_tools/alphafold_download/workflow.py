@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.tool_support.context import WorkflowContext, ensure_workflow_context
 from tools.infrastructure.workspace import workspace_output_dir
 from .client import download_alphafold_structure
 

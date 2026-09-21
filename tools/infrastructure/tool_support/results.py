@@ -53,6 +53,8 @@ def tool_error(ctx: RunContextWrapper[Any], error: Exception) -> str:
     """SDK failure formatter, including malformed model arguments."""
     result = {'error': str(error), 'error_type': type(error).__name__}
     context = ctx.context
+    if hasattr(context, 'public'):
+        result = context.public(result)
     name = getattr(ctx, 'tool_name', 'unknown_tool')
     if hasattr(context, 'tool_results'):
         context.tool_results.append({'tool': name, 'arguments': {}, 'result': result, 'tool_calls': []})
@@ -80,13 +82,14 @@ async def run_workflow(
         result = {'error': str(exc), 'error_type': type(exc).__name__}
     record = {'workflow': name, 'category': category, 'arguments': arguments,
               'result': result, 'tool_calls': workflow_context.action_calls}
+    record = context.public(record)
     context.tool_results.append(record)
-    envelope = result_envelope(result)
+    envelope = result_envelope(record['result'])
     if getattr(context, "sandbox_session", None) is not None:
-        from harness.sandbox import list_files
+        from tools.infrastructure.workspace.sdk import list_files
         context.files = await list_files(context.sandbox_session)
         envelope.files = context.files
-    from tools.infrastructure.tooling.evidence import EvidenceCollector
+    from tools.infrastructure.tool_support.evidence import EvidenceCollector
     envelope.evidence = EvidenceCollector().collect([record])['citations']
     context.record('tool_finished', tool=name, status=envelope.status)
     return envelope.model_dump_json()

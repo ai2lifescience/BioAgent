@@ -5,7 +5,7 @@ from __future__ import annotations
 from agents import Model
 from agents.sandbox import Manifest, SandboxAgent
 
-from tools.infrastructure.agent_sdk.pipeline_shell import PIPELINE_INSTRUCTIONS
+from tools.infrastructure.sdk_adapters.pipeline_shell import PIPELINE_INSTRUCTIONS
 
 from .guardrails import INPUT_GUARDRAIL, OUTPUT_GUARDRAIL
 from tools.registry import build_all_tools
@@ -67,8 +67,8 @@ responsibility for the final answer, including work delegated to specialists.
   and excerpts as citations. Use web_research_specialist for coordinated research
   across several sources.
 - Use code_inspection for read-only workspace code questions. Use coding_specialist
-  for a multi-step coding task; code_edit and code_test require explicit runtime
-  approval and must stay within the active workspace.
+  for a multi-step coding task. code_edit and code_test execute directly and
+  must stay within the active workspace.
 - Use biology_specialist when a biology task combines sequence, file, genome,
   similarity, structure, or Biopython operations. Use the direct tool for one
   operation.

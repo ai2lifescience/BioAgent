@@ -10,12 +10,12 @@ from typing import Any
 
 import requests
 
-from tools.infrastructure.pipeline_runtime.engine.config import write_runtime_config
-from tools.infrastructure.pipeline_runtime.engine.inputs import stringify_input_value
-from tools.infrastructure.pipeline_runtime.engine.outputs import finalize_output_records
-from tools.infrastructure.pipeline_runtime.engine.paths import read_json, resolve_pipeline_file
-from tools.infrastructure.pipeline_runtime.engine.types import PipelineContext
-from tools.infrastructure.pipeline_runtime.engine.wdl import (
+from tools.infrastructure.pipeline_engine.engine.config import write_runtime_config
+from tools.infrastructure.pipeline_engine.engine.inputs import stringify_input_value
+from tools.infrastructure.pipeline_engine.engine.outputs import finalize_output_records
+from tools.infrastructure.pipeline_engine.engine.paths import read_json, resolve_pipeline_file
+from tools.infrastructure.pipeline_engine.engine.types import PipelineContext
+from tools.infrastructure.pipeline_engine.engine.wdl import (
     copy_declared_outputs,
     output_path_by_name,
     write_wdl_inputs,

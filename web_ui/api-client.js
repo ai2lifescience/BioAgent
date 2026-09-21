@@ -27,6 +27,18 @@ export function createApiClient({ fetchImpl = window.fetch.bind(window) } = {}) 
       return requestJson(`/sessions/${encodeURIComponent(sessionId)}/messages`);
     },
 
+    async getRun(runId) {
+      return requestJson(`/runs/${encodeURIComponent(runId)}`);
+    },
+
+    async getRunEvents(runId, after = -1) {
+      return requestJson(`/runs/${encodeURIComponent(runId)}/events?after=${encodeURIComponent(after)}`);
+    },
+
+    async listRuns(sessionId) {
+      return requestJson(`/runs?session_id=${encodeURIComponent(sessionId || "")}`);
+    },
+
     async deleteSession(sessionId) {
       return requestJson(`/sessions/${encodeURIComponent(sessionId)}`, { method: "DELETE" });
     },

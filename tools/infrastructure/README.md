@@ -3,10 +3,10 @@
 This package contains runtime implementation details shared by the agent, web
 server, CLI, and pipeline workers. Model-facing tools remain under `tools/`.
 
-- `agent_sdk/` — SDK adapters such as the approval-aware `pipeline_shell`.
-- `pipeline_runtime/` — pipeline catalog, validation, job storage, workers, and
+- `sdk_adapters/` — SDK adapters such as the approval-aware `pipeline_shell`.
+- `pipeline_engine/` — pipeline catalog, validation, job storage, workers, and
   engine adapters.
-- `tooling/` — generic guardrails, context, evidence, result envelopes, and
+- `tool_support/` — generic guardrails, context, evidence, result envelopes, and
   bounded HTTP helpers used by function tools.
 - `workspace/` — safe session paths and workspace artifact metadata.
 

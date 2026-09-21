@@ -13,7 +13,7 @@ import socket
 from typing import Any
 
 import requests
-from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.tool_support.context import WorkflowContext, ensure_workflow_context
 from .parsing import extract_html_text, parse_duckduckgo_results
 
 

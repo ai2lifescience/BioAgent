@@ -8,8 +8,8 @@ from agents import RunContextWrapper
 from pydantic import Field
 
 from harness.context import AgentRunContext
-from tools.infrastructure.tooling.results import run_workflow
-from tools.infrastructure.tooling.tooling import bio_function_tool
+from tools.infrastructure.tool_support.results import run_workflow
+from tools.infrastructure.tool_support.decorators import bio_function_tool
 
 from .workflow import web_research as _workflow
 

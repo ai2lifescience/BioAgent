@@ -2,7 +2,7 @@
 from __future__ import annotations
 from tools.function_tools.bio_database_search.service import search_bio_database_tool as _action_bio_database_search
 from typing import Any
-from tools.infrastructure.tooling.context import WorkflowContext, ensure_workflow_context
+from tools.infrastructure.tool_support.context import WorkflowContext, ensure_workflow_context
 
 def database_lookup(database: str, query: str, max_results: int=5, operation: str | None=None, taxid: int | None=None, context: WorkflowContext | None=None) -> dict[str, Any]:
     context = ensure_workflow_context(context, 'database_lookup')

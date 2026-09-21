@@ -8,7 +8,7 @@ import time
 from typing import Any
 from urllib.parse import quote
 
-from tools.infrastructure.tooling.http import request_http, response_provenance
+from tools.infrastructure.tool_support.http import request_http, response_provenance
 
 
 KEGG_BASE_URL = "https://rest.kegg.jp"

@@ -735,6 +735,9 @@ function finishThinking(result) {
   setSendButtonState(false);
   sendButton.disabled = isSessionLoading;
   setComposerControlsDisabled(isSessionLoading);
+  if (result?.job_id) {
+    sessionStore.currentSession().last_run_id = String(result.job_id);
+  }
   if (result?.session_id && result.session_id !== sessionStore.activeSessionId) {
     const session = sessionStore.currentSession();
     session.id = result.session_id;

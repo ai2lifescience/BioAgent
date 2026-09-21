@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Callable
 
-from tools.infrastructure.tooling.context import WorkflowContext
+from tools.infrastructure.tool_support.context import WorkflowContext
 
 
 def _now() -> str:
@@ -48,7 +48,12 @@ class AgentRunContext:
             log_fn=self.log,
         )
 
+    def public(self, value: Any) -> Any:
+        from tools.infrastructure.workspace.public import public_payload
+        return public_payload(value, self.run.get("session_dir"))
+
     def record(self, event: str, **data: Any) -> None:
+        data = self.public(data)
         item = {"timestamp": _now(), "session_id": self.session_id, "event": event, "data": data}
         self.events.append(item)
         if self.log_fn and event in {"tool_started", "tool_finished", "agent_started", "agent_finished"}:
@@ -57,4 +62,4 @@ class AgentRunContext:
 
     def log(self, message: str) -> None:
         if self.log_fn:
-            self.log_fn(message)
+            self.log_fn(self.public(message))

@@ -10,7 +10,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.infrastructure.tooling.context import WorkflowContext
+from tools.infrastructure.tool_support.context import WorkflowContext
 from tools.function_tools.biology_analysis.workflow import biology_analysis
 from tools.function_tools.code_workspace.workflow import code_edit, code_inspection, code_test
 from tools.function_tools.data_analysis.workflow import data_analysis
