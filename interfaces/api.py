@@ -13,6 +13,7 @@ from harness.runtime import delete_session, list_sessions, resume_agent, run_age
 from harness.sandbox import delete_file, list_files, open_workspace, read_file, upload_file
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 from harness.jobs import get_queue, result_status
+from tools.infrastructure.knowledge import KnowledgeJobStore
 
 
 def enqueue_request(
@@ -46,6 +47,18 @@ def get_run(run_id: str) -> dict[str, Any]:
 
 def get_run_events(run_id: str, after: int = -1) -> list[dict[str, Any]]:
     return get_queue().events(str(run_id or "").strip(), int(after))
+
+
+def get_knowledge_job(job_id: str, session_id: str) -> dict[str, Any]:
+    """Return one session-owned durable knowledge job."""
+    return KnowledgeJobStore().get_job(str(job_id or "").strip(), session_id=str(session_id or "").strip())
+
+
+def get_knowledge_job_events(job_id: str, session_id: str, after: int = -1) -> list[dict[str, Any]]:
+    """Return resumable knowledge ingestion events for one session."""
+    return KnowledgeJobStore().events(
+        str(job_id or "").strip(), session_id=str(session_id or "").strip(), after=int(after)
+    )
 
 
 def list_runs(session_id: str | None = None) -> list[dict[str, Any]]:

@@ -32,7 +32,7 @@ def main() -> int:
         "sequence_stats", "sequence_find_orfs", "sequence_translate", "sequence_reverse_complement",
         "table_profile", "table_group", "table_plot", "structure_inspect",
         "genome_read_features", "genome_render_map", "pubmed_search", "web_search", "web_fetch", "evidence_index",
-        "evidence_retrieve", "report_write", "database_lookup", "pdb_download",
+        "evidence_retrieve", "knowledge_ingest", "knowledge_status", "knowledge_retrieve", "report_write", "database_lookup", "pdb_download",
         "alphafold_download", "file_inspection", "document_read", "workspace_search",
         "blast_search", "code_inspection", "code_edit", "code_test", "pipeline_shell",
         "research_specialist", "pipeline_specialist", "document_specialist",

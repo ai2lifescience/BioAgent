@@ -15,6 +15,9 @@ from .web_search import web_search
 from .web_fetch import web_fetch
 from .evidence_index import evidence_index
 from .evidence_retrieve import evidence_retrieve
+from .knowledge_ingest import knowledge_ingest
+from .knowledge_status import knowledge_status
+from .knowledge_retrieve import knowledge_retrieve
 from .report_write import report_write
 
 from .alphafold_download import alphafold_download
@@ -34,7 +37,7 @@ FUNCTION_TOOLS = [
     sequence_stats, sequence_find_orfs, sequence_translate, sequence_reverse_complement,
     table_profile, table_group, table_plot, structure_inspect,
     genome_read_features, genome_render_map, pubmed_search, web_search, web_fetch,
-    evidence_index, evidence_retrieve, report_write,
+    evidence_index, evidence_retrieve, knowledge_ingest, knowledge_status, knowledge_retrieve, report_write,
     alphafold_download, ncbi_retrieval, database_lookup, pdb_download, blast_search,
     file_inspection, document_read, workspace_search, code_inspection, code_edit, code_test,
 ]
@@ -58,6 +61,9 @@ __all__ = [
     "web_fetch",
     "evidence_index",
     "evidence_retrieve",
+    "knowledge_ingest",
+    "knowledge_status",
+    "knowledge_retrieve",
     "report_write",
     "alphafold_download",
     "ncbi_retrieval",

@@ -10,7 +10,8 @@ The catalog contains these narrow capabilities:
 sequence_stats, sequence_find_orfs, sequence_translate, sequence_reverse_complement
 table_profile, table_group, table_plot
 structure_inspect, genome_read_features, genome_render_map
-pubmed_search, web_search, web_fetch, evidence_index, evidence_retrieve, report_write
+pubmed_search, web_search, web_fetch, evidence_index, evidence_retrieve
+knowledge_ingest, knowledge_status, knowledge_retrieve, report_write
 alphafold_download, ncbi_retrieval, database_lookup, pdb_download, blast_search
 file_inspection, document_read, workspace_search
 code_inspection, code_edit, code_test
@@ -35,3 +36,10 @@ tools.
 Every result uses the typed `FunctionResult[T]` envelope with bounded data, evidence,
 and workspace-relative artifact metadata. Host paths remain an internal
 runtime detail and are projected out before results reach the model or browser.
+
+`evidence_index` and `evidence_retrieve` are run-local operations over evidence
+artifacts. The `knowledge_*` tools are the durable RAG boundary: ingestion
+submits a bounded crawler job, status observes that job, and retrieval returns
+an evidence artifact that `report_synthesize` can cite. Crawling, extraction,
+embedding, and collection storage live privately in
+`tools/infrastructure/knowledge/`; they are not public SDK tools.

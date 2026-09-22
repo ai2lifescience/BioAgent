@@ -133,6 +133,11 @@ runtime, not model-generated shell commands. HTTP agent runs use a durable queue
 `GET /runs/<run-id>/events` returns resumable progress. `POST /approve_stream`
 queues approval resumes through the same worker path. `GET /runs?session_id=...`
 lists runs that belong to a session.
+Knowledge ingestion uses its own session-scoped repository and worker lifecycle:
+`GET /knowledge/jobs/<job-id>?session_id=...` returns status,
+`GET /knowledge/jobs/<job-id>/events?session_id=...` returns resumable progress,
+and `/stream` on that path provides SSE. Knowledge events describe crawler and
+indexing progress; they remain separate from the SDK model-token stream.
 
 File management is automatic once a session exists: uploads are written under
 `uploads/`, each run gets `runs/<run-id>/`, and generated artifacts are written
@@ -294,6 +299,8 @@ approval decision, and collected outputs.
 - `tools/infrastructure/workspace/` owns safe workspace paths and small file metadata helpers
   for the SDK sandbox listing and browser adapter; the SDK sandbox remains the
   source of truth for files and their lifecycle.
+- `tools/infrastructure/knowledge/` owns durable session-scoped collections,
+  bounded web crawling, indexing, retrieval, and detached ingestion workers.
 - `harness/tracing.py` consumes SDK lifecycle hooks and spans locally without
   sending traces to OpenAI. The hooks provide UI progress; the SDK remains the
   source of trace/span creation.
@@ -322,6 +329,7 @@ tools/
 │   ├── runtime.py            # shared nested output extraction and recording
 │   ├── review.py             # nested evidence review agent
 │   └── synthesize.py         # nested cited report drafting agent
+├── infrastructure/knowledge/ # durable crawler and RAG repository
 └── infrastructure/tool_support/embeddings.py # bounded embedding transport
 ```
 
@@ -383,6 +391,9 @@ The SDK tool surface is organized by execution semantics:
   allowlisted command protocol. It runs all declared pipeline engines locally.
 - `tools/infrastructure/pipeline_engine/` — declarative pipeline planning, durable jobs,
   bounded waiting, cancellation, and result collection behind `pipeline_shell`.
+- `tools/infrastructure/knowledge/` — session-owned web collections, bounded
+  crawler workers, embeddings, and citation-ready retrieval behind the
+  `knowledge_*` FunctionTools.
 - `tools/runtime_tools/pipelines/` — model-visible pipeline manifests, workflow
   bundles, and bundled example inputs discovered by the runtime catalog.
 - `tools/infrastructure/tool_support/` — shared context, result envelopes,
@@ -453,8 +464,14 @@ only listed session files and returns bounded excerpts with file or PDF-page
 sources. `table_profile`, `table_group`, and `table_plot` accept bounded pandas
 operations and write plots or group tables into the session output directory.
 `web_search` returns bounded snippets and an evidence artifact; `pubmed_search`,
-`evidence_index`, `evidence_retrieve`, `report_review`, `report_synthesize`, and `report_write` compose the research
-path. The coding tools keep inspection read-only; `code_edit` and `code_test`
+`evidence_index`, `evidence_retrieve`, `report_review`, `report_synthesize`, and
+`report_write` compose the run-local research path. Durable RAG uses
+`knowledge_ingest`, `knowledge_status`, and `knowledge_retrieve`. Ingestion
+returns immediately with a session-owned job and collection ID; a private
+knowledge worker performs bounded discovery, fetching, extraction, chunking, and
+embedding. Retrieval projects selected chunks into a workspace-relative evidence
+artifact, and report agents answer only from that artifact. The coding tools keep
+inspection read-only; `code_edit` and `code_test`
 are bounded direct tools, restrict paths to the active workspace, and allow
 only fixed test commands. They do not request SDK approval; execution approval
 is reserved for pipeline `run` and `cancel` operations in `pipeline_shell`.
@@ -531,6 +548,8 @@ The primary intent boundaries are:
 | Raw nucleotide or protein records | `ncbi_retrieval` |
 | PubMed evidence | `pubmed_search` |
 | Web evidence | `web_search` |
+| Build a durable web knowledge collection | `knowledge_ingest` + `knowledge_status` |
+| Retrieve from a durable knowledge collection | `knowledge_retrieve` |
 | Rank saved evidence | `evidence_retrieve` |
 | Cited report draft | `report_synthesize` |
 | Save Markdown report | `report_write` |

@@ -29,6 +29,8 @@ from interfaces.api import (
     enqueue_approval,
     get_run,
     get_run_events,
+    get_knowledge_job,
+    get_knowledge_job_events,
     list_runs,
     list_sessions,
     list_session_messages,
@@ -41,6 +43,7 @@ from harness.sandbox import relative_file_path
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODELS
 from tools.infrastructure.pipeline_engine import service as pipeline_service
 from harness.jobs import TERMINAL, get_queue
+from tools.infrastructure.knowledge.store import TERMINAL_JOB_STATUSES
 from tools.infrastructure.workspace.public import public_payload
 
 
@@ -182,6 +185,9 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             return
         if path.startswith("/runs/"):
             self._handle_run_status(path)
+            return
+        if path.startswith("/knowledge/jobs/"):
+            self._handle_knowledge_job(path)
             return
         if path == "/runs":
             session_id = (parse_qs(urlparse(self.path).query).get("session_id") or [None])[0]
@@ -464,6 +470,51 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 self._send_json(_public_job(job))
         except (ValueError, TypeError) as exc:
             self._send_json({"error": str(exc)}, status=404)
+
+    def _handle_knowledge_job(self, path: str) -> None:
+        parts = path.strip("/").split("/")
+        if len(parts) not in {3, 4} or parts[:2] != ["knowledge", "jobs"]:
+            self._send_json({"error": "not found"}, status=404)
+            return
+        query = parse_qs(urlparse(self.path).query)
+        session_id = (query.get("session_id") or [""])[0].strip()
+        if not session_id:
+            self._send_json({"error": "session_id is required"}, status=400)
+            return
+        job_id = unquote(parts[2]).strip()
+        try:
+            job = get_knowledge_job(job_id, session_id)
+            if len(parts) == 4 and parts[3] == "events":
+                after = int((query.get("after") or ["-1"])[0])
+                events = get_knowledge_job_events(job_id, session_id, after)
+                self._send_json({"job": public_payload(job), "events": [public_payload(item) for item in events]})
+            elif len(parts) == 4 and parts[3] == "stream":
+                self._stream_knowledge_job(job_id, session_id)
+            elif len(parts) == 3:
+                self._send_json(public_payload(job))
+            else:
+                self._send_json({"error": "not found"}, status=404)
+        except (ValueError, TypeError) as exc:
+            self._send_json({"error": str(exc)}, status=404)
+
+    def _stream_knowledge_job(self, job_id: str, session_id: str) -> None:
+        self._send_stream_headers()
+        sequence = -1
+        heartbeat_at = time.monotonic()
+        while True:
+            for item in get_knowledge_job_events(job_id, session_id, sequence):
+                sequence = item["sequence"]
+                if not self._send_stream_event(item["event"], public_payload(item["payload"])):
+                    return
+            job = get_knowledge_job(job_id, session_id)
+            if job["status"] in TERMINAL_JOB_STATUSES:
+                self._send_stream_event("result", public_payload(job))
+                return
+            if time.monotonic() - heartbeat_at >= 15:
+                if not self._send_stream_event("heartbeat", {"job_id": job_id}):
+                    return
+                heartbeat_at = time.monotonic()
+            time.sleep(0.25)
 
     def _stream_run(self, run_id: str) -> None:
         self._send_stream_headers()

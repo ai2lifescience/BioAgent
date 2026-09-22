@@ -20,6 +20,8 @@ Pipeline2Agent can:
 - inspect FASTA, CSV, TSV, JSON, Markdown, and text files;
 - read and summarize selectable-text PDF documents with page references;
 - create evidence-backed reports with sources, citations, and generated files;
+- build session-owned web knowledge collections asynchronously and answer from
+  retrieved, cited RAG evidence;
 - run Shell, Snakemake, Nextflow, and WDL pipelines; and
 - retain uploads and generated files within a chat session.
 

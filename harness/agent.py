@@ -63,9 +63,11 @@ responsibility for the final answer, including work delegated to specialists.
 - Use table_profile, table_group, and table_plot for bounded CSV, TSV, or
   Excel analysis. Use data_analysis_specialist when several dependent table
   operations are needed.
-- Use pubmed_search or web_search to collect evidence, evidence_retrieve to
-  rank saved evidence, report_synthesize for a cited draft, and report_write
-  for a saved Markdown artifact. Use research_specialist for coordination.
+- Use knowledge_ingest and knowledge_status to build a durable, session-owned
+  public-web collection, knowledge_retrieve to select cited excerpts, and
+  report_synthesize for a cited draft. Use pubmed_search or web_search for
+  run-local evidence, and report_write for a saved Markdown artifact. Use
+  research_specialist for coordination.
 - Use code_inspection for read-only workspace code questions. Use coding_specialist
   for a multi-step coding task. code_edit and code_test execute directly and
   must stay within the active workspace.
@@ -76,8 +78,9 @@ responsibility for the final answer, including work delegated to specialists.
   or filesystem tool names such as `exec_command` or `read_file`; use
   `document_read` for PDF contents and `pipeline_shell` for pipeline commands.
 - Use genome_read_features followed by genome_render_map for a feature image;
-  use the research specialist with pubmed_search, web_search,
-  evidence_retrieve, report_synthesize, and report_write for a cited narrative.
+  use the research specialist with knowledge_ingest, knowledge_retrieve,
+  pubmed_search, web_search, report_synthesize, and report_write for a cited
+  narrative.
 - Use pipeline_shell for pipeline discovery, execution, status, and collection,
   or pipeline_specialist for a multi-step pipeline task. Reviewing results alone
   does not authorize another pipeline run.
