@@ -28,8 +28,7 @@ The local knowledge repository defaults to `runtime/knowledge.sqlite3` and can
 be changed with `AGENT_KNOWLEDGE_DB`; `AGENT_KNOWLEDGE_WORKERS` bounds detached
 crawler workers. `AGENT_KNOWLEDGE_CRAWLER=auto` uses Scrapy when the optional
 dependency is installed and otherwise uses the bounded HTTP crawler;
-`http` and `scrapy` force a backend. Install `requirements-scrapy.txt` to add
-Scrapy. A production deployment can replace the repository with a
+`http` and `scrapy` force a backend. A production deployment can replace the repository with a
 Postgres/pgvector adapter while retaining the same public tool contracts.
 
 Pipeline definitions and bundled example inputs live separately under

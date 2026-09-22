@@ -23,7 +23,7 @@ def get_crawler(backend: str | None = None) -> Crawler:
     if selected == "http" or (selected == "auto" and find_spec("scrapy") is None):
         return HttpCrawler()
     if find_spec("scrapy") is None:
-        raise ValueError("Scrapy is not installed. Install requirements-scrapy.txt or choose the http crawler.")
+        raise ValueError("Scrapy is not installed. Install requirements.txt or choose the http crawler.")
     from .scrapy import ScrapyCrawler
 
     return ScrapyCrawler()
