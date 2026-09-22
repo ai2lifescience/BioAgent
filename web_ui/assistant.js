@@ -21,6 +21,7 @@
     context: {},
     website: null,
     websitePoll: null,
+    websiteRequired: query.get("website_site") === "assistant-demo",
     maxTurns: 5,
   };
 
@@ -72,7 +73,7 @@
 
   function setBusy(busy) {
     state.busy = busy;
-    byId("send").disabled = busy || !state.ready;
+    byId("send").disabled = busy || !state.ready || (state.websiteRequired && !state.website);
     byId("stop").disabled = !state.abort;
     byId("stop").hidden = !state.abort;
     byId("newChat").disabled = busy;
@@ -145,6 +146,7 @@
   }
 
   async function websiteConnect(message) {
+    if (message.session_id && message.session_id !== state.sessionId) return;
     try {
       state.website = await websitePost("website/connect", {
         ticket: message.ticket, site_id: message.site_id, origin: parentOrigin,
@@ -152,11 +154,16 @@
         capabilities: message.capabilities || [], context: state.context,
       });
       state.website.site_id = message.site_id;
-      window.parent.postMessage({ type: "agent-website-connected", binding_id: state.website.binding_id }, parentOrigin);
+      window.parent.postMessage({ type: "agent-website-connected", session_id: state.sessionId, binding_id: state.website.binding_id }, parentOrigin);
       pollWebsite();
       status.textContent = "Connected to website";
+      byId("retryWebsite").hidden = true;
+      setBusy(false);
     } catch (error) {
       appendProgress(`Website bridge unavailable: ${error.message}`);
+      status.textContent = `Website connection failed: ${error.message}`;
+      byId("retryWebsite").hidden = false;
+      setBusy(false);
       window.parent.postMessage({ type: "agent-event", event: { type: "website-error", message: error.message } }, parentOrigin);
     }
   }
@@ -178,7 +185,7 @@
   }
 
   async function websiteResponse(message) {
-    if (!state.website || !message.call_id) return;
+    if (!state.website || message.session_id !== state.sessionId || !message.call_id) return;
     try {
       await websitePost("website/respond", { ...state.website, call_id: message.call_id,
         run_id: message.run_id, revision: message.revision, result: message.result, error: message.error });
@@ -369,7 +376,7 @@
     if (state.website) {
       websitePost("website/disconnect", state.website).catch(() => {});
       state.website = null;
-      window.parent.postMessage({ type: "agent-ready" }, parentOrigin);
+      window.parent.postMessage({ type: "agent-ready", session_id: state.sessionId }, parentOrigin);
     }
     state.uploads = [];
     state.logs = [];
@@ -394,6 +401,12 @@
   window.addEventListener("message", (event) => {
     if (window.parent === window || event.source !== window.parent || event.origin !== parentOrigin) return;
     if (event.data?.type === "agent-connect") websiteConnect(event.data);
+    if (event.data?.type === "agent-website-error") {
+      status.textContent = `Website connection failed: ${event.data.message || "unknown error"}`;
+      appendProgress(event.data.message || "Website connection failed.");
+      byId("retryWebsite").hidden = false;
+      setBusy(false);
+    }
     if (event.data?.type === "agent-website-connected") { /* handshake acknowledgement */ }
     if (event.data?.type === "agent-website-response") websiteResponse(event.data);
     if (event.data?.type === "agent-disconnect") {
@@ -401,7 +414,7 @@
       state.website = null;
     }
   });
-  if (window.parent !== window) window.parent.postMessage({ type: "agent-ready" }, parentOrigin);
+  if (window.parent !== window) window.parent.postMessage({ type: "agent-ready", session_id: state.sessionId }, parentOrigin);
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && window.parent !== window) {
       window.parent.postMessage({ type: "agent-close" }, parentOrigin);
@@ -425,5 +438,9 @@
   byId("attachButton").addEventListener("click", () => byId("uploadInput").click());
   byId("uploadInput").addEventListener("change", uploadFiles);
   byId("retryConfig").addEventListener("click", loadConfig);
+  byId("retryWebsite").addEventListener("click", () => {
+    byId("retryWebsite").hidden = true;
+    window.parent.postMessage({ type: "agent-website-retry", session_id: state.sessionId }, parentOrigin);
+  });
   loadConfig();
 })();

@@ -33,6 +33,11 @@ class AgentRunContext:
     def run(self) -> dict[str, Any]:
         return dict(self.session.metadata.get("run") or {})
 
+    @property
+    def website_binding(self) -> dict[str, Any] | None:
+        """Private website credentials; excluded from public run metadata."""
+        return self.session.metadata.get("website_binding")
+
     def user_context(self) -> dict[str, Any]:
         return {
             "session_id": self.session_id,

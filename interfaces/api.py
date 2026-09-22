@@ -32,13 +32,19 @@ def enqueue_request(
     with runtime.STATE_STORE.locked_session(identifier, request) as (session, _):
         if session.metadata.get("pending_run"):
             raise ValueError("Resolve the pending tool approval before sending another request.")
+        binding = None
         if website is not None:
             from harness.website import get_bridge
             binding = get_bridge().binding_for_run(
                 str(website.get("binding_id", "")), str(website.get("token", "")), identifier
             )
-            session.metadata["website_binding"] = binding
         job = get_queue().enqueue(request, identifier, model_key, turns)
+        # The worker waits for this session lock. Only change its binding after
+        # enqueue succeeds, so a rejected duplicate cannot alter active work.
+        if binding:
+            session.metadata["website_binding"] = binding
+        else:
+            session.metadata.pop("website_binding", None)
         session.metadata["last_run_id"] = job["run_id"]
         return job
 

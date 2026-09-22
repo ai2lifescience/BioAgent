@@ -51,7 +51,7 @@ class ImportResult(FunctionContract):
     bytes: int
 
 def _binding(ctx: RunContextWrapper[AgentRunContext]) -> dict:
-    binding = ctx.context.run.get("website_binding")
+    binding = ctx.context.website_binding
     if not isinstance(binding, dict):
         raise ValueError("This tool requires an active trusted website embedding.")
     return binding

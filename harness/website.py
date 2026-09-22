@@ -69,7 +69,20 @@ def allowed_sites() -> dict[str, list[str]]:
 
 def check_site(site_id: str, origin: str) -> None:
     if origin not in allowed_sites().get(site_id, []):
-        raise ValueError("website origin is not trusted for this site_id")
+        raise ValueError(f"Website origin {origin!r} is not configured for {site_id!r} in AGENT_WEBSITE_SITES.")
+
+
+def configure_local_demo(port: int) -> None:
+    """Provide a localhost demo on normal startup; never widen explicit settings.
+
+    The generated signing secret is process-local and inherited by detached
+    workers. Real external websites still configure their shared secret and
+    origins explicitly. A fresh server invalidates unconsumed demo tickets.
+    """
+    os.environ.setdefault("AGENT_WEBSITE_SITES", json.dumps({"assistant-demo": [
+        f"http://localhost:{port}", f"http://127.0.0.1:{port}",
+    ]}))
+    os.environ.setdefault("AGENT_WEBSITE_SECRET", secrets.token_urlsafe(48))
 
 
 class WebsiteBridge:

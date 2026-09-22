@@ -47,6 +47,7 @@
     const parentOrigin = window.location.origin;
     src.searchParams.set("parent_origin", parentOrigin);
     src.searchParams.set("embedded", "1");
+    if (options.siteId) src.searchParams.set("website_site", options.siteId);
     const shadow = host.attachShadow ? host.attachShadow({ mode: "open" }) : host;
     const style = document.createElement("style");
     style.textContent = EMBED_STYLE;
@@ -88,39 +89,67 @@
     let binding = null;
     let connecting = false;
     let destroyed = false;
+    let sessionId = null;
+    let connectionAttempt = 0;
+    let connectionTimeout = null;
+    const calls = new Map();
+
+    function post(message) {
+      frame.contentWindow?.postMessage({ protocol: 1, ...message }, src.origin);
+    }
+    function connectionError(message) {
+      connecting = false;
+      clearTimeout(connectionTimeout);
+      post({ type: "agent-website-error", session_id: sessionId, message });
+      options.onEvent?.({ type: "website-error", message });
+    }
 
     function postContext() {
-      frame.contentWindow?.postMessage({ type: "agent-context", context }, src.origin);
+      post({ type: "agent-context", context });
     }
     async function connectWebsite() {
       if (!options.siteId || typeof options.getToken !== "function" || connecting || binding) return;
       connecting = true;
+      const attempt = ++connectionAttempt;
+      const expectedSession = sessionId;
+      connectionTimeout = setTimeout(() => {
+        if (attempt === connectionAttempt) {
+          connectionAttempt++;
+          connectionError("Website connection timed out. Retry the connection.");
+        }
+      }, 15000);
       try {
+        if (typeof adapter.getPageContext !== "function") throw new Error("getPageContext is required for a website connection.");
+        await updateContext();
         const token = await options.getToken();
-        if (destroyed || !token) return;
-        frame.contentWindow?.postMessage({ type: "agent-connect", protocol: 1, site_id: options.siteId,
-          instance_id: instanceId, ticket: token, capabilities: Object.keys(adapter), context }, src.origin);
+        if (destroyed || attempt !== connectionAttempt) return;
+        if (typeof token !== "string" || !token) throw new Error("The website token endpoint returned no ticket.");
+        post({ type: "agent-connect", site_id: options.siteId, session_id: expectedSession,
+          instance_id: instanceId, ticket: token, capabilities: Object.keys(adapter), context });
       } catch (error) {
-        options.onEvent?.({ type: "website-error", error: String(error?.message || error) });
-      } finally { connecting = false; }
+        if (attempt === connectionAttempt && !destroyed) connectionError(String(error?.message || error));
+      }
     }
     async function dispatchWebsiteRequest(message) {
+      if (!binding || message.session_id !== sessionId || !message.call_id) return;
       const method = String(message.method || "");
       const callback = adapter[method];
-      if (typeof callback !== "function") {
-        frame.contentWindow?.postMessage({ type: "agent-website-response", call_id: message.call_id,
-          run_id: message.run_id, revision: message.revision, error: { code: "unsupported", message: `Website callback is not registered: ${method}` } }, src.origin);
-        return;
-      }
-      try {
-        const result = await callback(message.arguments || {}, message);
-        frame.contentWindow?.postMessage({ type: "agent-website-response", call_id: message.call_id,
-          run_id: message.run_id, revision: message.revision, result: result || {} }, src.origin);
-      } catch (error) {
-        frame.contentWindow?.postMessage({ type: "agent-website-response", call_id: message.call_id,
-          run_id: message.run_id, revision: message.revision,
-          error: { code: "host_callback_failed", message: String(error?.message || error) } }, src.origin);
-      }
+      if (!calls.has(message.call_id)) calls.set(message.call_id, (async () => {
+        try {
+          if (Date.now() / 1000 >= message.deadline) throw new Error("Website request expired.");
+          if (!Object.hasOwn(adapter, method) || typeof callback !== "function") throw new Error(`Website callback is not registered: ${method}`);
+          const current = await adapter.getPageContext();
+          if (method !== "getPageContext" && current.revision !== message.revision) throw new Error("Page changed; read website_context again.");
+          const result = await callback(message.arguments || {}, message);
+          await updateContext();
+          return { result: result || {} };
+        } catch (error) {
+          return { error: { code: "host_callback_failed", message: String(error?.message || error) } };
+        }
+      })());
+      const response = await calls.get(message.call_id);
+      if (!destroyed && message.session_id === sessionId) post({ type: "agent-website-response", session_id: sessionId,
+        call_id: message.call_id, run_id: message.run_id, revision: message.revision, ...response });
     }
     function open() {
       lastFocus = document.activeElement;
@@ -135,8 +164,8 @@
       launcher.setAttribute("aria-expanded", "false");
       (lastFocus || launcher).focus();
     }
-    async function updateContext(nextContext = {}) {
-      const value = nextContext && Object.keys(nextContext).length ? nextContext : (adapter.getPageContext ? await adapter.getPageContext() : {});
+    async function updateContext(nextContext) {
+      const value = nextContext !== undefined ? nextContext : (adapter.getPageContext ? await adapter.getPageContext() : context);
       context = { ...(value || {}) };
       postContext();
       return context;
@@ -144,13 +173,34 @@
     function onMessage(event) {
       if (event.source !== frame.contentWindow || event.origin !== src.origin) return;
       if (event.data?.type === "agent-close") closePanel();
-      if (event.data?.type === "agent-ready") { postContext(); connectWebsite(); }
+      if (event.data?.type === "agent-ready" || event.data?.type === "agent-website-retry") {
+        if (sessionId !== event.data.session_id || event.data.type === "agent-website-retry") {
+          sessionId = event.data.session_id;
+          binding = null;
+          connecting = false;
+          connectionAttempt++;
+          clearTimeout(connectionTimeout);
+          calls.clear();
+        }
+        postContext();
+        connectWebsite();
+      }
       if (event.data?.type === "agent-website-request") dispatchWebsiteRequest(event.data);
-      if (event.data?.type === "agent-website-connected") binding = { binding_id: event.data.binding_id };
+      if (event.data?.type === "agent-website-connected" && event.data.session_id === sessionId) {
+        binding = { binding_id: event.data.binding_id };
+        connecting = false;
+        clearTimeout(connectionTimeout);
+        options.onEvent?.({ type: "website-connected" });
+      }
+      if (event.data?.type === "agent-event") {
+        if (event.data.event?.type === "website-error") { connecting = false; clearTimeout(connectionTimeout); }
+        options.onEvent?.(event.data.event);
+      }
     }
     launcher.addEventListener("click", open);
     close.addEventListener("click", closePanel);
-    frame.addEventListener("load", () => { postContext(); connectWebsite(); });
+    // The iframe's ready message owns the handshake. A load event races with
+    // ready and used to create duplicate bindings or reuse an old chat binding.
     window.addEventListener("message", onMessage);
     if (options.open) open();
     return {
@@ -160,6 +210,8 @@
       get binding() { return binding; },
       destroy() {
         destroyed = true;
+        connectionAttempt++;
+        clearTimeout(connectionTimeout);
         if (binding) frame.contentWindow?.postMessage({ type: "agent-disconnect" }, src.origin);
         window.removeEventListener("message", onMessage);
         launcher.remove();

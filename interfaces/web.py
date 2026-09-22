@@ -43,7 +43,7 @@ from harness.sandbox import relative_file_path
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODELS
 from tools.infrastructure.pipeline_engine import service as pipeline_service
 from harness.jobs import TERMINAL, get_queue
-from harness.website import check_site, get_bridge, issue_ticket
+from harness.website import check_site, configure_local_demo, get_bridge, issue_ticket
 from tools.infrastructure.knowledge.models import TERMINAL_JOB_STATUSES
 from tools.infrastructure.workspace.public import public_payload
 
@@ -391,6 +391,8 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 origin = str(self.headers.get("Origin") or "").strip()
                 if site_id != "assistant-demo" or not origin:
                     raise ValueError("assistant-demo token requires the configured browser origin")
+                if urlparse(origin).netloc != self.headers.get("Host"):
+                    raise ValueError("Demo tickets are only issued to this server's own host page.")
                 check_site(site_id, origin)
                 secret = os.getenv("AGENT_WEBSITE_SECRET", "")
                 if len(secret) < 32:
@@ -720,6 +722,7 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
 def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
     get_queue().recover()
     server = ThreadingHTTPServer((host, port), AgentRequestHandler)
+    configure_local_demo(server.server_port)
     print(f"Pipeline2Agent web UI running at http://{host}:{port}")
     server.serve_forever()
 

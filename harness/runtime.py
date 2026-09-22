@@ -154,7 +154,7 @@ async def _execute(
             model_key, model=model, sandbox_root=str(sandbox_root),
         )
         run_input: str | RunState = request
-        if not pending and context.run.get("website_binding"):
+        if not pending and context.website_binding:
             # Make the active host-page capability explicit in the SDK input.
             # The binding secret stays in run context; only this instruction is
             # visible to the model, which prevents generic answers to page-
