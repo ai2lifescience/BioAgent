@@ -7,7 +7,7 @@ from agents import RunContextWrapper
 from pydantic import Field
 
 from harness.context import AgentRunContext
-from tools.infrastructure.knowledge import KnowledgeJobStore
+from tools.infrastructure.knowledge import KnowledgeService
 from tools.infrastructure.tool_support.decorators import bio_function_tool
 from tools.infrastructure.tool_support.operations import invoke
 from tools.infrastructure.tool_support.results import FunctionContract, FunctionResult
@@ -27,7 +27,7 @@ def _operation(*, request: str, collection_id: str | None, seed_urls: list[str],
     session_id = str((context.user_context or {}).get("session_id") or "").strip()
     if not session_id:
         raise ValueError("Knowledge ingestion requires an active session.")
-    job = KnowledgeJobStore().enqueue(
+    job = KnowledgeService().enqueue(
         session_id=session_id, request=request.strip(), collection_id=collection_id,
         seed_urls=seed_urls, allowed_domains=allowed_domains, max_pages=max_pages,
         max_depth=max_depth, refresh=refresh,

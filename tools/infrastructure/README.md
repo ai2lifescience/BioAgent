@@ -10,10 +10,11 @@ server, CLI, and pipeline workers. Model-facing tools remain under `tools/`.
   result envelopes, and bounded HTTP helpers used by function tools and report
   agents.
 - `workspace/` — safe session paths, PDF extraction, and workspace artifact metadata.
-- `knowledge/` — durable session-owned web collections, bounded crawling,
-  chunking, embeddings, retrieval, and ingestion workers. Its SQLite store is
-  the local implementation of the collection/job repository; public callers
-  use the `knowledge_*` FunctionTools.
+- `knowledge/` — durable session-owned web collections. `service.py` is the
+  application boundary; `repository.py` owns SQLite persistence, `jobs.py`
+  owns queueing and detached workers, `indexer.py` owns chunking and hybrid
+  retrieval, and `crawlers/` owns the crawler protocol plus HTTP and optional
+  Scrapy adapters. Public callers use only the `knowledge_*` FunctionTools.
 - `providers/` — external database clients and protocol parsers, never SDK tool registration.
 
 Durable agent-run queueing is application runtime infrastructure in
@@ -25,7 +26,10 @@ run restartable and observable for HTTP/CLI callers.
 
 The local knowledge repository defaults to `runtime/knowledge.sqlite3` and can
 be changed with `AGENT_KNOWLEDGE_DB`; `AGENT_KNOWLEDGE_WORKERS` bounds detached
-crawler workers. A production deployment can replace the repository with a
+crawler workers. `AGENT_KNOWLEDGE_CRAWLER=auto` uses Scrapy when the optional
+dependency is installed and otherwise uses the bounded HTTP crawler;
+`http` and `scrapy` force a backend. Install `requirements-scrapy.txt` to add
+Scrapy. A production deployment can replace the repository with a
 Postgres/pgvector adapter while retaining the same public tool contracts.
 
 Pipeline definitions and bundled example inputs live separately under

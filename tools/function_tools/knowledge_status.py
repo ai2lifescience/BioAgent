@@ -7,7 +7,7 @@ from agents import RunContextWrapper
 from pydantic import Field
 
 from harness.context import AgentRunContext
-from tools.infrastructure.knowledge import KnowledgeJobStore
+from tools.infrastructure.knowledge import KnowledgeService
 from tools.infrastructure.tool_support.decorators import bio_function_tool
 from tools.infrastructure.tool_support.operations import invoke
 from tools.infrastructure.tool_support.results import FunctionContract, FunctionResult
@@ -27,7 +27,7 @@ def _operation(*, job_id: str, context):
     session_id = str((context.user_context or {}).get("session_id") or "").strip()
     if not session_id:
         raise ValueError("Knowledge status requires an active session.")
-    return {"status": "ok", "data": KnowledgeJobStore().get_job(job_id, session_id=session_id), "files": [], "evidence": []}
+    return {"status": "ok", "data": KnowledgeService().get_job(job_id, session_id=session_id), "files": [], "evidence": []}
 
 
 @bio_function_tool(timeout=30)

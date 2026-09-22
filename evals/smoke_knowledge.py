@@ -9,8 +9,9 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.infrastructure.knowledge import KnowledgeJobStore, KnowledgePage  # noqa: E402
-from tools.infrastructure.knowledge import crawler, worker  # noqa: E402
+from tools.infrastructure.knowledge import KnowledgeService, KnowledgePage  # noqa: E402
+from tools.infrastructure.knowledge import worker  # noqa: E402
+from tools.infrastructure.knowledge.crawlers import http as crawler  # noqa: E402
 
 
 def main() -> int:
@@ -26,7 +27,7 @@ def main() -> int:
     assert crawler.canonical_url("https://EXAMPLE.org:443/start#fragment") == "https://example.org/start"
 
     with TemporaryDirectory() as directory:
-        store = KnowledgeJobStore(Path(directory) / "knowledge.sqlite3", max_workers=1)
+        store = KnowledgeService(Path(directory) / "knowledge.sqlite3", max_workers=1)
         store.dispatch = lambda: None  # Keep this offline check in-process.
         job = store.enqueue(
             session_id="session-1", request="alpha", collection_id=None,
@@ -40,7 +41,7 @@ def main() -> int:
         async def fake_crawl(**kwargs):
             return [KnowledgePage("https://example.org/start", "Example", "alpha knowledge " * 200)]
         worker.crawl = fake_crawl
-        worker.embed_texts = lambda texts: [[1.0, 0.0] for _ in texts]
+        worker.embed_texts = lambda texts, **kwargs: [[1.0, 0.0] for _ in texts]
         try:
             assert worker.execute(store, job["job_id"]) == 0
         finally:

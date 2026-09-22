@@ -7,7 +7,7 @@ from agents import RunContextWrapper
 from pydantic import Field
 
 from harness.context import AgentRunContext
-from tools.infrastructure.knowledge import KnowledgeJobStore
+from tools.infrastructure.knowledge import KnowledgeService
 from tools.infrastructure.tool_support.artifacts import output, write_json
 from tools.infrastructure.tool_support.decorators import bio_function_tool
 from tools.infrastructure.tool_support.embeddings import embed_texts
@@ -29,7 +29,7 @@ def _operation(*, collection_id: str, question: str, top_k: int, context):
     session_id = str((context.user_context or {}).get("session_id") or "").strip()
     if not session_id:
         raise ValueError("Knowledge retrieval requires an active session.")
-    store = KnowledgeJobStore()
+    store = KnowledgeService()
     collection = store.collection(collection_id, session_id=session_id)
     if collection["chunks"] < 1:
         raise ValueError("Knowledge collection has no indexed content. Wait for ingestion to finish.")

@@ -9,11 +9,11 @@ from uuid import uuid4
 from agents import SQLiteSession
 
 from harness import runtime
-from harness.runtime import delete_session, list_sessions, resume_agent, run_agent, update_session
+from harness.runtime import delete_session, list_sessions, resume_agent, run_agent, update_session  # noqa: F401
 from harness.sandbox import delete_file, list_files, open_workspace, read_file, upload_file
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 from harness.jobs import get_queue, result_status
-from tools.infrastructure.knowledge import KnowledgeJobStore
+from tools.infrastructure.knowledge import KnowledgeService
 
 
 def enqueue_request(
@@ -51,12 +51,12 @@ def get_run_events(run_id: str, after: int = -1) -> list[dict[str, Any]]:
 
 def get_knowledge_job(job_id: str, session_id: str) -> dict[str, Any]:
     """Return one session-owned durable knowledge job."""
-    return KnowledgeJobStore().get_job(str(job_id or "").strip(), session_id=str(session_id or "").strip())
+    return KnowledgeService().get_job(str(job_id or "").strip(), session_id=str(session_id or "").strip())
 
 
 def get_knowledge_job_events(job_id: str, session_id: str, after: int = -1) -> list[dict[str, Any]]:
     """Return resumable knowledge ingestion events for one session."""
-    return KnowledgeJobStore().events(
+    return KnowledgeService().events(
         str(job_id or "").strip(), session_id=str(session_id or "").strip(), after=int(after)
     )
 

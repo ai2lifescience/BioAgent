@@ -4,6 +4,11 @@ The package is private implementation code.  Model-facing boundaries live in
 ``tools.function_tools.knowledge_*`` and return only typed public contracts.
 """
 
-from .store import KnowledgeJobStore, KnowledgePage, KnowledgeSearchHit
+from .models import KnowledgePage, KnowledgeSearchHit, TERMINAL_JOB_STATUSES
+from .service import KnowledgeService
 
-__all__ = ["KnowledgeJobStore", "KnowledgePage", "KnowledgeSearchHit"]
+# Kept as a compatibility name for applications that used the first local
+# implementation. New code should depend on KnowledgeService.
+KnowledgeJobStore = KnowledgeService
+
+__all__ = ["KnowledgeService", "KnowledgeJobStore", "KnowledgePage", "KnowledgeSearchHit", "TERMINAL_JOB_STATUSES"]

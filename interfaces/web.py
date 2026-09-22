@@ -43,7 +43,7 @@ from harness.sandbox import relative_file_path
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODELS
 from tools.infrastructure.pipeline_engine import service as pipeline_service
 from harness.jobs import TERMINAL, get_queue
-from tools.infrastructure.knowledge.store import TERMINAL_JOB_STATUSES
+from tools.infrastructure.knowledge.models import TERMINAL_JOB_STATUSES
 from tools.infrastructure.workspace.public import public_payload
 
 

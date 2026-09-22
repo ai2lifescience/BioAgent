@@ -299,8 +299,11 @@ approval decision, and collected outputs.
 - `tools/infrastructure/workspace/` owns safe workspace paths and small file metadata helpers
   for the SDK sandbox listing and browser adapter; the SDK sandbox remains the
   source of truth for files and their lifecycle.
-- `tools/infrastructure/knowledge/` owns durable session-scoped collections,
-  bounded web crawling, indexing, retrieval, and detached ingestion workers.
+- `tools/infrastructure/knowledge/` owns durable session-scoped collections.
+  `service.py` composes the boundary; `repository.py` persists SQLite state,
+  `jobs.py` queues and dispatches detached workers, `indexer.py` handles
+  chunking and hybrid retrieval, and `crawlers/` provides an HTTP fallback plus
+  an optional isolated Scrapy adapter.
 - `harness/tracing.py` consumes SDK lifecycle hooks and spans locally without
   sending traces to OpenAI. The hooks provide UI progress; the SDK remains the
   source of trace/span creation.
@@ -329,7 +332,7 @@ tools/
 │   ├── runtime.py            # shared nested output extraction and recording
 │   ├── review.py             # nested evidence review agent
 │   └── synthesize.py         # nested cited report drafting agent
-├── infrastructure/knowledge/ # durable crawler and RAG repository
+├── infrastructure/knowledge/ # durable RAG service, jobs, indexer, crawlers
 └── infrastructure/tool_support/embeddings.py # bounded embedding transport
 ```
 
@@ -391,9 +394,9 @@ The SDK tool surface is organized by execution semantics:
   allowlisted command protocol. It runs all declared pipeline engines locally.
 - `tools/infrastructure/pipeline_engine/` — declarative pipeline planning, durable jobs,
   bounded waiting, cancellation, and result collection behind `pipeline_shell`.
-- `tools/infrastructure/knowledge/` — session-owned web collections, bounded
-  crawler workers, embeddings, and citation-ready retrieval behind the
-  `knowledge_*` FunctionTools.
+- `tools/infrastructure/knowledge/` — session-owned web collections behind the
+  `knowledge_*` FunctionTools. Its service, repository, indexer, job queue, and
+  crawler adapter boundaries remain private to the application runtime.
 - `tools/runtime_tools/pipelines/` — model-visible pipeline manifests, workflow
   bundles, and bundled example inputs discovered by the runtime catalog.
 - `tools/infrastructure/tool_support/` — shared context, result envelopes,
