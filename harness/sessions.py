@@ -6,6 +6,7 @@ import asyncio
 from contextlib import asynccontextmanager, contextmanager
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
+import fcntl
 import json
 import os
 from pathlib import Path
@@ -45,10 +46,11 @@ class SessionMetadata:
 
 
 class SessionMetadataStore:
-    def __init__(self, root: str | Path = "runtime/session_metadata") -> None:
-        self.root = Path(root)
+    def __init__(self, root: str | Path | None = None) -> None:
+        self.root = Path(root or os.getenv("AGENT_METADATA_DIR", "runtime/session_metadata")).resolve()
         self._sessions: dict[str, SessionMetadata] = {}
-        self._locks: dict[str, Lock] = {}
+        self._versions: dict[str, tuple[int, int]] = {}
+        self._locks: dict[str, _SessionLock] = {}
         self._lock = RLock()
 
     def _path(self, session_id: str) -> Path:
@@ -64,6 +66,8 @@ class SessionMetadataStore:
             temporary.write_text(json.dumps(asdict(session), ensure_ascii=False, indent=2), encoding="utf-8")
             os.chmod(temporary, 0o600)
             temporary.replace(path)
+            self._sessions[session.session_id] = session
+            self._versions[session.session_id] = (path.stat().st_mtime_ns, path.stat().st_ino)
 
     def create_session(self, user_request: str = "", session_id: str | None = None) -> SessionMetadata:
         with self._lock:
@@ -72,20 +76,23 @@ class SessionMetadataStore:
             session = SessionMetadata(session_id=identifier, user_request=user_request)
             session.metadata["title"] = " ".join(user_request.split())[:64] or "New chat"
             self._sessions[identifier] = session
-            self._locks.setdefault(identifier, Lock())
             self.save(session)
             return session
 
     def get_session(self, session_id: str) -> SessionMetadata | None:
         with self._lock:
-            if session_id in self._sessions:
-                return self._sessions[session_id]
             path = self._path(session_id)
             if not path.exists():
+                self._sessions.pop(session_id, None)
+                self._versions.pop(session_id, None)
                 return None
+            stat = path.stat()
+            version = (stat.st_mtime_ns, stat.st_ino)
+            if session_id in self._sessions and self._versions.get(session_id) == version:
+                return self._sessions[session_id]
             session = SessionMetadata(**json.loads(path.read_text(encoding="utf-8")))
             self._sessions[session_id] = session
-            self._locks.setdefault(session_id, Lock())
+            self._versions[session_id] = version
             return session
 
     def get_or_create_session(self, session_id: str | None, user_request: str = "") -> tuple[SessionMetadata, bool]:
@@ -95,14 +102,16 @@ class SessionMetadataStore:
                 return session, False
             return self.create_session(user_request, session_id), True
 
-    def _session_lock(self, session_id: str) -> Lock:
+    def _session_lock(self, session_id: str) -> _SessionLock:
         with self._lock:
-            return self._locks.setdefault(session_id, Lock())
+            self._path(session_id)
+            return self._locks.setdefault(session_id, _SessionLock(self.root / ".locks" / session_id))
 
     @contextmanager
     def locked_session(self, session_id: str | None, user_request: str = ""):
-        session, created = self.get_or_create_session(session_id, user_request)
-        with self._session_lock(session.session_id):
+        identifier = session_id or str(uuid4())
+        with self._session_lock(identifier):
+            session, created = self.get_or_create_session(identifier, user_request)
             try:
                 yield session, created
             finally:
@@ -110,14 +119,22 @@ class SessionMetadataStore:
 
     @asynccontextmanager
     async def async_locked_session(self, session_id: str | None, user_request: str = ""):
-        session, created = self.get_or_create_session(session_id, user_request)
-        lock = self._session_lock(session.session_id)
-        await asyncio.to_thread(lock.acquire)
+        identifier = session_id or str(uuid4())
+        lock = self._session_lock(identifier)
+        # Nonblocking acquisition avoids leaving a background thread holding a
+        # lock forever if the awaiting coroutine is cancelled.
+        while not lock.acquire(blocking=False):
+            await asyncio.sleep(0.05)
+        session = None
         try:
+            session, created = self.get_or_create_session(identifier, user_request)
             yield session, created
         finally:
-            self.save(session)
-            lock.release()
+            try:
+                if session is not None:
+                    self.save(session)
+            finally:
+                lock.release()
 
     @contextmanager
     def session_lock(self, session_id: str):
@@ -171,6 +188,7 @@ class SessionMetadataStore:
                  "created_at": s.created_at, "updated_at": s.updated_at,
                  "message_count": s.metadata.get("message_count", 0),
                  "last_message": s.metadata.get("last_message", ""),
+                 "last_run_id": s.metadata.get("last_run_id"),
                  "pinned": bool(s.metadata.get("pinned", False))}
                 for s in self._sessions.values()
             ]
@@ -189,8 +207,7 @@ class SessionMetadataStore:
     ) -> dict[str, Any]:
         """Update user-editable session metadata and return its sidebar summary."""
         identifier = str(session_id or "").strip()
-        session, _ = self.get_or_create_session(identifier)
-        with self._session_lock(identifier):
+        with self.locked_session(identifier) as (session, _):
             if title is not None:
                 cleaned = " ".join(str(title).split())[:80]
                 session.metadata["title"] = cleaned or "New chat"
@@ -216,7 +233,47 @@ class SessionMetadataStore:
             with self._lock:
                 exists = self.get_session(session_id) is not None
                 self._sessions.pop(session_id, None)
+                self._versions.pop(session_id, None)
                 self._path(session_id).unlink(missing_ok=True)
                 return exists
         finally:
             lock.release()
+
+
+class _SessionLock:
+    """Serialize workspace/session mutations across threads and worker processes."""
+
+    def __init__(self, path: Path) -> None:
+        self.path = path
+        self.thread_lock = Lock()
+        self.handle = None
+
+    def acquire(self, blocking: bool = True) -> bool:
+        if not self.thread_lock.acquire(blocking=blocking):
+            return False
+        handle = None
+        try:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            handle = self.path.open("a+")
+            fcntl.flock(handle, fcntl.LOCK_EX | (0 if blocking else fcntl.LOCK_NB))
+            self.handle = handle
+            return True
+        except BaseException as exc:
+            if handle is not None:
+                handle.close()
+            self.thread_lock.release()
+            if isinstance(exc, BlockingIOError):
+                return False
+            raise
+
+    def release(self) -> None:
+        self.handle.close()
+        self.handle = None
+        self.thread_lock.release()
+
+    def __enter__(self):
+        self.acquire()
+        return self
+
+    def __exit__(self, *args):
+        self.release()

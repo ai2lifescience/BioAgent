@@ -23,13 +23,13 @@ from agents.sandbox.session.base_sandbox_session import BaseSandboxSession
 from agents.sandbox.snapshot import NoopSnapshotSpec
 
 from tools.infrastructure.workspace import workspace_file_metadata
+from tools.infrastructure.workspace.sdk import list_files
 from .tracing import configure_tracing
 
 if TYPE_CHECKING:
     from .sessions import SessionMetadata
 
 WORKSPACES_DIR = Path(os.getenv("AGENT_SESSIONS_DIR", "runtime/sessions")).resolve()
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
 configure_tracing()
 
 
@@ -81,36 +81,6 @@ def relative_file_path(path: str) -> Path:
     return candidate
 
 
-async def list_files(session: BaseSandboxSession) -> list[dict]:
-    """List regular workspace files using SDK metadata; never follow symlinks."""
-    root = Path(session.state.manifest.root)
-    directories = [root]
-    files = []
-    while directories:
-        for entry in await session.ls(directories.pop()):
-            path = Path(entry.path)
-            if path.name.startswith("."):
-                continue
-            if entry.kind == EntryKind.DIRECTORY:
-                directories.append(path)
-            elif entry.kind == EntryKind.FILE:
-                relative = path.relative_to(root).as_posix()
-                project_path = (
-                    path.relative_to(PROJECT_ROOT).as_posix()
-                    if path.is_relative_to(PROJECT_ROOT)
-                    else str(path)
-                )
-                files.append({
-                    "path": project_path,
-                    "workspace_path": relative,
-                    "name": path.name,
-                    "size": entry.size,
-                    "modified_at": path.stat().st_mtime_ns,
-                    **workspace_file_metadata(path, uploaded=relative.startswith("uploads/")),
-                })
-    return sorted(files, key=lambda item: (item["modified_at"], item["path"]))
-
-
 async def upload_file(session: BaseSandboxSession, filename: str, data: bytes) -> dict:
     if not data:
         raise ValueError("Uploaded file is empty.")
@@ -118,14 +88,8 @@ async def upload_file(session: BaseSandboxSession, filename: str, data: bytes) -
     path = Path("uploads") / f"{uuid4().hex[:12]}_{name}"
     await session.mkdir("uploads", parents=True)
     await session.write(path, BytesIO(data))
-    project_path = (Path(session.state.manifest.root) / path).resolve()
-    display_path = (
-        project_path.relative_to(PROJECT_ROOT).as_posix()
-        if project_path.is_relative_to(PROJECT_ROOT)
-        else str(project_path)
-    )
     return {
-        "path": display_path,
+        "path": path.as_posix(),
         "workspace_path": path.as_posix(),
         "name": name,
         "size": len(data),

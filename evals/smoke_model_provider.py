@@ -106,7 +106,7 @@ class ProviderTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_nested_approval_resume_uses_fresh_provider_and_executes_once(self):
         messages = [
-            tool_call("pipeline_specialist", {"input": "Cancel the fixture job"}, "specialist"),
+            tool_call("pipeline_specialist", {"task": "Cancel the fixture job"}, "specialist"),
             tool_call("pipeline_shell", {
                 "commands": ["agent-pipeline cancel --job-id " + "a" * 32],
                 "timeout_ms": None, "max_output_length": None,
@@ -120,7 +120,7 @@ class ProviderTests(unittest.IsolatedAsyncioTestCase):
             requests.append(json.loads(request.content))
             return completion(messages[len(requests) - 1])
 
-        pipeline = importlib.import_module("tools.infrastructure.agent_sdk.pipeline_shell")
+        pipeline = importlib.import_module("tools.infrastructure.sdk_adapters.pipeline_shell")
         with patch("models.openrouter_provider.create_async_client", side_effect=lambda: self.make_client(respond)) as factory:
             with patch.object(pipeline, "dispatch", return_value={"status": "ok"}) as dispatch:
                 pending = await runtime.async_run_agent(

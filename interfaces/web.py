@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import re
 from time import perf_counter
+import time
 from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
 
@@ -24,7 +25,13 @@ from interfaces.api import (
     delete_session,
     delete_workspace_file,
     handle_approval,
-    handle_request,
+    enqueue_request,
+    enqueue_approval,
+    get_run,
+    get_run_events,
+    get_knowledge_job,
+    get_knowledge_job_events,
+    list_runs,
     list_sessions,
     list_session_messages,
     list_workspace_files,
@@ -34,7 +41,11 @@ from interfaces.api import (
 )
 from harness.sandbox import relative_file_path
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODELS
-from tools.infrastructure.pipeline_runtime import service as pipeline_service
+from tools.infrastructure.pipeline_engine import service as pipeline_service
+from harness.jobs import TERMINAL, get_queue
+from harness.website import check_site, configure_local_demo, get_bridge, issue_ticket
+from tools.infrastructure.knowledge.models import TERMINAL_JOB_STATUSES
+from tools.infrastructure.workspace.public import public_payload
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -107,6 +118,25 @@ def _runtime_info(
     }
 
 
+def _public_job(job: dict[str, Any]) -> dict[str, Any]:
+    """Return queue metadata without the original prompt or host internals."""
+    result = {
+        key: job.get(key)
+        for key in ("run_id", "session_id", "status", "model_key", "max_turns", "created_at", "updated_at", "error")
+    }
+    if job.get("result") is not None:
+        result["result"] = public_payload(job["result"])
+    if result.get("error"):
+        result["error"] = public_payload(result["error"])
+    return result
+
+
+def _public_event(item: dict[str, Any]) -> dict[str, Any]:
+    value = dict(item)
+    value["payload"] = public_payload(value.get("payload", {}))
+    return value
+
+
 class AgentRequestHandler(BaseHTTPRequestHandler):
     """Browser UI and JSON API handler."""
 
@@ -154,6 +184,16 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
         if path == "/sessions":
             self._send_json({"sessions": list_sessions()})
             return
+        if path.startswith("/runs/"):
+            self._handle_run_status(path)
+            return
+        if path.startswith("/knowledge/jobs/"):
+            self._handle_knowledge_job(path)
+            return
+        if path == "/runs":
+            session_id = (parse_qs(urlparse(self.path).query).get("session_id") or [None])[0]
+            self._send_json({"runs": [_public_job(item) for item in list_runs(session_id)]})
+            return
         if path.startswith("/sessions/") and path.endswith("/messages"):
             self._handle_session_messages(path)
             return
@@ -167,6 +207,9 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         path = urlparse(self.path).path
+        if path.startswith("/website/"):
+            self._handle_website(path[len("/website/"):])
+            return
         if path == "/workspace/files":
             self._handle_workspace_upload()
             return
@@ -243,7 +286,7 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
 
     def _handle_approval_stream(self) -> None:
-        """Resume an approved run while streaming runtime progress to the UI."""
+        """Queue an approval decision and stream the durable resumed run."""
         try:
             payload = self._read_json()
             session_id = str(payload.get("session_id", "")).strip()
@@ -259,41 +302,16 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 self._send_json({"error": "approval_id is required"}, status=400)
                 return
 
-            self._send_stream_headers()
-            logs: list[str] = []
-            start = perf_counter()
-
-            def log_stream(message: str) -> None:
-                line = _progress_line(start, message)
-                logs.append(line)
-                if not self._send_stream_event("log", {"message": line}):
-                    raise ConnectionAbortedError("Client disconnected from approval stream.")
-
-            self._send_stream_event(
-                "status",
-                {"message": "Approval received. Resuming the run.", "session_id": session_id},
-            )
-            result = handle_approval(session_id, approved, approval_id, log_fn=log_stream)
-            result["runtime"] = _runtime_info(
-                result,
-                perf_counter() - start,
-                logs,
-                model_key=result.get("model_key"),
-                max_turns=result.get("max_turns"),
-            )
-            self._send_stream_event("result", result)
+            job = enqueue_approval(session_id, approved, approval_id)
+            if job is None:
+                self._send_json({"error": "No pending approval for this session."}, status=400)
+                return
         except ConnectionAbortedError:
             return
         except Exception as exc:
-            runtime = {"status": "error", "elapsed_seconds": 0, "logs": []}
-            if "start" in locals():
-                runtime["elapsed_seconds"] = round(perf_counter() - start, 2)
-            if "logs" in locals():
-                runtime["logs"] = logs[-30:]
-            self._send_stream_event(
-                "error",
-                {"error": str(exc), "error_type": type(exc).__name__, "runtime": runtime},
-            )
+            self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
+            return
+        self._stream_run(job["run_id"])
 
     def do_DELETE(self) -> None:
         path = urlparse(self.path).path
@@ -318,46 +336,23 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             if not request:
                 self._send_json({"error": "request is required"}, status=400)
                 return
-            logs: list[str] = []
-            start = perf_counter()
             model_key = payload.get("model_key") or DEFAULT_AGENT_MODEL_KEY
             session_id = str(payload.get("session_id") or "").strip() or None
-
-            def log_progress(message: str) -> None:
-                logs.append(_progress_line(start, message))
-
-            result = handle_request(
+            job = enqueue_request(
                 request=request,
                 session_id=session_id,
                 model_key=model_key,
                 max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
-                log_fn=log_progress,
+                website=payload.get("website") if isinstance(payload.get("website"), dict) else None,
             )
-            result["runtime"] = _runtime_info(
-                result=result,
-                elapsed_seconds=perf_counter() - start,
-                logs=logs,
-                model_key=model_key,
-                max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
-            )
-            self._send_json(result)
+            self._send_json(_public_job(job), status=202)
         except Exception as exc:
-            runtime = {
-                "status": "error",
-                "elapsed_seconds": 0,
-                "logs": [],
-            }
-            if "start" in locals():
-                runtime["elapsed_seconds"] = round(perf_counter() - start, 2)
-            if "logs" in locals():
-                runtime["logs"] = logs[-30:]
             self._send_json(
                 {
                     "error": str(exc),
                     "error_type": type(exc).__name__,
-                    "runtime": runtime,
                 },
-                status=500,
+                status=400,
             )
 
     def _handle_run_stream(self) -> None:
@@ -368,64 +363,66 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 self._send_json({"error": "request is required"}, status=400)
                 return
 
-            self._send_stream_headers()
-            logs: list[str] = []
-            start = perf_counter()
             model_key = payload.get("model_key") or DEFAULT_AGENT_MODEL_KEY
             session_id = str(payload.get("session_id") or "").strip() or None
-
-            def log_stream(message: str) -> None:
-                line = _progress_line(start, message)
-                logs.append(line)
-                if not self._send_stream_event("log", {"message": line}):
-                    raise ConnectionAbortedError("Client disconnected from runtime stream.")
-
-            self._send_stream_event(
-                "status",
-                {
-                    "message": "Agent request started.",
-                    "model_key": model_key,
-                    "session_id": session_id,
-                    "max_turns": int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
-                },
-            )
-            result = handle_request(
+            job = enqueue_request(
                 request=request,
                 session_id=session_id,
                 model_key=model_key,
                 max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
-                log_fn=log_stream,
+                website=payload.get("website") if isinstance(payload.get("website"), dict) else None,
             )
-            result["runtime"] = _runtime_info(
-                result=result,
-                elapsed_seconds=perf_counter() - start,
-                logs=logs,
-                model_key=model_key,
-                max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
-            )
-            self._send_stream_event("result", result)
         except ConnectionAbortedError:
             return
         except Exception as exc:
-            runtime = {
-                "status": "error",
-                "elapsed_seconds": 0,
-                "logs": [],
-            }
-            if "start" in locals():
-                runtime["elapsed_seconds"] = round(perf_counter() - start, 2)
-            if "logs" in locals():
-                runtime["logs"] = logs
-            if "model_key" in locals():
-                runtime["model_key"] = model_key
-            self._send_stream_event(
-                "error",
-                {
-                    "error": str(exc),
-                    "error_type": type(exc).__name__,
-                    "runtime": runtime,
-                },
-            )
+            # Enqueue failures happen before SSE headers are sent. Once the
+            # stream is established, _stream_run reports terminal errors itself.
+            self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
+            return
+        self._stream_run(job["run_id"])
+
+    def _handle_website(self, operation: str) -> None:
+        """Authenticate and proxy the small browser-to-host website protocol."""
+        try:
+            payload = self._read_json()
+            bridge = get_bridge()
+            if operation == "demo-token":
+                site_id = str(payload.get("site_id", "")).strip()
+                origin = str(self.headers.get("Origin") or "").strip()
+                if site_id != "assistant-demo" or not origin:
+                    raise ValueError("assistant-demo token requires the configured browser origin")
+                if urlparse(origin).netloc != self.headers.get("Host"):
+                    raise ValueError("Demo tickets are only issued to this server's own host page.")
+                check_site(site_id, origin)
+                secret = os.getenv("AGENT_WEBSITE_SECRET", "")
+                if len(secret) < 32:
+                    raise ValueError("AGENT_WEBSITE_SECRET must be configured with at least 32 characters")
+                result = {"token": issue_ticket(secret, site_id=site_id, origin=origin, subject="assistant-demo-user")}
+            elif operation == "connect":
+                result = bridge.connect(
+                    ticket=str(payload.get("ticket", "")), site_id=str(payload.get("site_id", "")),
+                    origin=str(payload.get("origin", "")), instance_id=str(payload.get("instance_id", "")),
+                    session_id=str(payload.get("session_id", "")), context=payload.get("context") or {},
+                    capabilities=[str(x) for x in payload.get("capabilities", [])],
+                )
+            elif operation == "context":
+                result = bridge.context(str(payload.get("binding_id", "")), str(payload.get("token", "")), payload.get("context") or {})
+            elif operation == "poll":
+                result = {"requests": bridge.pending(str(payload.get("binding_id", "")), str(payload.get("token", "")))}
+            elif operation == "respond":
+                result = bridge.respond(
+                    str(payload.get("binding_id", "")), str(payload.get("token", "")), str(payload.get("call_id", "")),
+                    result=payload.get("result"), error=payload.get("error"), revision=str(payload.get("revision", "")),
+                )
+            elif operation == "disconnect":
+                bridge.disconnect(str(payload.get("binding_id", "")), str(payload.get("token", "")))
+                result = {"disconnected": True}
+            else:
+                self._send_json({"error": "not found"}, status=404)
+                return
+            self._send_json(result)
+        except Exception as exc:
+            self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
 
     def _handle_workspace(self) -> None:
         parsed = urlparse(self.path)
@@ -507,6 +504,96 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 },
                 status=400,
             )
+
+    def _handle_run_status(self, path: str) -> None:
+        parts = path.strip("/").split("/")
+        if len(parts) not in {2, 3} or parts[0] != "runs":
+            self._send_json({"error": "not found"}, status=404)
+            return
+        try:
+            job = get_run(parts[1])
+            if len(parts) == 3 and parts[2] == "events":
+                after = int((parse_qs(urlparse(self.path).query).get("after") or ["-1"])[0])
+                self._send_json({"run": _public_job(job), "events": [_public_event(item) for item in get_run_events(parts[1], after)]})
+            else:
+                self._send_json(_public_job(job))
+        except (ValueError, TypeError) as exc:
+            self._send_json({"error": str(exc)}, status=404)
+
+    def _handle_knowledge_job(self, path: str) -> None:
+        parts = path.strip("/").split("/")
+        if len(parts) not in {3, 4} or parts[:2] != ["knowledge", "jobs"]:
+            self._send_json({"error": "not found"}, status=404)
+            return
+        query = parse_qs(urlparse(self.path).query)
+        session_id = (query.get("session_id") or [""])[0].strip()
+        if not session_id:
+            self._send_json({"error": "session_id is required"}, status=400)
+            return
+        job_id = unquote(parts[2]).strip()
+        try:
+            job = get_knowledge_job(job_id, session_id)
+            if len(parts) == 4 and parts[3] == "events":
+                after = int((query.get("after") or ["-1"])[0])
+                events = get_knowledge_job_events(job_id, session_id, after)
+                self._send_json({"job": public_payload(job), "events": [public_payload(item) for item in events]})
+            elif len(parts) == 4 and parts[3] == "stream":
+                self._stream_knowledge_job(job_id, session_id)
+            elif len(parts) == 3:
+                self._send_json(public_payload(job))
+            else:
+                self._send_json({"error": "not found"}, status=404)
+        except (ValueError, TypeError) as exc:
+            self._send_json({"error": str(exc)}, status=404)
+
+    def _stream_knowledge_job(self, job_id: str, session_id: str) -> None:
+        self._send_stream_headers()
+        sequence = -1
+        heartbeat_at = time.monotonic()
+        while True:
+            for item in get_knowledge_job_events(job_id, session_id, sequence):
+                sequence = item["sequence"]
+                if not self._send_stream_event(item["event"], public_payload(item["payload"])):
+                    return
+            job = get_knowledge_job(job_id, session_id)
+            if job["status"] in TERMINAL_JOB_STATUSES:
+                self._send_stream_event("result", public_payload(job))
+                return
+            if time.monotonic() - heartbeat_at >= 15:
+                if not self._send_stream_event("heartbeat", {"job_id": job_id}):
+                    return
+                heartbeat_at = time.monotonic()
+            time.sleep(0.25)
+
+    def _stream_run(self, run_id: str) -> None:
+        self._send_stream_headers()
+        sequence = -1
+        heartbeat_at = time.monotonic()
+        while True:
+            for item in get_run_events(run_id, sequence):
+                sequence = item["sequence"]
+                if not self._send_stream_event(item["event"], public_payload(item["payload"])):
+                    return
+            job = get_run(run_id)
+            if job["status"] in TERMINAL:
+                if job.get("result"):
+                    payload = dict(job["result"])
+                    payload["job_id"] = run_id
+                    payload["run_status"] = job["status"]
+                    payload.setdefault("runtime", {})
+                    if isinstance(payload["runtime"], dict):
+                        payload["runtime"].update({"job_id": run_id, "status": job["status"]})
+                    if not self._send_stream_event("result", payload):
+                        return
+                else:
+                    self._send_stream_event("error", {"error": job.get("error") or "Agent run failed.", "run_id": run_id})
+                return
+            if time.monotonic() - heartbeat_at >= 15:
+                if not self._send_stream_event("heartbeat", {"run_id": run_id}):
+                    return
+                heartbeat_at = time.monotonic()
+            time.sleep(0.25)
+
 
     def _handle_delete_workspace_file(self, path: str) -> None:
         workspace_path = unquote(path[len("/workspace/files/"):]).strip()
@@ -633,7 +720,9 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
 
 
 def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
+    get_queue().recover()
     server = ThreadingHTTPServer((host, port), AgentRequestHandler)
+    configure_local_demo(server.server_port, server.server_address[0])
     print(f"Pipeline2Agent web UI running at http://{host}:{port}")
     server.serve_forever()
 

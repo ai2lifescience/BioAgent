@@ -1,56 +1,78 @@
+# Routing fixtures use current model-facing SDK tool names.
 - prompt: "download 10 records phiX174 genes A G"
-  expected_workflow: ncbi_retrieval
+  expected_tools:
+    - ncbi_retrieval
 
 - prompt: "Summarize genome structure and host range of PhiX174 with trusted sources."
-  expected_workflow: species_report
+  expected_tools:
+    - pubmed_search
+    - web_search
+    - evidence_retrieve
+    - report_synthesize
+  forbidden_tools:
+    - report_review
 
 - prompt: "Analyze PhiX174 segment sequence GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT"
-  expected_workflow: sequence_analysis
+  expected_tools:
+    - sequence_stats
+    - sequence_find_orfs
 
 - prompt: "Show genome structure of the latest FASTA as a circular map"
-  expected_workflow: genome_map
+  expected_tools:
+    - genome_read_features
+    - genome_render_map
 
 - prompt: "Search UniProt for BRCA1 human"
-  expected_workflow: database_lookup
-  forbidden_workflows:
+  expected_tools:
+    - database_lookup
+  forbidden_tools:
     - ncbi_retrieval
-    - species_report
+    - report_synthesize
 
 - prompt: "Download PDB structure 1A3N as cif"
-  expected_workflow: pdb_download
-  forbidden_workflows:
+  expected_tools:
+    - pdb_download
+  forbidden_tools:
     - database_lookup
-    - protein_structure_analysis
+    - structure_inspect
 
 - prompt: "Analyze structure file runtime/sessions/demo/outputs/structures/1A3N.cif"
-  expected_workflow: protein_structure_analysis
-  forbidden_workflows:
+  expected_tools:
+    - structure_inspect
+  forbidden_tools:
     - pdb_download
     - database_lookup
 
 - prompt: "Download PDB structure 3GOU"
-  expected_workflow: pdb_download
-  forbidden_workflows:
-    - protein_structure_analysis
+  expected_tools:
+    - pdb_download
+  forbidden_tools:
+    - structure_inspect
 
 - prompt: "Calculate GC content and detect ORFs in this FASTA file"
-  expected_workflow: sequence_analysis
-  forbidden_workflows:
+  expected_tools:
+    - sequence_stats
+    - sequence_find_orfs
+  forbidden_tools:
     - file_inspection
     - blast_search
 
 - prompt: "Show the columns and first 20 lines of this TSV file"
-  expected_workflow: file_inspection
-  forbidden_workflows:
-    - sequence_analysis
-    - genome_map
+  expected_tools:
+    - file_inspection
+  forbidden_tools:
+    - sequence_stats
+    - genome_render_map
 
 - prompt: "Find sequences similar to this protein with BLASTP"
-  expected_workflow: blast_search
-  forbidden_workflows:
-    - sequence_analysis
+  expected_tools:
+    - blast_search
+  forbidden_tools:
+    - sequence_stats
     - ncbi_retrieval
 
 - prompt: "Run the shell template and then summarize its outputs"
-  expected_workflow: pipeline_specialist
-  forbidden_workflows:
+  expected_tools:
+    - pipeline_specialist
+  forbidden_tools:
+    - code_test

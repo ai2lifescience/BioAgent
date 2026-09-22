@@ -5,10 +5,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from tools.infrastructure.tooling.context import WorkflowContext
+from tools.infrastructure.tool_support.context import OperationContext
 
 
-def session_root(context: WorkflowContext) -> Path:
+def session_root(context: OperationContext) -> Path:
     """Return the active session root, creating it for workspace writes."""
     if not context.session_dir:
         raise ValueError("The active session does not have a workspace root.")
@@ -20,7 +20,7 @@ def session_root(context: WorkflowContext) -> Path:
     return root
 
 
-def resolve_session_path(context: WorkflowContext, value: str) -> Path:
+def resolve_session_path(context: OperationContext, value: str) -> Path:
     """Resolve a safe relative path inside the active session workspace."""
     candidate = Path(str(value))
     if candidate.is_absolute() or ".." in candidate.parts or any(part.startswith(".") for part in candidate.parts):
@@ -32,28 +32,22 @@ def resolve_session_path(context: WorkflowContext, value: str) -> Path:
     return resolved
 
 
-def resolve_workspace_item(context: WorkflowContext, item: dict[str, Any]) -> tuple[Path, str]:
+def resolve_workspace_item(context: OperationContext, item: dict[str, Any]) -> tuple[Path, str]:
     """Resolve one file-list item and return its host path and public path."""
     public_path = str(item.get("workspace_path") or item.get("path") or "")
-    relative = str(item.get("workspace_path") or "").strip()
-    if relative and context.session_dir:
-        root = session_root(context)
-        resolved = (root / relative).resolve()
-        if not resolved.is_relative_to(root):
-            raise ValueError("Workspace paths must stay inside the active session.")
-    else:
-        raw = str(item.get("path") or "").strip()
-        resolved = Path(raw).expanduser().resolve() if raw else Path()
+    resolved = resolve_session_path(context, public_path)
     if not resolved.is_file():
         raise FileNotFoundError(f"Workspace file is not available: {public_path}")
     return resolved, public_path
 
 
-def select_workspace_file(context: WorkflowContext, requested: str | None = None,
+def select_workspace_file(context: OperationContext, requested: str | None = None,
                           *, suffixes: tuple[str, ...] = ()) -> tuple[Path, str]:
     """Resolve a listed session file and return its host path plus public path."""
     candidates = context.files
     requested = str(requested or "").strip()
+    if requested:
+        resolve_session_path(context, requested)
     if requested:
         matches = [
             item for item in candidates
@@ -79,7 +73,7 @@ def select_workspace_file(context: WorkflowContext, requested: str | None = None
     return resolve_workspace_item(context, item)
 
 
-def workspace_output_path(context: WorkflowContext, *parts: str) -> Path:
+def workspace_output_path(context: OperationContext, *parts: str) -> Path:
     """Create a path under the run output directory, without accepting traversal."""
     root = _output_root(context)
     candidate = confined_output_path(root, *parts)
@@ -88,7 +82,7 @@ def workspace_output_path(context: WorkflowContext, *parts: str) -> Path:
 
 
 def workspace_output_dir(
-    context: WorkflowContext,
+    context: OperationContext,
     requested: str | Path | None = None,
     *default_parts: str,
 ) -> Path:
@@ -109,7 +103,7 @@ def workspace_output_dir(
 
 
 def session_output_dir(
-    context: WorkflowContext,
+    context: OperationContext,
     requested: str | Path | None = None,
     *default_parts: str,
 ) -> Path:
@@ -124,7 +118,7 @@ def session_output_dir(
     return candidate
 
 
-def _output_root(context: WorkflowContext) -> Path:
+def _output_root(context: OperationContext) -> Path:
     root = session_root(context)
     # workspace_dir is host-owned run metadata, never a model-supplied base.
     if context.workspace_dir:

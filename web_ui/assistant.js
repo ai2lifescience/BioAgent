@@ -19,6 +19,9 @@
     uploads: [],
     logs: [],
     context: {},
+    website: null,
+    websitePoll: null,
+    websiteRequired: Boolean(query.get("website_site")),
     maxTurns: 5,
   };
 
@@ -46,11 +49,17 @@
   function setContext(context) {
     if (!context || typeof context !== "object" || Array.isArray(context)) return;
     // Replace context as a whole so a new project cannot keep an old sample ID.
-    state.context = {};
+    try {
+      const serialized = JSON.stringify(context);
+      if (serialized.length > 64 * 1024) throw new Error("Website context is too large");
+      state.context = { ...context };
+    } catch (_) {
+      state.context = {};
+    }
     const summary = byId("contextSummary");
     summary.replaceChildren();
     for (const [key, label] of Object.entries(contextLabels)) {
-      const value = typeof context[key] === "string" ? context[key].trim().slice(0, 200) : "";
+      const value = typeof state.context[key] === "string" ? state.context[key].trim().slice(0, 200) : "";
       if (!value) continue;
       state.context[key] = value;
       const chip = document.createElement("span");
@@ -64,7 +73,7 @@
 
   function setBusy(busy) {
     state.busy = busy;
-    byId("send").disabled = busy || !state.ready;
+    byId("send").disabled = busy || !state.ready || (state.websiteRequired && !state.website);
     byId("stop").disabled = !state.abort;
     byId("stop").hidden = !state.abort;
     byId("newChat").disabled = busy;
@@ -126,8 +135,69 @@
   }
 
   function requestText(text) {
-    if (!Object.keys(state.context).length) return text;
-    return `${text}\n\nWebsite context (user-supplied labels, not retrieved results):\n${JSON.stringify(state.context, null, 2)}`;
+    return text;
+  }
+
+  async function websitePost(path, body) {
+    const response = await fetch(apiUrl(path), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(payload.error || `Website bridge HTTP ${response.status}`);
+    return payload;
+  }
+
+  async function websiteConnect(message) {
+    if (message.session_id && message.session_id !== state.sessionId) return;
+    try {
+      state.website = await websitePost("website/connect", {
+        ticket: message.ticket, site_id: message.site_id, origin: parentOrigin,
+        instance_id: message.instance_id, session_id: state.sessionId,
+        capabilities: message.capabilities || [], context: state.context,
+      });
+      state.website.site_id = message.site_id;
+      window.parent.postMessage({ type: "agent-website-connected", session_id: state.sessionId, binding_id: state.website.binding_id }, parentOrigin);
+      pollWebsite();
+      status.textContent = "Connected to website";
+      byId("retryWebsite").hidden = true;
+      setBusy(false);
+    } catch (error) {
+      appendProgress(`Website bridge unavailable: ${error.message}`);
+      status.textContent = `Website connection failed: ${error.message}`;
+      byId("retryWebsite").hidden = false;
+      setBusy(false);
+      window.parent.postMessage({ type: "agent-event", event: { type: "website-error", message: error.message } }, parentOrigin);
+    }
+  }
+
+  async function pollWebsite() {
+    if (!state.website || state.websitePoll) return;
+    state.websitePoll = true;
+    try {
+      while (state.website) {
+        const website = state.website;
+        const payload = await websitePost("website/poll", website);
+        if (website !== state.website) continue;
+        for (const request of (payload.requests || [])) {
+          window.parent.postMessage({ type: "agent-website-request", ...request, session_id: website.session_id }, parentOrigin);
+        }
+        await new Promise((resolve) => setTimeout(resolve, 250));
+      }
+    } catch (error) {
+      if (state.website) appendProgress(`Website bridge disconnected: ${error.message}`);
+    } finally { state.websitePoll = null; }
+  }
+
+  async function websiteResponse(message) {
+    if (!state.website || message.session_id !== state.sessionId || !message.call_id) return;
+    try {
+      await websitePost("website/respond", { ...state.website, call_id: message.call_id,
+        run_id: message.run_id, revision: message.revision, result: message.result, error: message.error });
+    } catch (error) { appendProgress(`Website response failed: ${error.message}`); }
+  }
+
+  async function websiteContextUpdate() {
+    if (!state.website) return;
+    try { await websitePost("website/context", { ...state.website, context: state.context }); }
+    catch (error) { appendProgress(`Website context update failed: ${error.message}`); }
   }
 
   async function loadConfig() {
@@ -189,6 +259,7 @@
         session_id: state.sessionId,
         model_key: model.value,
         max_turns: steps,
+        website: state.website ? { binding_id: state.website.binding_id, token: state.website.token } : undefined,
       }),
       signal,
     });
@@ -304,6 +375,11 @@
   function newChat() {
     if (state.busy) return;
     state.sessionId = createSessionId();
+    if (state.website) {
+      websitePost("website/disconnect", state.website).catch(() => {});
+      state.website = null;
+      window.parent.postMessage({ type: "agent-ready", session_id: state.sessionId }, parentOrigin);
+    }
     state.uploads = [];
     state.logs = [];
     messages.replaceChildren(welcome.cloneNode(true));
@@ -322,8 +398,25 @@
     if (window.parent === window || event.source !== window.parent || event.origin !== parentOrigin) return;
     if (!event.data || event.data.type !== "agent-context" || !event.data.context) return;
     setContext(event.data.context);
+    websiteContextUpdate();
   });
-  if (window.parent !== window) window.parent.postMessage({ type: "agent-ready" }, parentOrigin);
+  window.addEventListener("message", (event) => {
+    if (window.parent === window || event.source !== window.parent || event.origin !== parentOrigin) return;
+    if (event.data?.type === "agent-connect") websiteConnect(event.data);
+    if (event.data?.type === "agent-website-error") {
+      status.textContent = `Website connection failed: ${event.data.message || "unknown error"}`;
+      appendProgress(event.data.message || "Website connection failed.");
+      byId("retryWebsite").hidden = false;
+      setBusy(false);
+    }
+    if (event.data?.type === "agent-website-connected") { /* handshake acknowledgement */ }
+    if (event.data?.type === "agent-website-response") websiteResponse(event.data);
+    if (event.data?.type === "agent-disconnect") {
+      if (state.website) websitePost("website/disconnect", state.website).catch(() => {});
+      state.website = null;
+    }
+  });
+  if (window.parent !== window) window.parent.postMessage({ type: "agent-ready", session_id: state.sessionId }, parentOrigin);
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && window.parent !== window) {
       window.parent.postMessage({ type: "agent-close" }, parentOrigin);
@@ -347,5 +440,9 @@
   byId("attachButton").addEventListener("click", () => byId("uploadInput").click());
   byId("uploadInput").addEventListener("change", uploadFiles);
   byId("retryConfig").addEventListener("click", loadConfig);
+  byId("retryWebsite").addEventListener("click", () => {
+    byId("retryWebsite").hidden = true;
+    window.parent.postMessage({ type: "agent-website-retry", session_id: state.sessionId }, parentOrigin);
+  });
   loadConfig();
 })();

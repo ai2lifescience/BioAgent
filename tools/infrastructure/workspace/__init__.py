@@ -19,6 +19,7 @@ from .paths import (
     workspace_output_dir,
     workspace_output_path,
 )
+from .sdk import list_files
 
 __all__ = [
     "confined_output_path",
@@ -36,4 +37,5 @@ __all__ = [
     "session_root",
     "workspace_output_dir",
     "workspace_output_path",
+    "list_files",
 ]

@@ -40,20 +40,20 @@ export function createArtifactViewers({
     const artifacts = [];
     const seen = new Set();
     for (const item of result?.files || []) {
-      if (item?.kind === "structure" && item?.source_skill === "protein_structure_analysis") {
-        addStructureArtifact(artifacts, seen, item?.path, item?.label || item?.source_skill);
+      if (item?.kind === "structure") {
+        addStructureArtifact(artifacts, seen, item?.path, item?.label || "structure");
       }
     }
     if (artifacts.length) return artifacts;
 
     const evidence = result?.evidence || {};
     for (const item of evidence.outputs || []) {
-      if (item?.tool === "protein_structure_analysis") {
+      if (item?.tool === "structure_inspect" || item?.tool === "pdb_download" || item?.tool === "alphafold_download") {
         addStructureArtifact(artifacts, seen, item?.structure_path, item?.pdb_id || item?.summary);
       }
     }
     for (const item of evidence.tool_outputs || []) {
-      if (item?.tool === "protein_structure_analysis" || item?.tool === "protein_structure_analyze") {
+      if (item?.tool === "structure_inspect" || item?.tool === "pdb_download" || item?.tool === "alphafold_download") {
         addStructureArtifact(artifacts, seen, item?.structure_path, item?.pdb_id || item?.summary);
       }
     }

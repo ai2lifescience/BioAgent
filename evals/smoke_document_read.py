@@ -14,8 +14,8 @@ if str(PROJECT_ROOT) not in sys.path:
 from pypdf import PdfWriter
 from pypdf.generic import DecodedStreamObject, DictionaryObject, NameObject
 
-from tools.infrastructure.tooling.context import WorkflowContext
-from tools.function_tools.document_read.workflow import document_read
+from tools.infrastructure.tool_support.context import OperationContext
+from tools.function_tools.workspace.document_read import _operation as document_read
 
 
 def _pdf_bytes() -> bytes:
@@ -44,11 +44,13 @@ def _pdf_bytes() -> bytes:
 
 def main() -> int:
     with TemporaryDirectory() as directory:
-        pdf = Path(directory) / "paper.pdf"
+        pdf = Path(directory) / "uploads" / "paper.pdf"
+        pdf.parent.mkdir()
         pdf.write_bytes(_pdf_bytes())
-        context = WorkflowContext(
+        context = OperationContext(
             "document_read",
             user_context={
+                "session_dir": directory,
                 "files": [
                     {
                         "path": str(pdf),
@@ -57,15 +59,15 @@ def main() -> int:
                 ]
             },
         )
-        result = document_read("uploads/paper.pdf", context=context)
+        result = document_read(path="uploads/paper.pdf", context=context)
         assert result["status"] == "ok"
-        assert result["page_count"] == 2
-        assert "[Page 1]" in result["text"]
-        assert "Pipeline2Agent PDF page two" in result["text"]
-        latest = document_read(None, context=context)
-        assert latest["source_path"] == "uploads/paper.pdf"
+        assert result["data"]["page_count"] == 2
+        assert "[Page 1]" in result["data"]["text"]
+        assert "Pipeline2Agent PDF page two" in result["data"]["text"]
+        latest = document_read(path=None, context=context)
+        assert latest["data"]["source_path"] == "uploads/paper.pdf"
         try:
-            document_read("/etc/passwd", context=context)
+            document_read(path="/etc/passwd", context=context)
         except ValueError as exc:
             assert "active workspace" in str(exc)
         else:

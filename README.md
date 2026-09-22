@@ -19,7 +19,9 @@ Pipeline2Agent can:
 - analyze nucleotide sequences, genome maps, and protein structures;
 - inspect FASTA, CSV, TSV, JSON, Markdown, and text files;
 - read and summarize selectable-text PDF documents with page references;
-- create species reports with sources, citations, and generated files;
+- create evidence-backed reports with sources, citations, and generated files;
+- build session-owned web knowledge collections asynchronously and answer from
+  retrieved, cited RAG evidence;
 - run Shell, Snakemake, Nextflow, and WDL pipelines; and
 - retain uploads and generated files within a chat session.
 
@@ -162,7 +164,7 @@ User / App
   -> Agent + Runner (OpenAI Agents SDK)
      -> RunConfig.model_provider -> OpenAI Python client -> OpenRouter
      -> Pipeline2Agent function tools
-        -> databases, sequence/structure tools, files, RAG, pipelines
+        -> databases, sequence/structure tools, files, evidence, pipelines
      -> SDK sessions (SQLite)
      -> SDK guardrails, tracing, and per-session Unix-local sandbox
   -> structured answer, evidence, status, and workspace files
@@ -174,8 +176,8 @@ paths. Uploads and generated files remain in per-session sandboxes.
 
 OpenRouter model IDs are configured in `models/config.py`. A run-scoped SDK
 `ModelProvider` resolves these aliases and owns the shared client for root and
-specialist agents. Reporting agents live with the species-report tool;
-embeddings live in `rag/`. See the
+specialist agents. Reporting agents live in `tools/agent_tools/`; evidence
+indexing and embeddings live in `tools/infrastructure/tool_support/`. See the
 [model architecture](docs/architecture.md#models-and-provider-ownership) for
 configuration and client lifecycle details.
 
@@ -200,6 +202,12 @@ curl -X POST http://127.0.0.1:8000/run \
   -H 'Content-Type: application/json' \
   -d '{"request": "What is GC content?"}'
 ```
+
+The HTTP request is durable: the `202` response contains a `run_id` and queued
+status. Poll `GET /runs/<run_id>` or consume resumable progress from
+`GET /runs/<run_id>/events?after=<sequence>`. The browser uses
+`POST /run_stream`, which exposes the same queued run as an SSE stream;
+`POST /approve_stream` does the same for approval resumes.
 
 
 
@@ -226,7 +234,7 @@ the task container images.
 - Pipeline inputs should be supplied explicitly through the request or uploaded
 through the web UI.
 - Use the pipeline catalog to discover the workflows available in this checkout.
-  See [pipeline architecture](docs/architecture.md#pipeline-runtime) for file
+  See [pipeline architecture](docs/architecture.md#pipeline-engine) for file
   handling, execution, and adding pipelines.
 
 
@@ -235,7 +243,7 @@ through the web UI.
 
 - [System architecture](docs/architecture.md)
 - [Web UI usage and examples](docs/web_usage.md)
-- [Pipeline runtime, file handling, and adding pipelines](docs/architecture.md#pipeline-runtime)
+- [Pipeline engine, file handling, and adding pipelines](docs/architecture.md#pipeline-engine)
 - [CLI usage and examples](docs/cli_usage.md)
 - [Team development workflow](docs/dev_workflow.md)
 - [Planned improvements](docs/todo.md)
