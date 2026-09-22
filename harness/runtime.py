@@ -154,6 +154,17 @@ async def _execute(
             model_key, model=model, sandbox_root=str(sandbox_root),
         )
         run_input: str | RunState = request
+        if not pending and context.run.get("website_binding"):
+            # Make the active host-page capability explicit in the SDK input.
+            # The binding secret stays in run context; only this instruction is
+            # visible to the model, which prevents generic answers to page-
+            # specific questions before it consults the website adapter.
+            run_input = (
+                "An authenticated trusted website is embedded in this run. "
+                "For any question about the current website, page, visible data, "
+                "or workflow, call website_context first and ground the answer "
+                "in its result.\n\nUser request:\n" + request
+            )
         if pending:
             # Restore agent definitions; this run resolves models through a fresh
             # provider instead of retaining clients from the approval pause.
