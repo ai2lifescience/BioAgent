@@ -129,6 +129,4 @@
 
   const AssistantDrawer = { mount };
   window.AssistantDrawer = AssistantDrawer;
-  // Preserve the original integration name for existing host pages.
-  window.Pipeline2AgentDrawer = AssistantDrawer;
 })();

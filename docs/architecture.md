@@ -7,7 +7,7 @@ function tools and deterministic implementations for scientific operations.
 Internal names use `agent`: the Python entry points are `run_agent`,
 `async_run_agent`, `resume_agent`, and `async_resume_agent`; pipeline commands
 use `agent-pipeline`, and environment variables use the `AGENT_` prefix.
-The public browser embedding API is `Pipeline2AgentDrawer`.
+The public browser embedding API is `AssistantDrawer`.
 
 ![Pipeline2Agent current system architecture](images/system_architecture.png)
 
@@ -43,7 +43,7 @@ one model turn.
                 ▼                   ▼                       ▼
 ┌──────────────────────────┐  ┌────────────────────────┐  ┌───────────────────┐
 │ Function / hosted tools  │  │ Agent.as_tool() or     │  │ pipeline_shell    │
-│ databases · files · RAG  │  │ handoff specialists    │  │ agent-pipeline    │
+│ databases · files · evidence  │  │ handoff specialists    │  │ agent-pipeline    │
 └──────────────┬───────────┘  └────────────┬───────────┘  └─────────┬─────────┘
                │                           │                         │
                │                           │                         ▼
@@ -69,10 +69,12 @@ the agent later uses the job ID to inspect status and collect verified results.
 The root agent selects tools through the SDK model loop. Domain specialists are
 currently exposed through `Agent.as_tool()`; a handoff can be added when a
 specialist should become the active owner of the remainder of a turn.
-Function-tool workflows and their implementations live under
-`tools/function_tools/<tool_name>/`; pipeline execution lives under
-`tools/infrastructure/pipeline_engine/`. Reporting agents live under
-`tools/function_tools/species_report/reporting/`.
+Atomic FunctionTool wrappers, contracts, parsers, and deterministic operations
+live together in one public module per capability under `tools/function_tools/`.
+Generic execution, artifact, and embedding adapters live under
+`tools/infrastructure/tool_support/`. Pipeline execution lives under
+`tools/infrastructure/pipeline_engine/`. Evidence review and report synthesis
+are nested SDK agents under `tools/agent_tools/`.
 
 The browser surface keeps the same boundaries. `interfaces/web.py` serves the
 HTTP/SSE contract, while the full-page UI loads focused JavaScript modules:
@@ -101,9 +103,9 @@ An agent is an LLM configured with instructions, a model, tools, optional
 structured output, guardrails, and orchestration behavior. `harness/agent.py`
 builds the root `SandboxAgent` and gives it cross-tool policy. It receives an
 `AgentRunContext` containing the session, workspace, model choice, progress
-callback, and accumulated tool results. Reporting agents are ordinary SDK
-`Agent` instances created inside the species-report workflow; they do not
-replace the root agent or own the browser conversation.
+callback, and accumulated tool results. Report synthesis is an ordinary SDK
+`Agent` exposed through `Agent.as_tool()`; it does not replace the root agent
+or own the browser conversation.
 
 The `Runner` repeatedly gives the active agent its conversation and tool
 results until it returns a final answer, reaches the configured turn limit, or
@@ -148,8 +150,9 @@ The root agent exposes focused specialists as callable tools with
 `specialist.as_tool(...)`. This is the manager pattern: the root keeps control
 of the user-facing answer, passes a bounded goal and known paths to a
 specialist, and combines the returned result with direct tool results. It is
-used for biology, retrieval, pipeline, document, data-analysis, web-research,
-and coding specialists in `tools/agent_tools/specialist/`.
+used for pipeline, document, data-analysis, research, and coding specialists
+in `tools/agent_tools/specialist/`. Biology and retrieval remain direct atomic
+tool capabilities; web research is part of the research specialist.
 
 A handoff is the other SDK orchestration pattern. A triage agent transfers the
 active run to a named specialist, and that specialist owns subsequent turns.
@@ -186,10 +189,10 @@ should encode that dispatch in a single tool or in the runtime service.
 
 #### Adding a function tool
 
-1. Create `tools/function_tools/<tool_name>/` with a public `__init__.py`, a
-   decorated workflow, and deterministic implementation modules. Keep external
-   adapters and validation inside that package; use `tools/infrastructure/tool_support/` only for
-   generic helpers.
+1. Create `tools/function_tools/<tool_name>.py` with one decorated capability.
+   Keep its schema, result contract, and domain operation in that module. Use
+   `tools/infrastructure/providers/` for external service clients and
+   `tools/infrastructure/tool_support/` for generic execution helpers.
 2. Give the function one clear name and docstring. Describe when to use it,
    when not to use it, input limits, side effects, and the next tool for an
    adjacent intent. Use typed parameters, `Literal`, and `Field(description=)`
@@ -198,8 +201,8 @@ should encode that dispatch in a single tool or in the runtime service.
    workspace helpers, and return the common result envelope with status, data,
    files, evidence, and errors. Keep the scientific operation deterministic
    and testable outside the wrapper.
-4. Export the tool from `tools/function_tools/__init__.py`. Add it to
-   `FUNCTION_TOOLS`; `tools.registry.build_all_tools()` then supplies it to the
+4. Export and register the tool in `tools/function_tools/catalog.py`.
+   `tools.registry.build_all_tools()` then supplies it to the
    root agent. Add it to a specialist's `TOOL_NAMES` only when that specialist
    should be able to call it.
 5. Add an offline smoke check for schema, validation, guardrails, and the
@@ -312,14 +315,14 @@ models/
 ├── openrouter_transport.py  # OpenAI / AsyncOpenAI transport configuration
 └── local_tools_model.py   # local shell/custom-tool wire adapter
 
-harness/agent.py          # root Agent definition and specialist assembly
-tools/function_tools/species_report/reporting/
-├── agents.py             # reporting Agent + Runner invocation
-├── opinions.py           # concurrent model opinions
-├── synthesis.py          # report synthesis and ordered fallback
-└── prompts.py            # scientific reporting instructions
-
-rag/embeddings.py         # embeddings for retrieval records and queries
+tools/
+├── agent_tools/reporting/    # nested Agent.as_tool reporting package
+│   ├── contracts.py          # typed review and synthesis inputs/outputs
+│   ├── evidence.py           # shared evidence loading and citation checks
+│   ├── runtime.py            # shared nested output extraction and recording
+│   ├── review.py             # nested evidence review agent
+│   └── synthesize.py         # nested cited report drafting agent
+└── infrastructure/tool_support/embeddings.py # bounded embedding transport
 ```
 
 `harness/runtime.py` creates an `OpenRouterProvider` for each run or approval
@@ -340,7 +343,7 @@ global default model API or client.
 The provider also accepts an explicit native ID; prefixes such as `openai/` and
 `openrouter/` are preserved. Change a catalog entry's `model` value or its
 documented environment override to select a deployment. Adding a catalog
-entry exposes it in the model selector and the default report opinion set;
+entry exposes it in the model selector and the configured agent tool surface;
 check that the selected model supports the tools used by its agents.
 
 `models/openrouter_transport.py` constructs the official OpenAI `OpenAI` and
@@ -354,23 +357,18 @@ check that the selected model supports the tools used by its agents.
 
 SDK model runs and embeddings use this OpenRouter transport. Credentials are
 read when a client is created. Embeddings use `client.embeddings.create()` in
-`rag/embeddings.py`, which closes the client after each batch and matches
+`tools/infrastructure/tool_support/embeddings.py`, which closes the client after each batch and matches
 returned vectors to inputs by their provider indexes.
 
 ### Reporting agents
 
-The species-report workflow runs in the function tool's worker thread. Its
-reporting services run SDK agents with `asyncio.run()` at that synchronous
-boundary. Opinion requests use `asyncio.gather()` and share one provider per
-batch; a failed request is recorded alongside successful opinions. Synthesis
-tries the requested or configured synthesis model, then the remaining catalog
-models in order. An empty response counts as a failure, and exhaustion raises
-an error containing the attempted models' failures.
-
-Reporting instructions and prompts belong to the species-report package.
-`Agent`, `ModelSettings`, `Runner`, and `RunConfig` control each reporting call.
-The reporting provider closes after the batch, and SDK spans are recorded
-locally in the calling run's trace when its `AgentRunContext` is supplied.
+Evidence review and report drafting are ordinary nested Agents SDK agents
+exposed through `Agent.as_tool()` in `tools/agent_tools/`. They accept only
+workspace-relative evidence artifact paths, receive the evidence as untrusted
+data in its instructions, returns its typed review or draft output, and validates
+source IDs before the result crosses the tool boundary. `report_write` remains a
+small deterministic FunctionTool for persisting Markdown. Searching, ranking,
+review, synthesis, and writing are therefore separate model-visible capabilities.
 
 ### Tool categories
 
@@ -402,31 +400,34 @@ Import tools and helpers directly from their category packages:
 ```python
 from tools.function_tools.file_inspection import file_inspection
 from tools.agent_tools import build_specialist_tools
-from tools.infrastructure.tool_support.results import ToolResult
+from tools.infrastructure.tool_support.results import FunctionResult
 ```
 
-Function-tool packages use a consistent layout:
+Atomic function capabilities use a deliberately flat public layout:
 
 ```text
-tools/function_tools/<tool_name>/
-├── __init__.py       # public SDK FunctionTool
-├── workflow.py       # run-context and result presentation
-├── analysis.py       # deterministic domain implementation
-└── adapters/         # optional external database clients
+tools/function_tools/
+├── sequence_stats.py          # one public FunctionTool
+├── sequence_find_orfs.py
+├── sequence_translate.py
+├── sequence_reverse_complement.py
+├── table_profile.py
+├── ...                        # one module per narrow capability
+├── catalog.py                 # explicit model-facing registry
+└── README.md                  # composition and artifact contracts
 ```
 
-Each function tool is a self-contained plug-in. Its package owns the public
-schema, workflow, domain implementation, external adapters, and tool-specific
-validation. It may use generic services from `tools/infrastructure/tool_support/`, but it must not
-import another public FunctionTool or depend on another tool's biological
-implementation. Adding or removing a tool should require only its package and
-the explicit registry entry; unrelated tools must continue to work unchanged.
+Each atomic module owns its SDK schema, bounded operation, and public wrapper.
+The catalog is explicit, so importing one capability cannot accidentally
+register a composite tool. Generic execution and artifact adapters live under
+`tools/infrastructure/tool_support/`; domain code is never shared through private
+root helpers. Capabilities compose through typed artifact paths and typed result
+models; a public FunctionTool never imports another public FunctionTool or
+depends on another tool's biological implementation.
 
-Small tools keep one descriptive implementation module, such as `analysis.py`
-or `inspection.py`, and `workflow.py` only when they need
-run context or result presentation. A
-package should add a subpackage only for a real subsystem, such as NCBI
-Entrez or species-report literature/web/RAG collection. Pipeline engine adapters
+The catalog contains only current SDK tools. A package should add a subpackage
+only under infrastructure for a real subsystem, such as NCBI Entrez in
+`tools/infrastructure/providers/ncbi/`. Pipeline engine adapters
 live separately under `tools/infrastructure/pipeline_engine/engine/`.
 Shared context, result envelopes, guardrails, generic result-path handling, and
 generic HTTP transport belong under `tools/infrastructure/tool_support/`. Workspace path safety and
@@ -440,22 +441,23 @@ tool can be added, removed, or tested independently.
 
 ### Function tools and workflows
 
-Every agent-facing workflow in `tools/function_tools/` is an OpenAI Agents SDK
-`FunctionTool`. The SDK `@function_tool` decorator owns its name, description,
-argument schema, validation, invocation, and failure handling. The same
-function-tool package contains the workflow and its deterministic adapters,
-clients, and domain code. Scientific calculations run in those implementations;
-workflows that synthesize reports call SDK reporting agents through
-`tools/function_tools/species_report/reporting/agents.py`.
+Every model-facing capability in `tools/function_tools/` is an OpenAI Agents SDK
+`FunctionTool`. The shared `bio_function_tool` decorator owns the common strict
+schema, guardrails, timeout, and failure boundary; each public module supplies
+its own typed inputs, bounded implementation, and output contract. Async network operations stay on the SDK event loop and
+blocking calculations run in cancellable child processes. Cross-tool workflows
+compose by passing returned workspace-relative artifact paths to the next tool.
 
 The general assistant tools follow the same boundary. `workspace_search` reads
 only listed session files and returns bounded excerpts with file or PDF-page
-sources. `data_analysis` accepts bounded pandas operations and writes plots into
-the session output directory. `web_research` uses bounded HTTP requests,
-preserves source URLs, and rejects local or private fetched hosts. The coding
-tools keep inspection read-only; `code_edit` and `code_test` are bounded direct
-tools, restrict paths to the active workspace, and allow only fixed test
-commands.
+sources. `table_profile`, `table_group`, and `table_plot` accept bounded pandas
+operations and write plots or group tables into the session output directory.
+`web_search` returns bounded snippets and an evidence artifact; `pubmed_search`,
+`evidence_index`, `evidence_retrieve`, `report_review`, `report_synthesize`, and `report_write` compose the research
+path. The coding tools keep inspection read-only; `code_edit` and `code_test`
+are bounded direct tools, restrict paths to the active workspace, and allow
+only fixed test commands. They do not request SDK approval; execution approval
+is reserved for pipeline `run` and `cancel` operations in `pipeline_shell`.
 
 ### Intent routing and task planning
 
@@ -527,25 +529,31 @@ The primary intent boundaries are:
 | User intent | Direct route |
 | --- | --- |
 | Raw nucleotide or protein records | `ncbi_retrieval` |
-| Cited organism research or Markdown report | `species_report` |
+| PubMed evidence | `pubmed_search` |
+| Web evidence | `web_search` |
+| Rank saved evidence | `evidence_retrieve` |
+| Cited report draft | `report_synthesize` |
+| Save Markdown report | `report_write` |
 | Database annotations or metadata | `database_lookup` |
 | Download an RCSB PDB file | `pdb_download` |
 | Download an AlphaFold structure | `alphafold_download` |
-| Analyze an existing structure file | `protein_structure_analysis` |
-| Sequence metrics or ORFs | `sequence_analysis` |
+| Analyze an existing structure file | `structure_inspect` |
+| Sequence metrics | `sequence_stats` |
+| Find sequence ORFs | `sequence_find_orfs` |
+| Translate a sequence | `sequence_translate` |
 | File metadata or previews | `file_inspection` |
 | Sequence similarity | `blast_search` |
-| Genome feature image | `genome_map` |
+| Read genome annotations | `genome_read_features` |
+| Genome feature image | `genome_render_map` |
 | Search uploaded documents | `workspace_search` |
 | Read or summarize a workspace PDF | `document_read` |
-| Profile or plot a table | `data_analysis` |
-| Current multi-source web question | `web_research` |
+| Profile a table | `table_profile` |
+| Group a table | `table_group` |
+| Plot a table column | `table_plot` |
 | Read-only workspace code question | `code_inspection` |
-| Biopython transformation or GenBank feature read | `biology_analysis` |
-| Multi-step biology work | `biology_specialist` |
 | Multi-step document work | `document_specialist` |
 | Multi-step data analysis | `data_analysis_specialist` |
-| Multi-source web research | `web_research_specialist` |
+| Multi-step evidence and report work | `research_specialist` |
 | Multi-step coding task | `coding_specialist` |
 | Execute or monitor a pipeline | `pipeline_shell` (`agent-pipeline` protocol) |
 | Review completed pipeline outputs | `pipeline_shell` with `agent-pipeline results --job-id ID` |
@@ -564,25 +572,31 @@ and [CLI guide](cli_usage.md).
 
 ### Specialist agents
 
-`tools/agent_tools/specialist/` defines focused agents for biology, retrieval,
-pipeline, document, data-analysis, web-research, and coding domains. Each
+`tools/agent_tools/specialist/` defines focused agents for pipeline, document,
+data-analysis, research, and coding domains. Each
 domain module owns its instructions and smaller tool set; the parent
 `registry.py` assembles them and exposes each one to the root agent with
-`Agent.as_tool()`. This keeps domain changes and tests isolated while the root
-agent retains control of the user-facing answer.
+`Agent.as_tool()`. Each accepts a typed `task` input and returns a bounded
+specialist result containing a summary and workspace-relative paths. This keeps
+domain changes and tests isolated while the root agent retains control of the
+user-facing answer.
 
 ```text
 tools/agent_tools/
 ├── __init__.py             # root-agent integration
 ├── registry.py             # ordered specialist registry
+├── reporting/              # evidence-bound nested reporting agents
+│   ├── contracts.py        # typed reporting contracts
+│   ├── evidence.py         # shared artifact and citation validation
+│   ├── runtime.py          # shared nested output extraction and recording
+│   ├── review.py           # evidence-bound nested review agent
+│   └── synthesize.py       # cited report drafting agent
 └── specialist/
     ├── __init__.py         # specialist builders
-    ├── biology.py          # sequence, Biopython, genome, BLAST, and structure tasks
-    ├── retrieval.py        # NCBI, database, and species-report tasks
     ├── pipeline.py         # pipeline planning, execution, and collection
     ├── document.py         # uploaded document search and reading
     ├── data_analysis.py    # bounded table analysis and plots
-    ├── web_research.py     # current public web research
+    ├── research.py         # evidence, synthesis, and report composition
     └── coding.py           # workspace inspection, edits, and tests
 ```
 
@@ -592,9 +606,10 @@ application context and tracing, but do not automatically receive the root's
 SQLite conversation history; the root supplies the goal, paths, constraints,
 and relevant prior results in the delegated request.
 
-The workflow wrapper keeps the common envelope at the SDK boundary while
-preserving raw action results inside `AgentRunContext` for evidence collection
-and workspace file discovery.
+Each flat FunctionTool keeps its SDK schema at the public boundary. Shared
+execution helpers preserve action results inside `AgentRunContext` for evidence
+collection and workspace file discovery; implementation adapters are private
+and never registered as tools.
 
 The SDK run context carries:
 
@@ -1182,8 +1197,8 @@ for session workspaces, including their per-run directories.
 Offline harness tests use `agents.testing.ScriptedModel` and mock HTTP
 transports to verify tool execution, guardrails, SDK spans, sessions,
 workspace files, and pipeline results without an API key. Provider and reporting
-checks cover client ownership, nested approval resumption, concurrent opinions,
-synthesis fallback, and embedding order. Live tests should use a temporary
+checks cover client ownership, nested approval resumption, evidence-bound nested
+agent tools, synthesis validation, and embedding order. Live tests should use a temporary
 OpenRouter key and a model that supports Chat Completions and tool calls.
 
 Run the relevant offline checks from the project root:

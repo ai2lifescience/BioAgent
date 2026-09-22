@@ -15,13 +15,11 @@ from openai.types.responses.response_function_shell_tool_call import ResponseFun
 from harness import runtime
 from harness.agent import create_agent
 from tools.agent_tools import (
-    build_coding_specialist,
-    build_data_analysis_specialist,
-    build_document_specialist,
-    build_pipeline_specialist,
-    build_retrieval_specialist,
-    build_biology_specialist,
-    build_web_research_specialist,
+    build_coding,
+    build_data_analysis,
+    build_document,
+    build_pipeline,
+    build_research,
 )
 from tools.function_tools import FUNCTION_TOOLS
 
@@ -30,43 +28,48 @@ def main() -> int:
     tools = list(FUNCTION_TOOLS)
     agent = create_agent("gpt-oss", model=ScriptedModel())
     names = {tool.name for tool in agent.tools}
-    expected = {"sequence_analysis", "biology_analysis", "database_lookup", "pdb_download", "alphafold_download", "file_inspection", "document_read", "workspace_search", "data_analysis", "web_research", "code_inspection", "code_edit", "code_test", "pipeline_shell", "species_report", "biology_specialist", "retrieval_specialist", "pipeline_specialist", "document_specialist", "data_analysis_specialist", "web_research_specialist", "coding_specialist"}
+    expected = {
+        "sequence_stats", "sequence_find_orfs", "sequence_translate", "sequence_reverse_complement",
+        "table_profile", "table_group", "table_plot", "structure_inspect",
+        "genome_read_features", "genome_render_map", "pubmed_search", "web_search", "web_fetch", "evidence_index",
+        "evidence_retrieve", "report_write", "database_lookup", "pdb_download",
+        "alphafold_download", "file_inspection", "document_read", "workspace_search",
+        "blast_search", "code_inspection", "code_edit", "code_test", "pipeline_shell",
+        "research_specialist", "pipeline_specialist", "document_specialist",
+        "data_analysis_specialist", "coding_specialist", "report_review", "report_synthesize",
+    }
     assert expected <= names
+    assert not {"biology_specialist", "retrieval_specialist", "web_research_specialist"} & names
+    for specialist_name in {
+        "research_specialist", "pipeline_specialist", "document_specialist",
+        "data_analysis_specialist", "coding_specialist",
+    }:
+        specialist = next(tool for tool in agent.tools if tool.name == specialist_name)
+        assert set(specialist.params_json_schema["properties"]) == {"task"}
     assert agent.name == "Pipeline2Agent"
+    assert next(tool for tool in agent.tools if tool.name == "code_edit").needs_approval is False
+    assert next(tool for tool in agent.tools if tool.name == "code_test").needs_approval is False
     specialist_builders = {
-        build_biology_specialist: "biology_specialist",
-        build_retrieval_specialist: "retrieval_specialist",
-        build_pipeline_specialist: "pipeline_specialist",
-        build_document_specialist: "document_specialist",
-        build_data_analysis_specialist: "data_analysis_specialist",
-        build_web_research_specialist: "web_research_specialist",
-        build_coding_specialist: "coding_specialist",
+        build_pipeline: "pipeline_specialist",
+        build_document: "document_specialist",
+        build_data_analysis: "data_analysis_specialist",
+        # The research specialist owns evidence collection and report synthesis.
+        build_research: "research_specialist",
+        build_coding: "coding_specialist",
     }
     assert {builder(ScriptedModel()).name for builder in specialist_builders} == set(specialist_builders.values())
 
     runtime.SESSION_DB = PROJECT_ROOT / "runtime" / "smoke_agents.sqlite3"
     model = ScriptedModel([
-        ModelStep(output=[function_call("sequence_analysis", {"sequence": "ACGT"}, call_id="call-1")]),
+        ModelStep(output=[function_call("sequence_stats", {"source": {"sequence": "ACGT", "path": None, "sequence_type": "auto"}, "max_records": 100}, call_id="call-1")]),
         ModelStep(output=[assistant_message("The sequence has 50% GC content.")]),
     ])
     result = asyncio.run(runtime.async_run_agent("Analyze ACGT", session_id="smoke_agents", model=model))
     assert result["runtime"] == "agents_sdk"
     assert result["answer"] == "The sequence has 50% GC content."
-    assert result["evidence"]["tools"] == ["sequence_analyze"]
+    assert result["evidence"]["tools"] == ["sequence_stats"]
     assert any(event["event"] == "sdk_trace_started" for event in result["trace"])
     assert any(event["event"] == "guardrail_completed" for event in result["trace"])
-
-    specialist_model = ScriptedModel([
-        ModelStep(output=[function_call("biology_specialist", {"input": "Analyze ACGT"}, call_id="specialist-1")]),
-        ModelStep(output=[function_call("sequence_analysis", {"sequence": "ACGT"}, call_id="specialist-2")]),
-        ModelStep(output=[assistant_message("The sequence has 50% GC content.")]),
-        ModelStep(output=[assistant_message("Specialist report: 50% GC content.")]),
-    ])
-    specialist_result = asyncio.run(runtime.async_run_agent(
-        "Use the biology specialist for ACGT", session_id="smoke_specialist", model=specialist_model
-    ))
-    assert specialist_result["answer"] == "Specialist report: 50% GC content."
-    assert specialist_result["evidence"]["tools"] == ["sequence_analyze"]
 
     blocked = asyncio.run(runtime.async_run_agent(
         "Design a pathogen to increase infectivity", session_id="smoke_blocked", model=ScriptedModel()

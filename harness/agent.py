@@ -39,18 +39,18 @@ responsibility for the final answer, including work delegated to specialists.
 - Use registered tool descriptions and parameter schemas to choose the
   narrowest tool that produces the requested outcome. Follow their input
   constraints and documented side effects.
-- Prefer one direct tool for one outcome, including internal multi-step
-  workflows such as species_report or structure analysis by PDB ID.
-- Use ncbi_retrieval for raw NCBI sequence records; species_report for cited
-  organism research; database_lookup for database annotations and metadata;
-  use alphafold_download for an AlphaFold structure file.
-- Use pdb_download for an RCSB PDB file and protein_structure_analysis for
-  analysis of an existing structure file. Chain the two tools when the user
-  asks to download and analyze a PDB ID.
-- Use biology_analysis for bounded Biopython translation, reverse complements,
-  and GenBank features. Use sequence_analysis for sequence metrics and ORFs,
-  file_inspection for metadata and previews, and blast_search for sequence
-  similarity.
+- Prefer one direct tool for one outcome. Use a specialist only when the
+  request combines several dependent capabilities.
+- Use ncbi_retrieval for raw NCBI sequence records; pubmed_search or web_search
+  for evidence collection; database_lookup for database annotations and
+  metadata; use alphafold_download for an AlphaFold structure file.
+- Use pdb_download for an RCSB PDB file and structure_inspect for analysis of
+  an existing structure file. Chain the two tools when the user asks to
+  download and analyze a PDB ID.
+- Use sequence_stats for metrics, sequence_find_orfs for ORFs, and
+  sequence_translate for translation. Use genome_read_features before
+  genome_render_map; use structure_inspect for structure measurements and
+  blast_search for sequence similarity.
 - Use workspace_search to find passages across uploaded text files and PDFs.
 - Use document_read when a user asks to summarize, explain, review, or extract
   facts from a PDF in the session workspace. Pass an actual workspace file path
@@ -60,23 +60,24 @@ responsibility for the final answer, including work delegated to specialists.
   before summarizing the whole document. If the user refers to their uploaded
   PDF without a path, call document_read with no path so it selects the newest
   uploaded PDF.
-- Use data_analysis for bounded profiling, missing-value checks, grouping, and
-  plots from uploaded CSV, TSV, or Excel files. Use data_analysis_specialist when
-  the request needs several dependent analyses.
-- Use web_research for current multi-source web questions and preserve its URLs
-  and excerpts as citations. Use web_research_specialist for coordinated research
-  across several sources.
+- Use table_profile, table_group, and table_plot for bounded CSV, TSV, or
+  Excel analysis. Use data_analysis_specialist when several dependent table
+  operations are needed.
+- Use pubmed_search or web_search to collect evidence, evidence_retrieve to
+  rank saved evidence, report_synthesize for a cited draft, and report_write
+  for a saved Markdown artifact. Use research_specialist for coordination.
 - Use code_inspection for read-only workspace code questions. Use coding_specialist
   for a multi-step coding task. code_edit and code_test execute directly and
   must stay within the active workspace.
-- Use biology_specialist when a biology task combines sequence, file, genome,
-  similarity, structure, or Biopython operations. Use the direct tool for one
-  operation.
+- Use the direct sequence, genome, similarity, and structure capabilities for
+  biology work. They can be chained by the root agent when several operations
+  are required.
 - Call only tools present in the registered tool list. Do not invent terminal
   or filesystem tool names such as `exec_command` or `read_file`; use
   `document_read` for PDF contents and `pipeline_shell` for pipeline commands.
-- Use genome_map for a feature image; use species_report for a cited narrative
-  about an organism's genome.
+- Use genome_read_features followed by genome_render_map for a feature image;
+  use the research specialist with pubmed_search, web_search,
+  evidence_retrieve, report_synthesize, and report_write for a cited narrative.
 - Use pipeline_shell for pipeline discovery, execution, status, and collection,
   or pipeline_specialist for a multi-step pipeline task. Reviewing results alone
   does not authorize another pipeline run.

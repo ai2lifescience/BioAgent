@@ -15,12 +15,12 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.function_tools.bio_database_search.adapters.alphafold import query_alphafold
+from tools.infrastructure.providers.database.adapters.alphafold import query_alphafold
 from tools.infrastructure.tool_support.http import request_http, validate_https_url
-from tools.function_tools.bio_database_search.adapters.interpro import query_interpro
-from tools.function_tools.bio_database_search.adapters.kegg import query_kegg
-from tools.function_tools.pdb_download.client import query_pdb
-from tools.function_tools.bio_database_search.adapters.quickgo import query_quickgo
+from tools.infrastructure.providers.database.adapters.interpro import query_interpro
+from tools.infrastructure.providers.database.adapters.kegg import query_kegg
+from tools.infrastructure.providers.pdb.client import query_pdb
+from tools.infrastructure.providers.database.adapters.quickgo import query_quickgo
 
 
 class FakeResponse:
@@ -77,7 +77,7 @@ def main() -> int:
     kegg_text = "ENTRY       eco:b0002\nNAME        thrA\nDEFINITION  bifunctional enzyme\n///\n"
     with (
         _single_response(FakeResponse(text=kegg_text)),
-        patch("tools.function_tools.bio_database_search.adapters.kegg._throttle"),
+        patch("tools.infrastructure.providers.database.adapters.kegg._throttle"),
     ):
         kegg = query_kegg("eco:b0002")
     assert kegg["operation"] == "get"

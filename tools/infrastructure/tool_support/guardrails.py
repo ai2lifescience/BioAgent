@@ -16,6 +16,8 @@ def _input_check(data: ToolInputGuardrailData) -> ToolGuardrailFunctionOutput:
 
 def _output_check(data: ToolOutputGuardrailData) -> ToolGuardrailFunctionOutput:
     value = data.output
+    if hasattr(value, "model_dump"):
+        value = value.model_dump(mode="json")
     try:
         parsed: Any = json.loads(value) if isinstance(value, str) else value
     except (TypeError, ValueError):

@@ -14,8 +14,8 @@ def bio_function_tool(*, timeout: int = 300, needs_approval: bool = False) -> An
     """Return the standard Pipeline2Agent FunctionTool decorator.
 
     Every public tool gets the same strict schema, error envelope, and
-    boundary guardrails.  Callers only specify the timeout and whether an
-    operation changes the workspace or executes a test command.
+    boundary guardrails. Callers specify the timeout and any explicit approval
+    policy. Workspace edits and bounded test commands use the default (direct).
     """
 
     options: dict[str, Any] = {

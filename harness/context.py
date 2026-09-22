@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Callable
 
-from tools.infrastructure.tool_support.context import WorkflowContext
+from tools.infrastructure.tool_support.context import OperationContext
 
 
 def _now() -> str:
@@ -41,11 +41,10 @@ class AgentRunContext:
             **self.run,
         }
 
-    def workflow_context(self, workflow_name: str) -> WorkflowContext:
-        return WorkflowContext(
-            workflow_name=workflow_name,
+    def operation_context(self, operation_name: str) -> OperationContext:
+        return OperationContext(
+            operation_name=operation_name,
             user_context=self.user_context(),
-            log_fn=self.log,
         )
 
     def public(self, value: Any) -> Any:

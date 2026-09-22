@@ -27,8 +27,14 @@ RESULT_COUNT_KEYS = (
     "bytes",
     "returncode",
 )
-RESULT_ID_KEYS = ("collection_name", "rid", "pdb_id", "file_format")
+RESULT_ID_KEYS = ("rid", "pdb_id", "file_format")
 RESULT_PATH_KEYS = (
+    "source_path",
+    "sequence_path",
+    "features_path",
+    "table_path",
+    "evidence_path",
+    "index_path",
     "fasta_path",
     "fasta_paths",
     "structure_path",
@@ -65,6 +71,8 @@ COMPACT_RESULT_KEYS = (
     "parameter_errors",
     "tool",
     "status",
+    "state",
+    "error",
     "summary",
     "needs_input",
     "pipeline_name",
@@ -170,9 +178,6 @@ def _collect_databases(value: dict[str, Any], evidence: dict[str, Any]) -> None:
         item = value.get(key)
         if item:
             _append_unique(evidence["databases"], str(item))
-    collection_name = value.get("collection_name")
-    if collection_name:
-        _append_unique(evidence["databases"], f"chroma:{collection_name}")
 
 
 def _candidate_item(item: dict[str, Any]) -> dict[str, Any]:
@@ -278,7 +283,7 @@ def _collect_tool_call(tool_call: dict[str, Any], evidence: dict[str, Any]) -> N
         _collect_databases(result, evidence)
         _collect_evidence_items(result, evidence)
 
-    if tool_call.get("status") == "error":
+    if tool_call.get("status") in {"error", "blocked"}:
         _append_unique(
             evidence["tool_errors"],
             {
@@ -340,7 +345,21 @@ class EvidenceCollector:
             _collect_query_terms(result, evidence)
             _collect_databases(result, evidence)
             _collect_evidence_items(result, evidence)
-            evidence["outputs"].append(_output_record(tool, arguments, result))
+            if record.get("status") in {"error", "blocked"}:
+                _append_unique(
+                    evidence["tool_errors"],
+                    {
+                        "tool": tool,
+                        "error": record.get("error"),
+                        "error_type": record.get("error_type"),
+                    },
+                )
+            projected = _output_record(tool, arguments, result)
+            if record.get("status"):
+                projected["status"] = record["status"]
+            if record.get("error"):
+                projected["error"] = record["error"]
+            evidence["outputs"].append(projected)
             _collect_record_tool_calls(record, evidence)
 
         return evidence

@@ -68,8 +68,7 @@ The helper creates the launcher, right-side panel, close button, iframe, and
 context messaging. Call `drawer.updateContext(nextContext)` when the user
 changes projects or samples.
 
-`AssistantDrawer` is the preferred embed API name. `Pipeline2AgentDrawer` is
-kept as a compatibility alias for existing host pages.
+`AssistantDrawer` is the only public embed API name.
 
 A custom embedding can update the assistant after loading with `postMessage`:
 
@@ -279,18 +278,19 @@ the biology tools:
 - **Document assistant:** search uploaded text/PDF files with `workspace_search`,
   then read selectable PDF pages with `document_read` and cite the workspace
   path and page markers.
-- **Data analyst:** use `data_analysis` for bounded profiles, missing-value
-  checks, grouped summaries, and distribution plots from CSV, TSV, or Excel
-  files. The tool returns measured values and created plot paths.
-- **Web research:** use `web_research` for current multi-source questions. It
-  preserves source URLs and bounded excerpts for citations; curated NCBI and
-  database requests still use their dedicated tools.
+- **Data analyst:** use `table_profile`, then `table_group` or `table_plot` for
+  bounded CSV, TSV, or Excel analysis. Each tool returns measured values and
+  workspace-relative artifact paths.
+- **Web research:** use `pubmed_search` or `web_search`, then
+  `evidence_index`, `evidence_retrieve`, `report_review`, `report_synthesize`, and `report_write` when a cited
+  report is requested. Search results preserve source URLs and bounded
+  excerpts.
 - **Coding assistant:** use `code_inspection` for read-only workspace questions.
   `code_edit` and `code_test` are direct and limited to the active
   session workspace and bounded commands.
 
 For a task combining several operations, the root agent can delegate to
-`document_specialist`, `data_analysis_specialist`, `web_research_specialist`,
+`document_specialist`, `data_analysis_specialist`, `research_specialist`,
 or `coding_specialist`. Each specialist shares the session workspace and returns
 the same runtime evidence used by the main chat.
 
@@ -596,21 +596,16 @@ Pipeline2Agent extracts the PDF in bounded, page-aware chunks and uses the page
 markers in its answer. Long documents may require several extraction calls.
 Scanned PDFs need OCR before their contents can be summarized.
 
-### Species Report
+### Evidence-backed research reports
 
-Use this for a trusted-source report using PubMed, trusted web collection, RAG,
-multiple model opinions, synthesis, and Markdown report output.
+Use the research specialist for a cited report assembled from PubMed or web evidence. It may fetch pages, index and retrieve evidence, request an independent evidence review, draft Markdown, and save the report as a workspace artifact.
 
 ```text
-Create a trusted-source species report about PhiX174 with PubMed and RAG
+Create a cited report about PhiX174 genome structure and host range using PubMed and trusted web sources
 ```
 
 ```text
-Create a species report about PhiX174 focusing on genome structure and host range
-```
-
-```text
-Summarize SARS-CoV-2 host range and genome structure using trusted sources
+Summarize SARS-CoV-2 host range and genome structure using retrieved evidence, then save the Markdown report
 ```
 
 Typical output:

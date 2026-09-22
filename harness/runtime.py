@@ -23,6 +23,7 @@ from .context import AgentRunContext
 from .sessions import SessionMetadata, SessionMetadataStore
 from .sandbox import delete_workspace, list_files, open_workspace, prepare_run, session_root
 from .tracing import AgentHooks, LOCAL_TRACES, configure_tracing
+from .streaming import PublicEvents, STREAM_SINK
 
 
 STATE_STORE = SessionMetadataStore()
@@ -61,50 +62,6 @@ def _approval_details(items: list[Any], context: AgentRunContext | None = None) 
                 pass
         details.append(detail)
     return details
-
-
-def _stream_event_payload(event: Any, context: AgentRunContext) -> tuple[str, dict[str, Any]]:
-    """Project one SDK stream event into a small, public event envelope.
-
-    SDK event objects can contain provider-specific response objects and model
-    arguments. Persist only stable semantic fields so the queue never becomes a
-    second copy of the SDK's private runtime state.
-    """
-    event_type = str(getattr(event, "type", "sdk_event"))
-    payload: dict[str, Any] = {"sdk_type": event_type}
-    if event_type == "raw_response_event":
-        data = getattr(event, "data", None)
-        data_type = str(getattr(data, "type", "raw_response"))
-        payload["data_type"] = data_type
-        if data_type == "response.output_text.delta":
-            payload["delta"] = str(getattr(data, "delta", ""))
-        return "sdk_raw_response", context.public(payload)
-    if event_type == "run_item_stream_event":
-        payload["name"] = str(getattr(event, "name", ""))
-        item = getattr(event, "item", None)
-        if item is not None:
-            payload["item_type"] = str(getattr(item, "type", ""))
-            for key in ("tool_name", "call_id"):
-                value = getattr(item, key, None)
-                if value:
-                    payload[key] = str(value)
-        return "sdk_run_item", context.public(payload)
-    if event_type == "agent_updated_stream_event":
-        agent = getattr(event, "new_agent", None)
-        payload["agent"] = str(getattr(agent, "name", ""))
-        return "sdk_agent_updated", context.public(payload)
-    return "sdk_event", context.public(payload)
-
-
-def _emit_stream_event(
-    event: Any,
-    context: AgentRunContext,
-    event_fn: Callable[[str, dict[str, Any]], None] | None,
-) -> None:
-    if event_fn is None:
-        return
-    name, payload = _stream_event_payload(event, context)
-    event_fn(name, payload)
 
 
 async def async_run_agent(
@@ -184,6 +141,10 @@ async def _execute(
     approval_decision: dict[str, Any] | None = None
     snapshot = None
     LOCAL_TRACES.bind(trace_id, context)
+    # Scripted fixtures use their non-streaming native shell-item path.
+    test_model = type(model).__module__.startswith("agents.testing") if model is not None else False
+    public_events = PublicEvents(context, event_fn) if event_fn and not test_model else None
+    stream_token = STREAM_SINK.set(public_events)
     try:
         sandbox_root = session_root(session.session_id)
         agent = create_agent(
@@ -231,8 +192,7 @@ async def _execute(
             # durable worker does so; direct library callers retain a compact
             # non-streaming result unless they explicitly request events. The
             # SDK test model intentionally uses its non-streaming fixture path.
-            test_model = type(model).__module__.startswith("agents.testing") if model is not None else False
-            use_stream = event_fn is not None and not test_model
+            use_stream = public_events is not None
             if not use_stream:
                 result = await Runner.run(
                     agent, run_input, context=context, max_turns=max(1, int(max_turns)),
@@ -244,7 +204,8 @@ async def _execute(
                     hooks=AgentHooks(), run_config=run_config, session=sdk_session,
                 )
                 async for stream_event in streamed.stream_events():
-                    _emit_stream_event(stream_event, context, event_fn)
+                    public_events(stream_event)
+                public_events.flush()
                 result = streamed
             context.files = await list_files(sandbox_session)
         if result.interruptions:
@@ -268,6 +229,9 @@ async def _execute(
         status = "error"
         context.record("run_failed", error=str(exc), error_type=type(exc).__name__)
     finally:
+        if public_events is not None:
+            public_events.flush()
+        STREAM_SINK.reset(stream_token)
         LOCAL_TRACES.unbind(trace_id)
         sdk_session.close()
         await provider.aclose()

@@ -41,20 +41,21 @@ export function createMessageRenderer({
   function toolLabel(tool) {
     const labels = {
       database_lookup: "Database lookup",
-      biology_analysis: "Transform sequence / GenBank",
+      genome_read_features: "Read genome features",
       alphafold_download: "Download AlphaFold structure",
-      biology_specialist: "Biology specialist",
       document_read: "Read document",
       file_inspection: "Inspect file",
-      genome_map: "Create genome map",
+      genome_render_map: "Create genome map",
       ncbi_retrieval: "Retrieve NCBI records",
       pdb_download: "Download PDB structure",
       pipeline_shell: "Run pipeline command",
       pipeline_specialist: "Pipeline specialist",
-      protein_structure_analysis: "Analyze protein structure",
-      sequence_analysis: "Analyze sequence",
-      retrieval_specialist: "Retrieval specialist",
-      species_report: "Write species report",
+      structure_inspect: "Inspect protein structure",
+      sequence_stats: "Measure sequence",
+      sequence_find_orfs: "Find sequence ORFs",
+      report_review: "Review evidence",
+      report_synthesize: "Draft cited report",
+      report_write: "Save cited report",
       blast_search: "BLAST search",
     };
     return labels[String(tool || "")] || String(tool || "Agent operation").replaceAll("_", " ");

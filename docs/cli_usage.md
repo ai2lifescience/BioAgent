@@ -63,23 +63,28 @@ ShellTool exported by `tools/infrastructure/sdk_adapters`.
 | `database_lookup` | database search actions |
 | `pdb_download` | `pdb_download` |
 | `alphafold_download` | Download an AlphaFold structure file |
-| `sequence_analysis` | `sequence_analyze` |
-| `genome_map` | `genome_map` |
-| `protein_structure_analysis` | `protein_structure_analyze` |
+| `sequence_stats` | Sequence metrics |
+| `sequence_find_orfs` | ORF feature detection |
+| `sequence_translate` | Translation and FASTA output |
+| `genome_read_features` | Read GenBank/GFF features |
+| `genome_render_map` | Render an existing feature artifact |
+| `structure_inspect` | Structure measurements |
 | `blast_search` | `blast_search` |
 | `file_inspection` | `file_inspect` |
 | `workspace_search` | Search uploaded text and PDF files |
 | `document_read` | Read selectable PDF pages |
-| `data_analysis` | Profile, describe, group, or plot tables |
-| `web_research` | Search public web pages with bounded excerpts |
+| `table_profile` | Profile a bounded table |
+| `table_group` | Group a bounded table |
+| `table_plot` | Plot one numeric table column |
+| `pubmed_search` / `web_search` | Collect bounded evidence |
+| `evidence_retrieve` | Rank saved evidence |
+| `report_review` / `report_synthesize` / `report_write` | Review evidence, draft, and save a cited report |
 | `code_inspection` | Inspect or search workspace code |
 | `code_edit` / `code_test` | Bounded direct workspace changes and tests |
-| `species_report` | literature retrieval, RAG, and report actions |
-| `biology_analysis` | Biopython transformations and GenBank features |
-
-The model selects tools from their descriptions and schemas. Biological
-calculations run in the workflow implementations; report synthesis uses SDK
-reporting agents in `tools/function_tools/species_report/reporting/`.
+The model selects tools from their descriptions and schemas. Atomic capabilities
+compose by passing workspace-relative artifact paths. `report_review` and
+`report_synthesize` are Agents SDK nested-agent tools; deterministic calculations
+remain in their owning typed FunctionTool modules.
 The root and specialist agents share the run's SDK model provider. See the
 [model architecture](architecture.md#models-and-provider-ownership) for model
 resolution, client ownership, and reporting behavior.

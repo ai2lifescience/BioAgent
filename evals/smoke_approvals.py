@@ -128,7 +128,7 @@ class ApprovalTests(unittest.TestCase):
 
     def test_nested_specialist_approval_restores_shared_context(self):
         pending = self.pause(steps=[
-            ModelStep(output=[function_call("pipeline_specialist", {"input": "Run the fixture pipeline"}, call_id="specialist")]),
+            ModelStep(output=[function_call("pipeline_specialist", {"task": "Run the fixture pipeline"}, call_id="specialist")]),
             ModelStep(output=[pipeline()]),
         ])
         done = self.resume(pending, steps=[response("Specialist finished."), response("Root finished.")])

@@ -35,7 +35,9 @@ class LocalTransportTests(unittest.IsolatedAsyncioTestCase):
                 "name": "apply_patch", "arguments": json.dumps({
                     "input": "*** Begin Patch\n*** Add File: note.txt\n+transport works\n*** End Patch"})}},
             {"id": "function-1", "type": "function", "function": {
-                "name": "sequence_analysis", "arguments": json.dumps({"sequence": "ACGT"})}},
+                "name": "sequence_stats", "arguments": json.dumps({
+                    "source": {"sequence": "ACGT", "path": None, "sequence_type": "auto"},
+                    "max_records": 100})}},
         ]
 
         def respond(request):
@@ -99,6 +101,9 @@ class LocalTransportTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(set(outputs), {"shell-1", "patch-1", "function-1"})
         self.assertIn("template_shell", outputs["shell-1"])
         self.assertIn("note.txt", outputs["patch-1"])
+        stats = json.loads(outputs["function-1"])
+        self.assertEqual(stats["status"], "ok")
+        self.assertEqual(stats["data"]["records"][0]["gc_content_percent"], 50.0)
 
     async def test_native_execution_and_history(self):
         await self.check_runtime(streaming=False)

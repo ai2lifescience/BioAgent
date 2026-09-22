@@ -106,7 +106,7 @@ class ProviderTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_nested_approval_resume_uses_fresh_provider_and_executes_once(self):
         messages = [
-            tool_call("pipeline_specialist", {"input": "Cancel the fixture job"}, "specialist"),
+            tool_call("pipeline_specialist", {"task": "Cancel the fixture job"}, "specialist"),
             tool_call("pipeline_shell", {
                 "commands": ["agent-pipeline cancel --job-id " + "a" * 32],
                 "timeout_ms": None, "max_output_length": None,

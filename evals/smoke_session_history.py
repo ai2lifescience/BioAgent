@@ -70,14 +70,16 @@ class SessionHistoryTests(unittest.TestCase):
         runtime.run_agent(
             "Analyze ACGT", session_id="rich_history",
             model=ScriptedModel([
-                ModelStep(output=[function_call("sequence_analysis", {"sequence": "ACGT"}, call_id="stats")]),
+                ModelStep(output=[function_call("sequence_stats", {
+                    "source": {"sequence": "ACGT", "path": None, "sequence_type": "auto"},
+                    "max_records": 100}, call_id="stats")]),
                 ModelStep(output=[assistant_message("Sequence statistics complete.")]),
             ]),
         )
         runtime.STATE_STORE = SessionMetadataStore(self.root / "metadata")
         messages = api.list_session_messages("rich_history")["messages"]
         self.assertIsNone(messages[1].get("result"))
-        self.assertEqual(messages[3]["result"]["evidence"]["tools"], ["sequence_analyze"])
+        self.assertEqual(messages[3]["result"]["evidence"]["tools"], ["sequence_stats"])
 
 
 if __name__ == "__main__":
