@@ -16,6 +16,7 @@ import json
 import os
 from pathlib import Path
 import secrets
+import socket
 import sqlite3
 import time
 from uuid import uuid4
@@ -72,16 +73,28 @@ def check_site(site_id: str, origin: str) -> None:
         raise ValueError(f"Website origin {origin!r} is not configured for {site_id!r} in AGENT_WEBSITE_SITES.")
 
 
-def configure_local_demo(port: int) -> None:
-    """Provide a localhost demo on normal startup; never widen explicit settings.
+def configure_local_demo(port: int, host: str = "127.0.0.1") -> None:
+    """Trust the demo's listening addresses; never widen explicit settings.
 
     The generated signing secret is process-local and inherited by detached
     workers. Real external websites still configure their shared secret and
     origins explicitly. A fresh server invalidates unconsumed demo tickets.
     """
-    os.environ.setdefault("AGENT_WEBSITE_SITES", json.dumps({"assistant-demo": [
-        f"http://localhost:{port}", f"http://127.0.0.1:{port}",
-    ]}))
+    if "AGENT_WEBSITE_SITES" not in os.environ:
+        hosts = {"localhost", "127.0.0.1"}
+        if host == "0.0.0.0":
+            # Resolve this machine's addresses, not the browser's Host header.
+            # The wildcard listen address itself is not a browser origin.
+            try:
+                addresses = socket.getaddrinfo(socket.gethostname(), port, socket.AF_INET, socket.SOCK_STREAM)
+                hosts.update(address[4][0] for address in addresses if address[4][0] != "0.0.0.0")
+            except OSError:
+                pass  # Explicit AGENT_WEBSITE_SITES also supports unresolved hosts/proxies.
+        else:
+            hosts.add(host)
+        os.environ["AGENT_WEBSITE_SITES"] = json.dumps({"assistant-demo": [
+            f"http://{address}:{port}" for address in sorted(hosts)
+        ]})
     os.environ.setdefault("AGENT_WEBSITE_SECRET", secrets.token_urlsafe(48))
 
 

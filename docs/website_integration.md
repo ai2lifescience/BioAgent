@@ -52,16 +52,33 @@ filters, workflow, manual, and adapter callbacks; the assistant remains the
 embedded `/assistant` iframe. Run this from the repository root:
 
 ```bash
-export AGENT_WEBSITE_SECRET="$(python -c 'import secrets; print(secrets.token_hex(32))')"
-export AGENT_WEBSITE_SITES='{"assistant-demo":["http://localhost:8000"]}'
 python -m interfaces.web --host 127.0.0.1 --port 8000
 ```
 
 Open `http://localhost:8000/assistant-demo`. Click the assistant launcher and
 ask it to explain the visible table or figure. The page requests a short-lived
 demo ticket from `/website/demo-token`; the signing secret stays on the server.
+When website settings are absent, startup generates a process-local signing
+secret and trusts localhost for the demo. For access from another computer,
+start with `--host 0.0.0.0` and open `http://<server-ip>:8000/assistant-demo`.
+The default also includes IPv4 addresses resolved from the server's hostname
+when listening on all interfaces, or the specific address passed to `--host`.
+
+An explicitly set `AGENT_WEBSITE_SITES` always takes precedence, including an
+empty allowlist. If it already contains only localhost, or address discovery
+does not find your LAN address, add the exact browser origin and restart:
+
+```bash
+export AGENT_WEBSITE_SITES='{"assistant-demo":["http://localhost:8000","http://127.0.0.1:8000","http://192.168.75.56:8000"]}'
+python -m interfaces.web --host 0.0.0.0 --port 8000
+```
+
+Replace the example IP and port with your server's address. Origins include the
+scheme, hostname/IP and port, with no path or trailing slash. Restart after
+changing settings, then reload the page or use **Retry website connection**.
 For a real external site, keep the same adapter and ticket contract but issue
-tickets from that site's authenticated backend.
+tickets from that site's authenticated backend and configure a stable shared
+`AGENT_WEBSITE_SECRET` and explicit trusted origins.
 
 ## Host integration API
 

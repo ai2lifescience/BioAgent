@@ -5,8 +5,50 @@ import json
 import os
 import tempfile
 import unittest
+from unittest.mock import patch
 
-from harness.website import WebsiteBridge, issue_ticket
+from harness.website import WebsiteBridge, allowed_sites, check_site, configure_local_demo, issue_ticket
+
+
+class WebsiteDemoConfigurationSmoke(unittest.TestCase):
+    def setUp(self):
+        environment = patch.dict(os.environ, clear=True)
+        environment.start()
+        self.addCleanup(environment.stop)
+
+    def test_wildcard_listener_trusts_discovered_address(self):
+        with patch("harness.website.socket.getaddrinfo", return_value=[
+            (2, 1, 6, "", ("192.168.75.56", 8000)),
+        ]):
+            configure_local_demo(8000, "0.0.0.0")
+        for origin in ("http://localhost:8000", "http://127.0.0.1:8000", "http://192.168.75.56:8000"):
+            check_site("assistant-demo", origin)
+        for origin in ("http://0.0.0.0:8000", "http://192.168.75.57:8000", "http://192.168.75.56:8001", "https://192.168.75.56:8000"):
+            with self.subTest(origin=origin), self.assertRaises(ValueError):
+                check_site("assistant-demo", origin)
+        self.assertGreaterEqual(len(os.environ["AGENT_WEBSITE_SECRET"]), 32)
+
+    def test_specific_listener_trusts_bound_address(self):
+        configure_local_demo(8765, "192.168.75.56")
+        check_site("assistant-demo", "http://192.168.75.56:8765")
+        with self.assertRaises(ValueError):
+            check_site("assistant-demo", "http://192.168.75.56:8000")
+
+    def test_explicit_settings_are_preserved(self):
+        os.environ["AGENT_WEBSITE_SECRET"] = "existing-secret" * 3
+        for sites in ({}, {"assistant-demo": ["http://localhost:8000"]}, {"portal": ["https://portal.test"]}):
+            with self.subTest(sites=sites):
+                os.environ["AGENT_WEBSITE_SITES"] = json.dumps(sites)
+                configure_local_demo(8000, "0.0.0.0")
+                self.assertEqual(allowed_sites(), sites)
+                self.assertEqual(os.environ["AGENT_WEBSITE_SECRET"], "existing-secret" * 3)
+                with self.assertRaises(ValueError):
+                    check_site("assistant-demo", "http://192.168.75.56:8000")
+
+    def test_address_lookup_failure_retains_localhost(self):
+        with patch("harness.website.socket.getaddrinfo", side_effect=OSError("unresolved hostname")):
+            configure_local_demo(8000, "0.0.0.0")
+        self.assertEqual(allowed_sites(), {"assistant-demo": ["http://127.0.0.1:8000", "http://localhost:8000"]})
 
 
 class WebsiteBridgeSmoke(unittest.IsolatedAsyncioTestCase):

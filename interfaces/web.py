@@ -722,7 +722,7 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
 def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
     get_queue().recover()
     server = ThreadingHTTPServer((host, port), AgentRequestHandler)
-    configure_local_demo(server.server_port)
+    configure_local_demo(server.server_port, server.server_address[0])
     print(f"Pipeline2Agent web UI running at http://{host}:{port}")
     server.serve_forever()
 

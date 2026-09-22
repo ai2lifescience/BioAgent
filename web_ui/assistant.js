@@ -21,7 +21,7 @@
     context: {},
     website: null,
     websitePoll: null,
-    websiteRequired: query.get("website_site") === "assistant-demo",
+    websiteRequired: Boolean(query.get("website_site")),
     maxTurns: 5,
   };
 
@@ -173,9 +173,11 @@
     state.websitePoll = true;
     try {
       while (state.website) {
-        const payload = await websitePost("website/poll", state.website);
+        const website = state.website;
+        const payload = await websitePost("website/poll", website);
+        if (website !== state.website) continue;
         for (const request of (payload.requests || [])) {
-          window.parent.postMessage({ type: "agent-website-request", ...request }, parentOrigin);
+          window.parent.postMessage({ type: "agent-website-request", ...request, session_id: website.session_id }, parentOrigin);
         }
         await new Promise((resolve) => setTimeout(resolve, 250));
       }
