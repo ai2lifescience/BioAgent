@@ -194,7 +194,7 @@ should encode that dispatch in a single tool or in the runtime service.
 
 #### Adding a function tool
 
-1. Create `tools/function_tools/<tool_name>.py` with one decorated capability.
+1. Create `tools/function_tools/<category>/<tool_name>.py` with one decorated capability.
    Keep its schema, result contract, and domain operation in that module. Use
    `tools/infrastructure/providers/` for external service clients and
    `tools/infrastructure/tool_support/` for generic execution helpers.
@@ -206,7 +206,7 @@ should encode that dispatch in a single tool or in the runtime service.
    workspace helpers, and return the common result envelope with status, data,
    files, evidence, and errors. Keep the scientific operation deterministic
    and testable outside the wrapper.
-4. Export and register the tool in `tools/function_tools/catalog.py`.
+4. Export and register the tool in `tools/function_tools/__init__.py`.
    `tools.registry.build_all_tools()` then supplies it to the
    root agent. Add it to a specialist's `TOOL_NAMES` only when that specialist
    should be able to call it.
@@ -412,34 +412,34 @@ agent receives one SDK tool list assembled from these categories.
 Import tools and helpers directly from their category packages:
 
 ```python
-from tools.function_tools.file_inspection import file_inspection
+from tools.function_tools.workspace.file_inspection import file_inspection
 from tools.agent_tools import build_specialist_tools
 from tools.infrastructure.tool_support.results import FunctionResult
 ```
 
-Atomic function capabilities use a deliberately flat public layout:
+Atomic function capabilities use stable capability-family packages:
 
 ```text
 tools/function_tools/
-├── sequence_stats.py          # one public FunctionTool
-├── sequence_find_orfs.py
-├── sequence_translate.py
-├── sequence_reverse_complement.py
-├── table_profile.py
-├── ...                        # one module per narrow capability
-├── catalog.py                 # explicit model-facing registry
+├── biology/                   # sequence, genome, structure, database tools
+├── data/                      # tabular analysis and plotting
+├── sources/                   # PubMed and public-web access
+├── knowledge/                 # evidence indexes and durable RAG
+├── workspace/                 # files, documents, and report artifacts
+├── coding/                   # code inspection, editing, and tests
+├── __init__.py                # explicit model-facing FunctionTool registry
 └── README.md                  # composition and artifact contracts
 ```
 
 Each atomic module owns its SDK schema, bounded operation, and public wrapper.
-The catalog is explicit, so importing one capability cannot accidentally
+The registry is explicit, so importing one capability cannot accidentally
 register a composite tool. Generic execution and artifact adapters live under
 `tools/infrastructure/tool_support/`; domain code is never shared through private
 root helpers. Capabilities compose through typed artifact paths and typed result
 models; a public FunctionTool never imports another public FunctionTool or
 depends on another tool's biological implementation.
 
-The catalog contains only current SDK tools. A package should add a subpackage
+The FunctionTool packages contain only current SDK tools. A package should add a subpackage
 only under infrastructure for a real subsystem, such as NCBI Entrez in
 `tools/infrastructure/providers/ncbi/`. Pipeline engine adapters
 live separately under `tools/infrastructure/pipeline_engine/engine/`.
@@ -628,7 +628,7 @@ application context and tracing, but do not automatically receive the root's
 SQLite conversation history; the root supplies the goal, paths, constraints,
 and relevant prior results in the delegated request.
 
-Each flat FunctionTool keeps its SDK schema at the public boundary. Shared
+Each FunctionTool module keeps its SDK schema at the public boundary. Shared
 execution helpers preserve action results inside `AgentRunContext` for evidence
 collection and workspace file discovery; implementation adapters are private
 and never registered as tools.

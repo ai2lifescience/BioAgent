@@ -108,10 +108,10 @@ class FunctionBoundaryTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result["data"]["text"], "")
 
     async def test_provider_contracts_and_download_artifacts(self):
-        alpha = importlib.import_module("tools.function_tools.alphafold_download")
-        pdb = importlib.import_module("tools.function_tools.pdb_download")
-        ncbi = importlib.import_module("tools.function_tools.ncbi_retrieval")
-        database = importlib.import_module("tools.function_tools.database_lookup")
+        alpha = importlib.import_module("tools.function_tools.biology.alphafold_download")
+        pdb = importlib.import_module("tools.function_tools.biology.pdb_download")
+        ncbi = importlib.import_module("tools.function_tools.biology.ncbi_retrieval")
+        database = importlib.import_module("tools.function_tools.biology.database_lookup")
 
         def alpha_response(accession, directory, file_format):
             path = Path(directory) / f"{accession}.{file_format}"
@@ -155,7 +155,7 @@ class FunctionBoundaryTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(len(self.context.files), 3)
 
     async def test_blast_submission_pending_and_failure_states(self):
-        module = importlib.import_module("tools.function_tools.blast_search")
+        module = importlib.import_module("tools.function_tools.biology.blast_search")
         with patch("tools.infrastructure.tool_support.operations.calculate", _calculate_locally):
             for state in ("SUBMITTED", "READY", "TIMEOUT", "FAILED", "UNKNOWN"):
                 with self.subTest(state=state), patch.object(module, "run_blast_search", return_value={

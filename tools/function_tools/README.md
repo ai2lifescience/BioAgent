@@ -1,20 +1,20 @@
 # Function tools
 
 This directory is the model-facing capability layer. Each atomic capability is
-one OpenAI Agents SDK `FunctionTool` exported by a flat module and registered
-explicitly in [`catalog.py`](catalog.py):
+one OpenAI Agents SDK `FunctionTool` exported by a category module and registered
+explicitly in [`__init__.py`](__init__.py). The package exports `FUNCTION_TOOLS`;
+import individual tools directly from their modules.
 
-The catalog contains these narrow capabilities:
+The package groups these narrow capabilities by stable ownership boundary:
 
 ```text
-sequence_stats, sequence_find_orfs, sequence_translate, sequence_reverse_complement
-table_profile, table_group, table_plot
-structure_inspect, genome_read_features, genome_render_map
-pubmed_search, web_search, web_fetch, evidence_index, evidence_retrieve
-knowledge_ingest, knowledge_status, knowledge_retrieve, report_write
-alphafold_download, ncbi_retrieval, database_lookup, pdb_download, blast_search
-file_inspection, document_read, workspace_search
-code_inspection, code_edit, code_test
+biology/   sequence_*, genome_*, structure_inspect, blast_search,
+           alphafold_download, pdb_download, ncbi_retrieval, database_lookup
+data/      table_profile, table_group, table_plot
+sources/   pubmed_search, web_search, web_fetch
+knowledge/ evidence_index, evidence_retrieve, knowledge_*
+workspace/ file_inspection, document_read, workspace_search, report_write
+coding/    code_inspection, code_edit, code_test
 ```
 
 Capabilities compose through data flow: a tool returns a workspace-relative
@@ -26,7 +26,7 @@ Agents choose each step through the SDK tool loop. `report_review` and
 `tools/agent_tools/reporting/`, because they are model-backed; the other entries are typed
 FunctionTools.
 
-Each flat module owns its SDK input schema and public `FunctionTool` wrapper.
+Each tool module owns its SDK input schema and public `FunctionTool` wrapper.
 Provider clients and parsers live in `tools/infrastructure/providers/` and
 workspace adapters live in `tools/infrastructure/workspace/`; they are never
 registered as model-facing tools. Generic execution and artifact handling live

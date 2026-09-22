@@ -15,17 +15,17 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from tools.function_tools.code_edit import _operation as code_edit
-from tools.function_tools.code_inspection import _operation as code_inspection
-from tools.function_tools.code_test import _operation as code_test
-from tools.function_tools.workspace_search import _operation as workspace_search
+from tools.function_tools.coding.code_edit import _operation as code_edit
+from tools.function_tools.coding.code_inspection import _operation as code_inspection
+from tools.function_tools.coding.code_test import _operation as code_test
+from tools.function_tools.workspace.workspace_search import _operation as workspace_search
 from tools.infrastructure.tool_support.context import OperationContext
 
-table_profile = importlib.import_module("tools.function_tools.table_profile")
-table_plot = importlib.import_module("tools.function_tools.table_plot")
-sequence_stats = importlib.import_module("tools.function_tools.sequence_stats")
-sequence_translate = importlib.import_module("tools.function_tools.sequence_translate")
-web_search = importlib.import_module("tools.function_tools.web_search")
+table_profile = importlib.import_module("tools.function_tools.data.table_profile")
+table_plot = importlib.import_module("tools.function_tools.data.table_plot")
+sequence_stats = importlib.import_module("tools.function_tools.biology.sequence_stats")
+sequence_translate = importlib.import_module("tools.function_tools.biology.sequence_translate")
+web_search = importlib.import_module("tools.function_tools.sources.web_search")
 
 
 def main() -> int:

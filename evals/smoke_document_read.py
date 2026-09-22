@@ -15,7 +15,7 @@ from pypdf import PdfWriter
 from pypdf.generic import DecodedStreamObject, DictionaryObject, NameObject
 
 from tools.infrastructure.tool_support.context import OperationContext
-from tools.function_tools.document_read import _operation as document_read
+from tools.function_tools.workspace.document_read import _operation as document_read
 
 
 def _pdf_bytes() -> bytes:

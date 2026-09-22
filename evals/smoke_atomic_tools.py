@@ -20,17 +20,17 @@ from harness.sessions import SessionMetadata
 from harness.streaming import PublicEvents, STREAM_SINK
 from harness.tracing import configure_tracing
 from tools.agent_tools.reporting import build_report_synthesize
-pubmed_module = importlib.import_module("tools.function_tools.pubmed_search")
-web_module = importlib.import_module("tools.function_tools.web_search")
-retrieve_module = importlib.import_module("tools.function_tools.evidence_retrieve")
-write_module = importlib.import_module("tools.function_tools.report_write")
-from tools.function_tools.genome_read_features import FeatureDocument, _calculate as read_features
-from tools.function_tools.genome_render_map import _calculate as render_map
-from tools.function_tools.sequence_find_orfs import _find_orfs as find_orfs, _calculate as orfs
-from tools.function_tools.sequence_translate import _calculate as translate
-from tools.function_tools.structure_inspect import _calculate as inspect_structure
-from tools.function_tools.table_group import _calculate as group
-from tools.function_tools.table_profile import _calculate as profile
+pubmed_module = importlib.import_module("tools.function_tools.sources.pubmed_search")
+web_module = importlib.import_module("tools.function_tools.sources.web_search")
+retrieve_module = importlib.import_module("tools.function_tools.knowledge.evidence_retrieve")
+write_module = importlib.import_module("tools.function_tools.workspace.report_write")
+from tools.function_tools.biology.genome_read_features import FeatureDocument, _calculate as read_features
+from tools.function_tools.biology.genome_render_map import _calculate as render_map
+from tools.function_tools.biology.sequence_find_orfs import _find_orfs as find_orfs, _calculate as orfs
+from tools.function_tools.biology.sequence_translate import _calculate as translate
+from tools.function_tools.biology.structure_inspect import _calculate as inspect_structure
+from tools.function_tools.data.table_group import _calculate as group
+from tools.function_tools.data.table_profile import _calculate as profile
 from tools.infrastructure.tool_support.results import FunctionResult as Result
 from tools.infrastructure.tool_support.context import OperationContext
 

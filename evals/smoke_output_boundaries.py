@@ -10,8 +10,8 @@ from unittest.mock import patch
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.function_tools.ncbi_retrieval import _operation as ncbi_retrieval
-from tools.function_tools.pdb_download import _operation as pdb_download
+from tools.function_tools.biology.ncbi_retrieval import _operation as ncbi_retrieval
+from tools.function_tools.biology.pdb_download import _operation as pdb_download
 from tools.infrastructure.tool_support.context import OperationContext
 from tools.infrastructure.workspace import workspace_output_dir
 
@@ -54,7 +54,7 @@ def main() -> None:
             captured["output_dir"] = str(kwargs["output_dir"])
             return {"fasta_paths": [], "metadata_paths": [], "results": [], "downloaded_count": 0, "matched_count": 0, "output_dir": captured["output_dir"]}
 
-        with patch("tools.function_tools.ncbi_retrieval.fetch_ncbi", fake_fetch):
+        with patch("tools.function_tools.biology.ncbi_retrieval.fetch_ncbi", fake_fetch):
             ncbi_retrieval(context=ncbi_context, accessions=["NC_001422"])
         assert Path(captured["output_dir"]).resolve().is_relative_to(session_root)
         _assert_rejected(ncbi_retrieval, context=ncbi_context, accessions=["NC_001422"], output_dir="/tmp/outside-agent-output")
@@ -67,7 +67,7 @@ def main() -> None:
             return {"status": "ok", "database": "pdb", "pdb_id": pdb_id,
                     "identifier": pdb_id, "file_format": file_format, "url": "https://example.org/1ABC.cif",
                     "structure_path": str(path), "output_dir": output_dir, "bytes": path.stat().st_size}
-        with patch("tools.function_tools.pdb_download.download_pdb_structure", fake_download):
+        with patch("tools.function_tools.biology.pdb_download.download_pdb_structure", fake_download):
             pdb_download(pdb_id="1ABC", context=pdb_context)
         _assert_rejected(pdb_download, pdb_id="1ABC", output_dir="/tmp/outside-agent-output", context=pdb_context)
 
