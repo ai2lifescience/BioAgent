@@ -72,6 +72,7 @@ async def async_run_agent(
     log_fn: Callable[[str], None] | None = None,
     model: Model | None = None,
     event_fn: Callable[[str, dict[str, Any]], None] | None = None,
+    website_binding: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     request = str(request or "").strip()
     if not request:
@@ -80,6 +81,8 @@ async def async_run_agent(
     async with STATE_STORE.async_locked_session(identifier, request) as (session, _created):
         if session.metadata.get("pending_run"):
             raise ValueError("Resolve the pending tool approval before sending another request in this session.")
+        if website_binding is not None:
+            session.metadata["website_binding"] = dict(website_binding)
         prepare_run(session)
         return await _execute(session, request, model_key, max_turns, log_fn, model, event_fn)
 
@@ -277,12 +280,13 @@ def run_agent(
     log_fn: Callable[[str], None] | None = None,
     model: Model | None = None,
     event_fn: Callable[[str, dict[str, Any]], None] | None = None,
+    website_binding: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Synchronous wrapper for CLI, HTTP, and notebook callers."""
     try:
         asyncio.get_running_loop()
     except RuntimeError:
-        return asyncio.run(async_run_agent(request, session_id, model_key, max_turns, log_fn, model, event_fn))
+        return asyncio.run(async_run_agent(request, session_id, model_key, max_turns, log_fn, model, event_fn, website_binding))
     raise RuntimeError("An event loop is already running; await async_run_agent instead.")
 
 

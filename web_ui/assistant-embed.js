@@ -83,9 +83,44 @@
     shadow.append(style, launcher, panel);
     let lastFocus = null;
     let context = { ...(options.context || {}) };
+    const adapter = options.adapter || {};
+    const instanceId = (window.crypto && window.crypto.randomUUID) ? window.crypto.randomUUID() : `instance_${Date.now()}_${Math.random()}`;
+    let binding = null;
+    let connecting = false;
+    let destroyed = false;
 
     function postContext() {
-      frame.contentWindow?.postMessage({ type: "agent-context", context }, parentOrigin);
+      frame.contentWindow?.postMessage({ type: "agent-context", context }, src.origin);
+    }
+    async function connectWebsite() {
+      if (!options.siteId || typeof options.getToken !== "function" || connecting || binding) return;
+      connecting = true;
+      try {
+        const token = await options.getToken();
+        if (destroyed || !token) return;
+        frame.contentWindow?.postMessage({ type: "agent-connect", protocol: 1, site_id: options.siteId,
+          instance_id: instanceId, ticket: token, capabilities: Object.keys(adapter), context }, src.origin);
+      } catch (error) {
+        options.onEvent?.({ type: "website-error", error: String(error?.message || error) });
+      } finally { connecting = false; }
+    }
+    async function dispatchWebsiteRequest(message) {
+      const method = String(message.method || "");
+      const callback = adapter[method];
+      if (typeof callback !== "function") {
+        frame.contentWindow?.postMessage({ type: "agent-website-response", call_id: message.call_id,
+          run_id: message.run_id, revision: message.revision, error: { code: "unsupported", message: `Website callback is not registered: ${method}` } }, src.origin);
+        return;
+      }
+      try {
+        const result = await callback(message.arguments || {}, message);
+        frame.contentWindow?.postMessage({ type: "agent-website-response", call_id: message.call_id,
+          run_id: message.run_id, revision: message.revision, result: result || {} }, src.origin);
+      } catch (error) {
+        frame.contentWindow?.postMessage({ type: "agent-website-response", call_id: message.call_id,
+          run_id: message.run_id, revision: message.revision,
+          error: { code: "host_callback_failed", message: String(error?.message || error) } }, src.origin);
+      }
     }
     function open() {
       lastFocus = document.activeElement;
@@ -100,25 +135,32 @@
       launcher.setAttribute("aria-expanded", "false");
       (lastFocus || launcher).focus();
     }
-    function updateContext(nextContext = {}) {
-      context = { ...nextContext };
+    async function updateContext(nextContext = {}) {
+      const value = nextContext && Object.keys(nextContext).length ? nextContext : (adapter.getPageContext ? await adapter.getPageContext() : {});
+      context = { ...(value || {}) };
       postContext();
+      return context;
     }
     function onMessage(event) {
       if (event.source !== frame.contentWindow || event.origin !== src.origin) return;
       if (event.data?.type === "agent-close") closePanel();
-      if (event.data?.type === "agent-ready") postContext();
+      if (event.data?.type === "agent-ready") { postContext(); connectWebsite(); }
+      if (event.data?.type === "agent-website-request") dispatchWebsiteRequest(event.data);
+      if (event.data?.type === "agent-website-connected") binding = { binding_id: event.data.binding_id };
     }
     launcher.addEventListener("click", open);
     close.addEventListener("click", closePanel);
-    frame.addEventListener("load", postContext);
+    frame.addEventListener("load", () => { postContext(); connectWebsite(); });
     window.addEventListener("message", onMessage);
     if (options.open) open();
     return {
       open,
       close: closePanel,
       updateContext,
+      get binding() { return binding; },
       destroy() {
+        destroyed = true;
+        if (binding) frame.contentWindow?.postMessage({ type: "agent-disconnect" }, src.origin);
         window.removeEventListener("message", onMessage);
         launcher.remove();
         panel.remove();

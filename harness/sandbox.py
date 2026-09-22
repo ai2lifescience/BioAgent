@@ -52,6 +52,10 @@ def prepare_run(session: SessionMetadata) -> dict[str, str]:
         "runtime_dir": str(root / "runs" / run_id),
         "workspace_dir": str(root / "outputs"),
     }
+    # A website binding is session-scoped and must survive durable worker
+    # handoff and SDK approval resume without exposing its secret to prompts.
+    if isinstance(session.metadata.get("website_binding"), dict):
+        run["website_binding"] = dict(session.metadata["website_binding"])
     session.metadata["run"] = run
     return run
 

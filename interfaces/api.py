@@ -21,6 +21,7 @@ def enqueue_request(
     session_id: str | None = None,
     model_key: str = DEFAULT_AGENT_MODEL_KEY,
     max_turns: int = DEFAULT_MAX_TURNS,
+    website: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Queue a durable model run and return its stable run identifier."""
     identifier = str(session_id or "").strip() or str(uuid4())
@@ -31,6 +32,12 @@ def enqueue_request(
     with runtime.STATE_STORE.locked_session(identifier, request) as (session, _):
         if session.metadata.get("pending_run"):
             raise ValueError("Resolve the pending tool approval before sending another request.")
+        if website is not None:
+            from harness.website import get_bridge
+            binding = get_bridge().binding_for_run(
+                str(website.get("binding_id", "")), str(website.get("token", "")), identifier
+            )
+            session.metadata["website_binding"] = binding
         job = get_queue().enqueue(request, identifier, model_key, turns)
         session.metadata["last_run_id"] = job["run_id"]
         return job

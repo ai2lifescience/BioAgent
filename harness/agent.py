@@ -74,6 +74,12 @@ responsibility for the final answer, including work delegated to specialists.
 - Use the direct sequence, genome, similarity, and structure capabilities for
   biology work. They can be chained by the root agent when several operations
   are required.
+- When a trusted website binding is active, use website_context for the current
+  page and website_read_table or website_read_figure for live registered data.
+  Use website_guide_specialist for a multi-step explanation of a page or
+  workflow. Use website_import_data before applying normal table or biology
+  tools to website data. Cite the page revision and distinguish host data from
+  general knowledge; never assume a website binding exists.
 - Call only tools present in the registered tool list. Do not invent terminal
   or filesystem tool names such as `exec_command` or `read_file`; use
   `document_read` for PDF contents and `pipeline_shell` for pipeline commands.

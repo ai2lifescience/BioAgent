@@ -30,6 +30,7 @@ from .specialist.pipeline import NAME as PIPELINE_NAME
 from .specialist.pipeline import TOOL_NAMES as PIPELINE_TOOL_NAMES
 from .specialist.pipeline import build_pipeline
 from .specialist.research import NAME as RESEARCH_NAME, DESCRIPTION as RESEARCH_DESCRIPTION, INSTRUCTIONS as RESEARCH_INSTRUCTIONS, TOOL_NAMES as RESEARCH_TOOL_NAMES, build_research
+from .specialist.website_guide import NAME as WEBSITE_NAME, DESCRIPTION as WEBSITE_DESCRIPTION, INSTRUCTIONS as WEBSITE_INSTRUCTIONS, TOOL_NAMES as WEBSITE_TOOL_NAMES, build_website_guide
 
 
 SPECIALIST_GROUPS: tuple[tuple[str, str, str, set[str]], ...] = (
@@ -38,6 +39,7 @@ SPECIALIST_GROUPS: tuple[tuple[str, str, str, set[str]], ...] = (
     (DOCUMENT_NAME, DOCUMENT_DESCRIPTION, DOCUMENT_INSTRUCTIONS, set(DOCUMENT_TOOL_NAMES)),
     (DATA_NAME, DATA_DESCRIPTION, DATA_INSTRUCTIONS, set(DATA_TOOL_NAMES)),
     (CODING_NAME, CODING_DESCRIPTION, CODING_INSTRUCTIONS, set(CODING_TOOL_NAMES)),
+    (WEBSITE_NAME, WEBSITE_DESCRIPTION, WEBSITE_INSTRUCTIONS, set(WEBSITE_TOOL_NAMES)),
 )
 
 SPECIALIST_BUILDERS = (
@@ -46,6 +48,7 @@ SPECIALIST_BUILDERS = (
     build_document,
     build_data_analysis,
     build_coding,
+    build_website_guide,
 )
 
 

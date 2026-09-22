@@ -43,6 +43,7 @@ from harness.sandbox import relative_file_path
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODELS
 from tools.infrastructure.pipeline_engine import service as pipeline_service
 from harness.jobs import TERMINAL, get_queue
+from harness.website import get_bridge
 from tools.infrastructure.knowledge.models import TERMINAL_JOB_STATUSES
 from tools.infrastructure.workspace.public import public_payload
 
@@ -206,6 +207,9 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         path = urlparse(self.path).path
+        if path.startswith("/website/"):
+            self._handle_website(path[len("/website/"):])
+            return
         if path == "/workspace/files":
             self._handle_workspace_upload()
             return
@@ -339,6 +343,7 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 session_id=session_id,
                 model_key=model_key,
                 max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
+                website=payload.get("website") if isinstance(payload.get("website"), dict) else None,
             )
             self._send_json(_public_job(job), status=202)
         except Exception as exc:
@@ -365,6 +370,7 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 session_id=session_id,
                 model_key=model_key,
                 max_turns=int(payload.get("max_turns", DEFAULT_MAX_TURNS)),
+                website=payload.get("website") if isinstance(payload.get("website"), dict) else None,
             )
         except ConnectionAbortedError:
             return
@@ -374,6 +380,37 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
             return
         self._stream_run(job["run_id"])
+
+    def _handle_website(self, operation: str) -> None:
+        """Authenticate and proxy the small browser-to-host website protocol."""
+        try:
+            payload = self._read_json()
+            bridge = get_bridge()
+            if operation == "connect":
+                result = bridge.connect(
+                    ticket=str(payload.get("ticket", "")), site_id=str(payload.get("site_id", "")),
+                    origin=str(payload.get("origin", "")), instance_id=str(payload.get("instance_id", "")),
+                    session_id=str(payload.get("session_id", "")), context=payload.get("context") or {},
+                    capabilities=[str(x) for x in payload.get("capabilities", [])],
+                )
+            elif operation == "context":
+                result = bridge.context(str(payload.get("binding_id", "")), str(payload.get("token", "")), payload.get("context") or {})
+            elif operation == "poll":
+                result = {"requests": bridge.pending(str(payload.get("binding_id", "")), str(payload.get("token", "")))}
+            elif operation == "respond":
+                result = bridge.respond(
+                    str(payload.get("binding_id", "")), str(payload.get("token", "")), str(payload.get("call_id", "")),
+                    result=payload.get("result"), error=payload.get("error"), revision=str(payload.get("revision", "")),
+                )
+            elif operation == "disconnect":
+                bridge.disconnect(str(payload.get("binding_id", "")), str(payload.get("token", "")))
+                result = {"disconnected": True}
+            else:
+                self._send_json({"error": "not found"}, status=404)
+                return
+            self._send_json(result)
+        except Exception as exc:
+            self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
 
     def _handle_workspace(self) -> None:
         parsed = urlparse(self.path)
