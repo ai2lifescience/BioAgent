@@ -1,150 +1,17 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Assistant Drawer Preview</title>
-  <style>
-    :root {
-      color: #173438;
-      background: #f4f8f8;
-      font: 14px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    * { box-sizing: border-box; }
-    body {
-      min-height: 100vh;
-      margin: 0;
-      background:
-        radial-gradient(circle at 12% -12%, #e1f3ef 0, transparent 38%),
-        #f4f8f8;
-    }
-    .shell { max-width: 1120px; margin: 0 auto; padding: 34px 28px 80px; }
-    header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 30px;
-    }
-    .brand-mark {
-      display: grid;
-      width: 38px;
-      height: 38px;
-      place-items: center;
-      border-radius: 12px;
-      color: #fff;
-      background: transparent;
-      box-shadow: none;
-      font-size: 12px;
-      font-weight: 800;
-    }
-    h1 { margin: 0; font-size: clamp(27px, 5vw, 42px); letter-spacing: -.05em; line-height: 1.05; }
-    .muted { color: #62777b; }
-    .subtitle { max-width: 650px; margin: 9px 0 0; color: #62777b; font-size: 14px; }
-    .demo-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-left: auto;
-      padding: 5px 9px;
-      border: 1px solid #cde2df;
-      border-radius: 999px;
-      color: #0f766e;
-      background: #effaf8;
-      font-size: 11px;
-      font-weight: 700;
-    }
-    .demo-badge::before { width: 6px; height: 6px; border-radius: 50%; background: #2eaa88; content: ""; }
-    .workspace {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-    }
-    .card {
-      min-height: 142px;
-      padding: 18px;
-      border: 1px solid #dce6e6;
-      border-radius: 14px;
-      background: #ffffffd9;
-      box-shadow: 0 8px 24px #1734380b;
-    }
-    .card:hover { border-color: #b9d9d4; transform: translateY(-1px); transition: .18s ease; }
-    .card-icon {
-      display: grid;
-      width: 30px;
-      height: 30px;
-      place-items: center;
-      margin-bottom: 18px;
-      border-radius: 9px;
-      color: #0f766e;
-      background: #e7f4f1;
-      font-weight: 800;
-    }
-    .card strong { display: block; margin-bottom: 4px; font-size: 13px; }
-    .card span { font-size: 13px; }
-    .drawer-hint {
-      margin: 22px 0 0;
-      padding: 14px 16px;
-      border: 1px dashed #c6dcda;
-      border-radius: 12px;
-      color: #62777b;
-      background: #ffffff80;
-      font-size: 12px;
-    }
-    @media (max-width: 680px) {
-      .shell { padding: 24px 16px 64px; }
-      header { align-items: flex-start; }
-      .demo-badge { display: none; }
-      .workspace { grid-template-columns: 1fr; gap: 10px; }
-      .card { min-height: 106px; }
-      .card-icon { margin-bottom: 12px; }
-    }
-  </style>
-</head>
-<body>
-  <main class="shell">
-    <header>
-      <span class="brand-mark" role="img" aria-label="Assistant">
-        <svg viewBox="0 0 512 512" fill="none" aria-hidden="true" width="38" height="38">
-          <defs><linearGradient id="bsod-screen-demo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#159BEA"/><stop offset="1" stop-color="#1486D8"/></linearGradient></defs>
-          <path d="M256 112c-4-38 10-58 34-67" stroke="#25283A" stroke-width="10" stroke-linecap="round"/>
-          <circle cx="300" cy="40" r="18" fill="#159BEA" stroke="#25283A" stroke-width="8"/>
-          <rect x="79" y="164" width="35" height="118" rx="17" fill="#D3D2D1" stroke="#25283A" stroke-width="9"/>
-          <rect x="398" y="164" width="35" height="118" rx="17" fill="#D3D2D1" stroke="#25283A" stroke-width="9"/>
-          <rect x="101" y="126" width="310" height="213" rx="48" fill="url(#bsod-screen-demo)" stroke="#25283A" stroke-width="10"/>
-          <path d="M128 162c23-19 52-27 87-27h94c34 0 62 8 77 25" stroke="#63C6F3" stroke-width="9" stroke-linecap="round" opacity=".7"/>
-          <rect x="181" y="204" width="13" height="52" rx="6.5" fill="#202332"/>
-          <rect x="318" y="204" width="13" height="52" rx="6.5" fill="#202332"/>
-          <ellipse cx="166" cy="275" rx="23" ry="12" fill="#F58FAE"/>
-          <ellipse cx="346" cy="275" rx="23" ry="12" fill="#F58FAE"/>
-          <path d="M241 275c7 9 23 9 30 0" stroke="#63D2F5" stroke-width="8" stroke-linecap="round"/>
-          <path d="M104 319c-23 17-28 44-14 61 9 11 23 11 30 1l20-31" fill="#D3D2D1" stroke="#25283A" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M408 319c23 17 28 44 14 61-9 11-23 11-30 1l-20-31" fill="#D3D2D1" stroke="#25283A" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-          <rect x="171" y="331" width="170" height="105" rx="25" fill="#F1F0ED" stroke="#25283A" stroke-width="9"/>
-          <rect x="224" y="352" width="64" height="53" rx="8" fill="#168EDC" stroke="#25283A" stroke-width="7"/>
-          <rect x="244" y="368" width="24" height="18" rx="3" fill="#82D8F5"/>
-          <path d="M190 433v39c0 9 7 16 16 16h31v-55" fill="#C9C8C6" stroke="#25283A" stroke-width="9" stroke-linejoin="round"/>
-          <path d="M322 433v39c0 9-7 16-16 16h-31v-55" fill="#C9C8C6" stroke="#25283A" stroke-width="9" stroke-linejoin="round"/>
-        </svg>
-      </span>
-      <div>
-        <h1>Workspace</h1>
-        <p class="subtitle">A small host page demonstrating the Assistant in a focused right-side drawer.</p>
-      </div>
-      <span class="demo-badge">Interactive demo</span>
-    </header>
-  <section class="workspace" aria-label="Example workspace">
-    <article class="card"><span class="card-icon" aria-hidden="true">P</span><strong>Project</strong><span class="muted">Respiratory surveillance</span></article>
-    <article class="card"><span class="card-icon" aria-hidden="true">S</span><strong>Sample</strong><span class="muted">sample-2026-0914</span></article>
-    <article class="card"><span class="card-icon" aria-hidden="true">R</span><strong>Result</strong><span class="muted">Metagenomic summary</span></article>
-  </section>
-  <p class="drawer-hint">Use the Assistant button to ask questions, attach files, or inspect a result without leaving this workspace.</p>
-  <div id="agent-drawer"></div>
-  </main>
-  <script src="./static/assistant-embed.js"></script>
-  <script>
-    AssistantDrawer.mount({
-      target: document.getElementById("agent-drawer"),
-    });
-  </script>
-</body>
-</html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Assistant Embed Demo</title>
+<style>
+body{margin:0;background:#f3f7f6;color:#173438;font:15px system-ui,sans-serif}main{max-width:1080px;margin:32px auto;padding:0 20px}header{display:flex;justify-content:space-between;align-items:center}section{background:white;border:1px solid #d9e5e4;border-radius:14px;padding:20px;margin-top:20px;box-shadow:0 8px 24px #17343810}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:9px;border-bottom:1px solid #e4eceb}svg{width:100%;height:220px;background:#f8fbfb;border-radius:8px}.pill{border:0;border-radius:999px;padding:9px 14px;background:#dff2ef;color:#115e59;cursor:pointer}@media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style>
+<main><header><div><h1>Sample comparison</h1><p>Independent website fixture: filter, inspect data, and ask the embedded guide.</p></div><button class="pill" id="filter">Show treated</button></header>
+<section class="grid"><div><h2>Relative abundance</h2><svg id="chart" viewBox="0 0 500 220" role="img" aria-label="Relative abundance chart"><polyline points="20,185 110,130 200,150 290,80 380,105 470,45" fill="none" stroke="#159487" stroke-width="5"/><circle cx="290" cy="80" r="7" fill="#115e59"/></svg></div><div><h2>Measurements</h2><table id="measurements"><thead><tr><th>Sample</th><th>Group</th><th>Score</th></tr></thead><tbody></tbody></table></div></section>
+<section><h2>Workflow</h2><p id="workflow">Step 2 of 3: review the comparison.</p><button class="pill" id="methods">Open methods</button></section><div id="assistant-root"></div></main>
+<script>
+const rows=[{sample:"S1",group:"control",score:0.42},{sample:"S2",group:"treated",score:0.81},{sample:"S3",group:"treated",score:0.67},{sample:"S4",group:"control",score:0.31}];let group="all",revision=1;
+function render(){document.querySelector("#measurements tbody").innerHTML=rows.filter(r=>group==="all"||r.group===group).map(r=>"<tr><td>"+r.sample+"</td><td>"+r.group+"</td><td>"+r.score+"</td></tr>").join("");document.querySelector("#filter").textContent=group==="all"?"Show treated":"Show all"} render();
+document.querySelector("#filter").onclick=()=>{group=group==="all"?"treated":"all";revision++;render();assistant&&assistant.updateContext(pageContext())};document.querySelector("#methods").onclick=()=>{location.hash="methods";revision++;assistant&&assistant.updateContext(pageContext())};
+function pageContext(){return {revision:"comparison-"+revision,title:"Sample comparison",url:location.href,selection:{group:group},filters:{group:group},workflow:{step:"review",steps:["select","review","export"]},resources:[{id:"measurements",kind:"table",title:"Measurements",exportable:true},{id:"abundance",kind:"figure",title:"Relative abundance"}],elements:[{id:"measurements",label:"Measurements table"},{id:"filter",label:"Group filter"}],routes:[{id:"methods",label:"Methods"}],actions:[{id:"set_group",description:"Filter group",parameters:{group:["all","treated","control"]}}],manual:{version:"2026-09",title:"Example user manual"}}}
+const dataFor=()=>rows.filter(r=>group==="all"||r.group===group);let assistant;
+(async()=>{const s=document.createElement("script");s.src="/static/assistant-embed.js";document.head.append(s);await new Promise(r=>s.onload=r);assistant=AssistantDrawer.mount({target:document.querySelector("#assistant-root"),src:"/assistant",siteId:"assistant-demo",getToken:()=>fetch("/website/demo-token",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({site_id:"assistant-demo"})}).then(r=>r.json()).then(x=>x.token),context:pageContext(),adapter:{getPageContext:pageContext,readTable:({resource_id,offset=0,limit=50})=>resource_id==="measurements"?{resource_id:resource_id,title:"Measurements",columns:[{name:"sample",type:"string"},{name:"group",type:"string"},{name:"score",type:"number"}],rows:dataFor().slice(offset,offset+limit),offset:offset,total_rows:dataFor().length,revision:"comparison-"+revision}:{},readFigure:({resource_id})=>({resource_id:resource_id,title:"Relative abundance",description:"Six ordered observations; teal line is the current sample comparison.",x_axis:{label:"Observation",unit:""},y_axis:{label:"Relative abundance",unit:"fraction"},series:[{name:"Observed",values:[.12,.31,.24,.55,.43,.72]}],revision:"comparison-"+revision}),searchManual:({query})=>({version:"2026-09",sections:[{id:"methods",title:"Methods",excerpt:"This page uses a " + query + " workflow."}]}),readManual:()=>({section_id:"methods",title:"Methods",version:"2026-09",text:"Use the filter to change cohort, then inspect Measurements. Export data when an analysis needs the complete table."}),exportData:()=>({filename:"measurements.csv",content:"sample,group,score\n"+dataFor().map(r=>r.sample+","+r.group+","+r.score).join("\n"),content_type:"text/csv"}),highlight:({element_id,message})=>{document.getElementById(element_id)&&document.getElementById(element_id).scrollIntoView({behavior:"smooth"});return {message:message||("Highlighted "+element_id),revision:"comparison-"+revision}},navigate:({route_id})=>{location.hash=route_id;return {message:"Opened "+route_id,revision:"comparison-"+revision}},invokeAction:({action_id,arguments:a})=>{if(action_id==="set_group"){group=["all","treated","control"].includes(a.group)?a.group:"all";revision++;render();return {action_id:action_id,message:"Group set to "+group,revision:"comparison-"+revision}}throw new Error("Unknown action")}}})})();
+</script>

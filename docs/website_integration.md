@@ -45,26 +45,23 @@ sequenceDiagram
 The implementation uses native `function_tool`, `Agent.as_tool`, run context and
 `Runner.run_streamed`; see the [OpenAI tools guide](https://developers.openai.com/api/docs/guides/tools).
 
-## Quick start: two independent origins
+## Quick start: the embedded host-page demo
 
-Set the same long random secret in the BioAgent service and your host backend:
+`/assistant-demo` is the canonical local host page. It owns its table, figure,
+filters, workflow, manual, and adapter callbacks; the assistant remains the
+embedded `/assistant` iframe. Run this from the repository root:
 
 ```bash
 export AGENT_WEBSITE_SECRET="$(python -c 'import secrets; print(secrets.token_hex(32))')"
-export AGENT_WEBSITE_SITES='{"example-workspace":["http://localhost:8081"]}'
+export AGENT_WEBSITE_SITES='{"assistant-demo":["http://localhost:8000"]}'
 python -m interfaces.web --host 127.0.0.1 --port 8000
 ```
 
-In another terminal with the same secret:
-
-```bash
-export AGENT_WEBSITE_SECRET='<same secret>'
-python examples/external-workspace/server.py --port 8081
-```
-
-Open `http://localhost:8081`. The example owns its CSS, SVG chart, table, filters,
-workflow and manual. Only the embed script and assistant iframe come from port
-8000. Override `AGENT_ASSISTANT_URL` on the example server if needed.
+Open `http://localhost:8000/assistant-demo`. Click the assistant launcher and
+ask it to explain the visible table or figure. The page requests a short-lived
+demo ticket from `/website/demo-token`; the signing secret stays on the server.
+For a real external site, keep the same adapter and ticket contract but issue
+tickets from that site's authenticated backend.
 
 ## Host integration API
 

@@ -43,7 +43,7 @@ from harness.sandbox import relative_file_path
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODELS
 from tools.infrastructure.pipeline_engine import service as pipeline_service
 from harness.jobs import TERMINAL, get_queue
-from harness.website import get_bridge
+from harness.website import check_site, get_bridge, issue_ticket
 from tools.infrastructure.knowledge.models import TERMINAL_JOB_STATUSES
 from tools.infrastructure.workspace.public import public_payload
 
@@ -386,7 +386,17 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
         try:
             payload = self._read_json()
             bridge = get_bridge()
-            if operation == "connect":
+            if operation == "demo-token":
+                site_id = str(payload.get("site_id", "")).strip()
+                origin = str(self.headers.get("Origin") or "").strip()
+                if site_id != "assistant-demo" or not origin:
+                    raise ValueError("assistant-demo token requires the configured browser origin")
+                check_site(site_id, origin)
+                secret = os.getenv("AGENT_WEBSITE_SECRET", "")
+                if len(secret) < 32:
+                    raise ValueError("AGENT_WEBSITE_SECRET must be configured with at least 32 characters")
+                result = {"token": issue_ticket(secret, site_id=site_id, origin=origin, subject="assistant-demo-user")}
+            elif operation == "connect":
                 result = bridge.connect(
                     ticket=str(payload.get("ticket", "")), site_id=str(payload.get("site_id", "")),
                     origin=str(payload.get("origin", "")), instance_id=str(payload.get("instance_id", "")),
