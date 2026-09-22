@@ -422,7 +422,7 @@ Atomic function capabilities use stable capability-family packages:
 ```text
 tools/function_tools/
 ├── biology/                   # sequence, genome, structure, database tools
-├── data/                      # tabular analysis and plotting
+├── data_analysis/             # tabular analysis and plotting
 ├── sources/                   # PubMed and public-web access
 ├── knowledge/                 # evidence indexes and durable RAG
 ├── workspace/                 # files, documents, and report artifacts

@@ -10,7 +10,7 @@ The package groups these narrow capabilities by stable ownership boundary:
 ```text
 biology/   sequence_*, genome_*, structure_inspect, blast_search,
            alphafold_download, pdb_download, ncbi_retrieval, database_lookup
-data/      table_profile, table_group, table_plot
+data_analysis/ table_profile, table_group, table_plot
 sources/   pubmed_search, web_search, web_fetch
 knowledge/ evidence_index, evidence_retrieve, knowledge_*
 workspace/ file_inspection, document_read, workspace_search, report_write

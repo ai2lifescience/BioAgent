@@ -8,9 +8,9 @@ from .biology.sequence_stats import sequence_stats
 from .biology.sequence_find_orfs import sequence_find_orfs
 from .biology.sequence_translate import sequence_translate
 from .biology.sequence_reverse_complement import sequence_reverse_complement
-from .data.table_profile import table_profile
-from .data.table_group import table_group
-from .data.table_plot import table_plot
+from .data_analysis.table_profile import table_profile
+from .data_analysis.table_group import table_group
+from .data_analysis.table_plot import table_plot
 from .biology.structure_inspect import structure_inspect
 from .biology.genome_read_features import genome_read_features
 from .biology.genome_render_map import genome_render_map
@@ -43,7 +43,7 @@ BIOLOGY_TOOLS = [
     structure_inspect, genome_read_features, genome_render_map,
 ]
 
-DATA_TOOLS = [table_profile, table_group, table_plot]
+DATA_ANALYSIS_TOOLS = [table_profile, table_group, table_plot]
 
 SOURCE_TOOLS = [pubmed_search, web_search, web_fetch]
 
@@ -57,7 +57,7 @@ CODING_TOOLS = [code_inspection, code_edit, code_test]
 
 FUNCTION_TOOL_GROUPS = {
     "biology": BIOLOGY_TOOLS,
-    "data": DATA_TOOLS,
+    "data_analysis": DATA_ANALYSIS_TOOLS,
     "sources": SOURCE_TOOLS,
     "knowledge": KNOWLEDGE_TOOLS,
     "workspace": WORKSPACE_TOOLS,

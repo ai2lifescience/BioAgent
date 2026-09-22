@@ -29,8 +29,8 @@ from tools.function_tools.biology.genome_render_map import _calculate as render_
 from tools.function_tools.biology.sequence_find_orfs import _find_orfs as find_orfs, _calculate as orfs
 from tools.function_tools.biology.sequence_translate import _calculate as translate
 from tools.function_tools.biology.structure_inspect import _calculate as inspect_structure
-from tools.function_tools.data.table_group import _calculate as group
-from tools.function_tools.data.table_profile import _calculate as profile
+from tools.function_tools.data_analysis.table_group import _calculate as group
+from tools.function_tools.data_analysis.table_profile import _calculate as profile
 from tools.infrastructure.tool_support.results import FunctionResult as Result
 from tools.infrastructure.tool_support.context import OperationContext
 

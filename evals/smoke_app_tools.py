@@ -21,8 +21,8 @@ from tools.function_tools.coding.code_test import _operation as code_test
 from tools.function_tools.workspace.workspace_search import _operation as workspace_search
 from tools.infrastructure.tool_support.context import OperationContext
 
-table_profile = importlib.import_module("tools.function_tools.data.table_profile")
-table_plot = importlib.import_module("tools.function_tools.data.table_plot")
+table_profile = importlib.import_module("tools.function_tools.data_analysis.table_profile")
+table_plot = importlib.import_module("tools.function_tools.data_analysis.table_plot")
 sequence_stats = importlib.import_module("tools.function_tools.biology.sequence_stats")
 sequence_translate = importlib.import_module("tools.function_tools.biology.sequence_translate")
 web_search = importlib.import_module("tools.function_tools.sources.web_search")
