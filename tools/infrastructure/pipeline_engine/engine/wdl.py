@@ -20,18 +20,28 @@ from tools.infrastructure.pipeline_engine.engine.paths import (
 )
 from tools.infrastructure.pipeline_engine.engine.types import PipelineContext
 from tools.infrastructure.pipeline_engine.engine.wdl_options import write_options_runtime_json
+from tools.infrastructure.pipeline_engine.engine.wdl_runtime import (
+    normalize_wdl_engine,
+    resolve_wdl_engine,
+)
 
 
 def run_wdl_pipeline(
     context: PipelineContext,
     dry_run: bool = False,
+    selected_engine: str | None = None,
+    cromwell_url: str | None = None,
 ) -> dict[str, Any]:
-    """Run a WDL pipeline with the backend selected by runner.yaml."""
-    selected_engine = str(context.runner_config.get("wdl_engine") or "miniwdl").strip().lower()
+    """Run a WDL pipeline with the selected local or Cromwell backend."""
+    selected_engine = (
+        normalize_wdl_engine(selected_engine)
+        if selected_engine is not None
+        else resolve_wdl_engine()
+    )
     if selected_engine == "cromwell" and not dry_run:
         from tools.infrastructure.pipeline_engine.engine.cromwell import run_cromwell_pipeline
 
-        return run_cromwell_pipeline(context)
+        return run_cromwell_pipeline(context, cromwell_url=cromwell_url)
     if selected_engine not in {"miniwdl", "cromwell"}:
         raise ValueError(
             f"Unsupported WDL engine '{selected_engine}'. Supported engines: miniwdl, cromwell."
@@ -91,7 +101,7 @@ def run_wdl_pipeline(
         "pipeline": str(context.runner_config.get("name", context.pipeline_name)),
         "pipeline_name": context.pipeline_name,
         "engine": "wdl",
-        "wdl_engine": "miniwdl",
+        "wdl_engine": selected_engine,
         "dry_run": dry_run,
         "config_path": str(runtime_config.path),
         "inputs_path": str(inputs_path),

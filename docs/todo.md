@@ -1,32 +1,13 @@
-# Pipeline2Agent TODO
+# Pipeline2Agent roadmap
 
-The follow-up list records deployment hardening and product improvements for
-the current Pipeline2Agent runtime.
+1. **Phase 1 — Runnable foundation**
+   - Provide the main functions.
+   - Run the basic end-to-end workflow.
 
-## Follow-up work
+2. **Phase 2 — Intelligent planning**
+   - Understand the user’s intent.
+   - Plan the required tasks.
 
-- Add handoffs only if a future workflow requires user-visible transfer between
-  specialists; current specialists already run as SDK agent-as-tool calls.
-- Add model-specific capability tests for tool calling, structured output, and
-  embeddings across OpenRouter providers.
-- Add redacted trace export to a selected observability backend when required.
-- Add retention and cleanup policies for old SQLite sessions and workspaces.
-- Add retention and cleanup policies for completed durable agent-run jobs and
-  their event history.
-- Expand live evaluation coverage with a temporary OpenRouter key.
-
-## Current guarantees
-
-- `harness.run_agent` is the single application entry point.
-- Model resolution uses a run-scoped SDK `ModelProvider`; the harness closes
-  its client on completion, failure, or approval pause.
-- Biological workflows are SDK function tools; pipelines use the local
-  `pipeline_shell` ShellTool.
-- Conversations use SDK `SQLiteSession`.
-- Session workspaces use the SDK Unix-local sandbox; file operations use
-  workspace-relative paths through the workspace API.
-- Input safety and output evidence checks use SDK guardrails.
-- SDK lifecycle events and spans are captured by local tracing hooks.
-- Deterministic biological implementations remain behind the tools.
-- Pipeline execution pauses for SDK approval and can resume or reject through
-  the API and HTTP `/approve` endpoint.
+3. **Phase 3 — Autonomous analysis**
+   - Accept a defined goal.
+   - Analyze and work toward the goal autonomously.

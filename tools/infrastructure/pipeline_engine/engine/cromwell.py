@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import time
 from typing import Any
+from urllib.parse import urlsplit
 
 import requests
 
@@ -26,7 +27,10 @@ from tools.infrastructure.pipeline_engine.engine.wdl import (
 TERMINAL_STATUSES = {"Succeeded", "Failed", "Aborted"}
 
 
-def run_cromwell_pipeline(context: PipelineContext) -> dict[str, Any]:
+def run_cromwell_pipeline(
+    context: PipelineContext,
+    cromwell_url: str | None = None,
+) -> dict[str, Any]:
     """Submit WDL to Cromwell Server, wait for completion, and collect outputs."""
     workflow_path = resolve_pipeline_file(
         context.pipeline_dir,
@@ -40,7 +44,7 @@ def run_cromwell_pipeline(context: PipelineContext) -> dict[str, Any]:
     outputs_json = context.run_dir / "wdl.outputs.json"
     metadata_json = context.run_dir / "wdl.metadata.json"
 
-    base_url = cromwell_base_url(context.runner_config)
+    base_url = cromwell_base_url(explicit_url=cromwell_url)
     api_version = str(context.runner_config.get("cromwell_api_version") or "v1").strip()
     poll_interval = max(
         1.0,
@@ -144,21 +148,34 @@ def run_cromwell_pipeline(context: PipelineContext) -> dict[str, Any]:
     }
 
 
-def cromwell_base_url(runner_config: dict[str, Any]) -> str:
-    value = os.environ.get("CROMWELL_URL") or runner_config.get("cromwell_url")
-    if not value:
+def cromwell_base_url(
+    explicit_url: str | None = None,
+) -> str:
+    # A saved plan's endpoint takes precedence over the worker environment.
+    value = explicit_url if explicit_url is not None else os.environ.get("CROMWELL_URL", "")
+    url = str(value).strip()
+    if not url:
         raise ValueError(
-            "Cromwell URL is not configured. Set CROMWELL_URL or runner.yaml cromwell_url."
+            "Cromwell URL is not configured. Set CROMWELL_URL to use Cromwell."
         )
-    url = str(value).strip().rstrip("/")
     if "://" not in url:
         url = f"http://{url}"
-    if not url.startswith(("http://", "https://")):
+    try:
+        parsed = urlsplit(url)
+        valid = (
+            parsed.scheme in {"http", "https"}
+            and bool(parsed.hostname)
+            and (parsed.port is None or parsed.port > 0)
+            and not any(char.isspace() for char in url)
+        )
+    except ValueError:
+        valid = False
+    if not valid:
         raise ValueError(
-            "Cromwell URL must use http:// or https://, for example "
+            "Cromwell URL must be a valid HTTP(S) endpoint, for example "
             "http://192.168.164.39:39000."
         )
-    return url
+    return url.rstrip("/")
 
 
 def cromwell_headers() -> dict[str, str]:

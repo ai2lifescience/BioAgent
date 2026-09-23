@@ -1,4 +1,17 @@
 name: template_nextflow
+display_name: Nextflow pipeline template
+description: Nextflow template that normalizes a FASTA sequence and reports basic
+  sequence and metadata metrics.
+visibility: internal
+use_when:
+- the user requests a Nextflow runtime demonstration
+avoid_when:
+- the user needs a validated production sequence-analysis workflow
+input_summary: FASTA sequence and TSV/CSV metadata.
+output_summary: Normalized FASTA, metrics JSON, and Markdown report.
+limitations: This is an educational workflow for testing the Nextflow engine.
+examples:
+- Run the bundled Nextflow template.
 engine: nextflow
 workflow: main.nf
 nextflow_config: nextflow.config
@@ -47,19 +60,6 @@ outputs:
     kind: sequence
     required: true
     description: Normalized sequence produced by this workflow.
-display_name: Nextflow pipeline template
-description: Nextflow template that normalizes a FASTA sequence and reports basic
-  sequence and metadata metrics.
-use_when:
-- the user requests a Nextflow runtime demonstration
-avoid_when:
-- the user needs a validated production sequence-analysis workflow
-input_summary: FASTA sequence and TSV/CSV metadata.
-output_summary: Normalized FASTA, metrics JSON, and Markdown report.
-limitations: This is an educational workflow for testing the Nextflow engine.
-examples:
-- Run the bundled Nextflow template.
-visibility: internal
 execution:
   boundary: container
   dependency_scope: pipeline

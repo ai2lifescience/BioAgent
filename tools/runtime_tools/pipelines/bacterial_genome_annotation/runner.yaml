@@ -1,4 +1,20 @@
 name: bacterial_genome_annotation
+display_name: Bacterial genome annotation
+description: Annotate assembled bacterial contigs with Prokka or Bakta and normalize
+  the results into sequence, feature, report, metrics, and archive artifacts.
+visibility: public
+use_when:
+- the user has assembled bacterial contigs and wants gene or feature annotation
+avoid_when:
+- the input is raw reads
+- the user requests comparative variant analysis
+input_summary: One assembled bacterial contigs FASTA file and an annotator selection
+  with optional organism metadata.
+output_summary: GFF, GenBank, protein, nucleotide, feature-table, report, metrics,
+  log, and raw-output archive files.
+limitations: Annotation quality depends on the selected tool and database versions.
+examples:
+- Annotate these bacterial contigs with Bakta.
 engine: shell
 config: config.yaml
 entrypoint: run.sh
@@ -126,22 +142,6 @@ outputs:
     kind: image
     required: false
     description: Bakta annotation plot (PNG) produced by this workflow.
-display_name: Bacterial genome annotation
-description: Annotate assembled bacterial contigs with Prokka or Bakta and normalize
-  the results into sequence, feature, report, metrics, and archive artifacts.
-use_when:
-- the user has assembled bacterial contigs and wants gene or feature annotation
-avoid_when:
-- the input is raw reads
-- the user requests comparative variant analysis
-input_summary: One assembled bacterial contigs FASTA file and an annotator selection
-  with optional organism metadata.
-output_summary: GFF, GenBank, protein, nucleotide, feature-table, report, metrics,
-  log, and raw-output archive files.
-limitations: Annotation quality depends on the selected tool and database versions.
-examples:
-- Annotate these bacterial contigs with Bakta.
-visibility: public
 execution:
   boundary: container
   dependency_scope: pipeline

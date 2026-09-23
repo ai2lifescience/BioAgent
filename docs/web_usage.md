@@ -1,732 +1,592 @@
-# Pipeline2Agent Web UI Usage
+# Pipeline2Agent web usage
 
-This guide shows how to run the Pipeline2Agent browser interface locally or from
-another computer on the same local network.
+This guide describes the current web interface and the HTTP contract implemented
+by interfaces/web.py. It covers the full SDK agent, session workspaces, durable
+runs, atomic tools, specialist agents, pipelines, knowledge ingestion, and
+trusted website embedding.
 
-## Start Local Web UI
+For the repository architecture, see [architecture.md](architecture.md). For
+the external host-page contract, see
+[web_integration.md](web_integration.md).
+For pipeline manifest fields and selection metadata, see
+[pipeline_definitions.md](pipeline_definitions.md).
+For the other model-facing tool contracts, see
+[tool_definitions.md](tool_definitions.md).
 
-Use this when you only need to open Pipeline2Agent on the same machine:
+## Start the server
 
-```bash
+Set the model provider credential in the server environment, then start the
+local web server:
+
+~~~bash
 conda activate openaisdk
+export OPENROUTER_API_KEY="your-key"
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
-```
+~~~
 
-Open:
+Open one of these pages:
 
-```text
-http://127.0.0.1:8000
-```
+| URL | Use |
+| --- | --- |
+| http://127.0.0.1:8000 | Full workspace UI |
+| http://127.0.0.1:8000/assistant | Compact assistant iframe surface |
+| http://127.0.0.1:8000/assistant-demo | Trusted external-website embedding demo |
+| http://127.0.0.1:8000/health | Server health check |
+| http://127.0.0.1:8000/config | Public model, file, and pipeline configuration |
 
-`127.0.0.1` means only this computer can access the web page.
+The default model alias is gpt-5.6-luna and the default maximum is five SDK
+turns. The UI can select another configured model. Model aliases and provider
+model IDs are defined in models/config.py.
 
-## Separate Assistant Page
+### WDL execution backend
 
-Restart the web server after updating, then open:
+WDL pipelines use local miniwdl and Docker by default. To submit them to the
+remote Cromwell server, set `CROMWELL_URL` before starting BioAgent:
 
-```text
-http://127.0.0.1:8000/assistant
-```
+~~~bash
+export CROMWELL_URL=http://192.168.164.39:39000
+curl "$CROMWELL_URL/engine/v1/status"
+python -B -m interfaces.web --host 127.0.0.1 --port 8000
+~~~
 
-The original interface remains at `/`. The assistant page is a compact chat
-surface intended to fill a host website's right-side drawer. It includes model
-selection, file attachments, streamed activity, and a small context summary.
+The URL is the backend selector: an unset or empty `CROMWELL_URL` uses local
+miniwdl, while a nonempty URL uses Cromwell. Restart BioAgent after changing
+the variable. New pipeline plans save the selected backend and URL, so later
+environment changes do not alter an existing plan. Cromwell execution requires
+shared filesystem paths visible to BioAgent, Cromwell, and the task containers.
 
-Open `/assistant-demo` to see a sample workspace with the Assistant mounted as a
-collapsible drawer:
+To return to local execution:
 
-```text
-http://127.0.0.1:8000/assistant-demo
-```
+~~~bash
+unset CROMWELL_URL
+python -B -m interfaces.web --host 127.0.0.1 --port 8000
+~~~
 
-Another website can open the assistant in an iframe or a separate tab and
-prefill the visible context:
+### Proxy and LAN access
 
-```text
-/assistant?project_id=123&sample_id=456&result_type=summary
-```
+If OpenRouter requires a SOCKS proxy, set `AGENT_PROXY` in the same terminal
+before starting the server. `ALL_PROXY` is not required when `AGENT_PROXY` is
+set.
 
-These values are labels included with your message; they do not fetch data from
-MScan. Attach a file or paste results for the agent to use. Encode parameter
-values with `URLSearchParams` when building links.
+~~~bash
+export AGENT_PROXY=socks5h://127.0.0.1:10801
+python -B -m interfaces.web --host 127.0.0.1 --port 8000
+~~~
 
-For a host website, include the reusable drawer helper and mount it once:
+For another computer on the same trusted LAN:
 
-```html
-<div id="agent-drawer"></div>
-<script src="https://pipeline2agent.example.org/static/assistant-embed.js"></script>
+~~~bash
+python -B -m interfaces.web --host 0.0.0.0 --port 8000
+~~~
+
+Find the server address with hostname -I and open
+http://SERVER_IP:8000/assistant-demo or http://SERVER_IP:8000.
+
+A local server is a development service. Put an authenticated gateway in front
+of it before exposing it beyond a trusted network.
+
+## What the web UI provides
+
+The browser UI is a client of the same SDK runtime used by the CLI, notebook
+helpers, and programmatic API.
+
+- Sessions preserve SDK conversation history and application metadata.
+- The Workspace panel lists, uploads, downloads, reads, and deletes files in
+  the active session workspace.
+- The assistant can reuse files and tool results across turns.
+- The Runtime panel shows status, model, elapsed time, tools, files, evidence,
+  and observable SDK events.
+- Tool results can render Markdown, tables, figures, structure previews, and
+  downloadable artifacts.
+- Durable runs continue after an HTTP request or browser stream disconnects.
+- Approval prompts are shown for pipeline execution and cancellation.
+- The Stop control stops the browser from waiting; it does not kill an already
+  running backend job.
+
+The web UI never needs a host filesystem path. Public paths such as
+uploads/sample.fasta or outputs/report.md are relative to the current workspace.
+
+## Architecture functions visible in the UI
+
+The main architectural functions can be tested from the chat box:
+
+| Architecture function | How it appears |
+| --- | --- |
+| SDK orchestration | The root agent selects FunctionTools, specialists, and runtime tools |
+| Atomic tool composition | One prompt can chain sequence, table, evidence, or workspace tools |
+| Specialist delegation | Research, pipeline, document, data-analysis, coding, and website-guide specialists handle bounded multi-step work |
+| Session continuity | A later prompt can refer to a downloaded or uploaded artifact |
+| Durable execution | Long agent, knowledge, and pipeline work has a job ID and status |
+| Native streaming | SDK events are exposed through the UI and persisted for polling |
+| Approval control | Pipeline run and cancel operations pause for an explicit decision |
+| Workspace isolation | Tools receive workspace-relative paths; host paths stay private |
+| Knowledge lifecycle | Crawl, index, retrieve, cite, and synthesize are separate operations |
+| Website bridge | The embedded assistant reads structured host context and requests host actions |
+| Evidence and artifacts | Results include sources, measurements, files, and observable tool events |
+
+## Usage examples
+
+Use the following prompts directly in the web chat. Each prompt is designed to
+exercise a specific part of the architecture and a current system capability.
+
+### 1. Direct SDK answer
+
+~~~text
+Explain what an open reading frame is and when an ORF is biologically useful.
+Do not search the web.
+~~~
+
+Expected behavior: the root SDK agent answers directly without inventing a tool
+call. This demonstrates ordinary model turns and the output guardrail.
+
+### 2. Atomic sequence analysis
+
+~~~text
+For the sequence ATGCGTAAACCCGGGTTT, calculate sequence statistics,
+find ORFs, translate the forward reading frame, and return the measurements.
+~~~
+
+Expected behavior: the root composes sequence_stats, sequence_find_orfs, and
+sequence_translate. The answer should distinguish each tool's result.
+
+For a workspace file:
+
+~~~text
+Inspect uploads/sample.fasta, report its sequence statistics, and find ORFs.
+~~~
+
+The file must already exist in the active workspace. The agent should discover
+or validate the workspace-relative path rather than guessing a host path.
+
+### 3. Database retrieval and structure analysis
+
+~~~text
+Download PDB structure 1A3N as mmCIF, then inspect its chains, residues,
+ligands, method, and resolution. Return the downloaded workspace path.
+~~~
+
+Expected behavior: pdb_download obtains the artifact and structure_inspect
+analyzes the returned file. The artifact is reusable in later turns.
+
+Another example:
+
+~~~text
+Look up BRCA1 in curated biological databases and return the record IDs,
+organisms, descriptions, and source URLs.
+~~~
+
+This uses database_lookup and provider adapters without exposing provider
+credentials or implementation paths.
+
+### 4. Generic table analysis
+
+Upload a CSV or TSV file, then ask:
+
+~~~text
+Profile uploads/measurements.csv. Identify numeric and categorical columns,
+missing values, and suspicious ranges. Then group by cohort and plot the
+measurement distributions. Save the generated figures in the workspace.
+~~~
+
+Expected behavior: the data-analysis specialist may coordinate
+table_profile, table_group, and table_plot. The tools are generic table tools;
+they are not restricted to biology data.
+
+### 5. Document and workspace research
+
+Upload a selectable-text PDF, then ask:
+
+~~~text
+Read the uploaded paper, find the sections that describe the experimental
+limitations, and summarize them with page markers.
+~~~
+
+Expected behavior: document_read and workspace_search operate on the session
+workspace. Scanned PDFs require OCR before their text can be read.
+
+For multiple files:
+
+~~~text
+Search all uploaded documents for the phrase "sample preparation", then compare
+the findings and cite each workspace-relative file and page marker.
+~~~
+
+### 6. Run-local web research and a report
+
+~~~text
+Research the current evidence about PhiX174 genome organization using PubMed
+and trusted web sources. Fetch the most relevant pages, review the evidence,
+draft a cited Markdown report, and save it to the workspace.
+~~~
+
+Expected behavior: research_specialist coordinates pubmed_search, web_search,
+web_fetch, evidence operations, report_review, report_synthesize, and finally
+report_write when a saved artifact was requested.
+
+The reporting agents do not search or write independently. They receive bounded
+evidence and return structured review or draft results.
+
+### 7. Durable knowledge ingestion
+
+~~~text
+Create a session-owned knowledge collection from these trusted public sources:
+https://example.org/guide
+https://example.org/reference
+Crawl only these domains, index the pages, and tell me the knowledge job ID.
+~~~
+
+Expected behavior: knowledge_ingest creates a durable job. It returns a
+collection and job identifier rather than pretending the crawl is complete.
+
+Then ask:
+
+~~~text
+Check the knowledge job status. When indexing succeeds, retrieve the passages
+about authentication and answer with source URLs and evidence IDs.
+~~~
+
+The flow is knowledge_status, knowledge_retrieve, and citation-ready evidence.
+The crawler may use the bounded HTTP crawler or the optional Scrapy subprocess.
+
+### 8. Pipeline discovery and execution
+
+Start with discovery:
+
+~~~text
+List the available pipelines and explain which one fits a FASTA annotation task.
+Show required inputs, outputs, limitations, and example data.
+~~~
+
+Then plan and run with an uploaded file:
+
+~~~text
+Use the suitable pipeline with uploads/sample.fasta. Create a validated plan,
+show the input mapping and parameters, and run it after I approve the plan.
+~~~
+
+Expected behavior: pipeline_specialist or pipeline_shell uses the
+agent-pipeline protocol:
+
+~~~text
+catalog -> files -> plan -> approval -> run -> status/wait -> results
+~~~
+
+The pipeline worker verifies input hashes and output confinement. A queued or
+running job is not a successful result. For a previous job:
+
+~~~text
+Check pipeline job JOB_ID and collect its verified results if it succeeded.
+Do not rerun it.
+~~~
+
+### 9. Coding inside the workspace
+
+~~~text
+Inspect the Python files in the workspace, explain the current job queue design,
+make the smallest edit needed to fix the status serialization, and run the
+relevant bounded tests. Show changed workspace-relative files.
+~~~
+
+Expected behavior: coding_specialist can coordinate code_inspection, code_edit,
+and code_test. Code editing and testing operate inside the active workspace and
+do not use arbitrary host paths. Pipeline execution remains a separate,
+approval-aware route.
+
+For a read-only request:
+
+~~~text
+Find where durable run events are persisted and explain the sequence-number
+contract without changing files.
+~~~
+
+This should use code_inspection only.
+
+### 10. Trusted website guidance
+
+Open /assistant-demo, connect the website, then ask:
+
+~~~text
+Introduce the current website. Identify the visible workflow, available tables
+and figures, and the relevant manual sections.
+~~~
+
+Expected behavior: website_context is called before answering page-specific
+questions. The website-guide specialist can then use
+website_read_table, website_read_figure, website_search_manual, and
+website_read_manual.
+
+For structured chart interpretation:
+
+~~~text
+Read the currently visible figure, describe the axes and trends using its actual
+values, and tell me which filter is active.
+~~~
+
+The bridge provides structured data from the trusted host. It does not claim
+to inspect arbitrary screenshots or cross-origin DOM.
+
+For host data analysis:
+
+~~~text
+Import the measurements table from the current website into the workspace,
+profile it, and plot the distribution by treatment group.
+~~~
+
+Expected behavior: website_import_data writes an explicit UTF-8 export under
+inputs/, then normal table tools analyze the imported artifact.
+
+For a registered UI action:
+
+~~~text
+Highlight the cohort filter and navigate to the Methods section. Explain what
+changed after the page revision updates.
+~~~
+
+The host validates highlight and navigation requests. The agent must use the
+new page revision before reading changed resources.
+
+### 11. Multi-turn composition
+
+Use one session for a dependent workflow:
+
+~~~text
+Download the AlphaFold structure for the requested protein and save it.
+~~~
+
+Then:
+
+~~~text
+Inspect the latest structure, summarize its chains and confidence metadata, and
+write a short Markdown report.
+~~~
+
+The second turn reuses the session workspace and conversation history. If the
+file is missing, the agent should ask for the required input rather than invent
+a path.
+
+## Workspace files
+
+The active workspace is session-scoped. Public paths use this layout:
+
+~~~text
+uploads/     files uploaded through the UI
+inputs/      explicit website exports and pipeline inputs
+outputs/     generated reports and ordinary artifacts
+runs/        run-specific and pipeline job files
+.pipeline/   private pipeline metadata
+~~~
+
+The UI displays relative paths. Internally, the runtime resolves them under
+runtime/sessions/<session-id>/ and rejects absolute paths, traversal, hidden
+runtime files, and symlink escapes.
+
+Upload files through the Workspace panel or the upload endpoint. Refer to them
+by the displayed relative path or by a clear filename in a prompt. Generated
+artifacts remain available to later turns in the same session.
+
+## Durable runs, streaming, and approvals
+
+The browser normally uses POST /run_stream. The server queues the run, starts a
+detached worker, and sends persisted events as SSE. A disconnected browser can
+recover the same run from its ID.
+
+For an API client, queue a run:
+
+~~~bash
+curl -sS -X POST http://127.0.0.1:8000/run \
+  -H 'Content-Type: application/json' \
+  -d '{"request":"Profile uploads/measurements.csv","session_id":"SESSION_ID"}'
+~~~
+
+The response contains run_id, session_id, status, model_key, and timestamps.
+Read status:
+
+~~~bash
+curl -sS http://127.0.0.1:8000/runs/RUN_ID
+~~~
+
+Read events after a sequence number:
+
+~~~bash
+curl -sS 'http://127.0.0.1:8000/runs/RUN_ID/events?after=12'
+~~~
+
+Run statuses are queued, running, succeeded, failed, blocked,
+pending_approval, and interrupted. Persisted event sequences make polling
+resumable. SSE is a transport over the same event store, not a second agent
+runtime.
+
+Approval-controlled runs expose an approval event and pause at
+pending_approval. Submit an explicit decision:
+
+~~~bash
+curl -sS -X POST http://127.0.0.1:8000/approve_stream \
+  -H 'Content-Type: application/json' \
+  -d '{"session_id":"SESSION_ID","approved":true,"approval_id":"APPROVAL_ID"}'
+~~~
+
+Pipeline run and cancellation require approval. Code inspection, code editing,
+and bounded code tests use their direct workspace tool path.
+
+## HTTP endpoints
+
+### Browser and session endpoints
+
+| Method and path | Purpose |
+| --- | --- |
+| GET / | Full workspace UI |
+| GET /assistant | Compact embedded assistant page |
+| GET /assistant-demo | Canonical trusted website demo |
+| GET /health | Health response |
+| GET /config | Model, artifact, and pipeline configuration |
+| GET /sessions | List sessions and message counts |
+| GET /sessions/<id>/messages | Read displayable session messages |
+| PATCH /sessions/<id> | Update title or pinned state |
+| DELETE /sessions/<id> | Delete SDK history, metadata, and workspace |
+
+### Run endpoints
+
+| Method and path | Purpose |
+| --- | --- |
+| POST /run | Queue a durable run and return its identifier |
+| POST /run_stream | Queue a run and stream persisted events as SSE |
+| GET /runs | List recent runs, optionally filtered by session_id |
+| GET /runs/<id> | Read one run status and public result |
+| GET /runs/<id>/events?after=N | Read resumable events |
+| POST /approve | Resume an approval through the synchronous API |
+| POST /approve_stream | Queue approval resume and stream persisted events |
+
+### Workspace and knowledge endpoints
+
+| Method and path | Purpose |
+| --- | --- |
+| GET /workspace?session_id=<id> | List session files and capabilities |
+| GET /workspace/file?session_id=<id>&path=<relative-path> | Read/download one file |
+| POST /workspace/files | Multipart upload into the session workspace |
+| DELETE /workspace/files/<path>?session_id=<id> | Delete one workspace-relative file |
+| GET /knowledge/jobs/<id>?session_id=<id> | Read knowledge job status |
+| GET /knowledge/jobs/<id>/events?session_id=<id>&after=N | Read ingestion events |
+| GET /knowledge/jobs/<id>/stream?session_id=<id> | Stream ingestion events as SSE |
+
+### Website bridge endpoints
+
+The website bridge endpoints are documented in
+[web_integration.md](web_integration.md):
+
+| Method and path | Purpose |
+| --- | --- |
+| POST /website/demo-token | Issue a local demo ticket |
+| POST /website/connect | Bind a trusted host page to a session |
+| POST /website/context | Replace the host page snapshot |
+| POST /website/poll | Poll pending host callback requests |
+| POST /website/respond | Return a correlated host callback result |
+| POST /website/disconnect | Revoke the binding |
+
+The browser assistant then includes the website binding in POST /run or
+POST /run_stream. The binding does not remove any existing root tools.
+
+## Embed the assistant in a trusted website
+
+The canonical local demonstration is /assistant-demo. A real host website should
+use the same iframe helper but provide its own authenticated ticket endpoint and
+host adapter:
+
+~~~html
+<div id="agent-root"></div>
+<script src="https://agent.example.com/static/assistant-embed.js"></script>
 <script>
-  const drawer = AssistantDrawer.mount({
-    target: document.getElementById("agent-drawer"),
-    src: "https://pipeline2agent.example.org/assistant",
-    context: { project_id: "123", sample_id: "456", result_type: "summary" }
+  const assistant = AssistantDrawer.mount({
+    target: document.getElementById("agent-root"),
+    src: "https://agent.example.com/assistant",
+    siteId: "lab-portal",
+    getToken: async () => {
+      const response = await fetch("/assistant-token", {method: "POST"});
+      return (await response.json()).token;
+    },
+    adapter: {
+      getPageContext: async () => pageSnapshot(),
+      readTable: async ({resource_id, offset, limit}) =>
+        tablePage(resource_id, offset, limit),
+      readFigure: async ({resource_id}) => chartDescription(resource_id),
+      searchManual: async ({query, limit}) => manualSearch(query, limit),
+      readManual: async ({section_id}) => manualSection(section_id),
+      exportData: async ({resource_id}) => exportResource(resource_id),
+      highlight: async ({element_id, message}) =>
+        highlightRegisteredElement(element_id, message),
+      navigate: async ({route_id}) => openRegisteredRoute(route_id),
+      invokeAction: async ({action_id, arguments: args}) =>
+        runRegisteredAction(action_id, args)
+    }
   });
 </script>
-```
+~~~
 
-The helper creates the launcher, right-side panel, close button, iframe, and
-context messaging. Call `drawer.updateContext(nextContext)` when the user
-changes projects or samples.
+getPageContext is required. Implement only callbacks supported by the host.
+Use stable resource, route, element, and action IDs. Return structured JSON,
+not arbitrary DOM or screenshots. The host owns authentication and must enforce
+the logged-in user's permissions.
 
-`AssistantDrawer` is the only public embed API name.
+Configure exact trusted origins:
 
-A custom embedding can update the assistant after loading with `postMessage`:
+~~~bash
+export AGENT_WEBSITE_SITES='{"lab-portal":["https://lab.example.com"]}'
+export AGENT_WEBSITE_SECRET='a-long-random-shared-secret-at-least-32-characters'
+~~~
 
-```js
-assistantFrame.contentWindow.postMessage(
-  {
-    type: "agent-context",
-    context: { project_id: "123", sample_id: "456", result_type: "summary" }
-  },
-  "https://pipeline2agent.example.org"
-);
-```
+The signing secret stays on the server. The browser receives a short-lived
+ticket and then a session-scoped binding token. Website data is imported into
+the normal workspace only through an explicit website_import_data operation.
 
-Use the exact Pipeline2Agent origin as the second argument and validate `event.origin`
-in a custom embedding implementation. The assistant accepts text labels only.
+Read [web_integration.md](web_integration.md) before deploying an
+external integration. It defines revisions, callback limits, polling,
+postMessage origin checks, ticket replay protection, and idempotency.
 
-For a proxy mount such as `/agent/assistant`, route the whole `/agent/`
-prefix to Pipeline2Agent and rewrite that prefix before forwarding, including static
-files and API requests. The page resolves these URLs relative to its mount
-point. Disable proxy buffering for streaming responses. Public website
-integration still needs that website's authentication and session permissions;
-this page does not add them.
+## Troubleshooting
 
-The separate page keeps its conversation while it is open. Reloading or choosing
-**New chat** starts a new session; context labels stay on screen. **Stop waiting**
-disconnects the response stream; work already started on the server may continue.
+Port 8000 already in use:
 
-Agent requests are durable queued runs. `POST /run` returns a `run_id`; poll `GET /runs/<run_id>` for status, use `GET /runs?session_id=<id>` to list session runs, or read resumable events from `GET /runs/<run_id>/events?after=<sequence>`. `POST /run_stream` and `POST /approve_stream` expose the queued run and approval resume as SSE.
-
-On the main page, use the session actions beside a conversation to rename it or
-pin it. Pinned conversations stay at the top of the list and the title and pin
-state are stored with the server-side session metadata.
-
-## Runtime Panel
-
-Each completed request includes a compact tab row below the answer: **Runtime**,
-**Plan & execution**, **Evidence**, and **Trace**. Select one tab at a time; the
-selected diagnostic view uses one shared content area:
-
-Click the selected tab again to hide the diagnostic area.
-
-- **Runtime** shows status, model, elapsed time, tool count, file count, and the
-  configured maximum turns.
-- **Plan & execution** shows the registered operations and the ordered agent,
-  model, handoff, tool, guardrail, approval, and completion events returned by
-  the Agents SDK. It reports observable actions and does not expose private
-  model reasoning.
-- **Evidence** groups tools, databases, queries, records, sources, links, files,
-  and tool errors. Workspace files link to their downloads.
-- **Trace** shows the timestamped technical event stream in a compact readable
-  form so the useful diagnostic details stay visible.
-
-The report remains useful for direct answers, database lookups, document reads,
-and pipeline requests. Pipeline outputs and structure or figure previews still
-appear above the report when a tool produces them.
-
-## Start For Local Network Access
-
-Use this when another PC on the same LAN should open the Pipeline2Agent page:
-
-Set the OpenRouter proxy once in your terminal, then start the server:
-
-```bash
-conda activate openaisdk
-export AGENT_PROXY=socks5h://127.0.0.1:10801
-python -B -m interfaces.web --host 0.0.0.0 --port 8000
-```
-
-`ALL_PROXY` is not required when `AGENT_PROXY` is set. You do not need to
-unset `HTTP_PROXY` or `HTTPS_PROXY` for OpenRouter requests. Use `http://` if
-your proxy provides an HTTP listener; use `socks5h://` for the SOCKS5 listener
-shown above.
-
-Alternatively, set the proxy for just the server process after activating
-`openaisdk`:
-
-```bash
-AGENT_PROXY=socks5h://127.0.0.1:10801 \
-  python -B -m interfaces.web --host 0.0.0.0 --port 8000
-```
-
-For direct OpenRouter connections, use:
-
-```bash
-AGENT_DISABLE_PROXY=1 \
-  python -B -m interfaces.web --host 0.0.0.0 --port 8000
-```
-
-`AGENT_DISABLE_PROXY=1` takes priority over proxy settings. If you previously
-exported it, run `unset AGENT_DISABLE_PROXY` before switching back to a
-proxy. Restart a running server after changing its environment.
-
-These Pipeline2Agent settings control OpenRouter model and embedding requests.
-Other database and pipeline clients retain their own proxy settings.
-
-Find this machine's LAN IP:
-
-```bash
-hostname -I
-```
-
-On another PC in the same local network, open:
-
-```text
-http://<LAN_IP>:8000
-```
-
-For example, if this machine's LAN IP is `192.168.75.56`:
-
-```text
-http://192.168.75.56:8000
-```
-
-`0.0.0.0` means the server accepts connections from other machines that can
-reach this computer. Use it only on a trusted local network.
-
-## Stop A Previous Web Server
-
-Check what process is using port `8000`:
-
-```bash
+~~~bash
 ss -ltnp 'sport = :8000'
-```
-
-Example output may include:
-
-```text
-users:(("python",pid=190933,fd=3))
-```
-
-Stop that process:
-
-```bash
-kill 190933
-```
-
-Replace `190933` with the real PID shown on your machine.
-
-You can also list Pipeline2Agent web processes:
-
-```bash
-ps -eo pid,cmd | rg 'interfaces\.web|interfaces/web.py'
-```
-
-## Firewall
-
-If another PC cannot open the page, allow port `8000` through the firewall:
-
-```bash
-sudo ufw allow 8000/tcp
-```
-
-Then retry:
-
-```text
-http://<LAN_IP>:8000
-```
-
-## Web UI Basics
-
-The web page works like a chat interface:
-
-1. Select a model from the model menu.
-2. Type a biological request in the message box.
-3. Click Send.
-4. Open the Thinking panel if you want to see runtime progress.
-5. Check the answer, evidence, status, trace, and generated files below
-   the response.
-
-The left session sidebar lets you create a new chat, switch between server-side
-SDK sessions, and delete sessions. The browser keeps only the active session ID;
-conversation messages are loaded from the server's `SQLiteSession` when a chat
-opens, so another browser tab or page reload sees the same history.
-
-The same session can reuse downloaded files. For example, you can download a
-FASTA file in one message and then ask Pipeline2Agent to analyze the latest FASTA in a
-later message.
-
-## Manage Workspace Files
-
-The `Workspace` panel is the file browser for the active SDK sandbox session.
-The agent and its tools see the same workspace, so an uploaded file is already
-available to pipeline tools; there is no separate input label or path insertion
-step.
-
-- Choose `Upload`, or drop files into the upload area. Files are stored under
-  `uploads/` in the current session.
-- Use the search box or the `All files`, `Inputs`, and `Outputs` filter to find a
-  file. The panel shows each file's name, type, size, and workspace-relative
-  path.
-- Use `Download` when you need a local copy. Use `Remove` to delete a file from
-  the session workspace.
-- Refer to a file by name in your message, for example `Analyze reads.fastq`
-  or `Run template_shell on metadata.csv`. Pipeline2Agent resolves the workspace file
-  and supplies the path required by the selected tool.
-- For a text-based PDF, ask `Summarize my uploaded paper.pdf` or ask a question
-  about the paper. Pipeline2Agent extracts the document in page-aware chunks and
-  `workspace_search` can find a phrase across several uploaded documents before
-  `document_read` reads the relevant PDF pages. Scanned PDFs still require OCR;
-  extracted text includes page markers so answers can cite page numbers.
-
-## Common assistant applications
-
-The current tool surface supports four general assistant workflows alongside
-the biology tools:
-
-- **Document assistant:** search uploaded text/PDF files with `workspace_search`,
-  then read selectable PDF pages with `document_read` and cite the workspace
-  path and page markers.
-- **Data analyst:** use `table_profile`, then `table_group` or `table_plot` for
-  bounded CSV, TSV, or Excel analysis. Each tool returns measured values and
-  workspace-relative artifact paths.
-- **Web research:** use `pubmed_search` or `web_search`, then
-  `evidence_index`, `evidence_retrieve`, `report_review`, `report_synthesize`, and `report_write` when a cited
-  report is requested. Search results preserve source URLs and bounded
-  excerpts.
-- **Coding assistant:** use `code_inspection` for read-only workspace questions.
-  `code_edit` and `code_test` are direct and limited to the active
-  session workspace and bounded commands.
-
-For a task combining several operations, the root agent can delegate to
-`document_specialist`, `data_analysis_specialist`, `research_specialist`,
-or `coding_specialist`. Each specialist shares the session workspace and returns
-the same runtime evidence used by the main chat.
-
-Workspace files are stored in the active SDK sandbox session:
-
-```text
-runtime/sessions/<session_id>/uploads/
-```
-
-If the same filename is uploaded more than once, Pipeline2Agent avoids overwriting by
-adding a unique prefix to the stored name. Generated outputs appear in the same
-workspace listing and can be downloaded or removed from the Workspace panel.
-
-```text
-a1b2c3d4e5f6_reads.fastq
-b2c3d4e5f6a1_reads.fastq
-```
-
-Keep this distinction:
-
-```text
-uploads/   original files provided through the web UI
-outputs/   files generated by other tools
-runs/      pipeline job records, input copies, and outputs
-```
-
-Pipeline workers stage verified copies of selected uploads under
-`runs/<job-id>/inputs/` before execution.
-
-## Usage Examples
-
-Use these examples directly in the web chat box.
-
-### Biology Chat / Knowledge QA
-
-Use this for general explanations that do not need file output or live database
-retrieval.
-
-```text
-What is GC content?
-```
-
-```text
-Explain the difference between nucleotide sequence alignment and protein sequence alignment.
-```
-
-```text
-What is the biological meaning of an open reading frame?
-```
-
-If you need citations, current records, downloaded files, or deterministic
-analysis, ask for a specific Pipeline2Agent tool such as NCBI retrieval, species
-report, sequence analysis, or BLAST.
-
-### NCBI Retrieval
-
-Use this to search or download public NCBI/Entrez sequence records, FASTA files,
-metadata CSVs, PubMed records, nucleotide records, protein records, or accession
-records.
-
-```text
-Download 10 records phiX174 genes A G
-```
-
-```text
-Download 5 records organism "Escherichia phage phiX174" genes A G
-```
-
-```text
-Download 10 records phiX174 genes A G from 2020-2024
-```
-
-```text
-Search NCBI nucleotide for NC_001422 and download FASTA metadata
-```
-
-Typical output:
-
-```text
-Answer summary
-FASTA file paths
-Metadata CSV paths
-NCBI query information
-Evidence and trace details
-```
-
-### UniProt / PDB Database Lookup
-
-Use this for lightweight database search without downloading a structure file.
-
-```text
-Search UniProt for BRCA1 human
-```
-
-```text
-Find 3 UniProt records for BRCA1 human
-```
-
-```text
-Find 3 PDB entries for hemoglobin
-```
-
-Typical output:
-
-```text
-Record IDs
-Names or titles
-Organism or source
-Database URLs
-```
-
-### PDB Structure Download
-
-Use this to download a specific structure file from RCSB PDB.
-
-```text
-Download PDB structure 1A3N as cif
-```
-
-```text
-Download PDB 1A3N as pdb
-```
-
-```text
-Fetch PDB 3GOU as cif
-```
-
-Downloaded structures are stored in the active session file directory by
-default. They can be reused later in the same web chat session.
-
-### Biology / Sequence / Genome Analysis
-
-Use the regular sequence workflow for deterministic sequence statistics, GC
-content, base counts, FASTA summaries, and ORF detection. Use the Biopython
-workflow for reverse complements, translation, and GenBank feature summaries.
-It accepts FASTA input but does not replace the sequence metrics workflow.
-
-```text
-Translate the uploaded sample.fasta in reading frame 1
-```
-
-```text
-Show the GenBank features in uploads/record.gb
-```
-
-```text
-Find the reverse complement of ATGCGTAA
-```
-
-```text
-Analyze PhiX174 segment sequence GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT
-```
-
-```text
-Find ORFs and GC content for PhiX174 segment sequence GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT
-```
-
-```text
-Analyze FASTA file data/ncbi_downloads_phix174/phix174_A.fasta
-```
-
-After downloading FASTA in the same web session:
-
-```text
-Analyze the latest FASTA
-```
-
-Typical output:
-
-```text
-Record count
-Sequence length
-GC content
-Base or residue counts
-ORF count
-```
-
-### Genome Map / Genome Structure Figure
-
-Use this to create a visual 1D genome map from FASTA, GenBank, or GFF input.
-The web UI renders generated SVG figures inline.
-
-```text
-Show genome structure for FASTA file data/ncbi_downloads_phix174/phix174_A.fasta as a circular map
-```
-
-```text
-Create a linear genome map for FASTA file data/ncbi_downloads_phix174/phix174_A.fasta
-```
-
-After downloading FASTA in the same web session:
-
-```text
-Show genome structure of the latest FASTA as a circular map
-```
-
-Typical output:
-
-```text
-Genome length
-Feature counts
-Gene/CDS/ORF counts
-SVG genome map shown in the answer
-```
-
-### Protein Structure Analysis
-
-Use this to analyze local or already downloaded PDB/mmCIF files for atoms,
-chains, residues, ligands, water, models, method, and resolution. A PDB ID is
-downloaded with `pdb_download` first, then passed to this analysis tool.
-
-Download and analyze a PDB ID:
-
-```text
-Download and analyze PDB structure 3GOU
-```
-
-Analyze a local structure file:
-
-```text
-Analyze structure file runtime/sessions/demo/outputs/structures/1A3N.cif
-```
-
-After downloading a structure in the same web session:
-
-```text
-Analyze the latest structure
-```
-
-Typical output:
-
-```text
-Atom count
-Chain count
-Residue count
-Ligands
-Experimental method
-Resolution
-Collapsible 3D viewer for .cif, .mmcif, and .pdb files
-```
-
-### BLAST Search
-
-Use this only when you explicitly want NCBI BLAST sequence similarity search.
-
-Submit a BLAST request:
-
-```text
-BLAST PhiX174 segment sequence GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT with blastn database nt
-```
-
-Submit and wait for hits:
-
-```text
-BLAST PhiX174 segment sequence GAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT with blastn database nt and wait
-```
-
-Poll an existing RID:
-
-```text
-Poll BLAST RID ABCD123456 and return hits
-```
-
-BLAST uses the public NCBI BLAST URL API. Waiting for BLAST results can take
-time.
-
-### File Inspection
-
-Use this to inspect local FASTA, CSV, TSV, Markdown, or text files.
-
-```text
-Inspect file data/ncbi_downloads_phix174/phix174_A.fasta
-```
-
-```text
-Inspect file data/ncbi_downloads_phix174/phix174_A.metadata.csv
-```
-
-```text
-Inspect file runs/<job-id>/outputs/report.md
-```
-
-Typical output:
-
-```text
-File type
-File size
-Line count
-Record or row count
-Preview lines
-```
-
-### PDF Document Reading
-
-Upload a selectable-text PDF to the current workspace, then ask a question
-about it or request a summary:
-
-```text
-Summarize my uploaded Paper2Agent.pdf and cite the relevant pages
-```
-
-Pipeline2Agent extracts the PDF in bounded, page-aware chunks and uses the page
-markers in its answer. Long documents may require several extraction calls.
-Scanned PDFs need OCR before their contents can be summarized.
-
-### Evidence-backed research reports
-
-Use the research specialist for a cited report assembled from PubMed or web evidence. It may fetch pages, index and retrieve evidence, request an independent evidence review, draft Markdown, and save the report as a workspace artifact.
-
-```text
-Create a cited report about PhiX174 genome structure and host range using PubMed and trusted web sources
-```
-
-```text
-Summarize SARS-CoV-2 host range and genome structure using retrieved evidence, then save the Markdown report
-```
-
-Typical output:
-
-```text
-Narrative answer
-Source summaries
-Citation/evidence details
-Markdown report path
-Evidence caveats if the source material is incomplete
-```
-
-### Pipeline Runner
-
-Pipeline2Agent discovers registered workflows under `tools/runtime_tools/pipelines/`
-and uses `pipeline_shell` to plan, execute, monitor, and collect their results.
-The [pipeline architecture reference](architecture.md#pipeline-runtime) contains
-the command protocol, file-role handling, manifest contract, engine requirements,
-and instructions for [adding a pipeline](architecture.md#adding-a-pipeline).
-
-First discover the available workflows:
-
-```text
-List the available pipelines and their required inputs.
-```
-
-For a demonstration using bundled synthetic data:
-
-```text
-Run the template_shell example and summarize its assignments and metrics.
-```
-
-For your own data, upload files to the current session and mention the filenames
-and their roles in the request. The agent discovers the matching workspace
-paths before it creates the validated plan:
-
-```text
-Run template_shell with my reads.txt as reads and metadata.tsv as metadata, with uppercase true. Return the results.
-```
-
-The agent discovers paths, selects inputs, and creates a validated plan. Missing
-inputs lead to a clarification request. Filename conventions can help identify
-roles, but there is no built-in R1/R2 classifier; provide explicit mappings
-when filenames or sample assignments are ambiguous. Bundled files are used only
-when an example is requested.
-
-Real execution pauses for approval of the saved plan. After approval, the job
-runs in a local worker. The agent can wait briefly and collect successful
-outputs, or report the job ID and status for a longer job. Review existing
-outputs in the same chat without rerunning the workflow:
-
-```text
-Check the status of job <job-id> and collect its results if it succeeded.
-```
-
-Results provide workspace file paths, metrics, bounded table previews, and a
-ZIP bundle. The agent can summarize these in its answer; the Workspace panel
-provides file downloads. Original uploads remain under `uploads/`; the worker
-uses verified input copies under `runs/<job-id>/inputs/` and writes declared
-outputs under `runs/<job-id>/outputs/`.
-
-Other bundled examples can be requested explicitly by name:
-
-```text
-Run template_snakemake with its bundled example data as a dry run with 2 cores.
-```
-
-```text
-Run template_nextflow with its bundled example data and summarize the results.
-```
-
-```text
-Run template_bio with its bundled example data and summarize the results.
-```
-
-The selected pipeline supplies its execution container and workflow
-dependencies. Shell pipelines do not support `--dry-run`; planning validates
-their declared inputs and settings without executing the workflow. Snakemake,
-Nextflow, and WDL bundles have engine-specific validation modes described in
-the architecture reference.
-
-`template_bio` is an educational demo: its alignment and variant outputs use a
-positional comparison. Its tree outputs are optional; ask to disable them or
-set `emit_phylogenetic_tree=false` when planning.
-
-## Multi-Turn Workspace Usage
-
-The web UI is the best interface for workflows that reuse files across turns.
-Examples:
-
-```text
-Download 10 records phiX174 genes A G
-```
-
-Then:
-
-```text
-Analyze the latest FASTA
-```
-
-Or:
-
-```text
-Download PDB structure 1A3N as cif
-```
-
-Then:
-
-```text
-Analyze the latest structure
-```
-
-This works because the web session keeps the SDK sandbox workspace. Separate CLI
-commands do not automatically share the same session unless you explicitly use
-the same API session.
-
-## Notes
-
-- The web UI files live in `web_ui/`.
-- `interfaces/web.py` serves HTTP routes and the browser UI.
-- The web UI is for development and local-network use, not public internet
-  deployment.
-- The Stop button in the browser stops waiting for the current response in the
-  UI. It is not a full backend process killer.
+ps -eo pid,cmd | rg 'interfaces\\.web|interfaces/web.py'
+kill PID
+~~~
+
+Website connection says that the origin is not configured:
+
+1. Copy the browser origin exactly, including scheme, hostname, and port.
+2. Add it to AGENT_WEBSITE_SITES under the correct site ID.
+3. Restart the server.
+4. Reload /assistant-demo or choose Retry website connection.
+
+The assistant answers about a website without consulting it:
+
+1. Confirm the website connection indicator is active.
+2. Ask for the current website or visible figure explicitly.
+3. The runtime instruction requires website_context for page-specific questions.
+4. If the binding expired, reconnect the host page.
+
+A run appears stuck:
+
+1. Read GET /runs/<id>.
+2. Read GET /runs/<id>/events?after=N.
+3. Check whether it is queued, running, pending_approval, or interrupted.
+4. Do not submit another request for the same side effect automatically.
+5. Review a failed or interrupted pipeline job before deciding whether to create
+   a new plan and retry.
+
+## Safety and deployment notes
+
+- Keep OPENROUTER_API_KEY, AGENT_WEBSITE_SECRET, and provider credentials out
+  of source control and browser payloads.
+- Treat crawled pages, uploaded documents, and website data as untrusted data.
+- Public responses expose workspace-relative paths, never host filesystem paths.
+- The pipeline shell accepts only the allowlisted agent-pipeline protocol.
+- Knowledge crawlers use bounded public HTTP/Scrapy access; they are not a
+  general private-network browser.
+- The local server does not provide complete multi-user authorization. Use an
+  authenticated reverse proxy or application gateway for shared deployments.
+- Durable workers do not silently replay interrupted side effects.
+
+For implementation changes, update [architecture.md](architecture.md),
+[web_integration.md](web_integration.md), and the relevant smoke tests
+together.

@@ -7,9 +7,9 @@ filters.
 
 ## Requirements
 
-- A reachable Cromwell Server (`CROMWELL_URL`, default
-  `http://127.0.0.1:8000`) and a shared filesystem between the submitter,
-  Cromwell, and task containers;
+- miniwdl for local execution, or Java for the standalone Cromwell command;
+- a reachable Cromwell Server when `CROMWELL_URL` is set, with a shared
+  filesystem between BioAgent, Cromwell, and task containers;
 - Docker or the configured backend with `mscan-detection:v1.0` (or a compatible
   image), including the Stage 1–6 Python/minimap2 entrypoints;
 - mounted minimap2 indexes and annotation tables for every database type you
@@ -21,10 +21,11 @@ The task image and databases are not included. Paths in `inputs.json` must be
 valid inside the Cromwell task runtime. Leave unused database paths unset rather
 than passing empty strings.
 
-Check the service:
+BioAgent defaults to local miniwdl when `CROMWELL_URL` is unset. For Cromwell
+submission, configure and verify its endpoint before starting BioAgent:
 
 ```bash
-export CROMWELL_URL=http://127.0.0.1:8000
+export CROMWELL_URL=http://192.168.164.39:39000
 curl "$CROMWELL_URL/engine/v1/status"
 ```
 

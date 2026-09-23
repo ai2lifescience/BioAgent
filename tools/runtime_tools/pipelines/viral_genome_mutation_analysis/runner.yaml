@@ -1,4 +1,20 @@
 name: viral_genome_mutation_analysis
+display_name: Viral genome mutation analysis
+description: Compare viral genome FASTA files to a reference, call nucleotide variants,
+  and optionally infer a phylogeny.
+visibility: public
+use_when:
+- the user wants mutation comparison across assembled viral genomes
+avoid_when:
+- the user has raw reads
+- the user asks for clinical interpretation of mutations
+input_summary: One genome or a directory of viral genome FASTA files plus a local
+  or database-resolved reference.
+output_summary: SNP matrix, variant table, summary, and optional tree artifacts.
+limitations: Reference resolution and phylogeny depend on configured databases and
+  external tools.
+examples:
+- Compare these viral genomes and summarize their mutations.
 engine: shell
 config: config.yaml
 entrypoint: run.sh
@@ -78,22 +94,6 @@ param_overrides:
   species: {}
   taxonid: {}
   threads: {}
-display_name: Viral genome mutation analysis
-description: Compare viral genome FASTA files to a reference, call nucleotide variants,
-  and optionally infer a phylogeny.
-use_when:
-- the user wants mutation comparison across assembled viral genomes
-avoid_when:
-- the user has raw reads
-- the user asks for clinical interpretation of mutations
-input_summary: One genome or a directory of viral genome FASTA files plus a local
-  or database-resolved reference.
-output_summary: SNP matrix, variant table, summary, and optional tree artifacts.
-limitations: Reference resolution and phylogeny depend on configured databases and
-  external tools.
-examples:
-- Compare these viral genomes and summarize their mutations.
-visibility: public
 execution:
   boundary: container
   dependency_scope: pipeline

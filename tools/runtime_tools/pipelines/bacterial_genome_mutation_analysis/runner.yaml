@@ -1,4 +1,21 @@
 name: bacterial_genome_mutation_analysis
+display_name: Bacterial genome mutation analysis
+description: Compare assembled bacterial genomes against a reference, call and filter
+  SNPs, and optionally build a phylogeny.
+visibility: public
+use_when:
+- the user wants mutation comparison or a phylogeny from assembled bacterial genomes
+avoid_when:
+- the input is raw FASTQ reads
+- the user needs clinical interpretation of variants
+input_summary: One genome or a directory of genomes, plus a local or database-resolved
+  reference.
+output_summary: Filtered SNP alignment, variant tables, summaries, metrics, and optional
+  tree artifacts.
+limitations: Reference resolution and phylogeny require the configured databases and
+  external tools.
+examples:
+- Compare these bacterial assemblies and build a SNP tree.
 engine: shell
 config: config.yaml
 entrypoint: run.sh
@@ -131,23 +148,6 @@ param_overrides:
   simulate_samples: {}
   seed: {}
   verbose: {}
-display_name: Bacterial genome mutation analysis
-description: Compare assembled bacterial genomes against a reference, call and filter
-  SNPs, and optionally build a phylogeny.
-use_when:
-- the user wants mutation comparison or a phylogeny from assembled bacterial genomes
-avoid_when:
-- the input is raw FASTQ reads
-- the user needs clinical interpretation of variants
-input_summary: One genome or a directory of genomes, plus a local or database-resolved
-  reference.
-output_summary: Filtered SNP alignment, variant tables, summaries, metrics, and optional
-  tree artifacts.
-limitations: Reference resolution and phylogeny require the configured databases and
-  external tools.
-examples:
-- Compare these bacterial assemblies and build a SNP tree.
-visibility: public
 execution:
   boundary: container
   dependency_scope: pipeline

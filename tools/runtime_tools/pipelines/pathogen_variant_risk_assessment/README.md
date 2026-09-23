@@ -6,9 +6,9 @@ supports the configured influenza and SARS-CoV-2 reference/resource sets.
 
 ## Requirements
 
-- Java and a reachable Cromwell Server (`CROMWELL_URL`, default
-  `http://127.0.0.1:8000`), with shared paths between submitter, Cromwell, and
-  task containers;
+- miniwdl for local execution, or Java for the standalone Cromwell command;
+- a reachable Cromwell Server when `CROMWELL_URL` is set, with shared paths
+  between BioAgent, Cromwell, and task containers;
 - Docker or the configured backend with `cncb/risk-wdl:v1.0` (or a compatible
   image), including `/app/run_variant_risk.sh` and
   `/app/lib/docker_bin_paths.sh`;
@@ -20,10 +20,11 @@ supports the configured influenza and SARS-CoV-2 reference/resource sets.
 All pathogen resources are deployment-managed and omitted from this bundle.
 Do not use the example absolute paths in `inputs.json` without replacing them.
 
-Check Cromwell:
+BioAgent defaults to local miniwdl when `CROMWELL_URL` is unset. For Cromwell
+submission, configure and verify its endpoint before starting BioAgent:
 
 ```bash
-export CROMWELL_URL=http://127.0.0.1:8000
+export CROMWELL_URL=http://192.168.164.39:39000
 curl "$CROMWELL_URL/engine/v1/status"
 ```
 

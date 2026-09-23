@@ -8,9 +8,9 @@ for downstream metagenomic analysis.
 
 Standalone execution requires:
 
-- Java and a reachable Cromwell Server (`CROMWELL_URL`, default
-  `http://127.0.0.1:8000`);
-- shared filesystem access for the caller, Cromwell, and task containers;
+- miniwdl for local execution, or Java for the standalone Cromwell command;
+- a reachable Cromwell Server when `CROMWELL_URL` is set, with shared filesystem
+  access for BioAgent, Cromwell, and task containers;
 - Docker or the configured backend with `cncb/mscan-detection-qc:v1.0` (or a
   compatible image) containing `fastp`, Kraken2, Bowtie2, and
   `/app/scripts/count_reads.py`;
@@ -21,10 +21,11 @@ as `Array[String]` in `inputs.json`; they must already be mounted at the same
 paths inside the task container. The default profile can require 8 CPUs, 64 GB
 RAM, and 500 GB disk.
 
-Verify Cromwell before submission:
+BioAgent defaults to local miniwdl when `CROMWELL_URL` is unset. For Cromwell
+submission, configure and verify its endpoint before starting BioAgent:
 
 ```bash
-export CROMWELL_URL=http://127.0.0.1:8000
+export CROMWELL_URL=http://192.168.164.39:39000
 curl "$CROMWELL_URL/engine/v1/status"
 ```
 

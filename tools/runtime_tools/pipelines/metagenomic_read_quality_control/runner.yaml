@@ -1,7 +1,20 @@
 name: metagenomic_read_quality_control
+display_name: Metagenomic read quality control
+description: Filter metagenomic reads and remove host or vector sequences with fastp,
+  Kraken2, and Bowtie2 before downstream analysis.
+visibility: public
+use_when:
+- the user wants quality filtering and host removal from metagenomic reads
+avoid_when:
+- the user wants final pathogen identification or variant interpretation
+input_summary: Required read 1, optional read 2, mounted Kraken2 and Bowtie2 resources,
+  and sample settings.
+output_summary: Cleaned reads, QC read counts, and phase-one read-overview tables.
+limitations: Reference databases, Docker images, and Cromwell service configuration
+  must be available.
+examples:
+- Quality-filter these metagenomic reads and remove host sequences.
 engine: wdl
-wdl_engine: cromwell
-cromwell_url: http://127.0.0.1:8000
 cromwell_api_version: v1
 cromwell_poll_interval: 5
 cromwell_visibility_timeout: 300
@@ -78,21 +91,6 @@ outputs:
     kind: table
     required: true
     description: Phase 1 read overview produced by this workflow.
-display_name: Metagenomic read quality control
-description: Filter metagenomic reads and remove host or vector sequences with fastp,
-  Kraken2, and Bowtie2 before downstream analysis.
-use_when:
-- the user wants quality filtering and host removal from metagenomic reads
-avoid_when:
-- the user wants final pathogen identification or variant interpretation
-input_summary: Required read 1, optional read 2, mounted Kraken2 and Bowtie2 resources,
-  and sample settings.
-output_summary: Cleaned reads, QC read counts, and phase-one read-overview tables.
-limitations: Reference databases, Docker images, and Cromwell service configuration
-  must be available.
-examples:
-- Quality-filter these metagenomic reads and remove host sequences.
-visibility: public
 execution:
   boundary: container
   dependency_scope: pipeline

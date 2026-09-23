@@ -1,4 +1,17 @@
 name: template_wdl
+display_name: WDL pipeline template
+description: WDL template that normalizes a FASTA sequence and produces sequence metrics
+  and a report.
+visibility: internal
+use_when:
+- the user requests a WDL runtime demonstration
+avoid_when:
+- the user needs a validated production sequence-analysis workflow
+input_summary: One FASTA sequence and optional WDL parameters.
+output_summary: Normalized FASTA, metrics JSON, and Markdown report.
+limitations: This is an educational workflow for testing WDL execution.
+examples:
+- Run the bundled WDL template.
 engine: wdl
 workflow: workflow.wdl
 inputs_json: inputs.json
@@ -36,19 +49,6 @@ outputs:
     kind: sequence
     required: true
     description: Normalized sequence produced by this workflow.
-display_name: WDL pipeline template
-description: WDL template that normalizes a FASTA sequence and produces sequence metrics
-  and a report.
-use_when:
-- the user requests a WDL runtime demonstration
-avoid_when:
-- the user needs a validated production sequence-analysis workflow
-input_summary: One FASTA sequence and optional WDL parameters.
-output_summary: Normalized FASTA, metrics JSON, and Markdown report.
-limitations: This is an educational workflow for testing WDL execution.
-examples:
-- Run the bundled WDL template.
-visibility: internal
 execution:
   boundary: container
   dependency_scope: pipeline

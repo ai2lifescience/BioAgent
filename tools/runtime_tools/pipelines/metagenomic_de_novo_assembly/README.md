@@ -8,9 +8,9 @@ minimap2 indexes, and optionally evaluates the assembly with MetaQUAST.
 
 Standalone execution requires:
 
-- Java and a reachable Cromwell Server (the BioAgent default is
-  `http://127.0.0.1:8000`);
-- a shared filesystem visible to Cromwell, its task backend, and the caller;
+- miniwdl for local execution, or Java for the standalone Cromwell command;
+- a reachable Cromwell Server when using REST submission, with shared paths
+  visible to BioAgent, Cromwell, and its task backend;
 - Docker or the configured task backend with `cncb/assembly-id:v1.0` (or a
   compatible image) available;
 - the assembly database indexes, annotation tables, and optional reference
@@ -23,12 +23,22 @@ The task image must provide `/app/scripts/run_assembly.sh`,
 files are not included in this bundle. Replace the example paths in
 `inputs.json` with paths readable by Cromwell and the task containers.
 
-Check the service before running:
+BioAgent uses local miniwdl by default when `CROMWELL_URL` is unset. To submit
+to Cromwell, set its endpoint before starting the BioAgent server:
 
 ```bash
-export CROMWELL_URL=http://127.0.0.1:8000
+export CROMWELL_URL=http://192.168.164.39:39000
 curl "$CROMWELL_URL/engine/v1/status"
 ```
+
+To switch back to local miniwdl and Docker before restarting BioAgent:
+
+```bash
+unset CROMWELL_URL
+```
+
+The choice is captured in each pipeline plan, so the detached worker uses the
+same backend selected at planning time.
 
 ## Inputs and workflow
 

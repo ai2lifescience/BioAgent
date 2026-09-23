@@ -1,7 +1,20 @@
 name: viral_molecular_typing
+display_name: Viral molecular typing
+description: Process viral reads, generate a consensus and alignment, and run configured
+  Nextclade molecular typing.
+visibility: public
+use_when:
+- the user wants configured influenza or SARS-CoV-2 read processing and typing
+avoid_when:
+- the user requests an unsupported pathogen or an unrestricted clinical diagnosis
+input_summary: Read 1, optional read 2, reference files, Nextclade dataset files,
+  and pathogen settings.
+output_summary: Typing CSV, Nextclade TSV and JSON, consensus FASTA, and final BAM.
+limitations: Results depend on the selected pathogen, references, Nextclade dataset,
+  Docker image, and Cromwell execution.
+examples:
+- Run molecular typing on these viral reads.
 engine: wdl
-wdl_engine: cromwell
-cromwell_url: http://127.0.0.1:8000
 cromwell_api_version: v1
 cromwell_poll_interval: 5
 cromwell_visibility_timeout: 300
@@ -88,21 +101,6 @@ outputs:
     kind: alignment
     required: true
     description: Final BAM produced by this workflow.
-display_name: Viral molecular typing
-description: Process viral reads, generate a consensus and alignment, and run configured
-  Nextclade molecular typing.
-use_when:
-- the user wants configured influenza or SARS-CoV-2 read processing and typing
-avoid_when:
-- the user requests an unsupported pathogen or an unrestricted clinical diagnosis
-input_summary: Read 1, optional read 2, reference files, Nextclade dataset files,
-  and pathogen settings.
-output_summary: Typing CSV, Nextclade TSV and JSON, consensus FASTA, and final BAM.
-limitations: Results depend on the selected pathogen, references, Nextclade dataset,
-  Docker image, and Cromwell execution.
-examples:
-- Run molecular typing on these viral reads.
-visibility: public
 execution:
   boundary: container
   dependency_scope: pipeline

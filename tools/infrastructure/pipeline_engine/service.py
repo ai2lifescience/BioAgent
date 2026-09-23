@@ -175,8 +175,6 @@ def plan(root: Path, name: str, inputs: dict, params: dict, cores: int = 1,
     engine = manifest.get("engine")
     if engine not in {"shell", "snakemake", "nextflow", "wdl"}:
         raise ValueError("Unsupported local engine.")
-    if engine == "wdl" and manifest.get("wdl_engine", "miniwdl") != "miniwdl":
-        raise ValueError("Local WDL execution requires miniwdl; remote Cromwell jobs use the legacy backend.")
     if dry_run and engine == "shell":
         raise ValueError("Shell pipelines do not declare a dry-run command; use plan to validate inputs.")
     max_timeout = min(86400, int(manifest.get("timeout", 300)))
@@ -219,10 +217,22 @@ def plan(root: Path, name: str, inputs: dict, params: dict, cores: int = 1,
     memory_mb = int(manifest.get("resources", {}).get("max_memory_mb", 8192))
     if not 128 <= memory_mb <= 65536:
         raise ValueError("Pipeline max_memory_mb must be between 128 and 65536.")
+    runtime_selection = {}
+    if engine == "wdl":
+        from tools.infrastructure.pipeline_engine.engine.cromwell import cromwell_base_url
+        from tools.infrastructure.pipeline_engine.engine.wdl_runtime import resolve_wdl_engine
+
+        selected_engine = resolve_wdl_engine()
+        runtime_selection["wdl_engine"] = selected_engine
+        if selected_engine == "cromwell":
+            # Resolve and validate the URL while the plan is created. The URL is
+            # recorded so a detached worker does not depend on a later env change.
+            runtime_selection["cromwell_url"] = cromwell_base_url()
     record = JobStore(root).create({"pipeline_name": name, "engine": engine,
         "inputs": records, "parameters": selected, "cores": cores, "timeout_seconds": timeout,
         "max_memory_mb": memory_mb, "dry_run": dry_run,
-        "definition_sha256": definition_hash(directory), "outputs": outputs})
+        "definition_sha256": definition_hash(directory), "outputs": outputs,
+        **runtime_selection})
     return {**summary(record), "plan": record["plan"],
             "command": f"agent-pipeline run --plan-id {record['plan_id']}"}
 
@@ -399,7 +409,18 @@ def execute_engine(root: Path, record: dict) -> dict:
         result = run_nextflow_pipeline(context, cores=plan["cores"], dry_run=plan["dry_run"])
     else:
         from tools.infrastructure.pipeline_engine.engine.wdl import run_wdl_pipeline
-        result = run_wdl_pipeline(context, dry_run=plan["dry_run"])
+        selected_runner_config = copy.deepcopy(context.runner_config)
+        if plan.get("wdl_engine"):
+            selected_runner_config["wdl_engine"] = plan["wdl_engine"]
+        if plan.get("cromwell_url"):
+            selected_runner_config["cromwell_url"] = plan["cromwell_url"]
+        context = replace(context, runner_config=selected_runner_config)
+        result = run_wdl_pipeline(
+            context,
+            dry_run=plan["dry_run"],
+            selected_engine=plan.get("wdl_engine"),
+            cromwell_url=plan.get("cromwell_url"),
+        )
     for item in result["output_records"]:
         path = Path(item["path"]).resolve()
         if not path.is_relative_to(output_dir):
