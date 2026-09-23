@@ -7,8 +7,9 @@ trimming -> iVar consensus -> Nextclade`.
 
 ## Requirements
 
-- Java and a reachable Cromwell Server, with shared paths for the submitter,
-  Cromwell, and task containers;
+- miniwdl for local execution, or Java for the standalone Cromwell command;
+- a reachable Cromwell Server when `CROMWELL_URL` is set, with shared paths
+  for BioAgent, Cromwell, and task containers;
 - Docker or the configured backend with `cncb/molecular-wdl:v1.0` (or a
   compatible image);
 - a task image containing Bash/core utilities, fastp, BWA, SAMtools, BamUtil,
@@ -21,10 +22,11 @@ trimming -> iVar consensus -> Nextclade`.
 The reference and Nextclade data are not included. Replace every deployment
 path in `inputs.json` with paths visible inside the Cromwell task image.
 
-Check the service and image before submitting:
+BioAgent defaults to local miniwdl when `CROMWELL_URL` is unset. For Cromwell
+submission, configure and verify its endpoint before starting BioAgent:
 
 ```bash
-export CROMWELL_URL=http://127.0.0.1:8000
+export CROMWELL_URL=http://192.168.164.39:39000
 curl "$CROMWELL_URL/engine/v1/status"
 docker image inspect cncb/molecular-wdl:v1.0
 ```

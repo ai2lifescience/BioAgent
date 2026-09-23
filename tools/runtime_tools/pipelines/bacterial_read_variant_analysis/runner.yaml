@@ -1,4 +1,21 @@
 name: bacterial_read_variant_analysis
+display_name: Bacterial read variant analysis
+description: Map bacterial reads to a reference, call and filter variants, build a
+  cross-sample SNP matrix, and optionally infer a phylogeny.
+visibility: public
+use_when:
+- the user wants variant comparison from bacterial FASTQ reads
+avoid_when:
+- the user has assembled genomes instead of reads
+- the user asks for clinical variant interpretation
+input_summary: Single-end or paired-end bacterial FASTQ data and a local or database-resolved
+  reference.
+output_summary: Variant tables, SNP matrix, QC metrics, alignment artifacts, summaries,
+  and optional tree files.
+limitations: Results depend on reference quality, coverage, database configuration,
+  and external tool versions.
+examples:
+- Call and compare bacterial variants from these reads.
 engine: shell
 config: config.yaml
 entrypoint: run.sh
@@ -112,23 +129,6 @@ param_overrides:
   step_size: {}
   sd_threshold: {}
   verbose: {}
-display_name: Bacterial read variant analysis
-description: Map bacterial reads to a reference, call and filter variants, build a
-  cross-sample SNP matrix, and optionally infer a phylogeny.
-use_when:
-- the user wants variant comparison from bacterial FASTQ reads
-avoid_when:
-- the user has assembled genomes instead of reads
-- the user asks for clinical variant interpretation
-input_summary: Single-end or paired-end bacterial FASTQ data and a local or database-resolved
-  reference.
-output_summary: Variant tables, SNP matrix, QC metrics, alignment artifacts, summaries,
-  and optional tree files.
-limitations: Results depend on reference quality, coverage, database configuration,
-  and external tool versions.
-examples:
-- Call and compare bacterial variants from these reads.
-visibility: public
 execution:
   boundary: container
   dependency_scope: pipeline

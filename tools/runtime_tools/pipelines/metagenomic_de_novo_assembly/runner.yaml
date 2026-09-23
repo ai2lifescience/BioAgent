@@ -1,7 +1,20 @@
 name: metagenomic_de_novo_assembly
+display_name: Metagenomic de novo assembly
+description: Assemble metagenomic reads, identify assembled contigs against configured
+  reference databases, and produce contig- and species-level reports.
+visibility: public
+use_when:
+- the user wants assembly and downstream identification from metagenomic reads
+avoid_when:
+- the user only needs read QC or host filtering
+input_summary: Single-end or paired-end FASTQ reads plus configured minimap2 indexes,
+  annotations, and optional reference FASTA files.
+output_summary: Renamed assembled contigs, contig report, species report, and workflow-generated
+  alignment artifacts.
+limitations: Results depend on configured databases, Docker images, and Cromwell resources.
+examples:
+- Assemble these metagenomic reads and identify the resulting contigs.
 engine: wdl
-wdl_engine: cromwell
-cromwell_url: http://127.0.0.1:8000
 cromwell_api_version: v1
 cromwell_poll_interval: 5
 cromwell_visibility_timeout: 300
@@ -86,21 +99,6 @@ outputs:
     kind: table
     required: true
     description: Species identification report produced by this workflow.
-display_name: Metagenomic de novo assembly
-description: Assemble metagenomic reads, identify assembled contigs against configured
-  reference databases, and produce contig- and species-level reports.
-use_when:
-- the user wants assembly and downstream identification from metagenomic reads
-avoid_when:
-- the user only needs read QC or host filtering
-input_summary: Single-end or paired-end FASTQ reads plus configured minimap2 indexes,
-  annotations, and optional reference FASTA files.
-output_summary: Renamed assembled contigs, contig report, species report, and workflow-generated
-  alignment artifacts.
-limitations: Results depend on configured databases, Docker images, and Cromwell resources.
-examples:
-- Assemble these metagenomic reads and identify the resulting contigs.
-visibility: public
 execution:
   boundary: container
   dependency_scope: pipeline

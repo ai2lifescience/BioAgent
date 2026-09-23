@@ -7,9 +7,20 @@ file inspection, and pipeline execution. It exposes deterministic biological ope
 The Python entry point is `harness.run_agent`; pipeline tools use the
 `agent-pipeline` command protocol and configuration uses `AGENT_*` variables.
 
+## System Architecture
+
+![Pipeline2Agent system architecture](docs/images/system_architecture.png)
+
+*Figure 1. Pipeline2Agent system architecture, from client interfaces and
+durable execution to typed tools, specialist agents, and pipeline services.*
+
 ## What Pipeline2Agent Does
 
 ![Pipeline2Agent functions](docs/images/system_functions.png)
+
+*Figure 2. Pipeline2Agent functional capabilities across biology, data
+analysis, research, knowledge, workspace, coding, pipelines, and trusted web
+integration.*
 
 Pipeline2Agent can:
 
@@ -76,16 +87,9 @@ python -B -m interfaces.web --host 127.0.0.1 --port 8000
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in a browser. Stop the
 server with `Ctrl+C`.
 
-If OpenRouter needs a SOCKS proxy, set it in the same terminal before starting
-the server:
-
-```bash
-export AGENT_PROXY=socks5h://127.0.0.1:10801
-```
-
-`ALL_PROXY` is not required when `AGENT_PROXY` is set. See the
-[web usage guide](docs/web_usage.md#start-for-local-network-access) for the
-complete launch command and direct-connection option.
+WDL pipelines use local miniwdl by default. For [Cromwell execution](docs/web_usage.md#wdl-execution-backend),
+[SOCKS proxy configuration](docs/web_usage.md#proxy-and-lan-access), or LAN access,
+see the web usage guide.
 
 ![Pipeline2Agent web interface](docs/images/web_ui.png)
 
@@ -229,10 +233,10 @@ print(result["answer"])
 `requirements.txt`.
 - Nextflow pipelines require a local `nextflow` executable, Java 17 or newer,
   and a POSIX shell. On Windows, run Pipeline2Agent and Nextflow inside WSL.
-- WDL pipelines use `miniwdl` and require a working Docker daemon plus access to
-the task container images.
+- WDL pipelines use local `miniwdl` by default and require Docker; see the
+  [web usage guide](docs/web_usage.md#wdl-execution-backend) for Cromwell setup.
 - Pipeline inputs should be supplied explicitly through the request or uploaded
-through the web UI.
+  through the web UI.
 - Use the pipeline catalog to discover the workflows available in this checkout.
   See [pipeline architecture](docs/architecture.md#pipeline-engine) for file
   handling, execution, and adding pipelines.
@@ -243,7 +247,9 @@ through the web UI.
 
 - [System architecture](docs/architecture.md)
 - [Web UI usage and examples](docs/web_usage.md)
+- [FunctionTool, specialist, and runtime tool definitions](docs/tool_definitions.md)
+- [Pipeline manifest definitions](docs/pipeline_definitions.md)
 - [Pipeline engine, file handling, and adding pipelines](docs/architecture.md#pipeline-engine)
 - [CLI usage and examples](docs/cli_usage.md)
 - [Team development workflow](docs/dev_workflow.md)
-- [Planned improvements](docs/todo.md)
+- [Roadmap and open work](docs/todo.md)

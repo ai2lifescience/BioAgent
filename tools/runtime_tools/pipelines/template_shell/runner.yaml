@@ -1,4 +1,19 @@
 name: template_shell
+display_name: Shell metadata assignment template
+description: Small shell template that joins sequence IDs to metadata and writes normalized
+  text, assignments, metrics, and a report.
+visibility: internal
+use_when:
+- the user wants sequence IDs matched to metadata categories
+avoid_when:
+- the user needs biological classification or sequence similarity analysis
+input_summary: Sequence text, FASTA, or FASTQ plus TSV/CSV metadata with matching
+  identifier and category columns.
+output_summary: Normalized sequence text, assignment table, metrics, and report.
+limitations: The workflow performs deterministic metadata joining and does not infer
+  biological subtypes.
+examples:
+- Assign sequence metadata with the shell template.
 engine: shell
 entrypoint: run.sh
 timeout: 120
@@ -51,21 +66,6 @@ outputs:
     kind: table
     required: true
     description: Sequence subtype assignments produced by this workflow.
-display_name: Shell metadata assignment template
-description: Small shell template that joins sequence IDs to metadata and writes normalized
-  text, assignments, metrics, and a report.
-use_when:
-- the user wants sequence IDs matched to metadata categories
-avoid_when:
-- the user needs biological classification or sequence similarity analysis
-input_summary: Sequence text, FASTA, or FASTQ plus TSV/CSV metadata with matching
-  identifier and category columns.
-output_summary: Normalized sequence text, assignment table, metrics, and report.
-limitations: The workflow performs deterministic metadata joining and does not infer
-  biological subtypes.
-examples:
-- Assign sequence metadata with the shell template.
-visibility: internal
 execution:
   boundary: container
   dependency_scope: pipeline

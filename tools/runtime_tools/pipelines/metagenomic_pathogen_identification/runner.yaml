@@ -1,7 +1,21 @@
 name: metagenomic_pathogen_identification
+display_name: Metagenomic pathogen identification
+description: Identify bacterial, viral, fungal, and parasite signals from host-filtered
+  reads using alignment, cross-database arbitration, and confidence filtering.
+visibility: public
+use_when:
+- the user wants pathogen detection from cleaned metagenomic reads
+avoid_when:
+- the input has not completed the required quality and host-filtering preparation
+input_summary: Required read 1, optional read 2, configured minimap2 indexes, annotation
+  tables, and filtering parameters.
+output_summary: Confidence-filtered panel, priority panel, sample overview, and cross-database
+  read-accounting tables.
+limitations: Detection depends on configured indexes, annotations, thresholds, and
+  Cromwell container execution.
+examples:
+- Identify pathogens in these host-filtered metagenomic reads.
 engine: wdl
-wdl_engine: cromwell
-cromwell_url: http://127.0.0.1:8000
 cromwell_api_version: v1
 cromwell_poll_interval: 5
 cromwell_visibility_timeout: 300
@@ -142,22 +156,6 @@ outputs:
     kind: table
     required: true
     description: Stage 2 cross-database signature produced by this workflow.
-display_name: Metagenomic pathogen identification
-description: Identify bacterial, viral, fungal, and parasite signals from host-filtered
-  reads using alignment, cross-database arbitration, and confidence filtering.
-use_when:
-- the user wants pathogen detection from cleaned metagenomic reads
-avoid_when:
-- the input has not completed the required quality and host-filtering preparation
-input_summary: Required read 1, optional read 2, configured minimap2 indexes, annotation
-  tables, and filtering parameters.
-output_summary: Confidence-filtered panel, priority panel, sample overview, and cross-database
-  read-accounting tables.
-limitations: Detection depends on configured indexes, annotations, thresholds, and
-  Cromwell container execution.
-examples:
-- Identify pathogens in these host-filtered metagenomic reads.
-visibility: public
 execution:
   boundary: container
   dependency_scope: pipeline

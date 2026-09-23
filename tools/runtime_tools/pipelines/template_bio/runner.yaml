@@ -1,4 +1,20 @@
 name: template_bio
+display_name: DNA analysis template
+description: Educational shell template that demonstrates a complete DNA read-analysis
+  artifact set without external bioinformatics tools.
+visibility: internal
+use_when:
+- the user requests a local demonstration of the pipeline runtime
+- the user wants to inspect example DNA analysis artifacts
+avoid_when:
+- the user needs validated alignment, variant calling, or research-grade interpretation
+input_summary: Single-end reads, one reference FASTA, and sample metadata.
+output_summary: QC metrics, demonstration alignments, consensus, variant-like records,
+  tables, figures, and reports.
+limitations: This is an educational positional-comparison workflow and is not a validated
+  aligner or variant caller.
+examples:
+- Run the bundled DNA analysis template.
 engine: shell
 entrypoint: run.sh
 timeout: 120
@@ -146,22 +162,6 @@ outputs:
     kind: image
     required: false
     description: Optional phylogenetic tree figure produced by this workflow.
-display_name: DNA analysis template
-description: Educational shell template that demonstrates a complete DNA read-analysis
-  artifact set without external bioinformatics tools.
-use_when:
-- the user requests a local demonstration of the pipeline runtime
-- the user wants to inspect example DNA analysis artifacts
-avoid_when:
-- the user needs validated alignment, variant calling, or research-grade interpretation
-input_summary: Single-end reads, one reference FASTA, and sample metadata.
-output_summary: QC metrics, demonstration alignments, consensus, variant-like records,
-  tables, figures, and reports.
-limitations: This is an educational positional-comparison workflow and is not a validated
-  aligner or variant caller.
-examples:
-- Run the bundled DNA analysis template.
-visibility: internal
 execution:
   boundary: container
   dependency_scope: pipeline

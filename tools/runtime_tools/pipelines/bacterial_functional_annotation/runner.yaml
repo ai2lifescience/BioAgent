@@ -1,4 +1,20 @@
 name: bacterial_functional_annotation
+display_name: Bacterial functional annotation
+description: Annotate bacterial genes and assign functional terms from contigs or
+  reads using the bundled functional-annotation workflow.
+visibility: public
+use_when:
+- the user wants gene function or orthology annotations from bacterial sequence data
+avoid_when:
+- the user needs a complete taxonomic classification or abundance estimate
+input_summary: Bacterial contigs, reads, or a supported batch directory, with configured
+  functional reference resources.
+output_summary: Gene annotations, functional term assignments, QC metrics, and run
+  status.
+limitations: Provides functional annotation evidence and does not infer abundance,
+  taxonomy, or biological conclusions.
+examples:
+- Annotate the functions of genes in this bacterial assembly.
 engine: shell
 config: config.yaml
 entrypoint: run.sh
@@ -57,22 +73,6 @@ param_overrides:
   sample_id:
     config_key: sample_id
     default: ''
-display_name: Bacterial functional annotation
-description: Annotate bacterial genes and assign functional terms from contigs or
-  reads using the bundled functional-annotation workflow.
-use_when:
-- the user wants gene function or orthology annotations from bacterial sequence data
-avoid_when:
-- the user needs a complete taxonomic classification or abundance estimate
-input_summary: Bacterial contigs, reads, or a supported batch directory, with configured
-  functional reference resources.
-output_summary: Gene annotations, functional term assignments, QC metrics, and run
-  status.
-limitations: Provides functional annotation evidence and does not infer abundance,
-  taxonomy, or biological conclusions.
-examples:
-- Annotate the functions of genes in this bacterial assembly.
-visibility: public
 execution:
   boundary: container
   dependency_scope: pipeline

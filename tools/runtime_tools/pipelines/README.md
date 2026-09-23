@@ -2,7 +2,14 @@
 
 Each directory is a self-contained bundle. `runner.yaml` is the agent-facing contract for intent, inputs, outputs, and execution.
 
+See [pipeline manifest definitions](../../../docs/pipeline_definitions.md) for
+the field order, selection metadata, input/output schema, and validation rules.
+
 Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
+
+WDL pipelines use local miniwdl by default. Set `CROMWELL_URL` before starting
+BioAgent to submit WDL jobs to that Cromwell service, or unset it to return to
+local execution. See the [startup commands](../../../README.md#4-start-the-web-ui).
 
 | Name | Visibility | Engine | Use when |
 | --- | --- | --- | --- |

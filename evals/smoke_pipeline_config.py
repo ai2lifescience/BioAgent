@@ -3,10 +3,13 @@ from __future__ import annotations
 
 from dataclasses import replace
 import json
+import os
 from pathlib import Path
+import subprocess
 import sys
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import Mock, patch
 
 import yaml
 
@@ -125,6 +128,105 @@ class PipelineConfigChecks(unittest.TestCase):
         for name in ("template_shell", "template_wdl"):
             result = service.plan(self.root, name, {}, {})
             self.assertEqual(result["status"], "needs_input")
+
+    def test_wdl_backend_is_selected_at_plan_time(self) -> None:
+        (self.root / "sequence.fasta").write_text(">synthetic\nACGT\n", encoding="utf-8")
+        (self.root / "reads.fastq").write_text("@synthetic\nACGT\n+\nIIII\n", encoding="utf-8")
+        for name, inputs in (
+            ("template_wdl", {"sequence": "sequence.fasta"}),
+            ("metagenomic_de_novo_assembly", {"read1": "reads.fastq"}),
+        ):
+            for url in (None, "", "  ", " http://192.168.164.39:39000/ "):
+                with self.subTest(pipeline=name, url=url), patch.dict(os.environ, {}, clear=True):
+                    remote = bool(url and url.strip())
+                    # Obsolete selectors must not override the URL-based choice.
+                    os.environ["AGENT_WDL_ENGINE"] = "local" if remote else "remote"
+                    os.environ["WDL_ENGINE"] = "miniwdl" if remote else "cromwell"
+                    if url is not None:
+                        os.environ["CROMWELL_URL"] = url
+                    plan = service.plan(self.root, name, inputs, {})["plan"]
+                    self.assertEqual(plan["wdl_engine"], "cromwell" if remote else "miniwdl")
+                    if remote:
+                        self.assertEqual(plan["cromwell_url"], "http://192.168.164.39:39000")
+                    else:
+                        self.assertNotIn("cromwell_url", plan)
+
+    def test_invalid_cromwell_url_is_rejected_before_saving_plan(self) -> None:
+        (self.root / "sequence.fasta").write_text(">synthetic\nACGT\n", encoding="utf-8")
+        for url in ("ftp://host", "http://", "http://host:invalid", "http://host:99999", "http://bad host"):
+            with self.subTest(url=url), patch.dict(os.environ, {"CROMWELL_URL": url}, clear=True):
+                with self.assertRaisesRegex(ValueError, "Cromwell URL"):
+                    service.plan(self.root, "template_wdl", {"sequence": "sequence.fasta"}, {})
+        self.assertEqual(service.JobStore(self.root).list(), [])
+
+    def wdl_output_fixture(self) -> dict[str, str]:
+        outputs = {}
+        directory = self.root / "engine-results"
+        directory.mkdir(exist_ok=True)
+        for key, filename, contents in (
+            ("report", "report.md", "# WDL fixture\n"),
+            ("metrics", "metrics.json", '{"sequence_length": 4}'),
+            ("normalized_fasta", "normalized.fasta", ">synthetic\nACGT\n"),
+        ):
+            path = directory / filename
+            path.write_text(contents, encoding="utf-8")
+            outputs[f"TemplateWdl.{key}"] = str(path)
+        return outputs
+
+    def test_saved_local_plan_stays_local_when_url_is_added(self) -> None:
+        inputs = {"sequence": "sequence.fasta"}
+        (self.root / inputs["sequence"]).write_text(">synthetic\nACGT\n", encoding="utf-8")
+        output_map = self.wdl_output_fixture()
+
+        def miniwdl_run(command, **kwargs):
+            self.assertEqual(command[:2], ["miniwdl", "run"])
+            Path(command[command.index("-o") + 1]).write_text(json.dumps({"outputs": output_map}))
+            return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+        with patch.dict(os.environ, {}, clear=True):
+            plan = service.plan(self.root, "template_wdl", inputs, {})
+            record = service.JobStore(self.root).get(plan["plan_id"])
+            os.environ["CROMWELL_URL"] = "http://changed.invalid:39000"
+            with (
+                patch("tools.infrastructure.pipeline_engine.engine.wdl.miniwdl_executable", return_value="miniwdl"),
+                patch("tools.infrastructure.pipeline_engine.engine.wdl.subprocess.run", side_effect=miniwdl_run),
+                patch("requests.post", side_effect=AssertionError("Local execution must not submit to Cromwell")),
+            ):
+                result = service.execute_engine(self.root, record)
+        self.assertEqual(result["wdl_engine"], "miniwdl")
+        self.assertEqual(result["metrics"]["sequence_length"], 4)
+        self.assertTrue(all(item.get("sha256") for item in result["output_records"]))
+
+    def test_saved_remote_plan_keeps_endpoint_when_environment_changes(self) -> None:
+        inputs = {"sequence": "sequence.fasta"}
+        (self.root / inputs["sequence"]).write_text(">synthetic\nACGT\n", encoding="utf-8")
+        output_map = self.wdl_output_fixture()
+        endpoint = "http://planned.invalid:39000"
+        for later_url in (None, "http://changed.invalid:39000"):
+            with self.subTest(later_url=later_url), patch.dict(os.environ, {"CROMWELL_URL": endpoint}, clear=True):
+                plan = service.plan(self.root, "template_wdl", inputs, {})
+                record = service.JobStore(self.root).get(plan["plan_id"])
+                os.environ.pop("CROMWELL_URL")
+                if later_url:
+                    os.environ["CROMWELL_URL"] = later_url
+                with (
+                    patch("requests.post", return_value=Mock(ok=True, json=lambda: {"id": "workflow-id", "status": "Succeeded"})) as post,
+                    patch("requests.get", side_effect=[
+                        Mock(ok=True, json=lambda: {"status": "Succeeded"}),
+                        Mock(ok=True, json=lambda: {"outputs": output_map}),
+                    ]) as get,
+                    patch("tools.infrastructure.pipeline_engine.engine.wdl.miniwdl_executable", side_effect=AssertionError("Remote execution must not start miniwdl")),
+                ):
+                    result = service.execute_engine(self.root, record)
+                self.assertEqual(post.call_args.args[0], f"{endpoint}/api/workflows/v1")
+                self.assertEqual([call.args[0] for call in get.call_args_list], [
+                    f"{endpoint}/api/workflows/v1/workflow-id/metadata",
+                    f"{endpoint}/api/workflows/v1/workflow-id/outputs",
+                ])
+                self.assertEqual(result["wdl_engine"], "cromwell")
+                self.assertEqual(result["cromwell_url"], endpoint)
+                self.assertEqual(result["metrics"]["sequence_length"], 4)
+                self.assertTrue(all(item.get("sha256") for item in result["output_records"]))
 
 
 if __name__ == "__main__":

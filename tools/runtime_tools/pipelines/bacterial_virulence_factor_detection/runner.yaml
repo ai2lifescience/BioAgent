@@ -1,4 +1,19 @@
 name: bacterial_virulence_factor_detection
+display_name: Bacterial virulence-factor detection
+description: Identify virulence-factor sequence candidates from bacterial or metagenomic
+  data and return normalized evidence tables and QC artifacts.
+visibility: public
+use_when:
+- the user wants virulence-factor sequence candidates from contigs or reads
+avoid_when:
+- the user asks for a pathogenicity or clinical risk conclusion
+input_summary: Contigs, reads, or a supported batch directory with configured virulence-factor
+  reference resources.
+output_summary: Virulence-factor hit tables, JSONL records, QC metrics, and run status.
+limitations: Associated-organism metadata is reference provenance and does not prove
+  pathogenicity or sample identity.
+examples:
+- Screen this assembly for virulence-factor candidates.
 engine: shell
 config: config.yaml
 entrypoint: run.sh
@@ -57,21 +72,6 @@ param_overrides:
   sample_id:
     config_key: sample_id
     default: ''
-display_name: Bacterial virulence-factor detection
-description: Identify virulence-factor sequence candidates from bacterial or metagenomic
-  data and return normalized evidence tables and QC artifacts.
-use_when:
-- the user wants virulence-factor sequence candidates from contigs or reads
-avoid_when:
-- the user asks for a pathogenicity or clinical risk conclusion
-input_summary: Contigs, reads, or a supported batch directory with configured virulence-factor
-  reference resources.
-output_summary: Virulence-factor hit tables, JSONL records, QC metrics, and run status.
-limitations: Associated-organism metadata is reference provenance and does not prove
-  pathogenicity or sample identity.
-examples:
-- Screen this assembly for virulence-factor candidates.
-visibility: public
 execution:
   boundary: container
   dependency_scope: pipeline

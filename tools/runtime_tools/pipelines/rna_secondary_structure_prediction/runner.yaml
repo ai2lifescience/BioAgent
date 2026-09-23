@@ -1,4 +1,20 @@
 name: rna_secondary_structure_prediction
+display_name: RNA secondary-structure prediction
+description: Convert nucleotide FASTA records to RNA, predict minimum-free-energy
+  secondary structures with RNAfold, and return structured reports.
+visibility: public
+use_when:
+- the user wants secondary-structure predictions for RNA or DNA-letter nucleotide
+  sequences
+avoid_when:
+- the user needs tertiary-structure modeling, pseudoknot prediction, or experimental
+  interpretation
+input_summary: A nucleotide FASTA file within the configured record and length limits.
+output_summary: Structure table, dot-bracket file, metrics, report, and RNAfold log.
+limitations: The workflow predicts equilibrium minimum-free-energy structures and
+  does not model cellular conditions or pseudoknots.
+examples:
+- Predict RNA secondary structures for this FASTA file.
 engine: shell
 config: config.yaml
 entrypoint: run.sh
@@ -49,22 +65,6 @@ outputs:
     kind: text
     required: true
     description: RNAfold execution log produced by this workflow.
-display_name: RNA secondary-structure prediction
-description: Convert nucleotide FASTA records to RNA, predict minimum-free-energy
-  secondary structures with RNAfold, and return structured reports.
-use_when:
-- the user wants secondary-structure predictions for RNA or DNA-letter nucleotide
-  sequences
-avoid_when:
-- the user needs tertiary-structure modeling, pseudoknot prediction, or experimental
-  interpretation
-input_summary: A nucleotide FASTA file within the configured record and length limits.
-output_summary: Structure table, dot-bracket file, metrics, report, and RNAfold log.
-limitations: The workflow predicts equilibrium minimum-free-energy structures and
-  does not model cellular conditions or pseudoknots.
-examples:
-- Predict RNA secondary structures for this FASTA file.
-visibility: public
 execution:
   boundary: container
   dependency_scope: pipeline

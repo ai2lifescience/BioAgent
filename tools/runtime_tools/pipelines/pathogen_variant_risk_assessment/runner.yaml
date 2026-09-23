@@ -1,7 +1,20 @@
 name: pathogen_variant_risk_assessment
+display_name: Pathogen variant risk assessment
+description: Align pathogen reads, call and annotate variants, and produce a pathogen-specific
+  risk-assessment report.
+visibility: public
+use_when:
+- the user wants configured pathogen variant calling and risk tables from clean reads
+avoid_when:
+- the user asks for an unrestricted clinical diagnosis or treatment recommendation
+input_summary: Clean read 1, optional read 2, reference and annotation resources,
+  pathogen settings, and thresholds.
+output_summary: Final risk report, segment depth summary, and complete workflow archive.
+limitations: Interpretation is limited to the configured pathogen, reference, annotation
+  database, and workflow thresholds.
+examples:
+- Run the configured pathogen variant risk workflow on these cleaned reads.
 engine: wdl
-wdl_engine: cromwell
-cromwell_url: http://127.0.0.1:8000
 cromwell_api_version: v1
 cromwell_poll_interval: 5
 cromwell_visibility_timeout: 300
@@ -195,21 +208,6 @@ outputs:
     kind: archive
     required: true
     description: Complete risk assessment output produced by this workflow.
-display_name: Pathogen variant risk assessment
-description: Align pathogen reads, call and annotate variants, and produce a pathogen-specific
-  risk-assessment report.
-use_when:
-- the user wants configured pathogen variant calling and risk tables from clean reads
-avoid_when:
-- the user asks for an unrestricted clinical diagnosis or treatment recommendation
-input_summary: Clean read 1, optional read 2, reference and annotation resources,
-  pathogen settings, and thresholds.
-output_summary: Final risk report, segment depth summary, and complete workflow archive.
-limitations: Interpretation is limited to the configured pathogen, reference, annotation
-  database, and workflow thresholds.
-examples:
-- Run the configured pathogen variant risk workflow on these cleaned reads.
-visibility: public
 execution:
   boundary: container
   dependency_scope: pipeline
