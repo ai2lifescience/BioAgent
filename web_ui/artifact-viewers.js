@@ -1,5 +1,22 @@
 import { escapeHtml, fileNameFromPath } from "/static/ui-utils.js";
+import { createGenomeViewers } from "/static/genome-viewer.js";
 
+const PUBLICATION_CHAIN_COLORS = Object.freeze({
+  A: "#18a7b5",
+  B: "#cfcfcf",
+  H: "#d94f91",
+  L: "#7768d8",
+});
+const PUBLICATION_PALETTE = Object.freeze([
+  "#18a7b5",
+  "#d28b37",
+  "#7768d8",
+  "#d94f91",
+  "#4f8edb",
+  "#4f9d79",
+  "#c96854",
+  "#64748b",
+]);
 export function createArtifactViewers({
   getStructureSuffixes,
   getImageSuffixes,
@@ -17,6 +34,26 @@ export function createArtifactViewers({
   };
 
   const structureFormat = (path) => String(path || "").toLowerCase().endsWith(".pdb") ? "pdb" : "cif";
+
+  function chainIdsFromModel(model) {
+    if (!model || typeof model.selectedAtoms !== "function") return [];
+    try {
+      const atoms = model.selectedAtoms({}) || [];
+      return [...new Set(atoms
+        .map((atom) => String(atom?.chain || atom?.chainid || "").trim())
+        .filter(Boolean))];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function chainColor(chain, index) {
+    return PUBLICATION_CHAIN_COLORS[chain] || PUBLICATION_PALETTE[index % PUBLICATION_PALETTE.length];
+  }
+
+  function chainLabel(chain) {
+    return `Chain ${chain}`;
+  }
 
   function pdbIdFromLabelOrPath(label, path) {
     const combined = `${label || ""} ${fileNameFromPath(path || "")}`;
@@ -80,11 +117,9 @@ export function createArtifactViewers({
     const evidence = result?.evidence || {};
     for (const item of evidence.outputs || []) {
       addFigureArtifact(artifacts, seen, item?.image_path, item?.label || item?.summary || item?.tool);
-      addFigureArtifact(artifacts, seen, item?.genome_map_path, item?.label || item?.summary || item?.tool);
     }
     for (const item of evidence.tool_outputs || []) {
       addFigureArtifact(artifacts, seen, item?.image_path, item?.label || item?.summary || item?.tool);
-      addFigureArtifact(artifacts, seen, item?.genome_map_path, item?.label || item?.summary || item?.tool);
     }
     return artifacts;
   }
@@ -235,13 +270,22 @@ export function createArtifactViewers({
             data-pdb-id="${escapeHtml(artifact.pdbId)}"
             data-structure-format="${escapeHtml(artifact.format)}">
             <div class="structure-toolbar" aria-label="Structure display controls">
-              <button type="button" data-style="cartoon" class="active">Cartoon</button>
+              <button type="button" data-style="publication" class="active">Publication</button>
+              <button type="button" data-style="cartoon">Cartoon</button>
               <button type="button" data-style="stick">Stick</button>
               <button type="button" data-style="sphere">Sphere</button>
               <button type="button" data-style="line">Line</button>
             </div>
-            <div class="structure-canvas" role="img" aria-label="Interactive molecular structure viewer">
-              <div class="structure-loading">Loading 3D viewer...</div>
+            <div class="structure-visual">
+              <div class="structure-canvas" role="img" aria-label="Interactive molecular structure viewer">
+                <div class="structure-loading">Loading 3D viewer...</div>
+              </div>
+              <div class="structure-overlay-title" aria-hidden="true">
+                <strong>${escapeHtml(artifact.pdbId ? `PDB ${artifact.pdbId}` : "Protein structure")}</strong>
+                <span>${escapeHtml(`${artifact.format.toUpperCase()} · interactive molecular view`)}</span>
+              </div>
+              <div class="structure-legend" aria-label="Chain color legend" hidden></div>
+              <div class="structure-note" aria-hidden="true">Drag to rotate · scroll to zoom</div>
             </div>
             <div class="structure-path">${escapeHtml(artifact.path)}</div>
           </div>
@@ -287,7 +331,47 @@ export function createArtifactViewers({
   }
 
   function activeStructureStyle(details) {
-    return details.querySelector("[data-style].active")?.dataset?.style || "cartoon";
+    return details.querySelector("[data-style].active")?.dataset?.style || "publication";
+  }
+
+  function updateChainLegend(details, chainIds) {
+    const legend = details.querySelector(".structure-legend");
+    if (!legend) return;
+    if (!chainIds.length) {
+      legend.hidden = true;
+      legend.replaceChildren();
+      return;
+    }
+    const visibleChainIds = chainIds.slice(0, 8);
+    legend.innerHTML = visibleChainIds.map((chain, index) => `
+      <div class="structure-legend-row">
+        <span class="structure-swatch" style="background:${escapeHtml(chainColor(chain, index))}"></span>
+        <span>${escapeHtml(chainLabel(chain))}</span>
+      </div>
+    `).join("") + (chainIds.length > visibleChainIds.length
+      ? `<div class="structure-legend-more">+${chainIds.length - visibleChainIds.length} more chains</div>`
+      : "");
+    legend.hidden = false;
+  }
+
+  function frameStructureViewer(details) {
+    const viewer = details._agentViewer;
+    if (!viewer) return;
+    const chainIds = details._chainIds || [];
+    viewer.zoomTo(chainIds.length ? { chain: chainIds } : {});
+    viewer.zoom(1.08);
+    if (!details.dataset.oriented) {
+      if (typeof viewer.rotate === "function") {
+        viewer.rotate(12, "x");
+        viewer.rotate(-8, "y");
+        viewer.rotate(5, "z");
+      }
+      details.dataset.oriented = "true";
+    }
+    viewer.render();
+    if (typeof viewer.resize === "function") {
+      setTimeout(() => { viewer.resize(); viewer.render(); }, 0);
+    }
   }
 
   function applyStructureStyle(details, style) {
@@ -300,7 +384,18 @@ export function createArtifactViewers({
       return;
     }
     viewer.setStyle({}, {});
-    if (style === "stick") {
+    if (style === "publication") {
+      const chainIds = details._chainIds || [];
+      if (chainIds.length) {
+        chainIds.forEach((chain, index) => {
+          viewer.setStyle({ chain }, { cartoon: { color: chainColor(chain, index), opacity: 0.98 } });
+        });
+      } else {
+        viewer.setStyle({ hetflag: false }, { cartoon: { color: "spectrum", opacity: 0.98 } });
+      }
+      viewer.setStyle({ hetflag: true }, { stick: { radius: 0.14, colorscheme: "whiteCarbon", opacity: 0.55 } });
+      viewer.setStyle({ resn: "HOH" }, {});
+    } else if (style === "stick") {
       viewer.setStyle({}, { stick: { radius: 0.16, colorscheme: "Jmol" } });
     } else if (style === "sphere") {
       viewer.setStyle({}, { sphere: { scale: 0.28, colorscheme: "Jmol" } });
@@ -311,21 +406,25 @@ export function createArtifactViewers({
       viewer.setStyle({ hetflag: true }, { stick: { radius: 0.22, colorscheme: "greenCarbon" } });
       viewer.setStyle({ resn: "HOH" }, {});
     }
-    viewer.zoomTo();
-    viewer.render();
-    if (typeof viewer.resize === "function") {
-      setTimeout(() => { viewer.resize(); viewer.render(); }, 0);
-    }
+    frameStructureViewer(details);
+  }
+
+  function finalizeStructureViewer(details, viewer, model) {
+    details._agentViewer = viewer;
+    details._structureModel = model;
+    details._chainIds = chainIdsFromModel(model);
+    updateChainLegend(details, details._chainIds);
+    if (typeof viewer.setProjection === "function") viewer.setProjection("orthographic");
+    details.dataset.loaded = "true";
+    applyStructureStyle(details, activeStructureStyle(details));
   }
 
   function renderStructureText(details, container, structureText, format) {
     ensureViewerContainerReady(container);
-    const viewer = window.$3Dmol.createViewer(container, { backgroundColor: "white", antialias: true });
+    const viewer = window.$3Dmol.createViewer(container, { backgroundColor: "white", antialias: true, fog: false });
     const model = viewer.addModel(structureText, format);
     if (!model) throw new Error(`3Dmol could not parse ${format} structure text.`);
-    details._agentViewer = viewer;
-    details.dataset.loaded = "true";
-    applyStructureStyle(details, activeStructureStyle(details));
+    finalizeStructureViewer(details, viewer, model);
   }
 
   function renderStructureFromPdbId(details, container, pdbId) {
@@ -334,7 +433,7 @@ export function createArtifactViewers({
       let viewer;
       try {
         ensureViewerContainerReady(container);
-        viewer = window.$3Dmol.createViewer(container, { backgroundColor: "white", antialias: true });
+        viewer = window.$3Dmol.createViewer(container, { backgroundColor: "white", antialias: true, fog: false });
       } catch (error) {
         reject(error);
         return;
@@ -348,9 +447,7 @@ export function createArtifactViewers({
           if (settled) return;
           window.clearTimeout(timeout);
           if (!model) { settled = true; reject(new Error(`3Dmol PDB fallback returned no model for ${pdbId}.`)); return; }
-          details._agentViewer = viewer;
-          details.dataset.loaded = "true";
-          applyStructureStyle(details, activeStructureStyle(details));
+          finalizeStructureViewer(details, viewer, model);
           settled = true;
           resolve();
         });
@@ -415,6 +512,7 @@ export function createArtifactViewers({
   }
 
   return {
+    ...createGenomeViewers({ workspaceFileUrl }),
     collectStructureArtifacts,
     collectFigureArtifacts,
     collectPipelineOutputRecords,

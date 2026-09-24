@@ -32,6 +32,7 @@ _TEXT_SUFFIXES = frozenset(
         ".newick",
         ".nwk",
         ".sam",
+        ".sizes",
         ".tre",
         ".tree",
         ".txt",
@@ -80,7 +81,7 @@ _KEY_PREFIX_KINDS = (
     ("metadata", "metadata"),
     ("report", "report"),
     ("image", "image"),
-    ("genome_map", "image"),
+    ("genome_map", "genome_map"),
     ("session_input", "input"),
     ("upload", "upload"),
     ("runner_config", "config"),
@@ -117,6 +118,9 @@ def artifact_kind(path: str | Path, key: str = "", *, uploaded: bool = False) ->
     for prefix, kind in _KEY_PREFIX_KINDS:
         if key.startswith(prefix):
             return kind
+    name = Path(path).name.lower()
+    if name == "genome_map.json":
+        return "genome_map"
     suffix = _suffix(path)
     if suffix in _STRUCTURE_SUFFIXES:
         return "structure"

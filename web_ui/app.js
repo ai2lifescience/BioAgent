@@ -350,6 +350,7 @@ function emptyStateHtml() {
 }
 
 function renderCurrentChat() {
+  artifactViewers.disposeGenomeViewers(chat);
   chat.innerHTML = "";
   const messages = sessionStore.currentSession().messages || [];
   if (!messages.length) {
@@ -421,6 +422,7 @@ async function loadActiveSession() {
   setSessionLoading(true);
   workspaceFiles = [];
   renderWorkspace();
+  artifactViewers.disposeGenomeViewers(chat);
   chat.textContent = "Loading conversation…";
   try {
     await Promise.all([sessionStore.loadConversation(sessionStore.activeSessionId), loadWorkspace()]);
@@ -810,6 +812,7 @@ function scrollBottom() {
 
 function addMessage(role, text, result = null) {
   if (chat.querySelector(".empty-state")) {
+    artifactViewers.disposeGenomeViewers(chat);
     chat.innerHTML = "";
   }
   messageRenderer.renderMessage(role, text, result);

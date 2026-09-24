@@ -45,6 +45,7 @@ RESULT_PATH_KEYS = (
     "image_path",
     "image_paths",
     "genome_map_path",
+    "reference_path",
     "session_input_path",
     "upload_path",
     "runner_config_path",

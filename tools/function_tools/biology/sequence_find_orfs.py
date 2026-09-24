@@ -11,7 +11,7 @@ from agents import RunContextWrapper
 from pydantic import Field, model_validator
 
 from harness.context import AgentRunContext
-from tools.infrastructure.tool_support.artifacts import input_path, output, write_json
+from tools.infrastructure.tool_support.artifacts import artifact, destination, input_path, output, write_json
 from tools.infrastructure.tool_support.decorators import bio_function_tool
 from tools.infrastructure.tool_support.operations import invoke
 from tools.infrastructure.tool_support.results import FunctionContract, FunctionResult
@@ -60,6 +60,7 @@ class FeatureDocument(FunctionContract):
     schema_version: Literal[1] = 1
     coordinates: Literal["1-based-inclusive"] = "1-based-inclusive"
     records: list[FeatureSet]
+    fasta_path: str | None = None
 
 
 class FeaturesResult(FunctionContract):
@@ -159,9 +160,14 @@ def _calculate(*, source: dict, max_records: int, min_length: int, strand: str, 
         if count > 50000:
             raise ValueError("More than 50000 ORFs; raise min_length or reduce input.")
         sets.append(FeatureSet(sequence_id=item.id, length=len(value), features=features))
-    document = FeatureDocument(records=sets)
+    reference = destination(context, "reference.fasta")
+    SeqIO.write(items, reference, "fasta-2line")
+    reference_file = artifact(context, reference)
+    document = FeatureDocument(records=sets, fasta_path=reference_file["path"])
     file = write_json(context, "features.json", document.model_dump(mode="json"))
-    return _feature_output(src.path or "inline sequence", document, file, records_truncated)
+    result = _feature_output(src.path or "inline sequence", document, file, records_truncated)
+    result["files"].append(reference_file)
+    return result
 
 
 @bio_function_tool(timeout=120)
@@ -177,4 +183,3 @@ async def sequence_find_orfs(
 
 
 __all__ = ["sequence_find_orfs", "FeatureDocument", "FeaturesResult"]
-

@@ -215,6 +215,45 @@ status. Poll `GET /runs/<run_id>` or consume resumable progress from
 
 
 
+### Embedded assistant
+
+Embed the assistant as a drawer in a trusted website with the supplied
+`assistant-embed.js` client. To try the integration locally, start the web
+server and open the host-page demo:
+
+```bash
+python -m interfaces.web --host 127.0.0.1 --port 8000
+```
+
+Then open [http://localhost:8000/assistant-demo](http://localhost:8000/assistant-demo)
+and ask the embedded assistant about the page's table or chart. A host page can
+mount the assistant with a signed ticket and a page-context adapter:
+
+![Embedded assistant demo](docs/images/assistant_embed_demo.png)
+
+*Embedded assistant drawer connected to the trusted host-page demo.*
+
+```html
+<script src="https://agent.example.com/static/assistant-embed.js"></script>
+<div id="assistant-root"></div>
+<script>
+const assistant = AssistantDrawer.mount({
+  target: document.getElementById("assistant-root"),
+  src: "https://agent.example.com/assistant",
+  siteId: "lab-portal",
+  getToken: async () => {
+    const response = await fetch("/assistant-token", {method: "POST"});
+    return (await response.json()).token;
+  },
+  adapter: {getPageContext: async () => pageSnapshot()},
+});
+</script>
+```
+
+See the [web integration guide](docs/web_integration.md) for signed tickets,
+trusted origins, data and action callbacks, and the complete adapter contract.
+
+
 ### Python
 
 ```python

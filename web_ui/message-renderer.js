@@ -45,7 +45,7 @@ export function createMessageRenderer({
       alphafold_download: "Download AlphaFold structure",
       document_read: "Read document",
       file_inspection: "Inspect file",
-      genome_render_map: "Create genome map",
+      genome_render_map: "Open genome browser",
       ncbi_retrieval: "Retrieve NCBI records",
       pdb_download: "Download PDB structure",
       pipeline_shell: "Run pipeline command",
@@ -264,7 +264,7 @@ export function createMessageRenderer({
         <div class="approval-controls"></div>
       </div>
     ` : "";
-    return `${artifactViewers.pipelineDownloadsHtml(result, pipelineOutputs)}${pipelineOutputs.length ? "" : artifactViewers.collectedBundleHtml(result)}${pipelineOutputs.length ? "" : artifactViewers.figureArtifactsHtml(result)}${pipelineOutputs.length ? "" : artifactViewers.structureViewerHtml(result)}${approvalPlanHtml(result)}${runtimeDetails}`;
+    return `${artifactViewers.pipelineDownloadsHtml(result, pipelineOutputs)}${pipelineOutputs.length ? "" : artifactViewers.collectedBundleHtml(result)}${pipelineOutputs.length ? "" : artifactViewers.genomeViewerHtml(result)}${pipelineOutputs.length ? "" : artifactViewers.figureArtifactsHtml(result)}${pipelineOutputs.length ? "" : artifactViewers.structureViewerHtml(result)}${approvalPlanHtml(result)}${runtimeDetails}`;
   }
 
   function initializeRuntimeTabs(root = document) {
@@ -311,6 +311,7 @@ export function createMessageRenderer({
       });
     }
     initializeRuntimeTabs(message);
+    artifactViewers.initializeGenomeViewers(message);
     artifactViewers.initializeStructureViewers(message);
   }
 

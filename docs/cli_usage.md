@@ -67,7 +67,7 @@ ShellTool exported by `tools/infrastructure/sdk_adapters`.
 | `sequence_find_orfs` | ORF feature detection |
 | `sequence_translate` | Translation and FASTA output |
 | `genome_read_features` | Read GenBank/GFF features |
-| `genome_render_map` | Render an existing feature artifact |
+| `genome_render_map` | Prepare an interactive IGV.js genome browser artifact |
 | `structure_inspect` | Structure measurements |
 | `blast_search` | `blast_search` |
 | `file_inspection` | `file_inspect` |

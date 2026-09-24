@@ -64,6 +64,7 @@ STATIC_FILES = {
     "/static/app.js": (WEB_UI_DIR / "app.js", "application/javascript; charset=utf-8"),
     "/static/assistant.js": (WEB_UI_DIR / "assistant.js", "application/javascript; charset=utf-8"),
     "/static/assistant-embed.js": (WEB_UI_DIR / "assistant-embed.js", "application/javascript; charset=utf-8"),
+    "/static/genome-viewer.js": (WEB_UI_DIR / "genome-viewer.js", "application/javascript; charset=utf-8"),
 }
 
 

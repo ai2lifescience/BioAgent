@@ -9,7 +9,7 @@ from agents import RunContextWrapper
 from pydantic import Field, model_validator
 
 from harness.context import AgentRunContext
-from tools.infrastructure.tool_support.artifacts import input_path, output, write_json
+from tools.infrastructure.tool_support.artifacts import artifact, destination, input_path, output, write_json
 from tools.infrastructure.tool_support.decorators import bio_function_tool
 from tools.infrastructure.tool_support.operations import invoke
 from tools.infrastructure.tool_support.results import FunctionContract, FunctionResult
@@ -47,6 +47,7 @@ class FeatureDocument(FunctionContract):
     schema_version: Literal[1] = 1
     coordinates: Literal["1-based-inclusive"] = "1-based-inclusive"
     records: list[FeatureSet]
+    fasta_path: str | None = None
 
 
 class FeaturesResult(FunctionContract):
@@ -96,6 +97,7 @@ def _gff_qualifiers(raw: str) -> dict[str, list[str]]:
 
 def _calculate(*, path: str, fasta_path: str | None, sequence_id: str | None, context):
     source = input_path(context, path, (".gb", ".gbk", ".genbank", ".gff", ".gff3"))
+    document_fasta_path = fasta_path
     if source.suffix.lower() in {".gff", ".gff3"}:
         if not fasta_path:
             raise ValueError("GFF input requires fasta_path for sequence IDs and lengths.")
@@ -140,9 +142,18 @@ def _calculate(*, path: str, fasta_path: str | None, sequence_id: str | None, co
         dataset = FeatureSet(sequence_id=selected, length=len(record), features=features)
     if len(dataset.features) > 50000:
         raise ValueError("More than 50000 features; select a smaller annotation file.")
-    document = FeatureDocument(records=[dataset])
+    reference_file = None
+    if source.suffix.lower() not in {".gff", ".gff3"} and record.seq.defined:
+        target = destination(context, "reference.fasta")
+        SeqIO.write(record, target, "fasta-2line")
+        reference_file = artifact(context, target)
+        document_fasta_path = reference_file["path"]
+    document = FeatureDocument(records=[dataset], fasta_path=document_fasta_path)
     file = write_json(context, "features.json", document.model_dump(mode="json"))
-    return _feature_output(path, document, file)
+    result = _feature_output(path, document, file)
+    if reference_file:
+        result["files"].append(reference_file)
+    return result
 
 
 @bio_function_tool(timeout=120)

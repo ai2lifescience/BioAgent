@@ -85,7 +85,7 @@ responsibility for the final answer, including work delegated to specialists.
 - Call only tools present in the registered tool list. Do not invent terminal
   or filesystem tool names such as `exec_command` or `read_file`; use
   `document_read` for PDF contents and `pipeline_shell` for pipeline commands.
-- Use genome_read_features followed by genome_render_map for a feature image;
+- Use genome_read_features followed by genome_render_map for an interactive genome browser;
   use the research specialist with knowledge_ingest, knowledge_retrieve,
   pubmed_search, web_search, report_synthesize, and report_write for a cited
   narrative.

@@ -13,6 +13,10 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import httpx2
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqFeature import CompoundLocation, SeqFeature, SimpleLocation
+from Bio.SeqRecord import SeqRecord
 from agents import Agent, Runner
 from agents.testing import ModelStep, ScriptedModel, assistant_message, function_call
 from harness.context import AgentRunContext
@@ -56,10 +60,15 @@ class AtomicToolsTests(unittest.IsolatedAsyncioTestCase):
                       context=self.workflow("sequence_find_orfs"))
         document = FeatureDocument.model_validate_json((self.root / result["data"]["features_path"]).read_text())
         self.assertEqual([(f.start, f.end, f.strand) for f in document.records[0].features], [(1, 9, 1)])
-        image = render_map(features_path=result["data"]["features_path"], sequence_id=None,
-                           layout="linear", label="<untrusted>", context=self.workflow("genome_render_map"))
-        self.assertIn("&lt;untrusted&gt;", (self.root / image["data"]["image_path"]).read_text())
-        self.assertFalse(image["data"]["truncated"])
+        genome_map = render_map(features_path=result["data"]["features_path"], sequence_id=None,
+                                label="<untrusted>", context=self.workflow("genome_render_map"))
+        map_document = json.loads((self.root / genome_map["data"]["genome_map_path"]).read_text())
+        self.assertEqual(map_document["coordinates"], "0-based-half-open")
+        self.assertEqual(map_document["title"], "<untrusted>")
+        self.assertEqual(map_document["features"][0]["start"], 0)
+        self.assertEqual(map_document["features"][0]["end"], 9)
+        self.assertEqual((self.root / genome_map["data"]["reference_path"]).read_text(), ">sequence_1\nATGAAATAG\n")
+        self.assertFalse(genome_map["data"]["truncated"])
         self.assertEqual(list(find_orfs("ATGNNNAAATAG", 9, "forward")), [])
         reverse = list(find_orfs("CTATTTCAT", 9, "reverse"))
         self.assertEqual((reverse[0].start, reverse[0].end, reverse[0].strand), (1, 9, -1))
@@ -88,6 +97,9 @@ class AtomicToolsTests(unittest.IsolatedAsyncioTestCase):
         result = read_features(path="input.gff", fasta_path="input.fa", sequence_id=None,
                                context=self.workflow("genome_read_features"))
         self.assertEqual(result["data"]["total"], 1)
+        genome_map = render_map(features_path=result["data"]["features_path"], sequence_id=None,
+                                label=None, context=self.workflow("genome_render_map"))
+        self.assertEqual((self.root / genome_map["data"]["reference_path"]).read_text(), ">ctg\nATGAAATAG\n")
         annotation.write_text("ctg\tfixture\tgene\t1\t99\t.\t+\t.\tID=g1\n")
         with self.assertRaises(ValueError):
             read_features(path="input.gff", fasta_path="input.fa", sequence_id=None,
@@ -99,6 +111,35 @@ class AtomicToolsTests(unittest.IsolatedAsyncioTestCase):
         result = inspect_structure(path="input.pdb", context=self.workflow("structure_inspect"))
         self.assertEqual(result["data"]["atom_count"], 2)
         self.assertEqual(result["data"]["residue_count"], 1)
+
+    def test_genbank_reference_and_joined_features_reach_genome_browser(self):
+        record = SeqRecord(Seq("ATGAAATAG"), id="ctg")
+        record.annotations["molecule_type"] = "DNA"
+        record.features = [SeqFeature(
+            CompoundLocation([SimpleLocation(0, 3, strand=-1), SimpleLocation(6, 9, strand=-1)]),
+            type="CDS", qualifiers={"gene": ["joined_gene"]},
+        )]
+        SeqIO.write(record, self.root / "input.gb", "genbank")
+        result = read_features(path="input.gb", fasta_path=None, sequence_id=None,
+                               context=self.workflow("genome_read_features"))
+        genome_map = render_map(features_path=result["data"]["features_path"], sequence_id=None,
+                                label=None, context=self.workflow("genome_render_map"))
+        document = json.loads((self.root / genome_map["data"]["genome_map_path"]).read_text())
+        self.assertEqual(document["reference_format"], "fasta")
+        self.assertEqual((self.root / document["reference_path"]).read_text(), ">ctg\nATGAAATAG\n")
+        self.assertEqual([(f["start"], f["end"], f["strand"]) for f in document["features"]],
+                         [(0, 3, "-"), (6, 9, "-")])
+
+    def test_genome_browser_without_bases_uses_sequence_length(self):
+        (self.root / "features.json").write_text(json.dumps({
+            "records": [{"sequence_id": "ctg", "length": 100, "features": []}],
+        }))
+        result = render_map(features_path="features.json", sequence_id=None, label=None,
+                            context=self.workflow("genome_render_map"))
+        document = json.loads((self.root / result["data"]["genome_map_path"]).read_text())
+        self.assertEqual(document["reference_format"], "chromsizes")
+        self.assertEqual((self.root / document["reference_path"]).read_text(), "ctg\t100\n")
+        self.assertEqual(result["files"][0]["kind"], "genome_map")
 
     async def test_search_retrieve_synthesize_write(self):
         requests = []
