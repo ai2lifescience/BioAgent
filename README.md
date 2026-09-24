@@ -18,9 +18,9 @@ durable execution to typed tools, specialist agents, and pipeline services.*
 
 ![Pipeline2Agent functions](docs/images/system_functions.png)
 
-*Figure 2. Pipeline2Agent functional capabilities across biology, data
-analysis, research, knowledge, workspace, coding, pipelines, and trusted web
-integration.*
+*Figure 2. Pipeline2Agent core functions: selecting, configuring, running, and
+understanding bioinformatics pipelines, with supporting data, file, and
+knowledge operations.*
 
 Pipeline2Agent can:
 
