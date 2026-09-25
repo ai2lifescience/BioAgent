@@ -34,26 +34,46 @@ Open one of these pages:
 | http://127.0.0.1:8000/health | Server health check |
 | http://127.0.0.1:8000/config | Public model, file, and pipeline configuration |
 
-The default model alias is gpt-5.6-luna and the default maximum is five SDK
+The default model alias is gpt-5.6-luna and the default maximum is 20 SDK
 turns. The UI can select another configured model. Model aliases and provider
 model IDs are defined in models/config.py.
 
+To choose the embedding model used by new knowledge collections and evidence
+indexes, set `EMBEDDING_MODEL` before starting the server. For the supported
+models and re-indexing behavior, see
+[Choosing an embedding model](architecture.md#choosing-an-embedding-model).
+
 ### WDL execution backend
 
-WDL pipelines use local miniwdl and Docker by default. To submit them to the
-remote Cromwell server, set `CROMWELL_URL` before starting BioAgent:
+WDL pipelines use local miniwdl and Docker by default. Set `CROMWELL_URL` to
+use the remote Cromwell backend. When the Cromwell host cannot see local
+workspace files, enable the S3 input-staging variables in the same profile:
 
 ~~~bash
 export CROMWELL_URL=http://192.168.164.39:39000
-curl "$CROMWELL_URL/engine/v1/status"
+export CROMWELL_INPUT_STORAGE_ENDPOINT=http://192.168.164.39:7070
+export CROMWELL_INPUT_STORAGE_URI=s3://cncb-web-server-mic/files
+export CROMWELL_INPUT_STORAGE_REGION=us-east-1
+export CROMWELL_INPUT_STORAGE_MOUNT_PREFIX=/data/versitygw/data/s3
+export CROMWELL_INPUT_STORAGE_ACCESS_KEY='your-s3-access-key'
+export CROMWELL_INPUT_STORAGE_SECRET_KEY='your-s3-secret-key'
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ~~~
 
-The URL is the backend selector: an unset or empty `CROMWELL_URL` uses local
-miniwdl, while a nonempty URL uses Cromwell. Restart BioAgent after changing
-the variable. New pipeline plans save the selected backend and URL, so later
-environment changes do not alter an existing plan. Cromwell execution requires
-shared filesystem paths visible to BioAgent, Cromwell, and the task containers.
+An unset `CROMWELL_URL` uses local miniwdl; a nonempty value uses Cromwell.
+Restart BioAgent after changing it. New plans save the selected backend and
+URL. Without S3 staging, the workflow and input/output paths must be visible
+to BioAgent, Cromwell, and the task containers.
+
+With S3 staging, local WDL inputs are uploaded before submission and rewritten
+to paths such as
+`/data/versitygw/data/s3/cncb-web-server-mic/files/...`. Repeated references
+share one upload; existing remote or mounted paths are preserved. Upload
+records are written to `cromwell.input_uploads.json`. Keep S3 credentials out of
+Git; environment variables, an instance profile, or another boto3 credential
+provider may supply them. This stages inputs only: output paths still need to
+be visible to BioAgent. See the [live test report](live_test_report_2026-09-24.md)
+for verification details.
 
 To return to local execution:
 

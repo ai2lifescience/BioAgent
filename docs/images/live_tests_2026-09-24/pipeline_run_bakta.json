@@ -1,0 +1,1814 @@
+{
+  "name": "pipeline_run_bakta",
+  "prompt": "I approve Bakta plan f8d96d89ae9c49bfb3c8a4abbc6fa648. Run it now and collect verified results. If it fails because the environment lacks Bakta or its database, record that as a blocked environment dependency and do not invent outputs.",
+  "session_id": "live-pipeline_discovery-051e3212",
+  "run_id": "dfdba481670940f48c5fbbfe713da795",
+  "elapsed_seconds": 33.49,
+  "result": {
+    "run_id": "dfdba481670940f48c5fbbfe713da795",
+    "session_id": "live-pipeline_discovery-051e3212",
+    "status": "succeeded",
+    "model_key": "deepseek/deepseek-v4-flash",
+    "max_turns": 20,
+    "created_at": "2026-09-24T15:01:05.452077+00:00",
+    "updated_at": "2026-09-24T15:01:36.950796+00:00",
+    "error": null,
+    "result": {
+      "answer": "Here is the full summary of all attempts. As requested, I am not inventing outputs.\n\n---\n\n## Result: Blocked — Missing environment dependencies\n\nAll three pipeline runs on the `bacterial_genome_annotation` pipeline failed due to missing tooling in the container environment:\n\n### Attempt history\n\n| Plan ID | Annotator | Failure | Root cause |\n|---|---|---|\n| `80e55dc2` (original) | Prokka (default) | Bakta-only params supplied with Prokka | Planning error — fixed in next plan |\n| `b6904b2f` (corrected) | Prokka (default) | **Prokka not installed** | `Prokka: not on `PATH` |\n| `f8d96d89` (Bakta) | Bakta | **Bakta database missing** | `bakta_db_path` / `BAKTA_DB` env var not set |\n\n### Blocked dependency\n\n```\nEnvironment dependency: bacterial_genome_annotation pipeline\n  - Annotator \"prokka\" → Prokka binary not found on `PATH`\n  - Annotator \"bakta\"      → Bakta DB path (`bakta_db_path` or `BAKTA_DB` ) not provided\n```\n\nThe contaier running the shell pipelines does not have Prokka installed and does not have a Bakta database configured. The `bacterial_genome_annotation` pipeline cannot execute in this environment without those prerequisites.\n\n### Potential alternatives\n\n1. **`bacterial_functional_annotation`** — A different shell pipeline that also accepts `.fasta` input and performs functional term/orthology annotation. It uses a bundled reference resource rather than Prokka or Bakta, so it may work in this environment.\n\n2. **Direct sequence tools** (no container needed) — `sequence_find_orfs` + `sequence_translate` can find open reading frames and translate them directly using the runtime SDK, which works independently of container tooling.\n\n3. **RNA secondary-structure prediction** — If the FASTA represents RNA/DNA sequences for structure prediction rather than gene annotation.\n\nWould you like me to try the **Bacterial functional annotation** pipeline, or use the direct sequence tools (`sequence_find_orfs` + `sequence_translate`) to annotate the example contigs?",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "live-pipeline_discovery-051e3212",
+      "max_turns": 20,
+      "messages": [
+        {
+          "role": "user",
+          "content": "I approve Bakta plan f8d96d89ae9c49bfb3c8a4abbc6fa648. Run it now and collect verified results. If it fails because the environment lacks Bakta or its database, record that as a blocked environment dependency and do not invent outputs."
+        },
+        {
+          "role": "assistant",
+          "content": "Here is the full summary of all attempts. As requested, I am not inventing outputs.\n\n---\n\n## Result: Blocked — Missing environment dependencies\n\nAll three pipeline runs on the `bacterial_genome_annotation` pipeline failed due to missing tooling in the container environment:\n\n### Attempt history\n\n| Plan ID | Annotator | Failure | Root cause |\n|---|---|---|\n| `80e55dc2` (original) | Prokka (default) | Bakta-only params supplied with Prokka | Planning error — fixed in next plan |\n| `b6904b2f` (corrected) | Prokka (default) | **Prokka not installed** | `Prokka: not on `PATH` |\n| `f8d96d89` (Bakta) | Bakta | **Bakta database missing** | `bakta_db_path` / `BAKTA_DB` env var not set |\n\n### Blocked dependency\n\n```\nEnvironment dependency: bacterial_genome_annotation pipeline\n  - Annotator \"prokka\" → Prokka binary not found on `PATH`\n  - Annotator \"bakta\"      → Bakta DB path (`bakta_db_path` or `BAKTA_DB` ) not provided\n```\n\nThe contaier running the shell pipelines does not have Prokka installed and does not have a Bakta database configured. The `bacterial_genome_annotation` pipeline cannot execute in this environment without those prerequisites.\n\n### Potential alternatives\n\n1. **`bacterial_functional_annotation`** — A different shell pipeline that also accepts `.fasta` input and performs functional term/orthology annotation. It uses a bundled reference resource rather than Prokka or Bakta, so it may work in this environment.\n\n2. **Direct sequence tools** (no container needed) — `sequence_find_orfs` + `sequence_translate` can find open reading frames and translate them directly using the runtime SDK, which works independently of container tooling.\n\n3. **RNA secondary-structure prediction** — If the FASTA represents RNA/DNA sequences for structure prediction rather than gene annotation.\n\nWould you like me to try the **Bacterial functional annotation** pipeline, or use the direct sequence tools (`sequence_find_orfs` + `sequence_translate`) to annotate the example contigs?"
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-24",
+        "tools": [
+          "pipeline_shell",
+          "file_inspection"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [],
+        "outputs": [
+          {
+            "tool": "pipeline_shell",
+            "job_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "plan_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "status": "queued"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "plan_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "logs": {
+              "stdout": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stdout.log",
+              "stderr": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stderr.log"
+            },
+            "status": "failed",
+            "error": "shell pipeline failed with exit code 1: bacterial_genome_annotation failed: Bakta requires bakta_db_path or the BAKTA_DB environment variable.\n",
+            "pipeline_name": "bacterial_genome_annotation"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "plan_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "logs": {
+              "stdout": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stdout.log",
+              "stderr": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stderr.log"
+            },
+            "status": "failed",
+            "error": "shell pipeline failed with exit code 1: bacterial_genome_annotation failed: Bakta requires bakta_db_path or the BAKTA_DB environment variable.\n",
+            "pipeline_name": "bacterial_genome_annotation"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "plan_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "logs": {
+              "stdout": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stdout.log",
+              "stderr": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stderr.log"
+            },
+            "status": "failed",
+            "error": "shell pipeline failed with exit code 1: bacterial_genome_annotation failed: Bakta requires bakta_db_path or the BAKTA_DB environment variable.\n",
+            "pipeline_name": "bacterial_genome_annotation"
+          },
+          {
+            "tool": "file_inspection",
+            "record_count": null,
+            "bytes": 845,
+            "status": "ok"
+          }
+        ],
+        "tool_outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "queued",
+            "job_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "plan_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "failed",
+            "error": "shell pipeline failed with exit code 1: bacterial_genome_annotation failed: Bakta requires bakta_db_path or the BAKTA_DB environment variable.\n",
+            "job_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "plan_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "logs": {
+              "stdout": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stdout.log",
+              "stderr": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stderr.log"
+            },
+            "pipeline_name": "bacterial_genome_annotation"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "failed",
+            "error": "shell pipeline failed with exit code 1: bacterial_genome_annotation failed: Bakta requires bakta_db_path or the BAKTA_DB environment variable.\n",
+            "job_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "plan_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "logs": {
+              "stdout": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stdout.log",
+              "stderr": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stderr.log"
+            },
+            "pipeline_name": "bacterial_genome_annotation"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "failed",
+            "error": "shell pipeline failed with exit code 1: bacterial_genome_annotation failed: Bakta requires bakta_db_path or the BAKTA_DB environment variable.\n",
+            "job_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "plan_id": "f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "logs": {
+              "stdout": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stdout.log",
+              "stderr": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stderr.log"
+            },
+            "pipeline_name": "bacterial_genome_annotation"
+          }
+        ],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-24T15:01:08.015175+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "run_started",
+          "data": {
+            "request": "I approve Bakta plan f8d96d89ae9c49bfb3c8a4abbc6fa648. Run it now and collect verified results. If it fails because the environment lacks Bakta or its database, record that as a blocked environment dependency and do not invent outputs.",
+            "model_key": "deepseek/deepseek-v4-flash"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:08.035048+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:08.047741+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_01cbacd5a46e43dcb4fc3d46",
+            "parent_id": "span_76588b501a9e49e5bf6870b6",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-24T15:01:08.042272+00:00",
+            "ended_at": "2026-09-24T15:01:08.047351+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:08.048864+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_c3233b99214d473984f0f1e7",
+            "parent_id": "span_62f485d8ea114025b03c1de4",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:01:08.048423+00:00",
+            "ended_at": "2026-09-24T15:01:08.048492+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:08.049362+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_9a15ebbc61214443843bd0ed",
+            "parent_id": "span_62f485d8ea114025b03c1de4",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:01:08.048939+00:00",
+            "ended_at": "2026-09-24T15:01:08.048986+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:08.053672+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_4c6d5751828d411bbace1c80",
+            "parent_id": "span_62f485d8ea114025b03c1de4",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:08.049625+00:00",
+            "ended_at": "2026-09-24T15:01:08.053226+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:08.058425+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_430957be2d8343708edc468e",
+            "parent_id": "span_62f485d8ea114025b03c1de4",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:08.053714+00:00",
+            "ended_at": "2026-09-24T15:01:08.057220+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:08.061215+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_62f485d8ea114025b03c1de4",
+            "parent_id": "span_76588b501a9e49e5bf6870b6",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:01:08.047830+00:00",
+            "ended_at": "2026-09-24T15:01:08.060061+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:08.064748+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:08.118605+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:11.707050+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_e3c762752ebe46ae820775c2",
+            "parent_id": "span_5523b4b27c1847d1b3a26685",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:01:08.143526+00:00",
+            "ended_at": "2026-09-24T15:01:11.705765+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:11.727611+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 37972,
+            "output_tokens": 133
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:11.739262+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_52b618a441f74f1fa4a8294c",
+            "parent_id": "span_5523b4b27c1847d1b3a26685",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:01:11.730398+00:00",
+            "ended_at": "2026-09-24T15:01:11.738110+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:11.740983+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_5523b4b27c1847d1b3a26685",
+            "parent_id": "span_12828bf55cdd4edeb860f008",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:01:08.062648+00:00",
+            "ended_at": "2026-09-24T15:01:11.740280+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:11.755096+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_12828bf55cdd4edeb860f008",
+            "parent_id": "span_76588b501a9e49e5bf6870b6",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-24T15:01:08.062448+00:00",
+            "ended_at": "2026-09-24T15:01:11.753804+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:11.756333+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_76588b501a9e49e5bf6870b6",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-24T15:01:08.035134+00:00",
+            "ended_at": "2026-09-24T15:01:11.755296+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:11.756843+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:11.795817+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "run_paused",
+          "data": {
+            "reason": "tool_approval",
+            "tool_names": [
+              "pipeline_shell"
+            ]
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.571891+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "approval_decision",
+          "data": {
+            "approved": true,
+            "tool_name": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.593037+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.596700+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_8c053eb962d7499aa69598eb",
+            "parent_id": "span_17b3d8e2b5184e2bb4a314fc",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:01:13.596256+00:00",
+            "ended_at": "2026-09-24T15:01:13.596329+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.597173+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_0af5644d51744374a8bfbeb7",
+            "parent_id": "span_17b3d8e2b5184e2bb4a314fc",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:01:13.596775+00:00",
+            "ended_at": "2026-09-24T15:01:13.596821+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.601133+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_4224745141954a08a0f1e626",
+            "parent_id": "span_17b3d8e2b5184e2bb4a314fc",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:13.597442+00:00",
+            "ended_at": "2026-09-24T15:01:13.600736+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.605854+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_929427cfd1814c60b0a9d3ca",
+            "parent_id": "span_17b3d8e2b5184e2bb4a314fc",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:13.601177+00:00",
+            "ended_at": "2026-09-24T15:01:13.604542+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.608676+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_17b3d8e2b5184e2bb4a314fc",
+            "parent_id": "span_d495f45915e143bf83e8d61a",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:01:13.595646+00:00",
+            "ended_at": "2026-09-24T15:01:13.607520+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.619219+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.705700+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline run --plan-id f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "status": "queued"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.725521+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.726059+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_179ad7a6e16c4dcda06a9f1b",
+            "parent_id": "span_d495f45915e143bf83e8d61a",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:01:13.618173+00:00",
+            "ended_at": "2026-09-24T15:01:13.725585+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.754228+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_561d2587f29a47ff8d244585",
+            "parent_id": "span_a5cfd87f3cd74b6680ebcc1a",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:01:13.752820+00:00",
+            "ended_at": "2026-09-24T15:01:13.752993+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.760909+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_fce8701d5789493299dbedb9",
+            "parent_id": "span_a5cfd87f3cd74b6680ebcc1a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:13.755013+00:00",
+            "ended_at": "2026-09-24T15:01:13.759723+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.766230+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_7b23e48a6ae2433bbc45ec7c",
+            "parent_id": "span_a5cfd87f3cd74b6680ebcc1a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:13.761029+00:00",
+            "ended_at": "2026-09-24T15:01:13.765292+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.767165+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_a5cfd87f3cd74b6680ebcc1a",
+            "parent_id": "span_d495f45915e143bf83e8d61a",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:01:13.751576+00:00",
+            "ended_at": "2026-09-24T15:01:13.766300+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.771027+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:13.775495+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:16.253203+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_ea6cd82fca794fa3bd994a54",
+            "parent_id": "span_1d77d7b5b567426f89b517ca",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:01:13.776645+00:00",
+            "ended_at": "2026-09-24T15:01:16.251854+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:16.255951+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 38260,
+            "output_tokens": 131
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:16.260823+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:16.270539+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline wait --job-id f8d96d89ae9c49bfb3c8a4abbc6fa648 --seconds 5",
+            "status": "failed"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:16.290153+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:16.290715+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_1b972eef1bbc4d8eb72c2752",
+            "parent_id": "span_1d77d7b5b567426f89b517ca",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:01:16.257150+00:00",
+            "ended_at": "2026-09-24T15:01:16.290212+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:16.291635+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_1d77d7b5b567426f89b517ca",
+            "parent_id": "span_95f2aea2990d4723aeb6e3de",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:01:13.769311+00:00",
+            "ended_at": "2026-09-24T15:01:16.291097+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:16.296995+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_757b82bd9df3419ab0a0e541",
+            "parent_id": "span_6ac6757b604346a6a6ee74d4",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:01:16.296513+00:00",
+            "ended_at": "2026-09-24T15:01:16.296598+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:16.302536+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_e73d965ed14543e8bec0b371",
+            "parent_id": "span_6ac6757b604346a6a6ee74d4",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:16.297285+00:00",
+            "ended_at": "2026-09-24T15:01:16.301237+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:16.308647+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_0f95b965b4a34f069c57ed41",
+            "parent_id": "span_6ac6757b604346a6a6ee74d4",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:16.302696+00:00",
+            "ended_at": "2026-09-24T15:01:16.307802+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:16.309188+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_6ac6757b604346a6a6ee74d4",
+            "parent_id": "span_95f2aea2990d4723aeb6e3de",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:01:16.295640+00:00",
+            "ended_at": "2026-09-24T15:01:16.308701+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:16.312966+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:20.321812+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_b87539af95a748eebfa1f1a5",
+            "parent_id": "span_0b681e6604734917889d9d10",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:01:16.313890+00:00",
+            "ended_at": "2026-09-24T15:01:20.320486+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:20.324795+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 38752,
+            "output_tokens": 230
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:20.329791+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:20.338492+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline status --job-id f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "status": "failed"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:20.357666+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:20.358211+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_76523034cb664621a7ed1e19",
+            "parent_id": "span_0b681e6604734917889d9d10",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:01:20.326107+00:00",
+            "ended_at": "2026-09-24T15:01:20.357721+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:20.359138+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_0b681e6604734917889d9d10",
+            "parent_id": "span_95f2aea2990d4723aeb6e3de",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:01:16.310411+00:00",
+            "ended_at": "2026-09-24T15:01:20.358601+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:20.364052+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_726de6422a4c44ac8d3f1803",
+            "parent_id": "span_d19629bb5f224884bd2f436a",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:01:20.363563+00:00",
+            "ended_at": "2026-09-24T15:01:20.363650+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:20.368164+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_6cd58a8681114e7bb78cff05",
+            "parent_id": "span_d19629bb5f224884bd2f436a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:20.364347+00:00",
+            "ended_at": "2026-09-24T15:01:20.367754+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:20.372899+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_df8edd3a350e46dc8edb4360",
+            "parent_id": "span_d19629bb5f224884bd2f436a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:20.368212+00:00",
+            "ended_at": "2026-09-24T15:01:20.371586+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:20.374105+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_d19629bb5f224884bd2f436a",
+            "parent_id": "span_95f2aea2990d4723aeb6e3de",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:01:20.362906+00:00",
+            "ended_at": "2026-09-24T15:01:20.373006+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:20.382707+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:23.168513+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_90c6fc4fa8924a428aade601",
+            "parent_id": "span_afb3f825b6614c4d88be3747",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:01:20.384754+00:00",
+            "ended_at": "2026-09-24T15:01:23.167221+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:23.172119+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 39343,
+            "output_tokens": 134
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:23.176708+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:23.188230+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline results --job-id f8d96d89ae9c49bfb3c8a4abbc6fa648",
+            "status": "failed"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:23.211388+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:23.211909+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_dbde9d5a95f8428fb3f3008f",
+            "parent_id": "span_afb3f825b6614c4d88be3747",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:01:23.173439+00:00",
+            "ended_at": "2026-09-24T15:01:23.211455+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:23.212869+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_afb3f825b6614c4d88be3747",
+            "parent_id": "span_95f2aea2990d4723aeb6e3de",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:01:20.376910+00:00",
+            "ended_at": "2026-09-24T15:01:23.212389+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:23.217423+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_1606b01beaaf46b9a4952fe0",
+            "parent_id": "span_c72b0deb30674617a4d98362",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:01:23.216788+00:00",
+            "ended_at": "2026-09-24T15:01:23.216886+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:23.223172+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_21979a2002ae4ddf89b1fb8c",
+            "parent_id": "span_c72b0deb30674617a4d98362",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:23.217797+00:00",
+            "ended_at": "2026-09-24T15:01:23.221933+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:23.228181+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_717c0cca21d545059dc6e97d",
+            "parent_id": "span_c72b0deb30674617a4d98362",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:23.223309+00:00",
+            "ended_at": "2026-09-24T15:01:23.227718+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:23.228627+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_c72b0deb30674617a4d98362",
+            "parent_id": "span_95f2aea2990d4723aeb6e3de",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:01:23.216138+00:00",
+            "ended_at": "2026-09-24T15:01:23.228245+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:23.232941+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:26.558593+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_5ed5b0a33e9247709397c3c4",
+            "parent_id": "span_7d4c53b87bd74d70aac12b53",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:01:23.233971+00:00",
+            "ended_at": "2026-09-24T15:01:26.557229+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:26.562214+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 39853,
+            "output_tokens": 117
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:26.565249+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:26.566494+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:29.168797+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "tool_finished",
+          "data": {
+            "tool": "file_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:29.170016+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:29.171227+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_25502aeae00d4214a0385a4e",
+            "parent_id": "span_7d4c53b87bd74d70aac12b53",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-24T15:01:26.563843+00:00",
+            "ended_at": "2026-09-24T15:01:29.170183+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:29.172950+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_7d4c53b87bd74d70aac12b53",
+            "parent_id": "span_95f2aea2990d4723aeb6e3de",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:01:23.229925+00:00",
+            "ended_at": "2026-09-24T15:01:29.171860+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:29.180027+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_11a55ec969704910a6153a47",
+            "parent_id": "span_251d90f68be3437bb06ce2e7",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:01:29.178733+00:00",
+            "ended_at": "2026-09-24T15:01:29.178916+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:29.186528+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_b340e40b6eb74e95b5256e4d",
+            "parent_id": "span_251d90f68be3437bb06ce2e7",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:29.180784+00:00",
+            "ended_at": "2026-09-24T15:01:29.185443+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:29.191561+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_45be4c70845a48d79cdac2f4",
+            "parent_id": "span_251d90f68be3437bb06ce2e7",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:01:29.186642+00:00",
+            "ended_at": "2026-09-24T15:01:29.190741+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:29.192384+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_251d90f68be3437bb06ce2e7",
+            "parent_id": "span_95f2aea2990d4723aeb6e3de",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:01:29.177412+00:00",
+            "ended_at": "2026-09-24T15:01:29.191626+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:29.198390+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:36.814606+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_d47e789006ce4540bbc62b12",
+            "parent_id": "span_c1f571678be1447bb90d3580",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:01:29.199776+00:00",
+            "ended_at": "2026-09-24T15:01:36.813272+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:36.818090+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 40240,
+            "output_tokens": 681
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:36.819912+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:36.820900+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_c1f571678be1447bb90d3580",
+            "parent_id": "span_95f2aea2990d4723aeb6e3de",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:01:29.194234+00:00",
+            "ended_at": "2026-09-24T15:01:36.820189+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:36.821741+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:36.822449+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_348977fc3be14d4c809cd1a3",
+            "parent_id": "span_95f2aea2990d4723aeb6e3de",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-24T15:01:36.821207+00:00",
+            "ended_at": "2026-09-24T15:01:36.821765+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:36.831827+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_3ff3a3406aeb48e2a5a5e683",
+            "parent_id": "span_5e516158843c4f3081ca7221",
+            "span_type": "custom",
+            "name": "sandbox.cleanup_sessions",
+            "model": null,
+            "started_at": "2026-09-24T15:01:36.830644+00:00",
+            "ended_at": "2026-09-24T15:01:36.831158+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:36.832456+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_5e516158843c4f3081ca7221",
+            "parent_id": "span_95f2aea2990d4723aeb6e3de",
+            "span_type": "custom",
+            "name": "sandbox.cleanup",
+            "model": null,
+            "started_at": "2026-09-24T15:01:36.830598+00:00",
+            "ended_at": "2026-09-24T15:01:36.831850+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:36.833069+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_95f2aea2990d4723aeb6e3de",
+            "parent_id": "span_d495f45915e143bf83e8d61a",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-24T15:01:13.767948+00:00",
+            "ended_at": "2026-09-24T15:01:36.832479+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:36.833730+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928",
+            "span_id": "span_d495f45915e143bf83e8d61a",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-24T15:01:13.593235+00:00",
+            "ended_at": "2026-09-24T15:01:36.833154+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:36.833999+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_8f15e6f6328c4ac3a7c3534ab6966928"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:01:36.853345+00:00",
+          "session_id": "live-pipeline_discovery-051e3212",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 5
+          }
+        }
+      ],
+      "run": {
+        "run_id": "bbc5e7f3-f38b-4561-a969-c39f5fdc07b5",
+        "session_dir": ".",
+        "runtime_dir": "runs/bbc5e7f3-f38b-4561-a969-c39f5fdc07b5",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "uploads/examples/bacterial_genome_annotation-90a60018/example_contigs.fasta",
+          "workspace_path": "uploads/examples/bacterial_genome_annotation-90a60018/example_contigs.fasta",
+          "name": "example_contigs.fasta",
+          "size": 660,
+          "modified_at": 1790261683578708092,
+          "kind": "upload",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/plan.json",
+          "workspace_path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/plan.json",
+          "name": "plan.json",
+          "size": 6212,
+          "modified_at": 1790261838545659164,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/stdout.log",
+          "workspace_path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/stdout.log",
+          "name": "stdout.log",
+          "size": 0,
+          "modified_at": 1790261923978198271,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/inputs/genome/0_example_contigs.fasta",
+          "workspace_path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/inputs/genome/0_example_contigs.fasta",
+          "name": "0_example_contigs.fasta",
+          "size": 660,
+          "modified_at": 1790261924092198996,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/inputs.json",
+          "workspace_path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/inputs.json",
+          "name": "inputs.json",
+          "size": 179,
+          "modified_at": 1790261924093199003,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/outputs/config.runtime.yaml",
+          "workspace_path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/outputs/config.runtime.yaml",
+          "name": "config.runtime.yaml",
+          "size": 4100,
+          "modified_at": 1790261924151199372,
+          "kind": "config",
+          "content_type": "text/yaml; charset=utf-8"
+        },
+        {
+          "path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/stderr.log",
+          "workspace_path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/stderr.log",
+          "name": "stderr.log",
+          "size": 875,
+          "modified_at": 1790261924267200109,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/job.json",
+          "workspace_path": "runs/80e55dc283aa44e8bfe958ddd6f831e2/job.json",
+          "name": "job.json",
+          "size": 7257,
+          "modified_at": 1790261924270200129,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/plan.json",
+          "workspace_path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/plan.json",
+          "name": "plan.json",
+          "size": 6172,
+          "modified_at": 1790261936110275550,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/stdout.log",
+          "workspace_path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/stdout.log",
+          "name": "stdout.log",
+          "size": 0,
+          "modified_at": 1790261998930678255,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/inputs.json",
+          "workspace_path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/inputs.json",
+          "name": "inputs.json",
+          "size": 179,
+          "modified_at": 1790261999076679196,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/inputs/genome/0_example_contigs.fasta",
+          "workspace_path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/inputs/genome/0_example_contigs.fasta",
+          "name": "0_example_contigs.fasta",
+          "size": 660,
+          "modified_at": 1790261999076679196,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/outputs/config.runtime.yaml",
+          "workspace_path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/outputs/config.runtime.yaml",
+          "name": "config.runtime.yaml",
+          "size": 4102,
+          "modified_at": 1790261999146679647,
+          "kind": "config",
+          "content_type": "text/yaml; charset=utf-8"
+        },
+        {
+          "path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/stderr.log",
+          "workspace_path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/stderr.log",
+          "name": "stderr.log",
+          "size": 927,
+          "modified_at": 1790261999263680401,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/job.json",
+          "workspace_path": "runs/b6904b2f7fd74bf1a4ac3f2f1f5bee33/job.json",
+          "name": "job.json",
+          "size": 7239,
+          "modified_at": 1790261999265680414,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/plan.json",
+          "workspace_path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/plan.json",
+          "name": "plan.json",
+          "size": 6238,
+          "modified_at": 1790262010779754673,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stdout.log",
+          "workspace_path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stdout.log",
+          "name": "stdout.log",
+          "size": 0,
+          "modified_at": 1790262073647162358,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/inputs.json",
+          "workspace_path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/inputs.json",
+          "name": "inputs.json",
+          "size": 179,
+          "modified_at": 1790262073832163562,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/inputs/genome/0_example_contigs.fasta",
+          "workspace_path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/inputs/genome/0_example_contigs.fasta",
+          "name": "0_example_contigs.fasta",
+          "size": 660,
+          "modified_at": 1790262073832163562,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/outputs/config.runtime.yaml",
+          "workspace_path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/outputs/config.runtime.yaml",
+          "name": "config.runtime.yaml",
+          "size": 4099,
+          "modified_at": 1790262073908164057,
+          "kind": "config",
+          "content_type": "text/yaml; charset=utf-8"
+        },
+        {
+          "path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stderr.log",
+          "workspace_path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/stderr.log",
+          "name": "stderr.log",
+          "size": 845,
+          "modified_at": 1790262074024164813,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/job.json",
+          "workspace_path": "runs/f8d96d89ae9c49bfb3c8a4abbc6fa648/job.json",
+          "name": "job.json",
+          "size": 7270,
+          "modified_at": 1790262074027164832,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        }
+      ],
+      "approval_decision": {
+        "approved": true,
+        "approval_id": "b7fb9643df91446584c18690a0943ffd",
+        "tool_name": "pipeline_shell",
+        "arguments": {
+          "commands": [
+            "agent-pipeline run --plan-id f8d96d89ae9c49bfb3c8a4abbc6fa648"
+          ],
+          "max_output_length": null,
+          "timeout_ms": 60000
+        },
+        "plan": {
+          "pipeline_name": "bacterial_genome_annotation",
+          "engine": "shell",
+          "inputs": {
+            "genome": [
+              {
+                "path": "uploads/examples/bacterial_genome_annotation-90a60018/example_contigs.fasta",
+                "sha256": "fd1a0a990dbd58e7251d154c749f5df5209c405f8d9303a259e5f10d42b585a2",
+                "size": 660
+              }
+            ]
+          },
+          "parameters": {
+            "annotator": "bakta",
+            "prefix": "example_annot",
+            "genus": "Example",
+            "species": "syntheticum",
+            "gram": "+",
+            "complete": false,
+            "rfam": false,
+            "cpus": 2
+          },
+          "cores": 1,
+          "timeout_seconds": 3600,
+          "max_memory_mb": 8192,
+          "dry_run": false,
+          "definition_sha256": "3bdf4870eec0e368220bb14a9d154d4c07ebc6c02e722456e5647d16b873a9b5",
+          "outputs": {
+            "report": {
+              "name": "report",
+              "label": "Annotation report",
+              "config_key": "report_path",
+              "default": "output/report.md",
+              "kind": "report",
+              "required": true,
+              "description": "Annotation report produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "metrics": {
+              "name": "metrics",
+              "label": "Annotation metrics",
+              "config_key": "metrics_path",
+              "default": "output/metrics.json",
+              "kind": "metrics",
+              "required": true,
+              "description": "Annotation metrics produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "gff": {
+              "name": "gff",
+              "label": "GFF3 annotation",
+              "config_key": "gff_path",
+              "default": "output/annotation.gff",
+              "kind": "annotation",
+              "required": true,
+              "description": "GFF3 annotation produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "genbank": {
+              "name": "genbank",
+              "label": "GenBank annotation",
+              "config_key": "gbk_path",
+              "default": "output/annotation.gbk",
+              "kind": "annotation",
+              "required": true,
+              "description": "GenBank annotation produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "proteins": {
+              "name": "proteins",
+              "label": "Protein sequences",
+              "config_key": "faa_path",
+              "default": "output/annotation.faa",
+              "kind": "sequence",
+              "required": true,
+              "description": "Protein sequences produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "genes": {
+              "name": "genes",
+              "label": "Gene nucleotide sequences",
+              "config_key": "ffn_path",
+              "default": "output/annotation.ffn",
+              "kind": "sequence",
+              "required": true,
+              "description": "Gene nucleotide sequences produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "contigs": {
+              "name": "contigs",
+              "label": "Annotated contigs",
+              "config_key": "fna_path",
+              "default": "output/annotation.fna",
+              "kind": "sequence",
+              "required": true,
+              "description": "Annotated contigs produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "features": {
+              "name": "features",
+              "label": "Feature table",
+              "config_key": "tsv_path",
+              "default": "output/annotation.tsv",
+              "kind": "table",
+              "required": true,
+              "description": "Feature table produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "summary": {
+              "name": "summary",
+              "label": "Annotation statistics",
+              "config_key": "summary_path",
+              "default": "output/annotation.txt",
+              "kind": "text",
+              "required": true,
+              "description": "Annotation statistics produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "log": {
+              "name": "log",
+              "label": "Annotation execution log",
+              "config_key": "log_path",
+              "default": "output/annotation.log",
+              "kind": "text",
+              "required": true,
+              "description": "Annotation execution log produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "bundle": {
+              "name": "bundle",
+              "label": "Complete raw annotation output",
+              "config_key": "bundle_path",
+              "default": "output/annotation_outputs.zip",
+              "kind": "archive",
+              "required": true,
+              "description": "Complete raw annotation output produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "bakta_json": {
+              "name": "bakta_json",
+              "label": "Bakta machine-readable annotation",
+              "config_key": "bakta_json_path",
+              "default": "output/annotation.json",
+              "kind": "metadata",
+              "required": false,
+              "description": "Bakta machine-readable annotation produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "inference": {
+              "name": "inference",
+              "label": "Bakta inference evidence",
+              "config_key": "inference_path",
+              "default": "output/annotation.inference.tsv",
+              "kind": "table",
+              "required": false,
+              "description": "Bakta inference evidence produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "hypotheticals": {
+              "name": "hypotheticals",
+              "label": "Bakta hypothetical proteins",
+              "config_key": "hypotheticals_path",
+              "default": "output/annotation.hypotheticals.tsv",
+              "kind": "table",
+              "required": false,
+              "description": "Bakta hypothetical proteins produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "plot_svg": {
+              "name": "plot_svg",
+              "label": "Bakta annotation plot (SVG)",
+              "config_key": "plot_svg_path",
+              "default": "output/annotation.svg",
+              "kind": "image",
+              "required": false,
+              "description": "Bakta annotation plot (SVG) produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "plot_png": {
+              "name": "plot_png",
+              "label": "Bakta annotation plot (PNG)",
+              "config_key": "plot_png_path",
+              "default": "output/annotation.png",
+              "kind": "image",
+              "required": false,
+              "description": "Bakta annotation plot (PNG) produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            }
+          }
+        }
+      },
+      "runtime": "agents_sdk",
+      "model_key": "deepseek/deepseek-v4-flash"
+    }
+  }
+}

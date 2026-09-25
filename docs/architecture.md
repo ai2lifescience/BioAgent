@@ -647,6 +647,7 @@ Important environment variables include:
 | OPENROUTER_API_KEY | model provider credential |
 | OPENROUTER_BASE_URL | OpenRouter-compatible API base URL |
 | AGENT_MODEL | model alias or provider model identifier |
+| EMBEDDING_MODEL | embedding model identifier; defaults to `nvidia/llama-nemotron-embed-vl-1b-v2:free`, with `openai/text-embedding-3-small` and `qwen/qwen3-embedding-8b` also supported |
 | AGENT_SESSION_DB | SDK SQLiteSession database |
 | AGENT_METADATA_DIR | application session metadata directory |
 | AGENT_SESSIONS_DIR | session workspace root |
@@ -659,8 +660,31 @@ Important environment variables include:
 | AGENT_WEBSITE_SECRET | website bridge HMAC secret |
 | AGENT_WEBSITE_DB | website bridge SQLite database |
 
+### Choosing an embedding model
+
+Set `EMBEDDING_MODEL` before starting BioAgent. The current default is
+`nvidia/llama-nemotron-embed-vl-1b-v2:free`; `openai/text-embedding-3-small`
+and `qwen/qwen3-embedding-8b` are also supported:
+
+```bash
+export EMBEDDING_MODEL=qwen/qwen3-embedding-8b
+python -B -m interfaces.web --host 127.0.0.1 --port 8000
+```
+
+You can set it for one launch without exporting it:
+
+```bash
+EMBEDDING_MODEL=openai/text-embedding-3-small \
+  python -B -m interfaces.web --host 127.0.0.1 --port 8000
+```
+
+Restart BioAgent after changing the variable. New knowledge collections and
+evidence indexes use the selected model. Existing collections and indexes keep
+the model recorded when they were created; create a new collection or rebuild
+an index to re-embed existing content.
+
 Model aliases and the default model are defined in models/config.py. The
-default model key is gpt-5.6-luna and the default maximum agent turns is five.
+default model key is gpt-5.6-luna and the default maximum agent turns is 20.
 Environment-specific secrets should be supplied outside source control.
 
 ## Testing and operational checks

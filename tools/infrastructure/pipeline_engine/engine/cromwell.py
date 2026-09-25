@@ -13,6 +13,11 @@ import requests
 
 from tools.infrastructure.pipeline_engine.engine.config import write_runtime_config
 from tools.infrastructure.pipeline_engine.engine.inputs import stringify_input_value
+from tools.infrastructure.pipeline_engine.engine.input_storage import (
+    S3InputUploader,
+    upload_local_file_values,
+    write_upload_manifest,
+)
 from tools.infrastructure.pipeline_engine.engine.outputs import finalize_output_records
 from tools.infrastructure.pipeline_engine.engine.paths import read_json, resolve_pipeline_file
 from tools.infrastructure.pipeline_engine.engine.types import PipelineContext
@@ -43,6 +48,21 @@ def run_cromwell_pipeline(
     options_path = write_wdl_options(context)
     outputs_json = context.run_dir / "wdl.outputs.json"
     metadata_json = context.run_dir / "wdl.metadata.json"
+    input_storage = S3InputUploader.from_environment()
+    uploaded_inputs: list[dict[str, Any]] = []
+    if input_storage is not None:
+        run_id = context.run_dir.parent.name
+        uploaded_inputs = upload_local_file_values(
+            inputs_path,
+            input_storage,
+            pipeline_name=context.pipeline_name,
+            run_id=run_id,
+        )
+        write_upload_manifest(
+            context.run_dir / "cromwell.input_uploads.json",
+            input_storage,
+            uploaded_inputs,
+        )
 
     base_url = cromwell_base_url(explicit_url=cromwell_url)
     api_version = str(context.runner_config.get("cromwell_api_version") or "v1").strip()
@@ -136,6 +156,11 @@ def run_cromwell_pipeline(
         "run_dir": str(context.run_dir),
         "output_dir": str(context.output_dir),
         "metadata_path": str(metadata_json),
+        "input_storage": {
+            "backend": input_storage.backend,
+            "base_uri": input_storage.base_uri,
+            "uploaded": uploaded_inputs,
+        } if input_storage is not None else None,
         "returncode": 0,
         "command": ["POST", f"{base_url}/api/workflows/{api_version}"],
         "stdout": f"Cromwell workflow {workflow_id} succeeded.",

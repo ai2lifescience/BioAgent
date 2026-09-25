@@ -1,0 +1,1885 @@
+{
+  "name": "wdl_cromwell_run_actual",
+  "prompt": "I approve plan f6b1daecedd14c4191ea41bdd74bb1e6. Submit it to remote Cromwell, wait for completion, and collect verified results.",
+  "session_id": "live-wdl-cromwell",
+  "run_id": "136bcd4353cf43ea8a3822ab16e3940b",
+  "result": {
+    "run_id": "136bcd4353cf43ea8a3822ab16e3940b",
+    "session_id": "live-wdl-cromwell",
+    "status": "succeeded",
+    "model_key": "deepseek/deepseek-v4-flash",
+    "max_turns": 20,
+    "created_at": "2026-09-24T15:10:18.576161+00:00",
+    "updated_at": "2026-09-24T15:11:56.435412+00:00",
+    "error": null,
+    "result": {
+      "answer": "Here's the exact result:\n\n---\n\n## Execution Report — Plan `f6b1daecedd14c4191ea41bdd74bb1e6`\n\n### What succeeded ✅\n\nThe job was **submitted** to the remote Cromwell backend at `http://192.168.164.39:39000` and Cromwell accepted it as workflow **`5ce660e7-085a-4723-ae2b-80744d8599f6`**. The miniwdl issue from the previous attempt was not encountered — this plan successfully bypassed local validation.\n\n### What failed ❌\n\nCromwell finished with status **Failed** due to a **file localization error**:\n\n```\nCould not localize runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz\n    runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz doesn't exist\n    File not found runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz\n```\n\n### Root cause 🔍\n\nThe pipeline shell staged the input file into a **local agent workspace path** (`runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_…`) and passed that path to the remote Cromwell server. The remote Cromwell at `http://192.168.164.39:39000` cannot access this local filesystem path — it's a **shared filesystem mismatch** between the agent workspace and the Cromwell executor.\n\n### Preserved evidence\n\n| Artifact | Path |\n|----------|------|\n| Cromwell workflow ID | `5ce660e7-085a-4723-ae2b-80744d8599f6` |\n| Stderr log | `runs/f6b1daecedd14c4191ea41bdd74bb1e6/stderr.log` |\n| Stdout log | `runs/f6b1daecedd14c4191ea41bdd74bb1e6/stdout.log` |\n\nTo resolve this, the Cromwell server would need access to the input file — either by:\n1. Making the session workspace path (`[internal path]`) visible to the Cromwell server via a shared filesystem mount at the same path, or\n2. Having the pipeline shell pre-stage inputs to a Cromwell-accessible path and pass that absolute path instead.",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "live-wdl-cromwell",
+      "max_turns": 20,
+      "messages": [
+        {
+          "role": "user",
+          "content": "I approve plan f6b1daecedd14c4191ea41bdd74bb1e6. Submit it to remote Cromwell, wait for completion, and collect verified results. If it fails, preserve the exact server or filesystem error."
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the exact result:\n\n---\n\n## Execution Report — Plan `f6b1daecedd14c4191ea41bdd74bb1e6`\n\n### What succeeded ✅\n\nThe job was **submitted** to the remote Cromwell backend at `http://192.168.164.39:39000` and Cromwell accepted it as workflow **`5ce660e7-085a-4723-ae2b-80744d8599f6`**. The miniwdl issue from the previous attempt was not encountered — this plan successfully bypassed local validation.\n\n### What failed ❌\n\nCromwell finished with status **Failed** due to a **file localization error**:\n\n```\nCould not localize runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz\n    runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz doesn't exist\n    File not found runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz\n```\n\n### Root cause 🔍\n\nThe pipeline shell staged the input file into a **local agent workspace path** (`runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_…`) and passed that path to the remote Cromwell server. The remote Cromwell at `http://192.168.164.39:39000` cannot access this local filesystem path — it's a **shared filesystem mismatch** between the agent workspace and the Cromwell executor.\n\n### Preserved evidence\n\n| Artifact | Path |\n|----------|------|\n| Cromwell workflow ID | `5ce660e7-085a-4723-ae2b-80744d8599f6` |\n| Stderr log | `runs/f6b1daecedd14c4191ea41bdd74bb1e6/stderr.log` |\n| Stdout log | `runs/f6b1daecedd14c4191ea41bdd74bb1e6/stdout.log` |\n\nTo resolve this, the Cromwell server would need access to the input file — either by:\n1. Making the session workspace path (`[internal path]`) visible to the Cromwell server via a shared filesystem mount at the same path, or\n2. Having the pipeline shell pre-stage inputs to a Cromwell-accessible path and pass that absolute path instead."
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-24",
+        "tools": [
+          "pipeline_shell",
+          "file_inspection"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [],
+        "outputs": [
+          {
+            "tool": "pipeline_shell",
+            "job_id": "f6b1daecedd14c4191ea41bdd74bb1e6",
+            "plan_id": "f6b1daecedd14c4191ea41bdd74bb1e6",
+            "status": "queued"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "f6b1daecedd14c4191ea41bdd74bb1e6",
+            "plan_id": "f6b1daecedd14c4191ea41bdd74bb1e6",
+            "logs": {
+              "stdout": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/stdout.log",
+              "stderr": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/stderr.log"
+            },
+            "status": "running",
+            "pipeline_name": "metagenomic_read_quality_control"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "f6b1daecedd14c4191ea41bdd74bb1e6",
+            "plan_id": "f6b1daecedd14c4191ea41bdd74bb1e6",
+            "logs": {
+              "stdout": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/stdout.log",
+              "stderr": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/stderr.log"
+            },
+            "status": "failed",
+            "error": "Cromwell workflow 5ce660e7-085a-4723-ae2b-80744d8599f6 finished with status Failed: Workflow failed | java.lang.Exception: Failed command instantiation | Failed command instantiation | Error(s) | :\nCould not localize runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz -> [internal path]:\n\truns/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz doesn't exist\n\tFile not found runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz\n\tFile not found [internal path] -> runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz\n\tFile not found runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz",
+            "pipeline_name": "metagenomic_read_quality_control"
+          },
+          {
+            "tool": "file_inspection",
+            "record_count": null,
+            "bytes": 0,
+            "status": "ok"
+          },
+          {
+            "tool": "file_inspection",
+            "record_count": null,
+            "bytes": 2218,
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "error",
+            "error": "Only agent-pipeline commands are supported."
+          },
+          {
+            "tool": "file_inspection",
+            "status": "error",
+            "error": "ValueError: No workspace file is available matching 'runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs'."
+          }
+        ],
+        "tool_outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "queued",
+            "job_id": "f6b1daecedd14c4191ea41bdd74bb1e6",
+            "plan_id": "f6b1daecedd14c4191ea41bdd74bb1e6"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "running",
+            "job_id": "f6b1daecedd14c4191ea41bdd74bb1e6",
+            "plan_id": "f6b1daecedd14c4191ea41bdd74bb1e6",
+            "logs": {
+              "stdout": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/stdout.log",
+              "stderr": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/stderr.log"
+            },
+            "pipeline_name": "metagenomic_read_quality_control"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "failed",
+            "error": "Cromwell workflow 5ce660e7-085a-4723-ae2b-80744d8599f6 finished with status Failed: Workflow failed | java.lang.Exception: Failed command instantiation | Failed command instantiation | Error(s) | :\nCould not localize runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz -> [internal path]:\n\truns/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz doesn't exist\n\tFile not found runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz\n\tFile not found [internal path] -> runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz\n\tFile not found runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz",
+            "job_id": "f6b1daecedd14c4191ea41bdd74bb1e6",
+            "plan_id": "f6b1daecedd14c4191ea41bdd74bb1e6",
+            "logs": {
+              "stdout": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/stdout.log",
+              "stderr": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/stderr.log"
+            },
+            "pipeline_name": "metagenomic_read_quality_control"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "error",
+            "error": "Only agent-pipeline commands are supported."
+          }
+        ],
+        "tool_errors": [
+          {
+            "tool": "pipeline_shell",
+            "error": "Only agent-pipeline commands are supported.",
+            "error_type": null
+          },
+          {
+            "tool": "file_inspection",
+            "error": "ValueError: No workspace file is available matching 'runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs'.",
+            "error_type": "ValueError"
+          }
+        ]
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-24T15:10:21.148757+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "run_started",
+          "data": {
+            "request": "I approve plan f6b1daecedd14c4191ea41bdd74bb1e6. Submit it to remote Cromwell, wait for completion, and collect verified results. If it fails, preserve the exact server or filesystem error.",
+            "model_key": "deepseek/deepseek-v4-flash"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:21.166158+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:21.182525+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_66d75cab24fe4cda93196417",
+            "parent_id": "span_ce3611ebcb564140b83cf1ac",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-24T15:10:21.178064+00:00",
+            "ended_at": "2026-09-24T15:10:21.182059+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:21.183997+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_39e1da252e6a4d04aad543fe",
+            "parent_id": "span_8b2e5efd48f14dd5a5ddd5f3",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:10:21.183457+00:00",
+            "ended_at": "2026-09-24T15:10:21.183557+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:21.184592+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_fbbc55cb4e034b9195764da2",
+            "parent_id": "span_8b2e5efd48f14dd5a5ddd5f3",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:10:21.184096+00:00",
+            "ended_at": "2026-09-24T15:10:21.184170+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:21.189120+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_6d456bd8d9b84da194c6436b",
+            "parent_id": "span_8b2e5efd48f14dd5a5ddd5f3",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:10:21.184953+00:00",
+            "ended_at": "2026-09-24T15:10:21.188668+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:21.192662+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_17c55c182eec4af68045b62c",
+            "parent_id": "span_8b2e5efd48f14dd5a5ddd5f3",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:10:21.189187+00:00",
+            "ended_at": "2026-09-24T15:10:21.192270+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:21.193689+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_8b2e5efd48f14dd5a5ddd5f3",
+            "parent_id": "span_ce3611ebcb564140b83cf1ac",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:10:21.182649+00:00",
+            "ended_at": "2026-09-24T15:10:21.193309+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:21.194816+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:21.236028+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:25.216874+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_75fce341390a4a438b384f2c",
+            "parent_id": "span_d2634a22bbec480fa258db3e",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:10:21.258971+00:00",
+            "ended_at": "2026-09-24T15:10:25.215594+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:25.242098+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 31133,
+            "output_tokens": 161
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:25.253025+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_5b559da6c8924ca08535853f",
+            "parent_id": "span_d2634a22bbec480fa258db3e",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:10:25.245301+00:00",
+            "ended_at": "2026-09-24T15:10:25.252326+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:25.254861+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_d2634a22bbec480fa258db3e",
+            "parent_id": "span_e3d1589f8e0a4832a300c71c",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:10:21.194208+00:00",
+            "ended_at": "2026-09-24T15:10:25.254157+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:25.284862+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_e3d1589f8e0a4832a300c71c",
+            "parent_id": "span_ce3611ebcb564140b83cf1ac",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-24T15:10:21.194112+00:00",
+            "ended_at": "2026-09-24T15:10:25.283966+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:25.285782+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_ce3611ebcb564140b83cf1ac",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-24T15:10:21.166240+00:00",
+            "ended_at": "2026-09-24T15:10:25.285030+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:25.286227+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:25.319737+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "run_paused",
+          "data": {
+            "reason": "tool_approval",
+            "tool_names": [
+              "pipeline_shell"
+            ]
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.700821+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "approval_decision",
+          "data": {
+            "approved": true,
+            "tool_name": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.728060+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.732066+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_1be95e33a4cc48a2b87b399a",
+            "parent_id": "span_ce7c61db83f44e88985a3ba0",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:10:26.731665+00:00",
+            "ended_at": "2026-09-24T15:10:26.731727+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.732512+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_bb1f75012fe6485e9483f7e4",
+            "parent_id": "span_ce7c61db83f44e88985a3ba0",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:10:26.732148+00:00",
+            "ended_at": "2026-09-24T15:10:26.732196+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.738051+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_30f24073677f4b229a66fa8a",
+            "parent_id": "span_ce7c61db83f44e88985a3ba0",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:10:26.732768+00:00",
+            "ended_at": "2026-09-24T15:10:26.736889+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.744219+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_137314ff9df147b4bd35583f",
+            "parent_id": "span_ce7c61db83f44e88985a3ba0",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:10:26.738225+00:00",
+            "ended_at": "2026-09-24T15:10:26.743184+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.746526+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_ce7c61db83f44e88985a3ba0",
+            "parent_id": "span_913e0dd0506141c09e7660b7",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:10:26.731111+00:00",
+            "ended_at": "2026-09-24T15:10:26.745538+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.756583+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.816519+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline run --plan-id f6b1daecedd14c4191ea41bdd74bb1e6",
+            "status": "queued"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.832697+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.833354+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_e604725e51db45f5a0fd6456",
+            "parent_id": "span_913e0dd0506141c09e7660b7",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:10:26.755518+00:00",
+            "ended_at": "2026-09-24T15:10:26.832771+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.840278+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_3104566714124f3cae19ae50",
+            "parent_id": "span_be6869257dde4047b2be8a29",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:10:26.839513+00:00",
+            "ended_at": "2026-09-24T15:10:26.839621+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.846434+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_591fd1af6e5a4287a7349a6b",
+            "parent_id": "span_be6869257dde4047b2be8a29",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:10:26.840771+00:00",
+            "ended_at": "2026-09-24T15:10:26.845213+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.852305+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_d625e7ab936941169a1dc91d",
+            "parent_id": "span_be6869257dde4047b2be8a29",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:10:26.846602+00:00",
+            "ended_at": "2026-09-24T15:10:26.851502+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.853224+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_be6869257dde4047b2be8a29",
+            "parent_id": "span_913e0dd0506141c09e7660b7",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:10:26.838729+00:00",
+            "ended_at": "2026-09-24T15:10:26.852381+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.856539+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:26.861458+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:29.830565+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_106a6902b8b749ea9105644e",
+            "parent_id": "span_2a3ef8ac87a44d4a858c8a14",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:10:26.862557+00:00",
+            "ended_at": "2026-09-24T15:10:29.829417+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:29.833287+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 31447,
+            "output_tokens": 120
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:29.838176+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:59.849052+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline wait --job-id f6b1daecedd14c4191ea41bdd74bb1e6 --seconds 30",
+            "status": "running"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:59.871109+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:59.871786+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_33d36cd434b647f786893a04",
+            "parent_id": "span_2a3ef8ac87a44d4a858c8a14",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:10:29.834525+00:00",
+            "ended_at": "2026-09-24T15:10:59.871222+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:59.873046+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_2a3ef8ac87a44d4a858c8a14",
+            "parent_id": "span_2fa50f6dd279485e88edba54",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:10:26.855079+00:00",
+            "ended_at": "2026-09-24T15:10:59.872443+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:59.916114+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_526aa0d1a64f4b0f98c935f5",
+            "parent_id": "span_90727bed28964aeebb61935f",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:10:59.915026+00:00",
+            "ended_at": "2026-09-24T15:10:59.915218+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:59.923265+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_98614a8f00e24ec2ba784c49",
+            "parent_id": "span_90727bed28964aeebb61935f",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:10:59.916789+00:00",
+            "ended_at": "2026-09-24T15:10:59.922083+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:59.929893+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_5b2c0fab669f48e2ad802d55",
+            "parent_id": "span_90727bed28964aeebb61935f",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:10:59.923432+00:00",
+            "ended_at": "2026-09-24T15:10:59.928866+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:59.930905+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_90727bed28964aeebb61935f",
+            "parent_id": "span_2fa50f6dd279485e88edba54",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:10:59.913846+00:00",
+            "ended_at": "2026-09-24T15:10:59.929988+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:10:59.937844+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:06.395959+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_ba4b0e9754cd464da77d9ca4",
+            "parent_id": "span_602b1751da814ae8b3cd3700",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:10:59.939627+00:00",
+            "ended_at": "2026-09-24T15:11:06.394711+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:06.399311+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 31854,
+            "output_tokens": 150
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:06.404136+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:27.461656+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline wait --job-id f6b1daecedd14c4191ea41bdd74bb1e6 --seconds 30",
+            "status": "failed"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:27.482692+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:27.483271+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_bad42be1c7af450991df4610",
+            "parent_id": "span_602b1751da814ae8b3cd3700",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:11:06.400682+00:00",
+            "ended_at": "2026-09-24T15:11:27.482797+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:27.484276+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_602b1751da814ae8b3cd3700",
+            "parent_id": "span_2fa50f6dd279485e88edba54",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:10:59.933092+00:00",
+            "ended_at": "2026-09-24T15:11:27.483828+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:27.516531+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_7de5db4c014a42fa88b86bfc",
+            "parent_id": "span_5e8a361199ed4b33bf845e05",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:11:27.515331+00:00",
+            "ended_at": "2026-09-24T15:11:27.515518+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:27.523575+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_47e0c6ba83c7453db594b077",
+            "parent_id": "span_5e8a361199ed4b33bf845e05",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:11:27.517343+00:00",
+            "ended_at": "2026-09-24T15:11:27.522549+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:27.529204+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_cadc822dae414238b1f81777",
+            "parent_id": "span_5e8a361199ed4b33bf845e05",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:11:27.523690+00:00",
+            "ended_at": "2026-09-24T15:11:27.528270+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:27.530135+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_5e8a361199ed4b33bf845e05",
+            "parent_id": "span_2fa50f6dd279485e88edba54",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:11:27.513996+00:00",
+            "ended_at": "2026-09-24T15:11:27.529288+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:27.535796+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:33.897647+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_3410f6bdfff44ed482d70a14",
+            "parent_id": "span_2cc1647019c740ebbc91ffa9",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:11:27.537030+00:00",
+            "ended_at": "2026-09-24T15:11:33.896881+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:33.900097+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 32644,
+            "output_tokens": 468
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:33.902226+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:33.902541+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:33.903471+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:33.905006+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:36.457511+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "tool_finished",
+          "data": {
+            "tool": "file_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:36.458624+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:36.459692+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_5236fc22d775428f8d8eb3d3",
+            "parent_id": "span_2cc1647019c740ebbc91ffa9",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-24T15:11:33.901556+00:00",
+            "ended_at": "2026-09-24T15:11:36.458782+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:36.512349+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "tool_finished",
+          "data": {
+            "tool": "file_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:36.513362+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:36.514391+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_6ea04d2e77484c90b3513c4a",
+            "parent_id": "span_2cc1647019c740ebbc91ffa9",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-24T15:11:33.901118+00:00",
+            "ended_at": "2026-09-24T15:11:36.513505+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:36.515996+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_2cc1647019c740ebbc91ffa9",
+            "parent_id": "span_2fa50f6dd279485e88edba54",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:11:27.532007+00:00",
+            "ended_at": "2026-09-24T15:11:36.515063+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:36.522334+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_a75a0050856049efb01926a5",
+            "parent_id": "span_405297781b6b412aa6039c46",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:11:36.521340+00:00",
+            "ended_at": "2026-09-24T15:11:36.521493+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:36.527941+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_86578089b2f741d5915aea81",
+            "parent_id": "span_405297781b6b412aa6039c46",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:11:36.522996+00:00",
+            "ended_at": "2026-09-24T15:11:36.527090+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:36.533230+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_c5b5152522474e3281cf91c0",
+            "parent_id": "span_405297781b6b412aa6039c46",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:11:36.528041+00:00",
+            "ended_at": "2026-09-24T15:11:36.532092+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:36.534264+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_405297781b6b412aa6039c46",
+            "parent_id": "span_2fa50f6dd279485e88edba54",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:11:36.520255+00:00",
+            "ended_at": "2026-09-24T15:11:36.533335+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:36.541277+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:40.343260+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_012fffacd2a04ac2b01e7c4d",
+            "parent_id": "span_b0c3012fede148d4a84c863c",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:11:36.542860+00:00",
+            "ended_at": "2026-09-24T15:11:40.342076+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:40.347564+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 33777,
+            "output_tokens": 136
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:40.350362+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:40.351463+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "ls -la runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/",
+            "status": "error"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:40.365858+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:40.366318+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_743be05b9e904451b5e9bf1a",
+            "parent_id": "span_b0c3012fede148d4a84c863c",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:11:40.349139+00:00",
+            "ended_at": "2026-09-24T15:11:40.365915+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:40.367203+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_b0c3012fede148d4a84c863c",
+            "parent_id": "span_2fa50f6dd279485e88edba54",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:11:36.536423+00:00",
+            "ended_at": "2026-09-24T15:11:40.366766+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:40.373929+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_a1e9dafdbebd47569330a815",
+            "parent_id": "span_889db211ec4143138835f73e",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:11:40.372630+00:00",
+            "ended_at": "2026-09-24T15:11:40.372838+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:40.380232+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_9e1b390ed67a47c78b503b29",
+            "parent_id": "span_889db211ec4143138835f73e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:11:40.374761+00:00",
+            "ended_at": "2026-09-24T15:11:40.379750+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:40.384952+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_2c9447d962884ee2b800fedb",
+            "parent_id": "span_889db211ec4143138835f73e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:11:40.380314+00:00",
+            "ended_at": "2026-09-24T15:11:40.384420+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:40.385492+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_889db211ec4143138835f73e",
+            "parent_id": "span_2fa50f6dd279485e88edba54",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:11:40.371263+00:00",
+            "ended_at": "2026-09-24T15:11:40.385013+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:40.389398+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:42.743439+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_1375fe547fb24c53a9621adc",
+            "parent_id": "span_cbc8ead4e10d4ad2bc1ecb5b",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:11:40.390315+00:00",
+            "ended_at": "2026-09-24T15:11:42.742296+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:42.748418+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 33981,
+            "output_tokens": 109
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:42.751417+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:42.752524+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:45.272441+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "tool_failed",
+          "data": {
+            "tool": "file_inspection",
+            "error_type": "ValueError"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:45.273638+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:45.274678+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_c9f738d3b4fb4a92b9b0b566",
+            "parent_id": "span_cbc8ead4e10d4ad2bc1ecb5b",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-24T15:11:42.750232+00:00",
+            "ended_at": "2026-09-24T15:11:45.273784+00:00",
+            "has_error": true
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:45.276195+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_cbc8ead4e10d4ad2bc1ecb5b",
+            "parent_id": "span_2fa50f6dd279485e88edba54",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:11:40.386679+00:00",
+            "ended_at": "2026-09-24T15:11:45.275261+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:45.282507+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_fe153cc3149c495ba930fef9",
+            "parent_id": "span_ec4dfb44d09049829cb199ed",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:11:45.281555+00:00",
+            "ended_at": "2026-09-24T15:11:45.281702+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:45.288180+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_ff43cc03e2dc4cd28c474a74",
+            "parent_id": "span_ec4dfb44d09049829cb199ed",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:11:45.283160+00:00",
+            "ended_at": "2026-09-24T15:11:45.287370+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:45.292860+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_5480ab8688044f4e956bdeee",
+            "parent_id": "span_ec4dfb44d09049829cb199ed",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:11:45.288272+00:00",
+            "ended_at": "2026-09-24T15:11:45.291749+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:45.293888+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_ec4dfb44d09049829cb199ed",
+            "parent_id": "span_2fa50f6dd279485e88edba54",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:11:45.280531+00:00",
+            "ended_at": "2026-09-24T15:11:45.292959+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:45.301441+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:56.268017+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_8b5b52999a5345b5a061673d",
+            "parent_id": "span_542fd2ace4aa408688029bde",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:11:45.302998+00:00",
+            "ended_at": "2026-09-24T15:11:56.266788+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:56.272415+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 34164,
+            "output_tokens": 903
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:56.275097+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:56.276384+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_542fd2ace4aa408688029bde",
+            "parent_id": "span_2fa50f6dd279485e88edba54",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:11:45.296082+00:00",
+            "ended_at": "2026-09-24T15:11:56.275443+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:56.277516+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:56.278151+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_1300f1b47ea240ab80ab8011",
+            "parent_id": "span_2fa50f6dd279485e88edba54",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-24T15:11:56.276722+00:00",
+            "ended_at": "2026-09-24T15:11:56.277540+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:56.291439+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_04244f7cdbec49eaa8e02847",
+            "parent_id": "span_f72867523f164fb38357bfb1",
+            "span_type": "custom",
+            "name": "sandbox.cleanup_sessions",
+            "model": null,
+            "started_at": "2026-09-24T15:11:56.289603+00:00",
+            "ended_at": "2026-09-24T15:11:56.290371+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:56.292379+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_f72867523f164fb38357bfb1",
+            "parent_id": "span_2fa50f6dd279485e88edba54",
+            "span_type": "custom",
+            "name": "sandbox.cleanup",
+            "model": null,
+            "started_at": "2026-09-24T15:11:56.289525+00:00",
+            "ended_at": "2026-09-24T15:11:56.291478+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:56.293307+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_2fa50f6dd279485e88edba54",
+            "parent_id": "span_913e0dd0506141c09e7660b7",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-24T15:10:26.854085+00:00",
+            "ended_at": "2026-09-24T15:11:56.292416+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:56.294321+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7",
+            "span_id": "span_913e0dd0506141c09e7660b7",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-24T15:10:26.728255+00:00",
+            "ended_at": "2026-09-24T15:11:56.293444+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:56.294785+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_c4a418d1633f4279bd4ad862469a71e7"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:11:56.348031+00:00",
+          "session_id": "live-wdl-cromwell",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 7
+          }
+        }
+      ],
+      "run": {
+        "run_id": "55900a57-8d9d-4fa8-a2a7-6c8c8fc30091",
+        "session_dir": ".",
+        "runtime_dir": "runs/55900a57-8d9d-4fa8-a2a7-6c8c8fc30091",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "uploads/2d7023156575_qc_demo.fq.gz",
+          "workspace_path": "uploads/2d7023156575_qc_demo.fq.gz",
+          "name": "2d7023156575_qc_demo.fq.gz",
+          "size": 240118,
+          "modified_at": 1790262148119649708,
+          "kind": "upload",
+          "content_type": "application/gzip"
+        },
+        {
+          "path": "runs/1bbdac4e3c9c41a988e52af672df7227/plan.json",
+          "workspace_path": "runs/1bbdac4e3c9c41a988e52af672df7227/plan.json",
+          "name": "plan.json",
+          "size": 2056,
+          "modified_at": 1790262192984945337,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/1bbdac4e3c9c41a988e52af672df7227/stdout.log",
+          "workspace_path": "runs/1bbdac4e3c9c41a988e52af672df7227/stdout.log",
+          "name": "stdout.log",
+          "size": 0,
+          "modified_at": 1790262255763361284,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/1bbdac4e3c9c41a988e52af672df7227/inputs.json",
+          "workspace_path": "runs/1bbdac4e3c9c41a988e52af672df7227/inputs.json",
+          "name": "inputs.json",
+          "size": 167,
+          "modified_at": 1790262255869361988,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/1bbdac4e3c9c41a988e52af672df7227/inputs/read1/0_2d7023156575_qc_demo.fq.gz",
+          "workspace_path": "runs/1bbdac4e3c9c41a988e52af672df7227/inputs/read1/0_2d7023156575_qc_demo.fq.gz",
+          "name": "0_2d7023156575_qc_demo.fq.gz",
+          "size": 240118,
+          "modified_at": 1790262255869361988,
+          "kind": "compressed",
+          "content_type": "application/gzip"
+        },
+        {
+          "path": "runs/1bbdac4e3c9c41a988e52af672df7227/outputs/config.runtime.yaml",
+          "workspace_path": "runs/1bbdac4e3c9c41a988e52af672df7227/outputs/config.runtime.yaml",
+          "name": "config.runtime.yaml",
+          "size": 1749,
+          "modified_at": 1790262255909362254,
+          "kind": "config",
+          "content_type": "text/yaml; charset=utf-8"
+        },
+        {
+          "path": "runs/1bbdac4e3c9c41a988e52af672df7227/outputs/inputs.runtime.json",
+          "workspace_path": "runs/1bbdac4e3c9c41a988e52af672df7227/outputs/inputs.runtime.json",
+          "name": "inputs.runtime.json",
+          "size": 935,
+          "modified_at": 1790262255910362261,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/1bbdac4e3c9c41a988e52af672df7227/outputs/options.runtime.json",
+          "workspace_path": "runs/1bbdac4e3c9c41a988e52af672df7227/outputs/options.runtime.json",
+          "name": "options.runtime.json",
+          "size": 345,
+          "modified_at": 1790262255911362268,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/1bbdac4e3c9c41a988e52af672df7227/stderr.log",
+          "workspace_path": "runs/1bbdac4e3c9c41a988e52af672df7227/stderr.log",
+          "name": "stderr.log",
+          "size": 936,
+          "modified_at": 1790262255917362307,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/1bbdac4e3c9c41a988e52af672df7227/job.json",
+          "workspace_path": "runs/1bbdac4e3c9c41a988e52af672df7227/job.json",
+          "name": "job.json",
+          "size": 2734,
+          "modified_at": 1790262255919362321,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/plan.json",
+          "workspace_path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/plan.json",
+          "name": "plan.json",
+          "size": 2057,
+          "modified_at": 1790262577497525121,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/stdout.log",
+          "workspace_path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/stdout.log",
+          "name": "stdout.log",
+          "size": 0,
+          "modified_at": 1790262626781860154,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz",
+          "workspace_path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs/read1/0_2d7023156575_qc_demo.fq.gz",
+          "name": "0_2d7023156575_qc_demo.fq.gz",
+          "size": 240118,
+          "modified_at": 1790262626934861196,
+          "kind": "compressed",
+          "content_type": "application/gzip"
+        },
+        {
+          "path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs.json",
+          "workspace_path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/inputs.json",
+          "name": "inputs.json",
+          "size": 167,
+          "modified_at": 1790262626936861209,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/outputs/config.runtime.yaml",
+          "workspace_path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/outputs/config.runtime.yaml",
+          "name": "config.runtime.yaml",
+          "size": 1749,
+          "modified_at": 1790262627076862162,
+          "kind": "config",
+          "content_type": "text/yaml; charset=utf-8"
+        },
+        {
+          "path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/outputs/inputs.runtime.json",
+          "workspace_path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/outputs/inputs.runtime.json",
+          "name": "inputs.runtime.json",
+          "size": 935,
+          "modified_at": 1790262627076862162,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/outputs/options.runtime.json",
+          "workspace_path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/outputs/options.runtime.json",
+          "name": "options.runtime.json",
+          "size": 345,
+          "modified_at": 1790262627077862169,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/outputs/cromwell.submission.json",
+          "workspace_path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/outputs/cromwell.submission.json",
+          "name": "cromwell.submission.json",
+          "size": 76,
+          "modified_at": 1790262627156862707,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/outputs/wdl.metadata.json",
+          "workspace_path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/outputs/wdl.metadata.json",
+          "name": "wdl.metadata.json",
+          "size": 18587,
+          "modified_at": 1790262687338272782,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/stderr.log",
+          "workspace_path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/stderr.log",
+          "name": "stderr.log",
+          "size": 2218,
+          "modified_at": 1790262687341272802,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/job.json",
+          "workspace_path": "runs/f6b1daecedd14c4191ea41bdd74bb1e6/job.json",
+          "name": "job.json",
+          "size": 4050,
+          "modified_at": 1790262687343272816,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        }
+      ],
+      "approval_decision": {
+        "approved": true,
+        "approval_id": "4f49afc9466c4897bfa85384f8531c62",
+        "tool_name": "pipeline_shell",
+        "arguments": {
+          "commands": [
+            "agent-pipeline run --plan-id f6b1daecedd14c4191ea41bdd74bb1e6"
+          ],
+          "max_output_length": null,
+          "timeout_ms": 30000
+        },
+        "plan": {
+          "pipeline_name": "metagenomic_read_quality_control",
+          "engine": "wdl",
+          "inputs": {
+            "read1": [
+              {
+                "path": "uploads/2d7023156575_qc_demo.fq.gz",
+                "sha256": "9101bef1192734f4c50d2908a91b18762432f7f1d789a007e13644b2bccde82c",
+                "size": 240118
+              }
+            ]
+          },
+          "parameters": {
+            "sample_id": "qc_demo"
+          },
+          "cores": 1,
+          "timeout_seconds": 86400,
+          "max_memory_mb": 8192,
+          "dry_run": false,
+          "definition_sha256": "d1ec0a99cc634b5b1c09b4346ad0852e2583e1bfa5685f63963b802865b9e818",
+          "outputs": {
+            "clean_r1": {
+              "name": "clean_r1",
+              "label": "Host-filtered read 1",
+              "config_key": "",
+              "default": "data/output/clean.R1.fq",
+              "kind": "sequence",
+              "required": true,
+              "description": "Host-filtered read 1 produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": "MetagenomicQc.clean_r1"
+            },
+            "clean_r2": {
+              "name": "clean_r2",
+              "label": "Host-filtered read 2",
+              "config_key": "",
+              "default": "data/output/clean.R2.fq",
+              "kind": "sequence",
+              "required": false,
+              "description": "Host-filtered read 2 produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": "MetagenomicQc.clean_r2"
+            },
+            "qc_counts": {
+              "name": "qc_counts",
+              "label": "QC read counts",
+              "config_key": "",
+              "default": "data/output/qc_counts.tsv",
+              "kind": "table",
+              "required": true,
+              "description": "QC read counts produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": "MetagenomicQc.qc_counts"
+            },
+            "phase1_metrics": {
+              "name": "phase1_metrics",
+              "label": "Phase 1 read overview",
+              "config_key": "",
+              "default": "data/output/phase1_read_overview.tsv",
+              "kind": "table",
+              "required": true,
+              "description": "Phase 1 read overview produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": "MetagenomicQc.phase1_metrics"
+            }
+          },
+          "wdl_engine": "cromwell",
+          "cromwell_url": "http://192.168.164.39:39000"
+        }
+      },
+      "runtime": "agents_sdk",
+      "model_key": "deepseek/deepseek-v4-flash"
+    }
+  }
+}

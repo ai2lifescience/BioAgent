@@ -1,0 +1,3012 @@
+{
+  "name": "pipeline_template_success",
+  "prompt": "Run the template_shell example with its bundled example data, wait for completion, and summarize its assignments and metrics. Use pipeline_shell and complete the approval flow.",
+  "session_id": "live-pipeline-template",
+  "run_id": "701935701b2e4dd985793b72b4bd0ac7",
+  "elapsed_seconds": 135.95,
+  "result": {
+    "run_id": "701935701b2e4dd985793b72b4bd0ac7",
+    "session_id": "live-pipeline-template",
+    "status": "succeeded",
+    "model_key": "deepseek/deepseek-v4-flash",
+    "max_turns": 20,
+    "created_at": "2026-09-24T15:31:41.820056+00:00",
+    "updated_at": "2026-09-24T15:33:55.730476+00:00",
+    "error": null,
+    "result": {
+      "answer": "The **template_shell** pipeline ran and completed successfully. Here's what it did:\n\n---\n\n## Pipeline overview — Shell metadata assignment template\n\nThe pipeline joined sequence IDs from the example reads with metadata categories, producing 4 outputs.\n\n### Assignment — Subtype assignments\n\nEach read was matched to its metadata subtype:\n\n| Sequence | Subtype |\n|----------|---------|\n| `read_001` | alpha |\n| `read_002` | beta |\n| `read_003` | gamma |\n\nNo reads were left unassigned.\n\n### Normalized text\n\nThe three reads were concatenated on a single line (whitespace normalization, no uppercasing), preserving the original 161 characters.\n\n### Metrics\n\n| Metric | Value |\n|---|---|\n| `line_count` | 3 |\n| `word_count` | 15 |\n| `char_count` | 161 |\n| `sequence_count` | 3 |\n| `assigned_subtype_count` | 3 |\n| `unassigned_subtype_count` | 0 |\n\n### Output files\n\n- **Report** — `runs/fe02735e1ab44d699e1276982a2c0df9/outputs/report.md`\n- **Metrics** — `runs/fe02735e1ab44d699e1276982a2c0df9/outputs/metrics.json`\n- **Normalized text** — `runs/fe02735e1ab44d699e1276982a2c0df9/outputs/normalized.txt`\n- **Subtype assignments** — `runs/fe02735e1ab44d699e1276982a2c0df9/outputs/subtypes.tsv`\n- **Bundle** — `runs/fe02735e1ab44d699e1276982a2c0df9/results.zip`\n\nThe pipeline completed in ~1 second, with all 3 example reads successfully classified into their respective subtypes (alpha, beta, gamma) with zero errors.",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "live-pipeline-template",
+      "max_turns": 20,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Run the template_shell example with its bundled example data, wait for completion, and summarize its assignments and metrics. Use pipeline_shell and complete the approval flow."
+        },
+        {
+          "role": "assistant",
+          "content": "The **template_shell** pipeline ran and completed successfully. Here's what it did:\n\n---\n\n## Pipeline overview — Shell metadata assignment template\n\nThe pipeline joined sequence IDs from the example reads with metadata categories, producing 4 outputs.\n\n### Assignment — Subtype assignments\n\nEach read was matched to its metadata subtype:\n\n| Sequence | Subtype |\n|----------|---------|\n| `read_001` | alpha |\n| `read_002` | beta |\n| `read_003` | gamma |\n\nNo reads were left unassigned.\n\n### Normalized text\n\nThe three reads were concatenated on a single line (whitespace normalization, no uppercasing), preserving the original 161 characters.\n\n### Metrics\n\n| Metric | Value |\n|---|---|\n| `line_count` | 3 |\n| `word_count` | 15 |\n| `char_count` | 161 |\n| `sequence_count` | 3 |\n| `assigned_subtype_count` | 3 |\n| `unassigned_subtype_count` | 0 |\n\n### Output files\n\n- **Report** — `runs/fe02735e1ab44d699e1276982a2c0df9/outputs/report.md`\n- **Metrics** — `runs/fe02735e1ab44d699e1276982a2c0df9/outputs/metrics.json`\n- **Normalized text** — `runs/fe02735e1ab44d699e1276982a2c0df9/outputs/normalized.txt`\n- **Subtype assignments** — `runs/fe02735e1ab44d699e1276982a2c0df9/outputs/subtypes.tsv`\n- **Bundle** — `runs/fe02735e1ab44d699e1276982a2c0df9/results.zip`\n\nThe pipeline completed in ~1 second, with all 3 example reads successfully classified into their respective subtypes (alpha, beta, gamma) with zero errors."
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-24",
+        "tools": [
+          "pipeline_shell",
+          "file_inspection"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [
+          "uploads/examples/template_shell-7c3abda2/example_metadata.tsv",
+          "uploads/examples/template_shell-7c3abda2/example_reads.txt",
+          "report.md",
+          "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/report.md",
+          "metrics.json",
+          "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/metrics.json",
+          "normalized.txt",
+          "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/normalized.txt",
+          "subtypes.tsv",
+          "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/subtypes.tsv",
+          "runs/fe02735e1ab44d699e1276982a2c0df9/results.zip"
+        ],
+        "outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok",
+            "pipeline_name": "template_shell"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "error",
+            "error": "unrecognized arguments: --pipeline template_shell"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "file_inspection",
+            "record_count": null,
+            "bytes": 64,
+            "status": "ok"
+          },
+          {
+            "tool": "file_inspection",
+            "record_count": null,
+            "bytes": 161,
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "fe02735e1ab44d699e1276982a2c0df9",
+            "plan_id": "fe02735e1ab44d699e1276982a2c0df9",
+            "status": "planned",
+            "command": "agent-pipeline run --plan-id fe02735e1ab44d699e1276982a2c0df9"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "fe02735e1ab44d699e1276982a2c0df9",
+            "plan_id": "fe02735e1ab44d699e1276982a2c0df9",
+            "status": "queued"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "fe02735e1ab44d699e1276982a2c0df9",
+            "plan_id": "fe02735e1ab44d699e1276982a2c0df9",
+            "logs": {
+              "stdout": "runs/fe02735e1ab44d699e1276982a2c0df9/stdout.log",
+              "stderr": "runs/fe02735e1ab44d699e1276982a2c0df9/stderr.log"
+            },
+            "status": "succeeded",
+            "pipeline_name": "template_shell"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "fe02735e1ab44d699e1276982a2c0df9",
+            "bundle_path": "runs/fe02735e1ab44d699e1276982a2c0df9/results.zip",
+            "metrics": {
+              "status": "ok",
+              "pipeline": "shell",
+              "label": "template_shell",
+              "normalize_mode": "whitespace",
+              "uppercase": false,
+              "line_count": 3,
+              "word_count": 15,
+              "char_count": 161,
+              "sequence_count": 3,
+              "assigned_subtype_count": 3,
+              "unassigned_subtype_count": 0
+            },
+            "tables": [
+              {
+                "name": "subtypes.tsv",
+                "columns": [
+                  "sequence_id",
+                  "subtype"
+                ],
+                "rows": [
+                  {
+                    "sequence_id": "read_001",
+                    "subtype": "alpha"
+                  },
+                  {
+                    "sequence_id": "read_002",
+                    "subtype": "beta"
+                  },
+                  {
+                    "sequence_id": "read_003",
+                    "subtype": "gamma"
+                  }
+                ],
+                "truncated": false
+              }
+            ],
+            "status": "succeeded",
+            "pipeline_name": "template_shell"
+          },
+          {
+            "tool": "file_inspection",
+            "record_count": null,
+            "bytes": 64,
+            "status": "ok"
+          },
+          {
+            "tool": "file_inspection",
+            "record_count": null,
+            "bytes": 161,
+            "status": "ok"
+          },
+          {
+            "tool": "file_inspection",
+            "record_count": null,
+            "bytes": 983,
+            "status": "ok"
+          }
+        ],
+        "tool_outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok",
+            "pipeline_name": "template_shell"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "error",
+            "error": "unrecognized arguments: --pipeline template_shell"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "planned",
+            "job_id": "fe02735e1ab44d699e1276982a2c0df9",
+            "plan_id": "fe02735e1ab44d699e1276982a2c0df9",
+            "command": "agent-pipeline run --plan-id fe02735e1ab44d699e1276982a2c0df9"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "queued",
+            "job_id": "fe02735e1ab44d699e1276982a2c0df9",
+            "plan_id": "fe02735e1ab44d699e1276982a2c0df9"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "succeeded",
+            "job_id": "fe02735e1ab44d699e1276982a2c0df9",
+            "plan_id": "fe02735e1ab44d699e1276982a2c0df9",
+            "logs": {
+              "stdout": "runs/fe02735e1ab44d699e1276982a2c0df9/stdout.log",
+              "stderr": "runs/fe02735e1ab44d699e1276982a2c0df9/stderr.log"
+            },
+            "pipeline_name": "template_shell"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "succeeded",
+            "job_id": "fe02735e1ab44d699e1276982a2c0df9",
+            "bundle_path": "runs/fe02735e1ab44d699e1276982a2c0df9/results.zip",
+            "metrics": {
+              "status": "ok",
+              "pipeline": "shell",
+              "label": "template_shell",
+              "normalize_mode": "whitespace",
+              "uppercase": false,
+              "line_count": 3,
+              "word_count": 15,
+              "char_count": 161,
+              "sequence_count": 3,
+              "assigned_subtype_count": 3,
+              "unassigned_subtype_count": 0
+            },
+            "tables": [
+              {
+                "name": "subtypes.tsv",
+                "columns": [
+                  "sequence_id",
+                  "subtype"
+                ],
+                "rows": [
+                  {
+                    "sequence_id": "read_001",
+                    "subtype": "alpha"
+                  },
+                  {
+                    "sequence_id": "read_002",
+                    "subtype": "beta"
+                  },
+                  {
+                    "sequence_id": "read_003",
+                    "subtype": "gamma"
+                  }
+                ],
+                "truncated": false
+              }
+            ],
+            "pipeline_name": "template_shell"
+          }
+        ],
+        "tool_errors": [
+          {
+            "tool": "pipeline_shell",
+            "error": "unrecognized arguments: --pipeline template_shell",
+            "error_type": null
+          }
+        ]
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-24T15:31:44.328552+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "run_started",
+          "data": {
+            "request": "Run the template_shell example with its bundled example data, wait for completion, and summarize its assignments and metrics. Use pipeline_shell and complete the approval flow.",
+            "model_key": "deepseek/deepseek-v4-flash"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:44.364182+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:44.390222+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_1ce60de85a3b4a1b8865490a",
+            "parent_id": "span_6e6866f5958a402ba8dc826e",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-24T15:31:44.389077+00:00",
+            "ended_at": "2026-09-24T15:31:44.389208+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:44.393232+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_8233de6b168549a6a790d328",
+            "parent_id": "span_038b82c219554d408012faeb",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:31:44.391984+00:00",
+            "ended_at": "2026-09-24T15:31:44.392179+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:44.394552+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_a9990e4061eb4ddf82188c61",
+            "parent_id": "span_038b82c219554d408012faeb",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:31:44.393432+00:00",
+            "ended_at": "2026-09-24T15:31:44.393573+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:44.401660+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_eddd09794a3f402b9228a51d",
+            "parent_id": "span_038b82c219554d408012faeb",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:31:44.395352+00:00",
+            "ended_at": "2026-09-24T15:31:44.400513+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:44.407496+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_50c2859ebb9947838b0b076a",
+            "parent_id": "span_038b82c219554d408012faeb",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:31:44.401814+00:00",
+            "ended_at": "2026-09-24T15:31:44.406425+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:44.410225+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_038b82c219554d408012faeb",
+            "parent_id": "span_6e6866f5958a402ba8dc826e",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:31:44.390411+00:00",
+            "ended_at": "2026-09-24T15:31:44.409155+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:44.412239+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:44.465590+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:51.823069+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_366738228c7d461e8382c3b7",
+            "parent_id": "span_4cf4bcc8a8cb4c2bba9e43bd",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:31:44.472157+00:00",
+            "ended_at": "2026-09-24T15:31:51.821923+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:51.870966+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 16122,
+            "output_tokens": 141
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:51.878316+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:51.962351+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline example --pipeline template_shell",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:51.967032+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:51.968163+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_001f215c7fe8496399574ac8",
+            "parent_id": "span_4cf4bcc8a8cb4c2bba9e43bd",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:31:51.873551+00:00",
+            "ended_at": "2026-09-24T15:31:51.967172+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:51.970111+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_4cf4bcc8a8cb4c2bba9e43bd",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:31:44.411501+00:00",
+            "ended_at": "2026-09-24T15:31:51.969080+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:51.990004+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_0e7898a08dc7405aba5d5790",
+            "parent_id": "span_9b39b9f44bb5425bbcb7e4be",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:31:51.988695+00:00",
+            "ended_at": "2026-09-24T15:31:51.988930+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:51.997479+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_50594bd6e7da467ba39740f4",
+            "parent_id": "span_9b39b9f44bb5425bbcb7e4be",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:31:51.990826+00:00",
+            "ended_at": "2026-09-24T15:31:51.996259+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:52.003970+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_a805026829e34db4a9c4b161",
+            "parent_id": "span_9b39b9f44bb5425bbcb7e4be",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:31:51.997641+00:00",
+            "ended_at": "2026-09-24T15:31:52.002864+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:52.005098+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_9b39b9f44bb5425bbcb7e4be",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:31:51.987371+00:00",
+            "ended_at": "2026-09-24T15:31:52.004173+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:52.008643+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:56.097977+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_c254e6d0c05944b19a8a85d9",
+            "parent_id": "span_d29a4304a9e749e5bab18962",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:31:52.009644+00:00",
+            "ended_at": "2026-09-24T15:31:56.096889+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:56.114652+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 16398,
+            "output_tokens": 116
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:56.120755+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:56.299857+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline catalog",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:56.301836+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:56.302255+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_bedeb618fd5d4dfa9ee0c0ae",
+            "parent_id": "span_d29a4304a9e749e5bab18962",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:31:56.116890+00:00",
+            "ended_at": "2026-09-24T15:31:56.301883+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:56.302939+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_d29a4304a9e749e5bab18962",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:31:52.006216+00:00",
+            "ended_at": "2026-09-24T15:31:56.302563+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:56.316412+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_af6279c45d9e48b0a1b3351d",
+            "parent_id": "span_12276facfc1a48acab31211a",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:31:56.315974+00:00",
+            "ended_at": "2026-09-24T15:31:56.316045+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:56.320210+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_2140c091cd4e42478f31740c",
+            "parent_id": "span_12276facfc1a48acab31211a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:31:56.316684+00:00",
+            "ended_at": "2026-09-24T15:31:56.319733+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:56.323891+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_49f3ed59d29e45a181ddef64",
+            "parent_id": "span_12276facfc1a48acab31211a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:31:56.320266+00:00",
+            "ended_at": "2026-09-24T15:31:56.323418+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:56.324397+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_12276facfc1a48acab31211a",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:31:56.315538+00:00",
+            "ended_at": "2026-09-24T15:31:56.323934+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:31:56.325963+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:00.918583+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_924b8cc8c44241a59e50b369",
+            "parent_id": "span_69c815f2b1d2477298cff39d",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:31:56.326454+00:00",
+            "ended_at": "2026-09-24T15:32:00.917491+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:00.936046+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 18691,
+            "output_tokens": 112
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:00.941612+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:01.118305+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline catalog",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:01.120541+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:01.120870+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_17687765bd264bb8bcf31742",
+            "parent_id": "span_69c815f2b1d2477298cff39d",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:32:00.937974+00:00",
+            "ended_at": "2026-09-24T15:32:01.120579+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:01.121466+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_69c815f2b1d2477298cff39d",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:31:56.324875+00:00",
+            "ended_at": "2026-09-24T15:32:01.121118+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:01.165953+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_adb4fe0b84a24b16b0c2ebb0",
+            "parent_id": "span_77572ab665284f459e89ad05",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:32:01.164724+00:00",
+            "ended_at": "2026-09-24T15:32:01.164896+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:01.172392+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_09f479c52e3a4bf4a615f49c",
+            "parent_id": "span_77572ab665284f459e89ad05",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:32:01.166747+00:00",
+            "ended_at": "2026-09-24T15:32:01.171325+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:01.177684+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_0900fd3bf8424f269d94c335",
+            "parent_id": "span_77572ab665284f459e89ad05",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:32:01.172511+00:00",
+            "ended_at": "2026-09-24T15:32:01.176629+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:01.178723+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_77572ab665284f459e89ad05",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:32:01.163519+00:00",
+            "ended_at": "2026-09-24T15:32:01.177762+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:01.181784+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:08.722161+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_b8e7ff9efa1843f993f6b495",
+            "parent_id": "span_8a3486110dfd4ecaa1c0789f",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:32:01.182769+00:00",
+            "ended_at": "2026-09-24T15:32:08.721062+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:08.738300+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 23104,
+            "output_tokens": 116
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:08.743987+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:08.747968+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline catalog --pipeline template_shell",
+            "status": "error"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:08.752253+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:08.753206+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_58d3392ca5cf40738ede3d95",
+            "parent_id": "span_8a3486110dfd4ecaa1c0789f",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:32:08.740287+00:00",
+            "ended_at": "2026-09-24T15:32:08.752366+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:08.754339+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_8a3486110dfd4ecaa1c0789f",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:32:01.179716+00:00",
+            "ended_at": "2026-09-24T15:32:08.753687+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:08.769485+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_c5158b5dea7841d8bce42c18",
+            "parent_id": "span_0f33f3a18e034b09ae5688d2",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:32:08.768830+00:00",
+            "ended_at": "2026-09-24T15:32:08.768934+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:08.774237+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_89323aadc2ee4942a41dd9f7",
+            "parent_id": "span_0f33f3a18e034b09ae5688d2",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:32:08.769891+00:00",
+            "ended_at": "2026-09-24T15:32:08.773503+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:08.778622+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_274b2805ea9f41648b20a7e1",
+            "parent_id": "span_0f33f3a18e034b09ae5688d2",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:32:08.774322+00:00",
+            "ended_at": "2026-09-24T15:32:08.777890+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:08.779331+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_0f33f3a18e034b09ae5688d2",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:32:08.768154+00:00",
+            "ended_at": "2026-09-24T15:32:08.778682+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:08.782184+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:13.293871+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_090a8418011549bdbdab3bb5",
+            "parent_id": "span_ac91eed6866848ce8c87552b",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:32:08.783072+00:00",
+            "ended_at": "2026-09-24T15:32:13.292784+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:13.310818+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 23291,
+            "output_tokens": 106
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:13.316400+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:13.325051+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline files",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:13.328520+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:13.329137+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_93083ee3cdc544b3bfa05865",
+            "parent_id": "span_ac91eed6866848ce8c87552b",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:32:13.312806+00:00",
+            "ended_at": "2026-09-24T15:32:13.328585+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:13.330156+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_ac91eed6866848ce8c87552b",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:32:08.780426+00:00",
+            "ended_at": "2026-09-24T15:32:13.329563+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:13.353969+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_e0dd7211ef36407b88266d6a",
+            "parent_id": "span_6e2b29fabceb4b73922ba696",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:32:13.352729+00:00",
+            "ended_at": "2026-09-24T15:32:13.352902+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:13.360653+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_1262e93ea5634207a7e7958f",
+            "parent_id": "span_6e2b29fabceb4b73922ba696",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:32:13.354775+00:00",
+            "ended_at": "2026-09-24T15:32:13.359576+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:13.366506+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_2b02fa006f674abbba5ffa52",
+            "parent_id": "span_6e2b29fabceb4b73922ba696",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:32:13.360775+00:00",
+            "ended_at": "2026-09-24T15:32:13.365325+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:13.367778+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_6e2b29fabceb4b73922ba696",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:32:13.351514+00:00",
+            "ended_at": "2026-09-24T15:32:13.366615+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:13.371789+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:18.333456+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_7660306e1f6c49e389319199",
+            "parent_id": "span_807e10f0b0b742eda16e2b37",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:32:13.373188+00:00",
+            "ended_at": "2026-09-24T15:32:18.332373+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:18.373835+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 23535,
+            "output_tokens": 165
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:18.378066+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:18.378653+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:18.380170+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:18.390903+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:20.859430+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "tool_finished",
+          "data": {
+            "tool": "file_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:20.865894+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:20.867545+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_a1fdef5769e1423298d69d25",
+            "parent_id": "span_807e10f0b0b742eda16e2b37",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-24T15:32:18.376917+00:00",
+            "ended_at": "2026-09-24T15:32:20.866434+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:20.886135+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "tool_finished",
+          "data": {
+            "tool": "file_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:20.891606+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:20.892713+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_cf9b06dea5fa4a5b9629c9e0",
+            "parent_id": "span_807e10f0b0b742eda16e2b37",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-24T15:32:18.376106+00:00",
+            "ended_at": "2026-09-24T15:32:20.891754+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:20.894462+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_807e10f0b0b742eda16e2b37",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:32:13.369020+00:00",
+            "ended_at": "2026-09-24T15:32:20.893439+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:20.918621+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_1f026cbf7e8d4fad9cb19ea4",
+            "parent_id": "span_e48c1018140d4bd3be72a24d",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:32:20.917554+00:00",
+            "ended_at": "2026-09-24T15:32:20.917715+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:20.925146+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_e5b6d41df5324071bcb83688",
+            "parent_id": "span_e48c1018140d4bd3be72a24d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:32:20.919327+00:00",
+            "ended_at": "2026-09-24T15:32:20.923930+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:20.930831+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_82d3c4f93df1494fa061ac0b",
+            "parent_id": "span_e48c1018140d4bd3be72a24d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:32:20.925292+00:00",
+            "ended_at": "2026-09-24T15:32:20.929766+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:20.931902+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_e48c1018140d4bd3be72a24d",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:32:20.916501+00:00",
+            "ended_at": "2026-09-24T15:32:20.930917+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:20.935829+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:29.657688+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_dab62606ac774cc89e247e49",
+            "parent_id": "span_d938acb5ca184f4cbb26ddb6",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:32:20.937188+00:00",
+            "ended_at": "2026-09-24T15:32:29.656596+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:29.676348+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 23972,
+            "output_tokens": 240
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:29.682312+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:29.869068+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline catalog",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:29.871311+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:29.871760+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_1bfe3d0f6dc74f4eb634af2f",
+            "parent_id": "span_d938acb5ca184f4cbb26ddb6",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:32:29.678594+00:00",
+            "ended_at": "2026-09-24T15:32:29.871373+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:29.872571+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_d938acb5ca184f4cbb26ddb6",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:32:20.933013+00:00",
+            "ended_at": "2026-09-24T15:32:29.872166+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:29.901903+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_6c31621b5856468893941f60",
+            "parent_id": "span_29876f1d2e65434eb1ba235f",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:32:29.900643+00:00",
+            "ended_at": "2026-09-24T15:32:29.900820+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:29.908549+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_c42f5982f845403195a6d339",
+            "parent_id": "span_29876f1d2e65434eb1ba235f",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:32:29.902708+00:00",
+            "ended_at": "2026-09-24T15:32:29.907466+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:29.914321+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_07df3c7a292d40089007e1ed",
+            "parent_id": "span_29876f1d2e65434eb1ba235f",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:32:29.908670+00:00",
+            "ended_at": "2026-09-24T15:32:29.913204+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:29.915390+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_29876f1d2e65434eb1ba235f",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:32:29.899429+00:00",
+            "ended_at": "2026-09-24T15:32:29.914406+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:29.918815+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:47.357341+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_2866a5e669f34b0ea526d26c",
+            "parent_id": "span_6f9fc87f09d64b578f3cd9a7",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:32:29.920301+00:00",
+            "ended_at": "2026-09-24T15:32:47.356195+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:47.381908+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 32159,
+            "output_tokens": 452
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:47.388170+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:47.429543+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline plan --pipeline template_shell --input reads=uploads/examples/template_shell-7c3abda2/example_reads.txt --input metadata=uploads/examples/template_shell-7c3abda2/example_metadata.tsv --timeout 120",
+            "status": "planned"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:47.435300+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:47.436362+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_7f484f2de21345c6ae05575c",
+            "parent_id": "span_6f9fc87f09d64b578f3cd9a7",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:32:47.384176+00:00",
+            "ended_at": "2026-09-24T15:32:47.435416+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:47.439137+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_6f9fc87f09d64b578f3cd9a7",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:32:29.916445+00:00",
+            "ended_at": "2026-09-24T15:32:47.437621+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:47.469375+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_67dbaa0ab3e145f1a5ee8436",
+            "parent_id": "span_04895dae579d46cab37b1380",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:32:47.468130+00:00",
+            "ended_at": "2026-09-24T15:32:47.468312+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:47.476987+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_2073c4ca1e024f3181f4309c",
+            "parent_id": "span_04895dae579d46cab37b1380",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:32:47.470155+00:00",
+            "ended_at": "2026-09-24T15:32:47.475783+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:47.482685+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_a91b40c3a57e4a20b2ce7b5c",
+            "parent_id": "span_04895dae579d46cab37b1380",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:32:47.477115+00:00",
+            "ended_at": "2026-09-24T15:32:47.481634+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:47.483705+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_04895dae579d46cab37b1380",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:32:47.466885+00:00",
+            "ended_at": "2026-09-24T15:32:47.482756+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:32:47.487759+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:03.375448+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_c264d708025b4bf285bae8e1",
+            "parent_id": "span_c131c2b2ac454aed8266e69b",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:32:47.489729+00:00",
+            "ended_at": "2026-09-24T15:33:03.374323+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:03.395846+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 33332,
+            "output_tokens": 168
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:03.399507+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_0914d35c2f6e417b9c3ac25c",
+            "parent_id": "span_c131c2b2ac454aed8266e69b",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:33:03.396927+00:00",
+            "ended_at": "2026-09-24T15:33:03.398929+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:03.400584+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_c131c2b2ac454aed8266e69b",
+            "parent_id": "span_8324bffbef2e4a06b3663793",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:32:47.484666+00:00",
+            "ended_at": "2026-09-24T15:33:03.400089+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:03.410205+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_8324bffbef2e4a06b3663793",
+            "parent_id": "span_6e6866f5958a402ba8dc826e",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-24T15:31:44.411293+00:00",
+            "ended_at": "2026-09-24T15:33:03.409820+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:03.410588+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_6e6866f5958a402ba8dc826e",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-24T15:31:44.364332+00:00",
+            "ended_at": "2026-09-24T15:33:03.410266+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:03.410762+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:03.453839+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "run_paused",
+          "data": {
+            "reason": "tool_approval",
+            "tool_names": [
+              "pipeline_shell"
+            ]
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.117310+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "approval_decision",
+          "data": {
+            "approved": true,
+            "tool_name": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.124427+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.127703+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_be8635f38e724447a14e2e24",
+            "parent_id": "span_4948abe8b0f64edfb677504d",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:33:04.127286+00:00",
+            "ended_at": "2026-09-24T15:33:04.127349+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.128154+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_80c5d11a35524a698ebf969a",
+            "parent_id": "span_4948abe8b0f64edfb677504d",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:33:04.127779+00:00",
+            "ended_at": "2026-09-24T15:33:04.127823+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.131809+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_c19c51d60934495a9ce71720",
+            "parent_id": "span_4948abe8b0f64edfb677504d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:33:04.128412+00:00",
+            "ended_at": "2026-09-24T15:33:04.131461+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.136164+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_94d3e87a4d9f42fd97578ec4",
+            "parent_id": "span_4948abe8b0f64edfb677504d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:33:04.131850+00:00",
+            "ended_at": "2026-09-24T15:33:04.134996+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.138743+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_4948abe8b0f64edfb677504d",
+            "parent_id": "span_c472d18072004bd69a618495",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:33:04.126738+00:00",
+            "ended_at": "2026-09-24T15:33:04.137673+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.153322+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.192792+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline run --plan-id fe02735e1ab44d699e1276982a2c0df9",
+            "status": "queued"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.199655+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.200760+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_e7a2e783b9564b8d928c31d3",
+            "parent_id": "span_c472d18072004bd69a618495",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:33:04.152230+00:00",
+            "ended_at": "2026-09-24T15:33:04.199771+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.210110+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_90510b0def364478b5c2d7cb",
+            "parent_id": "span_8161af0831904440bf61e868",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:33:04.208897+00:00",
+            "ended_at": "2026-09-24T15:33:04.209055+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.216527+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_1e8e0ea3b6b041b989c734d9",
+            "parent_id": "span_8161af0831904440bf61e868",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:33:04.210890+00:00",
+            "ended_at": "2026-09-24T15:33:04.215384+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.222355+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_bc1dd79882a548b2aaa18c66",
+            "parent_id": "span_8161af0831904440bf61e868",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:33:04.216667+00:00",
+            "ended_at": "2026-09-24T15:33:04.221285+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.223429+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_8161af0831904440bf61e868",
+            "parent_id": "span_c472d18072004bd69a618495",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:33:04.207750+00:00",
+            "ended_at": "2026-09-24T15:33:04.222441+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.225352+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:04.230341+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:13.807989+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_cc2938f86cff4d40aa0e2721",
+            "parent_id": "span_44ae003311774a27ab4f1be3",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:33:04.232117+00:00",
+            "ended_at": "2026-09-24T15:33:13.806778+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:13.813115+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 33649,
+            "output_tokens": 130
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:13.817158+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:13.826067+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline wait --job-id fe02735e1ab44d699e1276982a2c0df9 --seconds 5",
+            "status": "succeeded"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:13.836278+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:13.836833+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_de5e9914f0a2416baa6a4d43",
+            "parent_id": "span_44ae003311774a27ab4f1be3",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:33:13.814486+00:00",
+            "ended_at": "2026-09-24T15:33:13.836350+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:13.837823+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_44ae003311774a27ab4f1be3",
+            "parent_id": "span_2b5af9a9909c428e869faf73",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:33:04.224614+00:00",
+            "ended_at": "2026-09-24T15:33:13.837279+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:13.843386+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_27618ea9691c4f9b9da8191e",
+            "parent_id": "span_ffd0e79474cc47c7a73649d4",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:33:13.842698+00:00",
+            "ended_at": "2026-09-24T15:33:13.842821+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:13.848408+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_12560463e53f41759fed71cf",
+            "parent_id": "span_ffd0e79474cc47c7a73649d4",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:33:13.843794+00:00",
+            "ended_at": "2026-09-24T15:33:13.847875+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:13.853634+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_eee7e967e51d4475bcad7589",
+            "parent_id": "span_ffd0e79474cc47c7a73649d4",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:33:13.848475+00:00",
+            "ended_at": "2026-09-24T15:33:13.852444+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:13.854721+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_ffd0e79474cc47c7a73649d4",
+            "parent_id": "span_2b5af9a9909c428e869faf73",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:33:13.841947+00:00",
+            "ended_at": "2026-09-24T15:33:13.853743+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:13.859268+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:30.091695+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_1a3d698910aa4a548dbbed2f",
+            "parent_id": "span_8911e425ac114c4585f13056",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:33:13.861154+00:00",
+            "ended_at": "2026-09-24T15:33:30.090466+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:30.096966+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 34088,
+            "output_tokens": 132
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:30.101677+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:30.122737+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline results --job-id fe02735e1ab44d699e1276982a2c0df9",
+            "status": "succeeded"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:30.137360+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:30.138006+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_58898f660ed84c05b170cd45",
+            "parent_id": "span_8911e425ac114c4585f13056",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-24T15:33:30.098758+00:00",
+            "ended_at": "2026-09-24T15:33:30.137445+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:30.139141+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_8911e425ac114c4585f13056",
+            "parent_id": "span_2b5af9a9909c428e869faf73",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:33:13.855988+00:00",
+            "ended_at": "2026-09-24T15:33:30.138549+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:30.145029+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_3ddf0592933a428588d7c7b4",
+            "parent_id": "span_002dc5874b464df286337d51",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:33:30.144285+00:00",
+            "ended_at": "2026-09-24T15:33:30.144408+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:30.151054+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_6c917f4f65254bff8b3f0cbd",
+            "parent_id": "span_002dc5874b464df286337d51",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:33:30.145497+00:00",
+            "ended_at": "2026-09-24T15:33:30.149855+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:30.156924+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_28713539c83c465db31c0937",
+            "parent_id": "span_002dc5874b464df286337d51",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:33:30.151207+00:00",
+            "ended_at": "2026-09-24T15:33:30.155843+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:30.158000+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_002dc5874b464df286337d51",
+            "parent_id": "span_2b5af9a9909c428e869faf73",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:33:30.143484+00:00",
+            "ended_at": "2026-09-24T15:33:30.157013+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:30.161907+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:37.895771+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_12a1ea27a5f04e5d9dbdfcda",
+            "parent_id": "span_0019f1c71dd94a5eae054c0a",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:33:30.163396+00:00",
+            "ended_at": "2026-09-24T15:33:37.894526+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:37.902091+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 35238,
+            "output_tokens": 260
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:37.906299+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:37.906801+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:37.907274+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:37.908347+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:37.910002+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:37.911342+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.535303+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "tool_finished",
+          "data": {
+            "tool": "file_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.536380+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.538206+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_20a8c0565efd4f6491877f2a",
+            "parent_id": "span_0019f1c71dd94a5eae054c0a",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-24T15:33:37.905280+00:00",
+            "ended_at": "2026-09-24T15:33:40.537026+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.560807+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "tool_finished",
+          "data": {
+            "tool": "file_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.562326+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.563418+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_650b05850269480bafafff01",
+            "parent_id": "span_0019f1c71dd94a5eae054c0a",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-24T15:33:37.904787+00:00",
+            "ended_at": "2026-09-24T15:33:40.562471+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.579869+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "tool_finished",
+          "data": {
+            "tool": "file_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.580905+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.581995+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_45039944b121427190da709e",
+            "parent_id": "span_0019f1c71dd94a5eae054c0a",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-24T15:33:37.904164+00:00",
+            "ended_at": "2026-09-24T15:33:40.581048+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.583651+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_0019f1c71dd94a5eae054c0a",
+            "parent_id": "span_2b5af9a9909c428e869faf73",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:33:30.159086+00:00",
+            "ended_at": "2026-09-24T15:33:40.582651+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.590118+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_92ad18beced54819891a1e3e",
+            "parent_id": "span_3850ec198fa94b93a4e98fac",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-24T15:33:40.589189+00:00",
+            "ended_at": "2026-09-24T15:33:40.589334+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.596361+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_10a9e1bc1c884f34aa35db4e",
+            "parent_id": "span_3850ec198fa94b93a4e98fac",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:33:40.590735+00:00",
+            "ended_at": "2026-09-24T15:33:40.595222+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.602023+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_715b7b1494ad46898f756d1d",
+            "parent_id": "span_3850ec198fa94b93a4e98fac",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-24T15:33:40.596503+00:00",
+            "ended_at": "2026-09-24T15:33:40.600939+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.603085+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_3850ec198fa94b93a4e98fac",
+            "parent_id": "span_2b5af9a9909c428e869faf73",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-24T15:33:40.588224+00:00",
+            "ended_at": "2026-09-24T15:33:40.602110+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:40.607322+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:55.599932+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_ab2166cc5c3d4ffcbae9a743",
+            "parent_id": "span_da20483ae35647fc86f6a0e3",
+            "span_type": "generation",
+            "name": null,
+            "model": "deepseek/deepseek-v4-flash",
+            "started_at": "2026-09-24T15:33:40.609012+00:00",
+            "ended_at": "2026-09-24T15:33:55.598713+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:55.605899+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 36125,
+            "output_tokens": 438
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:55.608457+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:55.609279+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_da20483ae35647fc86f6a0e3",
+            "parent_id": "span_2b5af9a9909c428e869faf73",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-24T15:33:40.604221+00:00",
+            "ended_at": "2026-09-24T15:33:55.608657+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:55.609885+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:55.610511+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_cc0dd4b5c90c46d1862d30df",
+            "parent_id": "span_2b5af9a9909c428e869faf73",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-24T15:33:55.609512+00:00",
+            "ended_at": "2026-09-24T15:33:55.609911+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:55.640594+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_670b3cb78aa548fdb64e3225",
+            "parent_id": "span_a59affa2df5f4aeab7392afd",
+            "span_type": "custom",
+            "name": "sandbox.cleanup_sessions",
+            "model": null,
+            "started_at": "2026-09-24T15:33:55.638318+00:00",
+            "ended_at": "2026-09-24T15:33:55.639053+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:55.641527+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_a59affa2df5f4aeab7392afd",
+            "parent_id": "span_2b5af9a9909c428e869faf73",
+            "span_type": "custom",
+            "name": "sandbox.cleanup",
+            "model": null,
+            "started_at": "2026-09-24T15:33:55.638238+00:00",
+            "ended_at": "2026-09-24T15:33:55.640641+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:55.642383+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_2b5af9a9909c428e869faf73",
+            "parent_id": "span_c472d18072004bd69a618495",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-24T15:33:04.224395+00:00",
+            "ended_at": "2026-09-24T15:33:55.641566+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:55.643305+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515",
+            "span_id": "span_c472d18072004bd69a618495",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-24T15:33:04.124513+00:00",
+            "ended_at": "2026-09-24T15:33:55.642516+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:55.643695+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_d7fa6bc759b34ba49612e5b225569515"
+          }
+        },
+        {
+          "timestamp": "2026-09-24T15:33:55.668997+00:00",
+          "session_id": "live-pipeline-template",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 15
+          }
+        }
+      ],
+      "run": {
+        "run_id": "a69c9ca6-7684-4fb2-af8d-ddbd70f7400c",
+        "session_dir": ".",
+        "runtime_dir": "runs/a69c9ca6-7684-4fb2-af8d-ddbd70f7400c",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "uploads/examples/template_shell-7c3abda2/example_metadata.tsv",
+          "workspace_path": "uploads/examples/template_shell-7c3abda2/example_metadata.tsv",
+          "name": "example_metadata.tsv",
+          "size": 64,
+          "modified_at": 1790263911958443917,
+          "kind": "upload",
+          "content_type": "text/tab-separated-values; charset=utf-8"
+        },
+        {
+          "path": "uploads/examples/template_shell-7c3abda2/example_reads.txt",
+          "workspace_path": "uploads/examples/template_shell-7c3abda2/example_reads.txt",
+          "name": "example_reads.txt",
+          "size": 161,
+          "modified_at": 1790263911959443923,
+          "kind": "upload",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/plan.json",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/plan.json",
+          "name": "plan.json",
+          "size": 2048,
+          "modified_at": 1790263967424813570,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/stderr.log",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/stderr.log",
+          "name": "stderr.log",
+          "size": 0,
+          "modified_at": 1790263984173925428,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/inputs/reads/0_example_reads.txt",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/inputs/reads/0_example_reads.txt",
+          "name": "0_example_reads.txt",
+          "size": 161,
+          "modified_at": 1790263984278926130,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/inputs/metadata/0_example_metadata.tsv",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/inputs/metadata/0_example_metadata.tsv",
+          "name": "0_example_metadata.tsv",
+          "size": 64,
+          "modified_at": 1790263984311926350,
+          "kind": "metadata",
+          "content_type": "text/tab-separated-values; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/inputs.json",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/inputs.json",
+          "name": "inputs.json",
+          "size": 332,
+          "modified_at": 1790263984312926357,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/config.runtime.yaml",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/config.runtime.yaml",
+          "name": "config.runtime.yaml",
+          "size": 1948,
+          "modified_at": 1790263984355926644,
+          "kind": "config",
+          "content_type": "text/yaml; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/normalized.txt",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/normalized.txt",
+          "name": "normalized.txt",
+          "size": 161,
+          "modified_at": 1790263985048931275,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/subtypes.tsv",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/subtypes.tsv",
+          "name": "subtypes.tsv",
+          "size": 64,
+          "modified_at": 1790263985089931548,
+          "kind": "metadata",
+          "content_type": "text/tab-separated-values; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/metrics.json",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/metrics.json",
+          "name": "metrics.json",
+          "size": 276,
+          "modified_at": 1790263985108931676,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/report.md",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/outputs/report.md",
+          "name": "report.md",
+          "size": 983,
+          "modified_at": 1790263985110931689,
+          "kind": "text",
+          "content_type": "text/markdown; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/stdout.log",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/stdout.log",
+          "name": "stdout.log",
+          "size": 157,
+          "modified_at": 1790263985111931696,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/output-manifest.json",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/output-manifest.json",
+          "name": "output-manifest.json",
+          "size": 2310,
+          "modified_at": 1790263985125931789,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/job.json",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/job.json",
+          "name": "job.json",
+          "size": 9197,
+          "modified_at": 1790263985128931809,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/fe02735e1ab44d699e1276982a2c0df9/results.zip",
+          "workspace_path": "runs/fe02735e1ab44d699e1276982a2c0df9/results.zip",
+          "name": "results.zip",
+          "size": 2842,
+          "modified_at": 1790264010116098882,
+          "kind": "compressed",
+          "content_type": "application/zip"
+        }
+      ],
+      "approval_decision": {
+        "approved": true,
+        "approval_id": "81b5a3452ae1455f8220462f83b07eaf",
+        "tool_name": "pipeline_shell",
+        "arguments": {
+          "commands": [
+            "agent-pipeline run --plan-id fe02735e1ab44d699e1276982a2c0df9"
+          ],
+          "max_output_length": 5000,
+          "timeout_ms": 15000
+        },
+        "plan": {
+          "pipeline_name": "template_shell",
+          "engine": "shell",
+          "inputs": {
+            "reads": [
+              {
+                "path": "uploads/examples/template_shell-7c3abda2/example_reads.txt",
+                "sha256": "9bafdba3da5f47f80aefa077632e633cc888b99bdab98106043df3df69e33259",
+                "size": 161
+              }
+            ],
+            "metadata": [
+              {
+                "path": "uploads/examples/template_shell-7c3abda2/example_metadata.tsv",
+                "sha256": "fd4cf6bb4f6a6a28fda1fa23763bcb73c30e9447391b4d77c935a2933a9ddc97",
+                "size": 64
+              }
+            ]
+          },
+          "parameters": {},
+          "cores": 1,
+          "timeout_seconds": 120,
+          "max_memory_mb": 8192,
+          "dry_run": false,
+          "definition_sha256": "595ce80f6f738595e48d6a956c86ccaaae71e8f39b5ad2abec2536d22d950807",
+          "outputs": {
+            "report": {
+              "name": "report",
+              "label": "Report",
+              "config_key": "report_path",
+              "default": "report.md",
+              "kind": "report",
+              "required": true,
+              "description": "Report produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "metrics": {
+              "name": "metrics",
+              "label": "Metrics",
+              "config_key": "metrics_path",
+              "default": "metrics.json",
+              "kind": "metrics",
+              "required": true,
+              "description": "Metrics produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "normalized_text": {
+              "name": "normalized_text",
+              "label": "Normalized text",
+              "config_key": "normalized_path",
+              "default": "normalized.txt",
+              "kind": "text",
+              "required": true,
+              "description": "Normalized text produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "subtype_assignments": {
+              "name": "subtype_assignments",
+              "label": "Sequence subtype assignments",
+              "config_key": "subtype_path",
+              "default": "subtypes.tsv",
+              "kind": "table",
+              "required": true,
+              "description": "Sequence subtype assignments produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            }
+          }
+        }
+      },
+      "runtime": "agents_sdk",
+      "model_key": "deepseek/deepseek-v4-flash"
+    }
+  }
+}

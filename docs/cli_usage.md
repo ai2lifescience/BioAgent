@@ -29,7 +29,7 @@ the SDK session when a `--session-id` is supplied.
 ```text
 --model-key KEY          Model key from models/config.py (default: configured default)
 --session-id ID          Continue a persistent SDK conversation
---max-turns N            Maximum SDK turns (default: 5; configurable through the environment)
+--max-turns N            Maximum SDK turns (default: 20; configurable through the environment)
 --json                   Print the complete structured result as JSON
 --verbose                Include progress messages on stderr
 --approve ID             Approve a pending pipeline tool call (with --session-id)

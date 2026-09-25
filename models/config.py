@@ -55,19 +55,33 @@ DEFAULT_MODELS: dict[str, dict[str, Any]] = {
             "google/gemini-3.8-flash",
         ),
     },
+    "qwen3.8-max-0902": {
+        "label": "Qwen 3.8 Max",
+        "deployment": "OpenRouter",
+        "cost_tier": "Premium",
+        "model": os.getenv(
+            "AGENT_QWEN_38_MAX_MODEL",
+            "qwen/qwen3.8-max-0902",
+        ),
+    },
 }
 
 DEFAULT_AGENT_MODEL_KEY = os.getenv("AGENT_MODEL_KEY", "gpt-5.6-luna")
 DEFAULT_MODEL_KEYS = tuple(DEFAULT_MODELS)
-DEFAULT_MAX_TURNS = int(os.getenv("AGENT_MAX_TURNS", "5"))
+DEFAULT_MAX_TURNS = int(os.getenv("AGENT_MAX_TURNS", "20"))
 DEFAULT_SYNTHESIS_MODEL_KEY = os.getenv("AGENT_SYNTHESIS_MODEL_KEY", DEFAULT_AGENT_MODEL_KEY)
 DEFAULT_OPENROUTER_API_BASE = os.getenv(
     "OPENROUTER_API_BASE",
     "https://openrouter.ai/api/v1",
 )
+EMBEDDING_MODELS = (
+    "nvidia/llama-nemotron-embed-vl-1b-v2:free",
+    "openai/text-embedding-3-small",
+    "qwen/qwen3-embedding-8b",
+)
 DEFAULT_EMBEDDING_MODEL = os.getenv(
     "EMBEDDING_MODEL",
-    "nvidia/llama-nemotron-embed-vl-1b-v2:free",
+    EMBEDDING_MODELS[0],
 )
 
 
