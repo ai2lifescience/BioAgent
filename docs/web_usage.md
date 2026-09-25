@@ -158,6 +158,26 @@ Inspect uploads/sample.fasta, report its sequence statistics, and find ORFs.
 The file must already exist in the active workspace. The agent should discover
 or validate the workspace-relative path rather than guessing a host path.
 
+To turn sequence features into an interactive genome map:
+
+~~~text
+Read the annotations in uploads/sample.gb, render an interactive genome map,
+and return the generated map and reference paths.
+~~~
+
+Expected behavior: genome_read_features converts the GenBank annotations into a
+session-owned feature artifact, then genome_render_map creates the
+genome_map.json artifact and its reference sequence. The result includes an
+interactive genome browser with feature colors, pan and zoom controls, feature
+details on click, a full-sequence reset, and a download link for the map data.
+For GFF input, provide the matching FASTA and a sequence ID when the files
+contain more than one sequence:
+
+~~~text
+Read uploads/sample.gff with uploads/sample.fasta for sequence contig_1, then
+render its interactive genome map.
+~~~
+
 ### 3. Database retrieval and structure analysis
 
 ~~~text
@@ -177,6 +197,19 @@ organisms, descriptions, and source URLs.
 
 This uses database_lookup and provider adapters without exposing provider
 credentials or implementation paths.
+
+To display a downloaded or uploaded protein structure in 3D:
+
+~~~text
+Download PDB structure 1A3N as mmCIF, inspect its chains and ligands, and show
+the interactive 3D structure viewer.
+~~~
+
+Expected behavior: the structure artifact is rendered in the web result with
+Publication, Cartoon, Stick, Sphere, and Line display styles. Drag to rotate
+the model, scroll to zoom, and use the chain legend to identify chains. The
+same viewer is used for AlphaFold predictions and existing workspace `.pdb`,
+`.cif`, or `.mmcif` files.
 
 ### 4. Generic table analysis
 
