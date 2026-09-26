@@ -1,0 +1,15 @@
+PROMPT:
+Create a bounded session-owned knowledge collection from https://www.ncbi.nlm.nih.gov/nuccore/NC_001422.1. Crawl only ncbi.nlm.nih.gov, check status, and retrieve evidence about PhiX174 genome organization.
+
+MODEL: gpt-5.6-sol
+STATUS: succeeded
+TOOLS: knowledge_ingest, knowledge_status, knowledge_retrieve
+
+ANSWER:
+Collection created: `kb_cab4c911f706415ebaa89b270816859a`
+
+- Status: succeeded
+- Scope: `ncbi.nlm.nih.gov` only
+- Indexed: 1 page
+- Evidence: `outputs/knowledge_retrieve/276d2c70b765401f873a63c257ecce48/knowledge_evidence.json`
+- Limitation: NCBI returned a reCAPTCHA page, so no substantive PhiX174 genome-organization evidence was retrievable.

@@ -1,0 +1,2394 @@
+{
+  "case": "11_template_snakemake",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "Run template_snakemake with its bundled example data. Validate the plan and execute only if the required runtime is available; otherwise report the exact blocker.",
+  "session_id": "sol-20260926-11_template_snakemake",
+  "run_id": "3f3fb822c2064bf18b62cd2f4ba8f94b",
+  "uploads": [],
+  "started_at": "2026-09-26T06:44:33.677459+00:00",
+  "elapsed_seconds": 30.86,
+  "initial": {
+    "run_id": "3f3fb822c2064bf18b62cd2f4ba8f94b",
+    "session_id": "sol-20260926-11_template_snakemake",
+    "status": "running",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 18,
+    "created_at": "2026-09-26T06:44:02.816407+00:00",
+    "updated_at": "2026-09-26T06:44:02.822101+00:00",
+    "error": null
+  },
+  "status": {
+    "run_id": "3f3fb822c2064bf18b62cd2f4ba8f94b",
+    "session_id": "sol-20260926-11_template_snakemake",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 18,
+    "created_at": "2026-09-26T06:44:02.816407+00:00",
+    "updated_at": "2026-09-26T06:44:31.129661+00:00",
+    "error": null,
+    "result": {
+      "answer": "Plan validation succeeded, but execution was blocked.\n\n- **Blocker:** `Snakemake is not installed. Install it to run the Snakemake pipeline.`\n- **Job:** `fb60a1a9d8de4754a0860f14d31e95c3`\n- **Status:** Failed before workflow execution; no retry attempted.",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-11_template_snakemake",
+      "max_turns": 18,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Run template_snakemake with its bundled example data. Validate the plan and execute only if the required runtime is available; otherwise report the exact blocker."
+        },
+        {
+          "role": "assistant",
+          "content": "Plan validation succeeded, but execution was blocked.\n\n- **Blocker:** `Snakemake is not installed. Install it to run the Snakemake pipeline.`\n- **Job:** `fb60a1a9d8de4754a0860f14d31e95c3`\n- **Status:** Failed before workflow execution; no retry attempted."
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [
+          "pipeline_shell"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [
+          "uploads/examples/template_snakemake-b35f899b/metadata.tsv",
+          "uploads/examples/template_snakemake-b35f899b/sequences_segment1.fasta",
+          "uploads/examples/template_snakemake-b35f899b/sequences_segment2.fasta"
+        ],
+        "outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok",
+            "pipeline_name": "template_snakemake"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "fb60a1a9d8de4754a0860f14d31e95c3",
+            "plan_id": "fb60a1a9d8de4754a0860f14d31e95c3",
+            "status": "planned",
+            "command": "agent-pipeline run --plan-id fb60a1a9d8de4754a0860f14d31e95c3"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "fb60a1a9d8de4754a0860f14d31e95c3",
+            "plan_id": "fb60a1a9d8de4754a0860f14d31e95c3",
+            "status": "queued"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "fb60a1a9d8de4754a0860f14d31e95c3",
+            "plan_id": "fb60a1a9d8de4754a0860f14d31e95c3",
+            "logs": {
+              "stdout": "runs/fb60a1a9d8de4754a0860f14d31e95c3/stdout.log",
+              "stderr": "runs/fb60a1a9d8de4754a0860f14d31e95c3/stderr.log"
+            },
+            "status": "failed",
+            "error": "Snakemake is not installed. Install it to run the Snakemake pipeline.",
+            "pipeline_name": "template_snakemake"
+          }
+        ],
+        "tool_outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok",
+            "pipeline_name": "template_snakemake"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "planned",
+            "job_id": "fb60a1a9d8de4754a0860f14d31e95c3",
+            "plan_id": "fb60a1a9d8de4754a0860f14d31e95c3",
+            "command": "agent-pipeline run --plan-id fb60a1a9d8de4754a0860f14d31e95c3"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "queued",
+            "job_id": "fb60a1a9d8de4754a0860f14d31e95c3",
+            "plan_id": "fb60a1a9d8de4754a0860f14d31e95c3"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "failed",
+            "error": "Snakemake is not installed. Install it to run the Snakemake pipeline.",
+            "job_id": "fb60a1a9d8de4754a0860f14d31e95c3",
+            "plan_id": "fb60a1a9d8de4754a0860f14d31e95c3",
+            "logs": {
+              "stdout": "runs/fb60a1a9d8de4754a0860f14d31e95c3/stdout.log",
+              "stderr": "runs/fb60a1a9d8de4754a0860f14d31e95c3/stderr.log"
+            },
+            "pipeline_name": "template_snakemake"
+          }
+        ],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T06:44:05.834161+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "run_started",
+          "data": {
+            "request": "Run template_snakemake with its bundled example data. Validate the plan and execute only if the required runtime is available; otherwise report the exact blocker.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:05.851064+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:05.855524+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_e18d8f208a1e4a1db1d1c223",
+            "parent_id": "span_25411ac3cf00446c8f6ed854",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T06:44:05.855201+00:00",
+            "ended_at": "2026-09-26T06:44:05.855247+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:05.856527+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_a3738b57cf2d4932bf3554c1",
+            "parent_id": "span_768c80d6682e46efbb80e8a1",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:44:05.856176+00:00",
+            "ended_at": "2026-09-26T06:44:05.856250+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:05.856923+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_f93afe0dc3324f1f84c5b421",
+            "parent_id": "span_768c80d6682e46efbb80e8a1",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:44:05.856610+00:00",
+            "ended_at": "2026-09-26T06:44:05.856661+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:05.860150+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_3819041ce0ae490580f71787",
+            "parent_id": "span_768c80d6682e46efbb80e8a1",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:05.857329+00:00",
+            "ended_at": "2026-09-26T06:44:05.859871+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:05.862897+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_cc9a289651594c798793f2c3",
+            "parent_id": "span_768c80d6682e46efbb80e8a1",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:05.860193+00:00",
+            "ended_at": "2026-09-26T06:44:05.862618+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:05.863731+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_768c80d6682e46efbb80e8a1",
+            "parent_id": "span_25411ac3cf00446c8f6ed854",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:44:05.855611+00:00",
+            "ended_at": "2026-09-26T06:44:05.863434+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:05.864953+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:05.908612+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.040990+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_f625936c86d3488c9aab6c22",
+            "parent_id": "span_a0049d57d7d0480e9c9eba2a",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:44:05.911652+00:00",
+            "ended_at": "2026-09-26T06:44:13.040514+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.049951+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11355,
+            "output_tokens": 100
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.053350+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.241446+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline catalog",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.242448+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.242948+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_3e5c78f0c553450abc6bb35f",
+            "parent_id": "span_a0049d57d7d0480e9c9eba2a",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:44:13.051095+00:00",
+            "ended_at": "2026-09-26T06:44:13.242505+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.244796+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.248890+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline files",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.249343+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.249706+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_96e090409e294e28b10f4e49",
+            "parent_id": "span_a0049d57d7d0480e9c9eba2a",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:44:13.243175+00:00",
+            "ended_at": "2026-09-26T06:44:13.249385+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.250827+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_a0049d57d7d0480e9c9eba2a",
+            "parent_id": "span_807089add1ea44f7b0d7519f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:44:05.864760+00:00",
+            "ended_at": "2026-09-26T06:44:13.250334+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.264675+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_ac698b383030468e82ea5879",
+            "parent_id": "span_1c643e9a3ab74825bed85654",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:44:13.264219+00:00",
+            "ended_at": "2026-09-26T06:44:13.264315+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.269108+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_f1e1637dcc39449aa354465a",
+            "parent_id": "span_1c643e9a3ab74825bed85654",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:13.264957+00:00",
+            "ended_at": "2026-09-26T06:44:13.268724+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.272864+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_100762768a3a47c0baefd820",
+            "parent_id": "span_1c643e9a3ab74825bed85654",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:13.269162+00:00",
+            "ended_at": "2026-09-26T06:44:13.272481+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.273349+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_1c643e9a3ab74825bed85654",
+            "parent_id": "span_807089add1ea44f7b0d7519f",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:44:13.263478+00:00",
+            "ended_at": "2026-09-26T06:44:13.272951+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:13.275178+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:16.443803+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_2229670a161e4900b08f121b",
+            "parent_id": "span_a85630e794534dd491506c21",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:44:13.275901+00:00",
+            "ended_at": "2026-09-26T06:44:16.443407+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:16.450964+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 19069,
+            "output_tokens": 63
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:16.454395+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:16.465431+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline example --pipeline template_snakemake",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:16.467416+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:16.467944+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_ded1a870e08b4968a046f6a6",
+            "parent_id": "span_a85630e794534dd491506c21",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:44:16.452115+00:00",
+            "ended_at": "2026-09-26T06:44:16.467509+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:16.468657+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_a85630e794534dd491506c21",
+            "parent_id": "span_807089add1ea44f7b0d7519f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:44:13.273983+00:00",
+            "ended_at": "2026-09-26T06:44:16.468309+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:16.477860+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_775df4628245486981bba700",
+            "parent_id": "span_647d540b3ab94c4ab6ba8bba",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:44:16.477406+00:00",
+            "ended_at": "2026-09-26T06:44:16.477497+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:16.482307+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_c38b9c4e57114fb79e61f4b5",
+            "parent_id": "span_647d540b3ab94c4ab6ba8bba",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:16.478138+00:00",
+            "ended_at": "2026-09-26T06:44:16.481931+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:16.485952+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_250a3364dc7a496cbfa68a6a",
+            "parent_id": "span_647d540b3ab94c4ab6ba8bba",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:16.482364+00:00",
+            "ended_at": "2026-09-26T06:44:16.485599+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:16.486358+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_647d540b3ab94c4ab6ba8bba",
+            "parent_id": "span_807089add1ea44f7b0d7519f",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:44:16.476693+00:00",
+            "ended_at": "2026-09-26T06:44:16.485995+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:16.488124+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:19.326737+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_4ba637f130ae49d0adf78c1e",
+            "parent_id": "span_503c90ccdfa34a5b9c346d64",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:44:16.488836+00:00",
+            "ended_at": "2026-09-26T06:44:19.326352+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:19.333541+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 19282,
+            "output_tokens": 106
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:19.336522+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:19.355339+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline plan --pipeline template_snakemake --input sequence=uploads/examples/template_snakemake-b35f899b/sequences_segment1.fasta --input metadata=uploads/examples/template_snakemake-b35f899b/metadata.tsv --timeout 300",
+            "status": "planned"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:19.358391+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:19.358761+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_5ee7b31a660149d4a32a4ded",
+            "parent_id": "span_503c90ccdfa34a5b9c346d64",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:44:19.334636+00:00",
+            "ended_at": "2026-09-26T06:44:19.358437+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:19.359450+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_503c90ccdfa34a5b9c346d64",
+            "parent_id": "span_807089add1ea44f7b0d7519f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:44:16.487053+00:00",
+            "ended_at": "2026-09-26T06:44:19.359105+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:19.368639+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_dfe946d4654b4dfcb6833373",
+            "parent_id": "span_4fd501d7db9f4efbb2b92b7f",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:44:19.368189+00:00",
+            "ended_at": "2026-09-26T06:44:19.368279+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:19.373054+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_f99baa5c50b54f07b6a5076f",
+            "parent_id": "span_4fd501d7db9f4efbb2b92b7f",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:19.368953+00:00",
+            "ended_at": "2026-09-26T06:44:19.372651+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:19.376784+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_902b8814cad2437c9c89d038",
+            "parent_id": "span_4fd501d7db9f4efbb2b92b7f",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:19.373146+00:00",
+            "ended_at": "2026-09-26T06:44:19.376365+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:19.377289+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_4fd501d7db9f4efbb2b92b7f",
+            "parent_id": "span_807089add1ea44f7b0d7519f",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:44:19.367506+00:00",
+            "ended_at": "2026-09-26T06:44:19.376861+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:19.379034+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:22.333422+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_4065fb22caef4b0087de9959",
+            "parent_id": "span_041884dd3ef94cc9a2077c0d",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:44:19.379705+00:00",
+            "ended_at": "2026-09-26T06:44:22.333033+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:22.340111+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 20011,
+            "output_tokens": 82
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:22.344055+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_e35a106530ea4a00b6d0159c",
+            "parent_id": "span_041884dd3ef94cc9a2077c0d",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:44:22.341147+00:00",
+            "ended_at": "2026-09-26T06:44:22.343640+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:22.344913+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_041884dd3ef94cc9a2077c0d",
+            "parent_id": "span_807089add1ea44f7b0d7519f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:44:19.377767+00:00",
+            "ended_at": "2026-09-26T06:44:22.344552+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:22.354753+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_807089add1ea44f7b0d7519f",
+            "parent_id": "span_25411ac3cf00446c8f6ed854",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:44:05.864688+00:00",
+            "ended_at": "2026-09-26T06:44:22.354344+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:22.355270+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_25411ac3cf00446c8f6ed854",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:44:05.851144+00:00",
+            "ended_at": "2026-09-26T06:44:22.354839+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:22.355407+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:22.380142+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "run_paused",
+          "data": {
+            "reason": "tool_approval",
+            "tool_names": [
+              "pipeline_shell"
+            ]
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.001763+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "approval_decision",
+          "data": {
+            "approved": true,
+            "tool_name": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.012694+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.018004+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_eff0cc72ed8a460a999ab909",
+            "parent_id": "span_9a7cec7544624f73b06e1299",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:44:23.017545+00:00",
+            "ended_at": "2026-09-26T06:44:23.017637+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.018537+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_25b407d8237b4ed08390c7ea",
+            "parent_id": "span_9a7cec7544624f73b06e1299",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:44:23.018095+00:00",
+            "ended_at": "2026-09-26T06:44:23.018154+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.022099+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_aa3e0b0921eb4602b870fdd7",
+            "parent_id": "span_9a7cec7544624f73b06e1299",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:23.018999+00:00",
+            "ended_at": "2026-09-26T06:44:23.021738+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.024758+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_ff8e666d0e0140c1822c1ece",
+            "parent_id": "span_9a7cec7544624f73b06e1299",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:23.022151+00:00",
+            "ended_at": "2026-09-26T06:44:23.024338+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.026081+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_9a7cec7544624f73b06e1299",
+            "parent_id": "span_2428bdf7dae54208aa1c8319",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:44:23.016691+00:00",
+            "ended_at": "2026-09-26T06:44:23.025733+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.032268+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.049829+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline run --plan-id fb60a1a9d8de4754a0860f14d31e95c3",
+            "status": "queued"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.052821+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.053230+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_f7da5aef81384e1f96f17eb4",
+            "parent_id": "span_2428bdf7dae54208aa1c8319",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:44:23.031833+00:00",
+            "ended_at": "2026-09-26T06:44:23.052875+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.058328+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_ff5bcd65346f46c9b4c70ad5",
+            "parent_id": "span_7f8a90f74e874841894beb7d",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:44:23.057794+00:00",
+            "ended_at": "2026-09-26T06:44:23.057936+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.061607+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_54703192e1c04e0d9a6f312d",
+            "parent_id": "span_7f8a90f74e874841894beb7d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:23.058623+00:00",
+            "ended_at": "2026-09-26T06:44:23.061194+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.064348+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_0674c358798540b4831f21ae",
+            "parent_id": "span_7f8a90f74e874841894beb7d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:23.061691+00:00",
+            "ended_at": "2026-09-26T06:44:23.063942+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.064716+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_7f8a90f74e874841894beb7d",
+            "parent_id": "span_2428bdf7dae54208aa1c8319",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:44:23.057021+00:00",
+            "ended_at": "2026-09-26T06:44:23.064394+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.065672+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:23.068811+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:26.741855+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_44dd86472dc9461dbf5ce7c3",
+            "parent_id": "span_f9b1592d935144f9a3af9f35",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:44:23.069542+00:00",
+            "ended_at": "2026-09-26T06:44:26.741371+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:26.744087+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 20243,
+            "output_tokens": 88
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:26.746682+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:26.754946+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline wait --job-id fb60a1a9d8de4754a0860f14d31e95c3 --seconds 5",
+            "status": "failed"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:26.761680+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:26.762059+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_dd38cce71ebe4338992780e4",
+            "parent_id": "span_f9b1592d935144f9a3af9f35",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:44:26.744953+00:00",
+            "ended_at": "2026-09-26T06:44:26.761725+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:26.762729+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_f9b1592d935144f9a3af9f35",
+            "parent_id": "span_a05090c0a0154047aa410d2e",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:44:23.065325+00:00",
+            "ended_at": "2026-09-26T06:44:26.762391+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:26.767889+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_26ae794aeb444958a1c9ebd9",
+            "parent_id": "span_5a6a905ccdac4ffca0f6751e",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:44:26.766990+00:00",
+            "ended_at": "2026-09-26T06:44:26.767298+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:26.772941+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_8d99bddb7a9f4799b78d6f9e",
+            "parent_id": "span_5a6a905ccdac4ffca0f6751e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:26.768165+00:00",
+            "ended_at": "2026-09-26T06:44:26.772581+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:26.777816+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_dd2e2d3b4d594522bceeb98d",
+            "parent_id": "span_5a6a905ccdac4ffca0f6751e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:44:26.772998+00:00",
+            "ended_at": "2026-09-26T06:44:26.777454+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:26.778179+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_5a6a905ccdac4ffca0f6751e",
+            "parent_id": "span_a05090c0a0154047aa410d2e",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:44:26.766117+00:00",
+            "ended_at": "2026-09-26T06:44:26.777862+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:26.780688+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:31.063854+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_44731c53c7d64dfe971269c2",
+            "parent_id": "span_bf58a76ee1334ba790ddfa70",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:44:26.781386+00:00",
+            "ended_at": "2026-09-26T06:44:31.063264+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:31.065649+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 20664,
+            "output_tokens": 78
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:31.066648+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:31.067265+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_bf58a76ee1334ba790ddfa70",
+            "parent_id": "span_a05090c0a0154047aa410d2e",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:44:26.778753+00:00",
+            "ended_at": "2026-09-26T06:44:31.066822+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:31.067633+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:31.067949+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_7037d53425f247709aaba243",
+            "parent_id": "span_a05090c0a0154047aa410d2e",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T06:44:31.067464+00:00",
+            "ended_at": "2026-09-26T06:44:31.067648+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:31.075508+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_118a53abd8c544b0b2e0135f",
+            "parent_id": "span_afd1a5c9197b4d2689118728",
+            "span_type": "custom",
+            "name": "sandbox.cleanup_sessions",
+            "model": null,
+            "started_at": "2026-09-26T06:44:31.074718+00:00",
+            "ended_at": "2026-09-26T06:44:31.075107+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:31.075953+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_afd1a5c9197b4d2689118728",
+            "parent_id": "span_a05090c0a0154047aa410d2e",
+            "span_type": "custom",
+            "name": "sandbox.cleanup",
+            "model": null,
+            "started_at": "2026-09-26T06:44:31.074687+00:00",
+            "ended_at": "2026-09-26T06:44:31.075532+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:31.076372+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_a05090c0a0154047aa410d2e",
+            "parent_id": "span_2428bdf7dae54208aa1c8319",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:44:23.065187+00:00",
+            "ended_at": "2026-09-26T06:44:31.075977+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:31.076727+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027",
+            "span_id": "span_2428bdf7dae54208aa1c8319",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:44:23.012857+00:00",
+            "ended_at": "2026-09-26T06:44:31.076425+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:31.076844+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_54980a7286f14ec6b54ae83feb89a027"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:44:31.087822+00:00",
+          "session_id": "sol-20260926-11_template_snakemake",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 6
+          }
+        }
+      ],
+      "run": {
+        "run_id": "667e42ae-47d7-4d76-b340-f44888250ea5",
+        "session_dir": ".",
+        "runtime_dir": "runs/667e42ae-47d7-4d76-b340-f44888250ea5",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "uploads/examples/template_snakemake-b35f899b/metadata.tsv",
+          "workspace_path": "uploads/examples/template_snakemake-b35f899b/metadata.tsv",
+          "name": "metadata.tsv",
+          "size": 91,
+          "modified_at": 1790405056463342531,
+          "kind": "upload",
+          "content_type": "text/tab-separated-values; charset=utf-8"
+        },
+        {
+          "path": "uploads/examples/template_snakemake-b35f899b/sequences_segment1.fasta",
+          "workspace_path": "uploads/examples/template_snakemake-b35f899b/sequences_segment1.fasta",
+          "name": "sequences_segment1.fasta",
+          "size": 154,
+          "modified_at": 1790405056463342531,
+          "kind": "upload",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "uploads/examples/template_snakemake-b35f899b/sequences_segment2.fasta",
+          "workspace_path": "uploads/examples/template_snakemake-b35f899b/sequences_segment2.fasta",
+          "name": "sequences_segment2.fasta",
+          "size": 154,
+          "modified_at": 1790405056464342539,
+          "kind": "upload",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/plan.json",
+          "workspace_path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/plan.json",
+          "name": "plan.json",
+          "size": 1726,
+          "modified_at": 1790405059352363790,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/stdout.log",
+          "workspace_path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/stdout.log",
+          "name": "stdout.log",
+          "size": 0,
+          "modified_at": 1790405063043390942,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/inputs.json",
+          "workspace_path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/inputs.json",
+          "name": "inputs.json",
+          "size": 339,
+          "modified_at": 1790405063149391722,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/inputs/metadata/0_metadata.tsv",
+          "workspace_path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/inputs/metadata/0_metadata.tsv",
+          "name": "0_metadata.tsv",
+          "size": 91,
+          "modified_at": 1790405063149391722,
+          "kind": "metadata",
+          "content_type": "text/tab-separated-values; charset=utf-8"
+        },
+        {
+          "path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/inputs/sequence/0_sequences_segment1.fasta",
+          "workspace_path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/inputs/sequence/0_sequences_segment1.fasta",
+          "name": "0_sequences_segment1.fasta",
+          "size": 154,
+          "modified_at": 1790405063149391722,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/outputs/config.runtime.yaml",
+          "workspace_path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/outputs/config.runtime.yaml",
+          "name": "config.runtime.yaml",
+          "size": 1809,
+          "modified_at": 1790405063159391795,
+          "kind": "config",
+          "content_type": "text/yaml; charset=utf-8"
+        },
+        {
+          "path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/stderr.log",
+          "workspace_path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/stderr.log",
+          "name": "stderr.log",
+          "size": 963,
+          "modified_at": 1790405063160391803,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/job.json",
+          "workspace_path": "runs/fb60a1a9d8de4754a0860f14d31e95c3/job.json",
+          "name": "job.json",
+          "size": 2393,
+          "modified_at": 1790405063161391810,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        }
+      ],
+      "approval_decision": {
+        "approved": true,
+        "approval_id": "4dadd1e36fe548288d0008066c881e16",
+        "tool_name": "pipeline_shell",
+        "arguments": {
+          "commands": [
+            "agent-pipeline run --plan-id fb60a1a9d8de4754a0860f14d31e95c3"
+          ],
+          "max_output_length": 20000,
+          "timeout_ms": 120000
+        },
+        "plan": {
+          "pipeline_name": "template_snakemake",
+          "engine": "snakemake",
+          "inputs": {
+            "sequence": [
+              {
+                "path": "uploads/examples/template_snakemake-b35f899b/sequences_segment1.fasta",
+                "sha256": "b9267f205f091c8ce27ac46ebcdc851334d65d318b4430e2752637db9b85fbb1",
+                "size": 154
+              }
+            ],
+            "metadata": [
+              {
+                "path": "uploads/examples/template_snakemake-b35f899b/metadata.tsv",
+                "sha256": "e1987302cbff797a420941562dd19c784ded13a27e75b84dcd434bffdf4ea418",
+                "size": 91
+              }
+            ]
+          },
+          "parameters": {},
+          "cores": 1,
+          "timeout_seconds": 300,
+          "max_memory_mb": 8192,
+          "dry_run": false,
+          "definition_sha256": "cb3fd91f4b48d76ae5137e184d2d7b08f6db8ee2bc7748f699cd1b7ceff8aee7",
+          "outputs": {
+            "report": {
+              "name": "report",
+              "label": "Report",
+              "config_key": "report_path",
+              "default": "report.md",
+              "kind": "report",
+              "required": true,
+              "description": "Report produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "metrics": {
+              "name": "metrics",
+              "label": "Metrics",
+              "config_key": "metrics_path",
+              "default": "metrics.json",
+              "kind": "metrics",
+              "required": true,
+              "description": "Metrics produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "normalized_sequence": {
+              "name": "normalized_sequence",
+              "label": "Normalized sequence",
+              "config_key": "normalized_fasta_path",
+              "default": "normalized.fasta",
+              "kind": "sequence",
+              "required": true,
+              "description": "Normalized sequence produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            }
+          }
+        }
+      },
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "3f3fb822c2064bf18b62cd2f4ba8f94b",
+        "session_id": "sol-20260926-11_template_snakemake"
+      },
+      "created_at": "2026-09-26T06:44:02.817362+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "3f3fb822c2064bf18b62cd2f4ba8f94b"
+      },
+      "created_at": "2026-09-26T06:44:05.033604+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T06:44:05.852130+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T06:44:05.865129+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:12.132043+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:12.135044+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:12.137286+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll inspect the pipeline catalog and runtime availability "
+      },
+      "created_at": "2026-09-26T06:44:13.020976+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:13.024785+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:13.027423+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:13.029746+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:13.031748+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:13.033742+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:13.035924+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:13.038294+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:13.043229+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_C9RtcdUYIzJC2XwQEmTzAT45",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:13.045690+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_JRaSBq3r4kHsuUWyUzmArkJ1",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:13.047846+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_C9RtcdUYIzJC2XwQEmTzAT45",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:13.256397+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_JRaSBq3r4kHsuUWyUzmArkJ1",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:13.259270+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:15.747208+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:15.750197+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:15.752668+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "first.The requested internal demo is available; I’m staging its bundled inputs "
+      },
+      "created_at": "2026-09-26T06:44:16.428374+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:16.431157+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:16.433436+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:16.435642+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:16.437858+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:16.441324+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:16.446332+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_S7ngGrOz1rVCNJ5scgu6A6iV",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:16.448974+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_S7ngGrOz1rVCNJ5scgu6A6iV",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:16.473704+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:18.396297+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:18.399410+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:18.401586+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "next.Example inputs are staged. Now I’ll build and validate the exact "
+      },
+      "created_at": "2026-09-26T06:44:19.314386+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:19.316670+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:19.318746+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:19.320718+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:19.322658+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:19.324651+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:19.329114+00:00"
+    },
+    {
+      "sequence": 42,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_olbgwfxedU1NiC6h5oXSqwRm",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:19.331602+00:00"
+    },
+    {
+      "sequence": 43,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_olbgwfxedU1NiC6h5oXSqwRm",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:19.364518+00:00"
+    },
+    {
+      "sequence": 44,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:21.275294+00:00"
+    },
+    {
+      "sequence": 45,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:21.278951+00:00"
+    },
+    {
+      "sequence": 46,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:21.281719+00:00"
+    },
+    {
+      "sequence": 47,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "plan.The plan validated. I’ll execute it; runtime checks will gate "
+      },
+      "created_at": "2026-09-26T06:44:22.313863+00:00"
+    },
+    {
+      "sequence": 48,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:22.318636+00:00"
+    },
+    {
+      "sequence": 49,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:22.321331+00:00"
+    },
+    {
+      "sequence": 50,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:22.326522+00:00"
+    },
+    {
+      "sequence": 51,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:22.328882+00:00"
+    },
+    {
+      "sequence": 52,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:44:22.331079+00:00"
+    },
+    {
+      "sequence": 53,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:22.335517+00:00"
+    },
+    {
+      "sequence": 54,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_kv85rUGUKcRcJbovACyu9fYk",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:44:22.337848+00:00"
+    },
+    {
+      "sequence": 55,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "startup."
+      },
+      "created_at": "2026-09-26T06:44:22.413742+00:00"
+    },
+    {
+      "sequence": 56,
+      "event": "pending_approval",
+      "payload": {
+        "status": "pending_approval"
+      },
+      "created_at": "2026-09-26T06:44:22.416473+00:00"
+    },
+    {
+      "sequence": 57,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T06:44:31.130199+00:00"
+    }
+  ],
+  "approval_decisions": [
+    {
+      "approval_id": "4dadd1e36fe548288d0008066c881e16",
+      "tool_name": "pipeline_shell",
+      "approved": true,
+      "arguments": {
+        "commands": [
+          "agent-pipeline run --plan-id fb60a1a9d8de4754a0860f14d31e95c3"
+        ],
+        "max_output_length": 20000,
+        "timeout_ms": 120000
+      },
+      "plan": {
+        "pipeline_name": "template_snakemake",
+        "engine": "snakemake",
+        "inputs": {
+          "sequence": [
+            {
+              "path": "uploads/examples/template_snakemake-b35f899b/sequences_segment1.fasta",
+              "sha256": "b9267f205f091c8ce27ac46ebcdc851334d65d318b4430e2752637db9b85fbb1",
+              "size": 154
+            }
+          ],
+          "metadata": [
+            {
+              "path": "uploads/examples/template_snakemake-b35f899b/metadata.tsv",
+              "sha256": "e1987302cbff797a420941562dd19c784ded13a27e75b84dcd434bffdf4ea418",
+              "size": 91
+            }
+          ]
+        },
+        "parameters": {},
+        "cores": 1,
+        "timeout_seconds": 300,
+        "max_memory_mb": 8192,
+        "dry_run": false,
+        "definition_sha256": "cb3fd91f4b48d76ae5137e184d2d7b08f6db8ee2bc7748f699cd1b7ceff8aee7",
+        "outputs": {
+          "report": {
+            "name": "report",
+            "label": "Report",
+            "config_key": "report_path",
+            "default": "report.md",
+            "kind": "report",
+            "required": true,
+            "description": "Report produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "metrics": {
+            "name": "metrics",
+            "label": "Metrics",
+            "config_key": "metrics_path",
+            "default": "metrics.json",
+            "kind": "metrics",
+            "required": true,
+            "description": "Metrics produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "normalized_sequence": {
+            "name": "normalized_sequence",
+            "label": "Normalized sequence",
+            "config_key": "normalized_fasta_path",
+            "default": "normalized.fasta",
+            "kind": "sequence",
+            "required": true,
+            "description": "Normalized sequence produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          }
+        }
+      }
+    }
+  ],
+  "ui": {
+    "png": "11_template_snakemake.png",
+    "dom": "11_template_snakemake.txt",
+    "chrome_returncode": 0,
+    "stderr_tail": "340202 bytes written to file /media/data/fuhaoyi/codes/BioAgent/docs/images/live_tests_2026-09-26_gpt-5.6-sol/11_template_snakemake.png\n"
+  }
+}

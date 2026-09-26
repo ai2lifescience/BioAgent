@@ -1,0 +1,1484 @@
+{
+  "case": "28_complex_paper_display",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "Open the final Markdown report you just wrote. Display the report title, table of contents or headings, main findings, evidence/page references, and limitations in the web response; do not return only the file path.",
+  "session_id": "sol-20260926-complex-paper",
+  "run_id": "ba76ed8f99bd48d09c516a361fafa00c",
+  "uploads": [],
+  "started_at": "2026-09-26T07:43:04.816748+00:00",
+  "elapsed_seconds": 21.03,
+  "initial": {
+    "run_id": "ba76ed8f99bd48d09c516a361fafa00c",
+    "session_id": "sol-20260926-complex-paper",
+    "status": "running",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 16,
+    "created_at": "2026-09-26T07:42:43.785651+00:00",
+    "updated_at": "2026-09-26T07:42:43.791877+00:00",
+    "error": null
+  },
+  "status": {
+    "run_id": "ba76ed8f99bd48d09c516a361fafa00c",
+    "session_id": "sol-20260926-complex-paper",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 16,
+    "created_at": "2026-09-26T07:42:43.785651+00:00",
+    "updated_at": "2026-09-26T07:43:02.230229+00:00",
+    "error": null,
+    "result": {
+      "answer": "# Paper2Agent: Architecture, Reliability, Evaluation, and Practical Lessons\n\n**Headings**\n1. System architecture  \n2. Six-stage construction pipeline  \n3. Downstream agent loop  \n4. Tool and data interfaces  \n5. Evaluation evidence  \n6. Reliability and reproducibility mechanisms  \n7. Limitations and unresolved issues  \n8. Practical lessons  \n9. Overall assessment  \n10. Compact evidence map  \n\n**Main Findings**\n- Paper2Agent converts papers into MCP servers containing executable **tools**, queryable **resources**, and procedural **prompts**. [PDF p. 2]\n- Construction uses specialized agents for environment setup, tutorial discovery/execution, tool extraction, validation, repair, and server assembly. [PDF p. 10]\n- Runtime behavior follows a planning → action → observation loop over validated MCP capabilities. [PDF pp. 4–5]\n- Tests require output files, numerical agreement within 3%, and figure similarity by perceptual hash; failed functions get up to six repair attempts and are excluded if still invalid. [PDF p. 10]\n- Of 100 computational-biology papers, 74 were agentified and 593/599 proposed tools passed validation. [PDF pp. 5, 11]\n- Large-scale benchmark accuracy was 91.2%, versus 80.3% for direct Sonnet 4 repository access and 86.3% for Sonnet 4.6. [PDF p. 5]\n- AlphaGenome accuracy reached 98.7% on tutorial tasks, 100% on novel tasks, and 82.7% on open-ended tasks. [PDF p. 3]\n- Cross-domain accuracy was 98.1%; resource-only paper synthesis reached 89.0%. [PDF pp. 5, 11]\n\n**Evidence Map**\n- Architecture and interfaces: pp. 2–3\n- Agent loop: pp. 4–5\n- Evaluation results: pp. 3, 5, 7, 11–12\n- Implementation and validation: p. 10\n- Limitations and governance: pp. 7–8\n- TISSUE and ADHD examples: pp. 14–15\n\n**Limitations**\n- Only 74% of sampled biology papers completed agentification.\n- Missing code, data, models, documentation, or workable environments remain major blockers. [PDF pp. 5, 7]\n- Tutorial reproduction demonstrates execution fidelity, not universal scientific validity. [PDF pp. 8, 10]\n- Agents require ongoing maintenance and introduce security, IP, attribution, privacy, and governance concerns. [PDF p. 8]\n- Open-ended conclusions and hypotheses still require human judgment and experimental validation. [PDF pp. 7–8, 15]\n- PDF pages 16–18 required OCR and were not text-extractable.\n\nFull report: `outputs/report_write/31224843f309498db1c287656548e6fb/Paper2Agent_Architecture_Evaluation_Reliability_and_Lessons.md`",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-complex-paper",
+      "max_turns": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Open the final Markdown report you just wrote. Display the report title, table of contents or headings, main findings, evidence/page references, and limitations in the web response; do not return only the file path."
+        },
+        {
+          "role": "assistant",
+          "content": "# Paper2Agent: Architecture, Reliability, Evaluation, and Practical Lessons\n\n**Headings**\n1. System architecture  \n2. Six-stage construction pipeline  \n3. Downstream agent loop  \n4. Tool and data interfaces  \n5. Evaluation evidence  \n6. Reliability and reproducibility mechanisms  \n7. Limitations and unresolved issues  \n8. Practical lessons  \n9. Overall assessment  \n10. Compact evidence map  \n\n**Main Findings**\n- Paper2Agent converts papers into MCP servers containing executable **tools**, queryable **resources**, and procedural **prompts**. [PDF p. 2]\n- Construction uses specialized agents for environment setup, tutorial discovery/execution, tool extraction, validation, repair, and server assembly. [PDF p. 10]\n- Runtime behavior follows a planning → action → observation loop over validated MCP capabilities. [PDF pp. 4–5]\n- Tests require output files, numerical agreement within 3%, and figure similarity by perceptual hash; failed functions get up to six repair attempts and are excluded if still invalid. [PDF p. 10]\n- Of 100 computational-biology papers, 74 were agentified and 593/599 proposed tools passed validation. [PDF pp. 5, 11]\n- Large-scale benchmark accuracy was 91.2%, versus 80.3% for direct Sonnet 4 repository access and 86.3% for Sonnet 4.6. [PDF p. 5]\n- AlphaGenome accuracy reached 98.7% on tutorial tasks, 100% on novel tasks, and 82.7% on open-ended tasks. [PDF p. 3]\n- Cross-domain accuracy was 98.1%; resource-only paper synthesis reached 89.0%. [PDF pp. 5, 11]\n\n**Evidence Map**\n- Architecture and interfaces: pp. 2–3\n- Agent loop: pp. 4–5\n- Evaluation results: pp. 3, 5, 7, 11–12\n- Implementation and validation: p. 10\n- Limitations and governance: pp. 7–8\n- TISSUE and ADHD examples: pp. 14–15\n\n**Limitations**\n- Only 74% of sampled biology papers completed agentification.\n- Missing code, data, models, documentation, or workable environments remain major blockers. [PDF pp. 5, 7]\n- Tutorial reproduction demonstrates execution fidelity, not universal scientific validity. [PDF pp. 8, 10]\n- Agents require ongoing maintenance and introduce security, IP, attribution, privacy, and governance concerns. [PDF p. 8]\n- Open-ended conclusions and hypotheses still require human judgment and experimental validation. [PDF pp. 7–8, 15]\n- PDF pages 16–18 required OCR and were not text-extractable.\n\nFull report: `outputs/report_write/31224843f309498db1c287656548e6fb/Paper2Agent_Architecture_Evaluation_Reliability_and_Lessons.md`"
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [
+          "file_inspection"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [],
+        "outputs": [
+          {
+            "tool": "file_inspection",
+            "record_count": null,
+            "bytes": 31042,
+            "status": "ok"
+          }
+        ],
+        "tool_outputs": [],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T07:42:46.581299+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "run_started",
+          "data": {
+            "request": "Open the final Markdown report you just wrote. Display the report title, table of contents or headings, main findings, evidence/page references, and limitations in the web response; do not return only the file path.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:46.596639+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:46.611500+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_e5df4daebfd5471ba0302e20",
+            "parent_id": "span_7b87531223b94ce09dd3d7d4",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T07:42:46.601068+00:00",
+            "ended_at": "2026-09-26T07:42:46.611222+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:46.612667+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_42d85ee8ff6942d4bc498882",
+            "parent_id": "span_a6a8bc8e5ef14f3981a7283e",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:42:46.612317+00:00",
+            "ended_at": "2026-09-26T07:42:46.612390+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:46.613048+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_050dab9391574b2b823becf3",
+            "parent_id": "span_a6a8bc8e5ef14f3981a7283e",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:42:46.612742+00:00",
+            "ended_at": "2026-09-26T07:42:46.612793+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:46.616146+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_69d009981fdb458a99e74ce7",
+            "parent_id": "span_a6a8bc8e5ef14f3981a7283e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:42:46.613293+00:00",
+            "ended_at": "2026-09-26T07:42:46.615831+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:46.618703+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_c71e9e6eee164964a96dd56b",
+            "parent_id": "span_a6a8bc8e5ef14f3981a7283e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:42:46.616204+00:00",
+            "ended_at": "2026-09-26T07:42:46.618348+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:46.619895+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_a6a8bc8e5ef14f3981a7283e",
+            "parent_id": "span_7b87531223b94ce09dd3d7d4",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:42:46.611657+00:00",
+            "ended_at": "2026-09-26T07:42:46.619384+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:46.620907+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:46.669412+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:51.855106+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_372f0f15c4f64f14993d5cac",
+            "parent_id": "span_2e8cfd29fe4448cca1725f1a",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:42:46.672366+00:00",
+            "ended_at": "2026-09-26T07:42:51.854608+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:51.861415+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 40157,
+            "output_tokens": 79
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:51.863395+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:51.863838+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:54.991232+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "tool_finished",
+          "data": {
+            "tool": "file_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:54.994907+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:54.995425+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_d95e9c8069ba4622aa32b298",
+            "parent_id": "span_2e8cfd29fe4448cca1725f1a",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-26T07:42:51.862843+00:00",
+            "ended_at": "2026-09-26T07:42:54.995011+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:54.996181+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_2e8cfd29fe4448cca1725f1a",
+            "parent_id": "span_8bce4054aef94da3aa0b5399",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:42:46.620609+00:00",
+            "ended_at": "2026-09-26T07:42:54.995851+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:55.005905+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_b1f771397fc647b9a72d78ec",
+            "parent_id": "span_3713e26d87c4487b9856ed4c",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:42:55.005429+00:00",
+            "ended_at": "2026-09-26T07:42:55.005515+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:55.010361+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_b300cf1ce55947e482fb6588",
+            "parent_id": "span_3713e26d87c4487b9856ed4c",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:42:55.006337+00:00",
+            "ended_at": "2026-09-26T07:42:55.009841+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:55.013804+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_91ea971df1ee4f15b9e7d80d",
+            "parent_id": "span_3713e26d87c4487b9856ed4c",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:42:55.010445+00:00",
+            "ended_at": "2026-09-26T07:42:55.013420+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:55.014312+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_3713e26d87c4487b9856ed4c",
+            "parent_id": "span_8bce4054aef94da3aa0b5399",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:42:55.004782+00:00",
+            "ended_at": "2026-09-26T07:42:55.013891+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:42:55.017486+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:43:02.194583+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_ea3e3157dffd49a09f94cd24",
+            "parent_id": "span_104b0cdf14584226970992b7",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:42:55.018046+00:00",
+            "ended_at": "2026-09-26T07:43:02.194225+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:43:02.199059+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 44288,
+            "output_tokens": 631
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:43:02.200495+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:43:02.202814+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_104b0cdf14584226970992b7",
+            "parent_id": "span_8bce4054aef94da3aa0b5399",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:42:55.015967+00:00",
+            "ended_at": "2026-09-26T07:43:02.202483+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:43:02.206793+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:43:02.207107+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_a726ba3ae28545658305fb64",
+            "parent_id": "span_8bce4054aef94da3aa0b5399",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T07:43:02.206414+00:00",
+            "ended_at": "2026-09-26T07:43:02.206820+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:43:02.208953+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_8bce4054aef94da3aa0b5399",
+            "parent_id": "span_7b87531223b94ce09dd3d7d4",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T07:42:46.620526+00:00",
+            "ended_at": "2026-09-26T07:43:02.208633+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:43:02.209285+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b",
+            "span_id": "span_7b87531223b94ce09dd3d7d4",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T07:42:46.596718+00:00",
+            "ended_at": "2026-09-26T07:43:02.209029+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:43:02.209410+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_3fa9d7a842c547acabbd6c8da9b87d8b"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:43:02.214448+00:00",
+          "session_id": "sol-20260926-complex-paper",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 1
+          }
+        }
+      ],
+      "run": {
+        "run_id": "1db632f6-f260-4cbf-ad58-83b51e806beb",
+        "session_dir": ".",
+        "runtime_dir": "runs/1db632f6-f260-4cbf-ad58-83b51e806beb",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "uploads/6a2e5169450f_8f257ea0b0d9_Paper2Agent.pdf",
+          "workspace_path": "uploads/6a2e5169450f_8f257ea0b0d9_Paper2Agent.pdf",
+          "name": "6a2e5169450f_8f257ea0b0d9_Paper2Agent.pdf",
+          "size": 14067355,
+          "modified_at": 1790408441790861256,
+          "kind": "upload",
+          "content_type": "application/pdf"
+        },
+        {
+          "path": "outputs/report_write/31224843f309498db1c287656548e6fb/Paper2Agent_Architecture_Evaluation_Reliability_and_Lessons.md",
+          "workspace_path": "outputs/report_write/31224843f309498db1c287656548e6fb/Paper2Agent_Architecture_Evaluation_Reliability_and_Lessons.md",
+          "name": "Paper2Agent_Architecture_Evaluation_Reliability_and_Lessons.md",
+          "size": 31042,
+          "modified_at": 1790408554809313592,
+          "kind": "text",
+          "content_type": "text/markdown; charset=utf-8"
+        }
+      ],
+      "approval_decision": null,
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "ba76ed8f99bd48d09c516a361fafa00c",
+        "session_id": "sol-20260926-complex-paper"
+      },
+      "created_at": "2026-09-26T07:42:43.786916+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "ba76ed8f99bd48d09c516a361fafa00c"
+      },
+      "created_at": "2026-09-26T07:42:45.844455+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T07:42:46.598044+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T07:42:46.621167+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:42:51.199010+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:42:51.202738+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.205268+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll open the saved report and surface its requested sections "
+      },
+      "created_at": "2026-09-26T07:42:51.356054+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:42:51.358981+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.363594+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.366553+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.368964+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.382822+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.385957+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.388181+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.390908+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.396327+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.400329+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.402995+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.405936+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.422550+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.425497+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.427758+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.430478+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.434226+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.439602+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.442702+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.445114+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.448241+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.472716+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.475591+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.477717+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.479936+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.485073+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.487630+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.490325+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.493086+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.495559+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.520122+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.522943+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.528233+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.530610+00:00"
+    },
+    {
+      "sequence": 42,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.532896+00:00"
+    },
+    {
+      "sequence": 43,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.536797+00:00"
+    },
+    {
+      "sequence": 44,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.539136+00:00"
+    },
+    {
+      "sequence": 45,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.542086+00:00"
+    },
+    {
+      "sequence": 46,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.551556+00:00"
+    },
+    {
+      "sequence": 47,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.553891+00:00"
+    },
+    {
+      "sequence": 48,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.556642+00:00"
+    },
+    {
+      "sequence": 49,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.560245+00:00"
+    },
+    {
+      "sequence": 50,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.563181+00:00"
+    },
+    {
+      "sequence": 51,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.695925+00:00"
+    },
+    {
+      "sequence": 52,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.698889+00:00"
+    },
+    {
+      "sequence": 53,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.701208+00:00"
+    },
+    {
+      "sequence": 54,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.844514+00:00"
+    },
+    {
+      "sequence": 55,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:42:51.847799+00:00"
+    },
+    {
+      "sequence": 56,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:42:51.849959+00:00"
+    },
+    {
+      "sequence": 57,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:42:51.852354+00:00"
+    },
+    {
+      "sequence": 58,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.857338+00:00"
+    },
+    {
+      "sequence": 59,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_ENlGbu3KOFC4Bl6Iebruxdsk",
+        "tool_name": "file_inspection",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:51.859603+00:00"
+    },
+    {
+      "sequence": 60,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T07:42:51.864073+00:00"
+    },
+    {
+      "sequence": 61,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T07:42:54.991578+00:00"
+    },
+    {
+      "sequence": 62,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_ENlGbu3KOFC4Bl6Iebruxdsk",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:42:55.001581+00:00"
+    },
+    {
+      "sequence": 63,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:42:57.224039+00:00"
+    },
+    {
+      "sequence": 64,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:42:57.227150+00:00"
+    },
+    {
+      "sequence": 65,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:42:57.229742+00:00"
+    },
+    {
+      "sequence": 66,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "directly.# Paper2Agent: Architecture, Reliability, Evaluation, and Practical Lessons\n\n**Headings**\n1. System architecture  \n2. Six-stage construction pipeline  \n3. Downstream agent loop  \n4. Tool and data interfaces  \n5. Evaluation evidence  \n6. Reliability "
+      },
+      "created_at": "2026-09-26T07:42:57.531133+00:00"
+    },
+    {
+      "sequence": 67,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "and reproducibility mechanisms  \n7. Limitations and unresolved issues  \n8. Practical lessons  \n9. Overall assessment  \n10. Compact evidence map  \n\n**Main Findings**\n- Paper2Agent converts papers into MCP servers containing executable **tools**, queryable **resources**, "
+      },
+      "created_at": "2026-09-26T07:42:57.909073+00:00"
+    },
+    {
+      "sequence": 68,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "and procedural **prompts**. [PDF p. 2]\n- Construction uses specialized agents for environment setup, tutorial discovery/execution, tool extraction, validation, repair, and server assembly. [PDF p. 10]\n- Runtime behavior follows a planning → action → observation "
+      },
+      "created_at": "2026-09-26T07:42:58.327788+00:00"
+    },
+    {
+      "sequence": 69,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "loop over validated MCP capabilities. [PDF pp. 4–5]\n- Tests require output files, numerical agreement within 3%, and figure similarity by perceptual hash; failed functions get up to six repair attempts and are excluded if still invalid. [PDF p. 10]\n- Of 100 "
+      },
+      "created_at": "2026-09-26T07:42:58.878152+00:00"
+    },
+    {
+      "sequence": 70,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "computational-biology papers, 74 were agentified and 593/599 proposed tools passed validation. [PDF pp. 5, 11]\n- Large-scale benchmark accuracy was 91.2%, versus 80.3% for direct Sonnet 4 repository access and 86.3% for Sonnet 4.6. [PDF p. 5]\n- AlphaGenome "
+      },
+      "created_at": "2026-09-26T07:42:59.417125+00:00"
+    },
+    {
+      "sequence": 71,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "accuracy reached 98.7% on tutorial tasks, 100% on novel tasks, and 82.7% on open-ended tasks. [PDF p. 3]\n- Cross-domain accuracy was 98.1%; resource-only paper synthesis reached 89.0%. [PDF pp. 5, 11]\n\n**Evidence Map**\n- Architecture and interfaces: pp. 2–3\n"
+      },
+      "created_at": "2026-09-26T07:43:00.069538+00:00"
+    },
+    {
+      "sequence": 72,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "- Agent loop: pp. 4–5\n- Evaluation results: pp. 3, 5, 7, 11–12\n- Implementation and validation: p. 10\n- Limitations and governance: pp. 7–8\n- TISSUE and ADHD examples: pp. 14–15\n\n**Limitations**\n- Only 74% of sampled biology papers completed agentification.\n"
+      },
+      "created_at": "2026-09-26T07:43:00.626513+00:00"
+    },
+    {
+      "sequence": 73,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "- Missing code, data, models, documentation, or workable environments remain major blockers. [PDF pp. 5, 7]\n- Tutorial reproduction demonstrates execution fidelity, not universal scientific validity. [PDF pp. 8, 10]\n- Agents require ongoing maintenance and "
+      },
+      "created_at": "2026-09-26T07:43:01.158969+00:00"
+    },
+    {
+      "sequence": 74,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "introduce security, IP, attribution, privacy, and governance concerns. [PDF p. 8]\n- Open-ended conclusions and hypotheses still require human judgment and experimental validation. [PDF pp. 7–8, 15]\n- PDF pages 16–18 required OCR and were not text-extractable.\n\n"
+      },
+      "created_at": "2026-09-26T07:43:01.714681+00:00"
+    },
+    {
+      "sequence": 75,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "Full report: "
+      },
+      "created_at": "2026-09-26T07:43:02.186324+00:00"
+    },
+    {
+      "sequence": 76,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:43:02.188802+00:00"
+    },
+    {
+      "sequence": 77,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:43:02.190706+00:00"
+    },
+    {
+      "sequence": 78,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:43:02.192594+00:00"
+    },
+    {
+      "sequence": 79,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:43:02.196943+00:00"
+    },
+    {
+      "sequence": 80,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent finished: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T07:43:02.200723+00:00"
+    },
+    {
+      "sequence": 81,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "`outputs/report_write/31224843f309498db1c287656548e6fb/Paper2Agent_Architecture_Evaluation_Reliability_and_Lessons.md`"
+      },
+      "created_at": "2026-09-26T07:43:02.228211+00:00"
+    },
+    {
+      "sequence": 82,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T07:43:02.230411+00:00"
+    }
+  ],
+  "approval_decisions": [],
+  "ui": {
+    "png": "28_complex_paper_display.png",
+    "dom": "28_complex_paper_display.txt",
+    "returncode": 0
+  }
+}

@@ -9,8 +9,8 @@ for downstream metagenomic analysis.
 Standalone execution requires:
 
 - miniwdl for local execution, or Java for the standalone Cromwell command;
-- a reachable Cromwell Server when `CROMWELL_URL` is set, with shared filesystem
-  access for BioAgent, Cromwell, and task containers;
+- a reachable Cromwell Server when `CROMWELL_URL` is set, with the configured
+  S3-backed input/output paths available to Cromwell and task containers;
 - Docker or the configured backend with `cncb/mscan-detection-qc:v1.0` (or a
   compatible image) containing `fastp`, Kraken2, Bowtie2, and
   `/app/scripts/count_reads.py`;

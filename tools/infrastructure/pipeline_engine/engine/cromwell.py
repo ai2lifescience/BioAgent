@@ -15,6 +15,7 @@ from tools.infrastructure.pipeline_engine.engine.config import write_runtime_con
 from tools.infrastructure.pipeline_engine.engine.inputs import stringify_input_value
 from tools.infrastructure.pipeline_engine.engine.input_storage import (
     S3InputUploader,
+    S3OutputStorage,
     upload_local_file_values,
     write_upload_manifest,
 )
@@ -45,7 +46,20 @@ def run_cromwell_pipeline(
     )
     runtime_config = write_runtime_config(context)
     inputs_path = write_wdl_inputs(context)
-    options_path = write_wdl_options(context)
+    output_storage = S3OutputStorage.from_environment()
+    if output_storage is not None and output_storage.mount_prefix is None:
+        raise ValueError(
+            "CROMWELL_OUTPUT_STORAGE_URI is configured, but no Cromwell-visible output "
+            "directory is configured. The current Local backend needs "
+            "CROMWELL_OUTPUT_STORAGE_MOUNT_PREFIX. Set that to the remote S3-backed "
+            "mount."
+        )
+    options_path = write_wdl_options(
+        context,
+        output_storage_mount_prefix=(
+            output_storage.mount_prefix if output_storage is not None else None
+        ),
+    )
     outputs_json = context.run_dir / "wdl.outputs.json"
     metadata_json = context.run_dir / "wdl.metadata.json"
     input_storage = S3InputUploader.from_environment()
@@ -121,12 +135,34 @@ def run_cromwell_pipeline(
     output_map = output_response.get("outputs")
     if not isinstance(output_map, dict):
         output_map = output_response
-    copy_declared_outputs(runtime_config.output_records, output_map)
+    try:
+        copy_declared_outputs(
+            runtime_config.output_records,
+            output_map,
+            remote_downloader=output_storage,
+        )
 
-    files, output_records = finalize_output_records(
-        runtime_config.output_records,
-        require_outputs=True,
-    )
+        files, output_records = finalize_output_records(
+            runtime_config.output_records,
+            require_outputs=True,
+        )
+    except Exception as exc:
+        raise RuntimeError(
+            f"Cromwell workflow {workflow_id} succeeded, but output collection failed: {exc}"
+        ) from exc
+
+    output_storage_summary = None
+    if output_storage is not None:
+        output_storage_summary = {
+            "backend": output_storage.backend,
+            "base_uri": output_storage.base_uri,
+            "mount_prefix": output_storage.mount_prefix,
+            "execution_prefixes": list(output_storage.execution_prefixes),
+            "downloaded": output_storage.downloaded,
+        }
+        (context.run_dir / "cromwell.output_downloads.json").write_text(
+            json.dumps(output_storage_summary, indent=2) + "\n", encoding="utf-8"
+        )
     metrics_path = output_path_by_name(output_records, "metrics")
     report_path = output_path_by_name(output_records, "report")
     return {
@@ -161,6 +197,7 @@ def run_cromwell_pipeline(
             "base_uri": input_storage.base_uri,
             "uploaded": uploaded_inputs,
         } if input_storage is not None else None,
+        "output_storage": output_storage_summary,
         "returncode": 0,
         "command": ["POST", f"{base_url}/api/workflows/{api_version}"],
         "stdout": f"Cromwell workflow {workflow_id} succeeded.",

@@ -1,0 +1,3137 @@
+{
+  "case": "23_ncbi_retrieval",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "Retrieve three public NCBI records related to PhiX174 genes A and G, save the sequence and metadata artifacts, and summarize accession identifiers and source links.",
+  "session_id": "sol-20260926-23_ncbi_retrieval",
+  "run_id": "a95469e102fc400db4355be1df2b6c04",
+  "elapsed_seconds": 34.15,
+  "initial": {
+    "run_id": "a95469e102fc400db4355be1df2b6c04",
+    "session_id": "sol-20260926-23_ncbi_retrieval",
+    "status": "running",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 14,
+    "created_at": "2026-09-26T06:52:01.976708+00:00",
+    "updated_at": "2026-09-26T06:52:01.983384+00:00",
+    "error": null
+  },
+  "status": {
+    "run_id": "a95469e102fc400db4355be1df2b6c04",
+    "session_id": "sol-20260926-23_ncbi_retrieval",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 14,
+    "created_at": "2026-09-26T06:52:01.976708+00:00",
+    "updated_at": "2026-09-26T06:52:33.873553+00:00",
+    "error": null,
+    "result": {
+      "answer": "Retrieved three NCBI nucleotide records:\n\n- Gene A: [MN045317.1](https://www.ncbi.nlm.nih.gov/nuccore/MN045317.1)\n- Gene A: [MN045316.1](https://www.ncbi.nlm.nih.gov/nuccore/MN045316.1)\n- Gene G: [MN045334.1](https://www.ncbi.nlm.nih.gov/nuccore/MN045334.1)\n\nArtifacts:\n- Sequences: `outputs/phix174_A_G_records/phix174_gene_A_sequences.fasta`, `outputs/phix174_A_G_records/phix174_gene_G_sequences.fasta`\n- Metadata: `outputs/phix174_A_G_records/phix174_gene_A_metadata.csv`, `outputs/phix174_A_G_records/phix174_gene_G_metadata.csv`\n\nThese are synthetic constructs derived from Escherichia virus phiX174.",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-23_ncbi_retrieval",
+      "max_turns": 14,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Retrieve three public NCBI records related to PhiX174 genes A and G, save the sequence and metadata artifacts, and summarize accession identifiers and source links."
+        },
+        {
+          "role": "assistant",
+          "content": "Retrieved three NCBI nucleotide records:\n\n- Gene A: [MN045317.1](https://www.ncbi.nlm.nih.gov/nuccore/MN045317.1)\n- Gene A: [MN045316.1](https://www.ncbi.nlm.nih.gov/nuccore/MN045316.1)\n- Gene G: [MN045334.1](https://www.ncbi.nlm.nih.gov/nuccore/MN045334.1)\n\nArtifacts:\n- Sequences: `outputs/phix174_A_G_records/phix174_gene_A_sequences.fasta`, `outputs/phix174_A_G_records/phix174_gene_G_sequences.fasta`\n- Metadata: `outputs/phix174_A_G_records/phix174_gene_A_metadata.csv`, `outputs/phix174_A_G_records/phix174_gene_G_metadata.csv`\n\nThese are synthetic constructs derived from Escherichia virus phiX174."
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [
+          "ncbi_retrieval",
+          "file_inspection"
+        ],
+        "databases": [
+          "nucleotide"
+        ],
+        "query_terms": [
+          "PhiX174[Organism] AND (gene A[Title] OR gene G[Title])",
+          "PhiX174[All Fields] AND A[Gene Name]",
+          "PhiX174[All Fields] AND G[Gene Name]"
+        ],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [
+          "phix174_A_G_records",
+          "outputs/phix174_A_G_records",
+          "outputs/phix174_A_G_records/phix174_gene_A_sequences.fasta",
+          "outputs/phix174_A_G_records/phix174_gene_A_metadata.csv",
+          "outputs/phix174_A_G_records/phix174_gene_G_sequences.fasta",
+          "outputs/phix174_A_G_records/phix174_gene_G_metadata.csv"
+        ],
+        "outputs": [
+          {
+            "tool": "ncbi_retrieval",
+            "matched_count": 0,
+            "downloaded_count": 0,
+            "fasta_paths": [],
+            "metadata_paths": [],
+            "output_dir": "outputs/phix174_A_G_records",
+            "status": "ok"
+          },
+          {
+            "tool": "ncbi_retrieval",
+            "matched_count": 42,
+            "downloaded_count": 2,
+            "fasta_paths": [
+              "outputs/phix174_A_G_records/phix174_gene_A_sequences.fasta"
+            ],
+            "metadata_paths": [
+              "outputs/phix174_A_G_records/phix174_gene_A_metadata.csv"
+            ],
+            "output_dir": "outputs/phix174_A_G_records",
+            "status": "ok"
+          },
+          {
+            "tool": "ncbi_retrieval",
+            "matched_count": 21,
+            "downloaded_count": 1,
+            "fasta_paths": [
+              "outputs/phix174_A_G_records/phix174_gene_G_sequences.fasta"
+            ],
+            "metadata_paths": [
+              "outputs/phix174_A_G_records/phix174_gene_G_metadata.csv"
+            ],
+            "output_dir": "outputs/phix174_A_G_records",
+            "status": "ok"
+          },
+          {
+            "tool": "file_inspection",
+            "record_count": null,
+            "bytes": 707,
+            "status": "ok"
+          },
+          {
+            "tool": "file_inspection",
+            "record_count": null,
+            "bytes": 1223,
+            "status": "ok"
+          }
+        ],
+        "tool_outputs": [],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T06:52:04.934234+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "run_started",
+          "data": {
+            "request": "Retrieve three public NCBI records related to PhiX174 genes A and G, save the sequence and metadata artifacts, and summarize accession identifiers and source links.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:04.948478+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:04.953057+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_2c46e954e7c04000b48496be",
+            "parent_id": "span_e31e93130f824bfdb28dd160",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T06:52:04.952704+00:00",
+            "ended_at": "2026-09-26T06:52:04.952763+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:04.954113+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_ebb4d05aeb754441befd9116",
+            "parent_id": "span_dd9574cc2f6c4669862b7161",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:52:04.953768+00:00",
+            "ended_at": "2026-09-26T06:52:04.953844+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:04.954495+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_4035b57447194b84947622c3",
+            "parent_id": "span_dd9574cc2f6c4669862b7161",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:52:04.954193+00:00",
+            "ended_at": "2026-09-26T06:52:04.954246+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:04.958459+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_e0ca673331d8468c95478d74",
+            "parent_id": "span_dd9574cc2f6c4669862b7161",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:52:04.954745+00:00",
+            "ended_at": "2026-09-26T06:52:04.958177+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:04.961945+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_35d787eb412d4559871ad2e6",
+            "parent_id": "span_dd9574cc2f6c4669862b7161",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:52:04.958507+00:00",
+            "ended_at": "2026-09-26T06:52:04.961669+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:04.962891+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_dd9574cc2f6c4669862b7161",
+            "parent_id": "span_e31e93130f824bfdb28dd160",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:52:04.953143+00:00",
+            "ended_at": "2026-09-26T06:52:04.962606+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:04.963608+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:05.001155+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:08.828275+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_f2515cce9cdf4febafa1bbec",
+            "parent_id": "span_2b82d82f5e0047578d5c4ee2",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:52:05.003724+00:00",
+            "ended_at": "2026-09-26T06:52:08.827915+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:08.835196+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11360,
+            "output_tokens": 142
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:08.837118+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "ncbi_retrieval"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:08.837578+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "tool_started",
+          "data": {
+            "tool": "ncbi_retrieval"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:12.820763+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "tool_finished",
+          "data": {
+            "tool": "ncbi_retrieval",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:12.824216+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "ncbi_retrieval"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:12.824666+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_65e927cb073b41d3b054a2fc",
+            "parent_id": "span_2b82d82f5e0047578d5c4ee2",
+            "span_type": "function",
+            "name": "ncbi_retrieval",
+            "model": null,
+            "started_at": "2026-09-26T06:52:08.836287+00:00",
+            "ended_at": "2026-09-26T06:52:12.824299+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:12.825796+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_2b82d82f5e0047578d5c4ee2",
+            "parent_id": "span_02e1d6b4a6ad466e864a45af",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:52:04.963402+00:00",
+            "ended_at": "2026-09-26T06:52:12.825298+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:12.836203+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_9738488cc12444b5a930c739",
+            "parent_id": "span_f531e152591c44a0bddbdff9",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:52:12.835634+00:00",
+            "ended_at": "2026-09-26T06:52:12.835780+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:12.841671+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_1e7121e7768b43119fba6e17",
+            "parent_id": "span_f531e152591c44a0bddbdff9",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:52:12.836537+00:00",
+            "ended_at": "2026-09-26T06:52:12.840752+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:12.847718+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_384d4a3530c44284aba40066",
+            "parent_id": "span_f531e152591c44a0bddbdff9",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:52:12.841828+00:00",
+            "ended_at": "2026-09-26T06:52:12.846866+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:12.848649+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_f531e152591c44a0bddbdff9",
+            "parent_id": "span_02e1d6b4a6ad466e864a45af",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:52:12.834820+00:00",
+            "ended_at": "2026-09-26T06:52:12.847899+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:12.853412+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:16.764299+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_fb5ce957cc484118af57d3af",
+            "parent_id": "span_d7249dc1696c47e0b5070529",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:52:12.854102+00:00",
+            "ended_at": "2026-09-26T06:52:16.763938+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:16.774571+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11730,
+            "output_tokens": 252
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:16.776730+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "ncbi_retrieval"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:16.777158+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "ncbi_retrieval"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:16.778027+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "tool_started",
+          "data": {
+            "tool": "ncbi_retrieval"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:16.781881+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "tool_started",
+          "data": {
+            "tool": "ncbi_retrieval"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:22.626580+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "artifact_created",
+          "data": {
+            "tool": "ncbi_retrieval",
+            "path": "outputs/phix174_A_G_records/phix174_gene_A_sequences.fasta",
+            "workspace_path": "outputs/phix174_A_G_records/phix174_gene_A_sequences.fasta",
+            "name": "phix174_gene_A_sequences.fasta",
+            "kind": "sequence",
+            "content_type": "text/plain; charset=utf-8",
+            "size": 3156,
+            "modified_at": 1790405542588865630
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:22.627252+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "artifact_created",
+          "data": {
+            "tool": "ncbi_retrieval",
+            "path": "outputs/phix174_A_G_records/phix174_gene_A_metadata.csv",
+            "workspace_path": "outputs/phix174_A_G_records/phix174_gene_A_metadata.csv",
+            "name": "phix174_gene_A_metadata.csv",
+            "kind": "metadata",
+            "content_type": "text/csv; charset=utf-8",
+            "size": 1223,
+            "modified_at": 1790405542587865623
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:22.627588+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "tool_finished",
+          "data": {
+            "tool": "ncbi_retrieval",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:22.632166+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "ncbi_retrieval"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:22.633190+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_8ffdc143ad0d4486be22e17e",
+            "parent_id": "span_d7249dc1696c47e0b5070529",
+            "span_type": "function",
+            "name": "ncbi_retrieval",
+            "model": null,
+            "started_at": "2026-09-26T06:52:16.775759+00:00",
+            "ended_at": "2026-09-26T06:52:22.632425+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:23.058857+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "artifact_created",
+          "data": {
+            "tool": "ncbi_retrieval",
+            "path": "outputs/phix174_A_G_records/phix174_gene_G_sequences.fasta",
+            "workspace_path": "outputs/phix174_A_G_records/phix174_gene_G_sequences.fasta",
+            "name": "phix174_gene_G_sequences.fasta",
+            "kind": "sequence",
+            "content_type": "text/plain; charset=utf-8",
+            "size": 549,
+            "modified_at": 1790405543014868683
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:23.059528+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "artifact_created",
+          "data": {
+            "tool": "ncbi_retrieval",
+            "path": "outputs/phix174_A_G_records/phix174_gene_G_metadata.csv",
+            "workspace_path": "outputs/phix174_A_G_records/phix174_gene_G_metadata.csv",
+            "name": "phix174_gene_G_metadata.csv",
+            "kind": "metadata",
+            "content_type": "text/csv; charset=utf-8",
+            "size": 707,
+            "modified_at": 1790405543012868669
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:23.059866+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "tool_finished",
+          "data": {
+            "tool": "ncbi_retrieval",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:23.063741+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "ncbi_retrieval"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:23.064157+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_a902f2d90e8e4491bfbc34fd",
+            "parent_id": "span_d7249dc1696c47e0b5070529",
+            "span_type": "function",
+            "name": "ncbi_retrieval",
+            "model": null,
+            "started_at": "2026-09-26T06:52:16.776136+00:00",
+            "ended_at": "2026-09-26T06:52:23.063818+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:23.065248+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_d7249dc1696c47e0b5070529",
+            "parent_id": "span_02e1d6b4a6ad466e864a45af",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:52:12.851398+00:00",
+            "ended_at": "2026-09-26T06:52:23.064782+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:23.079615+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_ea2002af6cce43c1a5276d8f",
+            "parent_id": "span_ee245415fd344f3f8ab32011",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:52:23.078618+00:00",
+            "ended_at": "2026-09-26T06:52:23.078805+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:23.086245+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_b65b5e64466b4ceb9b54e525",
+            "parent_id": "span_ee245415fd344f3f8ab32011",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:52:23.080341+00:00",
+            "ended_at": "2026-09-26T06:52:23.085730+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:23.090263+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_d5733be249104f618d875ef5",
+            "parent_id": "span_ee245415fd344f3f8ab32011",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:52:23.086330+00:00",
+            "ended_at": "2026-09-26T06:52:23.089912+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:23.090641+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_ee245415fd344f3f8ab32011",
+            "parent_id": "span_02e1d6b4a6ad466e864a45af",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:52:23.077352+00:00",
+            "ended_at": "2026-09-26T06:52:23.090320+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:23.093063+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:25.795596+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_c5f20e425e1a46668d8751f8",
+            "parent_id": "span_5df84124f66840e79a80f7fd",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:52:23.093671+00:00",
+            "ended_at": "2026-09-26T06:52:25.795228+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:25.805287+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12848,
+            "output_tokens": 112
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:25.807357+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:25.807493+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:25.808026+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:25.811462+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:29.867522+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "tool_finished",
+          "data": {
+            "tool": "file_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:29.871518+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:29.872000+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_64b30c00ae0547b297a0ea30",
+            "parent_id": "span_5df84124f66840e79a80f7fd",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-26T06:52:25.806954+00:00",
+            "ended_at": "2026-09-26T06:52:29.871666+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:30.011571+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "tool_finished",
+          "data": {
+            "tool": "file_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:30.015541+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:30.016262+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_eabfa852ccdb43928fed3407",
+            "parent_id": "span_5df84124f66840e79a80f7fd",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-26T06:52:25.806485+00:00",
+            "ended_at": "2026-09-26T06:52:30.015683+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:30.017890+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_5df84124f66840e79a80f7fd",
+            "parent_id": "span_02e1d6b4a6ad466e864a45af",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:52:23.091681+00:00",
+            "ended_at": "2026-09-26T06:52:30.017235+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:30.034073+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_a442cfa6b675485aaea373bc",
+            "parent_id": "span_cc85a8635a01451ca406162f",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:52:30.033590+00:00",
+            "ended_at": "2026-09-26T06:52:30.033701+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:30.037663+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_9ee25cd313a649d995fbe565",
+            "parent_id": "span_cc85a8635a01451ca406162f",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:52:30.034505+00:00",
+            "ended_at": "2026-09-26T06:52:30.037311+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:30.040930+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_9d135ded292942b8928342d3",
+            "parent_id": "span_cc85a8635a01451ca406162f",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:52:30.037714+00:00",
+            "ended_at": "2026-09-26T06:52:30.040441+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:30.041287+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_cc85a8635a01451ca406162f",
+            "parent_id": "span_02e1d6b4a6ad466e864a45af",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:52:30.032938+00:00",
+            "ended_at": "2026-09-26T06:52:30.040974+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:30.043164+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:33.825061+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_89c84045c8504de0a08d285d",
+            "parent_id": "span_b6ae57bf766f4b55bf7e29d5",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:52:30.043608+00:00",
+            "ended_at": "2026-09-26T06:52:33.824681+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:33.829367+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 13945,
+            "output_tokens": 195
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:33.830869+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:33.833427+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_b6ae57bf766f4b55bf7e29d5",
+            "parent_id": "span_02e1d6b4a6ad466e864a45af",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:52:30.041818+00:00",
+            "ended_at": "2026-09-26T06:52:33.833089+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:33.837676+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:33.838000+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_7d070dc038574d6f9ea15a24",
+            "parent_id": "span_02e1d6b4a6ad466e864a45af",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T06:52:33.837497+00:00",
+            "ended_at": "2026-09-26T06:52:33.837699+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:33.839951+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_02e1d6b4a6ad466e864a45af",
+            "parent_id": "span_e31e93130f824bfdb28dd160",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:52:04.963321+00:00",
+            "ended_at": "2026-09-26T06:52:33.839608+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:33.840299+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693",
+            "span_id": "span_e31e93130f824bfdb28dd160",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:52:04.948583+00:00",
+            "ended_at": "2026-09-26T06:52:33.840006+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:33.840459+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_aef7db01ccaa4a4492df238f3d12e693"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:52:33.846207+00:00",
+          "session_id": "sol-20260926-23_ncbi_retrieval",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 5
+          }
+        }
+      ],
+      "run": {
+        "run_id": "a94948a4-c9eb-4709-abdb-f592c0d6a019",
+        "session_dir": ".",
+        "runtime_dir": "runs/a94948a4-c9eb-4709-abdb-f592c0d6a019",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "outputs/phix174_A_G_records/phix174_gene_A_metadata.csv",
+          "workspace_path": "outputs/phix174_A_G_records/phix174_gene_A_metadata.csv",
+          "name": "phix174_gene_A_metadata.csv",
+          "size": 1223,
+          "modified_at": 1790405542587865623,
+          "kind": "metadata",
+          "content_type": "text/csv; charset=utf-8"
+        },
+        {
+          "path": "outputs/phix174_A_G_records/phix174_gene_A_sequences.fasta",
+          "workspace_path": "outputs/phix174_A_G_records/phix174_gene_A_sequences.fasta",
+          "name": "phix174_gene_A_sequences.fasta",
+          "size": 3156,
+          "modified_at": 1790405542588865630,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "outputs/phix174_A_G_records/phix174_gene_G_metadata.csv",
+          "workspace_path": "outputs/phix174_A_G_records/phix174_gene_G_metadata.csv",
+          "name": "phix174_gene_G_metadata.csv",
+          "size": 707,
+          "modified_at": 1790405543012868669,
+          "kind": "metadata",
+          "content_type": "text/csv; charset=utf-8"
+        },
+        {
+          "path": "outputs/phix174_A_G_records/phix174_gene_G_sequences.fasta",
+          "workspace_path": "outputs/phix174_A_G_records/phix174_gene_G_sequences.fasta",
+          "name": "phix174_gene_G_sequences.fasta",
+          "size": 549,
+          "modified_at": 1790405543014868683,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        }
+      ],
+      "approval_decision": null,
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "a95469e102fc400db4355be1df2b6c04",
+        "session_id": "sol-20260926-23_ncbi_retrieval"
+      },
+      "created_at": "2026-09-26T06:52:01.977332+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "a95469e102fc400db4355be1df2b6c04"
+      },
+      "created_at": "2026-09-26T06:52:04.055360+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T06:52:04.949843+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T06:52:04.963806+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:07.515469+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:07.518557+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.520738+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll query NCBI for three PhiX174 A/G gene records and save both "
+      },
+      "created_at": "2026-09-26T06:52:07.785105+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:07.788010+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.792648+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.794706+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.796785+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.883345+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.888435+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.892297+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.894540+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.930185+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.932577+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.934807+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.937405+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.948285+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.952144+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.955550+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.958458+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.960599+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:07.998136+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.001638+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.003740+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.005724+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.023755+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.025826+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.027827+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.030055+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.041773+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.043780+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.047428+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.049715+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.051718+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.085543+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.089231+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.091534+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.093553+00:00"
+    },
+    {
+      "sequence": 42,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.113672+00:00"
+    },
+    {
+      "sequence": 43,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.115772+00:00"
+    },
+    {
+      "sequence": 44,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.118261+00:00"
+    },
+    {
+      "sequence": 45,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.120944+00:00"
+    },
+    {
+      "sequence": 46,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.167185+00:00"
+    },
+    {
+      "sequence": 47,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.171384+00:00"
+    },
+    {
+      "sequence": 48,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.173945+00:00"
+    },
+    {
+      "sequence": 49,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.176530+00:00"
+    },
+    {
+      "sequence": 50,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.178707+00:00"
+    },
+    {
+      "sequence": 51,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.182913+00:00"
+    },
+    {
+      "sequence": 52,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.185265+00:00"
+    },
+    {
+      "sequence": 53,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.188513+00:00"
+    },
+    {
+      "sequence": 54,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.190720+00:00"
+    },
+    {
+      "sequence": 55,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.209948+00:00"
+    },
+    {
+      "sequence": 56,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.212217+00:00"
+    },
+    {
+      "sequence": 57,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.214440+00:00"
+    },
+    {
+      "sequence": 58,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.216776+00:00"
+    },
+    {
+      "sequence": 59,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.223655+00:00"
+    },
+    {
+      "sequence": 60,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.227533+00:00"
+    },
+    {
+      "sequence": 61,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.229715+00:00"
+    },
+    {
+      "sequence": 62,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.231762+00:00"
+    },
+    {
+      "sequence": 63,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.234297+00:00"
+    },
+    {
+      "sequence": 64,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.236774+00:00"
+    },
+    {
+      "sequence": 65,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.271891+00:00"
+    },
+    {
+      "sequence": 66,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.274559+00:00"
+    },
+    {
+      "sequence": 67,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.276870+00:00"
+    },
+    {
+      "sequence": 68,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.280474+00:00"
+    },
+    {
+      "sequence": 69,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.293940+00:00"
+    },
+    {
+      "sequence": 70,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.296525+00:00"
+    },
+    {
+      "sequence": 71,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.298759+00:00"
+    },
+    {
+      "sequence": 72,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.300892+00:00"
+    },
+    {
+      "sequence": 73,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.318009+00:00"
+    },
+    {
+      "sequence": 74,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.320387+00:00"
+    },
+    {
+      "sequence": 75,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.322745+00:00"
+    },
+    {
+      "sequence": 76,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.325224+00:00"
+    },
+    {
+      "sequence": 77,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.327571+00:00"
+    },
+    {
+      "sequence": 78,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.330133+00:00"
+    },
+    {
+      "sequence": 79,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.388951+00:00"
+    },
+    {
+      "sequence": 80,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.391376+00:00"
+    },
+    {
+      "sequence": 81,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.394457+00:00"
+    },
+    {
+      "sequence": 82,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.396771+00:00"
+    },
+    {
+      "sequence": 83,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.449846+00:00"
+    },
+    {
+      "sequence": 84,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.452433+00:00"
+    },
+    {
+      "sequence": 85,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.454851+00:00"
+    },
+    {
+      "sequence": 86,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.457180+00:00"
+    },
+    {
+      "sequence": 87,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.461341+00:00"
+    },
+    {
+      "sequence": 88,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.463918+00:00"
+    },
+    {
+      "sequence": 89,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.466187+00:00"
+    },
+    {
+      "sequence": 90,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.468477+00:00"
+    },
+    {
+      "sequence": 91,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.470783+00:00"
+    },
+    {
+      "sequence": 92,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.488707+00:00"
+    },
+    {
+      "sequence": 93,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.490908+00:00"
+    },
+    {
+      "sequence": 94,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.493139+00:00"
+    },
+    {
+      "sequence": 95,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.496030+00:00"
+    },
+    {
+      "sequence": 96,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.515661+00:00"
+    },
+    {
+      "sequence": 97,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.517770+00:00"
+    },
+    {
+      "sequence": 98,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.519840+00:00"
+    },
+    {
+      "sequence": 99,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.523847+00:00"
+    },
+    {
+      "sequence": 100,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.541509+00:00"
+    },
+    {
+      "sequence": 101,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.543768+00:00"
+    },
+    {
+      "sequence": 102,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.545944+00:00"
+    },
+    {
+      "sequence": 103,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.551387+00:00"
+    },
+    {
+      "sequence": 104,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.553578+00:00"
+    },
+    {
+      "sequence": 105,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.670390+00:00"
+    },
+    {
+      "sequence": 106,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.673051+00:00"
+    },
+    {
+      "sequence": 107,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.675513+00:00"
+    },
+    {
+      "sequence": 108,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.815301+00:00"
+    },
+    {
+      "sequence": 109,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:08.820862+00:00"
+    },
+    {
+      "sequence": 110,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:08.823172+00:00"
+    },
+    {
+      "sequence": 111,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:08.825720+00:00"
+    },
+    {
+      "sequence": 112,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.830410+00:00"
+    },
+    {
+      "sequence": 113,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_eXJ3qrI2hbgVxzxpR5njM02h",
+        "tool_name": "ncbi_retrieval",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:08.832925+00:00"
+    },
+    {
+      "sequence": 114,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T06:52:08.837775+00:00"
+    },
+    {
+      "sequence": 115,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T06:52:12.821302+00:00"
+    },
+    {
+      "sequence": 116,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_eXJ3qrI2hbgVxzxpR5njM02h",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:12.831393+00:00"
+    },
+    {
+      "sequence": 117,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:14.664785+00:00"
+    },
+    {
+      "sequence": 118,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:14.669609+00:00"
+    },
+    {
+      "sequence": 119,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:14.671635+00:00"
+    },
+    {
+      "sequence": 120,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "artifacts.That exact title filter was too narrow; I’m broadening to annotated gene "
+      },
+      "created_at": "2026-09-26T06:52:16.360661+00:00"
+    },
+    {
+      "sequence": 121,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:16.365323+00:00"
+    },
+    {
+      "sequence": 122,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:16.370208+00:00"
+    },
+    {
+      "sequence": 123,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:16.373198+00:00"
+    },
+    {
+      "sequence": 124,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:16.377591+00:00"
+    },
+    {
+      "sequence": 125,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:16.750752+00:00"
+    },
+    {
+      "sequence": 126,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:16.754103+00:00"
+    },
+    {
+      "sequence": 127,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:16.757035+00:00"
+    },
+    {
+      "sequence": 128,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:16.759211+00:00"
+    },
+    {
+      "sequence": 129,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:16.761859+00:00"
+    },
+    {
+      "sequence": 130,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:16.767726+00:00"
+    },
+    {
+      "sequence": 131,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_nmN3ulEjYHBad817qifqPr3B",
+        "tool_name": "ncbi_retrieval",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:16.770203+00:00"
+    },
+    {
+      "sequence": 132,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_nh24AxVf0TLhT4sjzyVW6Vth",
+        "tool_name": "ncbi_retrieval",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:16.772636+00:00"
+    },
+    {
+      "sequence": 133,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T06:52:16.778224+00:00"
+    },
+    {
+      "sequence": 134,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T06:52:16.782074+00:00"
+    },
+    {
+      "sequence": 135,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T06:52:22.628249+00:00"
+    },
+    {
+      "sequence": 136,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T06:52:23.060465+00:00"
+    },
+    {
+      "sequence": 137,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_nmN3ulEjYHBad817qifqPr3B",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:23.070897+00:00"
+    },
+    {
+      "sequence": 138,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_nh24AxVf0TLhT4sjzyVW6Vth",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:23.073560+00:00"
+    },
+    {
+      "sequence": 139,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:24.984803+00:00"
+    },
+    {
+      "sequence": 140,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:24.987801+00:00"
+    },
+    {
+      "sequence": 141,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:24.990446+00:00"
+    },
+    {
+      "sequence": 142,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "fields.Three records are saved; I’m reading metadata to report exact accessions and "
+      },
+      "created_at": "2026-09-26T06:52:25.669140+00:00"
+    },
+    {
+      "sequence": 143,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:25.671777+00:00"
+    },
+    {
+      "sequence": 144,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:25.680554+00:00"
+    },
+    {
+      "sequence": 145,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:25.686660+00:00"
+    },
+    {
+      "sequence": 146,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:25.688874+00:00"
+    },
+    {
+      "sequence": 147,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:25.781737+00:00"
+    },
+    {
+      "sequence": 148,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:25.784672+00:00"
+    },
+    {
+      "sequence": 149,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:25.788338+00:00"
+    },
+    {
+      "sequence": 150,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:25.791058+00:00"
+    },
+    {
+      "sequence": 151,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:25.793512+00:00"
+    },
+    {
+      "sequence": 152,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:25.798108+00:00"
+    },
+    {
+      "sequence": 153,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_fYdKjciRHJZTypNkC524w7lX",
+        "tool_name": "file_inspection",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:25.800611+00:00"
+    },
+    {
+      "sequence": 154,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_1qZ5kKwQ5r3HyJ1wnih3f1wC",
+        "tool_name": "file_inspection",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:25.803200+00:00"
+    },
+    {
+      "sequence": 155,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T06:52:25.808254+00:00"
+    },
+    {
+      "sequence": 156,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T06:52:25.811666+00:00"
+    },
+    {
+      "sequence": 157,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T06:52:29.867990+00:00"
+    },
+    {
+      "sequence": 158,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T06:52:30.012181+00:00"
+    },
+    {
+      "sequence": 159,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_fYdKjciRHJZTypNkC524w7lX",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:30.027059+00:00"
+    },
+    {
+      "sequence": 160,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_1qZ5kKwQ5r3HyJ1wnih3f1wC",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:30.029616+00:00"
+    },
+    {
+      "sequence": 161,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:32.414272+00:00"
+    },
+    {
+      "sequence": 162,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:32.416875+00:00"
+    },
+    {
+      "sequence": 163,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:32.418938+00:00"
+    },
+    {
+      "sequence": 164,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "links.Retrieved three NCBI nucleotide records:\n\n- Gene A: [MN045317.1](https://www.ncbi.nlm.nih.gov/nuccore/MN045317.1)\n- Gene A: [MN045316.1](https://www.ncbi.nlm.nih.gov/nuccore/MN045316.1)\n- Gene G: [MN045334.1](https://www.ncbi.nlm.nih.gov/nuccore/MN045334.1)\n\n"
+      },
+      "created_at": "2026-09-26T06:52:33.066692+00:00"
+    },
+    {
+      "sequence": 165,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "Artifacts:\n- Sequences: `outputs/phix174_A_G_records/phix174_gene_A_sequences.fasta`, `outputs/phix174_A_G_records/phix174_gene_G_sequences.fasta`\n- Metadata: `outputs/phix174_A_G_records/phix174_gene_A_metadata.csv`, `outputs/phix174_A_G_records/phix174_gene_G_metadata.csv`\n\n"
+      },
+      "created_at": "2026-09-26T06:52:33.500536+00:00"
+    },
+    {
+      "sequence": 166,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "These are synthetic constructs derived from Escherichia virus "
+      },
+      "created_at": "2026-09-26T06:52:33.816396+00:00"
+    },
+    {
+      "sequence": 167,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:33.818703+00:00"
+    },
+    {
+      "sequence": 168,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:33.820791+00:00"
+    },
+    {
+      "sequence": 169,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:52:33.822879+00:00"
+    },
+    {
+      "sequence": 170,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:52:33.827424+00:00"
+    },
+    {
+      "sequence": 171,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent finished: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T06:52:33.831111+00:00"
+    },
+    {
+      "sequence": 172,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "phiX174."
+      },
+      "created_at": "2026-09-26T06:52:33.871577+00:00"
+    },
+    {
+      "sequence": 173,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T06:52:33.873751+00:00"
+    }
+  ],
+  "ui": {
+    "png": "23_ncbi_retrieval.png",
+    "dom": "23_ncbi_retrieval.txt"
+  }
+}

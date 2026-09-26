@@ -1,0 +1,2799 @@
+{
+  "case": "15_rna_structure",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "Run rna_secondary_structure_prediction with its bundled example_rna.fasta. Record RNAfold availability, validate parameters, and report structures/MFE artifacts or the precise blocker.",
+  "session_id": "sol-20260926-15_rna_structure",
+  "run_id": "fb13014d07e249e0a60d736ea1f058b5",
+  "uploads": [],
+  "started_at": "2026-09-26T06:46:16.177670+00:00",
+  "elapsed_seconds": 30.11,
+  "initial": {
+    "run_id": "fb13014d07e249e0a60d736ea1f058b5",
+    "session_id": "sol-20260926-15_rna_structure",
+    "status": "running",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 18,
+    "created_at": "2026-09-26T06:45:46.070505+00:00",
+    "updated_at": "2026-09-26T06:45:46.074355+00:00",
+    "error": null
+  },
+  "status": {
+    "run_id": "fb13014d07e249e0a60d736ea1f058b5",
+    "session_id": "sol-20260926-15_rna_structure",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 18,
+    "created_at": "2026-09-26T06:45:46.070505+00:00",
+    "updated_at": "2026-09-26T06:46:13.786865+00:00",
+    "error": null,
+    "result": {
+      "answer": "**Result**\n- Input validated: `uploads/examples/rna_secondary_structure_prediction-52957573/example_rna.fasta`\n- Parameters validated: `temperature_c=37.0`, `max_sequence_length=10000`\n- RNAfold availability: **Unavailable**—not installed or absent from `PATH`.\n- Job `cf6e2c3145c948778974ce7461f4948c` failed before folding.\n- No structure, dot-bracket, MFE, metrics, or report artifacts were produced.\n- Error log: `runs/cf6e2c3145c948778974ce7461f4948c/stderr.log`",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-15_rna_structure",
+      "max_turns": 18,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Run rna_secondary_structure_prediction with its bundled example_rna.fasta. Record RNAfold availability, validate parameters, and report structures/MFE artifacts or the precise blocker."
+        },
+        {
+          "role": "assistant",
+          "content": "**Result**\n- Input validated: `uploads/examples/rna_secondary_structure_prediction-52957573/example_rna.fasta`\n- Parameters validated: `temperature_c=37.0`, `max_sequence_length=10000`\n- RNAfold availability: **Unavailable**—not installed or absent from `PATH`.\n- Job `cf6e2c3145c948778974ce7461f4948c` failed before folding.\n- No structure, dot-bracket, MFE, metrics, or report artifacts were produced.\n- Error log: `runs/cf6e2c3145c948778974ce7461f4948c/stderr.log`"
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [
+          "pipeline_shell"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [
+          "uploads/examples/rna_secondary_structure_prediction-52957573/example_rna.fasta"
+        ],
+        "outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok",
+            "pipeline_name": "rna_secondary_structure_prediction"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "error",
+            "error": "Shell pipelines do not declare a dry-run command; use plan to validate inputs."
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "cf6e2c3145c948778974ce7461f4948c",
+            "plan_id": "cf6e2c3145c948778974ce7461f4948c",
+            "status": "planned",
+            "command": "agent-pipeline run --plan-id cf6e2c3145c948778974ce7461f4948c"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "cf6e2c3145c948778974ce7461f4948c",
+            "plan_id": "cf6e2c3145c948778974ce7461f4948c",
+            "status": "queued"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "cf6e2c3145c948778974ce7461f4948c",
+            "plan_id": "cf6e2c3145c948778974ce7461f4948c",
+            "logs": {
+              "stdout": "runs/cf6e2c3145c948778974ce7461f4948c/stdout.log",
+              "stderr": "runs/cf6e2c3145c948778974ce7461f4948c/stderr.log"
+            },
+            "status": "failed",
+            "error": "shell pipeline failed with exit code 1: rna_secondary_structure_prediction failed: RNAfold is not installed or is not available on PATH. Install ViennaRNA before running the rna_secondary_structure_prediction pipeline.\n",
+            "pipeline_name": "rna_secondary_structure_prediction"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "cf6e2c3145c948778974ce7461f4948c",
+            "plan_id": "cf6e2c3145c948778974ce7461f4948c",
+            "logs": {
+              "stdout": "runs/cf6e2c3145c948778974ce7461f4948c/stdout.log",
+              "stderr": "runs/cf6e2c3145c948778974ce7461f4948c/stderr.log"
+            },
+            "status": "failed",
+            "error": "shell pipeline failed with exit code 1: rna_secondary_structure_prediction failed: RNAfold is not installed or is not available on PATH. Install ViennaRNA before running the rna_secondary_structure_prediction pipeline.\n",
+            "pipeline_name": "rna_secondary_structure_prediction"
+          }
+        ],
+        "tool_outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok",
+            "pipeline_name": "rna_secondary_structure_prediction"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "error",
+            "error": "Shell pipelines do not declare a dry-run command; use plan to validate inputs."
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "planned",
+            "job_id": "cf6e2c3145c948778974ce7461f4948c",
+            "plan_id": "cf6e2c3145c948778974ce7461f4948c",
+            "command": "agent-pipeline run --plan-id cf6e2c3145c948778974ce7461f4948c"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "queued",
+            "job_id": "cf6e2c3145c948778974ce7461f4948c",
+            "plan_id": "cf6e2c3145c948778974ce7461f4948c"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "failed",
+            "error": "shell pipeline failed with exit code 1: rna_secondary_structure_prediction failed: RNAfold is not installed or is not available on PATH. Install ViennaRNA before running the rna_secondary_structure_prediction pipeline.\n",
+            "job_id": "cf6e2c3145c948778974ce7461f4948c",
+            "plan_id": "cf6e2c3145c948778974ce7461f4948c",
+            "logs": {
+              "stdout": "runs/cf6e2c3145c948778974ce7461f4948c/stdout.log",
+              "stderr": "runs/cf6e2c3145c948778974ce7461f4948c/stderr.log"
+            },
+            "pipeline_name": "rna_secondary_structure_prediction"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "failed",
+            "error": "shell pipeline failed with exit code 1: rna_secondary_structure_prediction failed: RNAfold is not installed or is not available on PATH. Install ViennaRNA before running the rna_secondary_structure_prediction pipeline.\n",
+            "job_id": "cf6e2c3145c948778974ce7461f4948c",
+            "plan_id": "cf6e2c3145c948778974ce7461f4948c",
+            "logs": {
+              "stdout": "runs/cf6e2c3145c948778974ce7461f4948c/stdout.log",
+              "stderr": "runs/cf6e2c3145c948778974ce7461f4948c/stderr.log"
+            },
+            "pipeline_name": "rna_secondary_structure_prediction"
+          }
+        ],
+        "tool_errors": [
+          {
+            "tool": "pipeline_shell",
+            "error": "Shell pipelines do not declare a dry-run command; use plan to validate inputs.",
+            "error_type": null
+          }
+        ]
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T06:45:49.159903+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "run_started",
+          "data": {
+            "request": "Run rna_secondary_structure_prediction with its bundled example_rna.fasta. Record RNAfold availability, validate parameters, and report structures/MFE artifacts or the precise blocker.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:49.174411+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:49.178426+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_d48f20cc62b24e8382af124e",
+            "parent_id": "span_299fa67d8ae84c64b37059fd",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T06:45:49.178108+00:00",
+            "ended_at": "2026-09-26T06:45:49.178158+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:49.179582+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_ffd091246d0643a38b4a77f4",
+            "parent_id": "span_0cf227caae82439596bc192b",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:45:49.179174+00:00",
+            "ended_at": "2026-09-26T06:45:49.179285+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:49.179979+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_1662cadeac954501beb12917",
+            "parent_id": "span_0cf227caae82439596bc192b",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:45:49.179675+00:00",
+            "ended_at": "2026-09-26T06:45:49.179725+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:49.183255+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_73fd6f94754447ff88c612df",
+            "parent_id": "span_0cf227caae82439596bc192b",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:45:49.180223+00:00",
+            "ended_at": "2026-09-26T06:45:49.182952+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:49.185651+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_b4185b0be15e4c7bb487713c",
+            "parent_id": "span_0cf227caae82439596bc192b",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:45:49.183318+00:00",
+            "ended_at": "2026-09-26T06:45:49.185350+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:49.186525+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_0cf227caae82439596bc192b",
+            "parent_id": "span_299fa67d8ae84c64b37059fd",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:45:49.178506+00:00",
+            "ended_at": "2026-09-26T06:45:49.186255+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:49.187390+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:49.225958+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:52.032618+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_d12bd86c37694670b7cd1b6e",
+            "parent_id": "span_4664b10da1b148028aba3c0a",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:45:49.228349+00:00",
+            "ended_at": "2026-09-26T06:45:52.032271+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:52.039218+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11356,
+            "output_tokens": 60
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:52.042673+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:52.214707+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline catalog",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:52.215615+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:52.215921+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_b5e1dda0362349dd8ca30079",
+            "parent_id": "span_4664b10da1b148028aba3c0a",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:45:52.040431+00:00",
+            "ended_at": "2026-09-26T06:45:52.215672+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:52.216665+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_4664b10da1b148028aba3c0a",
+            "parent_id": "span_62ce8ee14bf44333bb11c2b3",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:45:49.187144+00:00",
+            "ended_at": "2026-09-26T06:45:52.216370+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:52.225990+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_fe2287c5b3384e0ea4a49593",
+            "parent_id": "span_0d2a302715404089a36d7cb2",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:45:52.225618+00:00",
+            "ended_at": "2026-09-26T06:45:52.225711+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:52.229011+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_4d1ba36d2683415a8ffededd",
+            "parent_id": "span_0d2a302715404089a36d7cb2",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:45:52.226271+00:00",
+            "ended_at": "2026-09-26T06:45:52.228729+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:52.231449+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_26f3c7633ea143edb46bbbbb",
+            "parent_id": "span_0d2a302715404089a36d7cb2",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:45:52.229064+00:00",
+            "ended_at": "2026-09-26T06:45:52.231170+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:52.231793+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_0d2a302715404089a36d7cb2",
+            "parent_id": "span_62ce8ee14bf44333bb11c2b3",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:45:52.225076+00:00",
+            "ended_at": "2026-09-26T06:45:52.231534+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:52.233400+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:55.726707+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_359e518af5e940c39fa5ef8b",
+            "parent_id": "span_046eae31628d41a383c6cf42",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:45:52.234046+00:00",
+            "ended_at": "2026-09-26T06:45:55.726332+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:55.733889+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 18984,
+            "output_tokens": 69
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:55.737500+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:55.758341+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline example --pipeline rna_secondary_structure_prediction",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:55.760243+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:55.760614+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_a6dc6079daef4f0c864c5460",
+            "parent_id": "span_046eae31628d41a383c6cf42",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:45:55.735214+00:00",
+            "ended_at": "2026-09-26T06:45:55.760293+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:55.761428+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_046eae31628d41a383c6cf42",
+            "parent_id": "span_62ce8ee14bf44333bb11c2b3",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:45:52.232425+00:00",
+            "ended_at": "2026-09-26T06:45:55.761050+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:55.771184+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_82652b03e9b14b27b21842e0",
+            "parent_id": "span_9e8bb4a88eb44c58b85164aa",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:45:55.770573+00:00",
+            "ended_at": "2026-09-26T06:45:55.770715+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:55.775152+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_1e452ee1a5d74bb4943f5147",
+            "parent_id": "span_9e8bb4a88eb44c58b85164aa",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:45:55.771467+00:00",
+            "ended_at": "2026-09-26T06:45:55.774798+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:55.778545+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_df1ced8bee33424f81c51764",
+            "parent_id": "span_9e8bb4a88eb44c58b85164aa",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:45:55.775209+00:00",
+            "ended_at": "2026-09-26T06:45:55.778068+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:55.778930+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_9e8bb4a88eb44c58b85164aa",
+            "parent_id": "span_62ce8ee14bf44333bb11c2b3",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:45:55.769846+00:00",
+            "ended_at": "2026-09-26T06:45:55.778609+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:55.780702+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:58.805264+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_f5f3ead585e54b2fabe7b713",
+            "parent_id": "span_1d6a33a041eb444f8a186c56",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:45:55.781336+00:00",
+            "ended_at": "2026-09-26T06:45:58.804441+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:58.814656+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 19145,
+            "output_tokens": 116
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:58.820057+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:58.837594+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline plan --pipeline rna_secondary_structure_prediction --input rna=uploads/examples/rna_secondary_structure_prediction-52957573/example_rna.fasta --param temperature_c=37.0 --param max_sequence_length=10000 --cores 1 --timeout 3600 --dry-run",
+            "status": "error"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:58.839145+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:58.839517+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_82b89dd68008486792b69dda",
+            "parent_id": "span_1d6a33a041eb444f8a186c56",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:45:58.816334+00:00",
+            "ended_at": "2026-09-26T06:45:58.839211+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:58.840262+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_1d6a33a041eb444f8a186c56",
+            "parent_id": "span_62ce8ee14bf44333bb11c2b3",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:45:55.779440+00:00",
+            "ended_at": "2026-09-26T06:45:58.839945+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:58.848289+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_3cdc3ece694743e2b7ec2809",
+            "parent_id": "span_e07969938d1249b8981feecd",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:45:58.847928+00:00",
+            "ended_at": "2026-09-26T06:45:58.848011+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:58.851346+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_ead4f0964eb34fc392d84c92",
+            "parent_id": "span_e07969938d1249b8981feecd",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:45:58.848538+00:00",
+            "ended_at": "2026-09-26T06:45:58.851020+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:58.853825+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_2d1f3b1ab96d4136b832b552",
+            "parent_id": "span_e07969938d1249b8981feecd",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:45:58.851398+00:00",
+            "ended_at": "2026-09-26T06:45:58.853538+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:58.854107+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_e07969938d1249b8981feecd",
+            "parent_id": "span_62ce8ee14bf44333bb11c2b3",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:45:58.847401+00:00",
+            "ended_at": "2026-09-26T06:45:58.853867+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:45:58.855586+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:01.817826+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_7549eb25c75b44bfa8e53169",
+            "parent_id": "span_fdaba698df8a4326b692409b",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:45:58.856134+00:00",
+            "ended_at": "2026-09-26T06:46:01.817435+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:01.824523+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 19334,
+            "output_tokens": 112
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:01.827571+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:01.858024+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline plan --pipeline rna_secondary_structure_prediction --input rna=uploads/examples/rna_secondary_structure_prediction-52957573/example_rna.fasta --param temperature_c=37.0 --param max_sequence_length=10000 --cores 1 --timeout 3600",
+            "status": "planned"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:01.860829+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:01.861187+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_2cb2c4de18ce4a88ac48e1d9",
+            "parent_id": "span_fdaba698df8a4326b692409b",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:46:01.825583+00:00",
+            "ended_at": "2026-09-26T06:46:01.860879+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:01.862123+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_fdaba698df8a4326b692409b",
+            "parent_id": "span_62ce8ee14bf44333bb11c2b3",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:45:58.854548+00:00",
+            "ended_at": "2026-09-26T06:46:01.861624+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:01.871675+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_1d86633335194048b2702b64",
+            "parent_id": "span_c9c1d6c5e22846919633710d",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:46:01.871042+00:00",
+            "ended_at": "2026-09-26T06:46:01.871150+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:01.875787+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_2561acf46dfe48258e335dc9",
+            "parent_id": "span_c9c1d6c5e22846919633710d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:46:01.872014+00:00",
+            "ended_at": "2026-09-26T06:46:01.875373+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:01.879493+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_5f12e41f2b32437e9dcc2c47",
+            "parent_id": "span_c9c1d6c5e22846919633710d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:46:01.875842+00:00",
+            "ended_at": "2026-09-26T06:46:01.879027+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:01.879845+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_c9c1d6c5e22846919633710d",
+            "parent_id": "span_62ce8ee14bf44333bb11c2b3",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:46:01.870390+00:00",
+            "ended_at": "2026-09-26T06:46:01.879535+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:01.881824+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:04.494260+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_003c5b988aaf45e292d295db",
+            "parent_id": "span_55bef456c99847febb928d65",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:46:01.882532+00:00",
+            "ended_at": "2026-09-26T06:46:04.493907+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:04.500355+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 20169,
+            "output_tokens": 81
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:04.504271+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_a99c99d80d874306b3a7dea7",
+            "parent_id": "span_55bef456c99847febb928d65",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:46:04.501586+00:00",
+            "ended_at": "2026-09-26T06:46:04.503931+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:04.505362+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_55bef456c99847febb928d65",
+            "parent_id": "span_62ce8ee14bf44333bb11c2b3",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:46:01.880362+00:00",
+            "ended_at": "2026-09-26T06:46:04.504925+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:04.515074+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_62ce8ee14bf44333bb11c2b3",
+            "parent_id": "span_299fa67d8ae84c64b37059fd",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:45:49.187024+00:00",
+            "ended_at": "2026-09-26T06:46:04.514647+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:04.515415+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_299fa67d8ae84c64b37059fd",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:45:49.174509+00:00",
+            "ended_at": "2026-09-26T06:46:04.515126+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:04.515544+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:04.539884+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "run_paused",
+          "data": {
+            "reason": "tool_approval",
+            "tool_names": [
+              "pipeline_shell"
+            ]
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.246599+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "approval_decision",
+          "data": {
+            "approved": true,
+            "tool_name": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.254328+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.258323+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_c11b8ce532d94b1b8f0e1829",
+            "parent_id": "span_7b0f0c493d4a4653b8707d4c",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:46:05.257952+00:00",
+            "ended_at": "2026-09-26T06:46:05.258045+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.258707+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_f3b94a149f20449da3567b9c",
+            "parent_id": "span_7b0f0c493d4a4653b8707d4c",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:46:05.258401+00:00",
+            "ended_at": "2026-09-26T06:46:05.258448+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.261649+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_8378dd1581da44dd8cc2d07e",
+            "parent_id": "span_7b0f0c493d4a4653b8707d4c",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:46:05.258950+00:00",
+            "ended_at": "2026-09-26T06:46:05.261328+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.263943+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_4d269515a19848918eae71ce",
+            "parent_id": "span_7b0f0c493d4a4653b8707d4c",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:46:05.261708+00:00",
+            "ended_at": "2026-09-26T06:46:05.263667+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.264864+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_7b0f0c493d4a4653b8707d4c",
+            "parent_id": "span_1bc542680b3f46d897a5bc4e",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:46:05.257286+00:00",
+            "ended_at": "2026-09-26T06:46:05.264589+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.268949+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.288182+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline run --plan-id cf6e2c3145c948778974ce7461f4948c",
+            "status": "queued"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.290913+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.291320+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_46f86ccae1c24416bcfde2ed",
+            "parent_id": "span_1bc542680b3f46d897a5bc4e",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:46:05.268572+00:00",
+            "ended_at": "2026-09-26T06:46:05.290966+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.295852+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_ee856178d7e74a938abc0e01",
+            "parent_id": "span_cc92c1bdf37b46ed90959145",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:46:05.295282+00:00",
+            "ended_at": "2026-09-26T06:46:05.295415+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.299148+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_366d57e5d90540daac798f3a",
+            "parent_id": "span_cc92c1bdf37b46ed90959145",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:46:05.296130+00:00",
+            "ended_at": "2026-09-26T06:46:05.298666+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.301848+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_219c8fa4f5cc439e8c347aa4",
+            "parent_id": "span_cc92c1bdf37b46ed90959145",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:46:05.299223+00:00",
+            "ended_at": "2026-09-26T06:46:05.301493+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.302196+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_cc92c1bdf37b46ed90959145",
+            "parent_id": "span_1bc542680b3f46d897a5bc4e",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:46:05.294595+00:00",
+            "ended_at": "2026-09-26T06:46:05.301891+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.303231+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:05.306250+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:08.036937+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_22ed64a473974a9898059452",
+            "parent_id": "span_b83a986c98c744239b66f31c",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:46:05.307023+00:00",
+            "ended_at": "2026-09-26T06:46:08.036459+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:08.038897+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 20392,
+            "output_tokens": 79
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:08.041530+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:08.046591+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline wait --job-id cf6e2c3145c948778974ce7461f4948c --seconds 5",
+            "status": "failed"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:08.052644+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:08.053058+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_89db515d2ea949709c6bd030",
+            "parent_id": "span_b83a986c98c744239b66f31c",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:46:08.039688+00:00",
+            "ended_at": "2026-09-26T06:46:08.052696+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:08.053830+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_b83a986c98c744239b66f31c",
+            "parent_id": "span_b733f53ff3b24aef831131bb",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:46:05.302892+00:00",
+            "ended_at": "2026-09-26T06:46:08.053506+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:08.057301+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_085801a27ee9493a93618f1d",
+            "parent_id": "span_5ab889560e5147599447b549",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:46:08.056667+00:00",
+            "ended_at": "2026-09-26T06:46:08.056783+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:08.062261+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_9c4768ceac92427f919475b2",
+            "parent_id": "span_5ab889560e5147599447b549",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:46:08.057581+00:00",
+            "ended_at": "2026-09-26T06:46:08.061871+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:08.066061+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_fb7d63859d154a27af584fd5",
+            "parent_id": "span_5ab889560e5147599447b549",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:46:08.062340+00:00",
+            "ended_at": "2026-09-26T06:46:08.065684+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:08.066522+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_5ab889560e5147599447b549",
+            "parent_id": "span_b733f53ff3b24aef831131bb",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:46:08.055974+00:00",
+            "ended_at": "2026-09-26T06:46:08.066126+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:08.068521+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:10.728533+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_c7916d36d6944657b28237fe",
+            "parent_id": "span_ef59bef22a9e4db2bbe43566",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:46:08.069208+00:00",
+            "ended_at": "2026-09-26T06:46:10.727614+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:10.732177+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 20814,
+            "output_tokens": 93
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:10.737477+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:10.746213+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline results --job-id cf6e2c3145c948778974ce7461f4948c --max-table-rows 10",
+            "status": "failed"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:10.754879+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:10.755435+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_102f41d320ba4a85a9719408",
+            "parent_id": "span_ef59bef22a9e4db2bbe43566",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:46:10.733806+00:00",
+            "ended_at": "2026-09-26T06:46:10.754956+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:10.756458+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_ef59bef22a9e4db2bbe43566",
+            "parent_id": "span_b733f53ff3b24aef831131bb",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:46:08.067081+00:00",
+            "ended_at": "2026-09-26T06:46:10.755932+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:10.760390+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_879700d30073461a8074b324",
+            "parent_id": "span_0d5da8e2e6c4480ea66582e8",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:46:10.759618+00:00",
+            "ended_at": "2026-09-26T06:46:10.759775+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:10.765813+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_3edd5b271b5a4fa3ae32d94d",
+            "parent_id": "span_0d5da8e2e6c4480ea66582e8",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:46:10.761094+00:00",
+            "ended_at": "2026-09-26T06:46:10.765326+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:10.768726+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_fb1d9a611b984015a3fa5d09",
+            "parent_id": "span_0d5da8e2e6c4480ea66582e8",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:46:10.765876+00:00",
+            "ended_at": "2026-09-26T06:46:10.768360+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:10.769152+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_0d5da8e2e6c4480ea66582e8",
+            "parent_id": "span_b733f53ff3b24aef831131bb",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:46:10.758731+00:00",
+            "ended_at": "2026-09-26T06:46:10.768775+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:10.771277+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:13.716775+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_fe0bdf3fb0804517a460c5bd",
+            "parent_id": "span_b1eec73b5e754880ae86a86f",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:46:10.772034+00:00",
+            "ended_at": "2026-09-26T06:46:13.715847+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:13.720118+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 21264,
+            "output_tokens": 140
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:13.722257+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:13.723226+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_b1eec73b5e754880ae86a86f",
+            "parent_id": "span_b733f53ff3b24aef831131bb",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:46:10.769854+00:00",
+            "ended_at": "2026-09-26T06:46:13.722497+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:13.723881+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:13.724590+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_df3de3000b264975867066e7",
+            "parent_id": "span_b733f53ff3b24aef831131bb",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T06:46:13.723501+00:00",
+            "ended_at": "2026-09-26T06:46:13.723910+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:13.737276+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_ffd50ba1a5ee4bd5b6ef6329",
+            "parent_id": "span_6a5658db5fb84429ae5303be",
+            "span_type": "custom",
+            "name": "sandbox.cleanup_sessions",
+            "model": null,
+            "started_at": "2026-09-26T06:46:13.735605+00:00",
+            "ended_at": "2026-09-26T06:46:13.736361+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:13.737996+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_6a5658db5fb84429ae5303be",
+            "parent_id": "span_b733f53ff3b24aef831131bb",
+            "span_type": "custom",
+            "name": "sandbox.cleanup",
+            "model": null,
+            "started_at": "2026-09-26T06:46:13.735500+00:00",
+            "ended_at": "2026-09-26T06:46:13.737312+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:13.738507+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_b733f53ff3b24aef831131bb",
+            "parent_id": "span_1bc542680b3f46d897a5bc4e",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:46:05.302695+00:00",
+            "ended_at": "2026-09-26T06:46:13.738026+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:13.739066+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f",
+            "span_id": "span_1bc542680b3f46d897a5bc4e",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:46:05.254432+00:00",
+            "ended_at": "2026-09-26T06:46:13.738610+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:13.739252+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_c1c34a39f43e4f52862539dfa8478e4f"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:46:13.752313+00:00",
+          "session_id": "sol-20260926-15_rna_structure",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 7
+          }
+        }
+      ],
+      "run": {
+        "run_id": "70192b89-ed1c-48e1-807f-46d067095398",
+        "session_dir": ".",
+        "runtime_dir": "runs/70192b89-ed1c-48e1-807f-46d067095398",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "uploads/examples/rna_secondary_structure_prediction-52957573/example_rna.fasta",
+          "workspace_path": "uploads/examples/rna_secondary_structure_prediction-52957573/example_rna.fasta",
+          "name": "example_rna.fasta",
+          "size": 80,
+          "modified_at": 1790405155756070394,
+          "kind": "upload",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/cf6e2c3145c948778974ce7461f4948c/plan.json",
+          "workspace_path": "runs/cf6e2c3145c948778974ce7461f4948c/plan.json",
+          "name": "plan.json",
+          "size": 2313,
+          "modified_at": 1790405161854114922,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/cf6e2c3145c948778974ce7461f4948c/stdout.log",
+          "workspace_path": "runs/cf6e2c3145c948778974ce7461f4948c/stdout.log",
+          "name": "stdout.log",
+          "size": 0,
+          "modified_at": 1790405165278139916,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/cf6e2c3145c948778974ce7461f4948c/inputs/rna/0_example_rna.fasta",
+          "workspace_path": "runs/cf6e2c3145c948778974ce7461f4948c/inputs/rna/0_example_rna.fasta",
+          "name": "0_example_rna.fasta",
+          "size": 80,
+          "modified_at": 1790405165369140581,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/cf6e2c3145c948778974ce7461f4948c/inputs.json",
+          "workspace_path": "runs/cf6e2c3145c948778974ce7461f4948c/inputs.json",
+          "name": "inputs.json",
+          "size": 155,
+          "modified_at": 1790405165370140588,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/cf6e2c3145c948778974ce7461f4948c/outputs/config.runtime.yaml",
+          "workspace_path": "runs/cf6e2c3145c948778974ce7461f4948c/outputs/config.runtime.yaml",
+          "name": "config.runtime.yaml",
+          "size": 1852,
+          "modified_at": 1790405165378140646,
+          "kind": "config",
+          "content_type": "text/yaml; charset=utf-8"
+        },
+        {
+          "path": "runs/cf6e2c3145c948778974ce7461f4948c/stderr.log",
+          "workspace_path": "runs/cf6e2c3145c948778974ce7461f4948c/stderr.log",
+          "name": "stderr.log",
+          "size": 997,
+          "modified_at": 1790405165494141493,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/cf6e2c3145c948778974ce7461f4948c/job.json",
+          "workspace_path": "runs/cf6e2c3145c948778974ce7461f4948c/job.json",
+          "name": "job.json",
+          "size": 3167,
+          "modified_at": 1790405165495141500,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        }
+      ],
+      "approval_decision": {
+        "approved": true,
+        "approval_id": "b5f0e78455724e12bac20dcc705f0a42",
+        "tool_name": "pipeline_shell",
+        "arguments": {
+          "commands": [
+            "agent-pipeline run --plan-id cf6e2c3145c948778974ce7461f4948c"
+          ],
+          "max_output_length": 20000,
+          "timeout_ms": 120000
+        },
+        "plan": {
+          "pipeline_name": "rna_secondary_structure_prediction",
+          "engine": "shell",
+          "inputs": {
+            "rna": [
+              {
+                "path": "uploads/examples/rna_secondary_structure_prediction-52957573/example_rna.fasta",
+                "sha256": "020ed5bba85d54fec155adada7b208918708a39a1517552795c5f963ec2376d4",
+                "size": 80
+              }
+            ]
+          },
+          "parameters": {
+            "temperature_c": 37.0,
+            "max_sequence_length": 10000
+          },
+          "cores": 1,
+          "timeout_seconds": 3600,
+          "max_memory_mb": 8192,
+          "dry_run": false,
+          "definition_sha256": "a440ecaeaefed4ca58065bbf2d4c9d8e8c24e08919fa0c116407e43531155026",
+          "outputs": {
+            "report": {
+              "name": "report",
+              "label": "RNA folding report",
+              "config_key": "report_path",
+              "default": "output/report.md",
+              "kind": "report",
+              "required": true,
+              "description": "RNA folding report produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "metrics": {
+              "name": "metrics",
+              "label": "RNA folding metrics",
+              "config_key": "metrics_path",
+              "default": "output/metrics.json",
+              "kind": "metrics",
+              "required": true,
+              "description": "RNA folding metrics produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "structures": {
+              "name": "structures",
+              "label": "RNA structures table",
+              "config_key": "structures_path",
+              "default": "output/structures.tsv",
+              "kind": "table",
+              "required": true,
+              "description": "RNA structures table produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "dot_bracket": {
+              "name": "dot_bracket",
+              "label": "Dot-bracket structures",
+              "config_key": "dot_bracket_path",
+              "default": "output/structures.dbn",
+              "kind": "sequence_structure",
+              "required": true,
+              "description": "Dot-bracket structures produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "log": {
+              "name": "log",
+              "label": "RNAfold execution log",
+              "config_key": "log_path",
+              "default": "output/rnafold.log",
+              "kind": "text",
+              "required": true,
+              "description": "RNAfold execution log produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            }
+          }
+        }
+      },
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "fb13014d07e249e0a60d736ea1f058b5",
+        "session_id": "sol-20260926-15_rna_structure"
+      },
+      "created_at": "2026-09-26T06:45:46.071020+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "fb13014d07e249e0a60d736ea1f058b5"
+      },
+      "created_at": "2026-09-26T06:45:48.374598+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T06:45:49.175729+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T06:45:49.187602+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:51.454015+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:51.457060+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:45:51.459439+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll inspect the pipeline catalog, stage its bundled example, then validate and run "
+      },
+      "created_at": "2026-09-26T06:45:52.020001+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:45:52.022357+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:52.024549+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:52.026579+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:52.028508+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:52.030366+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:45:52.034657+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_SD1MCChpF4tFrRDlBAx3uajU",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:45:52.037094+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_SD1MCChpF4tFrRDlBAx3uajU",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:52.220918+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:55.016301+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:55.019198+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:45:55.021686+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "it.The pipeline supports the requested example and two bounded parameters. I’m staging the bundled FASTA "
+      },
+      "created_at": "2026-09-26T06:45:55.708360+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:45:55.711823+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:55.715000+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:55.717604+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:55.721994+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:55.724412+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:45:55.729654+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_WtnILDgv5PwoiD582U1PTzsI",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:45:55.731916+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_WtnILDgv5PwoiD582U1PTzsI",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:55.766391+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:57.761994+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:57.764787+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:45:57.767066+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "next.Example staged. I’ll create a dry-run plan to validate defaults and RNAfold "
+      },
+      "created_at": "2026-09-26T06:45:58.781521+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:45:58.788435+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:58.793119+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:58.796158+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:58.799323+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:58.802398+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:45:58.809048+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_X571uZr2QRnywxqskrMuSi3j",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:45:58.812463+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_X571uZr2QRnywxqskrMuSi3j",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:45:58.844587+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:46:00.754067+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:46:00.757880+00:00"
+    },
+    {
+      "sequence": 42,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:46:00.761155+00:00"
+    },
+    {
+      "sequence": 43,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "availability.Dry-run isn’t declared for this shell workflow; normal planning is its validation "
+      },
+      "created_at": "2026-09-26T06:46:01.803937+00:00"
+    },
+    {
+      "sequence": 44,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:46:01.806386+00:00"
+    },
+    {
+      "sequence": 45,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:46:01.808860+00:00"
+    },
+    {
+      "sequence": 46,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:46:01.811342+00:00"
+    },
+    {
+      "sequence": 47,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:46:01.813523+00:00"
+    },
+    {
+      "sequence": 48,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:46:01.815456+00:00"
+    },
+    {
+      "sequence": 49,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:46:01.819888+00:00"
+    },
+    {
+      "sequence": 50,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_Q1zIUoUwPwkw8co5HHWvIMG7",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:46:01.822455+00:00"
+    },
+    {
+      "sequence": 51,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_Q1zIUoUwPwkw8co5HHWvIMG7",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:46:01.867100+00:00"
+    },
+    {
+      "sequence": 52,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:46:03.683306+00:00"
+    },
+    {
+      "sequence": 53,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:46:03.686419+00:00"
+    },
+    {
+      "sequence": 54,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:46:03.688739+00:00"
+    },
+    {
+      "sequence": 55,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "path.Parameters and input validated successfully. I’ll run the exact saved plan and inspect its "
+      },
+      "created_at": "2026-09-26T06:46:04.480402+00:00"
+    },
+    {
+      "sequence": 56,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:46:04.482882+00:00"
+    },
+    {
+      "sequence": 57,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:46:04.485159+00:00"
+    },
+    {
+      "sequence": 58,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:46:04.487408+00:00"
+    },
+    {
+      "sequence": 59,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:46:04.489795+00:00"
+    },
+    {
+      "sequence": 60,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:46:04.492001+00:00"
+    },
+    {
+      "sequence": 61,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:46:04.496472+00:00"
+    },
+    {
+      "sequence": 62,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_AmpqdE1lFTMbo9pojcslQ9Rd",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:46:04.498583+00:00"
+    },
+    {
+      "sequence": 63,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "outputs."
+      },
+      "created_at": "2026-09-26T06:46:04.574881+00:00"
+    },
+    {
+      "sequence": 64,
+      "event": "pending_approval",
+      "payload": {
+        "status": "pending_approval"
+      },
+      "created_at": "2026-09-26T06:46:04.577400+00:00"
+    },
+    {
+      "sequence": 65,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T06:46:13.787106+00:00"
+    }
+  ],
+  "approval_decisions": [
+    {
+      "approval_id": "b5f0e78455724e12bac20dcc705f0a42",
+      "tool_name": "pipeline_shell",
+      "approved": true,
+      "arguments": {
+        "commands": [
+          "agent-pipeline run --plan-id cf6e2c3145c948778974ce7461f4948c"
+        ],
+        "max_output_length": 20000,
+        "timeout_ms": 120000
+      },
+      "plan": {
+        "pipeline_name": "rna_secondary_structure_prediction",
+        "engine": "shell",
+        "inputs": {
+          "rna": [
+            {
+              "path": "uploads/examples/rna_secondary_structure_prediction-52957573/example_rna.fasta",
+              "sha256": "020ed5bba85d54fec155adada7b208918708a39a1517552795c5f963ec2376d4",
+              "size": 80
+            }
+          ]
+        },
+        "parameters": {
+          "temperature_c": 37.0,
+          "max_sequence_length": 10000
+        },
+        "cores": 1,
+        "timeout_seconds": 3600,
+        "max_memory_mb": 8192,
+        "dry_run": false,
+        "definition_sha256": "a440ecaeaefed4ca58065bbf2d4c9d8e8c24e08919fa0c116407e43531155026",
+        "outputs": {
+          "report": {
+            "name": "report",
+            "label": "RNA folding report",
+            "config_key": "report_path",
+            "default": "output/report.md",
+            "kind": "report",
+            "required": true,
+            "description": "RNA folding report produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "metrics": {
+            "name": "metrics",
+            "label": "RNA folding metrics",
+            "config_key": "metrics_path",
+            "default": "output/metrics.json",
+            "kind": "metrics",
+            "required": true,
+            "description": "RNA folding metrics produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "structures": {
+            "name": "structures",
+            "label": "RNA structures table",
+            "config_key": "structures_path",
+            "default": "output/structures.tsv",
+            "kind": "table",
+            "required": true,
+            "description": "RNA structures table produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "dot_bracket": {
+            "name": "dot_bracket",
+            "label": "Dot-bracket structures",
+            "config_key": "dot_bracket_path",
+            "default": "output/structures.dbn",
+            "kind": "sequence_structure",
+            "required": true,
+            "description": "Dot-bracket structures produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "log": {
+            "name": "log",
+            "label": "RNAfold execution log",
+            "config_key": "log_path",
+            "default": "output/rnafold.log",
+            "kind": "text",
+            "required": true,
+            "description": "RNAfold execution log produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          }
+        }
+      }
+    }
+  ],
+  "ui": {
+    "png": "15_rna_structure.png",
+    "dom": "15_rna_structure.txt",
+    "chrome_returncode": 0,
+    "stderr_tail": "371801 bytes written to file /media/data/fuhaoyi/codes/BioAgent/docs/images/live_tests_2026-09-26_gpt-5.6-sol/15_rna_structure.png\n"
+  }
+}

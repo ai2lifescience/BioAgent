@@ -1,0 +1,4571 @@
+{
+  "case": "25_genbank_map",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "Read the annotations in the uploaded GenBank file, render an interactive genome map, return generated map/reference/feature paths, and leave the Genome browser visible for inspection.",
+  "session_id": "sol-20260926-25_genbank_map",
+  "run_id": "3abbcf6ea8e14114bce04d921b74caea",
+  "uploads": [
+    {
+      "session_id": "sol-20260926-25_genbank_map",
+      "files": [
+        {
+          "path": "uploads/20e1890d800b_NC_001422.gb",
+          "workspace_path": "uploads/20e1890d800b_NC_001422.gb",
+          "name": "NC_001422.gb",
+          "size": 5477,
+          "kind": "upload",
+          "content_type": "text/plain; charset=utf-8",
+          "session_id": "sol-20260926-25_genbank_map"
+        }
+      ]
+    }
+  ],
+  "started_at": "2026-09-26T07:40:15.655623+00:00",
+  "elapsed_seconds": 110.21,
+  "initial": {
+    "run_id": "3abbcf6ea8e14114bce04d921b74caea",
+    "session_id": "sol-20260926-25_genbank_map",
+    "status": "running",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 18,
+    "created_at": "2026-09-26T07:38:25.492679+00:00",
+    "updated_at": "2026-09-26T07:38:25.499815+00:00",
+    "error": null
+  },
+  "status": {
+    "run_id": "3abbcf6ea8e14114bce04d921b74caea",
+    "session_id": "sol-20260926-25_genbank_map",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 18,
+    "created_at": "2026-09-26T07:38:25.492679+00:00",
+    "updated_at": "2026-09-26T07:40:13.815166+00:00",
+    "error": null,
+    "result": {
+      "answer": "- Map: `outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/genome_map.json`\n- Reference: `outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/reference.fasta`\n- Features: `outputs/sequence_find_orfs/d0dcdd4083ec47188c4641a11cb78ba8/features.json`\n- Rendered 34 ORFs across 5,386 bp.\n\nNote: the uploaded `.gb` file was actually FASTA without annotations, so features were inferred as ORFs. Browser visibility could not be activated because no trusted website embedding is available.",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-25_genbank_map",
+      "max_turns": 18,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Read the annotations in the uploaded GenBank file, render an interactive genome map, return generated map/reference/feature paths, and leave the Genome browser visible for inspection."
+        },
+        {
+          "role": "assistant",
+          "content": "- Map: `outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/genome_map.json`\n- Reference: `outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/reference.fasta`\n- Features: `outputs/sequence_find_orfs/d0dcdd4083ec47188c4641a11cb78ba8/features.json`\n- Rendered 34 ORFs across 5,386 bp.\n\nNote: the uploaded `.gb` file was actually FASTA without annotations, so features were inferred as ORFs. Browser visibility could not be activated because no trusted website embedding is available."
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [
+          "pipeline_shell",
+          "genome_read_features",
+          "file_inspection",
+          "sequence_find_orfs",
+          "code_inspection",
+          "code_edit",
+          "genome_render_map",
+          "website_context"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [
+          "uploads/20e1890d800b_NC_001422.gb",
+          "generated/NC_001422.1.fasta",
+          "outputs/sequence_find_orfs/d0dcdd4083ec47188c4641a11cb78ba8/features.json",
+          "outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/genome_map.json",
+          "outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/reference.fasta"
+        ],
+        "outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "genome_read_features",
+            "status": "error",
+            "error": "ValueError: Provide sequence_id when input contains multiple sequences."
+          },
+          {
+            "tool": "file_inspection",
+            "record_count": 1,
+            "bytes": 5477,
+            "status": "ok"
+          },
+          {
+            "tool": "sequence_find_orfs",
+            "status": "error",
+            "error": "ValueError: File must use one of: .fa, .fasta, .fna, .faa, .ffn"
+          },
+          {
+            "tool": "code_inspection",
+            "summary": "Read uploads/20e1890d800b_NC_001422.gb.",
+            "matches": [],
+            "operation": "read",
+            "matched_count": 0,
+            "status": "ok"
+          },
+          {
+            "tool": "code_edit",
+            "summary": "Updated generated/NC_001422.1.fasta.",
+            "changed_files": [
+              "generated/NC_001422.1.fasta"
+            ],
+            "bytes": 5477,
+            "status": "ok"
+          },
+          {
+            "tool": "sequence_find_orfs",
+            "source_path": "generated/NC_001422.1.fasta",
+            "features_path": "outputs/sequence_find_orfs/d0dcdd4083ec47188c4641a11cb78ba8/features.json",
+            "status": "ok"
+          },
+          {
+            "tool": "genome_render_map",
+            "genome_length": 5386,
+            "source_path": "outputs/sequence_find_orfs/d0dcdd4083ec47188c4641a11cb78ba8/features.json",
+            "genome_map_path": "outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/genome_map.json",
+            "reference_path": "outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/reference.fasta",
+            "status": "ok"
+          },
+          {
+            "tool": "website_context",
+            "status": "error",
+            "error": "This tool requires an active trusted website embedding."
+          }
+        ],
+        "tool_outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          }
+        ],
+        "tool_errors": [
+          {
+            "tool": "genome_read_features",
+            "error": "ValueError: Provide sequence_id when input contains multiple sequences.",
+            "error_type": "ValueError"
+          },
+          {
+            "tool": "sequence_find_orfs",
+            "error": "ValueError: File must use one of: .fa, .fasta, .fna, .faa, .ffn",
+            "error_type": "ValueError"
+          },
+          {
+            "tool": "website_context",
+            "error": "This tool requires an active trusted website embedding.",
+            "error_type": "ValueError"
+          }
+        ]
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T07:38:28.470370+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "run_started",
+          "data": {
+            "request": "Read the annotations in the uploaded GenBank file, render an interactive genome map, return generated map/reference/feature paths, and leave the Genome browser visible for inspection.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:28.494626+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:28.498750+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_2efe6cada5d74a0e8c895785",
+            "parent_id": "span_b528cc1731fd449eb0da07c2",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T07:38:28.498425+00:00",
+            "ended_at": "2026-09-26T07:38:28.498473+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:28.499766+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_0a7c5aeeb0884ab299c36270",
+            "parent_id": "span_2134d17a44794df6a2445d42",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:38:28.499399+00:00",
+            "ended_at": "2026-09-26T07:38:28.499471+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:28.500225+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_4ab802bf9cdf449fb9dba82a",
+            "parent_id": "span_2134d17a44794df6a2445d42",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:38:28.499885+00:00",
+            "ended_at": "2026-09-26T07:38:28.499955+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:28.503357+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_9891c5f9a44a4fd1a5283901",
+            "parent_id": "span_2134d17a44794df6a2445d42",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:38:28.500482+00:00",
+            "ended_at": "2026-09-26T07:38:28.503082+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:28.505742+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_6796378b28a2496b9fe430c4",
+            "parent_id": "span_2134d17a44794df6a2445d42",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:38:28.503407+00:00",
+            "ended_at": "2026-09-26T07:38:28.505455+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:28.506686+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_2134d17a44794df6a2445d42",
+            "parent_id": "span_b528cc1731fd449eb0da07c2",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:38:28.498821+00:00",
+            "ended_at": "2026-09-26T07:38:28.506384+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:28.507364+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:28.545488+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:32.539468+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_b4280a3896b4417890f567ac",
+            "parent_id": "span_a97926e1f19443a8bcf1c8c7",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:38:28.547918+00:00",
+            "ended_at": "2026-09-26T07:38:32.539068+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:32.547093+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11361,
+            "output_tokens": 63
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:32.551447+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:32.558860+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline files",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:32.561334+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:32.562205+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_51dc8b02233e456889c77694",
+            "parent_id": "span_a97926e1f19443a8bcf1c8c7",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T07:38:32.548971+00:00",
+            "ended_at": "2026-09-26T07:38:32.561456+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:32.564153+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_a97926e1f19443a8bcf1c8c7",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:38:28.507174+00:00",
+            "ended_at": "2026-09-26T07:38:32.563385+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:32.580066+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_690e6078082a4be19f019e49",
+            "parent_id": "span_31c08408d89c4d02adb0bbd5",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:38:32.578883+00:00",
+            "ended_at": "2026-09-26T07:38:32.579144+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:32.585174+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_36c2918269994854af92b915",
+            "parent_id": "span_31c08408d89c4d02adb0bbd5",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:38:32.580598+00:00",
+            "ended_at": "2026-09-26T07:38:32.584739+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:32.589196+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_fee0b16a2de5452188a44f8c",
+            "parent_id": "span_31c08408d89c4d02adb0bbd5",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:38:32.585239+00:00",
+            "ended_at": "2026-09-26T07:38:32.588764+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:32.589743+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_31c08408d89c4d02adb0bbd5",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:38:32.578049+00:00",
+            "ended_at": "2026-09-26T07:38:32.589292+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:32.591959+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:36.381724+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_f0c1430087294b0380aec6f1",
+            "parent_id": "span_62a6000fcfba4252bf9c70e9",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:38:32.592510+00:00",
+            "ended_at": "2026-09-26T07:38:36.381332+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:36.388605+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11518,
+            "output_tokens": 68
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:36.390587+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "genome_read_features"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:36.391075+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_started",
+          "data": {
+            "tool": "genome_read_features"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:39.317233+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_failed",
+          "data": {
+            "tool": "genome_read_features",
+            "error_type": "ValueError"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:39.318334+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "genome_read_features"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:39.319244+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_3f2c920b4e944e4fb5f22ee4",
+            "parent_id": "span_62a6000fcfba4252bf9c70e9",
+            "span_type": "function",
+            "name": "genome_read_features",
+            "model": null,
+            "started_at": "2026-09-26T07:38:36.389874+00:00",
+            "ended_at": "2026-09-26T07:38:39.318478+00:00",
+            "has_error": true
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:39.320691+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_62a6000fcfba4252bf9c70e9",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:38:32.590667+00:00",
+            "ended_at": "2026-09-26T07:38:39.319923+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:39.334314+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_72a489a198894045a702eef4",
+            "parent_id": "span_e65479d7d10a4f899123c334",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:38:39.333775+00:00",
+            "ended_at": "2026-09-26T07:38:39.333878+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:39.337600+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_455ad6d0cf5a4308b55894bc",
+            "parent_id": "span_e65479d7d10a4f899123c334",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:38:39.334710+00:00",
+            "ended_at": "2026-09-26T07:38:39.337159+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:39.340235+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_8d274f374fb645b7bf10b00d",
+            "parent_id": "span_e65479d7d10a4f899123c334",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:38:39.337666+00:00",
+            "ended_at": "2026-09-26T07:38:39.339809+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:39.340765+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_e65479d7d10a4f899123c334",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:38:39.333089+00:00",
+            "ended_at": "2026-09-26T07:38:39.340284+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:39.342525+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:48.598449+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_4e5d413c0eff44f4902bfbc6",
+            "parent_id": "span_b120e9a9295e439bab828cef",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:38:39.342988+00:00",
+            "ended_at": "2026-09-26T07:38:48.597800+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:48.608581+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11637,
+            "output_tokens": 66
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:48.611432+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:48.612168+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:52.035491+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_finished",
+          "data": {
+            "tool": "file_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:52.040956+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:52.041922+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_09445039964a43e2bd7fa84c",
+            "parent_id": "span_b120e9a9295e439bab828cef",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-26T07:38:48.610147+00:00",
+            "ended_at": "2026-09-26T07:38:52.041169+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:52.043401+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_b120e9a9295e439bab828cef",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:38:39.341350+00:00",
+            "ended_at": "2026-09-26T07:38:52.042628+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:52.058166+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_6d0cb36cf55a4d4dbe5ddd3d",
+            "parent_id": "span_7e16b2067d624118a51d7c9a",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:38:52.057629+00:00",
+            "ended_at": "2026-09-26T07:38:52.057815+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:52.063186+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_dd25d4eb8be3441584f6513e",
+            "parent_id": "span_7e16b2067d624118a51d7c9a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:38:52.058478+00:00",
+            "ended_at": "2026-09-26T07:38:52.062449+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:52.066777+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_8a9bf25e0b1d4de092fe84fb",
+            "parent_id": "span_7e16b2067d624118a51d7c9a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:38:52.063326+00:00",
+            "ended_at": "2026-09-26T07:38:52.066426+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:52.067152+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_7e16b2067d624118a51d7c9a",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:38:52.056644+00:00",
+            "ended_at": "2026-09-26T07:38:52.066820+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:52.069226+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:59.870016+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_431718dca65f49038f7f6e21",
+            "parent_id": "span_37d39416e6694425bf698c92",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:38:52.069664+00:00",
+            "ended_at": "2026-09-26T07:38:59.869177+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:59.882529+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 13285,
+            "output_tokens": 105
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:59.885976+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "sequence_find_orfs"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:38:59.886835+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_started",
+          "data": {
+            "tool": "sequence_find_orfs"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:03.230414+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_failed",
+          "data": {
+            "tool": "sequence_find_orfs",
+            "error_type": "ValueError"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:03.231315+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "sequence_find_orfs"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:03.231736+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_57505c8327534ed28a975568",
+            "parent_id": "span_37d39416e6694425bf698c92",
+            "span_type": "function",
+            "name": "sequence_find_orfs",
+            "model": null,
+            "started_at": "2026-09-26T07:38:59.884378+00:00",
+            "ended_at": "2026-09-26T07:39:03.231413+00:00",
+            "has_error": true
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:03.232427+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_37d39416e6694425bf698c92",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:38:52.067683+00:00",
+            "ended_at": "2026-09-26T07:39:03.232086+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:03.243243+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_06f2bbecbd574093a5ef83f3",
+            "parent_id": "span_f06cfa41a979408881c34946",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:39:03.242592+00:00",
+            "ended_at": "2026-09-26T07:39:03.242753+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:03.248200+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_0fbf867a24ec453bb3341eb5",
+            "parent_id": "span_f06cfa41a979408881c34946",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:39:03.243535+00:00",
+            "ended_at": "2026-09-26T07:39:03.247849+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:03.252481+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_23e142f2eecb44c299ab6855",
+            "parent_id": "span_f06cfa41a979408881c34946",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:39:03.248261+00:00",
+            "ended_at": "2026-09-26T07:39:03.252128+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:03.252893+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_f06cfa41a979408881c34946",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:39:03.241831+00:00",
+            "ended_at": "2026-09-26T07:39:03.252524+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:03.254859+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:09.329764+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_971b4f29c39d42d7bb02e0c7",
+            "parent_id": "span_68ff8f589c9144f0a4d0c35e",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:39:03.255547+00:00",
+            "ended_at": "2026-09-26T07:39:09.329393+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:09.337200+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 13455,
+            "output_tokens": 85
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:09.339223+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "code_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:09.339745+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_started",
+          "data": {
+            "tool": "code_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:12.312913+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_finished",
+          "data": {
+            "tool": "code_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:12.316979+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "code_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:12.317508+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_4dee5f584ba3483397b165e9",
+            "parent_id": "span_68ff8f589c9144f0a4d0c35e",
+            "span_type": "function",
+            "name": "code_inspection",
+            "model": null,
+            "started_at": "2026-09-26T07:39:09.338512+00:00",
+            "ended_at": "2026-09-26T07:39:12.317054+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:12.318692+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_68ff8f589c9144f0a4d0c35e",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:39:03.253711+00:00",
+            "ended_at": "2026-09-26T07:39:12.318364+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:12.329757+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_3d6924afcd58449898efdb6e",
+            "parent_id": "span_0d93c25f22d7445fb920e22c",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:39:12.328694+00:00",
+            "ended_at": "2026-09-26T07:39:12.329001+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:12.334038+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_600a731a01f144f697cae6f2",
+            "parent_id": "span_0d93c25f22d7445fb920e22c",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:39:12.330052+00:00",
+            "ended_at": "2026-09-26T07:39:12.333619+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:12.337764+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_4be33b93a2ee498cb00686f9",
+            "parent_id": "span_0d93c25f22d7445fb920e22c",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:39:12.334198+00:00",
+            "ended_at": "2026-09-26T07:39:12.337061+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:12.338115+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_0d93c25f22d7445fb920e22c",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:39:12.327990+00:00",
+            "ended_at": "2026-09-26T07:39:12.337808+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:12.340056+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:39.973582+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_4a2300470cd04cfd92ce7d90",
+            "parent_id": "span_d00411a5d8df440480c341a6",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:39:12.340473+00:00",
+            "ended_at": "2026-09-26T07:39:39.973176+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:39.978439+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 16597,
+            "output_tokens": 2962
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:39.980510+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "code_edit"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:39.981006+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_started",
+          "data": {
+            "tool": "code_edit"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:43.038416+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "artifact_created",
+          "data": {
+            "tool": "code_edit",
+            "path": "generated/NC_001422.1.fasta",
+            "workspace_path": "generated/NC_001422.1.fasta",
+            "name": "NC_001422.1.fasta",
+            "kind": "sequence",
+            "content_type": "text/plain; charset=utf-8",
+            "size": 5477,
+            "modified_at": 1790408383000654643
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:43.038571+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_finished",
+          "data": {
+            "tool": "code_edit",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:43.045993+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "code_edit"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:43.046389+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_ae9d42e671a142c29e39b46a",
+            "parent_id": "span_d00411a5d8df440480c341a6",
+            "span_type": "function",
+            "name": "code_edit",
+            "model": null,
+            "started_at": "2026-09-26T07:39:39.979843+00:00",
+            "ended_at": "2026-09-26T07:39:43.046067+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:43.048320+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_d00411a5d8df440480c341a6",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:39:12.338602+00:00",
+            "ended_at": "2026-09-26T07:39:43.047993+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:43.061441+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_93340bd74ad6448eb415345e",
+            "parent_id": "span_d6b43a510c514bf699b43810",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:39:43.060930+00:00",
+            "ended_at": "2026-09-26T07:39:43.061024+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:43.066335+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_dcb7c3373ecf42ad84bf6c0d",
+            "parent_id": "span_d6b43a510c514bf699b43810",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:39:43.061932+00:00",
+            "ended_at": "2026-09-26T07:39:43.065910+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:43.070544+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_88b35cb71863499a895d77ce",
+            "parent_id": "span_d6b43a510c514bf699b43810",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:39:43.066383+00:00",
+            "ended_at": "2026-09-26T07:39:43.070195+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:43.070902+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_d6b43a510c514bf699b43810",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:39:43.060303+00:00",
+            "ended_at": "2026-09-26T07:39:43.070589+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:43.073104+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:50.457492+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_5c5fd868f5d24d34972a087e",
+            "parent_id": "span_0ad1d0ce28684d4c992c7da9",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:39:43.073745+00:00",
+            "ended_at": "2026-09-26T07:39:50.457122+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:50.462507+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 19742,
+            "output_tokens": 55
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:50.464593+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "sequence_find_orfs"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:50.465086+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_started",
+          "data": {
+            "tool": "sequence_find_orfs"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:53.207551+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "artifact_created",
+          "data": {
+            "tool": "sequence_find_orfs",
+            "path": "outputs/sequence_find_orfs/d0dcdd4083ec47188c4641a11cb78ba8/features.json",
+            "workspace_path": "outputs/sequence_find_orfs/d0dcdd4083ec47188c4641a11cb78ba8/features.json",
+            "name": "features.json",
+            "kind": "config",
+            "content_type": "application/json; charset=utf-8",
+            "size": 3575,
+            "modified_at": 1790408393155688777
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:53.207884+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "artifact_created",
+          "data": {
+            "tool": "sequence_find_orfs",
+            "path": "outputs/sequence_find_orfs/2572303a9c9e4101bf92d7f0a399c4ac/reference.fasta",
+            "workspace_path": "outputs/sequence_find_orfs/2572303a9c9e4101bf92d7f0a399c4ac/reference.fasta",
+            "name": "reference.fasta",
+            "kind": "sequence",
+            "content_type": "text/plain; charset=utf-8",
+            "size": 5400,
+            "modified_at": 1790408393154688774
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:53.208043+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_finished",
+          "data": {
+            "tool": "sequence_find_orfs",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:53.212033+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "sequence_find_orfs"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:53.212487+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_3aa3d724726044e7b5ca9dd4",
+            "parent_id": "span_0ad1d0ce28684d4c992c7da9",
+            "span_type": "function",
+            "name": "sequence_find_orfs",
+            "model": null,
+            "started_at": "2026-09-26T07:39:50.463801+00:00",
+            "ended_at": "2026-09-26T07:39:53.212122+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:53.213218+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_0ad1d0ce28684d4c992c7da9",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:39:43.071586+00:00",
+            "ended_at": "2026-09-26T07:39:53.212866+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:53.224259+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_49974b55a508460687521e69",
+            "parent_id": "span_1f428ff42e6f4a9a9f888baa",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:39:53.223794+00:00",
+            "ended_at": "2026-09-26T07:39:53.223898+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:53.227459+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_27ef76b3609b4929b4b1a94a",
+            "parent_id": "span_1f428ff42e6f4a9a9f888baa",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:39:53.224557+00:00",
+            "ended_at": "2026-09-26T07:39:53.227105+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:53.230238+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_8ca1d889021541fbbd157b24",
+            "parent_id": "span_1f428ff42e6f4a9a9f888baa",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:39:53.227512+00:00",
+            "ended_at": "2026-09-26T07:39:53.229858+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:53.230612+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_1f428ff42e6f4a9a9f888baa",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:39:53.223246+00:00",
+            "ended_at": "2026-09-26T07:39:53.230288+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:39:53.232413+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:03.356729+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_450d4f42694a463da504463d",
+            "parent_id": "span_17d52b7c7b494c5f99b5151c",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:39:53.232860+00:00",
+            "ended_at": "2026-09-26T07:40:03.356312+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:03.364752+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 21281,
+            "output_tokens": 107
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:03.366776+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "genome_render_map"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:03.367352+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_started",
+          "data": {
+            "tool": "genome_render_map"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:06.098592+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "artifact_created",
+          "data": {
+            "tool": "genome_render_map",
+            "path": "outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/genome_map.json",
+            "workspace_path": "outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/genome_map.json",
+            "name": "genome_map.json",
+            "kind": "genome_map",
+            "content_type": "application/json; charset=utf-8",
+            "size": 5013,
+            "modified_at": 1790408406072733155
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:06.098919+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "artifact_created",
+          "data": {
+            "tool": "genome_render_map",
+            "path": "outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/reference.fasta",
+            "workspace_path": "outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/reference.fasta",
+            "name": "reference.fasta",
+            "kind": "sequence",
+            "content_type": "text/plain; charset=utf-8",
+            "size": 5400,
+            "modified_at": 1790408406071733152
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:06.099174+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_finished",
+          "data": {
+            "tool": "genome_render_map",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:06.102454+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "genome_render_map"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:06.102849+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_a80fc7975286452d9e282b54",
+            "parent_id": "span_17d52b7c7b494c5f99b5151c",
+            "span_type": "function",
+            "name": "genome_render_map",
+            "model": null,
+            "started_at": "2026-09-26T07:40:03.366133+00:00",
+            "ended_at": "2026-09-26T07:40:06.102526+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:06.103515+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_17d52b7c7b494c5f99b5151c",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:39:53.231100+00:00",
+            "ended_at": "2026-09-26T07:40:06.103202+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:06.112741+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_584cad3999d04573b0c79dab",
+            "parent_id": "span_e6c69fe36b134171b64cbe96",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:40:06.112290+00:00",
+            "ended_at": "2026-09-26T07:40:06.112376+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:06.116772+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_94ed2a4b42344262ba6732b3",
+            "parent_id": "span_e6c69fe36b134171b64cbe96",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:40:06.113059+00:00",
+            "ended_at": "2026-09-26T07:40:06.116415+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:06.121104+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_2776c82e642e4e66b13123b7",
+            "parent_id": "span_e6c69fe36b134171b64cbe96",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:40:06.116821+00:00",
+            "ended_at": "2026-09-26T07:40:06.120262+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:06.121943+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_e6c69fe36b134171b64cbe96",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:40:06.111554+00:00",
+            "ended_at": "2026-09-26T07:40:06.121186+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:06.125703+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:09.653666+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_6123567d397e43a4a81b9724",
+            "parent_id": "span_f2ab1a23bbf64b9ca97dca71",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:40:06.126588+00:00",
+            "ended_at": "2026-09-26T07:40:09.653259+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:09.661011+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 21741,
+            "output_tokens": 14
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:09.663070+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_context"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:09.666529+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "tool_failed",
+          "data": {
+            "tool": "website_context",
+            "error_type": "ValueError"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:09.666993+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_context"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:09.667355+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_d4797ec7e0cb4fd6b7219b46",
+            "parent_id": "span_f2ab1a23bbf64b9ca97dca71",
+            "span_type": "function",
+            "name": "website_context",
+            "model": null,
+            "started_at": "2026-09-26T07:40:09.662437+00:00",
+            "ended_at": "2026-09-26T07:40:09.667047+00:00",
+            "has_error": true
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:09.668126+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_f2ab1a23bbf64b9ca97dca71",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:40:06.122986+00:00",
+            "ended_at": "2026-09-26T07:40:09.667740+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:09.678070+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_e188f11c983a4ad887d766fd",
+            "parent_id": "span_872c9c9031634ea1bcd906ae",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:40:09.677459+00:00",
+            "ended_at": "2026-09-26T07:40:09.677611+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:09.681949+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_ffcc4b63dd2541e1a242487c",
+            "parent_id": "span_872c9c9031634ea1bcd906ae",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:40:09.678478+00:00",
+            "ended_at": "2026-09-26T07:40:09.681462+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:09.685195+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_0994fa647a2d4610b459fdd3",
+            "parent_id": "span_872c9c9031634ea1bcd906ae",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:40:09.682022+00:00",
+            "ended_at": "2026-09-26T07:40:09.684727+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:09.685685+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_872c9c9031634ea1bcd906ae",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:40:09.676786+00:00",
+            "ended_at": "2026-09-26T07:40:09.685251+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:09.688360+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:13.737578+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_f35c8f5d0aaf47f1a6fc353b",
+            "parent_id": "span_29a4a9d273084b71b51047f7",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:40:09.688972+00:00",
+            "ended_at": "2026-09-26T07:40:13.737038+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:13.742594+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 21801,
+            "output_tokens": 149
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:13.744334+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:13.746819+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_29a4a9d273084b71b51047f7",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:40:09.686396+00:00",
+            "ended_at": "2026-09-26T07:40:13.746401+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:13.751402+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:13.751730+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_ddf27f0fffcc4a1496b2f914",
+            "parent_id": "span_bb36c883972f42fd9f2caa45",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T07:40:13.751176+00:00",
+            "ended_at": "2026-09-26T07:40:13.751421+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:13.753923+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_bb36c883972f42fd9f2caa45",
+            "parent_id": "span_b528cc1731fd449eb0da07c2",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T07:38:28.507101+00:00",
+            "ended_at": "2026-09-26T07:40:13.753481+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:13.754385+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4",
+            "span_id": "span_b528cc1731fd449eb0da07c2",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T07:38:28.494704+00:00",
+            "ended_at": "2026-09-26T07:40:13.754043+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:13.754625+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_651c416632bf42a9bb01a5e9b2bf6fe4"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:13.763364+00:00",
+          "session_id": "sol-20260926-25_genbank_map",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 9
+          }
+        }
+      ],
+      "run": {
+        "run_id": "48775a49-c87b-44a6-b524-79f624993293",
+        "session_dir": ".",
+        "runtime_dir": "runs/48775a49-c87b-44a6-b524-79f624993293",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "uploads/20e1890d800b_NC_001422.gb",
+          "workspace_path": "uploads/20e1890d800b_NC_001422.gb",
+          "name": "20e1890d800b_NC_001422.gb",
+          "size": 5477,
+          "modified_at": 1790408305438417355,
+          "kind": "upload",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "generated/NC_001422.1.fasta",
+          "workspace_path": "generated/NC_001422.1.fasta",
+          "name": "NC_001422.1.fasta",
+          "size": 5477,
+          "modified_at": 1790408383000654643,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "outputs/sequence_find_orfs/2572303a9c9e4101bf92d7f0a399c4ac/reference.fasta",
+          "workspace_path": "outputs/sequence_find_orfs/2572303a9c9e4101bf92d7f0a399c4ac/reference.fasta",
+          "name": "reference.fasta",
+          "size": 5400,
+          "modified_at": 1790408393154688774,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "outputs/sequence_find_orfs/d0dcdd4083ec47188c4641a11cb78ba8/features.json",
+          "workspace_path": "outputs/sequence_find_orfs/d0dcdd4083ec47188c4641a11cb78ba8/features.json",
+          "name": "features.json",
+          "size": 3575,
+          "modified_at": 1790408393155688777,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/reference.fasta",
+          "workspace_path": "outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/reference.fasta",
+          "name": "reference.fasta",
+          "size": 5400,
+          "modified_at": 1790408406071733152,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/genome_map.json",
+          "workspace_path": "outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/genome_map.json",
+          "name": "genome_map.json",
+          "size": 5013,
+          "modified_at": 1790408406072733155,
+          "kind": "genome_map",
+          "content_type": "application/json; charset=utf-8"
+        }
+      ],
+      "approval_decision": null,
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "3abbcf6ea8e14114bce04d921b74caea",
+        "session_id": "sol-20260926-25_genbank_map"
+      },
+      "created_at": "2026-09-26T07:38:25.493949+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "3abbcf6ea8e14114bce04d921b74caea"
+      },
+      "created_at": "2026-09-26T07:38:27.607193+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T07:38:28.495935+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T07:38:28.507560+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:31.585907+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:31.589598+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:31.591861+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll locate the uploaded GenBank file, parse its annotations, then render and open the genome "
+      },
+      "created_at": "2026-09-26T07:38:32.523380+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:32.526102+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:32.529007+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:32.531254+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:32.534064+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:32.536528+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:32.541755+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_3jc6XkIMjMlflZ8aw6yu02Bb",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:32.544589+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_3jc6XkIMjMlflZ8aw6yu02Bb",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:32.574339+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:35.672256+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:35.676583+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:35.679335+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "browser.The GenBank upload is identified. I’m parsing its sequence and features "
+      },
+      "created_at": "2026-09-26T07:38:35.932074+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:35.935009+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:35.960216+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:35.963195+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:35.965647+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:35.968384+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:35.987088+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:35.989642+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:35.992108+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:35.994738+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.045723+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.048073+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.051076+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.053758+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.057649+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.097322+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.100706+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.103988+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.107210+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.115031+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.118448+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.123332+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.126766+00:00"
+    },
+    {
+      "sequence": 42,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.166431+00:00"
+    },
+    {
+      "sequence": 43,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.169334+00:00"
+    },
+    {
+      "sequence": 44,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.175249+00:00"
+    },
+    {
+      "sequence": 45,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.178076+00:00"
+    },
+    {
+      "sequence": 46,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.180360+00:00"
+    },
+    {
+      "sequence": 47,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.289631+00:00"
+    },
+    {
+      "sequence": 48,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.293868+00:00"
+    },
+    {
+      "sequence": 49,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.296485+00:00"
+    },
+    {
+      "sequence": 50,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.298792+00:00"
+    },
+    {
+      "sequence": 51,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.373101+00:00"
+    },
+    {
+      "sequence": 52,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:36.375534+00:00"
+    },
+    {
+      "sequence": 53,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:36.377540+00:00"
+    },
+    {
+      "sequence": 54,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:36.379612+00:00"
+    },
+    {
+      "sequence": 55,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.384605+00:00"
+    },
+    {
+      "sequence": 56,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_Cm4IU9Myl4WCAhELhuXleMlr",
+        "tool_name": "genome_read_features",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:36.386804+00:00"
+    },
+    {
+      "sequence": 57,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T07:38:36.391304+00:00"
+    },
+    {
+      "sequence": 58,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_Cm4IU9Myl4WCAhELhuXleMlr",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:39.327990+00:00"
+    },
+    {
+      "sequence": 59,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:41.291838+00:00"
+    },
+    {
+      "sequence": 60,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:41.297385+00:00"
+    },
+    {
+      "sequence": 61,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:41.302922+00:00"
+    },
+    {
+      "sequence": 62,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "now.The file contains multiple sequence records, so I’ll inspect their IDs and select the annotated reference "
+      },
+      "created_at": "2026-09-26T07:38:41.639185+00:00"
+    },
+    {
+      "sequence": 63,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:41.642438+00:00"
+    },
+    {
+      "sequence": 64,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:41.649252+00:00"
+    },
+    {
+      "sequence": 65,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:41.652449+00:00"
+    },
+    {
+      "sequence": 66,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:41.655423+00:00"
+    },
+    {
+      "sequence": 67,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:41.658343+00:00"
+    },
+    {
+      "sequence": 68,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:41.663718+00:00"
+    },
+    {
+      "sequence": 69,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:41.666495+00:00"
+    },
+    {
+      "sequence": 70,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:41.900970+00:00"
+    },
+    {
+      "sequence": 71,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:48.333978+00:00"
+    },
+    {
+      "sequence": 72,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:48.587049+00:00"
+    },
+    {
+      "sequence": 73,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:48.590273+00:00"
+    },
+    {
+      "sequence": 74,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:48.592979+00:00"
+    },
+    {
+      "sequence": 75,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:48.595874+00:00"
+    },
+    {
+      "sequence": 76,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:48.603457+00:00"
+    },
+    {
+      "sequence": 77,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_cZbmA7dYhqX7W1lLFPa9si9P",
+        "tool_name": "file_inspection",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:48.606047+00:00"
+    },
+    {
+      "sequence": 78,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T07:38:48.612372+00:00"
+    },
+    {
+      "sequence": 79,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T07:38:52.036123+00:00"
+    },
+    {
+      "sequence": 80,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_cZbmA7dYhqX7W1lLFPa9si9P",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:52.052844+00:00"
+    },
+    {
+      "sequence": 81,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:55.489039+00:00"
+    },
+    {
+      "sequence": 82,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:55.492890+00:00"
+    },
+    {
+      "sequence": 83,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:55.495627+00:00"
+    },
+    {
+      "sequence": 84,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "explicitly.The upload is actually FASTA-formatted despite its `.gb` name, so it has no embedded annotations. I’ll still generate reference features from detected ORFs and render the requested "
+      },
+      "created_at": "2026-09-26T07:38:56.045005+00:00"
+    },
+    {
+      "sequence": 85,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:56.051101+00:00"
+    },
+    {
+      "sequence": 86,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.131076+00:00"
+    },
+    {
+      "sequence": 87,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.134910+00:00"
+    },
+    {
+      "sequence": 88,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.137164+00:00"
+    },
+    {
+      "sequence": 89,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.141247+00:00"
+    },
+    {
+      "sequence": 90,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.146880+00:00"
+    },
+    {
+      "sequence": 91,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.150161+00:00"
+    },
+    {
+      "sequence": 92,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.154756+00:00"
+    },
+    {
+      "sequence": 93,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.157541+00:00"
+    },
+    {
+      "sequence": 94,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.187413+00:00"
+    },
+    {
+      "sequence": 95,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.190554+00:00"
+    },
+    {
+      "sequence": 96,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.193399+00:00"
+    },
+    {
+      "sequence": 97,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.195611+00:00"
+    },
+    {
+      "sequence": 98,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.198179+00:00"
+    },
+    {
+      "sequence": 99,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.233539+00:00"
+    },
+    {
+      "sequence": 100,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.237091+00:00"
+    },
+    {
+      "sequence": 101,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.240187+00:00"
+    },
+    {
+      "sequence": 102,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.242788+00:00"
+    },
+    {
+      "sequence": 103,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.246768+00:00"
+    },
+    {
+      "sequence": 104,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.249126+00:00"
+    },
+    {
+      "sequence": 105,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.252288+00:00"
+    },
+    {
+      "sequence": 106,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.255439+00:00"
+    },
+    {
+      "sequence": 107,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:56.489192+00:00"
+    },
+    {
+      "sequence": 108,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:59.818460+00:00"
+    },
+    {
+      "sequence": 109,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:59.856287+00:00"
+    },
+    {
+      "sequence": 110,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:59.859411+00:00"
+    },
+    {
+      "sequence": 111,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:59.863202+00:00"
+    },
+    {
+      "sequence": 112,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:38:59.866670+00:00"
+    },
+    {
+      "sequence": 113,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:59.875645+00:00"
+    },
+    {
+      "sequence": 114,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_WdV4swR7SGAvRkFwUPjYRwn6",
+        "tool_name": "sequence_find_orfs",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:38:59.879220+00:00"
+    },
+    {
+      "sequence": 115,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T07:38:59.887267+00:00"
+    },
+    {
+      "sequence": 116,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_WdV4swR7SGAvRkFwUPjYRwn6",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:03.237980+00:00"
+    },
+    {
+      "sequence": 117,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:05.523278+00:00"
+    },
+    {
+      "sequence": 118,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:05.526695+00:00"
+    },
+    {
+      "sequence": 119,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:05.529333+00:00"
+    },
+    {
+      "sequence": 120,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "browser.The sequence tool requires a FASTA extension. I’m creating a correctly named reference copy, then calling ORFs and rendering "
+      },
+      "created_at": "2026-09-26T07:39:06.019791+00:00"
+    },
+    {
+      "sequence": 121,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:06.023278+00:00"
+    },
+    {
+      "sequence": 122,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.028037+00:00"
+    },
+    {
+      "sequence": 123,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.059930+00:00"
+    },
+    {
+      "sequence": 124,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.063335+00:00"
+    },
+    {
+      "sequence": 125,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.066398+00:00"
+    },
+    {
+      "sequence": 126,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.069408+00:00"
+    },
+    {
+      "sequence": 127,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.076485+00:00"
+    },
+    {
+      "sequence": 128,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.079327+00:00"
+    },
+    {
+      "sequence": 129,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.082900+00:00"
+    },
+    {
+      "sequence": 130,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.087543+00:00"
+    },
+    {
+      "sequence": 131,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.118310+00:00"
+    },
+    {
+      "sequence": 132,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.120883+00:00"
+    },
+    {
+      "sequence": 133,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.123505+00:00"
+    },
+    {
+      "sequence": 134,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.126847+00:00"
+    },
+    {
+      "sequence": 135,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.129152+00:00"
+    },
+    {
+      "sequence": 136,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.133275+00:00"
+    },
+    {
+      "sequence": 137,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.136938+00:00"
+    },
+    {
+      "sequence": 138,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.139128+00:00"
+    },
+    {
+      "sequence": 139,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.141319+00:00"
+    },
+    {
+      "sequence": 140,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.381040+00:00"
+    },
+    {
+      "sequence": 141,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.384076+00:00"
+    },
+    {
+      "sequence": 142,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:06.387435+00:00"
+    },
+    {
+      "sequence": 143,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:09.202042+00:00"
+    },
+    {
+      "sequence": 144,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:09.319474+00:00"
+    },
+    {
+      "sequence": 145,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:09.322531+00:00"
+    },
+    {
+      "sequence": 146,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:09.324951+00:00"
+    },
+    {
+      "sequence": 147,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:09.327574+00:00"
+    },
+    {
+      "sequence": 148,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:09.332489+00:00"
+    },
+    {
+      "sequence": 149,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_FCx8x1l2JiWhDeJadMhPOXme",
+        "tool_name": "code_inspection",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:09.334954+00:00"
+    },
+    {
+      "sequence": 150,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T07:39:09.339955+00:00"
+    },
+    {
+      "sequence": 151,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T07:39:12.313273+00:00"
+    },
+    {
+      "sequence": 152,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_FCx8x1l2JiWhDeJadMhPOXme",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:12.324489+00:00"
+    },
+    {
+      "sequence": 153,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:15.254512+00:00"
+    },
+    {
+      "sequence": 154,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:15.258196+00:00"
+    },
+    {
+      "sequence": 155,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:15.289975+00:00"
+    },
+    {
+      "sequence": 156,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:15.292863+00:00"
+    },
+    {
+      "sequence": 157,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:15.295476+00:00"
+    },
+    {
+      "sequence": 158,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:15.298611+00:00"
+    },
+    {
+      "sequence": 159,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:15.540671+00:00"
+    },
+    {
+      "sequence": 160,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:15.545043+00:00"
+    },
+    {
+      "sequence": 161,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:15.547382+00:00"
+    },
+    {
+      "sequence": 162,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:15.550299+00:00"
+    },
+    {
+      "sequence": 163,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:39.547353+00:00"
+    },
+    {
+      "sequence": 164,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:39.962802+00:00"
+    },
+    {
+      "sequence": 165,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:39.971061+00:00"
+    },
+    {
+      "sequence": 166,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_wE2QPh35VioNItNxoBBDzt5F",
+        "tool_name": "code_edit",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:39.976678+00:00"
+    },
+    {
+      "sequence": 167,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T07:39:39.981239+00:00"
+    },
+    {
+      "sequence": 168,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T07:39:43.038950+00:00"
+    },
+    {
+      "sequence": 169,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_wE2QPh35VioNItNxoBBDzt5F",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:43.055380+00:00"
+    },
+    {
+      "sequence": 170,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:50.350108+00:00"
+    },
+    {
+      "sequence": 171,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:50.354526+00:00"
+    },
+    {
+      "sequence": 172,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:50.372935+00:00"
+    },
+    {
+      "sequence": 173,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:50.450522+00:00"
+    },
+    {
+      "sequence": 174,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:50.455114+00:00"
+    },
+    {
+      "sequence": 175,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_FGHa73KSIJiSAIcfUL3KhjsD",
+        "tool_name": "sequence_find_orfs",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:50.460614+00:00"
+    },
+    {
+      "sequence": 176,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T07:39:50.465293+00:00"
+    },
+    {
+      "sequence": 177,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T07:39:53.208497+00:00"
+    },
+    {
+      "sequence": 178,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_FGHa73KSIJiSAIcfUL3KhjsD",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:53.217690+00:00"
+    },
+    {
+      "sequence": 179,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:57.627749+00:00"
+    },
+    {
+      "sequence": 180,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:39:57.631560+00:00"
+    },
+    {
+      "sequence": 181,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:39:57.634475+00:00"
+    },
+    {
+      "sequence": 182,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "it.ORF features and the reference are ready. I’m rendering the interactive map and opening the Genome "
+      },
+      "created_at": "2026-09-26T07:40:03.211488+00:00"
+    },
+    {
+      "sequence": 183,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:03.215560+00:00"
+    },
+    {
+      "sequence": 184,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:03.221135+00:00"
+    },
+    {
+      "sequence": 185,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:03.342262+00:00"
+    },
+    {
+      "sequence": 186,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:03.345731+00:00"
+    },
+    {
+      "sequence": 187,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:03.349089+00:00"
+    },
+    {
+      "sequence": 188,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:03.352404+00:00"
+    },
+    {
+      "sequence": 189,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:03.359901+00:00"
+    },
+    {
+      "sequence": 190,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_dKYCBLuHJOETtate0u8xfJrN",
+        "tool_name": "genome_render_map",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:03.362410+00:00"
+    },
+    {
+      "sequence": 191,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T07:40:03.367555+00:00"
+    },
+    {
+      "sequence": 192,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T07:40:06.099691+00:00"
+    },
+    {
+      "sequence": 193,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_dKYCBLuHJOETtate0u8xfJrN",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:06.108224+00:00"
+    },
+    {
+      "sequence": 194,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:09.269882+00:00"
+    },
+    {
+      "sequence": 195,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:09.275397+00:00"
+    },
+    {
+      "sequence": 196,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:09.408593+00:00"
+    },
+    {
+      "sequence": 197,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:09.646318+00:00"
+    },
+    {
+      "sequence": 198,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:09.651090+00:00"
+    },
+    {
+      "sequence": 199,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_MHnauGDH639fP6iKKEdelTVq",
+        "tool_name": "website_context",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:09.657137+00:00"
+    },
+    {
+      "sequence": 200,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_MHnauGDH639fP6iKKEdelTVq",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:09.673059+00:00"
+    },
+    {
+      "sequence": 201,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:12.154985+00:00"
+    },
+    {
+      "sequence": 202,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:12.158628+00:00"
+    },
+    {
+      "sequence": 203,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:12.160999+00:00"
+    },
+    {
+      "sequence": 204,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "browser.- Map: `outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/genome_map.json`\n- Reference: `outputs/genome_render_map/d063c928c5f043d1bdd4f36ec52368dd/reference.fasta`\n- Features: `outputs/sequence_find_orfs/d0dcdd4083ec47188c4641a11cb78ba8/features.json`\n"
+      },
+      "created_at": "2026-09-26T07:40:12.802196+00:00"
+    },
+    {
+      "sequence": 205,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "- Rendered 34 ORFs across 5,386 bp.\n\nNote: the uploaded `.gb` file was actually FASTA without annotations, so features were inferred as ORFs. Browser visibility could not be activated because no trusted website embedding is "
+      },
+      "created_at": "2026-09-26T07:40:13.727793+00:00"
+    },
+    {
+      "sequence": 206,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:13.730539+00:00"
+    },
+    {
+      "sequence": 207,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:13.732767+00:00"
+    },
+    {
+      "sequence": 208,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:13.734942+00:00"
+    },
+    {
+      "sequence": 209,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:13.740713+00:00"
+    },
+    {
+      "sequence": 210,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent finished: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T07:40:13.744581+00:00"
+    },
+    {
+      "sequence": 211,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "available."
+      },
+      "created_at": "2026-09-26T07:40:13.812424+00:00"
+    },
+    {
+      "sequence": 212,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T07:40:13.815383+00:00"
+    }
+  ],
+  "approval_decisions": [],
+  "ui": {
+    "png": "25_genbank_map.png",
+    "dom": "25_genbank_map.txt",
+    "returncode": 0
+  }
+}

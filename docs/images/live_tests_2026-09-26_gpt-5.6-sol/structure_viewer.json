@@ -1,0 +1,1891 @@
+{
+  "case": "26_structure_viewer",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "Download PDB structure 1A3N as mmCIF, inspect chains, residues, ligands, method, and resolution, then show the interactive 3D structure viewer in Publication style and leave it open.",
+  "session_id": "sol-20260926-26_structure_viewer",
+  "run_id": "356f9ea6b9c54b13bc32ebbe9166d1b7",
+  "uploads": [],
+  "started_at": "2026-09-26T07:40:40.683946+00:00",
+  "elapsed_seconds": 25.02,
+  "initial": {
+    "run_id": "356f9ea6b9c54b13bc32ebbe9166d1b7",
+    "session_id": "sol-20260926-26_structure_viewer",
+    "status": "running",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 16,
+    "created_at": "2026-09-26T07:40:15.664273+00:00",
+    "updated_at": "2026-09-26T07:40:15.668573+00:00",
+    "error": null
+  },
+  "status": {
+    "run_id": "356f9ea6b9c54b13bc32ebbe9166d1b7",
+    "session_id": "sol-20260926-26_structure_viewer",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 16,
+    "created_at": "2026-09-26T07:40:15.664273+00:00",
+    "updated_at": "2026-09-26T07:40:38.133971+00:00",
+    "error": null,
+    "result": {
+      "answer": "Downloaded and inspected `outputs/structures/1A3N.cif`.\n\n- Chains: A, B, C, D\n- Residues: 1,027\n- Ligand: HEM\n- Method: X-ray diffraction\n- Resolution: 1.8 Å\n\nI couldn’t open the interactive viewer because no trusted website embedding is active in this session.",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-26_structure_viewer",
+      "max_turns": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Download PDB structure 1A3N as mmCIF, inspect chains, residues, ligands, method, and resolution, then show the interactive 3D structure viewer in Publication style and leave it open."
+        },
+        {
+          "role": "assistant",
+          "content": "Downloaded and inspected `outputs/structures/1A3N.cif`.\n\n- Chains: A, B, C, D\n- Residues: 1,027\n- Ligand: HEM\n- Method: X-ray diffraction\n- Resolution: 1.8 Å\n\nI couldn’t open the interactive viewer because no trusted website embedding is active in this session."
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [
+          "pdb_download",
+          "structure_inspect",
+          "website_context"
+        ],
+        "databases": [
+          "pdb"
+        ],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [
+          "https://files.rcsb.org/download/1A3N.cif"
+        ],
+        "files": [
+          "structures",
+          "outputs/structures/1A3N.cif",
+          "outputs/structures"
+        ],
+        "outputs": [
+          {
+            "tool": "pdb_download",
+            "summary": "Downloaded PDB 1A3N as CIF.",
+            "bytes": 560920,
+            "pdb_id": "1A3N",
+            "file_format": "cif",
+            "structure_path": "outputs/structures/1A3N.cif",
+            "output_dir": "outputs/structures",
+            "status": "ok"
+          },
+          {
+            "tool": "structure_inspect",
+            "atom_count": 4997,
+            "chain_count": 4,
+            "residue_count": 1027,
+            "ligand_count": 1,
+            "model_count": 1,
+            "file_format": "cif",
+            "structure_path": "outputs/structures/1A3N.cif",
+            "status": "ok"
+          },
+          {
+            "tool": "website_context",
+            "status": "error",
+            "error": "This tool requires an active trusted website embedding."
+          }
+        ],
+        "tool_outputs": [],
+        "tool_errors": [
+          {
+            "tool": "website_context",
+            "error": "This tool requires an active trusted website embedding.",
+            "error_type": "ValueError"
+          }
+        ]
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T07:40:18.631046+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "run_started",
+          "data": {
+            "request": "Download PDB structure 1A3N as mmCIF, inspect chains, residues, ligands, method, and resolution, then show the interactive 3D structure viewer in Publication style and leave it open.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:18.646135+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:18.650624+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_c954da6ae23a44078357aa14",
+            "parent_id": "span_4dd7822b71724df488cfff26",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T07:40:18.650285+00:00",
+            "ended_at": "2026-09-26T07:40:18.650334+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:18.651796+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_4ad241c2a28943099c42b84a",
+            "parent_id": "span_08a7bb376e5b4155bc269084",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:40:18.651285+00:00",
+            "ended_at": "2026-09-26T07:40:18.651381+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:18.652310+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_543fdff2189e412c9995a10c",
+            "parent_id": "span_08a7bb376e5b4155bc269084",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:40:18.651926+00:00",
+            "ended_at": "2026-09-26T07:40:18.652013+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:18.655506+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_dc1fcbc4f4e4469ab721c519",
+            "parent_id": "span_08a7bb376e5b4155bc269084",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:40:18.652556+00:00",
+            "ended_at": "2026-09-26T07:40:18.655178+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:18.658040+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_25d1d16bc51d465190971889",
+            "parent_id": "span_08a7bb376e5b4155bc269084",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:40:18.655563+00:00",
+            "ended_at": "2026-09-26T07:40:18.657716+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:18.658929+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_08a7bb376e5b4155bc269084",
+            "parent_id": "span_4dd7822b71724df488cfff26",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:40:18.650702+00:00",
+            "ended_at": "2026-09-26T07:40:18.658635+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:18.659814+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:18.698821+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:21.921551+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_807894b73d9941aca24b84c0",
+            "parent_id": "span_1038888104e1456aac401725",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:40:18.701126+00:00",
+            "ended_at": "2026-09-26T07:40:21.921156+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:21.928523+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11372,
+            "output_tokens": 63
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:21.930539+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pdb_download"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:21.931032+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "tool_started",
+          "data": {
+            "tool": "pdb_download"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:25.991478+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "artifact_created",
+          "data": {
+            "tool": "pdb_download",
+            "path": "outputs/structures/1A3N.cif",
+            "workspace_path": "outputs/structures/1A3N.cif",
+            "name": "1A3N.cif",
+            "kind": "structure",
+            "content_type": "chemical/x-mmcif; charset=utf-8",
+            "size": 560920,
+            "modified_at": 1790408425960803527
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:25.991697+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "tool_finished",
+          "data": {
+            "tool": "pdb_download",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:25.995889+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pdb_download"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:25.996495+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_cccf30cd142644ad87684d81",
+            "parent_id": "span_1038888104e1456aac401725",
+            "span_type": "function",
+            "name": "pdb_download",
+            "model": null,
+            "started_at": "2026-09-26T07:40:21.929866+00:00",
+            "ended_at": "2026-09-26T07:40:25.996014+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:25.997398+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_1038888104e1456aac401725",
+            "parent_id": "span_7011ae2db0f7403c9d5baad7",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:40:18.659554+00:00",
+            "ended_at": "2026-09-26T07:40:25.997056+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:26.007630+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_3bffc9341fd54de3aeb20fe5",
+            "parent_id": "span_a4ce9805e0614f12aada1c42",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:40:26.007147+00:00",
+            "ended_at": "2026-09-26T07:40:26.007235+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:26.011632+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_6be96d8883b04f41846174cb",
+            "parent_id": "span_a4ce9805e0614f12aada1c42",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:40:26.008122+00:00",
+            "ended_at": "2026-09-26T07:40:26.011225+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:26.014784+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_fb4fa050a2f7493daa509b2d",
+            "parent_id": "span_a4ce9805e0614f12aada1c42",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:40:26.011684+00:00",
+            "ended_at": "2026-09-26T07:40:26.014410+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:26.015187+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_a4ce9805e0614f12aada1c42",
+            "parent_id": "span_7011ae2db0f7403c9d5baad7",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:40:26.006491+00:00",
+            "ended_at": "2026-09-26T07:40:26.014866+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:26.017712+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:28.213601+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_6b98a3b91c694270a097b1ae",
+            "parent_id": "span_37faeaf344e345a5bd1b859d",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:40:26.018410+00:00",
+            "ended_at": "2026-09-26T07:40:28.213174+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:28.218591+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11620,
+            "output_tokens": 28
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:28.220553+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "structure_inspect"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:28.221251+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "tool_started",
+          "data": {
+            "tool": "structure_inspect"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:31.413308+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "tool_finished",
+          "data": {
+            "tool": "structure_inspect",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:31.417309+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "structure_inspect"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:31.417874+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_041a913c089f49ff818b286f",
+            "parent_id": "span_37faeaf344e345a5bd1b859d",
+            "span_type": "function",
+            "name": "structure_inspect",
+            "model": null,
+            "started_at": "2026-09-26T07:40:28.219994+00:00",
+            "ended_at": "2026-09-26T07:40:31.417394+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:31.419006+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_37faeaf344e345a5bd1b859d",
+            "parent_id": "span_7011ae2db0f7403c9d5baad7",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:40:26.016597+00:00",
+            "ended_at": "2026-09-26T07:40:31.418669+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:31.429890+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_27a9317eb82044d3bfac5950",
+            "parent_id": "span_a17492ec676545f89484b717",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:40:31.429366+00:00",
+            "ended_at": "2026-09-26T07:40:31.429496+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:31.435864+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_1dd06f1be0d3432dbf5d6f3a",
+            "parent_id": "span_a17492ec676545f89484b717",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:40:31.430227+00:00",
+            "ended_at": "2026-09-26T07:40:31.435048+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:31.442080+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_ebaeb26640c84928b5fca7d6",
+            "parent_id": "span_a17492ec676545f89484b717",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:40:31.436019+00:00",
+            "ended_at": "2026-09-26T07:40:31.441278+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:31.442899+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_a17492ec676545f89484b717",
+            "parent_id": "span_7011ae2db0f7403c9d5baad7",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:40:31.428696+00:00",
+            "ended_at": "2026-09-26T07:40:31.442173+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:31.446390+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:34.917719+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_1fa2f5d0acd04e4ea73b3542",
+            "parent_id": "span_45d79a80b9854c58b2ea61ec",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:40:31.446988+00:00",
+            "ended_at": "2026-09-26T07:40:34.917318+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:34.925597+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11812,
+            "output_tokens": 37
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:34.927433+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_context"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:34.931793+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "tool_failed",
+          "data": {
+            "tool": "website_context",
+            "error_type": "ValueError"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:34.932931+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_context"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:34.933442+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_db36f6be828349b7bb7b39bb",
+            "parent_id": "span_45d79a80b9854c58b2ea61ec",
+            "span_type": "function",
+            "name": "website_context",
+            "model": null,
+            "started_at": "2026-09-26T07:40:34.926909+00:00",
+            "ended_at": "2026-09-26T07:40:34.933100+00:00",
+            "has_error": true
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:34.934109+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_45d79a80b9854c58b2ea61ec",
+            "parent_id": "span_7011ae2db0f7403c9d5baad7",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:40:31.444037+00:00",
+            "ended_at": "2026-09-26T07:40:34.933787+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:34.945007+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_a4c10c24f22e407bb38bcd75",
+            "parent_id": "span_fe3a3b836ee04a56a2add4d3",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:40:34.944539+00:00",
+            "ended_at": "2026-09-26T07:40:34.944650+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:34.951580+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_4c19de97ea2140ed88a7a258",
+            "parent_id": "span_fe3a3b836ee04a56a2add4d3",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:40:34.945592+00:00",
+            "ended_at": "2026-09-26T07:40:34.950536+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:34.958672+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_d464615f936c4cbb80578fc8",
+            "parent_id": "span_fe3a3b836ee04a56a2add4d3",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:40:34.951748+00:00",
+            "ended_at": "2026-09-26T07:40:34.957801+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:34.959530+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_fe3a3b836ee04a56a2add4d3",
+            "parent_id": "span_7011ae2db0f7403c9d5baad7",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:40:34.943876+00:00",
+            "ended_at": "2026-09-26T07:40:34.958760+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:34.963875+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:38.078159+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_0a161262bad8474ab4f99e1d",
+            "parent_id": "span_1978310d06334886b6b2e77f",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:40:34.964487+00:00",
+            "ended_at": "2026-09-26T07:40:38.077005+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:38.089287+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11895,
+            "output_tokens": 80
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:38.092157+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:38.095692+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_1978310d06334886b6b2e77f",
+            "parent_id": "span_7011ae2db0f7403c9d5baad7",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:40:34.960921+00:00",
+            "ended_at": "2026-09-26T07:40:38.094626+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:38.102340+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:38.102827+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_ba92d705c7424068a5800d52",
+            "parent_id": "span_7011ae2db0f7403c9d5baad7",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T07:40:38.102024+00:00",
+            "ended_at": "2026-09-26T07:40:38.102388+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:38.105410+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_7011ae2db0f7403c9d5baad7",
+            "parent_id": "span_4dd7822b71724df488cfff26",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T07:40:18.659451+00:00",
+            "ended_at": "2026-09-26T07:40:38.104935+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:38.105922+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5",
+            "span_id": "span_4dd7822b71724df488cfff26",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T07:40:18.646245+00:00",
+            "ended_at": "2026-09-26T07:40:38.105504+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:38.106147+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_e8eb621d7e6e4f248973a7bf6878f4c5"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:40:38.112723+00:00",
+          "session_id": "sol-20260926-26_structure_viewer",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 3
+          }
+        }
+      ],
+      "run": {
+        "run_id": "9d70e584-1520-49d9-b2b8-95633ccf9478",
+        "session_dir": ".",
+        "runtime_dir": "runs/9d70e584-1520-49d9-b2b8-95633ccf9478",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "outputs/structures/1A3N.cif",
+          "workspace_path": "outputs/structures/1A3N.cif",
+          "name": "1A3N.cif",
+          "size": 560920,
+          "modified_at": 1790408425960803527,
+          "kind": "structure",
+          "content_type": "chemical/x-mmcif; charset=utf-8"
+        }
+      ],
+      "approval_decision": null,
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "356f9ea6b9c54b13bc32ebbe9166d1b7",
+        "session_id": "sol-20260926-26_structure_viewer"
+      },
+      "created_at": "2026-09-26T07:40:15.664803+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "356f9ea6b9c54b13bc32ebbe9166d1b7"
+      },
+      "created_at": "2026-09-26T07:40:17.841410+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T07:40:18.647333+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T07:40:18.660012+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:21.291167+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:21.295112+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.297432+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll download and inspect 1A3N, then configure the site’s 3D "
+      },
+      "created_at": "2026-09-26T07:40:21.559552+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:21.562499+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.564645+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.566759+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.569582+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.582286+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.584751+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.589847+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.594974+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.597368+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.599783+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.602353+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.604891+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.607218+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.625890+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.633662+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.635826+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.638120+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.699465+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.701846+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.704735+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.706759+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.832880+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.908456+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:21.913331+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:21.916934+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:21.919179+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.923885+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_Q2tx5SenTrxXwwyxEOwABD8E",
+        "tool_name": "pdb_download",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:21.926732+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T07:40:21.931268+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T07:40:25.992266+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_Q2tx5SenTrxXwwyxEOwABD8E",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:26.002946+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:27.901983+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:27.905553+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:27.936838+00:00"
+    },
+    {
+      "sequence": 42,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:27.939532+00:00"
+    },
+    {
+      "sequence": 43,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:27.944083+00:00"
+    },
+    {
+      "sequence": 44,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:27.946739+00:00"
+    },
+    {
+      "sequence": 45,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:27.968689+00:00"
+    },
+    {
+      "sequence": 46,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:27.979481+00:00"
+    },
+    {
+      "sequence": 47,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:27.981767+00:00"
+    },
+    {
+      "sequence": 48,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:27.984763+00:00"
+    },
+    {
+      "sequence": 49,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:27.987266+00:00"
+    },
+    {
+      "sequence": 50,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:27.996366+00:00"
+    },
+    {
+      "sequence": 51,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:27.998983+00:00"
+    },
+    {
+      "sequence": 52,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:28.001949+00:00"
+    },
+    {
+      "sequence": 53,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:28.004344+00:00"
+    },
+    {
+      "sequence": 54,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:28.138473+00:00"
+    },
+    {
+      "sequence": 55,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:28.208183+00:00"
+    },
+    {
+      "sequence": 56,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:28.210994+00:00"
+    },
+    {
+      "sequence": 57,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_ppIZzwCL6kaHVnHNXV0csvIw",
+        "tool_name": "structure_inspect",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:28.216402+00:00"
+    },
+    {
+      "sequence": 58,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T07:40:28.221455+00:00"
+    },
+    {
+      "sequence": 59,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T07:40:31.413785+00:00"
+    },
+    {
+      "sequence": 60,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_ppIZzwCL6kaHVnHNXV0csvIw",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:31.424757+00:00"
+    },
+    {
+      "sequence": 61,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:34.493835+00:00"
+    },
+    {
+      "sequence": 62,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:34.497283+00:00"
+    },
+    {
+      "sequence": 63,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:34.499751+00:00"
+    },
+    {
+      "sequence": 64,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "viewer.Structure details are confirmed. Next I’ll open the viewer and apply Publication "
+      },
+      "created_at": "2026-09-26T07:40:34.820446+00:00"
+    },
+    {
+      "sequence": 65,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:34.823512+00:00"
+    },
+    {
+      "sequence": 66,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:34.825542+00:00"
+    },
+    {
+      "sequence": 67,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:34.906550+00:00"
+    },
+    {
+      "sequence": 68,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:34.909198+00:00"
+    },
+    {
+      "sequence": 69,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:34.912384+00:00"
+    },
+    {
+      "sequence": 70,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:34.914761+00:00"
+    },
+    {
+      "sequence": 71,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:34.920262+00:00"
+    },
+    {
+      "sequence": 72,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_BljJZpvvFGsZSxtaP7q6M3V0",
+        "tool_name": "website_context",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:34.922922+00:00"
+    },
+    {
+      "sequence": 73,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_BljJZpvvFGsZSxtaP7q6M3V0",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:34.939901+00:00"
+    },
+    {
+      "sequence": 74,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:37.270212+00:00"
+    },
+    {
+      "sequence": 75,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:37.274190+00:00"
+    },
+    {
+      "sequence": 76,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:37.277080+00:00"
+    },
+    {
+      "sequence": 77,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "style.Downloaded and inspected `outputs/structures/1A3N.cif`.\n\n- Chains: A, B, C, D\n- Residues: 1,027\n- Ligand: HEM\n- Method: X-ray diffraction\n- Resolution: 1.8 Å\n\nI couldn’t open the interactive viewer because no trusted website embedding is active in this "
+      },
+      "created_at": "2026-09-26T07:40:37.862592+00:00"
+    },
+    {
+      "sequence": 78,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:38.067950+00:00"
+    },
+    {
+      "sequence": 79,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:38.071451+00:00"
+    },
+    {
+      "sequence": 80,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:40:38.074599+00:00"
+    },
+    {
+      "sequence": 81,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:40:38.086745+00:00"
+    },
+    {
+      "sequence": 82,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent finished: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T07:40:38.092517+00:00"
+    },
+    {
+      "sequence": 83,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "session."
+      },
+      "created_at": "2026-09-26T07:40:38.131513+00:00"
+    },
+    {
+      "sequence": 84,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T07:40:38.134222+00:00"
+    }
+  ],
+  "approval_decisions": [],
+  "ui": {
+    "png": "26_structure_viewer.png",
+    "dom": "26_structure_viewer.txt",
+    "returncode": 0
+  }
+}

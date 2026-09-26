@@ -45,9 +45,9 @@ models and re-indexing behavior, see
 
 ### WDL execution backend
 
-WDL pipelines use local miniwdl and Docker by default. Set `CROMWELL_URL` to
-use the remote Cromwell backend. When the Cromwell host cannot see local
-workspace files, enable the S3 input-staging variables in the same profile:
+WDL pipelines use local miniwdl and Docker by default. For the remote Mscan
+Cromwell server, configure S3 input uploads and output downloads before
+starting BioAgent:
 
 ~~~bash
 export CROMWELL_URL=http://192.168.164.39:39000
@@ -57,23 +57,28 @@ export CROMWELL_INPUT_STORAGE_REGION=us-east-1
 export CROMWELL_INPUT_STORAGE_MOUNT_PREFIX=/data/versitygw/data/s3
 export CROMWELL_INPUT_STORAGE_ACCESS_KEY='your-s3-access-key'
 export CROMWELL_INPUT_STORAGE_SECRET_KEY='your-s3-secret-key'
+# Output downloads reuse the input-storage endpoint, region, and credentials.
+export CROMWELL_OUTPUT_STORAGE_URI=s3://cncb-web-server-mic/cromwell/outputs
+export CROMWELL_OUTPUT_STORAGE_MOUNT_PREFIX=/data/versitygw/data/s3/cncb-web-server-mic/cromwell/outputs
+export CROMWELL_OUTPUT_STORAGE_EXECUTION_PATH_PREFIXES=/data/cromwell-workspace/cromwell-executions,/cromwell-share/cloud_cromwell/cromwell-executions
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ~~~
 
-An unset `CROMWELL_URL` uses local miniwdl; a nonempty value uses Cromwell.
-Restart BioAgent after changing it. New plans save the selected backend and
-URL. Without S3 staging, the workflow and input/output paths must be visible
-to BioAgent, Cromwell, and the task containers.
+BioAgent uploads local inputs to S3, submits the workflow through Cromwell's
+REST API, and downloads the outputs declared in `runner.yaml` from S3 after
+success. Downloaded files are validated and hashed in the local job directory.
+Transfer records are saved as `cromwell.input_uploads.json` and
+`cromwell.output_downloads.json`.
 
-With S3 staging, local WDL inputs are uploaded before submission and rewritten
-to paths such as
-`/data/versitygw/data/s3/cncb-web-server-mic/files/...`. Repeated references
-share one upload; existing remote or mounted paths are preserved. Upload
-records are written to `cromwell.input_uploads.json`. Keep S3 credentials out of
-Git; environment variables, an instance profile, or another boto3 credential
-provider may supply them. This stages inputs only: output paths still need to
-be visible to BioAgent. See the [live test report](live_test_report_2026-09-24.md)
-for verification details.
+The mount prefixes describe existing paths on the Cromwell/task hosts.
+BioAgent only needs access to the Cromwell and S3 endpoints; no shared mount
+is needed on the BioAgent host. Cromwell must be able to read inputs and write
+outputs at those server-side paths. Reference databases remain on the task hosts.
+
+Output downloads reuse the input-storage endpoint, region, and credentials.
+Supply credentials through the environment, outside Git. Restart BioAgent
+after changing these settings. New plans save the selected backend and URL;
+detached workers receive the S3 transport settings.
 
 To return to local execution:
 

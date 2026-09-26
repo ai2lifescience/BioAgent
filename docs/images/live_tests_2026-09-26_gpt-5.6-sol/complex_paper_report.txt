@@ -1,0 +1,30 @@
+PROMPT:
+Read the uploaded 18-page Paper2Agent research paper thoroughly. Extract its architecture, agent loop, tool interfaces, evaluation evidence, reliability mechanisms, limitations, and practical lessons with page markers. Write a detailed Markdown report to the workspace and include the report path, section outline, and key findings.
+
+MODEL: gpt-5.6-sol
+STATUS: succeeded
+TOOLS: file_inspection, document_read, report_write
+
+ANSWER:
+Report saved to:
+
+`outputs/report_write/31224843f309498db1c287656548e6fb/Paper2Agent_Architecture_Evaluation_Reliability_and_Lessons.md`
+
+**Outline**
+- System architecture and MCP interfaces
+- Six-stage construction pipeline
+- Planning–action–observation agent loop
+- Evaluation evidence
+- Reliability mechanisms
+- Limitations
+- Practical implementation lessons
+- Evidence map by PDF page
+
+**Key Findings**
+- Converts papers into MCP servers exposing tools, resources, and workflow prompts.
+- Validates tools using reference outputs, 3% numeric tolerance, figure hashing, bounded repair, and fail-closed exclusion.
+- Agentified 74/100 biology papers; 593/599 extracted tools passed validation.
+- Achieved 91.2% large-scale benchmark accuracy versus 80.3% for direct repository access.
+- Main constraints are incomplete artifacts, dependency failures, maintenance, security/IP concerns, and the need for human scientific judgment.
+
+Pages 16–18 required OCR; the report covers all selectable content on pages 1–15 and clearly marks this limitation.

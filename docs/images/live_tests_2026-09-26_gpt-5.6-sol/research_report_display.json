@@ -1,0 +1,1947 @@
+{
+  "case": "30_research_report_display",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "Read the final Markdown report from the previous turn and display its substantive contents in the web response: title, headings, key findings, evidence table or citations, limitations, and conclusion. Include the saved report path and do not summarize with only a link.",
+  "session_id": "sol-20260926-research-display",
+  "run_id": "32b77ca504fb460daed61f2e833083f1",
+  "uploads": [],
+  "started_at": "2026-09-26T07:46:37.120873+00:00",
+  "elapsed_seconds": 26.22,
+  "initial": {
+    "run_id": "32b77ca504fb460daed61f2e833083f1",
+    "session_id": "sol-20260926-research-display",
+    "status": "running",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 16,
+    "created_at": "2026-09-26T07:46:10.905232+00:00",
+    "updated_at": "2026-09-26T07:46:10.910284+00:00",
+    "error": null
+  },
+  "status": {
+    "run_id": "32b77ca504fb460daed61f2e833083f1",
+    "session_id": "sol-20260926-research-display",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 16,
+    "created_at": "2026-09-26T07:46:10.905232+00:00",
+    "updated_at": "2026-09-26T07:46:34.323803+00:00",
+    "error": null,
+    "result": {
+      "answer": "# Reliable Interactive AI Agents for Scientific Research\n\n**Saved report:** `outputs/report_write/73666c5eb0314a4a99c7b9ac56257ff8/Reliable_Interactive_AI_Agents_for_Scientific_Research_Evide.md`  \n**Evidence cutoff:** 2026-09-26\n\n## Headings\n\n1. Scope, method, and evidence hierarchy  \n2. Factual accuracy, hallucination, and citations  \n3. Tool use and reproducibility  \n4. Human oversight  \n5. Uncertainty and calibration  \n6. Security and prompt injection  \n7. Provenance  \n8. Benchmark limitations  \n9. Evidence quality and contradictions  \n10. Practical governance checklist  \n11. Evidence gaps and limitations  \n12. Conclusion  \n\n## Key Findings\n\n- Current evidence supports AI agents as **supervised research assistants—not autonomous scientific authorities**.\n- They can accelerate literature triage, writing, coding, data processing, and bounded research-engineering tasks.\n- Fluent or guideline-consistent answers do not ensure factual or citation reliability.\n- Reliability requires source verification, constrained tool access, reproducible execution, security controls, provenance, uncertainty handling, and accountable expert review.\n- Standards such as NIST, OWASP, and C2PA define useful controls but do not empirically prove accuracy or safety.\n\n## Evidence Comparison\n\n| Evidence | Main result | Interpretation |\n|---|---|---|\n| ChatGPT-3.5 citation audit, [PMID 37337480](https://pubmed.ncbi.nlm.nih.gov/37337480/) | Among 115 references, 47% were fabricated, 46% authentic but inaccurate, and 7% authentic and accurate. | Citation checking is essential; plausible prose masks severe sourcing failures. |\n| ChatGPT-5 citation audit, [PMID 42668804](https://pubmed.ncbi.nlm.nih.gov/42668804/) | Of 2,736 references, 7.13% were fabricated and 49.34% bibliographically accurate; only 8% of queries had completely accurate citations. | Newer systems may improve, but substantial errors persist. Different study designs prevent direct longitudinal comparison. |\n| ChatGPT-4o mini guideline study, [PMID 41625387](https://pubmed.ncbi.nlm.nih.gov/41625387/) | 76.3% of responses matched recommendations and 88.2% were rated highly clear, yet 7.9% of citations were fabricated and only 1.1% overlapped with guideline references. | Clarity, recommendation agreement, and citation integrity are separate properties. |\n| METR RE-Bench | Agents surpassed experts at a two-hour budget but performed worse at longer budgets. | Performance depends strongly on task horizon and resource constraints. |\n| ScienceAgentBench | Offers code, data, and containers; a verified split was later released to correct false negatives. | Reproducible harnesses help, but benchmark artifacts can distort results. |\n| Structured imaging review, [PMID 42682816](https://pubmed.ncbi.nlm.nih.gov/42682816/) | Reports hallucination, uncertain calibration, site dependence, and limited prospective evidence. | Deployment evidence does not generalize automatically across tasks or institutions. |\n| NIST AI 600-1 | Provides voluntary generative-AI risk-management guidance. | Normative framework, not proof that a system is reliable. |\n| OWASP GenAI Security Project | Identifies prompt injection and other application vulnerabilities. | Establishes credible security concerns; scientific-agent-specific trials remain scarce. |\n| C2PA 2.2 | Defines signed provenance manifests, hashes, assertions, and validation states. | Supports traceability and tamper evidence, but cannot establish scientific truth. |\n\n## Reproducibility and Oversight\n\nReliable tool-using workflows should:\n\n- Pin models, prompts, datasets, dependencies, and tool versions.\n- Log retrievals, tool calls, parameters, outputs, errors, and failed attempts.\n- Use containers or sandboxes and restrict permissions.\n- Repeat stochastic runs and test generated code.\n- Compare critical outputs with independent implementations.\n- Require reviewers who can inspect evidence and halt the workflow.\n- Independently reproduce consequential analyses before publication.\n\nNominal “human-in-the-loop” approval is insufficient if reviewers lack domain expertise, execution traces, time, or authority. Automation bias can persist despite formal approval.\n\n## Uncertainty and Security\n\nThe evidence does not establish reliable self-reported confidence for research agents. Verbal confidence should not be treated as calibrated probability. Workflows should separate observations from inference, test stability across reruns, measure calibration locally, and provide abstention and escalation routes.\n\nPrompt injection is particularly important when agents ingest papers, webpages, email, metadata, or tool output. Recommended controls include:\n\n- Treat retrieved content as data, not instructions.\n- Separate system instructions from evidence.\n- Apply least privilege and tool/network allowlists.\n- Sandbox execution and filter secrets.\n- Require confirmation for external or irreversible actions.\n- Preserve immutable audit logs.\n- Conduct adversarial testing for injection and data leakage.\n\nThe reviewed evidence contained no scientific-agent-specific prompt-injection trial providing a defense success rate.\n\n## Practical Governance\n\nBefore deployment, define acceptable errors, prohibited actions, data sensitivity, approval points, and accountable owners. Evaluate representative local, rare, and adversarial cases.\n\nDuring each run, record the environment, mark generated content, require claim-level citations, verify numerical and bibliographic claims, surface uncertainty, and block untrusted content from changing policy.\n\nBefore scientific use, independently reproduce critical results, verify citations and quotations, assess privacy and bias, disclose material AI use, and archive code, datasets, dependencies, and provenance.\n\nAfter deployment, monitor drift and failures, red-team unsafe tool use, revalidate after every model or workflow change, and maintain rollback and retirement procedures.\n\n## Limitations\n\n- Most publications reviewed were domain-specific medical studies or reviews rather than direct trials of autonomous scientific agents.\n- Medical findings may not generalize to every scientific field.\n- ML-engineering benchmarks may not generalize to hypothesis formation, wet-lab research, or scholarly synthesis.\n- Prospective, multi-institution and long-duration studies remain sparse.\n- Evidence is limited on calibration, abstention, human–agent team design, automation bias, equity, and governance effectiveness.\n- Closed models, nondeterminism, API changes, and model drift impede exact replication.\n- Benchmark averages can hide catastrophic failures and subgroup variation.\n- Several sources were available as indexed abstracts or excerpts rather than complete articles.\n- The evidence base is changing rapidly.\n\n## Conclusion\n\nNo reviewed evidence justifies treating interactive AI agents as independently reliable scientific researchers. Evidence supports **bounded, auditable assistance under expert supervision**.\n\nReliability depends less on fluent output than on verified sources, constrained tools, reproducible execution, calibrated escalation, security controls, provenance, and accountable human review. Standards can structure these safeguards, but only task-specific empirical evaluation can establish performance—and that evidence remains valid only within its tested domain.",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-research-display",
+      "max_turns": 16,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Read the final Markdown report from the previous turn and display its substantive contents in the web response: title, headings, key findings, evidence table or citations, limitations, and conclusion. Include the saved report path and do not summarize with only a link."
+        },
+        {
+          "role": "assistant",
+          "content": "# Reliable Interactive AI Agents for Scientific Research\n\n**Saved report:** `outputs/report_write/73666c5eb0314a4a99c7b9ac56257ff8/Reliable_Interactive_AI_Agents_for_Scientific_Research_Evide.md`  \n**Evidence cutoff:** 2026-09-26\n\n## Headings\n\n1. Scope, method, and evidence hierarchy  \n2. Factual accuracy, hallucination, and citations  \n3. Tool use and reproducibility  \n4. Human oversight  \n5. Uncertainty and calibration  \n6. Security and prompt injection  \n7. Provenance  \n8. Benchmark limitations  \n9. Evidence quality and contradictions  \n10. Practical governance checklist  \n11. Evidence gaps and limitations  \n12. Conclusion  \n\n## Key Findings\n\n- Current evidence supports AI agents as **supervised research assistants—not autonomous scientific authorities**.\n- They can accelerate literature triage, writing, coding, data processing, and bounded research-engineering tasks.\n- Fluent or guideline-consistent answers do not ensure factual or citation reliability.\n- Reliability requires source verification, constrained tool access, reproducible execution, security controls, provenance, uncertainty handling, and accountable expert review.\n- Standards such as NIST, OWASP, and C2PA define useful controls but do not empirically prove accuracy or safety.\n\n## Evidence Comparison\n\n| Evidence | Main result | Interpretation |\n|---|---|---|\n| ChatGPT-3.5 citation audit, [PMID 37337480](https://pubmed.ncbi.nlm.nih.gov/37337480/) | Among 115 references, 47% were fabricated, 46% authentic but inaccurate, and 7% authentic and accurate. | Citation checking is essential; plausible prose masks severe sourcing failures. |\n| ChatGPT-5 citation audit, [PMID 42668804](https://pubmed.ncbi.nlm.nih.gov/42668804/) | Of 2,736 references, 7.13% were fabricated and 49.34% bibliographically accurate; only 8% of queries had completely accurate citations. | Newer systems may improve, but substantial errors persist. Different study designs prevent direct longitudinal comparison. |\n| ChatGPT-4o mini guideline study, [PMID 41625387](https://pubmed.ncbi.nlm.nih.gov/41625387/) | 76.3% of responses matched recommendations and 88.2% were rated highly clear, yet 7.9% of citations were fabricated and only 1.1% overlapped with guideline references. | Clarity, recommendation agreement, and citation integrity are separate properties. |\n| METR RE-Bench | Agents surpassed experts at a two-hour budget but performed worse at longer budgets. | Performance depends strongly on task horizon and resource constraints. |\n| ScienceAgentBench | Offers code, data, and containers; a verified split was later released to correct false negatives. | Reproducible harnesses help, but benchmark artifacts can distort results. |\n| Structured imaging review, [PMID 42682816](https://pubmed.ncbi.nlm.nih.gov/42682816/) | Reports hallucination, uncertain calibration, site dependence, and limited prospective evidence. | Deployment evidence does not generalize automatically across tasks or institutions. |\n| NIST AI 600-1 | Provides voluntary generative-AI risk-management guidance. | Normative framework, not proof that a system is reliable. |\n| OWASP GenAI Security Project | Identifies prompt injection and other application vulnerabilities. | Establishes credible security concerns; scientific-agent-specific trials remain scarce. |\n| C2PA 2.2 | Defines signed provenance manifests, hashes, assertions, and validation states. | Supports traceability and tamper evidence, but cannot establish scientific truth. |\n\n## Reproducibility and Oversight\n\nReliable tool-using workflows should:\n\n- Pin models, prompts, datasets, dependencies, and tool versions.\n- Log retrievals, tool calls, parameters, outputs, errors, and failed attempts.\n- Use containers or sandboxes and restrict permissions.\n- Repeat stochastic runs and test generated code.\n- Compare critical outputs with independent implementations.\n- Require reviewers who can inspect evidence and halt the workflow.\n- Independently reproduce consequential analyses before publication.\n\nNominal “human-in-the-loop” approval is insufficient if reviewers lack domain expertise, execution traces, time, or authority. Automation bias can persist despite formal approval.\n\n## Uncertainty and Security\n\nThe evidence does not establish reliable self-reported confidence for research agents. Verbal confidence should not be treated as calibrated probability. Workflows should separate observations from inference, test stability across reruns, measure calibration locally, and provide abstention and escalation routes.\n\nPrompt injection is particularly important when agents ingest papers, webpages, email, metadata, or tool output. Recommended controls include:\n\n- Treat retrieved content as data, not instructions.\n- Separate system instructions from evidence.\n- Apply least privilege and tool/network allowlists.\n- Sandbox execution and filter secrets.\n- Require confirmation for external or irreversible actions.\n- Preserve immutable audit logs.\n- Conduct adversarial testing for injection and data leakage.\n\nThe reviewed evidence contained no scientific-agent-specific prompt-injection trial providing a defense success rate.\n\n## Practical Governance\n\nBefore deployment, define acceptable errors, prohibited actions, data sensitivity, approval points, and accountable owners. Evaluate representative local, rare, and adversarial cases.\n\nDuring each run, record the environment, mark generated content, require claim-level citations, verify numerical and bibliographic claims, surface uncertainty, and block untrusted content from changing policy.\n\nBefore scientific use, independently reproduce critical results, verify citations and quotations, assess privacy and bias, disclose material AI use, and archive code, datasets, dependencies, and provenance.\n\nAfter deployment, monitor drift and failures, red-team unsafe tool use, revalidate after every model or workflow change, and maintain rollback and retirement procedures.\n\n## Limitations\n\n- Most publications reviewed were domain-specific medical studies or reviews rather than direct trials of autonomous scientific agents.\n- Medical findings may not generalize to every scientific field.\n- ML-engineering benchmarks may not generalize to hypothesis formation, wet-lab research, or scholarly synthesis.\n- Prospective, multi-institution and long-duration studies remain sparse.\n- Evidence is limited on calibration, abstention, human–agent team design, automation bias, equity, and governance effectiveness.\n- Closed models, nondeterminism, API changes, and model drift impede exact replication.\n- Benchmark averages can hide catastrophic failures and subgroup variation.\n- Several sources were available as indexed abstracts or excerpts rather than complete articles.\n- The evidence base is changing rapidly.\n\n## Conclusion\n\nNo reviewed evidence justifies treating interactive AI agents as independently reliable scientific researchers. Evidence supports **bounded, auditable assistance under expert supervision**.\n\nReliability depends less on fluent output than on verified sources, constrained tools, reproducible execution, calibrated escalation, security controls, provenance, and accountable human review. Standards can structure these safeguards, but only task-specific empirical evaluation can establish performance—and that evidence remains valid only within its tested domain."
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [
+          "file_inspection"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [],
+        "outputs": [
+          {
+            "tool": "file_inspection",
+            "record_count": null,
+            "bytes": 20350,
+            "status": "ok"
+          }
+        ],
+        "tool_outputs": [],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T07:46:14.100345+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "run_started",
+          "data": {
+            "request": "Read the final Markdown report from the previous turn and display its substantive contents in the web response: title, headings, key findings, evidence table or citations, limitations, and conclusion. Include the saved report path and do not summarize with only a link.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:14.123722+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:14.128831+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_cb24cd3969a34619b588efd2",
+            "parent_id": "span_8b7403f9ed974719b7e5325d",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T07:46:14.127884+00:00",
+            "ended_at": "2026-09-26T07:46:14.128506+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:14.129848+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_7634ed041c4341529e1c0655",
+            "parent_id": "span_5b06b050c2d64109a257ae65",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:46:14.129484+00:00",
+            "ended_at": "2026-09-26T07:46:14.129556+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:14.130230+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_f0bf954b5b784176801fbf2b",
+            "parent_id": "span_5b06b050c2d64109a257ae65",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:46:14.129921+00:00",
+            "ended_at": "2026-09-26T07:46:14.129970+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:14.134276+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_66b7b61892c8467b87aba174",
+            "parent_id": "span_5b06b050c2d64109a257ae65",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:46:14.130479+00:00",
+            "ended_at": "2026-09-26T07:46:14.133984+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:14.137554+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_dbd905a53d6d42e29ad47a7d",
+            "parent_id": "span_5b06b050c2d64109a257ae65",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:46:14.134319+00:00",
+            "ended_at": "2026-09-26T07:46:14.137277+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:14.138429+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_5b06b050c2d64109a257ae65",
+            "parent_id": "span_8b7403f9ed974719b7e5325d",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:46:14.128914+00:00",
+            "ended_at": "2026-09-26T07:46:14.138158+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:14.139409+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:14.180002+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:17.238736+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_22555bb4913541249cbf45d1",
+            "parent_id": "span_456bce8fecc146909d7db0d2",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:46:14.182739+00:00",
+            "ended_at": "2026-09-26T07:46:17.238420+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:17.246397+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 13147,
+            "output_tokens": 86
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:17.248428+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:17.249183+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:20.332593+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "tool_finished",
+          "data": {
+            "tool": "file_inspection",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:20.336705+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:20.337200+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_6a7a6802d2f14c5596e1abd7",
+            "parent_id": "span_456bce8fecc146909d7db0d2",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-09-26T07:46:17.247838+00:00",
+            "ended_at": "2026-09-26T07:46:20.336851+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:20.337930+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_456bce8fecc146909d7db0d2",
+            "parent_id": "span_701c2ac7f2a9473d96efc09f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:46:14.139113+00:00",
+            "ended_at": "2026-09-26T07:46:20.337667+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:20.347976+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_3fa797dde77e4c1b9d385ef7",
+            "parent_id": "span_dee577440beb4f30b25b9ae8",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:46:20.347613+00:00",
+            "ended_at": "2026-09-26T07:46:20.347697+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:20.352936+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_fb63b7fa4b1f46f8968ccde0",
+            "parent_id": "span_dee577440beb4f30b25b9ae8",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:46:20.348449+00:00",
+            "ended_at": "2026-09-26T07:46:20.352395+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:20.356728+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_2457a5a9ba1845db93f99628",
+            "parent_id": "span_dee577440beb4f30b25b9ae8",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:46:20.352981+00:00",
+            "ended_at": "2026-09-26T07:46:20.356353+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:20.357143+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_dee577440beb4f30b25b9ae8",
+            "parent_id": "span_701c2ac7f2a9473d96efc09f",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:46:20.347104+00:00",
+            "ended_at": "2026-09-26T07:46:20.356814+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:20.360419+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:34.248286+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_184e5a72e83a415e80d6a1e9",
+            "parent_id": "span_0f6299521aa94117a734fdb5",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:46:20.360902+00:00",
+            "ended_at": "2026-09-26T07:46:34.247439+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:34.254967+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 17588,
+            "output_tokens": 1445
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:34.256280+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:34.259602+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_0f6299521aa94117a734fdb5",
+            "parent_id": "span_701c2ac7f2a9473d96efc09f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:46:20.358730+00:00",
+            "ended_at": "2026-09-26T07:46:34.258813+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:34.268604+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:34.269369+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_0826ddb3b82a44b1983c33b3",
+            "parent_id": "span_701c2ac7f2a9473d96efc09f",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T07:46:34.267920+00:00",
+            "ended_at": "2026-09-26T07:46:34.268650+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:34.272010+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_701c2ac7f2a9473d96efc09f",
+            "parent_id": "span_8b7403f9ed974719b7e5325d",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T07:46:14.138995+00:00",
+            "ended_at": "2026-09-26T07:46:34.271436+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:34.272672+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c",
+            "span_id": "span_8b7403f9ed974719b7e5325d",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T07:46:14.123800+00:00",
+            "ended_at": "2026-09-26T07:46:34.272198+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:34.272894+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_a604b13d2e974599be41a2ac191da16c"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:34.291692+00:00",
+          "session_id": "sol-20260926-research-display",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 1
+          }
+        }
+      ],
+      "run": {
+        "run_id": "b9ae93d6-27b7-4798-9f3f-7124e80237d5",
+        "session_dir": ".",
+        "runtime_dir": "runs/b9ae93d6-27b7-4798-9f3f-7124e80237d5",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "outputs/web_search/fc323d780fc64c3da029fb3ce54f888a/evidence.json",
+          "workspace_path": "outputs/web_search/fc323d780fc64c3da029fb3ce54f888a/evidence.json",
+          "name": "evidence.json",
+          "size": 3094,
+          "modified_at": 1790408597791502169,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/pubmed_search/bd1755790a5140f78c9c1d55785755f2/evidence.json",
+          "workspace_path": "outputs/pubmed_search/bd1755790a5140f78c9c1d55785755f2/evidence.json",
+          "name": "evidence.json",
+          "size": 36,
+          "modified_at": 1790408597962502935,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/pubmed_search/966d61cbc9d545d69a6013dd1faa7b16/evidence.json",
+          "workspace_path": "outputs/pubmed_search/966d61cbc9d545d69a6013dd1faa7b16/evidence.json",
+          "name": "evidence.json",
+          "size": 36,
+          "modified_at": 1790408597978503007,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_search/4f690d26b454457eac91d503205f4e08/evidence.json",
+          "workspace_path": "outputs/web_search/4f690d26b454457eac91d503205f4e08/evidence.json",
+          "name": "evidence.json",
+          "size": 4801,
+          "modified_at": 1790408598030503240,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_search/1eba7592f9c64c8b89d1495a4592b096/evidence.json",
+          "workspace_path": "outputs/web_search/1eba7592f9c64c8b89d1495a4592b096/evidence.json",
+          "name": "evidence.json",
+          "size": 36,
+          "modified_at": 1790408598231504142,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_search/18c9ffdbf51a476f9ce807aad52502cf/evidence.json",
+          "workspace_path": "outputs/web_search/18c9ffdbf51a476f9ce807aad52502cf/evidence.json",
+          "name": "evidence.json",
+          "size": 36,
+          "modified_at": 1790408602750524453,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/pubmed_search/dc2e432876a74f88bd89db62b8012239/evidence.json",
+          "workspace_path": "outputs/pubmed_search/dc2e432876a74f88bd89db62b8012239/evidence.json",
+          "name": "evidence.json",
+          "size": 36,
+          "modified_at": 1790408603112526084,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_search/3a44385d3c3e4e709a3b3d7240792a0d/evidence.json",
+          "workspace_path": "outputs/web_search/3a44385d3c3e4e709a3b3d7240792a0d/evidence.json",
+          "name": "evidence.json",
+          "size": 36,
+          "modified_at": 1790408603172526354,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_search/ec51e358c91d41a5aa7e82b89ecc70fd/evidence.json",
+          "workspace_path": "outputs/web_search/ec51e358c91d41a5aa7e82b89ecc70fd/evidence.json",
+          "name": "evidence.json",
+          "size": 36,
+          "modified_at": 1790408603540528013,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/pubmed_search/8079a34a272d4ef38f1d685a17bbc36b/evidence.json",
+          "workspace_path": "outputs/pubmed_search/8079a34a272d4ef38f1d685a17bbc36b/evidence.json",
+          "name": "evidence.json",
+          "size": 7289,
+          "modified_at": 1790408605105535072,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_fetch/162bfbe871314bf084e2f77b79db1f2e/evidence.json",
+          "workspace_path": "outputs/web_fetch/162bfbe871314bf084e2f77b79db1f2e/evidence.json",
+          "name": "evidence.json",
+          "size": 12260,
+          "modified_at": 1790408610815560919,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_fetch/d7821f2b036b4009ba25604857a4d4a0/evidence.json",
+          "workspace_path": "outputs/web_fetch/d7821f2b036b4009ba25604857a4d4a0/evidence.json",
+          "name": "evidence.json",
+          "size": 2983,
+          "modified_at": 1790408611117562290,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_fetch/7a5a5c0472794b0984ae94bac4b85ecc/evidence.json",
+          "workspace_path": "outputs/web_fetch/7a5a5c0472794b0984ae94bac4b85ecc/evidence.json",
+          "name": "evidence.json",
+          "size": 464,
+          "modified_at": 1790408611127562335,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_fetch/58e85b4e81f4440ebb8b955e78e255ec/evidence.json",
+          "workspace_path": "outputs/web_fetch/58e85b4e81f4440ebb8b955e78e255ec/evidence.json",
+          "name": "evidence.json",
+          "size": 29504,
+          "modified_at": 1790408611295563098,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_search/e79d9cab29ad4ecda6ade51c8839c0bf/evidence.json",
+          "workspace_path": "outputs/web_search/e79d9cab29ad4ecda6ade51c8839c0bf/evidence.json",
+          "name": "evidence.json",
+          "size": 36,
+          "modified_at": 1790408611532564175,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_search/3b62c8d3eb3e45c5b5f3f086c4a91f7e/evidence.json",
+          "workspace_path": "outputs/web_search/3b62c8d3eb3e45c5b5f3f086c4a91f7e/evidence.json",
+          "name": "evidence.json",
+          "size": 36,
+          "modified_at": 1790408611547564243,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_fetch/4741a5ab6dab481abbbc7318f1ae1ab9/evidence.json",
+          "workspace_path": "outputs/web_fetch/4741a5ab6dab481abbbc7318f1ae1ab9/evidence.json",
+          "name": "evidence.json",
+          "size": 464,
+          "modified_at": 1790408611687564879,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_search/f9086051e482474eab9920b75a4b030d/evidence.json",
+          "workspace_path": "outputs/web_search/f9086051e482474eab9920b75a4b030d/evidence.json",
+          "name": "evidence.json",
+          "size": 36,
+          "modified_at": 1790408617845592930,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_fetch/ba84f92b59c040b49500c461f896f519/evidence.json",
+          "workspace_path": "outputs/web_fetch/ba84f92b59c040b49500c461f896f519/evidence.json",
+          "name": "evidence.json",
+          "size": 4796,
+          "modified_at": 1790408618151594328,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/pubmed_search/d89c06335c6f4c89b1db8d3bbc827247/evidence.json",
+          "workspace_path": "outputs/pubmed_search/d89c06335c6f4c89b1db8d3bbc827247/evidence.json",
+          "name": "evidence.json",
+          "size": 29308,
+          "modified_at": 1790408618507595956,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/web_fetch/4eacaec4d6624fd780d5d10a96c98906/evidence.json",
+          "workspace_path": "outputs/web_fetch/4eacaec4d6624fd780d5d10a96c98906/evidence.json",
+          "name": "evidence.json",
+          "size": 30458,
+          "modified_at": 1790408621903611502,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/evidence_retrieve/117ccc756b8e4bc3a9f274d3f95db930/evidence.json",
+          "workspace_path": "outputs/evidence_retrieve/117ccc756b8e4bc3a9f274d3f95db930/evidence.json",
+          "name": "evidence.json",
+          "size": 43521,
+          "modified_at": 1790408636589679277,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "outputs/report_write/73666c5eb0314a4a99c7b9ac56257ff8/Reliable_Interactive_AI_Agents_for_Scientific_Research_Evide.md",
+          "workspace_path": "outputs/report_write/73666c5eb0314a4a99c7b9ac56257ff8/Reliable_Interactive_AI_Agents_for_Scientific_Research_Evide.md",
+          "name": "Reliable_Interactive_AI_Agents_for_Scientific_Research_Evide.md",
+          "size": 20350,
+          "modified_at": 1790408755117255910,
+          "kind": "text",
+          "content_type": "text/markdown; charset=utf-8"
+        }
+      ],
+      "approval_decision": null,
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "32b77ca504fb460daed61f2e833083f1",
+        "session_id": "sol-20260926-research-display"
+      },
+      "created_at": "2026-09-26T07:46:10.905643+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "32b77ca504fb460daed61f2e833083f1"
+      },
+      "created_at": "2026-09-26T07:46:13.207676+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T07:46:14.124833+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T07:46:14.139634+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:16.501935+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:16.505257+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.510374+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll read the saved report and reproduce its substantive sections "
+      },
+      "created_at": "2026-09-26T07:46:16.631862+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:16.634765+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.638074+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.640826+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.645054+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.661046+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.664239+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.667353+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.670288+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.698555+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.702034+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.705382+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.708011+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.740895+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.743730+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.746004+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.748426+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.751753+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.761768+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.764714+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.769805+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.773020+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.801637+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.804870+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.808181+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.811283+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.839211+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.842381+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.845307+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.848412+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.852472+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.877593+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.880890+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.883952+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.887024+00:00"
+    },
+    {
+      "sequence": 42,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.898337+00:00"
+    },
+    {
+      "sequence": 43,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.900760+00:00"
+    },
+    {
+      "sequence": 44,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.902762+00:00"
+    },
+    {
+      "sequence": 45,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.904625+00:00"
+    },
+    {
+      "sequence": 46,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.969615+00:00"
+    },
+    {
+      "sequence": 47,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.972797+00:00"
+    },
+    {
+      "sequence": 48,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.974938+00:00"
+    },
+    {
+      "sequence": 49,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.977344+00:00"
+    },
+    {
+      "sequence": 50,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:16.981970+00:00"
+    },
+    {
+      "sequence": 51,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:17.071258+00:00"
+    },
+    {
+      "sequence": 52,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:17.074717+00:00"
+    },
+    {
+      "sequence": 53,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:17.081328+00:00"
+    },
+    {
+      "sequence": 54,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:17.084020+00:00"
+    },
+    {
+      "sequence": 55,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:17.088466+00:00"
+    },
+    {
+      "sequence": 56,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:17.090697+00:00"
+    },
+    {
+      "sequence": 57,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:17.092696+00:00"
+    },
+    {
+      "sequence": 58,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:17.094854+00:00"
+    },
+    {
+      "sequence": 59,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:17.097910+00:00"
+    },
+    {
+      "sequence": 60,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:17.100103+00:00"
+    },
+    {
+      "sequence": 61,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:17.229973+00:00"
+    },
+    {
+      "sequence": 62,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:17.232493+00:00"
+    },
+    {
+      "sequence": 63,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:17.234446+00:00"
+    },
+    {
+      "sequence": 64,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:17.236699+00:00"
+    },
+    {
+      "sequence": 65,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:17.241115+00:00"
+    },
+    {
+      "sequence": 66,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_kmKmY2zEKf2hP5mPuMuA8eCl",
+        "tool_name": "file_inspection",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:17.243841+00:00"
+    },
+    {
+      "sequence": 67,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T07:46:17.249411+00:00"
+    },
+    {
+      "sequence": 68,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T07:46:20.333168+00:00"
+    },
+    {
+      "sequence": 69,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_kmKmY2zEKf2hP5mPuMuA8eCl",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:20.342417+00:00"
+    },
+    {
+      "sequence": 70,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:22.325240+00:00"
+    },
+    {
+      "sequence": 71,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:22.329812+00:00"
+    },
+    {
+      "sequence": 72,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:22.333017+00:00"
+    },
+    {
+      "sequence": 73,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "here.# Reliable Interactive AI Agents for Scientific Research\n\n**Saved report:** `outputs/report_write/73666c5eb0314a4a99c7b9ac56257ff8/Reliable_Interactive_AI_Agents_for_Scientific_Research_Evide.md`  \n**Evidence cutoff:** 2026-09-26\n\n## Headings\n\n1. Scope, "
+      },
+      "created_at": "2026-09-26T07:46:22.790506+00:00"
+    },
+    {
+      "sequence": 74,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "method, and evidence hierarchy  \n2. Factual accuracy, hallucination, and citations  \n3. Tool use and reproducibility  \n4. Human oversight  \n5. Uncertainty and calibration  \n6. Security and prompt injection  \n7. Provenance  \n8. Benchmark limitations  \n9. Evidence "
+      },
+      "created_at": "2026-09-26T07:46:23.083246+00:00"
+    },
+    {
+      "sequence": 75,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "quality and contradictions  \n10. Practical governance checklist  \n11. Evidence gaps and limitations  \n12. Conclusion  \n\n## Key Findings\n\n- Current evidence supports AI agents as **supervised research assistants—not autonomous scientific authorities**.\n- They "
+      },
+      "created_at": "2026-09-26T07:46:23.357959+00:00"
+    },
+    {
+      "sequence": 76,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "can accelerate literature triage, writing, coding, data processing, and bounded research-engineering tasks.\n- Fluent or guideline-consistent answers do not ensure factual or citation reliability.\n- Reliability requires source verification, constrained tool "
+      },
+      "created_at": "2026-09-26T07:46:23.768154+00:00"
+    },
+    {
+      "sequence": 77,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "access, reproducible execution, security controls, provenance, uncertainty handling, and accountable expert review.\n- Standards such as NIST, OWASP, and C2PA define useful controls but do not empirically prove accuracy or safety.\n\n## Evidence Comparison\n\n| "
+      },
+      "created_at": "2026-09-26T07:46:24.110251+00:00"
+    },
+    {
+      "sequence": 78,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "Evidence | Main result | Interpretation |\n|---|---|---|\n| ChatGPT-3.5 citation audit, [PMID 37337480](https://pubmed.ncbi.nlm.nih.gov/37337480/) | Among 115 references, 47% were fabricated, 46% authentic but inaccurate, and 7% authentic and accurate. | Citation "
+      },
+      "created_at": "2026-09-26T07:46:24.650745+00:00"
+    },
+    {
+      "sequence": 79,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "checking is essential; plausible prose masks severe sourcing failures. |\n| ChatGPT-5 citation audit, [PMID 42668804](https://pubmed.ncbi.nlm.nih.gov/42668804/) | Of 2,736 references, 7.13% were fabricated and 49.34% bibliographically accurate; only 8% of queries "
+      },
+      "created_at": "2026-09-26T07:46:25.264960+00:00"
+    },
+    {
+      "sequence": 80,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "had completely accurate citations. | Newer systems may improve, but substantial errors persist. Different study designs prevent direct longitudinal comparison. |\n| ChatGPT-4o mini guideline study, [PMID 41625387](https://pubmed.ncbi.nlm.nih.gov/41625387/) "
+      },
+      "created_at": "2026-09-26T07:46:25.815846+00:00"
+    },
+    {
+      "sequence": 81,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "| 76.3% of responses matched recommendations and 88.2% were rated highly clear, yet 7.9% of citations were fabricated and only 1.1% overlapped with guideline references. | Clarity, recommendation agreement, and citation integrity are separate properties. |\n"
+      },
+      "created_at": "2026-09-26T07:46:26.249242+00:00"
+    },
+    {
+      "sequence": 82,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "| METR RE-Bench | Agents surpassed experts at a two-hour budget but performed worse at longer budgets. | Performance depends strongly on task horizon and resource constraints. |\n| ScienceAgentBench | Offers code, data, and containers; a verified split was "
+      },
+      "created_at": "2026-09-26T07:46:26.678693+00:00"
+    },
+    {
+      "sequence": 83,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "later released to correct false negatives. | Reproducible harnesses help, but benchmark artifacts can distort results. |\n| Structured imaging review, [PMID 42682816](https://pubmed.ncbi.nlm.nih.gov/42682816/) | Reports hallucination, uncertain calibration, "
+      },
+      "created_at": "2026-09-26T07:46:27.128926+00:00"
+    },
+    {
+      "sequence": 84,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "site dependence, and limited prospective evidence. | Deployment evidence does not generalize automatically across tasks or institutions. |\n| NIST AI 600-1 | Provides voluntary generative-AI risk-management guidance. | Normative framework, not proof that a "
+      },
+      "created_at": "2026-09-26T07:46:27.569702+00:00"
+    },
+    {
+      "sequence": 85,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "system is reliable. |\n| OWASP GenAI Security Project | Identifies prompt injection and other application vulnerabilities. | Establishes credible security concerns; scientific-agent-specific trials remain scarce. |\n| C2PA 2.2 | Defines signed provenance manifests, "
+      },
+      "created_at": "2026-09-26T07:46:28.118247+00:00"
+    },
+    {
+      "sequence": 86,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "hashes, assertions, and validation states. | Supports traceability and tamper evidence, but cannot establish scientific truth. |\n\n## Reproducibility and Oversight\n\nReliable tool-using workflows should:\n\n- Pin models, prompts, datasets, dependencies, and tool "
+      },
+      "created_at": "2026-09-26T07:46:28.481829+00:00"
+    },
+    {
+      "sequence": 87,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "versions.\n- Log retrievals, tool calls, parameters, outputs, errors, and failed attempts.\n- Use containers or sandboxes and restrict permissions.\n- Repeat stochastic runs and test generated code.\n- Compare critical outputs with independent implementations.\n"
+      },
+      "created_at": "2026-09-26T07:46:28.857084+00:00"
+    },
+    {
+      "sequence": 88,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "- Require reviewers who can inspect evidence and halt the workflow.\n- Independently reproduce consequential analyses before publication.\n\nNominal “human-in-the-loop” approval is insufficient if reviewers lack domain expertise, execution traces, time, or authority. "
+      },
+      "created_at": "2026-09-26T07:46:29.353216+00:00"
+    },
+    {
+      "sequence": 89,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "Automation bias can persist despite formal approval.\n\n## Uncertainty and Security\n\nThe evidence does not establish reliable self-reported confidence for research agents. Verbal confidence should not be treated as calibrated probability. Workflows should separate "
+      },
+      "created_at": "2026-09-26T07:46:29.682999+00:00"
+    },
+    {
+      "sequence": 90,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "observations from inference, test stability across reruns, measure calibration locally, and provide abstention and escalation routes.\n\nPrompt injection is particularly important when agents ingest papers, webpages, email, metadata, or tool output. Recommended "
+      },
+      "created_at": "2026-09-26T07:46:30.075903+00:00"
+    },
+    {
+      "sequence": 91,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "controls include:\n\n- Treat retrieved content as data, not instructions.\n- Separate system instructions from evidence.\n- Apply least privilege and tool/network allowlists.\n- Sandbox execution and filter secrets.\n- Require confirmation for external or irreversible "
+      },
+      "created_at": "2026-09-26T07:46:30.372285+00:00"
+    },
+    {
+      "sequence": 92,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "actions.\n- Preserve immutable audit logs.\n- Conduct adversarial testing for injection and data leakage.\n\nThe reviewed evidence contained no scientific-agent-specific prompt-injection trial providing a defense success rate.\n\n## Practical Governance\n\nBefore "
+      },
+      "created_at": "2026-09-26T07:46:30.776189+00:00"
+    },
+    {
+      "sequence": 93,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "deployment, define acceptable errors, prohibited actions, data sensitivity, approval points, and accountable owners. Evaluate representative local, rare, and adversarial cases.\n\nDuring each run, record the environment, mark generated content, require claim-level "
+      },
+      "created_at": "2026-09-26T07:46:31.203773+00:00"
+    },
+    {
+      "sequence": 94,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "citations, verify numerical and bibliographic claims, surface uncertainty, and block untrusted content from changing policy.\n\nBefore scientific use, independently reproduce critical results, verify citations and quotations, assess privacy and bias, disclose "
+      },
+      "created_at": "2026-09-26T07:46:31.593708+00:00"
+    },
+    {
+      "sequence": 95,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "material AI use, and archive code, datasets, dependencies, and provenance.\n\nAfter deployment, monitor drift and failures, red-team unsafe tool use, revalidate after every model or workflow change, and maintain rollback and retirement procedures.\n\n## Limitations\n\n"
+      },
+      "created_at": "2026-09-26T07:46:31.932916+00:00"
+    },
+    {
+      "sequence": 96,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "- Most publications reviewed were domain-specific medical studies or reviews rather than direct trials of autonomous scientific agents.\n- Medical findings may not generalize to every scientific field.\n- ML-engineering benchmarks may not generalize to hypothesis "
+      },
+      "created_at": "2026-09-26T07:46:32.388178+00:00"
+    },
+    {
+      "sequence": 97,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "formation, wet-lab research, or scholarly synthesis.\n- Prospective, multi-institution and long-duration studies remain sparse.\n- Evidence is limited on calibration, abstention, human–agent team design, automation bias, equity, and governance effectiveness.\n"
+      },
+      "created_at": "2026-09-26T07:46:32.805744+00:00"
+    },
+    {
+      "sequence": 98,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "- Closed models, nondeterminism, API changes, and model drift impede exact replication.\n- Benchmark averages can hide catastrophic failures and subgroup variation.\n- Several sources were available as indexed abstracts or excerpts rather than complete articles.\n"
+      },
+      "created_at": "2026-09-26T07:46:33.319069+00:00"
+    },
+    {
+      "sequence": 99,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "- The evidence base is changing rapidly.\n\n## Conclusion\n\nNo reviewed evidence justifies treating interactive AI agents as independently reliable scientific researchers. Evidence supports **bounded, auditable assistance under expert supervision**.\n\nReliability "
+      },
+      "created_at": "2026-09-26T07:46:33.622716+00:00"
+    },
+    {
+      "sequence": 100,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "depends less on fluent output than on verified sources, constrained tools, reproducible execution, calibrated escalation, security controls, provenance, and accountable human review. Standards can structure these safeguards, but only task-specific empirical "
+      },
+      "created_at": "2026-09-26T07:46:33.842409+00:00"
+    },
+    {
+      "sequence": 101,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "evaluation can establish performance—and that evidence remains valid only within its tested "
+      },
+      "created_at": "2026-09-26T07:46:34.234293+00:00"
+    },
+    {
+      "sequence": 102,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:34.237558+00:00"
+    },
+    {
+      "sequence": 103,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:34.239855+00:00"
+    },
+    {
+      "sequence": 104,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:34.243001+00:00"
+    },
+    {
+      "sequence": 105,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:34.252653+00:00"
+    },
+    {
+      "sequence": 106,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent finished: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T07:46:34.256501+00:00"
+    },
+    {
+      "sequence": 107,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "domain."
+      },
+      "created_at": "2026-09-26T07:46:34.321350+00:00"
+    },
+    {
+      "sequence": 108,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T07:46:34.323989+00:00"
+    }
+  ],
+  "approval_decisions": [],
+  "ui": {
+    "png": "30_research_report_display.png",
+    "dom": "30_research_report_display.txt",
+    "returncode": 0
+  }
+}

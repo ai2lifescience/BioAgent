@@ -280,8 +280,23 @@ def start(root: Path, plan_id: str) -> dict:
         row = json.loads(db.execute("SELECT data FROM jobs WHERE id = ?", (plan_id,)).fetchone()[0])
         if row["status"] != "planned":
             return summary(row)
-        # Only carry runtime paths and locale, never provider API keys into scripts.
-        env = {key: os.environ[key] for key in ("PATH", "LANG", "LC_ALL", "JAVA_HOME", "CONDA_PREFIX") if key in os.environ}
+        # Carry the runtime transport configuration into the detached worker.
+        # The worker needs these values to upload inputs and reach Cromwell;
+        # model-provider credentials are intentionally not propagated.
+        worker_env_keys = (
+            "PATH", "LANG", "LC_ALL", "JAVA_HOME", "CONDA_PREFIX",
+            "CROMWELL_URL", "CROMWELL_TOKEN",
+            "CROMWELL_INPUT_STORAGE_URI", "CROMWELL_INPUT_STORAGE_ENDPOINT",
+            "CROMWELL_INPUT_STORAGE_REGION", "CROMWELL_INPUT_STORAGE_MOUNT_PREFIX",
+            "CROMWELL_INPUT_STORAGE_ACCESS_KEY", "CROMWELL_INPUT_STORAGE_SECRET_KEY",
+            "CROMWELL_INPUT_STORAGE_SESSION_TOKEN", "CROMWELL_OUTPUT_STORAGE_URI",
+            "CROMWELL_OUTPUT_STORAGE_ENDPOINT", "CROMWELL_OUTPUT_STORAGE_REGION",
+            "CROMWELL_OUTPUT_STORAGE_MOUNT_PREFIX",
+            "CROMWELL_OUTPUT_STORAGE_EXECUTION_PATH_PREFIXES",
+            "CROMWELL_OUTPUT_STORAGE_ACCESS_KEY", "CROMWELL_OUTPUT_STORAGE_SECRET_KEY",
+            "CROMWELL_OUTPUT_STORAGE_SESSION_TOKEN",
+        )
+        env = {key: os.environ[key] for key in worker_env_keys if key in os.environ}
         env["PATH"] = str(Path(sys.executable).parent) + os.pathsep + env.get("PATH", os.defpath)
         env.update(PYTHONPATH=str(PROJECT_ROOT), PYTHONUNBUFFERED="1")
         with (directory / "stdout.log").open("ab") as stdout, (directory / "stderr.log").open("ab") as stderr:

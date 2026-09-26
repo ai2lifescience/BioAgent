@@ -1,0 +1,3903 @@
+{
+  "case": "08_knowledge_ingest",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "Create a bounded session-owned knowledge collection from https://www.ncbi.nlm.nih.gov/nuccore/NC_001422.1. Crawl only ncbi.nlm.nih.gov, check status, and retrieve evidence about PhiX174 genome organization.",
+  "session_id": "sol-20260926-08_knowledge_ingest",
+  "run_id": "951dbaa6b05748bc983b8c8da3944e9e",
+  "uploads": [],
+  "started_at": "2026-09-26T06:42:59.660952+00:00",
+  "elapsed_seconds": 33.45,
+  "initial": {
+    "run_id": "951dbaa6b05748bc983b8c8da3944e9e",
+    "session_id": "sol-20260926-08_knowledge_ingest",
+    "status": "running",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 18,
+    "created_at": "2026-09-26T06:42:26.211266+00:00",
+    "updated_at": "2026-09-26T06:42:26.217888+00:00",
+    "error": null
+  },
+  "status": {
+    "run_id": "951dbaa6b05748bc983b8c8da3944e9e",
+    "session_id": "sol-20260926-08_knowledge_ingest",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 18,
+    "created_at": "2026-09-26T06:42:26.211266+00:00",
+    "updated_at": "2026-09-26T06:42:56.989404+00:00",
+    "error": null,
+    "result": {
+      "answer": "Collection created: `kb_cab4c911f706415ebaa89b270816859a`\n\n- Status: succeeded\n- Scope: `ncbi.nlm.nih.gov` only\n- Indexed: 1 page\n- Evidence: `outputs/knowledge_retrieve/276d2c70b765401f873a63c257ecce48/knowledge_evidence.json`\n- Limitation: NCBI returned a reCAPTCHA page, so no substantive PhiX174 genome-organization evidence was retrievable.",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-08_knowledge_ingest",
+      "max_turns": 18,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Create a bounded session-owned knowledge collection from https://www.ncbi.nlm.nih.gov/nuccore/NC_001422.1. Crawl only ncbi.nlm.nih.gov, check status, and retrieve evidence about PhiX174 genome organization."
+        },
+        {
+          "role": "assistant",
+          "content": "Collection created: `kb_cab4c911f706415ebaa89b270816859a`\n\n- Status: succeeded\n- Scope: `ncbi.nlm.nih.gov` only\n- Indexed: 1 page\n- Evidence: `outputs/knowledge_retrieve/276d2c70b765401f873a63c257ecce48/knowledge_evidence.json`\n- Limitation: NCBI returned a reCAPTCHA page, so no substantive PhiX174 genome-organization evidence was retrievable."
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [
+          "knowledge_ingest",
+          "knowledge_status",
+          "knowledge_retrieve"
+        ],
+        "databases": [],
+        "query_terms": [
+          "What does the NCBI record NC_001422.1 show about bacteriophage PhiX174 genome organization, including genome size and topology, genes or coding sequences, strand usage, and overlapping genes?"
+        ],
+        "record_ids": [
+          "src_d2e422f4ff09ee5c21c79b5d_c0"
+        ],
+        "citations": [
+          {
+            "id": "src_d2e422f4ff09ee5c21c79b5d_c0",
+            "title": "Checking your browser - reCAPTCHA",
+            "source": "knowledge",
+            "pmid": null,
+            "url": "https://www.ncbi.nlm.nih.gov/nuccore/NC_001422.1",
+            "year": null
+          }
+        ],
+        "urls": [
+          "https://www.ncbi.nlm.nih.gov/nuccore/NC_001422.1"
+        ],
+        "files": [
+          "outputs/knowledge_retrieve/276d2c70b765401f873a63c257ecce48/knowledge_evidence.json"
+        ],
+        "outputs": [
+          {
+            "tool": "knowledge_ingest",
+            "job_id": "kj_2580128b785b437b8acb04d2f2f6accf",
+            "status": "ok",
+            "error": null
+          },
+          {
+            "tool": "knowledge_status",
+            "job_id": "kj_2580128b785b437b8acb04d2f2f6accf",
+            "status": "ok",
+            "error": null
+          },
+          {
+            "tool": "knowledge_retrieve",
+            "sources": [
+              {
+                "id": "src_d2e422f4ff09ee5c21c79b5d_c0",
+                "title": "Checking your browser - reCAPTCHA",
+                "url": "https://www.ncbi.nlm.nih.gov/nuccore/NC_001422.1",
+                "source": "knowledge",
+                "text": "Checking your browser - reCAPTCHA\nChecking your browser before accessing www.ncbi.nlm.nih.gov ...\nClick\nhere\nif you are not automatically redirected after 5 seconds.",
+                "pmid": null,
+                "year": null,
+                "retrieved_at": "2026-09-26T06:42:40.055836+00:00"
+              }
+            ],
+            "evidence_path": "outputs/knowledge_retrieve/276d2c70b765401f873a63c257ecce48/knowledge_evidence.json",
+            "status": "ok"
+          }
+        ],
+        "tool_outputs": [],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T06:42:29.457491+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "run_started",
+          "data": {
+            "request": "Create a bounded session-owned knowledge collection from https://www.ncbi.nlm.nih.gov/nuccore/NC_001422.1. Crawl only ncbi.nlm.nih.gov, check status, and retrieve evidence about PhiX174 genome organization.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:29.471681+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:29.475899+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_04af1455b40b4deda22c263c",
+            "parent_id": "span_e2cacc3551b640e9ac224f8e",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T06:42:29.475574+00:00",
+            "ended_at": "2026-09-26T06:42:29.475626+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:29.476938+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_6cc1ab63e070404d9ff59159",
+            "parent_id": "span_8213f2d674764cb39e65372c",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:42:29.476582+00:00",
+            "ended_at": "2026-09-26T06:42:29.476660+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:29.477329+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_62f5c409d4234884915f085a",
+            "parent_id": "span_8213f2d674764cb39e65372c",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:42:29.477020+00:00",
+            "ended_at": "2026-09-26T06:42:29.477070+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:29.481127+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_31ec74fee02c4b539020011d",
+            "parent_id": "span_8213f2d674764cb39e65372c",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:42:29.477573+00:00",
+            "ended_at": "2026-09-26T06:42:29.480848+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:29.484385+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_b938167b3919402c93eea902",
+            "parent_id": "span_8213f2d674764cb39e65372c",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:42:29.481171+00:00",
+            "ended_at": "2026-09-26T06:42:29.484103+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:29.485250+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_8213f2d674764cb39e65372c",
+            "parent_id": "span_e2cacc3551b640e9ac224f8e",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:42:29.475973+00:00",
+            "ended_at": "2026-09-26T06:42:29.484980+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:29.486018+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:29.524085+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:33.146540+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_73952e838a31456fa14966ff",
+            "parent_id": "span_9524c42a68a44651b3b025c2",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:42:29.527092+00:00",
+            "ended_at": "2026-09-26T06:42:33.146246+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:33.153463+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11376,
+            "output_tokens": 141
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:33.155310+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "knowledge_ingest"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:33.155832+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "tool_started",
+          "data": {
+            "tool": "knowledge_ingest"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:36.104658+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "tool_finished",
+          "data": {
+            "tool": "knowledge_ingest",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:36.108152+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "knowledge_ingest"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:36.108545+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_f28551d0918f46f79a220cf0",
+            "parent_id": "span_9524c42a68a44651b3b025c2",
+            "span_type": "function",
+            "name": "knowledge_ingest",
+            "model": null,
+            "started_at": "2026-09-26T06:42:33.154595+00:00",
+            "ended_at": "2026-09-26T06:42:36.108221+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:36.109476+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_9524c42a68a44651b3b025c2",
+            "parent_id": "span_bd95fce18f2745bd9ccf4595",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:42:29.485802+00:00",
+            "ended_at": "2026-09-26T06:42:36.108997+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:36.119663+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_e3959f9ebc77421a9cab8f3f",
+            "parent_id": "span_45f047379dac4775bc52e241",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:42:36.119174+00:00",
+            "ended_at": "2026-09-26T06:42:36.119272+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:36.124242+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_005e65d3f5054e068107e53a",
+            "parent_id": "span_45f047379dac4775bc52e241",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:42:36.120030+00:00",
+            "ended_at": "2026-09-26T06:42:36.123847+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:36.127928+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_94391b1113bd4b4fadf5f29e",
+            "parent_id": "span_45f047379dac4775bc52e241",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:42:36.124298+00:00",
+            "ended_at": "2026-09-26T06:42:36.127545+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:36.128467+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_45f047379dac4775bc52e241",
+            "parent_id": "span_bd95fce18f2745bd9ccf4595",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:42:36.118336+00:00",
+            "ended_at": "2026-09-26T06:42:36.128031+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:36.131679+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:39.237573+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_9e949da0984849e883f79317",
+            "parent_id": "span_ab4601e60d304432b6a0334b",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:42:36.132178+00:00",
+            "ended_at": "2026-09-26T06:42:39.237180+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:39.248787+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11671,
+            "output_tokens": 63
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:39.252082+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "knowledge_status"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:39.253035+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "tool_started",
+          "data": {
+            "tool": "knowledge_status"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:42.020886+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "tool_finished",
+          "data": {
+            "tool": "knowledge_status",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:42.024067+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "knowledge_status"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:42.024381+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_d03dae3860f34bf5bb05eb09",
+            "parent_id": "span_ab4601e60d304432b6a0334b",
+            "span_type": "function",
+            "name": "knowledge_status",
+            "model": null,
+            "started_at": "2026-09-26T06:42:39.251033+00:00",
+            "ended_at": "2026-09-26T06:42:42.024131+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:42.024987+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_ab4601e60d304432b6a0334b",
+            "parent_id": "span_bd95fce18f2745bd9ccf4595",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:42:36.130238+00:00",
+            "ended_at": "2026-09-26T06:42:42.024728+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:42.035165+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_8cfabe6e292145ab81b9a125",
+            "parent_id": "span_6e2a269558b848d3a9b5018e",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:42:42.034784+00:00",
+            "ended_at": "2026-09-26T06:42:42.034862+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:42.039154+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_a26a5070f8904fe283552fa9",
+            "parent_id": "span_6e2a269558b848d3a9b5018e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:42:42.035443+00:00",
+            "ended_at": "2026-09-26T06:42:42.038851+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:42.042488+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_ff37aff9b2554e47869b3ff8",
+            "parent_id": "span_6e2a269558b848d3a9b5018e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:42:42.039205+00:00",
+            "ended_at": "2026-09-26T06:42:42.042195+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:42.042832+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_6e2a269558b848d3a9b5018e",
+            "parent_id": "span_bd95fce18f2745bd9ccf4595",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:42:42.034272+00:00",
+            "ended_at": "2026-09-26T06:42:42.042528+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:42.044619+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:45.852363+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_81aa29f1d23e404a84b66d9f",
+            "parent_id": "span_a695545f97754728a57e70e3",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:42:42.045119+00:00",
+            "ended_at": "2026-09-26T06:42:45.851866+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:45.859251+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11916,
+            "output_tokens": 115
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:45.861210+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "knowledge_retrieve"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:45.861729+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "tool_started",
+          "data": {
+            "tool": "knowledge_retrieve"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:50.006883+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "artifact_created",
+          "data": {
+            "tool": "knowledge_retrieve",
+            "path": "outputs/knowledge_retrieve/276d2c70b765401f873a63c257ecce48/knowledge_evidence.json",
+            "workspace_path": "outputs/knowledge_retrieve/276d2c70b765401f873a63c257ecce48/knowledge_evidence.json",
+            "name": "knowledge_evidence.json",
+            "kind": "config",
+            "content_type": "application/json; charset=utf-8",
+            "size": 466,
+            "modified_at": 1790404969973703591
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:50.007037+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "tool_finished",
+          "data": {
+            "tool": "knowledge_retrieve",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:50.012374+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "knowledge_retrieve"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:50.012781+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_ac5fd46c855a46398b075577",
+            "parent_id": "span_a695545f97754728a57e70e3",
+            "span_type": "function",
+            "name": "knowledge_retrieve",
+            "model": null,
+            "started_at": "2026-09-26T06:42:45.860724+00:00",
+            "ended_at": "2026-09-26T06:42:50.012450+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:50.013537+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_a695545f97754728a57e70e3",
+            "parent_id": "span_bd95fce18f2745bd9ccf4595",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:42:42.043402+00:00",
+            "ended_at": "2026-09-26T06:42:50.013216+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:50.027409+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_f0c7d77b357c47ae86479421",
+            "parent_id": "span_5f6db1df4522410d99d4cb6a",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:42:50.026536+00:00",
+            "ended_at": "2026-09-26T06:42:50.026704+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:50.033880+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_8e4ffb52892147d1a8a7508a",
+            "parent_id": "span_5f6db1df4522410d99d4cb6a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:42:50.028126+00:00",
+            "ended_at": "2026-09-26T06:42:50.033014+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:50.039609+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_3a76ac3f5ce04bb9b9c073d1",
+            "parent_id": "span_5f6db1df4522410d99d4cb6a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:42:50.034065+00:00",
+            "ended_at": "2026-09-26T06:42:50.038776+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:50.040431+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_5f6db1df4522410d99d4cb6a",
+            "parent_id": "span_bd95fce18f2745bd9ccf4595",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:42:50.025487+00:00",
+            "ended_at": "2026-09-26T06:42:50.039689+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:50.044451+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:56.937966+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_de601a978771437dbf4d3c70",
+            "parent_id": "span_c4c1a43a59024d528f04a77c",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:42:50.045182+00:00",
+            "ended_at": "2026-09-26T06:42:56.937596+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:56.942234+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12478,
+            "output_tokens": 112
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:56.944095+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:56.947153+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_c4c1a43a59024d528f04a77c",
+            "parent_id": "span_bd95fce18f2745bd9ccf4595",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:42:50.041745+00:00",
+            "ended_at": "2026-09-26T06:42:56.946727+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:56.952284+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:56.952673+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_c2bceaf22261458e8e08f639",
+            "parent_id": "span_bd95fce18f2745bd9ccf4595",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T06:42:56.951990+00:00",
+            "ended_at": "2026-09-26T06:42:56.952314+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:56.957421+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_bd95fce18f2745bd9ccf4595",
+            "parent_id": "span_e2cacc3551b640e9ac224f8e",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:42:29.485710+00:00",
+            "ended_at": "2026-09-26T06:42:56.957057+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:56.957848+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d",
+            "span_id": "span_e2cacc3551b640e9ac224f8e",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:42:29.471782+00:00",
+            "ended_at": "2026-09-26T06:42:56.957513+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:56.958088+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_42529140ac11485da48084417f581a2d"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:42:56.964077+00:00",
+          "session_id": "sol-20260926-08_knowledge_ingest",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 3
+          }
+        }
+      ],
+      "run": {
+        "run_id": "4ba81de4-5b9a-401a-8414-2f583e70d1dc",
+        "session_dir": ".",
+        "runtime_dir": "runs/4ba81de4-5b9a-401a-8414-2f583e70d1dc",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "outputs/knowledge_retrieve/276d2c70b765401f873a63c257ecce48/knowledge_evidence.json",
+          "workspace_path": "outputs/knowledge_retrieve/276d2c70b765401f873a63c257ecce48/knowledge_evidence.json",
+          "name": "knowledge_evidence.json",
+          "size": 466,
+          "modified_at": 1790404969973703591,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        }
+      ],
+      "approval_decision": null,
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "951dbaa6b05748bc983b8c8da3944e9e",
+        "session_id": "sol-20260926-08_knowledge_ingest"
+      },
+      "created_at": "2026-09-26T06:42:26.212450+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "951dbaa6b05748bc983b8c8da3944e9e"
+      },
+      "created_at": "2026-09-26T06:42:28.703140+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T06:42:29.472998+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T06:42:29.486239+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:31.869438+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:31.871874+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:31.874383+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll ingest the NCBI record within the requested domain, then check completion and retrieve genome-organization "
+      },
+      "created_at": "2026-09-26T06:42:32.164059+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:32.166530+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.168701+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.170682+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.172662+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.189208+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.194853+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.197971+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.200440+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.289334+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.292146+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.294712+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.299238+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.304080+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.306609+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.311273+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.313694+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.316269+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.373912+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.377515+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.380967+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.388948+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.402771+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.405668+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.408191+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.410942+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.421036+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.423265+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.425403+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.427599+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.430522+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.478999+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.481540+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.483891+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.486893+00:00"
+    },
+    {
+      "sequence": 42,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.539406+00:00"
+    },
+    {
+      "sequence": 43,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.541818+00:00"
+    },
+    {
+      "sequence": 44,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.544344+00:00"
+    },
+    {
+      "sequence": 45,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.546814+00:00"
+    },
+    {
+      "sequence": 46,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.566405+00:00"
+    },
+    {
+      "sequence": 47,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.568876+00:00"
+    },
+    {
+      "sequence": 48,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.571445+00:00"
+    },
+    {
+      "sequence": 49,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.573655+00:00"
+    },
+    {
+      "sequence": 50,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.576658+00:00"
+    },
+    {
+      "sequence": 51,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.591055+00:00"
+    },
+    {
+      "sequence": 52,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.594800+00:00"
+    },
+    {
+      "sequence": 53,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.596809+00:00"
+    },
+    {
+      "sequence": 54,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.598784+00:00"
+    },
+    {
+      "sequence": 55,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.631373+00:00"
+    },
+    {
+      "sequence": 56,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.633856+00:00"
+    },
+    {
+      "sequence": 57,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.635788+00:00"
+    },
+    {
+      "sequence": 58,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.637747+00:00"
+    },
+    {
+      "sequence": 59,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.641823+00:00"
+    },
+    {
+      "sequence": 60,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.644224+00:00"
+    },
+    {
+      "sequence": 61,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.646886+00:00"
+    },
+    {
+      "sequence": 62,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.648963+00:00"
+    },
+    {
+      "sequence": 63,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.651699+00:00"
+    },
+    {
+      "sequence": 64,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.685298+00:00"
+    },
+    {
+      "sequence": 65,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.687924+00:00"
+    },
+    {
+      "sequence": 66,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.690504+00:00"
+    },
+    {
+      "sequence": 67,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.692608+00:00"
+    },
+    {
+      "sequence": 68,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.696592+00:00"
+    },
+    {
+      "sequence": 69,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.698577+00:00"
+    },
+    {
+      "sequence": 70,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.700599+00:00"
+    },
+    {
+      "sequence": 71,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.702622+00:00"
+    },
+    {
+      "sequence": 72,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.704612+00:00"
+    },
+    {
+      "sequence": 73,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.706638+00:00"
+    },
+    {
+      "sequence": 74,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.741259+00:00"
+    },
+    {
+      "sequence": 75,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.743790+00:00"
+    },
+    {
+      "sequence": 76,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.746876+00:00"
+    },
+    {
+      "sequence": 77,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.749667+00:00"
+    },
+    {
+      "sequence": 78,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.766789+00:00"
+    },
+    {
+      "sequence": 79,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.769292+00:00"
+    },
+    {
+      "sequence": 80,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.771415+00:00"
+    },
+    {
+      "sequence": 81,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.773651+00:00"
+    },
+    {
+      "sequence": 82,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.787974+00:00"
+    },
+    {
+      "sequence": 83,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.790327+00:00"
+    },
+    {
+      "sequence": 84,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.792901+00:00"
+    },
+    {
+      "sequence": 85,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.796275+00:00"
+    },
+    {
+      "sequence": 86,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.798814+00:00"
+    },
+    {
+      "sequence": 87,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.824126+00:00"
+    },
+    {
+      "sequence": 88,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.827065+00:00"
+    },
+    {
+      "sequence": 89,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.829271+00:00"
+    },
+    {
+      "sequence": 90,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.839702+00:00"
+    },
+    {
+      "sequence": 91,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.848129+00:00"
+    },
+    {
+      "sequence": 92,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.851489+00:00"
+    },
+    {
+      "sequence": 93,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.854202+00:00"
+    },
+    {
+      "sequence": 94,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.857156+00:00"
+    },
+    {
+      "sequence": 95,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.872429+00:00"
+    },
+    {
+      "sequence": 96,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.874638+00:00"
+    },
+    {
+      "sequence": 97,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.876718+00:00"
+    },
+    {
+      "sequence": 98,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.878719+00:00"
+    },
+    {
+      "sequence": 99,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.880708+00:00"
+    },
+    {
+      "sequence": 100,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.933844+00:00"
+    },
+    {
+      "sequence": 101,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.937229+00:00"
+    },
+    {
+      "sequence": 102,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.940700+00:00"
+    },
+    {
+      "sequence": 103,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.944145+00:00"
+    },
+    {
+      "sequence": 104,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:32.992786+00:00"
+    },
+    {
+      "sequence": 105,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:33.136800+00:00"
+    },
+    {
+      "sequence": 106,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:33.139557+00:00"
+    },
+    {
+      "sequence": 107,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:33.141702+00:00"
+    },
+    {
+      "sequence": 108,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:33.144211+00:00"
+    },
+    {
+      "sequence": 109,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:33.148794+00:00"
+    },
+    {
+      "sequence": 110,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_A7FgR9SNWcZW5JQ25SYXHUnT",
+        "tool_name": "knowledge_ingest",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:33.151647+00:00"
+    },
+    {
+      "sequence": 111,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T06:42:33.156056+00:00"
+    },
+    {
+      "sequence": 112,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T06:42:36.105044+00:00"
+    },
+    {
+      "sequence": 113,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_A7FgR9SNWcZW5JQ25SYXHUnT",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:36.114628+00:00"
+    },
+    {
+      "sequence": 114,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:38.545111+00:00"
+    },
+    {
+      "sequence": 115,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:38.550488+00:00"
+    },
+    {
+      "sequence": 116,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.552554+00:00"
+    },
+    {
+      "sequence": 117,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "evidence.The collection is running; I’ll check its crawl and indexing status "
+      },
+      "created_at": "2026-09-26T06:42:38.892005+00:00"
+    },
+    {
+      "sequence": 118,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:38.895165+00:00"
+    },
+    {
+      "sequence": 119,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.899381+00:00"
+    },
+    {
+      "sequence": 120,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.902214+00:00"
+    },
+    {
+      "sequence": 121,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.904497+00:00"
+    },
+    {
+      "sequence": 122,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.931660+00:00"
+    },
+    {
+      "sequence": 123,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.935281+00:00"
+    },
+    {
+      "sequence": 124,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.937717+00:00"
+    },
+    {
+      "sequence": 125,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.940003+00:00"
+    },
+    {
+      "sequence": 126,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.944145+00:00"
+    },
+    {
+      "sequence": 127,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.946745+00:00"
+    },
+    {
+      "sequence": 128,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.948944+00:00"
+    },
+    {
+      "sequence": 129,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.951239+00:00"
+    },
+    {
+      "sequence": 130,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.983696+00:00"
+    },
+    {
+      "sequence": 131,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.987844+00:00"
+    },
+    {
+      "sequence": 132,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.990185+00:00"
+    },
+    {
+      "sequence": 133,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.992797+00:00"
+    },
+    {
+      "sequence": 134,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.995434+00:00"
+    },
+    {
+      "sequence": 135,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:38.999224+00:00"
+    },
+    {
+      "sequence": 136,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:39.001686+00:00"
+    },
+    {
+      "sequence": 137,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:39.003796+00:00"
+    },
+    {
+      "sequence": 138,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:39.005795+00:00"
+    },
+    {
+      "sequence": 139,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:39.073843+00:00"
+    },
+    {
+      "sequence": 140,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:39.078002+00:00"
+    },
+    {
+      "sequence": 141,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:39.080561+00:00"
+    },
+    {
+      "sequence": 142,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:39.082753+00:00"
+    },
+    {
+      "sequence": 143,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:39.131484+00:00"
+    },
+    {
+      "sequence": 144,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:39.137551+00:00"
+    },
+    {
+      "sequence": 145,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:39.139690+00:00"
+    },
+    {
+      "sequence": 146,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:39.226327+00:00"
+    },
+    {
+      "sequence": 147,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:39.228981+00:00"
+    },
+    {
+      "sequence": 148,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:39.233072+00:00"
+    },
+    {
+      "sequence": 149,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:39.235243+00:00"
+    },
+    {
+      "sequence": 150,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:39.242888+00:00"
+    },
+    {
+      "sequence": 151,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_v1diIbirnybkTdb2cxZ6vyHD",
+        "tool_name": "knowledge_status",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:39.246423+00:00"
+    },
+    {
+      "sequence": 152,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T06:42:39.253542+00:00"
+    },
+    {
+      "sequence": 153,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T06:42:42.021175+00:00"
+    },
+    {
+      "sequence": 154,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_v1diIbirnybkTdb2cxZ6vyHD",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:42.028770+00:00"
+    },
+    {
+      "sequence": 155,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:44.473205+00:00"
+    },
+    {
+      "sequence": 156,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:44.476681+00:00"
+    },
+    {
+      "sequence": 157,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.480006+00:00"
+    },
+    {
+      "sequence": 158,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "now.Ingestion succeeded with one indexed NCBI page. I’ll retrieve citation-ready excerpts on genome "
+      },
+      "created_at": "2026-09-26T06:42:44.743978+00:00"
+    },
+    {
+      "sequence": 159,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:44.747131+00:00"
+    },
+    {
+      "sequence": 160,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.750472+00:00"
+    },
+    {
+      "sequence": 161,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.795990+00:00"
+    },
+    {
+      "sequence": 162,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.799336+00:00"
+    },
+    {
+      "sequence": 163,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.805852+00:00"
+    },
+    {
+      "sequence": 164,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.809164+00:00"
+    },
+    {
+      "sequence": 165,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.812347+00:00"
+    },
+    {
+      "sequence": 166,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.815370+00:00"
+    },
+    {
+      "sequence": 167,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.820626+00:00"
+    },
+    {
+      "sequence": 168,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.823665+00:00"
+    },
+    {
+      "sequence": 169,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.826429+00:00"
+    },
+    {
+      "sequence": 170,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.843457+00:00"
+    },
+    {
+      "sequence": 171,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.846488+00:00"
+    },
+    {
+      "sequence": 172,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.849329+00:00"
+    },
+    {
+      "sequence": 173,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.852293+00:00"
+    },
+    {
+      "sequence": 174,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.859313+00:00"
+    },
+    {
+      "sequence": 175,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.862394+00:00"
+    },
+    {
+      "sequence": 176,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.865258+00:00"
+    },
+    {
+      "sequence": 177,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.868198+00:00"
+    },
+    {
+      "sequence": 178,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.871264+00:00"
+    },
+    {
+      "sequence": 179,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.912966+00:00"
+    },
+    {
+      "sequence": 180,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.915745+00:00"
+    },
+    {
+      "sequence": 181,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.918244+00:00"
+    },
+    {
+      "sequence": 182,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.920993+00:00"
+    },
+    {
+      "sequence": 183,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.937597+00:00"
+    },
+    {
+      "sequence": 184,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.940035+00:00"
+    },
+    {
+      "sequence": 185,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.942658+00:00"
+    },
+    {
+      "sequence": 186,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.944639+00:00"
+    },
+    {
+      "sequence": 187,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.977930+00:00"
+    },
+    {
+      "sequence": 188,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.981979+00:00"
+    },
+    {
+      "sequence": 189,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.984255+00:00"
+    },
+    {
+      "sequence": 190,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.986528+00:00"
+    },
+    {
+      "sequence": 191,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:44.988514+00:00"
+    },
+    {
+      "sequence": 192,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.005613+00:00"
+    },
+    {
+      "sequence": 193,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.008987+00:00"
+    },
+    {
+      "sequence": 194,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.011370+00:00"
+    },
+    {
+      "sequence": 195,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.013820+00:00"
+    },
+    {
+      "sequence": 196,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.036725+00:00"
+    },
+    {
+      "sequence": 197,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.038764+00:00"
+    },
+    {
+      "sequence": 198,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.041916+00:00"
+    },
+    {
+      "sequence": 199,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.044122+00:00"
+    },
+    {
+      "sequence": 200,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.102221+00:00"
+    },
+    {
+      "sequence": 201,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.105604+00:00"
+    },
+    {
+      "sequence": 202,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.108732+00:00"
+    },
+    {
+      "sequence": 203,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.111433+00:00"
+    },
+    {
+      "sequence": 204,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.113797+00:00"
+    },
+    {
+      "sequence": 205,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.129747+00:00"
+    },
+    {
+      "sequence": 206,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.133832+00:00"
+    },
+    {
+      "sequence": 207,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.136332+00:00"
+    },
+    {
+      "sequence": 208,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.138577+00:00"
+    },
+    {
+      "sequence": 209,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.315640+00:00"
+    },
+    {
+      "sequence": 210,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.318736+00:00"
+    },
+    {
+      "sequence": 211,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.321422+00:00"
+    },
+    {
+      "sequence": 212,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.323978+00:00"
+    },
+    {
+      "sequence": 213,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.411535+00:00"
+    },
+    {
+      "sequence": 214,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.414616+00:00"
+    },
+    {
+      "sequence": 215,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.416870+00:00"
+    },
+    {
+      "sequence": 216,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.419446+00:00"
+    },
+    {
+      "sequence": 217,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.421702+00:00"
+    },
+    {
+      "sequence": 218,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.527104+00:00"
+    },
+    {
+      "sequence": 219,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.531052+00:00"
+    },
+    {
+      "sequence": 220,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.533657+00:00"
+    },
+    {
+      "sequence": 221,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.535677+00:00"
+    },
+    {
+      "sequence": 222,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.572830+00:00"
+    },
+    {
+      "sequence": 223,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.575547+00:00"
+    },
+    {
+      "sequence": 224,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.577717+00:00"
+    },
+    {
+      "sequence": 225,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.580388+00:00"
+    },
+    {
+      "sequence": 226,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.585901+00:00"
+    },
+    {
+      "sequence": 227,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.588750+00:00"
+    },
+    {
+      "sequence": 228,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.592172+00:00"
+    },
+    {
+      "sequence": 229,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.594709+00:00"
+    },
+    {
+      "sequence": 230,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.596737+00:00"
+    },
+    {
+      "sequence": 231,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.726667+00:00"
+    },
+    {
+      "sequence": 232,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.842458+00:00"
+    },
+    {
+      "sequence": 233,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:45.845380+00:00"
+    },
+    {
+      "sequence": 234,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:45.847710+00:00"
+    },
+    {
+      "sequence": 235,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:45.849819+00:00"
+    },
+    {
+      "sequence": 236,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.854829+00:00"
+    },
+    {
+      "sequence": 237,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_g70AbLVDNgP9dF6IoKF4wY7n",
+        "tool_name": "knowledge_retrieve",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:45.857038+00:00"
+    },
+    {
+      "sequence": 238,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T06:42:45.862127+00:00"
+    },
+    {
+      "sequence": 239,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T06:42:50.008074+00:00"
+    },
+    {
+      "sequence": 240,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_g70AbLVDNgP9dF6IoKF4wY7n",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:50.019211+00:00"
+    },
+    {
+      "sequence": 241,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:51.993652+00:00"
+    },
+    {
+      "sequence": 242,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:51.997943+00:00"
+    },
+    {
+      "sequence": 243,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:52.004180+00:00"
+    },
+    {
+      "sequence": 244,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "organization.Collection created: `kb_cab4c911f706415ebaa89b270816859a`\n\n- Status: succeeded\n- Scope: `ncbi.nlm.nih.gov` only\n- Indexed: 1 page\n- Evidence: `outputs/knowledge_retrieve/276d2c70b765401f873a63c257ecce48/knowledge_evidence.json`\n- Limitation: NCBI returned a reCAPTCHA page, so no substantive PhiX174 genome-organization evidence was "
+      },
+      "created_at": "2026-09-26T06:42:56.836413+00:00"
+    },
+    {
+      "sequence": 245,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:56.931571+00:00"
+    },
+    {
+      "sequence": 246,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:56.933800+00:00"
+    },
+    {
+      "sequence": 247,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:42:56.935845+00:00"
+    },
+    {
+      "sequence": 248,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:42:56.940188+00:00"
+    },
+    {
+      "sequence": 249,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent finished: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T06:42:56.944452+00:00"
+    },
+    {
+      "sequence": 250,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "retrievable."
+      },
+      "created_at": "2026-09-26T06:42:56.986968+00:00"
+    },
+    {
+      "sequence": 251,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T06:42:56.989772+00:00"
+    }
+  ],
+  "approval_decisions": [],
+  "ui": {
+    "png": "08_knowledge_ingest.png",
+    "dom": "08_knowledge_ingest.txt",
+    "chrome_returncode": 0,
+    "stderr_tail": "262385 bytes written to file /media/data/fuhaoyi/codes/BioAgent/docs/images/live_tests_2026-09-26_gpt-5.6-sol/08_knowledge_ingest.png\n"
+  }
+}

@@ -1,0 +1,20 @@
+PROMPT:
+Analyze the uploaded FASTA. Read its genome features, calculate sequence statistics, identify ORFs, render a genome map, and summarize the generated visualization artifacts.
+
+MODEL: gpt-5.6-sol
+STATUS: succeeded
+TOOLS: pipeline_shell, sequence_stats, genome_read_features, sequence_find_orfs, genome_render_map
+
+ANSWER:
+**Results**
+- FASTA contains 10 phiX174 records, each 5,386 bp.
+- GC content ranges from 44.616–44.801%.
+- ORF search (both strands, ≥90 nt) found 348 ORFs; 34 occur in `NC_001422.1`.
+- Longest reference ORF: 1,284 nt at positions 1,001–2,284 (+ strand).
+- FASTA cannot supply annotated genome features; GenBank/GFF is required. Predicted ORFs were used instead.
+
+**Visualization**
+- Interactive linear genome map displays all 34 reference ORFs across 5,386 bp, including overlapping forward/reverse-strand candidates.
+- Map: `outputs/genome_render_map/86ef87223da34966bc6bb3d60cc786f1/genome_map.json`
+- Reference: `outputs/genome_render_map/86ef87223da34966bc6bb3d60cc786f1/reference.fasta`
+- Full ORF feature set: `outputs/sequence_find_orfs/3047d9355cc94c8d975a8a856440bf96/features.json`

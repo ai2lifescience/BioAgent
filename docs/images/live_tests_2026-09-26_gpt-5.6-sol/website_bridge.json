@@ -1,0 +1,3186 @@
+{
+  "case": "18_website_bridge",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "Introduce the current website. Read the page context, measurements table, and figure, search and read the relevant manual section, then set the group filter to treated and summarize what changed.",
+  "session_id": "sol-20260926-18_website_bridge",
+  "run_id": "c312c0c6494940a6b8553618f20f3a6a",
+  "binding": {
+    "binding_id": "cca4cdb8231c4eb087e1fb467372ddf9",
+    "site_id": null,
+    "origin": null,
+    "session_id": "sol-20260926-18_website_bridge"
+  },
+  "status": {
+    "run_id": "c312c0c6494940a6b8553618f20f3a6a",
+    "session_id": "sol-20260926-18_website_bridge",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 18,
+    "created_at": "2026-09-26T06:48:36.020127+00:00",
+    "updated_at": "2026-09-26T06:49:04.082504+00:00",
+    "error": null,
+    "result": {
+      "answer": "The current website is **Sample comparison**, a review workflow with:\n\n- **Measurements:** 4 samples; treated scores are S2 = 0.81 and S3 = 0.67.\n- **Relative abundance:** six values from 0.12 to 0.72.\n- **Manual:** “Use the filter to change cohort, then inspect Measurements.”\n\nI set the group filter to **treated**; the action reported revision `comparison-2`. However, subsequent page, table, and figure reads still returned stale revision `comparison-1` with unfiltered data, so the visible changes could not be verified.",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-18_website_bridge",
+      "max_turns": 18,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Introduce the current website. Read the page context, measurements table, and figure, search and read the relevant manual section, then set the group filter to treated and summarize what changed."
+        },
+        {
+          "role": "assistant",
+          "content": "The current website is **Sample comparison**, a review workflow with:\n\n- **Measurements:** 4 samples; treated scores are S2 = 0.81 and S3 = 0.67.\n- **Relative abundance:** six values from 0.12 to 0.72.\n- **Manual:** “Use the filter to change cohort, then inspect Measurements.”\n\nI set the group filter to **treated**; the action reported revision `comparison-2`. However, subsequent page, table, and figure reads still returned stale revision `comparison-1` with unfiltered data, so the visible changes could not be verified."
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [],
+        "outputs": [],
+        "tool_outputs": [],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T06:48:39.118130+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "run_started",
+          "data": {
+            "request": "Introduce the current website. Read the page context, measurements table, and figure, search and read the relevant manual section, then set the group filter to treated and summarize what changed.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:39.134798+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:39.140236+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_5b67ba0630f445dfa8a8e251",
+            "parent_id": "span_40af6ae1b22d4aa4adec5586",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T06:48:39.139887+00:00",
+            "ended_at": "2026-09-26T06:48:39.139962+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:39.141279+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_063a25781c1142cc8af548b7",
+            "parent_id": "span_a0ea80bee2534b7db70e76bd",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:48:39.140930+00:00",
+            "ended_at": "2026-09-26T06:48:39.141007+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:39.141664+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_c3ff6e35d0ea46a28756f49e",
+            "parent_id": "span_a0ea80bee2534b7db70e76bd",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:48:39.141351+00:00",
+            "ended_at": "2026-09-26T06:48:39.141399+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:39.145124+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_253d607c0475458eb8a3fd82",
+            "parent_id": "span_a0ea80bee2534b7db70e76bd",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:39.141909+00:00",
+            "ended_at": "2026-09-26T06:48:39.144848+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:39.147991+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_498c6bd46aff44989fae0aa9",
+            "parent_id": "span_a0ea80bee2534b7db70e76bd",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:39.145170+00:00",
+            "ended_at": "2026-09-26T06:48:39.147713+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:39.148917+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_a0ea80bee2534b7db70e76bd",
+            "parent_id": "span_40af6ae1b22d4aa4adec5586",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:48:39.140315+00:00",
+            "ended_at": "2026-09-26T06:48:39.148650+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:39.150317+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:39.195380+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:42.285520+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_49d23749a0414fcaa779120d",
+            "parent_id": "span_78587aeff36b4bb9b5cccb50",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:48:39.198479+00:00",
+            "ended_at": "2026-09-26T06:48:42.285227+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:42.291326+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11399,
+            "output_tokens": 43
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:42.293278+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_context"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:42.799402+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_context"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:42.799809+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_594d001c2ad343aea1f03e5a",
+            "parent_id": "span_78587aeff36b4bb9b5cccb50",
+            "span_type": "function",
+            "name": "website_context",
+            "model": null,
+            "started_at": "2026-09-26T06:48:42.292734+00:00",
+            "ended_at": "2026-09-26T06:48:42.799480+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:42.800562+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_78587aeff36b4bb9b5cccb50",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:48:39.150119+00:00",
+            "ended_at": "2026-09-26T06:48:42.800232+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:42.811852+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_4e98efda20ba4a01b3df74fb",
+            "parent_id": "span_2f832190ef10479b82a3a82e",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:48:42.811261+00:00",
+            "ended_at": "2026-09-26T06:48:42.811347+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:42.816620+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_b45f3833e49145afac701c2a",
+            "parent_id": "span_2f832190ef10479b82a3a82e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:42.812618+00:00",
+            "ended_at": "2026-09-26T06:48:42.816265+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:42.820495+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_7a3649010dec4f028e594bb6",
+            "parent_id": "span_2f832190ef10479b82a3a82e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:42.816671+00:00",
+            "ended_at": "2026-09-26T06:48:42.820145+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:42.820920+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_2f832190ef10479b82a3a82e",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:48:42.810663+00:00",
+            "ended_at": "2026-09-26T06:48:42.820593+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:42.823238+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:45.912269+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_b771a21405e64a0bbf37fdeb",
+            "parent_id": "span_7c25bb94c22a456f8cfcec45",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:48:42.823680+00:00",
+            "ended_at": "2026-09-26T06:48:45.911422+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:45.930694+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11568,
+            "output_tokens": 125
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:45.934802+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_read_table"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:45.935142+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_read_figure"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:45.935449+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_search_manual"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:46.191825+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_read_table"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:46.192731+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_ac90816b2a3641ec90c5f3ed",
+            "parent_id": "span_7c25bb94c22a456f8cfcec45",
+            "span_type": "function",
+            "name": "website_read_table",
+            "model": null,
+            "started_at": "2026-09-26T06:48:45.932859+00:00",
+            "ended_at": "2026-09-26T06:48:46.191983+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:46.194244+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_read_figure"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:46.195125+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_303c9e696c8540e4906a3950",
+            "parent_id": "span_7c25bb94c22a456f8cfcec45",
+            "span_type": "function",
+            "name": "website_read_figure",
+            "model": null,
+            "started_at": "2026-09-26T06:48:45.933517+00:00",
+            "ended_at": "2026-09-26T06:48:46.194388+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:46.200661+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_search_manual"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:46.201503+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_556cba966aaa466282747aef",
+            "parent_id": "span_7c25bb94c22a456f8cfcec45",
+            "span_type": "function",
+            "name": "website_search_manual",
+            "model": null,
+            "started_at": "2026-09-26T06:48:45.933979+00:00",
+            "ended_at": "2026-09-26T06:48:46.200790+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:46.203060+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_7c25bb94c22a456f8cfcec45",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:48:42.821522+00:00",
+            "ended_at": "2026-09-26T06:48:46.202317+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:46.223024+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_8a5e865865874f94a1c24dd0",
+            "parent_id": "span_9077ec80395e42d79d29a98a",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:48:46.222452+00:00",
+            "ended_at": "2026-09-26T06:48:46.222585+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:46.227232+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_791af2833d594b1a8ac4a044",
+            "parent_id": "span_9077ec80395e42d79d29a98a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:46.223336+00:00",
+            "ended_at": "2026-09-26T06:48:46.226877+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:46.231240+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_c9de08b083b7450b88483560",
+            "parent_id": "span_9077ec80395e42d79d29a98a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:46.227286+00:00",
+            "ended_at": "2026-09-26T06:48:46.230509+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:46.231993+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_9077ec80395e42d79d29a98a",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:48:46.221743+00:00",
+            "ended_at": "2026-09-26T06:48:46.231326+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:46.235775+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.023807+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_5ded7d81b4274244905908f1",
+            "parent_id": "span_cf4e56ebd2d0487a9c92995d",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:48:46.236649+00:00",
+            "ended_at": "2026-09-26T06:48:50.023360+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.032867+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12007,
+            "output_tokens": 88
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.034850+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_read_manual"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.034988+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_context"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.289198+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_read_manual"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.289605+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_821fcb7f53094a429b80c502",
+            "parent_id": "span_cf4e56ebd2d0487a9c92995d",
+            "span_type": "function",
+            "name": "website_read_manual",
+            "model": null,
+            "started_at": "2026-09-26T06:48:50.034020+00:00",
+            "ended_at": "2026-09-26T06:48:50.289273+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.291362+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_context"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.291755+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_3e8e8f87788c4bd1bb24c379",
+            "parent_id": "span_cf4e56ebd2d0487a9c92995d",
+            "span_type": "function",
+            "name": "website_context",
+            "model": null,
+            "started_at": "2026-09-26T06:48:50.034406+00:00",
+            "ended_at": "2026-09-26T06:48:50.291420+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.292617+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_cf4e56ebd2d0487a9c92995d",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:48:46.233298+00:00",
+            "ended_at": "2026-09-26T06:48:50.292132+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.304604+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_7165274f31664380939646f3",
+            "parent_id": "span_a8566a7f4142405cbee2cb29",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:48:50.304072+00:00",
+            "ended_at": "2026-09-26T06:48:50.304194+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.308863+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_e6222abad4514b57ba3c6ff2",
+            "parent_id": "span_a8566a7f4142405cbee2cb29",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:50.304905+00:00",
+            "ended_at": "2026-09-26T06:48:50.308404+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.312319+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_6be77e96401342d2a7aab9ec",
+            "parent_id": "span_a8566a7f4142405cbee2cb29",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:50.308919+00:00",
+            "ended_at": "2026-09-26T06:48:50.311963+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.312762+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_a8566a7f4142405cbee2cb29",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:48:50.303308+00:00",
+            "ended_at": "2026-09-26T06:48:50.312356+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:50.314757+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:52.883382+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_a6ab2fcccccd44a1b0614fe0",
+            "parent_id": "span_107a99bb95394e9b89c3007f",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:48:50.315352+00:00",
+            "ended_at": "2026-09-26T06:48:52.883025+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:52.891005+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12279,
+            "output_tokens": 63
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:52.892957+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_action"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:53.397960+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_action"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:53.398382+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_6eb01793938d42c2bd8e9ce0",
+            "parent_id": "span_107a99bb95394e9b89c3007f",
+            "span_type": "function",
+            "name": "website_action",
+            "model": null,
+            "started_at": "2026-09-26T06:48:52.892224+00:00",
+            "ended_at": "2026-09-26T06:48:53.398037+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:53.399316+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_107a99bb95394e9b89c3007f",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:48:50.313562+00:00",
+            "ended_at": "2026-09-26T06:48:53.398880+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:53.409080+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_db256cc7bf6d4a3990465091",
+            "parent_id": "span_468497b57f174475b0cf4d5a",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:48:53.408641+00:00",
+            "ended_at": "2026-09-26T06:48:53.408727+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:53.413606+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_68aca56e204a4d4aa7e6c780",
+            "parent_id": "span_468497b57f174475b0cf4d5a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:53.409372+00:00",
+            "ended_at": "2026-09-26T06:48:53.413213+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:53.417315+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_4caf4a4b66c448ffab444734",
+            "parent_id": "span_468497b57f174475b0cf4d5a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:53.413710+00:00",
+            "ended_at": "2026-09-26T06:48:53.416947+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:53.417773+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_468497b57f174475b0cf4d5a",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:48:53.407891+00:00",
+            "ended_at": "2026-09-26T06:48:53.417357+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:53.419829+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:55.922778+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_07502c2d6c8447699e3d6c69",
+            "parent_id": "span_5f0eafcd87494312b13fb39e",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:48:53.420333+00:00",
+            "ended_at": "2026-09-26T06:48:55.922419+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:55.930254+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12392,
+            "output_tokens": 42
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:55.932102+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_context"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:56.437831+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_context"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:56.438357+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_79cb001b5aa1432bb2f4c8fd",
+            "parent_id": "span_5f0eafcd87494312b13fb39e",
+            "span_type": "function",
+            "name": "website_context",
+            "model": null,
+            "started_at": "2026-09-26T06:48:55.931652+00:00",
+            "ended_at": "2026-09-26T06:48:56.437971+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:56.439041+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_5f0eafcd87494312b13fb39e",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:48:53.418399+00:00",
+            "ended_at": "2026-09-26T06:48:56.438718+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:56.454602+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_776b5722c3c74f9e8099a602",
+            "parent_id": "span_594c379fa02c4ff4a001e248",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:48:56.454133+00:00",
+            "ended_at": "2026-09-26T06:48:56.454218+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:56.459256+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_55acfd76c2b34bef8a35ddcb",
+            "parent_id": "span_594c379fa02c4ff4a001e248",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:56.455026+00:00",
+            "ended_at": "2026-09-26T06:48:56.458771+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:56.463089+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_bdcbdc8986344392abb44134",
+            "parent_id": "span_594c379fa02c4ff4a001e248",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:56.459313+00:00",
+            "ended_at": "2026-09-26T06:48:56.462611+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:56.463441+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_594c379fa02c4ff4a001e248",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:48:56.453495+00:00",
+            "ended_at": "2026-09-26T06:48:56.463129+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:56.465381+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:58.719808+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_5f232c4b001e4138bc67c044",
+            "parent_id": "span_a92afdd41bc74c09921ff89a",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:48:56.465834+00:00",
+            "ended_at": "2026-09-26T06:48:58.719296+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:58.726911+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12560,
+            "output_tokens": 63
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:58.729076+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_read_table"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:58.729222+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_read_figure"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:58.984270+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_read_table"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:58.984790+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_db60d96d870e49c1abefe404",
+            "parent_id": "span_a92afdd41bc74c09921ff89a",
+            "span_type": "function",
+            "name": "website_read_table",
+            "model": null,
+            "started_at": "2026-09-26T06:48:58.728406+00:00",
+            "ended_at": "2026-09-26T06:48:58.984386+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:58.985504+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_read_figure"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:58.985926+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_e5410eeb086448a6a839cfcb",
+            "parent_id": "span_a92afdd41bc74c09921ff89a",
+            "span_type": "function",
+            "name": "website_read_figure",
+            "model": null,
+            "started_at": "2026-09-26T06:48:58.728726+00:00",
+            "ended_at": "2026-09-26T06:48:58.985579+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:58.986706+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_a92afdd41bc74c09921ff89a",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:48:56.463963+00:00",
+            "ended_at": "2026-09-26T06:48:58.986380+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:58.998824+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_e2d0284c6a094e8dae7a2bd8",
+            "parent_id": "span_0263befda2d9448dbc0937c0",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:48:58.998369+00:00",
+            "ended_at": "2026-09-26T06:48:58.998450+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:59.002548+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_41333f73f56946a9bc019634",
+            "parent_id": "span_0263befda2d9448dbc0937c0",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:58.999217+00:00",
+            "ended_at": "2026-09-26T06:48:59.002185+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:59.005596+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_55cd0f395b294e1a95c820c5",
+            "parent_id": "span_0263befda2d9448dbc0937c0",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:48:59.002616+00:00",
+            "ended_at": "2026-09-26T06:48:59.005217+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:59.005946+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_0263befda2d9448dbc0937c0",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:48:58.997742+00:00",
+            "ended_at": "2026-09-26T06:48:59.005638+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:48:59.007989+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:49:04.030901+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_2c5c09464e53454fa3dcfd65",
+            "parent_id": "span_4bc038fc932244f5b98b917e",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:48:59.008493+00:00",
+            "ended_at": "2026-09-26T06:49:04.030534+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:49:04.036240+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12879,
+            "output_tokens": 132
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:49:04.037780+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:49:04.040784+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_4bc038fc932244f5b98b917e",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:48:59.006522+00:00",
+            "ended_at": "2026-09-26T06:49:04.040436+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:49:04.045117+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:49:04.045462+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_cec4c00598554acb84454edd",
+            "parent_id": "span_55d4975fe3f84f4290b4102f",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T06:49:04.044900+00:00",
+            "ended_at": "2026-09-26T06:49:04.045137+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:49:04.047519+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_55d4975fe3f84f4290b4102f",
+            "parent_id": "span_40af6ae1b22d4aa4adec5586",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:48:39.149894+00:00",
+            "ended_at": "2026-09-26T06:49:04.047155+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:49:04.047915+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2",
+            "span_id": "span_40af6ae1b22d4aa4adec5586",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:48:39.134896+00:00",
+            "ended_at": "2026-09-26T06:49:04.047590+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:49:04.048091+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_c82f340306bc40939133409348c219e2"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:49:04.052301+00:00",
+          "session_id": "sol-20260926-18_website_bridge",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 0
+          }
+        }
+      ],
+      "run": {
+        "run_id": "fbfb80df-f8bd-4415-8cd2-84681d7ea3d4",
+        "session_dir": ".",
+        "runtime_dir": "runs/fbfb80df-f8bd-4415-8cd2-84681d7ea3d4",
+        "workspace_dir": "outputs"
+      },
+      "files": [],
+      "approval_decision": null,
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "website_calls": [
+    {
+      "method": "getPageContext",
+      "arguments": {},
+      "result": {
+        "revision": "comparison-1",
+        "title": "Sample comparison",
+        "url": "http://127.0.0.1:8000/assistant-demo",
+        "selection": {
+          "group": "all"
+        },
+        "workflow": {
+          "step": "review"
+        },
+        "resources": [
+          {
+            "id": "measurements",
+            "kind": "table",
+            "title": "Measurements"
+          },
+          {
+            "id": "abundance",
+            "kind": "figure",
+            "title": "Relative abundance"
+          }
+        ],
+        "manual": {
+          "version": "2026-09"
+        }
+      }
+    },
+    {
+      "method": "readTable",
+      "arguments": {
+        "resource_id": "measurements",
+        "offset": 0,
+        "limit": 200
+      },
+      "result": {
+        "resource_id": "measurements",
+        "title": "Measurements",
+        "columns": [
+          {
+            "name": "sample",
+            "type": "string"
+          },
+          {
+            "name": "group",
+            "type": "string"
+          },
+          {
+            "name": "score",
+            "type": "number"
+          }
+        ],
+        "rows": [
+          {
+            "sample": "S1",
+            "group": "control",
+            "score": 0.42
+          },
+          {
+            "sample": "S2",
+            "group": "treated",
+            "score": 0.81
+          },
+          {
+            "sample": "S3",
+            "group": "treated",
+            "score": 0.67
+          },
+          {
+            "sample": "S4",
+            "group": "control",
+            "score": 0.31
+          }
+        ],
+        "offset": 0,
+        "total_rows": 4,
+        "revision": "comparison-1"
+      }
+    },
+    {
+      "method": "readFigure",
+      "arguments": {
+        "resource_id": "abundance"
+      },
+      "result": {
+        "resource_id": "abundance",
+        "title": "Relative abundance",
+        "description": "Six ordered observations",
+        "x_axis": {
+          "label": "Observation"
+        },
+        "y_axis": {
+          "label": "Relative abundance",
+          "unit": "fraction"
+        },
+        "series": [
+          {
+            "name": "Observed",
+            "values": [
+              0.12,
+              0.31,
+              0.24,
+              0.55,
+              0.43,
+              0.72
+            ]
+          }
+        ],
+        "revision": "comparison-1"
+      }
+    },
+    {
+      "method": "searchManual",
+      "arguments": {
+        "query": "Sample comparison group filter treated measurements relative abundance",
+        "limit": 5
+      },
+      "result": {
+        "version": "2026-09",
+        "sections": [
+          {
+            "id": "methods",
+            "title": "Methods",
+            "excerpt": "Use the filter to change cohort."
+          }
+        ]
+      }
+    },
+    {
+      "method": "readManual",
+      "arguments": {
+        "section_id": "methods"
+      },
+      "result": {
+        "section_id": "methods",
+        "title": "Methods",
+        "version": "2026-09",
+        "text": "Use the filter to change cohort, then inspect Measurements."
+      }
+    },
+    {
+      "method": "getPageContext",
+      "arguments": {},
+      "result": {
+        "revision": "comparison-1",
+        "title": "Sample comparison",
+        "url": "http://127.0.0.1:8000/assistant-demo",
+        "selection": {
+          "group": "all"
+        },
+        "workflow": {
+          "step": "review"
+        },
+        "resources": [
+          {
+            "id": "measurements",
+            "kind": "table",
+            "title": "Measurements"
+          },
+          {
+            "id": "abundance",
+            "kind": "figure",
+            "title": "Relative abundance"
+          }
+        ],
+        "manual": {
+          "version": "2026-09"
+        }
+      }
+    },
+    {
+      "method": "invokeAction",
+      "arguments": {
+        "action_id": "set_group_filter",
+        "arguments": {
+          "group": "treated"
+        }
+      },
+      "result": {
+        "action_id": "set_group_filter",
+        "message": "Group set to treated",
+        "revision": "comparison-2"
+      }
+    },
+    {
+      "method": "getPageContext",
+      "arguments": {},
+      "result": {
+        "revision": "comparison-1",
+        "title": "Sample comparison",
+        "url": "http://127.0.0.1:8000/assistant-demo",
+        "selection": {
+          "group": "all"
+        },
+        "workflow": {
+          "step": "review"
+        },
+        "resources": [
+          {
+            "id": "measurements",
+            "kind": "table",
+            "title": "Measurements"
+          },
+          {
+            "id": "abundance",
+            "kind": "figure",
+            "title": "Relative abundance"
+          }
+        ],
+        "manual": {
+          "version": "2026-09"
+        }
+      }
+    },
+    {
+      "method": "readTable",
+      "arguments": {
+        "resource_id": "measurements",
+        "offset": 0,
+        "limit": 200
+      },
+      "result": {
+        "resource_id": "measurements",
+        "title": "Measurements",
+        "columns": [
+          {
+            "name": "sample",
+            "type": "string"
+          },
+          {
+            "name": "group",
+            "type": "string"
+          },
+          {
+            "name": "score",
+            "type": "number"
+          }
+        ],
+        "rows": [
+          {
+            "sample": "S1",
+            "group": "control",
+            "score": 0.42
+          },
+          {
+            "sample": "S2",
+            "group": "treated",
+            "score": 0.81
+          },
+          {
+            "sample": "S3",
+            "group": "treated",
+            "score": 0.67
+          },
+          {
+            "sample": "S4",
+            "group": "control",
+            "score": 0.31
+          }
+        ],
+        "offset": 0,
+        "total_rows": 4,
+        "revision": "comparison-1"
+      }
+    },
+    {
+      "method": "readFigure",
+      "arguments": {
+        "resource_id": "abundance"
+      },
+      "result": {
+        "resource_id": "abundance",
+        "title": "Relative abundance",
+        "description": "Six ordered observations",
+        "x_axis": {
+          "label": "Observation"
+        },
+        "y_axis": {
+          "label": "Relative abundance",
+          "unit": "fraction"
+        },
+        "series": [
+          {
+            "name": "Observed",
+            "values": [
+              0.12,
+              0.31,
+              0.24,
+              0.55,
+              0.43,
+              0.72
+            ]
+          }
+        ],
+        "revision": "comparison-1"
+      }
+    }
+  ],
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "c312c0c6494940a6b8553618f20f3a6a",
+        "session_id": "sol-20260926-18_website_bridge"
+      },
+      "created_at": "2026-09-26T06:48:36.020753+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "c312c0c6494940a6b8553618f20f3a6a"
+      },
+      "created_at": "2026-09-26T06:48:38.251837+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T06:48:39.136770+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T06:48:39.150528+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:41.771526+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:41.775126+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:41.777291+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll inspect the live page, its table and figure, then consult the manual before applying the treated "
+      },
+      "created_at": "2026-09-26T06:48:42.037041+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:42.040143+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:42.154411+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:42.277047+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:42.279466+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:42.281505+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:42.283386+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:42.287182+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_9psfEt2bDW1hywQUWSASDvMx",
+        "tool_name": "website_context",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:42.289516+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_9psfEt2bDW1hywQUWSASDvMx",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:42.806329+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:44.597839+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:44.600804+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:44.604135+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "filter.The page is a sample-comparison review with the group filter at “all.” I’m reading both registered resources and locating the filter instructions "
+      },
+      "created_at": "2026-09-26T06:48:45.869877+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:45.872573+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:45.877144+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:45.879760+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:45.882241+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:45.884583+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:45.886777+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:45.894237+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:45.897375+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:45.900253+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:45.903210+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:45.906177+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:45.909181+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:45.918397+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_ujwJqWNiLcQVVfxYjCK3YjiL",
+        "tool_name": "website_read_table",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:45.922059+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_dZlznGxqpCZc0mjVSQJLRi8L",
+        "tool_name": "website_read_figure",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:45.925112+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_LwIkW6v4lSY9klwnCvLsKWl9",
+        "tool_name": "website_search_manual",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:45.928374+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_ujwJqWNiLcQVVfxYjCK3YjiL",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:46.213340+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_dZlznGxqpCZc0mjVSQJLRi8L",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:46.216040+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_LwIkW6v4lSY9klwnCvLsKWl9",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:46.218528+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:49.161462+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:49.164165+00:00"
+    },
+    {
+      "sequence": 42,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:49.167063+00:00"
+    },
+    {
+      "sequence": 43,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "now.The unfiltered table has four samples, and the figure has six ordered abundance values. Next I’ll read the exact manual guidance and identify the page’s filter "
+      },
+      "created_at": "2026-09-26T06:48:49.916529+00:00"
+    },
+    {
+      "sequence": 44,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:49.919105+00:00"
+    },
+    {
+      "sequence": 45,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:49.922728+00:00"
+    },
+    {
+      "sequence": 46,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:49.924831+00:00"
+    },
+    {
+      "sequence": 47,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:49.995450+00:00"
+    },
+    {
+      "sequence": 48,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:50.012709+00:00"
+    },
+    {
+      "sequence": 49,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:50.014834+00:00"
+    },
+    {
+      "sequence": 50,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:50.016850+00:00"
+    },
+    {
+      "sequence": 51,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:50.019187+00:00"
+    },
+    {
+      "sequence": 52,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:50.021330+00:00"
+    },
+    {
+      "sequence": 53,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:50.026355+00:00"
+    },
+    {
+      "sequence": 54,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_j7V6Q9DjUTnQyxqegVFEyW28",
+        "tool_name": "website_read_manual",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:50.028735+00:00"
+    },
+    {
+      "sequence": 55,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_fbVpvzkoJdM2SHU3Rcn2kaGf",
+        "tool_name": "website_context",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:50.030886+00:00"
+    },
+    {
+      "sequence": 56,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_j7V6Q9DjUTnQyxqegVFEyW28",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:50.297799+00:00"
+    },
+    {
+      "sequence": 57,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_fbVpvzkoJdM2SHU3Rcn2kaGf",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:50.300291+00:00"
+    },
+    {
+      "sequence": 58,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:52.220437+00:00"
+    },
+    {
+      "sequence": 59,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:52.223778+00:00"
+    },
+    {
+      "sequence": 60,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.226798+00:00"
+    },
+    {
+      "sequence": 61,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "action.Manual guidance confirms changing the cohort first, then inspecting Measurements. I’m applying the treated cohort and will compare the refreshed "
+      },
+      "created_at": "2026-09-26T06:48:52.584752+00:00"
+    },
+    {
+      "sequence": 62,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:52.587504+00:00"
+    },
+    {
+      "sequence": 63,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.590439+00:00"
+    },
+    {
+      "sequence": 64,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.598113+00:00"
+    },
+    {
+      "sequence": 65,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.601269+00:00"
+    },
+    {
+      "sequence": 66,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.604668+00:00"
+    },
+    {
+      "sequence": 67,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.607895+00:00"
+    },
+    {
+      "sequence": 68,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.618861+00:00"
+    },
+    {
+      "sequence": 69,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.625528+00:00"
+    },
+    {
+      "sequence": 70,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.629028+00:00"
+    },
+    {
+      "sequence": 71,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.632308+00:00"
+    },
+    {
+      "sequence": 72,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.639864+00:00"
+    },
+    {
+      "sequence": 73,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.643171+00:00"
+    },
+    {
+      "sequence": 74,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.646348+00:00"
+    },
+    {
+      "sequence": 75,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.648852+00:00"
+    },
+    {
+      "sequence": 76,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.651315+00:00"
+    },
+    {
+      "sequence": 77,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.653991+00:00"
+    },
+    {
+      "sequence": 78,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.755009+00:00"
+    },
+    {
+      "sequence": 79,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.757935+00:00"
+    },
+    {
+      "sequence": 80,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.761145+00:00"
+    },
+    {
+      "sequence": 81,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.873549+00:00"
+    },
+    {
+      "sequence": 82,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:52.876715+00:00"
+    },
+    {
+      "sequence": 83,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:52.878809+00:00"
+    },
+    {
+      "sequence": 84,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:52.880856+00:00"
+    },
+    {
+      "sequence": 85,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.886042+00:00"
+    },
+    {
+      "sequence": 86,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_y4S23M9some6DekZebpWUFe3",
+        "tool_name": "website_action",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:52.888926+00:00"
+    },
+    {
+      "sequence": 87,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_y4S23M9some6DekZebpWUFe3",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:53.404278+00:00"
+    },
+    {
+      "sequence": 88,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:55.319900+00:00"
+    },
+    {
+      "sequence": 89,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:55.323321+00:00"
+    },
+    {
+      "sequence": 90,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:55.325780+00:00"
+    },
+    {
+      "sequence": 91,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "resources.The treated filter applied successfully. I’m verifying the new page revision and reading the updated table and "
+      },
+      "created_at": "2026-09-26T06:48:55.797308+00:00"
+    },
+    {
+      "sequence": 92,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:55.799871+00:00"
+    },
+    {
+      "sequence": 93,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:55.802401+00:00"
+    },
+    {
+      "sequence": 94,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:55.913207+00:00"
+    },
+    {
+      "sequence": 95,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:55.915869+00:00"
+    },
+    {
+      "sequence": 96,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:55.918478+00:00"
+    },
+    {
+      "sequence": 97,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:55.920658+00:00"
+    },
+    {
+      "sequence": 98,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:55.925453+00:00"
+    },
+    {
+      "sequence": 99,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_YwmI2Km8dIQiGACKMOaOVvQF",
+        "tool_name": "website_context",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:55.928100+00:00"
+    },
+    {
+      "sequence": 100,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_YwmI2Km8dIQiGACKMOaOVvQF",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:56.444221+00:00"
+    },
+    {
+      "sequence": 101,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:58.590699+00:00"
+    },
+    {
+      "sequence": 102,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:58.594074+00:00"
+    },
+    {
+      "sequence": 103,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:58.603907+00:00"
+    },
+    {
+      "sequence": 104,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:58.606546+00:00"
+    },
+    {
+      "sequence": 105,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:58.609207+00:00"
+    },
+    {
+      "sequence": 106,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:58.706923+00:00"
+    },
+    {
+      "sequence": 107,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:58.714938+00:00"
+    },
+    {
+      "sequence": 108,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:58.717194+00:00"
+    },
+    {
+      "sequence": 109,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_iNitlBvj11y7QHWAJfz5Yib5",
+        "tool_name": "website_read_table",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:58.722818+00:00"
+    },
+    {
+      "sequence": 110,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_0z60KxDm5RZXq59CXjvMAZsf",
+        "tool_name": "website_read_figure",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:48:58.724882+00:00"
+    },
+    {
+      "sequence": 111,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_iNitlBvj11y7QHWAJfz5Yib5",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:58.991872+00:00"
+    },
+    {
+      "sequence": 112,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_0z60KxDm5RZXq59CXjvMAZsf",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:48:58.994439+00:00"
+    },
+    {
+      "sequence": 113,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:49:02.547492+00:00"
+    },
+    {
+      "sequence": 114,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:49:02.550704+00:00"
+    },
+    {
+      "sequence": 115,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:49:02.553067+00:00"
+    },
+    {
+      "sequence": 116,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "figure.The current website is **Sample comparison**, a review workflow with:\n\n- **Measurements:** 4 samples; treated scores are S2 = 0.81 and S3 = 0.67.\n- **Relative abundance:** six values from 0.12 to 0.72.\n- **Manual:** “Use the filter to change cohort, "
+      },
+      "created_at": "2026-09-26T06:49:03.284890+00:00"
+    },
+    {
+      "sequence": 117,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "then inspect Measurements.”\n\nI set the group filter to **treated**; the action reported revision `comparison-2`. However, subsequent page, table, and figure reads still returned stale revision `comparison-1` with unfiltered data, so the visible changes could "
+      },
+      "created_at": "2026-09-26T06:49:03.781733+00:00"
+    },
+    {
+      "sequence": 118,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "not be "
+      },
+      "created_at": "2026-09-26T06:49:04.022441+00:00"
+    },
+    {
+      "sequence": 119,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:49:04.024698+00:00"
+    },
+    {
+      "sequence": 120,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:49:04.026827+00:00"
+    },
+    {
+      "sequence": 121,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:49:04.028845+00:00"
+    },
+    {
+      "sequence": 122,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:49:04.033884+00:00"
+    },
+    {
+      "sequence": 123,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent finished: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T06:49:04.038168+00:00"
+    },
+    {
+      "sequence": 124,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "verified."
+      },
+      "created_at": "2026-09-26T06:49:04.079768+00:00"
+    },
+    {
+      "sequence": 125,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T06:49:04.082770+00:00"
+    }
+  ],
+  "ui": {
+    "png": "18_website_bridge.png",
+    "dom": "18_website_bridge.txt",
+    "chrome_returncode": 0
+  }
+}

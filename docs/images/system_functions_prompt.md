@@ -1,85 +1,70 @@
-# System functions figure generation prompt
+# System functions figure edit prompt
 
-Generated from scratch with the built-in image generation tool. The existing system architecture image was supplied solely as a palette and typography reference; the previous functions image was not used.
+Edited with the built-in `image_gen` tool using the existing figure as the edit target.
 
-Final figure: [system_functions.png](system_functions.png), 1672 × 941 pixels. The current revision removes the pipeline count, removes the configured variant-risk caption, and adds coding support.
+Final figure: [system_functions.png](system_functions.png), 1672 × 941 pixels. This revision replaces the six bioinformatics pipeline panels with Genome assembly, Taxonomic identification, Functional annotation, Variant detection, Molecular typing, and Risk assessment. The title, workflow and supporting functions retain their original content and visual style.
 
-## Prompt
+## Final edit prompt
 
-Use case: scientific-educational.
-Asset: a NEW scientific publication figure showing the USER-FACING SCIENTIFIC FUNCTIONS of a bioinformatics pipeline agent.
-Input image: STYLE REFERENCE ONLY — borrow the soft color palette, restrained scientific illustrations and readable sans-serif typography. This is NOT an edit target. Do not copy its architecture layout, formula, labels, LLM, Harness, neural network, MCP, models or workspace. Create a completely new functional overview from scratch.
+Use case: precise-object-edit.
+Asset type: existing scientific publication figure, 1672 × 941 pixels.
+Input image: EDIT TARGET — docs/images/system_functions.png. Edit this existing figure in place. It is NOT merely a style reference.
 
-PRIMARY MESSAGE:
-The main function is choosing and running bioinformatics pipelines, then delivering understandable scientific results. Scientific pipeline analyses are the dominant content. Supporting data retrieval, file analysis and knowledge search are secondary.
+PRIMARY REQUEST:
+Replace ONLY the contents of the six capability panels under the heading "Bioinformatics pipelines", using the exact six requested headings below. Maintain the original 3-column × 2-row arrangement, the panel boundaries and positions, pastel backgrounds, navy typography, vector-like line artwork, font family, and hierarchy. Make the new illustrations elegant, scientifically clear, balanced and suitable for a computational-biology journal.
 
-STYLE:
-Beautiful computational biology journal graphical abstract. White background, ample whitespace, muted powder blue, desaturated teal, pale sage and lavender. Deep slate/navy text; calm readable humanist sans-serif, semibold headings and regular captions. Delicate scientific vector-like illustration, fine consistent strokes, balanced geometry. Soft borderless tinted groupings rather than heavy card borders. No bright cyan, electric blue, neon green, saturated purple, orange button colors, glossy effects, shadows, fake data, tiny dense text or ornamental clutter. Use consistent flat scientific illustrations. All chart axes have flat endpoints, never arrowheads. Thin directional arrows only for workflow flow. Request high native landscape resolution, approximately 16:9.
+CRITICAL UNCHANGED REGIONS:
+Preserve the entire top title and four-step workflow, the arrows, all four workflow captions and illustrations, the "Bioinformatics pipelines" heading itself, the entire bottom "Supporting functions" strip with all four icon/label items, the white background, overall image dimensions and margins. Do not redraw or reword any of those regions. Retain all original pixels outside the six panel interiors wherever possible. The six panels are the ONLY edit area, approximately x=36–1637, y=370–822 in the 1672×941 original. Do not crop, shift, rescale, restyle or rearrange the figure.
 
-LAYOUT:
-A spacious three-level composition. Top: one modest title with ample space below it, followed by a compact four-step user workflow. Middle: a dominant, beautifully balanced 3-column by 2-row collection of six scientific pipeline groups. Bottom: a slim, quieter strip of four supporting functions. Keep the structure visually simple; prioritize the six scientific groups. The figure should be easy to understand in a few seconds.
+SIX PANEL CONTENTS, reading order:
+1. Top left — exact heading: "Genome assembly"
+Caption line 1: "Read assembly"
+Caption line 2: "Contig reconstruction"
+Illustration: tidy short overlapping sequence-read bars assembling into a few longer aligned contigs, with a single modest internal directional arrow. Match the existing thin strokes and pastel blue/sage scientific illustration style.
 
-TOP TITLE, exact:
-"From biological data to scientific results"
-No other brand title or equation.
+2. Top middle — exact heading: "Taxonomic identification"
+Caption line 1: "Sequence classification"
+Caption line 2: "Reference-based identification"
+Illustration: a clean rooted taxonomic branching tree with tiny restrained microbe silhouettes at the tips and a small reference-sequence sheet; scientifically schematic, no numeric values or invented species names.
 
-TOP USER WORKFLOW:
-Four concise illustrated steps, aligned on one horizontal line, with simple right-pointing arrows BETWEEN them, never through text:
-"Question & data" — a small question bubble beside FASTA/FASTQ input sheets.
-"Select & configure" — a small workflow list with a checkmark.
-"Run & monitor" — a tidy workflow DAG with a subtle progress indicator.
-"Results & reports" — a report sheet beside a small bar chart with flat axes.
-This is a user task flow, not a software architecture. No internal modules, servers or database storage layers.
+3. Top right — exact heading: "Functional annotation"
+Caption line 1: "Gene prediction"
+Caption line 2: "Functional assignment"
+Illustration: a short gene-feature track of colored directional blocks beside a matching annotation sheet. Fine navy outlines, muted blue, sage, lavender details.
 
-MIDDLE MAIN SECTION:
-Small clear section heading "Bioinformatics pipelines". Do not print a pipeline count because the catalog grows over time.
-Below it six equally sized, generously spaced scientific capability groups as a 3 × 2 arrangement. Use a meaningful scientific illustration for each group, then a short heading and exactly the supplied caption(s). These are alternative analysis capabilities, not steps to execute sequentially: NO arrows between the six groups. A restrained pale-tinted borderless background may unify each group. Avoid six giant dark boxes or long paragraphs.
+4. Bottom left — exact heading: "Variant detection"
+Caption line 1: "Sequence comparison"
+Caption line 2: "Variant calling"
+Illustration: three neatly aligned short DNA sequences with a single nucleotide difference marked in restrained color, plus a small variant-results sheet. All rows aligned, no phylogenetic tree necessary.
 
-Group 1, top left:
-Heading "Metagenomics"
-Caption line 1 "Read QC · Host removal"
-Caption line 2 "Assembly · Pathogen identification"
-Illustration: several short read fragments combining into a contig, with tiny abstract microbe silhouettes to indicate identification. Scientifically elegant and schematic.
+5. Bottom middle — exact heading: "Molecular typing"
+Caption line 1: "Allelic profiles"
+Caption line 2: "Sequence-based typing"
+Illustration: several aligned small gene-locus blocks forming distinct allele profiles beside a compact classification report. Schematic, elegant, avoid tiny dense text and fake numeric scores.
 
-Group 2, top middle:
-Heading "Genome annotation"
-Caption line 1 "Gene features"
-Caption line 2 "Functional annotation"
-Illustration: a short linear DNA feature track with clean directional gene blocks and a small annotation sheet. Use pale blue and sage, not vivid colors.
+6. Bottom right — exact heading: "Risk assessment"
+Caption line 1: "Resistance-gene screening"
+Caption line 2: "Virulence-factor screening"
+Illustration: a short sequence with two subtly highlighted features connected to a small checklist report and restrained reference database symbol, matching the original icon style. Represents sequence-based evidence screening, not a clinical diagnosis; no hazard imagery, numerical risk score, treatment claims or alarm colors.
 
-Group 3, top right:
-Heading "Resistance & virulence"
-Caption line 1 "Resistance-gene candidates"
-Caption line 2 "Virulence-factor candidates"
-Illustration: a sequence fragment with two neatly highlighted regions and a small reference match/check symbol. This is sequence-based screening, not treatment selection or a clinical diagnosis. No hazard symbol, weapons, or dramatic danger motif.
+STYLE INVARIANTS:
+Keep the same soft powder blue, pale sage/teal and lavender panel colors, deep navy humanist sans-serif text, soft borderless rounded panels, delicate fine consistent outlines, crisp smooth edges. Match original heading and caption sizes, center-align each heading, illustration and caption block, equal panel padding and visual weight. Long headings must be cleanly readable on one line at a consistent size within the panels. Maintain generous whitespace. NO new sections, panel numbering, logos, watermarks, shadows, glossy effects, arrows between the six capability panels, or additional captions.
 
-Group 4, bottom left:
-Heading "Variants & phylogeny"
-Caption line 1 "Bacterial reads & genomes"
-Caption line 2 "Viral genomes"
-Illustration: a tiny alignment with one or two highlighted nucleotide differences alongside a tidy branching phylogenetic tree. Keep alignment schematic and unlabeled if detailed letters would be too small. No tree cycles or malformed branches.
+OUTPUT:
+One final complete PNG figure at the original 1672 × 941 dimensions, with the unchanged surrounding artwork and only these six panels replaced. Text must be spelled exactly as supplied.
 
-Group 5, bottom middle:
-Heading "Viral characterization"
-Caption line 1 "Molecular typing"
-No second caption line.
-Illustration: a restrained generic viral particle beside a short consensus sequence and report. Do not show a numerical risk score, clinical diagnosis, or imaginary quantitative results.
+## Refinement pass — sequence lettering and consistency
 
-Group 6, bottom right:
-Heading "RNA structure"
-Caption "Secondary-structure prediction"
-Illustration: a clear simple RNA stem-loop with correctly paired short stem rungs and a continuous single-strand loop; no impossible branching, tangle or 3D protein structure.
+The figure was refined with the built-in `image_gen` tool using the current figure as the edit target. The six capability labels, captions, layout, palette, and surrounding workflow/supporting functions were preserved. The risk-assessment sequence was cleaned to use only valid uppercase DNA letters A, C, G, and T, and typography/illustration consistency was improved.
 
-BOTTOM SUPPORT STRIP:
-Use a small label "Supporting functions" and four compact evenly spaced icon-and-label items, separated by whitespace, visually subordinate to the pipelines:
-"Retrieve data & literature" — a source document and magnifier.
-"Analyze files & documents" — a table and document.
-"Search knowledge & explain findings" — a reference book and small speech bubble.
-"Coding support" — a small clean code-window or angle-bracket icon.
-Keep this strip open and borderless; do not add connecting arrows or more captions.
+### Refinement prompt
 
-ACCURACY AND CONSISTENCY:
-Use only these supplied labels; spell them correctly and do not repeat headings. The six groups summarize the expanding pipeline catalog: metagenomic workflows, annotation workflows, resistance/virulence workflows, mutation/variant workflows, viral typing/risk workflows, and RNA workflows. Do not print a fixed total or per-group counts.
-Pipeline execution is the main capability. Do not add unsupported clinical outcomes, tertiary RNA modeling, abundance quantification, diagnoses, or performance statistics.
-Do not include architecture-related labels, LLM brands, tool engines, approvals, harness internals, a neural network, model icons, code snippets or an agent robot.
-Keep all icons consistent in detail level, line weight and scale. Maintain generous margins and readable short captions. No clipping, overprinting, arrows through text, extraneous frame lines, watermarks or logos.
+Use the existing `system_functions.png` as the edit target. Preserve its exact 1672 × 941 dimensions, content, six capability labels and captions, panel positions, pastel blue/sage/lavender palette, typography hierarchy, top workflow, section heading, supporting-functions strip, and overall scientific graphical-abstract style. Improve only antialiasing, typography consistency, illustration alignment, and whitespace. In the Risk assessment panel, render a crisp uppercase DNA sequence using only valid A/C/G/T characters with the exact text `...ATGCC  AAGTTC  GCCC...  TTGACA...`; keep the highlighted features and labels `Resistance gene` and `Virulence factor`. Do not add, remove, rename, rearrange, crop, or rescale any content; do not add logos, watermarks, hazard symbols, numeric scores, clinical claims, or extra words.
+
+## Font-color refinement — reference image
+
+The current figure was refined with the built-in `image_gen` tool using [`good font color.png`](good%20font%20color.png) as the font-color reference. The six updated pipeline panels and all content were preserved. Typography, arrows, and text-like linework now use a darker, muted deep navy/slate treatment matching the reference instead of the overly bright saturated blue.
+
+### Refinement constraints
+
+Preserve the exact 1672 × 941 dimensions, title, four-step workflow, six current pipeline labels and captions, panel illustrations, bottom supporting-functions strip, layout, pastel fills, and scientific graphical-abstract style. Change only the typography color treatment and polish. Do not revert the six current panels to the older reference panels, add or remove wording, rearrange content, crop, rescale, add logos, add watermarks, or introduce new decorative elements. Keep the Risk assessment sequence as clean uppercase DNA letters: `...ATGCC  AAGTTC  GCCC...  TTGACA...`.

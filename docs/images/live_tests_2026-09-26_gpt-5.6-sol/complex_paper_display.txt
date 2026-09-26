@@ -1,0 +1,49 @@
+PROMPT:
+Open the final Markdown report you just wrote. Display the report title, table of contents or headings, main findings, evidence/page references, and limitations in the web response; do not return only the file path.
+
+MODEL: gpt-5.6-sol
+STATUS: succeeded
+TOOLS: file_inspection
+
+ANSWER:
+# Paper2Agent: Architecture, Reliability, Evaluation, and Practical Lessons
+
+**Headings**
+1. System architecture  
+2. Six-stage construction pipeline  
+3. Downstream agent loop  
+4. Tool and data interfaces  
+5. Evaluation evidence  
+6. Reliability and reproducibility mechanisms  
+7. Limitations and unresolved issues  
+8. Practical lessons  
+9. Overall assessment  
+10. Compact evidence map  
+
+**Main Findings**
+- Paper2Agent converts papers into MCP servers containing executable **tools**, queryable **resources**, and procedural **prompts**. [PDF p. 2]
+- Construction uses specialized agents for environment setup, tutorial discovery/execution, tool extraction, validation, repair, and server assembly. [PDF p. 10]
+- Runtime behavior follows a planning → action → observation loop over validated MCP capabilities. [PDF pp. 4–5]
+- Tests require output files, numerical agreement within 3%, and figure similarity by perceptual hash; failed functions get up to six repair attempts and are excluded if still invalid. [PDF p. 10]
+- Of 100 computational-biology papers, 74 were agentified and 593/599 proposed tools passed validation. [PDF pp. 5, 11]
+- Large-scale benchmark accuracy was 91.2%, versus 80.3% for direct Sonnet 4 repository access and 86.3% for Sonnet 4.6. [PDF p. 5]
+- AlphaGenome accuracy reached 98.7% on tutorial tasks, 100% on novel tasks, and 82.7% on open-ended tasks. [PDF p. 3]
+- Cross-domain accuracy was 98.1%; resource-only paper synthesis reached 89.0%. [PDF pp. 5, 11]
+
+**Evidence Map**
+- Architecture and interfaces: pp. 2–3
+- Agent loop: pp. 4–5
+- Evaluation results: pp. 3, 5, 7, 11–12
+- Implementation and validation: p. 10
+- Limitations and governance: pp. 7–8
+- TISSUE and ADHD examples: pp. 14–15
+
+**Limitations**
+- Only 74% of sampled biology papers completed agentification.
+- Missing code, data, models, documentation, or workable environments remain major blockers. [PDF pp. 5, 7]
+- Tutorial reproduction demonstrates execution fidelity, not universal scientific validity. [PDF pp. 8, 10]
+- Agents require ongoing maintenance and introduce security, IP, attribution, privacy, and governance concerns. [PDF p. 8]
+- Open-ended conclusions and hypotheses still require human judgment and experimental validation. [PDF pp. 7–8, 15]
+- PDF pages 16–18 required OCR and were not text-extractable.
+
+Full report: `outputs/report_write/31224843f309498db1c287656548e6fb/Paper2Agent_Architecture_Evaluation_Reliability_and_Lessons.md`

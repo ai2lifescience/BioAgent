@@ -1,0 +1,1182 @@
+{
+  "case": "31_pipeline_usage_discovery",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "List the available pipelines and explain which one fits a FASTA annotation task. Show required inputs, outputs, limitations, and example data. Do not execute a pipeline.",
+  "session_id": "sol-20260926-31_pipeline_usage_discovery",
+  "run_id": "cbfc6aa7c136401fbddce34251895ad2",
+  "uploads": [],
+  "started_at": "2026-09-26T07:46:57.281057+00:00",
+  "elapsed_seconds": 20.16,
+  "initial": {
+    "run_id": "cbfc6aa7c136401fbddce34251895ad2",
+    "session_id": "sol-20260926-31_pipeline_usage_discovery",
+    "status": "running",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 12,
+    "created_at": "2026-09-26T07:46:37.126112+00:00",
+    "updated_at": "2026-09-26T07:46:37.131552+00:00",
+    "error": null
+  },
+  "status": {
+    "run_id": "cbfc6aa7c136401fbddce34251895ad2",
+    "session_id": "sol-20260926-31_pipeline_usage_discovery",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 12,
+    "created_at": "2026-09-26T07:46:37.126112+00:00",
+    "updated_at": "2026-09-26T07:46:54.815186+00:00",
+    "error": null,
+    "result": {
+      "answer": "**Available Pipelines**\n- Public: 13 workflows covering bacterial annotation, AMR/virulence detection, bacterial/viral variants, metagenomics, viral typing, and RNA structure prediction.\n- Internal: 5 educational runtime templates for shell, WDL, Nextflow, and Snakemake.\n\n**Best FASTA Annotation Fit**\n- `bacterial_genome_annotation` — intended for assembled bacterial contigs in FASTA format.\n- Required input: `genome` (`.fasta`, `.fa`, or `.fna`).\n- Annotator: Prokka by default; Bakta is selectable.\n- Optional metadata: genus, species, strain, locus tag, translation table, Gram status, and related settings.\n- Outputs: GFF, GenBank, proteins, genes, contigs, feature tables, reports, metrics, plots, logs, and archive bundle.\n- Limitation: requires assembled bacterial contigs—not raw reads. Quality depends on annotator and database versions.\n\n**Other Annotation Option**\n- `bacterial_functional_annotation` accepts bacterial FASTA or FASTQ and assigns gene functions/orthology terms.\n- Outputs: annotation terms, gene annotations, QC, and status.\n- Limitation: does not infer taxonomy, abundance, or biological conclusions.\n\n**Example Data**\n- Staged FASTA: `uploads/examples/bacterial_genome_annotation-dbffbb8c/example_contigs.fasta`\n- No pipeline was planned or executed.",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-31_pipeline_usage_discovery",
+      "max_turns": 12,
+      "messages": [
+        {
+          "role": "user",
+          "content": "List the available pipelines and explain which one fits a FASTA annotation task. Show required inputs, outputs, limitations, and example data. Do not execute a pipeline."
+        },
+        {
+          "role": "assistant",
+          "content": "**Available Pipelines**\n- Public: 13 workflows covering bacterial annotation, AMR/virulence detection, bacterial/viral variants, metagenomics, viral typing, and RNA structure prediction.\n- Internal: 5 educational runtime templates for shell, WDL, Nextflow, and Snakemake.\n\n**Best FASTA Annotation Fit**\n- `bacterial_genome_annotation` — intended for assembled bacterial contigs in FASTA format.\n- Required input: `genome` (`.fasta`, `.fa`, or `.fna`).\n- Annotator: Prokka by default; Bakta is selectable.\n- Optional metadata: genus, species, strain, locus tag, translation table, Gram status, and related settings.\n- Outputs: GFF, GenBank, proteins, genes, contigs, feature tables, reports, metrics, plots, logs, and archive bundle.\n- Limitation: requires assembled bacterial contigs—not raw reads. Quality depends on annotator and database versions.\n\n**Other Annotation Option**\n- `bacterial_functional_annotation` accepts bacterial FASTA or FASTQ and assigns gene functions/orthology terms.\n- Outputs: annotation terms, gene annotations, QC, and status.\n- Limitation: does not infer taxonomy, abundance, or biological conclusions.\n\n**Example Data**\n- Staged FASTA: `uploads/examples/bacterial_genome_annotation-dbffbb8c/example_contigs.fasta`\n- No pipeline was planned or executed."
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [
+          "pipeline_shell"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [
+          "uploads/examples/bacterial_genome_annotation-dbffbb8c/example_contigs.fasta"
+        ],
+        "outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok",
+            "pipeline_name": "bacterial_genome_annotation"
+          }
+        ],
+        "tool_outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok",
+            "pipeline_name": "bacterial_genome_annotation"
+          }
+        ],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T07:46:40.080456+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "run_started",
+          "data": {
+            "request": "List the available pipelines and explain which one fits a FASTA annotation task. Show required inputs, outputs, limitations, and example data. Do not execute a pipeline.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:40.096288+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:40.100875+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_f905a457a3ce4a45b3a6ad3e",
+            "parent_id": "span_5a19771228624b48950ece0c",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T07:46:40.100533+00:00",
+            "ended_at": "2026-09-26T07:46:40.100588+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:40.101884+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_aca224ae438547a38d810de6",
+            "parent_id": "span_4e835dc412994708b0fb9503",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:46:40.101516+00:00",
+            "ended_at": "2026-09-26T07:46:40.101592+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:40.102279+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_75bc369d666a4310bcb6f180",
+            "parent_id": "span_4e835dc412994708b0fb9503",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:46:40.101957+00:00",
+            "ended_at": "2026-09-26T07:46:40.102007+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:40.105442+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_5f34f5a15e62476bba333ac2",
+            "parent_id": "span_4e835dc412994708b0fb9503",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:46:40.102607+00:00",
+            "ended_at": "2026-09-26T07:46:40.105147+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:40.109038+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_d2aa3aed60a84289a0f7ae7b",
+            "parent_id": "span_4e835dc412994708b0fb9503",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:46:40.105487+00:00",
+            "ended_at": "2026-09-26T07:46:40.108743+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:40.110395+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_4e835dc412994708b0fb9503",
+            "parent_id": "span_5a19771228624b48950ece0c",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:46:40.100949+00:00",
+            "ended_at": "2026-09-26T07:46:40.110007+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:40.111098+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:40.151532+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:46.116633+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_d2c597715a904e4eb651bcf3",
+            "parent_id": "span_e56f13c9b12b49f7972c16ea",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:46:40.155056+00:00",
+            "ended_at": "2026-09-26T07:46:46.116179+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:46.128338+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11364,
+            "output_tokens": 56
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:46.132112+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:46.351470+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline catalog",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:46.352612+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:46.353237+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_0d06f03eae9349e9ab88c273",
+            "parent_id": "span_e56f13c9b12b49f7972c16ea",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T07:46:46.129815+00:00",
+            "ended_at": "2026-09-26T07:46:46.352724+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:46.354168+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_e56f13c9b12b49f7972c16ea",
+            "parent_id": "span_3b7e982b4830421a822e700b",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:46:40.110900+00:00",
+            "ended_at": "2026-09-26T07:46:46.353808+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:46.365755+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_1a96e4e235a3413aaa2274ac",
+            "parent_id": "span_f187824be64e4246b201ded5",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:46:46.365193+00:00",
+            "ended_at": "2026-09-26T07:46:46.365298+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:46.369946+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_4ab0b1d0ab3040e98a8d110c",
+            "parent_id": "span_f187824be64e4246b201ded5",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:46:46.366212+00:00",
+            "ended_at": "2026-09-26T07:46:46.369451+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:46.373584+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_27a79810f8d54391bf3c96b6",
+            "parent_id": "span_f187824be64e4246b201ded5",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:46:46.369999+00:00",
+            "ended_at": "2026-09-26T07:46:46.373197+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:46.374019+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_f187824be64e4246b201ded5",
+            "parent_id": "span_3b7e982b4830421a822e700b",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:46:46.364588+00:00",
+            "ended_at": "2026-09-26T07:46:46.373673+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:46.375635+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:48.973336+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_36f7d71c4f424cdd88b4be4c",
+            "parent_id": "span_34a907e11c7d4e859b01cca0",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:46:46.376283+00:00",
+            "ended_at": "2026-09-26T07:46:48.972425+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:48.981329+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 18988,
+            "output_tokens": 68
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:48.985307+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:49.008071+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline example --pipeline bacterial_genome_annotation",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:49.012624+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:49.013588+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_971c2dd77ed14b2386d00994",
+            "parent_id": "span_34a907e11c7d4e859b01cca0",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T07:46:48.982527+00:00",
+            "ended_at": "2026-09-26T07:46:49.012759+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:49.015823+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_34a907e11c7d4e859b01cca0",
+            "parent_id": "span_3b7e982b4830421a822e700b",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:46:46.374559+00:00",
+            "ended_at": "2026-09-26T07:46:49.014663+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:49.032829+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_f1fd5874b429475ba51f9255",
+            "parent_id": "span_30c82b7bafa9495db3fe9fc0",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T07:46:49.032228+00:00",
+            "ended_at": "2026-09-26T07:46:49.032339+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:49.038113+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_6a357c9be4144ab38c27c1b0",
+            "parent_id": "span_30c82b7bafa9495db3fe9fc0",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:46:49.033221+00:00",
+            "ended_at": "2026-09-26T07:46:49.037288+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:49.042340+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_b605d2b275cf46b9b9aeda7f",
+            "parent_id": "span_30c82b7bafa9495db3fe9fc0",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T07:46:49.038278+00:00",
+            "ended_at": "2026-09-26T07:46:49.042015+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:49.042677+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_30c82b7bafa9495db3fe9fc0",
+            "parent_id": "span_3b7e982b4830421a822e700b",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T07:46:49.031118+00:00",
+            "ended_at": "2026-09-26T07:46:49.042383+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:49.044180+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:54.748049+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_92f4d3842e31449694184899",
+            "parent_id": "span_032ae67bef9e4a66b65fe833",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T07:46:49.045394+00:00",
+            "ended_at": "2026-09-26T07:46:54.747081+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:54.757836+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 19150,
+            "output_tokens": 299
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:54.760896+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:54.764872+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_032ae67bef9e4a66b65fe833",
+            "parent_id": "span_3b7e982b4830421a822e700b",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T07:46:49.043132+00:00",
+            "ended_at": "2026-09-26T07:46:54.764222+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:54.771474+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:54.771960+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_81d78d15bcde4f1fb7f8cc2d",
+            "parent_id": "span_3b7e982b4830421a822e700b",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T07:46:54.771178+00:00",
+            "ended_at": "2026-09-26T07:46:54.771505+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:54.775862+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_3b7e982b4830421a822e700b",
+            "parent_id": "span_5a19771228624b48950ece0c",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T07:46:40.110825+00:00",
+            "ended_at": "2026-09-26T07:46:54.774925+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:54.776788+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb",
+            "span_id": "span_5a19771228624b48950ece0c",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T07:46:40.096472+00:00",
+            "ended_at": "2026-09-26T07:46:54.776022+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:54.777193+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_68dc13982f214d34a253f8b79a980bcb"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T07:46:54.792280+00:00",
+          "session_id": "sol-20260926-31_pipeline_usage_discovery",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 2
+          }
+        }
+      ],
+      "run": {
+        "run_id": "f3c72d7d-a249-4f42-80e5-849e69d71f54",
+        "session_dir": ".",
+        "runtime_dir": "runs/f3c72d7d-a249-4f42-80e5-849e69d71f54",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "uploads/examples/bacterial_genome_annotation-dbffbb8c/example_contigs.fasta",
+          "workspace_path": "uploads/examples/bacterial_genome_annotation-dbffbb8c/example_contigs.fasta",
+          "name": "example_contigs.fasta",
+          "size": 660,
+          "modified_at": 1790408809006533533,
+          "kind": "upload",
+          "content_type": "text/plain; charset=utf-8"
+        }
+      ],
+      "approval_decision": null,
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "cbfc6aa7c136401fbddce34251895ad2",
+        "session_id": "sol-20260926-31_pipeline_usage_discovery"
+      },
+      "created_at": "2026-09-26T07:46:37.126525+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "cbfc6aa7c136401fbddce34251895ad2"
+      },
+      "created_at": "2026-09-26T07:46:39.220427+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T07:46:40.097600+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T07:46:40.111314+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:44.113682+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:44.117158+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:44.119965+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll inspect the pipeline catalog, then stage only relevant example "
+      },
+      "created_at": "2026-09-26T07:46:46.098133+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:46.101321+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:46.105632+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:46.107678+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:46.111716+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:46.113927+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:46.118787+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_Y6uj4Ir5OnA0FHZzhm33gDTl",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:46.120933+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_Y6uj4Ir5OnA0FHZzhm33gDTl",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:46.359856+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:48.217275+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:48.220169+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:48.222733+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "data.The best match is assembled bacterial FASTA annotation; I’ll stage its bundled example without running "
+      },
+      "created_at": "2026-09-26T07:46:48.954047+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:48.957357+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:48.960583+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:48.963610+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:48.966341+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:48.970446+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:48.976030+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_LGFYcWazg8IyCHocHBkKRdcr",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:48.978987+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_LGFYcWazg8IyCHocHBkKRdcr",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:49.026722+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:51.112951+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:51.116321+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:51.119334+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "it.**Available Pipelines**\n- Public: 13 workflows covering bacterial annotation, AMR/virulence detection, bacterial/viral variants, metagenomics, viral typing, and RNA structure prediction.\n- Internal: 5 educational runtime templates for shell, WDL, Nextflow, "
+      },
+      "created_at": "2026-09-26T07:46:51.876786+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "and Snakemake.\n\n**Best FASTA Annotation Fit**\n- `bacterial_genome_annotation` — intended for assembled bacterial contigs in FASTA format.\n- Required input: `genome` (`.fasta`, `.fa`, or `.fna`).\n- Annotator: Prokka by default; Bakta is selectable.\n- Optional "
+      },
+      "created_at": "2026-09-26T07:46:52.646772+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "metadata: genus, species, strain, locus tag, translation table, Gram status, and related settings.\n- Outputs: GFF, GenBank, proteins, genes, contigs, feature tables, reports, metrics, plots, logs, and archive bundle.\n- Limitation: requires assembled bacterial "
+      },
+      "created_at": "2026-09-26T07:46:53.396241+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "contigs—not raw reads. Quality depends on annotator and database versions.\n\n**Other Annotation Option**\n- `bacterial_functional_annotation` accepts bacterial FASTA or FASTQ and assigns gene functions/orthology terms.\n- Outputs: annotation terms, gene annotations, "
+      },
+      "created_at": "2026-09-26T07:46:53.995997+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "QC, and status.\n- Limitation: does not infer taxonomy, abundance, or biological conclusions.\n\n**Example Data**\n- Staged FASTA: `uploads/examples/bacterial_genome_annotation-dbffbb8c/example_contigs.fasta`\n- No pipeline was planned or "
+      },
+      "created_at": "2026-09-26T07:46:54.731932+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:54.737299+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:54.740879+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T07:46:54.744326+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T07:46:54.755086+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent finished: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T07:46:54.761263+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "executed."
+      },
+      "created_at": "2026-09-26T07:46:54.812683+00:00"
+    },
+    {
+      "sequence": 42,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T07:46:54.815368+00:00"
+    }
+  ],
+  "approval_decisions": [],
+  "ui": {
+    "png": "31_pipeline_usage_discovery.png",
+    "dom": "31_pipeline_usage_discovery.txt",
+    "returncode": 0
+  }
+}

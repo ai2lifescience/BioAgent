@@ -1,0 +1,69 @@
+{
+  "job_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+  "plan_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+  "status": "timed_out",
+  "created_at": "2026-09-26T11:05:28.996783+00:00",
+  "plan": {
+    "pipeline_name": "metagenomic_de_novo_assembly",
+    "engine": "wdl",
+    "inputs": {
+      "read1": [
+        {
+          "path": "uploads/examples/metagenomic_de_novo_assembly-18354e7a/assembly_demo.fastq.gz",
+          "sha256": "4d3438f07a5ffc48b96e0a45e3c674cdf5ef6a72740450e9cc73f3bb9244405d",
+          "size": 9480292
+        }
+      ]
+    },
+    "parameters": {},
+    "cores": 1,
+    "timeout_seconds": 90,
+    "max_memory_mb": 8192,
+    "dry_run": false,
+    "definition_sha256": "7d60b1d0f95fef7c3b7d49ac90c75ffe41088ef9b869bd93d2f2f65adf39d3a6",
+    "outputs": {
+      "contigs": {
+        "name": "contigs",
+        "label": "Renamed assembled contigs",
+        "config_key": "",
+        "default": "data/output/final.contigs.renamed.fa",
+        "kind": "sequence",
+        "required": true,
+        "description": "Renamed assembled contigs produced by this workflow.",
+        "nextflow_output": "",
+        "wdl_output": "AssemblyId.final_contigs_renamed"
+      },
+      "contig_report": {
+        "name": "contig_report",
+        "label": "Contig identification report",
+        "config_key": "",
+        "default": "data/output/contig_report.tsv",
+        "kind": "table",
+        "required": true,
+        "description": "Contig identification report produced by this workflow.",
+        "nextflow_output": "",
+        "wdl_output": "AssemblyId.contig_report_tsv"
+      },
+      "species_report": {
+        "name": "species_report",
+        "label": "Species identification report",
+        "config_key": "",
+        "default": "data/output/species_report.tsv",
+        "kind": "table",
+        "required": true,
+        "description": "Species identification report produced by this workflow.",
+        "nextflow_output": "",
+        "wdl_output": "AssemblyId.species_report_tsv"
+      }
+    },
+    "wdl_engine": "cromwell",
+    "cromwell_url": "http://192.168.164.39:39000"
+  },
+  "pid": 2668932,
+  "process_identity": "88053585",
+  "queued_at": "2026-09-26T11:05:32.632871+00:00",
+  "started_at": "2026-09-26T11:05:32.693798+00:00",
+  "updated_at": "2026-09-26T11:07:02.699667+00:00",
+  "finished_at": "2026-09-26T11:07:02.698419+00:00",
+  "error": "Pipeline exceeded its timeout."
+}

@@ -1,0 +1,28 @@
+PROMPT:
+List the available pipelines and explain which one fits a FASTA annotation task. Show required inputs, outputs, limitations, and example data. Do not execute a pipeline.
+
+MODEL: gpt-5.6-sol
+STATUS: succeeded
+TOOLS: pipeline_shell
+
+ANSWER:
+**Available Pipelines**
+- Public: 13 workflows covering bacterial annotation, AMR/virulence detection, bacterial/viral variants, metagenomics, viral typing, and RNA structure prediction.
+- Internal: 5 educational runtime templates for shell, WDL, Nextflow, and Snakemake.
+
+**Best FASTA Annotation Fit**
+- `bacterial_genome_annotation` — intended for assembled bacterial contigs in FASTA format.
+- Required input: `genome` (`.fasta`, `.fa`, or `.fna`).
+- Annotator: Prokka by default; Bakta is selectable.
+- Optional metadata: genus, species, strain, locus tag, translation table, Gram status, and related settings.
+- Outputs: GFF, GenBank, proteins, genes, contigs, feature tables, reports, metrics, plots, logs, and archive bundle.
+- Limitation: requires assembled bacterial contigs—not raw reads. Quality depends on annotator and database versions.
+
+**Other Annotation Option**
+- `bacterial_functional_annotation` accepts bacterial FASTA or FASTQ and assigns gene functions/orthology terms.
+- Outputs: annotation terms, gene annotations, QC, and status.
+- Limitation: does not infer taxonomy, abundance, or biological conclusions.
+
+**Example Data**
+- Staged FASTA: `uploads/examples/bacterial_genome_annotation-dbffbb8c/example_contigs.fasta`
+- No pipeline was planned or executed.

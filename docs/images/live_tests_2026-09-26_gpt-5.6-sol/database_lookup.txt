@@ -1,0 +1,30 @@
+PROMPT:
+Look up UniProt P0A7V8 and summarize its annotation. Then query InterPro, KEGG, and QuickGO where supported; report identifiers and source links, and distinguish unavailable services.
+
+MODEL: gpt-5.6-sol
+STATUS: succeeded
+TOOLS: database_lookup
+
+ANSWER:
+**UniProt**
+- **P0A7V8 / RS4_ECOLI** — reviewed small ribosomal subunit protein **uS4**, encoded by **rpsD**, from *Escherichia coli* K-12.
+- Functionally annotated as a bacterial ribosomal/RNA-binding protein involved in translation.
+- Source: https://www.uniprot.org/uniprotkb/P0A7V8/entry
+
+**InterPro**
+- `IPR001912` — uS4 N-terminal domain
+- `IPR002942` — RNA-binding S4 domain
+- `IPR005709` — bacterial uS4 family
+- `IPR018079` — uS4 conserved site
+- `IPR022801` — uS4 family
+- `IPR036986` — RNA-binding S4-domain superfamily
+- Links: `https://www.ebi.ac.uk/interpro/entry/InterPro/<ID>/`
+
+**KEGG**
+- Direct accession lookup was unavailable: KEGG rejected `P0A7V8` because its endpoint requires a KEGG identifier rather than this UniProt accession.
+- Source: https://www.kegg.jp/
+
+**QuickGO**
+- Service was reachable, but the supported operation treated `P0A7V8` as an ontology-term search and returned no record; protein annotation lookup was therefore unavailable.
+- Relevant GO identifiers reported through InterPro: `GO:0003723`, `GO:0003735`, `GO:0006412`, `GO:0015935`, `GO:0019843`.
+- GO links: `https://www.ebi.ac.uk/QuickGO/term/<GO-ID>`

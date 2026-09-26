@@ -1,0 +1,3922 @@
+{
+  "case": "09_template_bio",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "Run template_bio with its bundled example data. Validate the plan, request approval, execute with bounded resources, collect verified metrics and reports, and summarize the result bundle.",
+  "session_id": "sol-20260926-09_template_bio",
+  "run_id": "06d05e7fadb24b719d01ee426ed2b8d8",
+  "uploads": [],
+  "started_at": "2026-09-26T06:43:35.050724+00:00",
+  "elapsed_seconds": 35.38,
+  "initial": {
+    "run_id": "06d05e7fadb24b719d01ee426ed2b8d8",
+    "session_id": "sol-20260926-09_template_bio",
+    "status": "running",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 18,
+    "created_at": "2026-09-26T06:42:59.669126+00:00",
+    "updated_at": "2026-09-26T06:42:59.675395+00:00",
+    "error": null
+  },
+  "status": {
+    "run_id": "06d05e7fadb24b719d01ee426ed2b8d8",
+    "session_id": "sol-20260926-09_template_bio",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 18,
+    "created_at": "2026-09-26T06:42:59.669126+00:00",
+    "updated_at": "2026-09-26T06:43:32.378075+00:00",
+    "error": null,
+    "result": {
+      "answer": "**Result**\n- `template_bio` succeeded in ~1.8 seconds with 1 core, 8 GB RAM, and 120-second limit.\n- QC: 5 reads input; 3 passed (60%); 72/104 bases retained (69.23%).\n- Reference: 24 bp, 100% covered, mean depth 3×.\n- One demonstration variant: `T>A` at position 8, depth 3, allele fraction 66.67%.\n- Reports: `runs/db88c4d8d687484f970a7513d1be20da/outputs/report.md:1` and `runs/db88c4d8d687484f970a7513d1be20da/outputs/report.html:1`\n- Verified bundle: `runs/db88c4d8d687484f970a7513d1be20da/results.zip`\n\nThis is an educational positional-comparison workflow, not validated alignment or variant calling.",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-09_template_bio",
+      "max_turns": 18,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Run template_bio with its bundled example data. Validate the plan, request approval, execute with bounded resources, collect verified metrics and reports, and summarize the result bundle."
+        },
+        {
+          "role": "assistant",
+          "content": "**Result**\n- `template_bio` succeeded in ~1.8 seconds with 1 core, 8 GB RAM, and 120-second limit.\n- QC: 5 reads input; 3 passed (60%); 72/104 bases retained (69.23%).\n- Reference: 24 bp, 100% covered, mean depth 3×.\n- One demonstration variant: `T>A` at position 8, depth 3, allele fraction 66.67%.\n- Reports: `runs/db88c4d8d687484f970a7513d1be20da/outputs/report.md:1` and `runs/db88c4d8d687484f970a7513d1be20da/outputs/report.html:1`\n- Verified bundle: `runs/db88c4d8d687484f970a7513d1be20da/results.zip`\n\nThis is an educational positional-comparison workflow, not validated alignment or variant calling."
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [
+          "pipeline_shell"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [
+          "uploads/examples/template_bio-cd774b2b/example_reads.fastq",
+          "uploads/examples/template_bio-cd774b2b/example_reference.fasta",
+          "uploads/examples/template_bio-cd774b2b/example_samples.tsv",
+          "report.md",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/report.md",
+          "metrics.json",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/metrics.json",
+          "report.html",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/report.html",
+          "filtered_reads.fastq",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/filtered_reads.fastq",
+          "read_qc.tsv",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/read_qc.tsv",
+          "sample_summary.tsv",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/sample_summary.tsv",
+          "coverage.tsv",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/coverage.tsv",
+          "alignments.sam",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/alignments.sam",
+          "consensus.fasta",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/consensus.fasta",
+          "variants.vcf",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/variants.vcf",
+          "variant_summary.tsv",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/variant_summary.tsv",
+          "qc_overview.png",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/qc_overview.png",
+          "coverage.png",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/coverage.png",
+          "variant_allele_fraction.png",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/variant_allele_fraction.png",
+          "phylogenetic_tree.nwk",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/phylogenetic_tree.nwk",
+          "phylogenetic_tree.png",
+          "runs/db88c4d8d687484f970a7513d1be20da/outputs/phylogenetic_tree.png",
+          "runs/db88c4d8d687484f970a7513d1be20da/results.zip"
+        ],
+        "outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok",
+            "pipeline_name": "template_bio"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "error",
+            "error": "Shell pipelines do not declare a dry-run command; use plan to validate inputs."
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "db88c4d8d687484f970a7513d1be20da",
+            "plan_id": "db88c4d8d687484f970a7513d1be20da",
+            "status": "planned",
+            "command": "agent-pipeline run --plan-id db88c4d8d687484f970a7513d1be20da"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "db88c4d8d687484f970a7513d1be20da",
+            "plan_id": "db88c4d8d687484f970a7513d1be20da",
+            "status": "queued"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "db88c4d8d687484f970a7513d1be20da",
+            "plan_id": "db88c4d8d687484f970a7513d1be20da",
+            "logs": {
+              "stdout": "runs/db88c4d8d687484f970a7513d1be20da/stdout.log",
+              "stderr": "runs/db88c4d8d687484f970a7513d1be20da/stderr.log"
+            },
+            "status": "succeeded",
+            "pipeline_name": "template_bio"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "db88c4d8d687484f970a7513d1be20da",
+            "bundle_path": "runs/db88c4d8d687484f970a7513d1be20da/results.zip",
+            "metrics": {
+              "aligned_read_count": 3,
+              "base_retention_percent": 69.23,
+              "bases_at_3x_percent": 100.0,
+              "covered_reference_bases": 24,
+              "failed_read_count": 2,
+              "filter_outcomes": {
+                "low_quality": 1,
+                "pass": 3,
+                "short": 1
+              },
+              "input_base_count": 104,
+              "input_read_count": 5,
+              "maximum_retained_depth": 3,
+              "mean_input_gc_percent": 50.0,
+              "mean_input_quality": 32.0,
+              "mean_input_read_length": 20.8,
+              "mean_retained_depth": 3.0,
+              "mean_retained_read_length": 24.0,
+              "metadata_field_count": 7,
+              "mode": "educational_positional_comparison",
+              "parameters": {
+                "emit_phylogenetic_tree": true,
+                "min_alt_depth": 2,
+                "min_alt_fraction": 0.6,
+                "min_base_quality": 20,
+                "min_length": 12,
+                "min_mean_quality": 20.0,
+                "plot_dpi": 140,
+                "sample_id": "sample_demo"
+              },
+              "passed_read_count": 3,
+              "phylogenetic_tree_emitted": true,
+              "pipeline": "template_bio",
+              "q20_base_percent": 76.92,
+              "q30_base_percent": 76.92,
+              "read_retention_percent": 60.0,
+              "reference_coverage_percent": 100.0,
+              "reference_id": "demo_reference",
+              "reference_length": 24,
+              "retained_base_count": 72,
+              "sample_id": "sample_demo",
+              "status": "ok",
+              "transition_count": 0,
+              "transversion_count": 1,
+              "variant_count": 1
+            },
+            "tables": [
+              {
+                "name": "read_qc.tsv",
+                "columns": [
+                  "read_id",
+                  "length",
+                  "gc_percent",
+                  "mean_quality",
+                  "q20_bases",
+                  "q30_bases",
+                  "status"
+                ],
+                "rows": [
+                  {
+                    "read_id": "read001",
+                    "length": "24",
+                    "gc_percent": "50.00",
+                    "mean_quality": "40.00",
+                    "q20_bases": "24",
+                    "q30_bases": "24",
+                    "status": "pass"
+                  },
+                  {
+                    "read_id": "read002",
+                    "length": "24",
+                    "gc_percent": "50.00",
+                    "mean_quality": "40.00",
+                    "q20_bases": "24",
+                    "q30_bases": "24",
+                    "status": "pass"
+                  },
+                  {
+                    "read_id": "read003",
+                    "length": "24",
+                    "gc_percent": "50.00",
+                    "mean_quality": "40.00",
+                    "q20_bases": "24",
+                    "q30_bases": "24",
+                    "status": "pass"
+                  },
+                  {
+                    "read_id": "read004",
+                    "length": "24",
+                    "gc_percent": "50.00",
+                    "mean_quality": "0.00",
+                    "q20_bases": "0",
+                    "q30_bases": "0",
+                    "status": "low_quality"
+                  },
+                  {
+                    "read_id": "read005",
+                    "length": "8",
+                    "gc_percent": "50.00",
+                    "mean_quality": "40.00",
+                    "q20_bases": "8",
+                    "q30_bases": "8",
+                    "status": "short"
+                  }
+                ],
+                "truncated": false
+              },
+              {
+                "name": "sample_summary.tsv",
+                "columns": [
+                  "sample_id",
+                  "organism",
+                  "condition",
+                  "replicate",
+                  "library_layout",
+                  "platform",
+                  "collection_date",
+                  "input_read_count",
+                  "passed_read_count",
+                  "read_retention_percent",
+                  "mean_input_read_length",
+                  "mean_input_quality",
+                  "q30_base_percent",
+                  "mean_retained_depth",
+                  "reference_coverage_percent",
+                  "variant_count"
+                ],
+                "rows": [
+                  {
+                    "sample_id": "sample_demo",
+                    "organism": "synthetic construct",
+                    "condition": "demo",
+                    "replicate": "1",
+                    "library_layout": "single-end",
+                    "platform": "Illumina",
+                    "collection_date": "2026-01-15",
+                    "input_read_count": "5",
+                    "passed_read_count": "3",
+                    "read_retention_percent": "60.0",
+                    "mean_input_read_length": "20.8",
+                    "mean_input_quality": "32.0",
+                    "q30_base_percent": "76.92",
+                    "mean_retained_depth": "3.0",
+                    "reference_coverage_percent": "100.0",
+                    "variant_count": "1"
+                  }
+                ],
+                "truncated": false
+              },
+              {
+                "name": "coverage.tsv",
+                "columns": [
+                  "chrom",
+                  "position",
+                  "reference",
+                  "depth",
+                  "A",
+                  "C",
+                  "G",
+                  "T",
+                  "consensus",
+                  "variant"
+                ],
+                "rows": [
+                  {
+                    "chrom": "demo_reference",
+                    "position": "1",
+                    "reference": "A",
+                    "depth": "3",
+                    "A": "3",
+                    "C": "0",
+                    "G": "0",
+                    "T": "0",
+                    "consensus": "A",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "2",
+                    "reference": "C",
+                    "depth": "3",
+                    "A": "0",
+                    "C": "3",
+                    "G": "0",
+                    "T": "0",
+                    "consensus": "C",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "3",
+                    "reference": "G",
+                    "depth": "3",
+                    "A": "0",
+                    "C": "0",
+                    "G": "3",
+                    "T": "0",
+                    "consensus": "G",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "4",
+                    "reference": "T",
+                    "depth": "3",
+                    "A": "0",
+                    "C": "0",
+                    "G": "0",
+                    "T": "3",
+                    "consensus": "T",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "5",
+                    "reference": "A",
+                    "depth": "3",
+                    "A": "3",
+                    "C": "0",
+                    "G": "0",
+                    "T": "0",
+                    "consensus": "A",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "6",
+                    "reference": "C",
+                    "depth": "3",
+                    "A": "0",
+                    "C": "3",
+                    "G": "0",
+                    "T": "0",
+                    "consensus": "C",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "7",
+                    "reference": "G",
+                    "depth": "3",
+                    "A": "0",
+                    "C": "0",
+                    "G": "3",
+                    "T": "0",
+                    "consensus": "G",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "8",
+                    "reference": "T",
+                    "depth": "3",
+                    "A": "2",
+                    "C": "0",
+                    "G": "0",
+                    "T": "1",
+                    "consensus": "A",
+                    "variant": "yes"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "9",
+                    "reference": "A",
+                    "depth": "3",
+                    "A": "3",
+                    "C": "0",
+                    "G": "0",
+                    "T": "0",
+                    "consensus": "A",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "10",
+                    "reference": "C",
+                    "depth": "3",
+                    "A": "0",
+                    "C": "3",
+                    "G": "0",
+                    "T": "0",
+                    "consensus": "C",
+                    "variant": "no"
+                  }
+                ],
+                "truncated": true
+              },
+              {
+                "name": "variant_summary.tsv",
+                "columns": [
+                  "chrom",
+                  "position",
+                  "ref",
+                  "alt",
+                  "depth",
+                  "ref_depth",
+                  "alt_depth",
+                  "alt_fraction",
+                  "change_type",
+                  "filter"
+                ],
+                "rows": [
+                  {
+                    "chrom": "demo_reference",
+                    "position": "8",
+                    "ref": "T",
+                    "alt": "A",
+                    "depth": "3",
+                    "ref_depth": "1",
+                    "alt_depth": "2",
+                    "alt_fraction": "0.6667",
+                    "change_type": "transversion",
+                    "filter": "PASS"
+                  }
+                ],
+                "truncated": false
+              }
+            ],
+            "status": "succeeded",
+            "pipeline_name": "template_bio"
+          }
+        ],
+        "tool_outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok",
+            "pipeline_name": "template_bio"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "error",
+            "error": "Shell pipelines do not declare a dry-run command; use plan to validate inputs."
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "planned",
+            "job_id": "db88c4d8d687484f970a7513d1be20da",
+            "plan_id": "db88c4d8d687484f970a7513d1be20da",
+            "command": "agent-pipeline run --plan-id db88c4d8d687484f970a7513d1be20da"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "queued",
+            "job_id": "db88c4d8d687484f970a7513d1be20da",
+            "plan_id": "db88c4d8d687484f970a7513d1be20da"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "succeeded",
+            "job_id": "db88c4d8d687484f970a7513d1be20da",
+            "plan_id": "db88c4d8d687484f970a7513d1be20da",
+            "logs": {
+              "stdout": "runs/db88c4d8d687484f970a7513d1be20da/stdout.log",
+              "stderr": "runs/db88c4d8d687484f970a7513d1be20da/stderr.log"
+            },
+            "pipeline_name": "template_bio"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "succeeded",
+            "job_id": "db88c4d8d687484f970a7513d1be20da",
+            "bundle_path": "runs/db88c4d8d687484f970a7513d1be20da/results.zip",
+            "metrics": {
+              "aligned_read_count": 3,
+              "base_retention_percent": 69.23,
+              "bases_at_3x_percent": 100.0,
+              "covered_reference_bases": 24,
+              "failed_read_count": 2,
+              "filter_outcomes": {
+                "low_quality": 1,
+                "pass": 3,
+                "short": 1
+              },
+              "input_base_count": 104,
+              "input_read_count": 5,
+              "maximum_retained_depth": 3,
+              "mean_input_gc_percent": 50.0,
+              "mean_input_quality": 32.0,
+              "mean_input_read_length": 20.8,
+              "mean_retained_depth": 3.0,
+              "mean_retained_read_length": 24.0,
+              "metadata_field_count": 7,
+              "mode": "educational_positional_comparison",
+              "parameters": {
+                "emit_phylogenetic_tree": true,
+                "min_alt_depth": 2,
+                "min_alt_fraction": 0.6,
+                "min_base_quality": 20,
+                "min_length": 12,
+                "min_mean_quality": 20.0,
+                "plot_dpi": 140,
+                "sample_id": "sample_demo"
+              },
+              "passed_read_count": 3,
+              "phylogenetic_tree_emitted": true,
+              "pipeline": "template_bio",
+              "q20_base_percent": 76.92,
+              "q30_base_percent": 76.92,
+              "read_retention_percent": 60.0,
+              "reference_coverage_percent": 100.0,
+              "reference_id": "demo_reference",
+              "reference_length": 24,
+              "retained_base_count": 72,
+              "sample_id": "sample_demo",
+              "status": "ok",
+              "transition_count": 0,
+              "transversion_count": 1,
+              "variant_count": 1
+            },
+            "tables": [
+              {
+                "name": "read_qc.tsv",
+                "columns": [
+                  "read_id",
+                  "length",
+                  "gc_percent",
+                  "mean_quality",
+                  "q20_bases",
+                  "q30_bases",
+                  "status"
+                ],
+                "rows": [
+                  {
+                    "read_id": "read001",
+                    "length": "24",
+                    "gc_percent": "50.00",
+                    "mean_quality": "40.00",
+                    "q20_bases": "24",
+                    "q30_bases": "24",
+                    "status": "pass"
+                  },
+                  {
+                    "read_id": "read002",
+                    "length": "24",
+                    "gc_percent": "50.00",
+                    "mean_quality": "40.00",
+                    "q20_bases": "24",
+                    "q30_bases": "24",
+                    "status": "pass"
+                  },
+                  {
+                    "read_id": "read003",
+                    "length": "24",
+                    "gc_percent": "50.00",
+                    "mean_quality": "40.00",
+                    "q20_bases": "24",
+                    "q30_bases": "24",
+                    "status": "pass"
+                  },
+                  {
+                    "read_id": "read004",
+                    "length": "24",
+                    "gc_percent": "50.00",
+                    "mean_quality": "0.00",
+                    "q20_bases": "0",
+                    "q30_bases": "0",
+                    "status": "low_quality"
+                  },
+                  {
+                    "read_id": "read005",
+                    "length": "8",
+                    "gc_percent": "50.00",
+                    "mean_quality": "40.00",
+                    "q20_bases": "8",
+                    "q30_bases": "8",
+                    "status": "short"
+                  }
+                ],
+                "truncated": false
+              },
+              {
+                "name": "sample_summary.tsv",
+                "columns": [
+                  "sample_id",
+                  "organism",
+                  "condition",
+                  "replicate",
+                  "library_layout",
+                  "platform",
+                  "collection_date",
+                  "input_read_count",
+                  "passed_read_count",
+                  "read_retention_percent",
+                  "mean_input_read_length",
+                  "mean_input_quality",
+                  "q30_base_percent",
+                  "mean_retained_depth",
+                  "reference_coverage_percent",
+                  "variant_count"
+                ],
+                "rows": [
+                  {
+                    "sample_id": "sample_demo",
+                    "organism": "synthetic construct",
+                    "condition": "demo",
+                    "replicate": "1",
+                    "library_layout": "single-end",
+                    "platform": "Illumina",
+                    "collection_date": "2026-01-15",
+                    "input_read_count": "5",
+                    "passed_read_count": "3",
+                    "read_retention_percent": "60.0",
+                    "mean_input_read_length": "20.8",
+                    "mean_input_quality": "32.0",
+                    "q30_base_percent": "76.92",
+                    "mean_retained_depth": "3.0",
+                    "reference_coverage_percent": "100.0",
+                    "variant_count": "1"
+                  }
+                ],
+                "truncated": false
+              },
+              {
+                "name": "coverage.tsv",
+                "columns": [
+                  "chrom",
+                  "position",
+                  "reference",
+                  "depth",
+                  "A",
+                  "C",
+                  "G",
+                  "T",
+                  "consensus",
+                  "variant"
+                ],
+                "rows": [
+                  {
+                    "chrom": "demo_reference",
+                    "position": "1",
+                    "reference": "A",
+                    "depth": "3",
+                    "A": "3",
+                    "C": "0",
+                    "G": "0",
+                    "T": "0",
+                    "consensus": "A",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "2",
+                    "reference": "C",
+                    "depth": "3",
+                    "A": "0",
+                    "C": "3",
+                    "G": "0",
+                    "T": "0",
+                    "consensus": "C",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "3",
+                    "reference": "G",
+                    "depth": "3",
+                    "A": "0",
+                    "C": "0",
+                    "G": "3",
+                    "T": "0",
+                    "consensus": "G",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "4",
+                    "reference": "T",
+                    "depth": "3",
+                    "A": "0",
+                    "C": "0",
+                    "G": "0",
+                    "T": "3",
+                    "consensus": "T",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "5",
+                    "reference": "A",
+                    "depth": "3",
+                    "A": "3",
+                    "C": "0",
+                    "G": "0",
+                    "T": "0",
+                    "consensus": "A",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "6",
+                    "reference": "C",
+                    "depth": "3",
+                    "A": "0",
+                    "C": "3",
+                    "G": "0",
+                    "T": "0",
+                    "consensus": "C",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "7",
+                    "reference": "G",
+                    "depth": "3",
+                    "A": "0",
+                    "C": "0",
+                    "G": "3",
+                    "T": "0",
+                    "consensus": "G",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "8",
+                    "reference": "T",
+                    "depth": "3",
+                    "A": "2",
+                    "C": "0",
+                    "G": "0",
+                    "T": "1",
+                    "consensus": "A",
+                    "variant": "yes"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "9",
+                    "reference": "A",
+                    "depth": "3",
+                    "A": "3",
+                    "C": "0",
+                    "G": "0",
+                    "T": "0",
+                    "consensus": "A",
+                    "variant": "no"
+                  },
+                  {
+                    "chrom": "demo_reference",
+                    "position": "10",
+                    "reference": "C",
+                    "depth": "3",
+                    "A": "0",
+                    "C": "3",
+                    "G": "0",
+                    "T": "0",
+                    "consensus": "C",
+                    "variant": "no"
+                  }
+                ],
+                "truncated": true
+              },
+              {
+                "name": "variant_summary.tsv",
+                "columns": [
+                  "chrom",
+                  "position",
+                  "ref",
+                  "alt",
+                  "depth",
+                  "ref_depth",
+                  "alt_depth",
+                  "alt_fraction",
+                  "change_type",
+                  "filter"
+                ],
+                "rows": [
+                  {
+                    "chrom": "demo_reference",
+                    "position": "8",
+                    "ref": "T",
+                    "alt": "A",
+                    "depth": "3",
+                    "ref_depth": "1",
+                    "alt_depth": "2",
+                    "alt_fraction": "0.6667",
+                    "change_type": "transversion",
+                    "filter": "PASS"
+                  }
+                ],
+                "truncated": false
+              }
+            ],
+            "pipeline_name": "template_bio"
+          }
+        ],
+        "tool_errors": [
+          {
+            "tool": "pipeline_shell",
+            "error": "Shell pipelines do not declare a dry-run command; use plan to validate inputs.",
+            "error_type": null
+          }
+        ]
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T06:43:03.051912+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "run_started",
+          "data": {
+            "request": "Run template_bio with its bundled example data. Validate the plan, request approval, execute with bounded resources, collect verified metrics and reports, and summarize the result bundle.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:03.070092+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:03.074800+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_bcb0ebf8ee4446f28b1ad9c1",
+            "parent_id": "span_8de6983334444ecb86910eb6",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T06:43:03.074464+00:00",
+            "ended_at": "2026-09-26T06:43:03.074517+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:03.075880+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_542ee7affe8e4a5bb8187632",
+            "parent_id": "span_f3a8e490aed347dca6643376",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:43:03.075499+00:00",
+            "ended_at": "2026-09-26T06:43:03.075588+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:03.076605+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_bda40ef0bf4c4dc2aa23d193",
+            "parent_id": "span_f3a8e490aed347dca6643376",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:43:03.076129+00:00",
+            "ended_at": "2026-09-26T06:43:03.076256+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:03.079637+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_db60b5fdf7dc4820a84cb01e",
+            "parent_id": "span_f3a8e490aed347dca6643376",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:03.077047+00:00",
+            "ended_at": "2026-09-26T06:43:03.079185+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:03.082343+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_3949e39887104fce855cfb57",
+            "parent_id": "span_f3a8e490aed347dca6643376",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:03.079871+00:00",
+            "ended_at": "2026-09-26T06:43:03.082067+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:03.084059+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_f3a8e490aed347dca6643376",
+            "parent_id": "span_8de6983334444ecb86910eb6",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:43:03.074884+00:00",
+            "ended_at": "2026-09-26T06:43:03.083522+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:03.084786+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:03.130631+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:06.408742+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_3ecbd9fb54df4a4fa371ccfa",
+            "parent_id": "span_05982a94262343b283ee04ee",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:43:03.133197+00:00",
+            "ended_at": "2026-09-26T06:43:06.408414+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:06.416009+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11356,
+            "output_tokens": 55
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:06.419865+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:06.631586+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline catalog",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:06.632850+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:06.633265+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_0e7bd48bfc484771a4fba9c7",
+            "parent_id": "span_05982a94262343b283ee04ee",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:43:06.417387+00:00",
+            "ended_at": "2026-09-26T06:43:06.632953+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:06.634105+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_05982a94262343b283ee04ee",
+            "parent_id": "span_b40105d29e5a46888326ea34",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:43:03.084587+00:00",
+            "ended_at": "2026-09-26T06:43:06.633743+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:06.645428+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_c0ce88007c6440049ef4c2b7",
+            "parent_id": "span_0cddc8e8a6bc4a2988871036",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:43:06.644921+00:00",
+            "ended_at": "2026-09-26T06:43:06.645028+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:06.649990+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_aed48c22b00249c394e5554f",
+            "parent_id": "span_0cddc8e8a6bc4a2988871036",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:06.645974+00:00",
+            "ended_at": "2026-09-26T06:43:06.649651+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:06.653576+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_9d5a98c425f241e8be6caa36",
+            "parent_id": "span_0cddc8e8a6bc4a2988871036",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:06.650040+00:00",
+            "ended_at": "2026-09-26T06:43:06.653226+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:06.653975+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_0cddc8e8a6bc4a2988871036",
+            "parent_id": "span_b40105d29e5a46888326ea34",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:43:06.644292+00:00",
+            "ended_at": "2026-09-26T06:43:06.653659+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:06.655782+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:09.443630+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_b5b220267f85407b93d020b9",
+            "parent_id": "span_853252957863472d975e6e0a",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:43:06.656590+00:00",
+            "ended_at": "2026-09-26T06:43:09.443266+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:09.455863+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 18979,
+            "output_tokens": 62
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:09.463001+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:09.486370+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline example --pipeline template_bio",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:09.490485+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:09.491354+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_f256b295dad6448291bb0155",
+            "parent_id": "span_853252957863472d975e6e0a",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:43:09.457975+00:00",
+            "ended_at": "2026-09-26T06:43:09.490611+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:09.493141+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_853252957863472d975e6e0a",
+            "parent_id": "span_b40105d29e5a46888326ea34",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:43:06.654627+00:00",
+            "ended_at": "2026-09-26T06:43:09.492177+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:09.507890+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_d1b448355d434c949020100e",
+            "parent_id": "span_93450072539945c9825434b8",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:43:09.506855+00:00",
+            "ended_at": "2026-09-26T06:43:09.507043+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:09.514972+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_c0d2c794b54d49279e5a3ab0",
+            "parent_id": "span_93450072539945c9825434b8",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:09.508624+00:00",
+            "ended_at": "2026-09-26T06:43:09.514163+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:09.520629+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_7477901d8543461ab1ecba94",
+            "parent_id": "span_93450072539945c9825434b8",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:09.515092+00:00",
+            "ended_at": "2026-09-26T06:43:09.520112+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:09.521138+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_93450072539945c9825434b8",
+            "parent_id": "span_b40105d29e5a46888326ea34",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:43:09.505277+00:00",
+            "ended_at": "2026-09-26T06:43:09.520689+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:09.523691+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:12.819153+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_5548c57011ac4060ba8f97c3",
+            "parent_id": "span_0f994a38ec534782b55b6913",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:43:09.524611+00:00",
+            "ended_at": "2026-09-26T06:43:12.818691+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:12.825629+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 19186,
+            "output_tokens": 129
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:12.829007+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:12.848995+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline plan --pipeline template_bio --input reads=uploads/examples/template_bio-cd774b2b/example_reads.fastq --input reference=uploads/examples/template_bio-cd774b2b/example_reference.fasta --input metadata=uploads/examples/template_bio-cd774b2b/example_samples.tsv --cores 1 --timeout 120 --dry-run",
+            "status": "error"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:12.852925+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:12.853792+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_0cee98a520164bf993259b62",
+            "parent_id": "span_0f994a38ec534782b55b6913",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:43:12.826714+00:00",
+            "ended_at": "2026-09-26T06:43:12.853062+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:12.855367+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_0f994a38ec534782b55b6913",
+            "parent_id": "span_b40105d29e5a46888326ea34",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:43:09.521806+00:00",
+            "ended_at": "2026-09-26T06:43:12.854618+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:12.869136+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_a863028ab24248338dd75fd3",
+            "parent_id": "span_2221aeeb66214f49b378b2a8",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:43:12.868471+00:00",
+            "ended_at": "2026-09-26T06:43:12.868615+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:12.873411+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_3f7f32e116df46df84a66a0e",
+            "parent_id": "span_2221aeeb66214f49b378b2a8",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:12.869589+00:00",
+            "ended_at": "2026-09-26T06:43:12.872939+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:12.876897+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_f0305fff94924c7a9e30d9f0",
+            "parent_id": "span_2221aeeb66214f49b378b2a8",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:12.873494+00:00",
+            "ended_at": "2026-09-26T06:43:12.876367+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:12.877373+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_2221aeeb66214f49b378b2a8",
+            "parent_id": "span_b40105d29e5a46888326ea34",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:43:12.867661+00:00",
+            "ended_at": "2026-09-26T06:43:12.876968+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:12.879497+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:17.319691+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_7595222263404d2b88ab2655",
+            "parent_id": "span_493ce13a90c44a03bb959eb0",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:43:12.880231+00:00",
+            "ended_at": "2026-09-26T06:43:17.319329+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:17.326451+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 19388,
+            "output_tokens": 134
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:17.329679+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:17.369399+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline plan --pipeline template_bio --input reads=uploads/examples/template_bio-cd774b2b/example_reads.fastq --input reference=uploads/examples/template_bio-cd774b2b/example_reference.fasta --input metadata=uploads/examples/template_bio-cd774b2b/example_samples.tsv --cores 1 --timeout 120",
+            "status": "planned"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:17.374981+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:17.375670+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_00fabb0ee8c3409c8358c763",
+            "parent_id": "span_493ce13a90c44a03bb959eb0",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:43:17.327599+00:00",
+            "ended_at": "2026-09-26T06:43:17.375082+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:17.376972+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_493ce13a90c44a03bb959eb0",
+            "parent_id": "span_b40105d29e5a46888326ea34",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:43:12.878072+00:00",
+            "ended_at": "2026-09-26T06:43:17.376370+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:17.388460+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_2c4c9f586be24bdb962206a8",
+            "parent_id": "span_d24dc5c431374fb4b02c465c",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:43:17.387956+00:00",
+            "ended_at": "2026-09-26T06:43:17.388067+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:17.392331+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_2e559e6ff24c4b2d9329cc5e",
+            "parent_id": "span_d24dc5c431374fb4b02c465c",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:17.389033+00:00",
+            "ended_at": "2026-09-26T06:43:17.391933+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:17.395255+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_df8f1ad9172b4fe9b2c74d1c",
+            "parent_id": "span_d24dc5c431374fb4b02c465c",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:17.392433+00:00",
+            "ended_at": "2026-09-26T06:43:17.394920+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:17.395616+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_d24dc5c431374fb4b02c465c",
+            "parent_id": "span_b40105d29e5a46888326ea34",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:43:17.387341+00:00",
+            "ended_at": "2026-09-26T06:43:17.395299+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:17.397641+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.255920+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_8514680cc9384f99a5facfbb",
+            "parent_id": "span_fa755af6411346658aa61642",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:43:17.398513+00:00",
+            "ended_at": "2026-09-26T06:43:20.255560+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.263324+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 21263,
+            "output_tokens": 89
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.267377+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_a2333bc1d8364b0e8598276c",
+            "parent_id": "span_fa755af6411346658aa61642",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.264392+00:00",
+            "ended_at": "2026-09-26T06:43:20.266884+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.268222+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_fa755af6411346658aa61642",
+            "parent_id": "span_b40105d29e5a46888326ea34",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:43:17.396337+00:00",
+            "ended_at": "2026-09-26T06:43:20.267902+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.279732+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_b40105d29e5a46888326ea34",
+            "parent_id": "span_8de6983334444ecb86910eb6",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:43:03.084497+00:00",
+            "ended_at": "2026-09-26T06:43:20.278782+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.280616+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_8de6983334444ecb86910eb6",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:43:03.070193+00:00",
+            "ended_at": "2026-09-26T06:43:20.279902+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.280955+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.316033+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "run_paused",
+          "data": {
+            "reason": "tool_approval",
+            "tool_names": [
+              "pipeline_shell"
+            ]
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.885090+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "approval_decision",
+          "data": {
+            "approved": true,
+            "tool_name": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.894030+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.898066+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_261143db6cc740afbecd183f",
+            "parent_id": "span_627f96d8f90545df998ee633",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.897700+00:00",
+            "ended_at": "2026-09-26T06:43:20.897782+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.898462+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_985f7db42b3243a381c52035",
+            "parent_id": "span_627f96d8f90545df998ee633",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.898148+00:00",
+            "ended_at": "2026-09-26T06:43:20.898202+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.902070+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_3f3d335cca6a4242a4131c9f",
+            "parent_id": "span_627f96d8f90545df998ee633",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.898718+00:00",
+            "ended_at": "2026-09-26T06:43:20.901784+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.904846+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_1772e64365964eb4833d157b",
+            "parent_id": "span_627f96d8f90545df998ee633",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.902117+00:00",
+            "ended_at": "2026-09-26T06:43:20.904557+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.905957+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_627f96d8f90545df998ee633",
+            "parent_id": "span_cbe5325ef1534bb38bb22a4a",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.897076+00:00",
+            "ended_at": "2026-09-26T06:43:20.905473+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.911495+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.939844+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline run --plan-id db88c4d8d687484f970a7513d1be20da",
+            "status": "queued"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.943113+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.943677+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_ac93be8814d943d5847e916d",
+            "parent_id": "span_cbe5325ef1534bb38bb22a4a",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.911113+00:00",
+            "ended_at": "2026-09-26T06:43:20.943292+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.950100+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_aedd06307a384171a60c2ba9",
+            "parent_id": "span_62e4be4474a64c6aa0d4ecb8",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.949128+00:00",
+            "ended_at": "2026-09-26T06:43:20.949388+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.953913+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_8a83e3dcf10949d3aaddfbc7",
+            "parent_id": "span_62e4be4474a64c6aa0d4ecb8",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.950399+00:00",
+            "ended_at": "2026-09-26T06:43:20.953556+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.957353+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_dc9f377791a649459b16c5ef",
+            "parent_id": "span_62e4be4474a64c6aa0d4ecb8",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.953975+00:00",
+            "ended_at": "2026-09-26T06:43:20.957007+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.957779+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_62e4be4474a64c6aa0d4ecb8",
+            "parent_id": "span_cbe5325ef1534bb38bb22a4a",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.948330+00:00",
+            "ended_at": "2026-09-26T06:43:20.957449+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:20.958636+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:21.008970+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:24.806982+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_a88a78eecda241fc9900e30c",
+            "parent_id": "span_1638adda86ce42f9ba9e8d07",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:43:21.010345+00:00",
+            "ended_at": "2026-09-26T06:43:24.806502+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:24.809403+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 21496,
+            "output_tokens": 85
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:24.812948+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:24.818146+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline wait --job-id db88c4d8d687484f970a7513d1be20da --seconds 5",
+            "status": "succeeded"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:24.827803+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:24.828170+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_bb7da25baa9142279b5babfb",
+            "parent_id": "span_1638adda86ce42f9ba9e8d07",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:43:24.810817+00:00",
+            "ended_at": "2026-09-26T06:43:24.827859+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:24.828877+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_1638adda86ce42f9ba9e8d07",
+            "parent_id": "span_ee4a8599522549539621d230",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.958398+00:00",
+            "ended_at": "2026-09-26T06:43:24.828516+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:24.832232+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_4deb501f335d4f5e876d73b2",
+            "parent_id": "span_13af8a2a167a48388d960993",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:43:24.831778+00:00",
+            "ended_at": "2026-09-26T06:43:24.831879+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:24.835956+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_2d1450f79dbf4f65aea45100",
+            "parent_id": "span_13af8a2a167a48388d960993",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:24.832524+00:00",
+            "ended_at": "2026-09-26T06:43:24.835607+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:24.838825+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_4c6945baaaa84ec88827e516",
+            "parent_id": "span_13af8a2a167a48388d960993",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:24.836007+00:00",
+            "ended_at": "2026-09-26T06:43:24.838421+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:24.839346+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_13af8a2a167a48388d960993",
+            "parent_id": "span_ee4a8599522549539621d230",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:43:24.830981+00:00",
+            "ended_at": "2026-09-26T06:43:24.838892+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:24.841657+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:28.595975+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_703265af88654818bc71cd76",
+            "parent_id": "span_fdb7f79f428445c191af6f4d",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:43:24.842416+00:00",
+            "ended_at": "2026-09-26T06:43:28.595422+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:28.598229+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 21878,
+            "output_tokens": 91
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:28.600945+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:28.638796+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline results --job-id db88c4d8d687484f970a7513d1be20da --max-table-rows 10",
+            "status": "succeeded"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:28.646412+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:28.646796+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_efc841a59b5e41fa919925b8",
+            "parent_id": "span_fdb7f79f428445c191af6f4d",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T06:43:28.598999+00:00",
+            "ended_at": "2026-09-26T06:43:28.646480+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:28.647475+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_fdb7f79f428445c191af6f4d",
+            "parent_id": "span_ee4a8599522549539621d230",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:43:24.840079+00:00",
+            "ended_at": "2026-09-26T06:43:28.647186+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:28.651471+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_f5c93c858a454241a810c32e",
+            "parent_id": "span_f74b03a1803f4bfd921e12f6",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:43:28.651108+00:00",
+            "ended_at": "2026-09-26T06:43:28.651197+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:28.655399+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_f1ba11cc2fd4448c875d66e0",
+            "parent_id": "span_f74b03a1803f4bfd921e12f6",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:28.651712+00:00",
+            "ended_at": "2026-09-26T06:43:28.654998+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:28.658511+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_0826970bc6a2460581bbd1c4",
+            "parent_id": "span_f74b03a1803f4bfd921e12f6",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:43:28.655459+00:00",
+            "ended_at": "2026-09-26T06:43:28.658211+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:28.658854+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_f74b03a1803f4bfd921e12f6",
+            "parent_id": "span_ee4a8599522549539621d230",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:43:28.650457+00:00",
+            "ended_at": "2026-09-26T06:43:28.658554+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:28.660614+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:32.279674+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_d024996c1b114ce680abdd5d",
+            "parent_id": "span_7315a9430257469785092f5f",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:43:28.661385+00:00",
+            "ended_at": "2026-09-26T06:43:32.279194+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:32.281599+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 26729,
+            "output_tokens": 210
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:32.282912+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:32.283353+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_7315a9430257469785092f5f",
+            "parent_id": "span_ee4a8599522549539621d230",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:43:28.659362+00:00",
+            "ended_at": "2026-09-26T06:43:32.283041+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:32.283765+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:32.284130+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_62bf645988cc4d93b1c02898",
+            "parent_id": "span_ee4a8599522549539621d230",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T06:43:32.283537+00:00",
+            "ended_at": "2026-09-26T06:43:32.283788+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:32.291091+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_1c5a46b7be664c75aee173c4",
+            "parent_id": "span_975bf3e06b7642659f662416",
+            "span_type": "custom",
+            "name": "sandbox.cleanup_sessions",
+            "model": null,
+            "started_at": "2026-09-26T06:43:32.290311+00:00",
+            "ended_at": "2026-09-26T06:43:32.290709+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:32.291454+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_975bf3e06b7642659f662416",
+            "parent_id": "span_ee4a8599522549539621d230",
+            "span_type": "custom",
+            "name": "sandbox.cleanup",
+            "model": null,
+            "started_at": "2026-09-26T06:43:32.290277+00:00",
+            "ended_at": "2026-09-26T06:43:32.291107+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:32.291893+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_ee4a8599522549539621d230",
+            "parent_id": "span_cbe5325ef1534bb38bb22a4a",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.958249+00:00",
+            "ended_at": "2026-09-26T06:43:32.291489+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:32.292241+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05",
+            "span_id": "span_cbe5325ef1534bb38bb22a4a",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:43:20.894157+00:00",
+            "ended_at": "2026-09-26T06:43:32.291951+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:32.292366+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_268b6d9514f444ac8b18930ea06a1c05"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:43:32.307390+00:00",
+          "session_id": "sol-20260926-09_template_bio",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 7
+          }
+        }
+      ],
+      "run": {
+        "run_id": "2b3bbe03-b2c7-4bb9-9ed3-90396a58c840",
+        "session_dir": ".",
+        "runtime_dir": "runs/2b3bbe03-b2c7-4bb9-9ed3-90396a58c840",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "uploads/examples/template_bio-cd774b2b/example_reads.fastq",
+          "workspace_path": "uploads/examples/template_bio-cd774b2b/example_reads.fastq",
+          "name": "example_reads.fastq",
+          "size": 385,
+          "modified_at": 1790404989482848160,
+          "kind": "upload",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "uploads/examples/template_bio-cd774b2b/example_reference.fasta",
+          "workspace_path": "uploads/examples/template_bio-cd774b2b/example_reference.fasta",
+          "name": "example_reference.fasta",
+          "size": 61,
+          "modified_at": 1790404989482848160,
+          "kind": "upload",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "uploads/examples/template_bio-cd774b2b/example_samples.tsv",
+          "workspace_path": "uploads/examples/template_bio-cd774b2b/example_samples.tsv",
+          "name": "example_samples.tsv",
+          "size": 149,
+          "modified_at": 1790404989483848168,
+          "kind": "upload",
+          "content_type": "text/tab-separated-values; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/plan.json",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/plan.json",
+          "name": "plan.json",
+          "size": 6645,
+          "modified_at": 1790404997357906441,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/stderr.log",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/stderr.log",
+          "name": "stderr.log",
+          "size": 0,
+          "modified_at": 1790405000927932847,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/inputs/reads/0_example_reads.fastq",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/inputs/reads/0_example_reads.fastq",
+          "name": "0_example_reads.fastq",
+          "size": 385,
+          "modified_at": 1790405001036933653,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/inputs/reference/0_example_reference.fasta",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/inputs/reference/0_example_reference.fasta",
+          "name": "0_example_reference.fasta",
+          "size": 61,
+          "modified_at": 1790405001036933653,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/inputs.json",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/inputs.json",
+          "name": "inputs.json",
+          "size": 492,
+          "modified_at": 1790405001037933661,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/inputs/metadata/0_example_samples.tsv",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/inputs/metadata/0_example_samples.tsv",
+          "name": "0_example_samples.tsv",
+          "size": 149,
+          "modified_at": 1790405001037933661,
+          "kind": "metadata",
+          "content_type": "text/tab-separated-values; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/config.runtime.yaml",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/config.runtime.yaml",
+          "name": "config.runtime.yaml",
+          "size": 4130,
+          "modified_at": 1790405001055933794,
+          "kind": "config",
+          "content_type": "text/yaml; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/coverage.tsv",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/coverage.tsv",
+          "name": "coverage.tsv",
+          "size": 889,
+          "modified_at": 1790405001637938097,
+          "kind": "metadata",
+          "content_type": "text/tab-separated-values; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/filtered_reads.fastq",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/filtered_reads.fastq",
+          "name": "filtered_reads.fastq",
+          "size": 253,
+          "modified_at": 1790405001637938097,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/read_qc.tsv",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/read_qc.tsv",
+          "name": "read_qc.tsv",
+          "size": 238,
+          "modified_at": 1790405001637938097,
+          "kind": "metadata",
+          "content_type": "text/tab-separated-values; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/sample_summary.tsv",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/sample_summary.tsv",
+          "name": "sample_summary.tsv",
+          "size": 364,
+          "modified_at": 1790405001637938097,
+          "kind": "metadata",
+          "content_type": "text/tab-separated-values; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/alignments.sam",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/alignments.sam",
+          "name": "alignments.sam",
+          "size": 438,
+          "modified_at": 1790405001638938105,
+          "kind": "annotation",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/consensus.fasta",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/consensus.fasta",
+          "name": "consensus.fasta",
+          "size": 48,
+          "modified_at": 1790405001638938105,
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/metrics.json",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/metrics.json",
+          "name": "metrics.json",
+          "size": 1240,
+          "modified_at": 1790405001638938105,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/variant_summary.tsv",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/variant_summary.tsv",
+          "name": "variant_summary.tsv",
+          "size": 133,
+          "modified_at": 1790405001638938105,
+          "kind": "metadata",
+          "content_type": "text/tab-separated-values; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/variants.vcf",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/variants.vcf",
+          "name": "variants.vcf",
+          "size": 578,
+          "modified_at": 1790405001638938105,
+          "kind": "annotation",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/qc_overview.png",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/qc_overview.png",
+          "name": "qc_overview.png",
+          "size": 79528,
+          "modified_at": 1790405002186942157,
+          "kind": "image",
+          "content_type": "image/png"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/coverage.png",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/coverage.png",
+          "name": "coverage.png",
+          "size": 35889,
+          "modified_at": 1790405002373943540,
+          "kind": "image",
+          "content_type": "image/png"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/phylogenetic_tree.nwk",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/phylogenetic_tree.nwk",
+          "name": "phylogenetic_tree.nwk",
+          "size": 58,
+          "modified_at": 1790405002508944538,
+          "kind": "phylogenetic_tree",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/variant_allele_fraction.png",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/variant_allele_fraction.png",
+          "name": "variant_allele_fraction.png",
+          "size": 28447,
+          "modified_at": 1790405002508944538,
+          "kind": "image",
+          "content_type": "image/png"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/phylogenetic_tree.png",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/phylogenetic_tree.png",
+          "name": "phylogenetic_tree.png",
+          "size": 32702,
+          "modified_at": 1790405002709946025,
+          "kind": "image",
+          "content_type": "image/png"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/report.md",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/report.md",
+          "name": "report.md",
+          "size": 2559,
+          "modified_at": 1790405002709946025,
+          "kind": "text",
+          "content_type": "text/markdown; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/report.html",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/outputs/report.html",
+          "name": "report.html",
+          "size": 240801,
+          "modified_at": 1790405002711946039,
+          "kind": "report",
+          "content_type": "text/html; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/stdout.log",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/stdout.log",
+          "name": "stdout.log",
+          "size": 170,
+          "modified_at": 1790405002711946039,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/output-manifest.json",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/output-manifest.json",
+          "name": "output-manifest.json",
+          "size": 9598,
+          "modified_at": 1790405002829946912,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/job.json",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/job.json",
+          "name": "job.json",
+          "size": 25290,
+          "modified_at": 1790405002831946927,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/db88c4d8d687484f970a7513d1be20da/results.zip",
+          "workspace_path": "runs/db88c4d8d687484f970a7513d1be20da/results.zip",
+          "name": "results.zip",
+          "size": 309133,
+          "modified_at": 1790405008629989787,
+          "kind": "compressed",
+          "content_type": "application/zip"
+        }
+      ],
+      "approval_decision": {
+        "approved": true,
+        "approval_id": "3a01c454dd64443084aa1de612b5eb05",
+        "tool_name": "pipeline_shell",
+        "arguments": {
+          "commands": [
+            "agent-pipeline run --plan-id db88c4d8d687484f970a7513d1be20da"
+          ],
+          "max_output_length": 20000,
+          "timeout_ms": 120000
+        },
+        "plan": {
+          "pipeline_name": "template_bio",
+          "engine": "shell",
+          "inputs": {
+            "reads": [
+              {
+                "path": "uploads/examples/template_bio-cd774b2b/example_reads.fastq",
+                "sha256": "5e95fa95821c31e5446e051cdf4ccd4b82144ac71b809e065e1101c12386b60d",
+                "size": 385
+              }
+            ],
+            "reference": [
+              {
+                "path": "uploads/examples/template_bio-cd774b2b/example_reference.fasta",
+                "sha256": "73f4c86513507e373bc902232aded85b398678e313f059b42b26e1ae38c4fd09",
+                "size": 61
+              }
+            ],
+            "metadata": [
+              {
+                "path": "uploads/examples/template_bio-cd774b2b/example_samples.tsv",
+                "sha256": "ab843cad4c085902847f8145aec07c0f932ef591663efdc9cd13bac0c6acb79e",
+                "size": 149
+              }
+            ]
+          },
+          "parameters": {},
+          "cores": 1,
+          "timeout_seconds": 120,
+          "max_memory_mb": 8192,
+          "dry_run": false,
+          "definition_sha256": "a9914088514a5a1cbe6bdd2791a4eb9d585488085eaa9ef75ce26ef2c96b60ac",
+          "outputs": {
+            "report": {
+              "name": "report",
+              "label": "Analysis report",
+              "config_key": "report_path",
+              "default": "report.md",
+              "kind": "report",
+              "required": true,
+              "description": "Analysis report produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "metrics": {
+              "name": "metrics",
+              "label": "QC and analysis metrics",
+              "config_key": "metrics_path",
+              "default": "metrics.json",
+              "kind": "metrics",
+              "required": true,
+              "description": "QC and analysis metrics produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "html_report": {
+              "name": "html_report",
+              "label": "Interactive-style HTML report",
+              "config_key": "html_report_path",
+              "default": "report.html",
+              "kind": "report",
+              "required": true,
+              "description": "Interactive-style HTML report produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "filtered_reads": {
+              "name": "filtered_reads",
+              "label": "Quality-filtered FASTQ",
+              "config_key": "filtered_fastq_path",
+              "default": "filtered_reads.fastq",
+              "kind": "sequence",
+              "required": true,
+              "description": "Quality-filtered FASTQ produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "read_qc": {
+              "name": "read_qc",
+              "label": "Per-read QC table",
+              "config_key": "read_qc_path",
+              "default": "read_qc.tsv",
+              "kind": "table",
+              "required": true,
+              "description": "Per-read QC table produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "sample_summary": {
+              "name": "sample_summary",
+              "label": "Sample summary table",
+              "config_key": "sample_summary_path",
+              "default": "sample_summary.tsv",
+              "kind": "table",
+              "required": true,
+              "description": "Sample summary table produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "coverage": {
+              "name": "coverage",
+              "label": "Per-position coverage table",
+              "config_key": "coverage_path",
+              "default": "coverage.tsv",
+              "kind": "table",
+              "required": true,
+              "description": "Per-position coverage table produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "alignments": {
+              "name": "alignments",
+              "label": "Demonstration alignments",
+              "config_key": "alignment_sam_path",
+              "default": "alignments.sam",
+              "kind": "alignment",
+              "required": true,
+              "description": "Demonstration alignments produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "consensus": {
+              "name": "consensus",
+              "label": "Consensus sequence",
+              "config_key": "consensus_fasta_path",
+              "default": "consensus.fasta",
+              "kind": "sequence",
+              "required": true,
+              "description": "Consensus sequence produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "variants": {
+              "name": "variants",
+              "label": "Demonstration variants",
+              "config_key": "variants_vcf_path",
+              "default": "variants.vcf",
+              "kind": "variants",
+              "required": true,
+              "description": "Demonstration variants produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "variant_table": {
+              "name": "variant_table",
+              "label": "Variant summary table",
+              "config_key": "variant_table_path",
+              "default": "variant_summary.tsv",
+              "kind": "table",
+              "required": true,
+              "description": "Variant summary table produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "qc_figure": {
+              "name": "qc_figure",
+              "label": "Read QC overview figure",
+              "config_key": "qc_figure_path",
+              "default": "qc_overview.png",
+              "kind": "image",
+              "required": true,
+              "description": "Read QC overview figure produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "coverage_figure": {
+              "name": "coverage_figure",
+              "label": "Coverage profile figure",
+              "config_key": "coverage_figure_path",
+              "default": "coverage.png",
+              "kind": "image",
+              "required": true,
+              "description": "Coverage profile figure produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "variant_figure": {
+              "name": "variant_figure",
+              "label": "Variant allele fraction figure",
+              "config_key": "variant_figure_path",
+              "default": "variant_allele_fraction.png",
+              "kind": "image",
+              "required": true,
+              "description": "Variant allele fraction figure produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "phylogenetic_tree": {
+              "name": "phylogenetic_tree",
+              "label": "Optional phylogenetic tree",
+              "config_key": "phylogenetic_tree_path",
+              "default": "phylogenetic_tree.nwk",
+              "kind": "phylogenetic_tree",
+              "required": false,
+              "description": "Optional phylogenetic tree produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            },
+            "phylogenetic_tree_figure": {
+              "name": "phylogenetic_tree_figure",
+              "label": "Optional phylogenetic tree figure",
+              "config_key": "phylogenetic_tree_figure_path",
+              "default": "phylogenetic_tree.png",
+              "kind": "image",
+              "required": false,
+              "description": "Optional phylogenetic tree figure produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": ""
+            }
+          }
+        }
+      },
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "06d05e7fadb24b719d01ee426ed2b8d8",
+        "session_id": "sol-20260926-09_template_bio"
+      },
+      "created_at": "2026-09-26T06:42:59.670243+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "06d05e7fadb24b719d01ee426ed2b8d8"
+      },
+      "created_at": "2026-09-26T06:43:02.020419+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T06:43:03.071248+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T06:43:03.084990+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:05.576043+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:05.578682+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:05.580573+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll inspect the pipeline catalog, then stage its bundled "
+      },
+      "created_at": "2026-09-26T06:43:06.395100+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:06.397786+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:06.399853+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:06.402078+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:06.404146+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:06.406506+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:06.410791+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_iqMhtHrKcyLwrGuRvOWiQBsQ",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:06.413771+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_iqMhtHrKcyLwrGuRvOWiQBsQ",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:06.639793+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:08.712950+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:08.715964+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:08.718621+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "example.The requested internal demo matches exactly. I’m staging its three inputs "
+      },
+      "created_at": "2026-09-26T06:43:09.428585+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:09.431544+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:09.434265+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:09.436515+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:09.438823+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:09.441601+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:09.449189+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_vuPoQpn9rR9xzrUUrAEga6IF",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:09.453011+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_vuPoQpn9rR9xzrUUrAEga6IF",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:09.501358+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:11.740087+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:11.743385+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:11.746032+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "now.Example inputs are ready; next I’ll validate a resource-bounded "
+      },
+      "created_at": "2026-09-26T06:43:12.804978+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:12.807508+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:12.810003+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:12.812380+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:12.814754+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:12.816801+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:12.821393+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_HaWiLNymKyjRpRsgHm76BLLo",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:12.823751+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_HaWiLNymKyjRpRsgHm76BLLo",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:12.863864+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:14.944789+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:14.951247+00:00"
+    },
+    {
+      "sequence": 42,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:14.953398+00:00"
+    },
+    {
+      "sequence": 43,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "plan.This shell workflow validates through a normal plan, not `--dry-run`; I’ll create that exact bounded "
+      },
+      "created_at": "2026-09-26T06:43:17.303394+00:00"
+    },
+    {
+      "sequence": 44,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:17.305950+00:00"
+    },
+    {
+      "sequence": 45,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:17.308267+00:00"
+    },
+    {
+      "sequence": 46,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:17.310376+00:00"
+    },
+    {
+      "sequence": 47,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:17.312814+00:00"
+    },
+    {
+      "sequence": 48,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:17.317397+00:00"
+    },
+    {
+      "sequence": 49,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:17.321968+00:00"
+    },
+    {
+      "sequence": 50,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_OesFwfl41UN6KE5kbeRAWk1w",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:17.324467+00:00"
+    },
+    {
+      "sequence": 51,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_OesFwfl41UN6KE5kbeRAWk1w",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:17.383601+00:00"
+    },
+    {
+      "sequence": 52,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:19.370687+00:00"
+    },
+    {
+      "sequence": 53,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:19.373634+00:00"
+    },
+    {
+      "sequence": 54,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:19.375987+00:00"
+    },
+    {
+      "sequence": 55,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "plan.Plan validation passed at 1 core, 8 GB, and 120 seconds. I’m requesting approval to execute "
+      },
+      "created_at": "2026-09-26T06:43:20.238894+00:00"
+    },
+    {
+      "sequence": 56,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:20.242078+00:00"
+    },
+    {
+      "sequence": 57,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:20.244517+00:00"
+    },
+    {
+      "sequence": 58,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:20.246648+00:00"
+    },
+    {
+      "sequence": 59,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:20.248819+00:00"
+    },
+    {
+      "sequence": 60,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:43:20.253679+00:00"
+    },
+    {
+      "sequence": 61,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:20.258274+00:00"
+    },
+    {
+      "sequence": 62,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_Pf1tS6XuhaKGf50imBdFwlMQ",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:43:20.260903+00:00"
+    },
+    {
+      "sequence": 63,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "it."
+      },
+      "created_at": "2026-09-26T06:43:20.344510+00:00"
+    },
+    {
+      "sequence": 64,
+      "event": "pending_approval",
+      "payload": {
+        "status": "pending_approval"
+      },
+      "created_at": "2026-09-26T06:43:20.347931+00:00"
+    },
+    {
+      "sequence": 65,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T06:43:32.378404+00:00"
+    }
+  ],
+  "approval_decisions": [
+    {
+      "approval_id": "3a01c454dd64443084aa1de612b5eb05",
+      "tool_name": "pipeline_shell",
+      "approved": true,
+      "arguments": {
+        "commands": [
+          "agent-pipeline run --plan-id db88c4d8d687484f970a7513d1be20da"
+        ],
+        "max_output_length": 20000,
+        "timeout_ms": 120000
+      },
+      "plan": {
+        "pipeline_name": "template_bio",
+        "engine": "shell",
+        "inputs": {
+          "reads": [
+            {
+              "path": "uploads/examples/template_bio-cd774b2b/example_reads.fastq",
+              "sha256": "5e95fa95821c31e5446e051cdf4ccd4b82144ac71b809e065e1101c12386b60d",
+              "size": 385
+            }
+          ],
+          "reference": [
+            {
+              "path": "uploads/examples/template_bio-cd774b2b/example_reference.fasta",
+              "sha256": "73f4c86513507e373bc902232aded85b398678e313f059b42b26e1ae38c4fd09",
+              "size": 61
+            }
+          ],
+          "metadata": [
+            {
+              "path": "uploads/examples/template_bio-cd774b2b/example_samples.tsv",
+              "sha256": "ab843cad4c085902847f8145aec07c0f932ef591663efdc9cd13bac0c6acb79e",
+              "size": 149
+            }
+          ]
+        },
+        "parameters": {},
+        "cores": 1,
+        "timeout_seconds": 120,
+        "max_memory_mb": 8192,
+        "dry_run": false,
+        "definition_sha256": "a9914088514a5a1cbe6bdd2791a4eb9d585488085eaa9ef75ce26ef2c96b60ac",
+        "outputs": {
+          "report": {
+            "name": "report",
+            "label": "Analysis report",
+            "config_key": "report_path",
+            "default": "report.md",
+            "kind": "report",
+            "required": true,
+            "description": "Analysis report produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "metrics": {
+            "name": "metrics",
+            "label": "QC and analysis metrics",
+            "config_key": "metrics_path",
+            "default": "metrics.json",
+            "kind": "metrics",
+            "required": true,
+            "description": "QC and analysis metrics produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "html_report": {
+            "name": "html_report",
+            "label": "Interactive-style HTML report",
+            "config_key": "html_report_path",
+            "default": "report.html",
+            "kind": "report",
+            "required": true,
+            "description": "Interactive-style HTML report produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "filtered_reads": {
+            "name": "filtered_reads",
+            "label": "Quality-filtered FASTQ",
+            "config_key": "filtered_fastq_path",
+            "default": "filtered_reads.fastq",
+            "kind": "sequence",
+            "required": true,
+            "description": "Quality-filtered FASTQ produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "read_qc": {
+            "name": "read_qc",
+            "label": "Per-read QC table",
+            "config_key": "read_qc_path",
+            "default": "read_qc.tsv",
+            "kind": "table",
+            "required": true,
+            "description": "Per-read QC table produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "sample_summary": {
+            "name": "sample_summary",
+            "label": "Sample summary table",
+            "config_key": "sample_summary_path",
+            "default": "sample_summary.tsv",
+            "kind": "table",
+            "required": true,
+            "description": "Sample summary table produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "coverage": {
+            "name": "coverage",
+            "label": "Per-position coverage table",
+            "config_key": "coverage_path",
+            "default": "coverage.tsv",
+            "kind": "table",
+            "required": true,
+            "description": "Per-position coverage table produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "alignments": {
+            "name": "alignments",
+            "label": "Demonstration alignments",
+            "config_key": "alignment_sam_path",
+            "default": "alignments.sam",
+            "kind": "alignment",
+            "required": true,
+            "description": "Demonstration alignments produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "consensus": {
+            "name": "consensus",
+            "label": "Consensus sequence",
+            "config_key": "consensus_fasta_path",
+            "default": "consensus.fasta",
+            "kind": "sequence",
+            "required": true,
+            "description": "Consensus sequence produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "variants": {
+            "name": "variants",
+            "label": "Demonstration variants",
+            "config_key": "variants_vcf_path",
+            "default": "variants.vcf",
+            "kind": "variants",
+            "required": true,
+            "description": "Demonstration variants produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "variant_table": {
+            "name": "variant_table",
+            "label": "Variant summary table",
+            "config_key": "variant_table_path",
+            "default": "variant_summary.tsv",
+            "kind": "table",
+            "required": true,
+            "description": "Variant summary table produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "qc_figure": {
+            "name": "qc_figure",
+            "label": "Read QC overview figure",
+            "config_key": "qc_figure_path",
+            "default": "qc_overview.png",
+            "kind": "image",
+            "required": true,
+            "description": "Read QC overview figure produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "coverage_figure": {
+            "name": "coverage_figure",
+            "label": "Coverage profile figure",
+            "config_key": "coverage_figure_path",
+            "default": "coverage.png",
+            "kind": "image",
+            "required": true,
+            "description": "Coverage profile figure produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "variant_figure": {
+            "name": "variant_figure",
+            "label": "Variant allele fraction figure",
+            "config_key": "variant_figure_path",
+            "default": "variant_allele_fraction.png",
+            "kind": "image",
+            "required": true,
+            "description": "Variant allele fraction figure produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "phylogenetic_tree": {
+            "name": "phylogenetic_tree",
+            "label": "Optional phylogenetic tree",
+            "config_key": "phylogenetic_tree_path",
+            "default": "phylogenetic_tree.nwk",
+            "kind": "phylogenetic_tree",
+            "required": false,
+            "description": "Optional phylogenetic tree produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          },
+          "phylogenetic_tree_figure": {
+            "name": "phylogenetic_tree_figure",
+            "label": "Optional phylogenetic tree figure",
+            "config_key": "phylogenetic_tree_figure_path",
+            "default": "phylogenetic_tree.png",
+            "kind": "image",
+            "required": false,
+            "description": "Optional phylogenetic tree figure produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": ""
+          }
+        }
+      }
+    }
+  ],
+  "ui": {
+    "png": "09_template_bio.png",
+    "dom": "09_template_bio.txt",
+    "chrome_returncode": 0,
+    "stderr_tail": "343823 bytes written to file /media/data/fuhaoyi/codes/BioAgent/docs/images/live_tests_2026-09-26_gpt-5.6-sol/09_template_bio.png\n"
+  }
+}

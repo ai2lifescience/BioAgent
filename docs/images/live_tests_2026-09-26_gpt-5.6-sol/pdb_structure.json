@@ -1,0 +1,1645 @@
+{
+  "case": "03_pdb_structure",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "Download PDB structure 1A3N as a CIF, inspect its chains and basic residue/atom statistics, and summarize verified findings with the generated file path.",
+  "session_id": "sol-20260926-03_pdb_structure",
+  "run_id": "c05955faf50c42f6801ab6e7459eaa68",
+  "uploads": [],
+  "started_at": "2026-09-26T06:38:57.714706+00:00",
+  "elapsed_seconds": 23.15,
+  "initial": {
+    "run_id": "c05955faf50c42f6801ab6e7459eaa68",
+    "session_id": "sol-20260926-03_pdb_structure",
+    "status": "running",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 12,
+    "created_at": "2026-09-26T06:38:34.564708+00:00",
+    "updated_at": "2026-09-26T06:38:34.569951+00:00",
+    "error": null
+  },
+  "status": {
+    "run_id": "c05955faf50c42f6801ab6e7459eaa68",
+    "session_id": "sol-20260926-03_pdb_structure",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 12,
+    "created_at": "2026-09-26T06:38:34.564708+00:00",
+    "updated_at": "2026-09-26T06:38:54.957443+00:00",
+    "error": null,
+    "result": {
+      "answer": "- Downloaded **PDB 1A3N** as CIF: `outputs/structures/1A3N.cif`\n- Structure: deoxy human hemoglobin; X-ray diffraction, 1.8 Å\n- Chains: 4 (`A`, `B`, `C`, `D`)\n- Models: 1\n- Residues: 1,027\n- Atoms: 4,997 standard atoms; 627 HETATM records\n- Waters: 455\n- Ligand: `HEM` (1 distinct ligand type)",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-03_pdb_structure",
+      "max_turns": 12,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Download PDB structure 1A3N as a CIF, inspect its chains and basic residue/atom statistics, and summarize verified findings with the generated file path."
+        },
+        {
+          "role": "assistant",
+          "content": "- Downloaded **PDB 1A3N** as CIF: `outputs/structures/1A3N.cif`\n- Structure: deoxy human hemoglobin; X-ray diffraction, 1.8 Å\n- Chains: 4 (`A`, `B`, `C`, `D`)\n- Models: 1\n- Residues: 1,027\n- Atoms: 4,997 standard atoms; 627 HETATM records\n- Waters: 455\n- Ligand: `HEM` (1 distinct ligand type)"
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [
+          "pdb_download",
+          "structure_inspect"
+        ],
+        "databases": [
+          "pdb"
+        ],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [
+          "https://files.rcsb.org/download/1A3N.cif"
+        ],
+        "files": [
+          "structures",
+          "outputs/structures/1A3N.cif",
+          "outputs/structures"
+        ],
+        "outputs": [
+          {
+            "tool": "pdb_download",
+            "summary": "Downloaded PDB 1A3N as CIF.",
+            "bytes": 560920,
+            "pdb_id": "1A3N",
+            "file_format": "cif",
+            "structure_path": "outputs/structures/1A3N.cif",
+            "output_dir": "outputs/structures",
+            "status": "ok"
+          },
+          {
+            "tool": "structure_inspect",
+            "atom_count": 4997,
+            "chain_count": 4,
+            "residue_count": 1027,
+            "ligand_count": 1,
+            "model_count": 1,
+            "file_format": "cif",
+            "structure_path": "outputs/structures/1A3N.cif",
+            "status": "ok"
+          }
+        ],
+        "tool_outputs": [],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T06:38:37.414203+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "run_started",
+          "data": {
+            "request": "Download PDB structure 1A3N as a CIF, inspect its chains and basic residue/atom statistics, and summarize verified findings with the generated file path.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:37.429672+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:37.435014+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_47202984394b4fa788bbbced",
+            "parent_id": "span_f7cc3dac1e4444e2b5ea1308",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T06:38:37.434658+00:00",
+            "ended_at": "2026-09-26T06:38:37.434750+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:37.436002+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_75c5bee3d6fc408590cf39c1",
+            "parent_id": "span_e9bf9ff098584647973cd689",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:38:37.435659+00:00",
+            "ended_at": "2026-09-26T06:38:37.435737+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:37.436363+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_c47beb41c83f4a10820061d7",
+            "parent_id": "span_e9bf9ff098584647973cd689",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:38:37.436071+00:00",
+            "ended_at": "2026-09-26T06:38:37.436119+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:37.439457+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_8362ad83b9a846cd89685d3d",
+            "parent_id": "span_e9bf9ff098584647973cd689",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:38:37.436653+00:00",
+            "ended_at": "2026-09-26T06:38:37.439185+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:37.441942+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_49f4f28c5a2440d69ed73393",
+            "parent_id": "span_e9bf9ff098584647973cd689",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:38:37.439549+00:00",
+            "ended_at": "2026-09-26T06:38:37.441673+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:37.443174+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_e9bf9ff098584647973cd689",
+            "parent_id": "span_f7cc3dac1e4444e2b5ea1308",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:38:37.435085+00:00",
+            "ended_at": "2026-09-26T06:38:37.442828+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:37.443865+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:37.494026+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:40.513960+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_860d5dfbc7fc409b9b9240c4",
+            "parent_id": "span_342cf620e0914438948e0b73",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:38:37.497321+00:00",
+            "ended_at": "2026-09-26T06:38:40.513609+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:40.521248+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11355,
+            "output_tokens": 56
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:40.522985+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pdb_download"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:40.523409+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "tool_started",
+          "data": {
+            "tool": "pdb_download"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:43.741091+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "artifact_created",
+          "data": {
+            "tool": "pdb_download",
+            "path": "outputs/structures/1A3N.cif",
+            "workspace_path": "outputs/structures/1A3N.cif",
+            "name": "1A3N.cif",
+            "kind": "structure",
+            "content_type": "chemical/x-mmcif; charset=utf-8",
+            "size": 560920,
+            "modified_at": 1790404723702850714
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:43.741436+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "tool_finished",
+          "data": {
+            "tool": "pdb_download",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:43.745803+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pdb_download"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:43.746701+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_625d0e2f3de24b82a7db2156",
+            "parent_id": "span_342cf620e0914438948e0b73",
+            "span_type": "function",
+            "name": "pdb_download",
+            "model": null,
+            "started_at": "2026-09-26T06:38:40.522311+00:00",
+            "ended_at": "2026-09-26T06:38:43.745966+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:43.748229+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_342cf620e0914438948e0b73",
+            "parent_id": "span_e7636f81fba0461aae6503ac",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:38:37.443672+00:00",
+            "ended_at": "2026-09-26T06:38:43.747377+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:43.762579+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_d6543c048b5e48a29bedad93",
+            "parent_id": "span_2e8f273d06444b299eb84b06",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:38:43.761735+00:00",
+            "ended_at": "2026-09-26T06:38:43.761944+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:43.767517+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_b80a9a1289bc485abe9f44c4",
+            "parent_id": "span_2e8f273d06444b299eb84b06",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:38:43.763095+00:00",
+            "ended_at": "2026-09-26T06:38:43.767151+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:43.771129+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_70f51f71642f4092b9a09b16",
+            "parent_id": "span_2e8f273d06444b299eb84b06",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:38:43.767588+00:00",
+            "ended_at": "2026-09-26T06:38:43.770765+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:43.771517+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_2e8f273d06444b299eb84b06",
+            "parent_id": "span_e7636f81fba0461aae6503ac",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:38:43.760718+00:00",
+            "ended_at": "2026-09-26T06:38:43.771212+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:43.774213+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:47.362690+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_15523c843fea41258cf3e97a",
+            "parent_id": "span_7febc2c0db30418296c447fe",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:38:43.774663+00:00",
+            "ended_at": "2026-09-26T06:38:47.362092+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:47.372122+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11596,
+            "output_tokens": 51
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:47.373894+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "structure_inspect"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:47.375294+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "tool_started",
+          "data": {
+            "tool": "structure_inspect"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:50.438137+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "tool_finished",
+          "data": {
+            "tool": "structure_inspect",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:50.442377+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "structure_inspect"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:50.442786+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_2e32f2f26e1c428c9d2eb4e2",
+            "parent_id": "span_7febc2c0db30418296c447fe",
+            "span_type": "function",
+            "name": "structure_inspect",
+            "model": null,
+            "started_at": "2026-09-26T06:38:47.373386+00:00",
+            "ended_at": "2026-09-26T06:38:50.442462+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:50.444451+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_7febc2c0db30418296c447fe",
+            "parent_id": "span_e7636f81fba0461aae6503ac",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:38:43.773193+00:00",
+            "ended_at": "2026-09-26T06:38:50.444117+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:50.458351+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_79168885db3847fcaaeba1ef",
+            "parent_id": "span_dc650a8995264c5db1a9ba81",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:38:50.457275+00:00",
+            "ended_at": "2026-09-26T06:38:50.457472+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:50.464553+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_f6c92fe189634d568a3558d9",
+            "parent_id": "span_dc650a8995264c5db1a9ba81",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:38:50.459057+00:00",
+            "ended_at": "2026-09-26T06:38:50.464188+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:50.468132+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_5468570961ca476880b5a5fb",
+            "parent_id": "span_dc650a8995264c5db1a9ba81",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:38:50.464617+00:00",
+            "ended_at": "2026-09-26T06:38:50.467788+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:50.468484+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_dc650a8995264c5db1a9ba81",
+            "parent_id": "span_e7636f81fba0461aae6503ac",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:38:50.455925+00:00",
+            "ended_at": "2026-09-26T06:38:50.468182+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:50.470896+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:54.918020+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_6be3635ece7b4225b0945871",
+            "parent_id": "span_c1f65b154cc54534987d2a9c",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:38:50.471328+00:00",
+            "ended_at": "2026-09-26T06:38:54.917515+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:54.922043+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11811,
+            "output_tokens": 120
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:54.923355+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:54.925927+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_c1f65b154cc54534987d2a9c",
+            "parent_id": "span_e7636f81fba0461aae6503ac",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:38:50.469106+00:00",
+            "ended_at": "2026-09-26T06:38:54.925558+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:54.930105+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:54.930417+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_3af8a985b9e44ac28ad66e49",
+            "parent_id": "span_e7636f81fba0461aae6503ac",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T06:38:54.929918+00:00",
+            "ended_at": "2026-09-26T06:38:54.930123+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:54.932537+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_e7636f81fba0461aae6503ac",
+            "parent_id": "span_f7cc3dac1e4444e2b5ea1308",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:38:37.443601+00:00",
+            "ended_at": "2026-09-26T06:38:54.932186+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:54.932924+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d",
+            "span_id": "span_f7cc3dac1e4444e2b5ea1308",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:38:37.429753+00:00",
+            "ended_at": "2026-09-26T06:38:54.932603+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:54.933134+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_f043a31a115f4a62926dd71bf1e40a8d"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:38:54.938001+00:00",
+          "session_id": "sol-20260926-03_pdb_structure",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 2
+          }
+        }
+      ],
+      "run": {
+        "run_id": "beefb700-903b-4d95-8de1-0b98e43688a5",
+        "session_dir": ".",
+        "runtime_dir": "runs/beefb700-903b-4d95-8de1-0b98e43688a5",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "outputs/structures/1A3N.cif",
+          "workspace_path": "outputs/structures/1A3N.cif",
+          "name": "1A3N.cif",
+          "size": 560920,
+          "modified_at": 1790404723702850714,
+          "kind": "structure",
+          "content_type": "chemical/x-mmcif; charset=utf-8"
+        }
+      ],
+      "approval_decision": null,
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "c05955faf50c42f6801ab6e7459eaa68",
+        "session_id": "sol-20260926-03_pdb_structure"
+      },
+      "created_at": "2026-09-26T06:38:34.565429+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "c05955faf50c42f6801ab6e7459eaa68"
+      },
+      "created_at": "2026-09-26T06:38:36.591921+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T06:38:37.430784+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T06:38:37.444063+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:39.900930+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:39.904478+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:39.907159+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll download the CIF, then inspect its chain and structure "
+      },
+      "created_at": "2026-09-26T06:38:40.089078+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:40.092008+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.094760+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.097229+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.105465+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.110247+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.112588+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.114896+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.118068+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.125797+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.128796+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.131857+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.134794+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.137767+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.141043+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.173758+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.176780+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.180152+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.183588+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.186612+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.330548+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.334195+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.337611+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.504614+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:40.507197+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:40.509595+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:40.511772+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.515917+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_puS6A1Z78sqqAjgaNQ4ywIYG",
+        "tool_name": "pdb_download",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:40.519313+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T06:38:40.523611+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T06:38:43.741985+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_puS6A1Z78sqqAjgaNQ4ywIYG",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:43.757183+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:46.751445+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:46.755659+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:46.759855+00:00"
+    },
+    {
+      "sequence": 42,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "statistics.The CIF is downloaded; I’m now verifying chains, residues, and "
+      },
+      "created_at": "2026-09-26T06:38:47.090482+00:00"
+    },
+    {
+      "sequence": 43,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:47.093348+00:00"
+    },
+    {
+      "sequence": 44,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.098395+00:00"
+    },
+    {
+      "sequence": 45,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.101362+00:00"
+    },
+    {
+      "sequence": 46,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.104166+00:00"
+    },
+    {
+      "sequence": 47,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.110266+00:00"
+    },
+    {
+      "sequence": 48,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.113053+00:00"
+    },
+    {
+      "sequence": 49,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.115791+00:00"
+    },
+    {
+      "sequence": 50,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.118905+00:00"
+    },
+    {
+      "sequence": 51,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.159681+00:00"
+    },
+    {
+      "sequence": 52,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.163427+00:00"
+    },
+    {
+      "sequence": 53,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.167511+00:00"
+    },
+    {
+      "sequence": 54,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.170341+00:00"
+    },
+    {
+      "sequence": 55,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.253055+00:00"
+    },
+    {
+      "sequence": 56,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.255858+00:00"
+    },
+    {
+      "sequence": 57,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.258741+00:00"
+    },
+    {
+      "sequence": 58,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.347117+00:00"
+    },
+    {
+      "sequence": 59,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:47.353321+00:00"
+    },
+    {
+      "sequence": 60,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:47.356290+00:00"
+    },
+    {
+      "sequence": 61,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:47.359629+00:00"
+    },
+    {
+      "sequence": 62,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.366070+00:00"
+    },
+    {
+      "sequence": 63,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_n9xUEyZU9ep8dGBMs5KTHIjD",
+        "tool_name": "structure_inspect",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:47.369280+00:00"
+    },
+    {
+      "sequence": 64,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T06:38:47.375490+00:00"
+    },
+    {
+      "sequence": 65,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T06:38:50.438583+00:00"
+    },
+    {
+      "sequence": 66,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_n9xUEyZU9ep8dGBMs5KTHIjD",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:50.450995+00:00"
+    },
+    {
+      "sequence": 67,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:53.681115+00:00"
+    },
+    {
+      "sequence": 68,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:53.685611+00:00"
+    },
+    {
+      "sequence": 69,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:53.689170+00:00"
+    },
+    {
+      "sequence": 70,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "atoms.- Downloaded **PDB 1A3N** as CIF: `outputs/structures/1A3N.cif`\n- Structure: deoxy human hemoglobin; X-ray diffraction, 1.8 Å\n- Chains: 4 (`A`, `B`, `C`, `D`)\n- Models: 1\n- Residues: 1,027\n- Atoms: 4,997 standard atoms; 627 HETATM records\n- Waters: 455\n"
+      },
+      "created_at": "2026-09-26T06:38:54.560817+00:00"
+    },
+    {
+      "sequence": 71,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "- Ligand: `HEM` (1 distinct ligand "
+      },
+      "created_at": "2026-09-26T06:38:54.908560+00:00"
+    },
+    {
+      "sequence": 72,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:54.911124+00:00"
+    },
+    {
+      "sequence": 73,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:54.913497+00:00"
+    },
+    {
+      "sequence": 74,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:38:54.915671+00:00"
+    },
+    {
+      "sequence": 75,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:38:54.919874+00:00"
+    },
+    {
+      "sequence": 76,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent finished: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T06:38:54.923696+00:00"
+    },
+    {
+      "sequence": 77,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "type)"
+      },
+      "created_at": "2026-09-26T06:38:54.955241+00:00"
+    },
+    {
+      "sequence": 78,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T06:38:54.957647+00:00"
+    }
+  ],
+  "approval_decisions": [],
+  "ui": {
+    "png": "03_pdb_structure.png",
+    "dom": "03_pdb_structure.txt",
+    "chrome_returncode": 0,
+    "stderr_tail": "198522 bytes written to file /media/data/fuhaoyi/codes/BioAgent/docs/images/live_tests_2026-09-26_gpt-5.6-sol/03_pdb_structure.png\n"
+  }
+}

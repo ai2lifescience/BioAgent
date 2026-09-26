@@ -1,0 +1,1111 @@
+{
+  "case": "20_alphafold_followup",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "Using the CIF downloaded in the previous turn, inspect the existing file without downloading it again. Report chains, atom/residue counts, and basic structure measurements with the verified path.",
+  "session_id": "sol-20260926-alphafold-handoff",
+  "run_id": "e358bf95950e410ba945f08cba3bfb4d",
+  "elapsed_seconds": 15.23,
+  "initial": {
+    "run_id": "e358bf95950e410ba945f08cba3bfb4d",
+    "session_id": "sol-20260926-alphafold-handoff",
+    "status": "running",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 14,
+    "created_at": "2026-09-26T06:50:23.698762+00:00",
+    "updated_at": "2026-09-26T06:50:23.704351+00:00",
+    "error": null
+  },
+  "status": {
+    "run_id": "e358bf95950e410ba945f08cba3bfb4d",
+    "session_id": "sol-20260926-alphafold-handoff",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 14,
+    "created_at": "2026-09-26T06:50:23.698762+00:00",
+    "updated_at": "2026-09-26T06:50:36.443411+00:00",
+    "error": null,
+    "result": {
+      "answer": "- Verified path: `outputs/alphafold/AF-P0A7V8-F1.cif`\n- Chains: 1 (`A`)\n- Atoms: 1,651\n- Residues: 206\n- Models: 1\n- HETATM / waters / ligands: 0 / 0 / 0\n- Resolution and experimental method: not applicable to this predicted structure.",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-alphafold-handoff",
+      "max_turns": 14,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Using the CIF downloaded in the previous turn, inspect the existing file without downloading it again. Report chains, atom/residue counts, and basic structure measurements with the verified path."
+        },
+        {
+          "role": "assistant",
+          "content": "- Verified path: `outputs/alphafold/AF-P0A7V8-F1.cif`\n- Chains: 1 (`A`)\n- Atoms: 1,651\n- Residues: 206\n- Models: 1\n- HETATM / waters / ligands: 0 / 0 / 0\n- Resolution and experimental method: not applicable to this predicted structure."
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [
+          "structure_inspect"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [
+          "outputs/alphafold/AF-P0A7V8-F1.cif"
+        ],
+        "outputs": [
+          {
+            "tool": "structure_inspect",
+            "atom_count": 1651,
+            "chain_count": 1,
+            "residue_count": 206,
+            "ligand_count": 0,
+            "model_count": 1,
+            "file_format": "cif",
+            "structure_path": "outputs/alphafold/AF-P0A7V8-F1.cif",
+            "status": "ok"
+          }
+        ],
+        "tool_outputs": [],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T06:50:26.516468+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "run_started",
+          "data": {
+            "request": "Using the CIF downloaded in the previous turn, inspect the existing file without downloading it again. Report chains, atom/residue counts, and basic structure measurements with the verified path.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:26.531093+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:26.535809+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_14cc869ea0d04c3c8026aec9",
+            "parent_id": "span_878a5e503262486bb0ddcefc",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T06:50:26.535288+00:00",
+            "ended_at": "2026-09-26T06:50:26.535495+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:26.536807+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_6451a3bedebe4913b72a0577",
+            "parent_id": "span_146897ffee4748bda9a3a19d",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:50:26.536454+00:00",
+            "ended_at": "2026-09-26T06:50:26.536523+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:26.537178+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_a61d30c6d10c4cc9a3b86717",
+            "parent_id": "span_146897ffee4748bda9a3a19d",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:50:26.536879+00:00",
+            "ended_at": "2026-09-26T06:50:26.536927+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:26.540207+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_639d7182d294460698520c9f",
+            "parent_id": "span_146897ffee4748bda9a3a19d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:50:26.537441+00:00",
+            "ended_at": "2026-09-26T06:50:26.539891+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:26.542525+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_46ae9f1394f64a88bb66f671",
+            "parent_id": "span_146897ffee4748bda9a3a19d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:50:26.540261+00:00",
+            "ended_at": "2026-09-26T06:50:26.542223+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:26.543337+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_146897ffee4748bda9a3a19d",
+            "parent_id": "span_878a5e503262486bb0ddcefc",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:50:26.535886+00:00",
+            "ended_at": "2026-09-26T06:50:26.543071+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:26.544137+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:26.583134+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:30.056872+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_f02cdb83bf6c4126b8accc3d",
+            "parent_id": "span_ed951b9d5bc4428791770268",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:50:26.585325+00:00",
+            "ended_at": "2026-09-26T06:50:30.056504+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:30.063814+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11735,
+            "output_tokens": 55
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:30.065381+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "structure_inspect"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:30.065818+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "tool_started",
+          "data": {
+            "tool": "structure_inspect"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:33.085917+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "tool_finished",
+          "data": {
+            "tool": "structure_inspect",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:33.089269+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "structure_inspect"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:33.089689+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_6d5ab7fde61f46858546772c",
+            "parent_id": "span_ed951b9d5bc4428791770268",
+            "span_type": "function",
+            "name": "structure_inspect",
+            "model": null,
+            "started_at": "2026-09-26T06:50:30.064858+00:00",
+            "ended_at": "2026-09-26T06:50:33.089352+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:33.090708+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_ed951b9d5bc4428791770268",
+            "parent_id": "span_f30079df1f264bc5ac23a919",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:50:26.543861+00:00",
+            "ended_at": "2026-09-26T06:50:33.090167+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:33.101002+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_60ecc5806d844134b7b4158e",
+            "parent_id": "span_1c13dcf6849e476091c659d2",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T06:50:33.100381+00:00",
+            "ended_at": "2026-09-26T06:50:33.100468+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:33.105322+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_171a249be3784929bc15de4b",
+            "parent_id": "span_1c13dcf6849e476091c659d2",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:50:33.101522+00:00",
+            "ended_at": "2026-09-26T06:50:33.104925+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:33.109099+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_2d778de671fe480aae242283",
+            "parent_id": "span_1c13dcf6849e476091c659d2",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T06:50:33.105381+00:00",
+            "ended_at": "2026-09-26T06:50:33.108750+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:33.109489+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_1c13dcf6849e476091c659d2",
+            "parent_id": "span_f30079df1f264bc5ac23a919",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T06:50:33.099738+00:00",
+            "ended_at": "2026-09-26T06:50:33.109177+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:33.111653+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:36.400967+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_fbc2f1a2e0dc4d7ba9a6641c",
+            "parent_id": "span_126890cf1ba248d682a94109",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T06:50:33.112163+00:00",
+            "ended_at": "2026-09-26T06:50:36.400605+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:36.405195+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11935,
+            "output_tokens": 89
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:36.406683+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:36.414558+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_126890cf1ba248d682a94109",
+            "parent_id": "span_f30079df1f264bc5ac23a919",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T06:50:33.110460+00:00",
+            "ended_at": "2026-09-26T06:50:36.414223+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:36.418994+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:36.419477+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_ae603c2290fe47b48f34fd09",
+            "parent_id": "span_f30079df1f264bc5ac23a919",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T06:50:36.418747+00:00",
+            "ended_at": "2026-09-26T06:50:36.419033+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:36.421402+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_f30079df1f264bc5ac23a919",
+            "parent_id": "span_878a5e503262486bb0ddcefc",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:50:26.543768+00:00",
+            "ended_at": "2026-09-26T06:50:36.420913+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:36.421756+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95",
+            "span_id": "span_878a5e503262486bb0ddcefc",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T06:50:26.531201+00:00",
+            "ended_at": "2026-09-26T06:50:36.421451+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:36.421886+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_8c0ef80ed3cc4c06ab5079bb37168e95"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T06:50:36.426586+00:00",
+          "session_id": "sol-20260926-alphafold-handoff",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 1
+          }
+        }
+      ],
+      "run": {
+        "run_id": "64d3fb7f-0305-4546-9756-9d14e0beaf37",
+        "session_dir": ".",
+        "runtime_dir": "runs/64d3fb7f-0305-4546-9756-9d14e0beaf37",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "outputs/alphafold/AF-P0A7V8-F1.cif",
+          "workspace_path": "outputs/alphafold/AF-P0A7V8-F1.cif",
+          "name": "AF-P0A7V8-F1.cif",
+          "size": 203554,
+          "modified_at": 1790405418723976078,
+          "kind": "structure",
+          "content_type": "chemical/x-mmcif; charset=utf-8"
+        }
+      ],
+      "approval_decision": null,
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "e358bf95950e410ba945f08cba3bfb4d",
+        "session_id": "sol-20260926-alphafold-handoff"
+      },
+      "created_at": "2026-09-26T06:50:23.699795+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "e358bf95950e410ba945f08cba3bfb4d"
+      },
+      "created_at": "2026-09-26T06:50:25.762060+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T06:50:26.532234+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T06:50:26.544382+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:50:29.514231+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:50:29.516897+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.519191+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll inspect the existing CIF directly and summarize its structure "
+      },
+      "created_at": "2026-09-26T06:50:29.688349+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:50:29.690845+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.694607+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.715072+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.717724+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.721147+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.723588+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.726005+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.743594+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.745702+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.747753+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.750252+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.779012+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.781251+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.783282+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.786810+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.798737+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.800959+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.803818+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.805694+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.807893+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.882558+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.function_call_arguments.delta",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:29.885001+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:30.046341+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:50:30.049741+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:50:30.051651+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:50:30.054195+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:30.058750+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_MKFUT92HjcBumImSuo6z2C0u",
+        "tool_name": "structure_inspect",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:30.061386+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool started"
+      },
+      "created_at": "2026-09-26T06:50:30.066336+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Tool finished"
+      },
+      "created_at": "2026-09-26T06:50:33.086301+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_MKFUT92HjcBumImSuo6z2C0u",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:50:33.096079+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:50:35.441788+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:50:35.444674+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:35.446817+00:00"
+    },
+    {
+      "sequence": 42,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "metrics.- Verified path: `outputs/alphafold/AF-P0A7V8-F1.cif`\n- Chains: 1 (`A`)\n- Atoms: 1,651\n- Residues: 206\n- Models: 1\n- HETATM [internal path] waters [internal path] ligands: 0 [internal path] 0 [internal path] 0\n- Resolution and experimental method: "
+      },
+      "created_at": "2026-09-26T06:50:36.074239+00:00"
+    },
+    {
+      "sequence": 43,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "not applicable to this predicted "
+      },
+      "created_at": "2026-09-26T06:50:36.391137+00:00"
+    },
+    {
+      "sequence": 44,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:36.393976+00:00"
+    },
+    {
+      "sequence": 45,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:50:36.396363+00:00"
+    },
+    {
+      "sequence": 46,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T06:50:36.398844+00:00"
+    },
+    {
+      "sequence": 47,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T06:50:36.403159+00:00"
+    },
+    {
+      "sequence": 48,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent finished: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T06:50:36.406876+00:00"
+    },
+    {
+      "sequence": 49,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "structure."
+      },
+      "created_at": "2026-09-26T06:50:36.441164+00:00"
+    },
+    {
+      "sequence": 50,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T06:50:36.443617+00:00"
+    }
+  ],
+  "ui": {
+    "png": "20_alphafold_followup.png",
+    "dom": "20_alphafold_followup.txt",
+    "chrome_returncode": 0
+  }
+}

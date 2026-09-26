@@ -1,0 +1,2326 @@
+{
+  "case": "37_remote_metagenomic_assembly",
+  "model_key": "gpt-5.6-sol",
+  "prompt": "You must perform an actual remote execution of metagenomic_de_novo_assembly. Do not use --dry-run, do not call miniwdl, do not run local validation, and do not stop after planning. First issue exactly `agent-pipeline example --pipeline metagenomic_de_novo_assembly`; then issue `agent-pipeline plan --pipeline metagenomic_de_novo_assembly --input read1=<the returned bundled FASTQ path> --cores 1 --timeout 90` with no `--dry-run`; request approval; after approval issue `agent-pipeline run --plan-id <returned plan id>` exactly once; then poll with `agent-pipeline wait --job-id <returned job id> --seconds 30` at most three times and collect results if successful. Use the configured remote Cromwell/S3 backend. Report the actual Cromwell workflow status, logs, dependency/resource/localization blocker, verified output paths and SHA-256 hashes if any. Do not retry or cancel.",
+  "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+  "run_id": "82fae7a93d534403afbf6cabd63ad6a9",
+  "started_at": "2026-09-26T11:07:16.925978+00:00",
+  "elapsed_seconds": 117.56,
+  "initial": {
+    "run_id": "82fae7a93d534403afbf6cabd63ad6a9",
+    "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+    "status": "running",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 20,
+    "created_at": "2026-09-26T11:05:19.368197+00:00",
+    "updated_at": "2026-09-26T11:05:19.424178+00:00",
+    "error": null
+  },
+  "status": {
+    "run_id": "82fae7a93d534403afbf6cabd63ad6a9",
+    "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+    "status": "succeeded",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 20,
+    "created_at": "2026-09-26T11:05:19.368197+00:00",
+    "updated_at": "2026-09-26T11:07:06.042643+00:00",
+    "error": null,
+    "result": {
+      "answer": "**Execution Result**\n- Job `08fb76f4f1064045ad7bd07a7e6a9327`\n- Cromwell status: `timed_out` after 90 seconds\n- Blocker: workflow exceeded configured resource/time limit\n- Logs: `runs/08fb76f4f1064045ad7bd07a7e6a9327/stdout.log`, `runs/08fb76f4f1064045ad7bd07a7e6a9327/stderr.log`\n- No successful outputs or output SHA-256 hashes were produced\n- Input SHA-256: `4d3438f07a5ffc48b96e0a45e3c674cdf5ef6a72740450e9cc73f3bb9244405d`",
+      "status": "ok",
+      "approval_required": false,
+      "approvals": [],
+      "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+      "max_turns": 20,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You must perform an actual remote execution of metagenomic_de_novo_assembly. Do not use --dry-run, do not call miniwdl, do not run local validation, and do not stop after planning. First issue exactly `agent-pipeline example --pipeline metagenomic_de_novo_assembly`; then issue `agent-pipeline plan --pipeline metagenomic_de_novo_assembly --input read1=<the returned bundled FASTQ path> --cores 1 --timeout 90` with no `--dry-run`; request approval; after approval issue `agent-pipeline run --plan-id <returned plan id>` exactly once; then poll with `agent-pipeline wait --job-id <returned job id> --seconds 30` at most three times and collect results if successful. Use the configured remote Cromwell/S3 backend. Report the actual Cromwell workflow status, logs, dependency/resource/localization blocker, verified output paths and SHA-256 hashes if any. Do not retry or cancel."
+        },
+        {
+          "role": "assistant",
+          "content": "**Execution Result**\n- Job `08fb76f4f1064045ad7bd07a7e6a9327`\n- Cromwell status: `timed_out` after 90 seconds\n- Blocker: workflow exceeded configured resource/time limit\n- Logs: `runs/08fb76f4f1064045ad7bd07a7e6a9327/stdout.log`, `runs/08fb76f4f1064045ad7bd07a7e6a9327/stderr.log`\n- No successful outputs or output SHA-256 hashes were produced\n- Input SHA-256: `4d3438f07a5ffc48b96e0a45e3c674cdf5ef6a72740450e9cc73f3bb9244405d`"
+        }
+      ],
+      "evidence": {
+        "retrieval_date": "2026-09-26",
+        "tools": [
+          "pipeline_shell"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [
+          "uploads/examples/metagenomic_de_novo_assembly-18354e7a/assembly_demo.fastq.gz"
+        ],
+        "outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok",
+            "pipeline_name": "metagenomic_de_novo_assembly"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "plan_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "status": "planned",
+            "command": "agent-pipeline run --plan-id 08fb76f4f1064045ad7bd07a7e6a9327"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "plan_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "status": "queued"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "plan_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "logs": {
+              "stdout": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stdout.log",
+              "stderr": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stderr.log"
+            },
+            "status": "running",
+            "pipeline_name": "metagenomic_de_novo_assembly"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "plan_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "logs": {
+              "stdout": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stdout.log",
+              "stderr": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stderr.log"
+            },
+            "status": "running",
+            "pipeline_name": "metagenomic_de_novo_assembly"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "plan_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "logs": {
+              "stdout": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stdout.log",
+              "stderr": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stderr.log"
+            },
+            "status": "timed_out",
+            "error": "Pipeline exceeded its timeout.",
+            "pipeline_name": "metagenomic_de_novo_assembly"
+          }
+        ],
+        "tool_outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok",
+            "pipeline_name": "metagenomic_de_novo_assembly"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "planned",
+            "job_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "plan_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "command": "agent-pipeline run --plan-id 08fb76f4f1064045ad7bd07a7e6a9327"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "queued",
+            "job_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "plan_id": "08fb76f4f1064045ad7bd07a7e6a9327"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "running",
+            "job_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "plan_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "logs": {
+              "stdout": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stdout.log",
+              "stderr": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stderr.log"
+            },
+            "pipeline_name": "metagenomic_de_novo_assembly"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "running",
+            "job_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "plan_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "logs": {
+              "stdout": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stdout.log",
+              "stderr": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stderr.log"
+            },
+            "pipeline_name": "metagenomic_de_novo_assembly"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "timed_out",
+            "error": "Pipeline exceeded its timeout.",
+            "job_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "plan_id": "08fb76f4f1064045ad7bd07a7e6a9327",
+            "logs": {
+              "stdout": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stdout.log",
+              "stderr": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stderr.log"
+            },
+            "pipeline_name": "metagenomic_de_novo_assembly"
+          }
+        ],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-09-26T11:05:22.534186+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "run_started",
+          "data": {
+            "request": "You must perform an actual remote execution of metagenomic_de_novo_assembly. Do not use --dry-run, do not call miniwdl, do not run local validation, and do not stop after planning. First issue exactly `agent-pipeline example --pipeline metagenomic_de_novo_assembly`; then issue `agent-pipeline plan --pipeline metagenomic_de_novo_assembly --input read1=<the returned bundled FASTQ path> --cores 1 --timeout 90` with no `--dry-run`; request approval; after approval issue `agent-pipeline run --plan-id <returned plan id>` exactly once; then poll with `agent-pipeline wait --job-id <returned job id> --seconds 30` at most three times and collect results if successful. Use the configured remote Cromwell/S3 backend. Report the actual Cromwell workflow status, logs, dependency/resource/localization blocker, verified output paths and SHA-256 hashes if any. Do not retry or cancel.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:22.552795+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:22.568877+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_538c287d8795408692902c2b",
+            "parent_id": "span_4f4a4c406c0f454398a5e7b0",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-09-26T11:05:22.568241+00:00",
+            "ended_at": "2026-09-26T11:05:22.568405+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:22.570900+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_e071d13044ca4448bf5eef6e",
+            "parent_id": "span_0ab617461c4a4e6f89e57942",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T11:05:22.570276+00:00",
+            "ended_at": "2026-09-26T11:05:22.570426+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:22.571522+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_6218db030ecc48539460a71c",
+            "parent_id": "span_0ab617461c4a4e6f89e57942",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T11:05:22.571018+00:00",
+            "ended_at": "2026-09-26T11:05:22.571095+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:22.575497+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_47a142d0e4524e8797c77131",
+            "parent_id": "span_0ab617461c4a4e6f89e57942",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:05:22.571907+00:00",
+            "ended_at": "2026-09-26T11:05:22.575033+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:22.578919+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_ecd422fb66a440ed91075286",
+            "parent_id": "span_0ab617461c4a4e6f89e57942",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:05:22.575560+00:00",
+            "ended_at": "2026-09-26T11:05:22.578483+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:22.580631+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_0ab617461c4a4e6f89e57942",
+            "parent_id": "span_4f4a4c406c0f454398a5e7b0",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T11:05:22.569056+00:00",
+            "ended_at": "2026-09-26T11:05:22.580114+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:22.581745+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:22.634433+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:26.140990+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_893b0073f13240be8a568d3c",
+            "parent_id": "span_f1393b2344a044319d0c120a",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T11:05:22.637672+00:00",
+            "ended_at": "2026-09-26T11:05:26.139914+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:26.171440+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11541,
+            "output_tokens": 64
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:26.179277+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:26.234381+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline example --pipeline metagenomic_de_novo_assembly",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:26.238609+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:26.239683+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_5e1bb2846a5946aeb850f9af",
+            "parent_id": "span_f1393b2344a044319d0c120a",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T11:05:26.174208+00:00",
+            "ended_at": "2026-09-26T11:05:26.238823+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:26.241423+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_f1393b2344a044319d0c120a",
+            "parent_id": "span_f0480eb43cfc45ae82ea672f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T11:05:22.581416+00:00",
+            "ended_at": "2026-09-26T11:05:26.240580+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:26.260699+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_b0422fbc430b44ed8107ae40",
+            "parent_id": "span_75534ede61df454c92c7940f",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T11:05:26.259915+00:00",
+            "ended_at": "2026-09-26T11:05:26.260051+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:26.267147+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_757b1d6de78f48948b00e816",
+            "parent_id": "span_75534ede61df454c92c7940f",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:05:26.261524+00:00",
+            "ended_at": "2026-09-26T11:05:26.266504+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:26.272365+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_21dd9d26019f445faeb1a9a3",
+            "parent_id": "span_75534ede61df454c92c7940f",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:05:26.267232+00:00",
+            "ended_at": "2026-09-26T11:05:26.271654+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:26.273250+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_75534ede61df454c92c7940f",
+            "parent_id": "span_f0480eb43cfc45ae82ea672f",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T11:05:26.258996+00:00",
+            "ended_at": "2026-09-26T11:05:26.272616+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:26.275950+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:28.928783+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_9879f56d66814d3b9ddae85a",
+            "parent_id": "span_1e4b72770d53487a8df5a53a",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T11:05:26.276944+00:00",
+            "ended_at": "2026-09-26T11:05:28.928368+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:28.941423+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 11709,
+            "output_tokens": 102
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:28.945245+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:29.003302+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline plan --pipeline metagenomic_de_novo_assembly --input read1=uploads/examples/metagenomic_de_novo_assembly-18354e7a/assembly_demo.fastq.gz --cores 1 --timeout 90",
+            "status": "planned"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:29.008880+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:29.009938+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_4c93bf54214c4d949f5f21fb",
+            "parent_id": "span_1e4b72770d53487a8df5a53a",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T11:05:28.942688+00:00",
+            "ended_at": "2026-09-26T11:05:29.009016+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:29.011944+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_1e4b72770d53487a8df5a53a",
+            "parent_id": "span_f0480eb43cfc45ae82ea672f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T11:05:26.274271+00:00",
+            "ended_at": "2026-09-26T11:05:29.011096+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:29.028253+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_e3e7ce63b2e045af8996e90a",
+            "parent_id": "span_9450e8ced6424b3ea6b4e849",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T11:05:29.027584+00:00",
+            "ended_at": "2026-09-26T11:05:29.027703+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:29.033558+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_b1ae9e90a00b49f4999b7b7a",
+            "parent_id": "span_9450e8ced6424b3ea6b4e849",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:05:29.028695+00:00",
+            "ended_at": "2026-09-26T11:05:29.032994+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:29.037917+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_05bcf79bf4df4920bbe164b1",
+            "parent_id": "span_9450e8ced6424b3ea6b4e849",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:05:29.033657+00:00",
+            "ended_at": "2026-09-26T11:05:29.037217+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:29.038549+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_9450e8ced6424b3ea6b4e849",
+            "parent_id": "span_f0480eb43cfc45ae82ea672f",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T11:05:29.026774+00:00",
+            "ended_at": "2026-09-26T11:05:29.037981+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:29.041112+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:31.613422+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_74caa7f4541c4f03a7384aeb",
+            "parent_id": "span_bc53db59467d494dac9fc357",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T11:05:29.041875+00:00",
+            "ended_at": "2026-09-26T11:05:31.612984+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:31.625481+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12461,
+            "output_tokens": 81
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:31.629729+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_6d4b5260d77049cc86ba21e2",
+            "parent_id": "span_bc53db59467d494dac9fc357",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T11:05:31.626752+00:00",
+            "ended_at": "2026-09-26T11:05:31.629351+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:31.630780+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_bc53db59467d494dac9fc357",
+            "parent_id": "span_f0480eb43cfc45ae82ea672f",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T11:05:29.039349+00:00",
+            "ended_at": "2026-09-26T11:05:31.630304+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:31.642183+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_f0480eb43cfc45ae82ea672f",
+            "parent_id": "span_4f4a4c406c0f454398a5e7b0",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T11:05:22.581297+00:00",
+            "ended_at": "2026-09-26T11:05:31.641198+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:31.643295+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_4f4a4c406c0f454398a5e7b0",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T11:05:22.552958+00:00",
+            "ended_at": "2026-09-26T11:05:31.642415+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:31.643831+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:31.673026+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "run_paused",
+          "data": {
+            "reason": "tool_approval",
+            "tool_names": [
+              "pipeline_shell"
+            ]
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.556329+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "approval_decision",
+          "data": {
+            "approved": true,
+            "tool_name": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.566908+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.572245+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_6fe7a41e2bb14d2d8ad940a7",
+            "parent_id": "span_fd7d1361328a4058bd050ffb",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T11:05:32.571725+00:00",
+            "ended_at": "2026-09-26T11:05:32.571807+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.572985+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_319a90b34e924fcaa39a614b",
+            "parent_id": "span_fd7d1361328a4058bd050ffb",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T11:05:32.572374+00:00",
+            "ended_at": "2026-09-26T11:05:32.572459+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.576328+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_0cc068b562e14545b646ea9d",
+            "parent_id": "span_fd7d1361328a4058bd050ffb",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:05:32.573311+00:00",
+            "ended_at": "2026-09-26T11:05:32.575923+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.579375+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_9e08d4bd6296437792120152",
+            "parent_id": "span_fd7d1361328a4058bd050ffb",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:05:32.576379+00:00",
+            "ended_at": "2026-09-26T11:05:32.578851+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.580529+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_fd7d1361328a4058bd050ffb",
+            "parent_id": "span_d822fd936d884d5abf26d600",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T11:05:32.571043+00:00",
+            "ended_at": "2026-09-26T11:05:32.580152+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.586207+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.636387+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline run --plan-id 08fb76f4f1064045ad7bd07a7e6a9327",
+            "status": "queued"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.638900+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.639319+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_41f70e14206e4fe8b03b9dbe",
+            "parent_id": "span_d822fd936d884d5abf26d600",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T11:05:32.585534+00:00",
+            "ended_at": "2026-09-26T11:05:32.638953+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.643283+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_3e764e78c51a40a6a5455322",
+            "parent_id": "span_33aec46040894206877a0ab8",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T11:05:32.642771+00:00",
+            "ended_at": "2026-09-26T11:05:32.642862+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.647196+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_92ba43212c8c4378a8111c22",
+            "parent_id": "span_33aec46040894206877a0ab8",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:05:32.643676+00:00",
+            "ended_at": "2026-09-26T11:05:32.646799+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.650762+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_d7fd174e485248a59e42dd69",
+            "parent_id": "span_33aec46040894206877a0ab8",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:05:32.647243+00:00",
+            "ended_at": "2026-09-26T11:05:32.650386+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.651135+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_33aec46040894206877a0ab8",
+            "parent_id": "span_d822fd936d884d5abf26d600",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T11:05:32.642213+00:00",
+            "ended_at": "2026-09-26T11:05:32.650801+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.652038+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:32.654762+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:35.603033+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_5e14540a8d4643fe8beab7d0",
+            "parent_id": "span_43b36bf411bb4d368c7c8cc5",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T11:05:32.655178+00:00",
+            "ended_at": "2026-09-26T11:05:35.602503+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:35.604879+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12688,
+            "output_tokens": 85
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:05:35.607495+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:05.613450+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline wait --job-id 08fb76f4f1064045ad7bd07a7e6a9327 --seconds 30",
+            "status": "running"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:05.624382+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:05.625150+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_5499c0306cc047b6a0c10f92",
+            "parent_id": "span_43b36bf411bb4d368c7c8cc5",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T11:05:35.605606+00:00",
+            "ended_at": "2026-09-26T11:06:05.624486+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:05.626402+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_43b36bf411bb4d368c7c8cc5",
+            "parent_id": "span_cbde5565266f4488b0ddd770",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T11:05:32.651750+00:00",
+            "ended_at": "2026-09-26T11:06:05.625738+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:05.630497+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_0340f68ab18347ab9b45fc0d",
+            "parent_id": "span_59a2b271058747a298c6462a",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T11:06:05.629817+00:00",
+            "ended_at": "2026-09-26T11:06:05.629929+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:05.635628+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_dbae2cc5da5c499881903444",
+            "parent_id": "span_59a2b271058747a298c6462a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:06:05.630945+00:00",
+            "ended_at": "2026-09-26T11:06:05.635043+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:05.639587+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_71fa65f80b264c3191627265",
+            "parent_id": "span_59a2b271058747a298c6462a",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:06:05.635723+00:00",
+            "ended_at": "2026-09-26T11:06:05.639009+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:05.640116+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_59a2b271058747a298c6462a",
+            "parent_id": "span_cbde5565266f4488b0ddd770",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T11:06:05.628910+00:00",
+            "ended_at": "2026-09-26T11:06:05.639662+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:05.641914+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:08.395424+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_d8e92e9385cc4863b3b2821f",
+            "parent_id": "span_1e1e2a7584b4428d809ac061",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T11:06:05.642414+00:00",
+            "ended_at": "2026-09-26T11:06:08.394242+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:08.398706+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 13048,
+            "output_tokens": 85
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:08.403890+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:38.412123+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline wait --job-id 08fb76f4f1064045ad7bd07a7e6a9327 --seconds 30",
+            "status": "running"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:38.424809+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:38.425452+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_3d560a0c7b3248bdae8e4118",
+            "parent_id": "span_1e1e2a7584b4428d809ac061",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T11:06:08.400215+00:00",
+            "ended_at": "2026-09-26T11:06:38.424926+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:38.426488+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_1e1e2a7584b4428d809ac061",
+            "parent_id": "span_cbde5565266f4488b0ddd770",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T11:06:05.640643+00:00",
+            "ended_at": "2026-09-26T11:06:38.425958+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:38.431363+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_eb6324c5b5ea4f3a89d70612",
+            "parent_id": "span_38733c73469b4cbe88914396",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T11:06:38.430433+00:00",
+            "ended_at": "2026-09-26T11:06:38.430637+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:38.436340+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_51381170824144799f2710f1",
+            "parent_id": "span_38733c73469b4cbe88914396",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:06:38.431853+00:00",
+            "ended_at": "2026-09-26T11:06:38.435871+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:38.440601+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_851f9b809f7947afa2a3c28d",
+            "parent_id": "span_38733c73469b4cbe88914396",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:06:38.436402+00:00",
+            "ended_at": "2026-09-26T11:06:38.440119+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:38.441073+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_38733c73469b4cbe88914396",
+            "parent_id": "span_cbde5565266f4488b0ddd770",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T11:06:38.429599+00:00",
+            "ended_at": "2026-09-26T11:06:38.440647+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:38.443474+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:41.133921+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_86ddcaef6e9745099103279e",
+            "parent_id": "span_c1d2510e7fa54152b59f69d7",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T11:06:38.444041+00:00",
+            "ended_at": "2026-09-26T11:06:41.133358+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:41.135764+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 13408,
+            "output_tokens": 83
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:06:41.138878+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:02.894047+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline wait --job-id 08fb76f4f1064045ad7bd07a7e6a9327 --seconds 30",
+            "status": "timed_out"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:02.908669+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:02.909291+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_e947bbe787324d439a27a84a",
+            "parent_id": "span_c1d2510e7fa54152b59f69d7",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-09-26T11:06:41.137198+00:00",
+            "ended_at": "2026-09-26T11:07:02.908772+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:02.910337+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_c1d2510e7fa54152b59f69d7",
+            "parent_id": "span_cbde5565266f4488b0ddd770",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T11:06:38.441952+00:00",
+            "ended_at": "2026-09-26T11:07:02.909806+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:02.914524+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_d4c6cf30099d40c1a07ded89",
+            "parent_id": "span_5a2bdc1390be47d9847014b9",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-09-26T11:07:02.913831+00:00",
+            "ended_at": "2026-09-26T11:07:02.913955+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:02.919386+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_32f13c6c447c49d09959df53",
+            "parent_id": "span_5a2bdc1390be47d9847014b9",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:07:02.914971+00:00",
+            "ended_at": "2026-09-26T11:07:02.918956+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:02.923147+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_a294566b5d164e97a04d4a84",
+            "parent_id": "span_5a2bdc1390be47d9847014b9",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-09-26T11:07:02.919444+00:00",
+            "ended_at": "2026-09-26T11:07:02.922760+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:02.923538+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_5a2bdc1390be47d9847014b9",
+            "parent_id": "span_cbde5565266f4488b0ddd770",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-09-26T11:07:02.913020+00:00",
+            "ended_at": "2026-09-26T11:07:02.923185+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:02.925689+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:05.971522+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_3ff2d1e801a942a69e932b90",
+            "parent_id": "span_c6b2a758f31c4556b0f95b5e",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-09-26T11:07:02.926310+00:00",
+            "ended_at": "2026-09-26T11:07:05.970458+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:05.974814+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 13803,
+            "output_tokens": 175
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:05.976927+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:05.977944+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_c6b2a758f31c4556b0f95b5e",
+            "parent_id": "span_cbde5565266f4488b0ddd770",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-09-26T11:07:02.924301+00:00",
+            "ended_at": "2026-09-26T11:07:05.977146+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:05.978628+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:05.979446+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_6bf011e96bd64a4986f1caba",
+            "parent_id": "span_cbde5565266f4488b0ddd770",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-09-26T11:07:05.978192+00:00",
+            "ended_at": "2026-09-26T11:07:05.978657+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:05.992154+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_2664c7adbd9948f08ded1418",
+            "parent_id": "span_d0bb2e6b543a4570ae107e99",
+            "span_type": "custom",
+            "name": "sandbox.cleanup_sessions",
+            "model": null,
+            "started_at": "2026-09-26T11:07:05.990792+00:00",
+            "ended_at": "2026-09-26T11:07:05.991395+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:05.992861+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_d0bb2e6b543a4570ae107e99",
+            "parent_id": "span_cbde5565266f4488b0ddd770",
+            "span_type": "custom",
+            "name": "sandbox.cleanup",
+            "model": null,
+            "started_at": "2026-09-26T11:07:05.990733+00:00",
+            "ended_at": "2026-09-26T11:07:05.992182+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:05.993501+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_cbde5565266f4488b0ddd770",
+            "parent_id": "span_d822fd936d884d5abf26d600",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T11:05:32.651622+00:00",
+            "ended_at": "2026-09-26T11:07:05.992895+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:05.994069+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6",
+            "span_id": "span_d822fd936d884d5abf26d600",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-09-26T11:05:32.567006+00:00",
+            "ended_at": "2026-09-26T11:07:05.993626+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:05.994240+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_2dab8cf3bc2b4b8b9303a829b8398dc6"
+          }
+        },
+        {
+          "timestamp": "2026-09-26T11:07:06.007026+00:00",
+          "session_id": "sol-20260926-37_remote_metagenomic_assembly",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 6
+          }
+        }
+      ],
+      "run": {
+        "run_id": "b13c87c1-cc15-4bd5-9564-41369e0298e4",
+        "session_dir": ".",
+        "runtime_dir": "runs/b13c87c1-cc15-4bd5-9564-41369e0298e4",
+        "workspace_dir": "outputs"
+      },
+      "files": [
+        {
+          "path": "uploads/examples/metagenomic_de_novo_assembly-18354e7a/assembly_demo.fastq.gz",
+          "workspace_path": "uploads/examples/metagenomic_de_novo_assembly-18354e7a/assembly_demo.fastq.gz",
+          "name": "assembly_demo.fastq.gz",
+          "size": 9480292,
+          "modified_at": 1790420726231642359,
+          "kind": "upload",
+          "content_type": "application/gzip"
+        },
+        {
+          "path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/plan.json",
+          "workspace_path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/plan.json",
+          "name": "plan.json",
+          "size": 1796,
+          "modified_at": 1790420728997659329,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stderr.log",
+          "workspace_path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stderr.log",
+          "name": "stderr.log",
+          "size": 0,
+          "modified_at": 1790420732630681635,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stdout.log",
+          "workspace_path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/stdout.log",
+          "name": "stdout.log",
+          "size": 0,
+          "modified_at": 1790420732630681635,
+          "kind": "text",
+          "content_type": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/inputs/read1/0_assembly_demo.fastq.gz",
+          "workspace_path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/inputs/read1/0_assembly_demo.fastq.gz",
+          "name": "0_assembly_demo.fastq.gz",
+          "size": 9480292,
+          "modified_at": 1790420732760682433,
+          "kind": "compressed",
+          "content_type": "application/gzip"
+        },
+        {
+          "path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/inputs.json",
+          "workspace_path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/inputs.json",
+          "name": "inputs.json",
+          "size": 182,
+          "modified_at": 1790420732782682569,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/outputs/config.runtime.yaml",
+          "workspace_path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/outputs/config.runtime.yaml",
+          "name": "config.runtime.yaml",
+          "size": 2959,
+          "modified_at": 1790420732852682998,
+          "kind": "config",
+          "content_type": "text/yaml; charset=utf-8"
+        },
+        {
+          "path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/outputs/options.runtime.json",
+          "workspace_path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/outputs/options.runtime.json",
+          "name": "options.runtime.json",
+          "size": 284,
+          "modified_at": 1790420733000683907,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/outputs/cromwell.input_uploads.json",
+          "workspace_path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/outputs/cromwell.input_uploads.json",
+          "name": "cromwell.input_uploads.json",
+          "size": 558,
+          "modified_at": 1790420734977696054,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/outputs/inputs.runtime.json",
+          "workspace_path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/outputs/inputs.runtime.json",
+          "name": "inputs.runtime.json",
+          "size": 2147,
+          "modified_at": 1790420734977696054,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/outputs/cromwell.submission.json",
+          "workspace_path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/outputs/cromwell.submission.json",
+          "name": "cromwell.submission.json",
+          "size": 76,
+          "modified_at": 1790420735024696343,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        },
+        {
+          "path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/job.json",
+          "workspace_path": "runs/08fb76f4f1064045ad7bd07a7e6a9327/job.json",
+          "name": "job.json",
+          "size": 2399,
+          "modified_at": 1790420822699240066,
+          "kind": "config",
+          "content_type": "application/json; charset=utf-8"
+        }
+      ],
+      "approval_decision": {
+        "approved": true,
+        "approval_id": "bc46bc25e14a4ebc8b3e1b6040b6ac39",
+        "tool_name": "pipeline_shell",
+        "arguments": {
+          "commands": [
+            "agent-pipeline run --plan-id 08fb76f4f1064045ad7bd07a7e6a9327"
+          ],
+          "max_output_length": 20000,
+          "timeout_ms": 90000
+        },
+        "plan": {
+          "pipeline_name": "metagenomic_de_novo_assembly",
+          "engine": "wdl",
+          "inputs": {
+            "read1": [
+              {
+                "path": "uploads/examples/metagenomic_de_novo_assembly-18354e7a/assembly_demo.fastq.gz",
+                "sha256": "4d3438f07a5ffc48b96e0a45e3c674cdf5ef6a72740450e9cc73f3bb9244405d",
+                "size": 9480292
+              }
+            ]
+          },
+          "parameters": {},
+          "cores": 1,
+          "timeout_seconds": 90,
+          "max_memory_mb": 8192,
+          "dry_run": false,
+          "definition_sha256": "7d60b1d0f95fef7c3b7d49ac90c75ffe41088ef9b869bd93d2f2f65adf39d3a6",
+          "outputs": {
+            "contigs": {
+              "name": "contigs",
+              "label": "Renamed assembled contigs",
+              "config_key": "",
+              "default": "data/output/final.contigs.renamed.fa",
+              "kind": "sequence",
+              "required": true,
+              "description": "Renamed assembled contigs produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": "AssemblyId.final_contigs_renamed"
+            },
+            "contig_report": {
+              "name": "contig_report",
+              "label": "Contig identification report",
+              "config_key": "",
+              "default": "data/output/contig_report.tsv",
+              "kind": "table",
+              "required": true,
+              "description": "Contig identification report produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": "AssemblyId.contig_report_tsv"
+            },
+            "species_report": {
+              "name": "species_report",
+              "label": "Species identification report",
+              "config_key": "",
+              "default": "data/output/species_report.tsv",
+              "kind": "table",
+              "required": true,
+              "description": "Species identification report produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": "AssemblyId.species_report_tsv"
+            }
+          },
+          "wdl_engine": "cromwell",
+          "cromwell_url": "http://192.168.164.39:39000"
+        }
+      },
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    }
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "event": "queued",
+      "payload": {
+        "message": "Agent run queued.",
+        "run_id": "82fae7a93d534403afbf6cabd63ad6a9",
+        "session_id": "sol-20260926-37_remote_metagenomic_assembly"
+      },
+      "created_at": "2026-09-26T11:05:19.368955+00:00"
+    },
+    {
+      "sequence": 1,
+      "event": "started",
+      "payload": {
+        "message": "Agent run started.",
+        "run_id": "82fae7a93d534403afbf6cabd63ad6a9"
+      },
+      "created_at": "2026-09-26T11:05:21.393538+00:00"
+    },
+    {
+      "sequence": 2,
+      "event": "sdk_agent_updated",
+      "payload": {
+        "sdk_type": "agent_updated_stream_event",
+        "agent": "Pipeline2Agent",
+        "parent_call_id": null
+      },
+      "created_at": "2026-09-26T11:05:22.554359+00:00"
+    },
+    {
+      "sequence": 3,
+      "event": "log",
+      "payload": {
+        "message": "[agents] Agent started: Pipeline2Agent."
+      },
+      "created_at": "2026-09-26T11:05:22.582104+00:00"
+    },
+    {
+      "sequence": 4,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:25.442068+00:00"
+    },
+    {
+      "sequence": 5,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:25.460287+00:00"
+    },
+    {
+      "sequence": 6,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T11:05:25.465393+00:00"
+    },
+    {
+      "sequence": 7,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "I’ll stage the bundled example first, exactly as "
+      },
+      "created_at": "2026-09-26T11:05:26.042342+00:00"
+    },
+    {
+      "sequence": 8,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T11:05:26.047968+00:00"
+    },
+    {
+      "sequence": 9,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:26.064400+00:00"
+    },
+    {
+      "sequence": 10,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:26.094661+00:00"
+    },
+    {
+      "sequence": 11,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:26.099799+00:00"
+    },
+    {
+      "sequence": 12,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:26.122883+00:00"
+    },
+    {
+      "sequence": 13,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T11:05:26.145277+00:00"
+    },
+    {
+      "sequence": 14,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_Fiy2QCw1VJnCp6jq0jM4Uiwt",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T11:05:26.151928+00:00"
+    },
+    {
+      "sequence": 15,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_Fiy2QCw1VJnCp6jq0jM4Uiwt",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:26.251469+00:00"
+    },
+    {
+      "sequence": 16,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:28.013631+00:00"
+    },
+    {
+      "sequence": 17,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:28.045144+00:00"
+    },
+    {
+      "sequence": 18,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T11:05:28.049376+00:00"
+    },
+    {
+      "sequence": 19,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "requested.The bundled FASTQ is staged; I’m creating the remote execution "
+      },
+      "created_at": "2026-09-26T11:05:28.840265+00:00"
+    },
+    {
+      "sequence": 20,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T11:05:28.859793+00:00"
+    },
+    {
+      "sequence": 21,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:28.884299+00:00"
+    },
+    {
+      "sequence": 22,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:28.904897+00:00"
+    },
+    {
+      "sequence": 23,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:28.909206+00:00"
+    },
+    {
+      "sequence": 24,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:28.924625+00:00"
+    },
+    {
+      "sequence": 25,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T11:05:28.931855+00:00"
+    },
+    {
+      "sequence": 26,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_QNqMr4wcaYsARmEh09r8DlD5",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T11:05:28.937603+00:00"
+    },
+    {
+      "sequence": 27,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_output",
+        "item_type": "tool_call_output_item",
+        "call_id": "call_QNqMr4wcaYsARmEh09r8DlD5",
+        "tool_name": null,
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:29.019319+00:00"
+    },
+    {
+      "sequence": 28,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.created",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:30.905115+00:00"
+    },
+    {
+      "sequence": 29,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:30.915696+00:00"
+    },
+    {
+      "sequence": 30,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.added",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T11:05:30.922581+00:00"
+    },
+    {
+      "sequence": 31,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "plan.The Cromwell plan is ready; I’m requesting approval to launch "
+      },
+      "created_at": "2026-09-26T11:05:31.571418+00:00"
+    },
+    {
+      "sequence": 32,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.content_part.done",
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T11:05:31.576054+00:00"
+    },
+    {
+      "sequence": 33,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.added",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:31.580314+00:00"
+    },
+    {
+      "sequence": 34,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:31.586066+00:00"
+    },
+    {
+      "sequence": 35,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.output_item.done",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:31.591470+00:00"
+    },
+    {
+      "sequence": 36,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "agent": null,
+        "parent_call_id": null,
+        "data_type": "response.completed",
+        "item_id": null
+      },
+      "created_at": "2026-09-26T11:05:31.595573+00:00"
+    },
+    {
+      "sequence": 37,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "message_output_created",
+        "item_type": "message_output_item",
+        "call_id": null,
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T11:05:31.615747+00:00"
+    },
+    {
+      "sequence": 38,
+      "event": "sdk_run_item",
+      "payload": {
+        "sdk_type": "run_item_stream_event",
+        "agent": null,
+        "parent_call_id": null,
+        "name": "tool_called",
+        "item_type": "tool_call_item",
+        "call_id": "call_vWrqXOjnj2hAIdfuszs7OROZ",
+        "tool_name": null,
+        "item_id": "__fake_id__"
+      },
+      "created_at": "2026-09-26T11:05:31.621208+00:00"
+    },
+    {
+      "sequence": 39,
+      "event": "sdk_raw_response",
+      "payload": {
+        "sdk_type": "raw_response_event",
+        "data_type": "response.output_text.delta",
+        "delta": "it."
+      },
+      "created_at": "2026-09-26T11:05:31.688620+00:00"
+    },
+    {
+      "sequence": 40,
+      "event": "pending_approval",
+      "payload": {
+        "status": "pending_approval"
+      },
+      "created_at": "2026-09-26T11:05:31.711394+00:00"
+    },
+    {
+      "sequence": 41,
+      "event": "succeeded",
+      "payload": {
+        "status": "succeeded"
+      },
+      "created_at": "2026-09-26T11:07:06.042883+00:00"
+    }
+  ],
+  "approval_decisions": [
+    {
+      "approval_id": "bc46bc25e14a4ebc8b3e1b6040b6ac39",
+      "tool_name": "pipeline_shell",
+      "approved": true,
+      "arguments": {
+        "commands": [
+          "agent-pipeline run --plan-id 08fb76f4f1064045ad7bd07a7e6a9327"
+        ],
+        "max_output_length": 20000,
+        "timeout_ms": 90000
+      },
+      "plan": {
+        "pipeline_name": "metagenomic_de_novo_assembly",
+        "engine": "wdl",
+        "inputs": {
+          "read1": [
+            {
+              "path": "uploads/examples/metagenomic_de_novo_assembly-18354e7a/assembly_demo.fastq.gz",
+              "sha256": "4d3438f07a5ffc48b96e0a45e3c674cdf5ef6a72740450e9cc73f3bb9244405d",
+              "size": 9480292
+            }
+          ]
+        },
+        "parameters": {},
+        "cores": 1,
+        "timeout_seconds": 90,
+        "max_memory_mb": 8192,
+        "dry_run": false,
+        "definition_sha256": "7d60b1d0f95fef7c3b7d49ac90c75ffe41088ef9b869bd93d2f2f65adf39d3a6",
+        "outputs": {
+          "contigs": {
+            "name": "contigs",
+            "label": "Renamed assembled contigs",
+            "config_key": "",
+            "default": "data/output/final.contigs.renamed.fa",
+            "kind": "sequence",
+            "required": true,
+            "description": "Renamed assembled contigs produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": "AssemblyId.final_contigs_renamed"
+          },
+          "contig_report": {
+            "name": "contig_report",
+            "label": "Contig identification report",
+            "config_key": "",
+            "default": "data/output/contig_report.tsv",
+            "kind": "table",
+            "required": true,
+            "description": "Contig identification report produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": "AssemblyId.contig_report_tsv"
+          },
+          "species_report": {
+            "name": "species_report",
+            "label": "Species identification report",
+            "config_key": "",
+            "default": "data/output/species_report.tsv",
+            "kind": "table",
+            "required": true,
+            "description": "Species identification report produced by this workflow.",
+            "nextflow_output": "",
+            "wdl_output": "AssemblyId.species_report_tsv"
+          }
+        },
+        "wdl_engine": "cromwell",
+        "cromwell_url": "http://192.168.164.39:39000"
+      }
+    }
+  ],
+  "ui": {
+    "png": "37_remote_metagenomic_assembly.png",
+    "dom": "37_remote_metagenomic_assembly.txt",
+    "returncode": 0
+  }
+}

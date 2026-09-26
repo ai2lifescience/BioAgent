@@ -1,0 +1,107 @@
+PROMPT:
+Read the final Markdown report from the previous turn and display its substantive contents in the web response: title, headings, key findings, evidence table or citations, limitations, and conclusion. Include the saved report path and do not summarize with only a link.
+
+MODEL: gpt-5.6-sol
+STATUS: succeeded
+TOOLS: file_inspection
+
+ANSWER:
+# Reliable Interactive AI Agents for Scientific Research
+
+**Saved report:** `outputs/report_write/73666c5eb0314a4a99c7b9ac56257ff8/Reliable_Interactive_AI_Agents_for_Scientific_Research_Evide.md`  
+**Evidence cutoff:** 2026-09-26
+
+## Headings
+
+1. Scope, method, and evidence hierarchy  
+2. Factual accuracy, hallucination, and citations  
+3. Tool use and reproducibility  
+4. Human oversight  
+5. Uncertainty and calibration  
+6. Security and prompt injection  
+7. Provenance  
+8. Benchmark limitations  
+9. Evidence quality and contradictions  
+10. Practical governance checklist  
+11. Evidence gaps and limitations  
+12. Conclusion  
+
+## Key Findings
+
+- Current evidence supports AI agents as **supervised research assistants—not autonomous scientific authorities**.
+- They can accelerate literature triage, writing, coding, data processing, and bounded research-engineering tasks.
+- Fluent or guideline-consistent answers do not ensure factual or citation reliability.
+- Reliability requires source verification, constrained tool access, reproducible execution, security controls, provenance, uncertainty handling, and accountable expert review.
+- Standards such as NIST, OWASP, and C2PA define useful controls but do not empirically prove accuracy or safety.
+
+## Evidence Comparison
+
+| Evidence | Main result | Interpretation |
+|---|---|---|
+| ChatGPT-3.5 citation audit, [PMID 37337480](https://pubmed.ncbi.nlm.nih.gov/37337480/) | Among 115 references, 47% were fabricated, 46% authentic but inaccurate, and 7% authentic and accurate. | Citation checking is essential; plausible prose masks severe sourcing failures. |
+| ChatGPT-5 citation audit, [PMID 42668804](https://pubmed.ncbi.nlm.nih.gov/42668804/) | Of 2,736 references, 7.13% were fabricated and 49.34% bibliographically accurate; only 8% of queries had completely accurate citations. | Newer systems may improve, but substantial errors persist. Different study designs prevent direct longitudinal comparison. |
+| ChatGPT-4o mini guideline study, [PMID 41625387](https://pubmed.ncbi.nlm.nih.gov/41625387/) | 76.3% of responses matched recommendations and 88.2% were rated highly clear, yet 7.9% of citations were fabricated and only 1.1% overlapped with guideline references. | Clarity, recommendation agreement, and citation integrity are separate properties. |
+| METR RE-Bench | Agents surpassed experts at a two-hour budget but performed worse at longer budgets. | Performance depends strongly on task horizon and resource constraints. |
+| ScienceAgentBench | Offers code, data, and containers; a verified split was later released to correct false negatives. | Reproducible harnesses help, but benchmark artifacts can distort results. |
+| Structured imaging review, [PMID 42682816](https://pubmed.ncbi.nlm.nih.gov/42682816/) | Reports hallucination, uncertain calibration, site dependence, and limited prospective evidence. | Deployment evidence does not generalize automatically across tasks or institutions. |
+| NIST AI 600-1 | Provides voluntary generative-AI risk-management guidance. | Normative framework, not proof that a system is reliable. |
+| OWASP GenAI Security Project | Identifies prompt injection and other application vulnerabilities. | Establishes credible security concerns; scientific-agent-specific trials remain scarce. |
+| C2PA 2.2 | Defines signed provenance manifests, hashes, assertions, and validation states. | Supports traceability and tamper evidence, but cannot establish scientific truth. |
+
+## Reproducibility and Oversight
+
+Reliable tool-using workflows should:
+
+- Pin models, prompts, datasets, dependencies, and tool versions.
+- Log retrievals, tool calls, parameters, outputs, errors, and failed attempts.
+- Use containers or sandboxes and restrict permissions.
+- Repeat stochastic runs and test generated code.
+- Compare critical outputs with independent implementations.
+- Require reviewers who can inspect evidence and halt the workflow.
+- Independently reproduce consequential analyses before publication.
+
+Nominal “human-in-the-loop” approval is insufficient if reviewers lack domain expertise, execution traces, time, or authority. Automation bias can persist despite formal approval.
+
+## Uncertainty and Security
+
+The evidence does not establish reliable self-reported confidence for research agents. Verbal confidence should not be treated as calibrated probability. Workflows should separate observations from inference, test stability across reruns, measure calibration locally, and provide abstention and escalation routes.
+
+Prompt injection is particularly important when agents ingest papers, webpages, email, metadata, or tool output. Recommended controls include:
+
+- Treat retrieved content as data, not instructions.
+- Separate system instructions from evidence.
+- Apply least privilege and tool/network allowlists.
+- Sandbox execution and filter secrets.
+- Require confirmation for external or irreversible actions.
+- Preserve immutable audit logs.
+- Conduct adversarial testing for injection and data leakage.
+
+The reviewed evidence contained no scientific-agent-specific prompt-injection trial providing a defense success rate.
+
+## Practical Governance
+
+Before deployment, define acceptable errors, prohibited actions, data sensitivity, approval points, and accountable owners. Evaluate representative local, rare, and adversarial cases.
+
+During each run, record the environment, mark generated content, require claim-level citations, verify numerical and bibliographic claims, surface uncertainty, and block untrusted content from changing policy.
+
+Before scientific use, independently reproduce critical results, verify citations and quotations, assess privacy and bias, disclose material AI use, and archive code, datasets, dependencies, and provenance.
+
+After deployment, monitor drift and failures, red-team unsafe tool use, revalidate after every model or workflow change, and maintain rollback and retirement procedures.
+
+## Limitations
+
+- Most publications reviewed were domain-specific medical studies or reviews rather than direct trials of autonomous scientific agents.
+- Medical findings may not generalize to every scientific field.
+- ML-engineering benchmarks may not generalize to hypothesis formation, wet-lab research, or scholarly synthesis.
+- Prospective, multi-institution and long-duration studies remain sparse.
+- Evidence is limited on calibration, abstention, human–agent team design, automation bias, equity, and governance effectiveness.
+- Closed models, nondeterminism, API changes, and model drift impede exact replication.
+- Benchmark averages can hide catastrophic failures and subgroup variation.
+- Several sources were available as indexed abstracts or excerpts rather than complete articles.
+- The evidence base is changing rapidly.
+
+## Conclusion
+
+No reviewed evidence justifies treating interactive AI agents as independently reliable scientific researchers. Evidence supports **bounded, auditable assistance under expert supervision**.
+
+Reliability depends less on fluent output than on verified sources, constrained tools, reproducible execution, calibrated escalation, security controls, provenance, and accountable human review. Standards can structure these safeguards, but only task-specific empirical evaluation can establish performance—and that evidence remains valid only within its tested domain.

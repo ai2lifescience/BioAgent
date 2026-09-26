@@ -7,42 +7,22 @@ the field order, selection metadata, input/output schema, and validation rules.
 
 Pipeline dependencies and databases belong to the pipeline container. The BioAgent environment does not install workflow tools.
 
-WDL pipelines use local miniwdl by default. Set `CROMWELL_URL` before starting
-BioAgent to submit WDL jobs to that Cromwell service, or unset it to return to
-local execution. See the [startup commands](../../../README.md#4-start-the-web-ui).
+WDL pipelines use local miniwdl by default. For remote Cromwell, use the
+[Cromwell and S3 setup](../../../docs/web_usage.md#wdl-execution-backend).
+It contains the complete environment configuration for the Mscan server:
+one Cromwell URL, S3 input/output prefixes, and one set of storage credentials.
+Output downloads reuse the input-storage endpoint, region, and credentials.
 
-When the Cromwell host cannot see BioAgent's local workspace, inputs can be
-staged to an S3-compatible bucket before submission. Install the project
-requirements, configure credentials using the normal boto3 environment or
-instance profile, and set:
+BioAgent uploads inputs to S3, submits WDL through the Cromwell REST API, and
+downloads the files declared in `runner.yaml` after success. Downloaded outputs
+are validated and hashed in the local job directory. The input and output mount
+prefixes describe existing paths on the Cromwell/task hosts; BioAgent needs no
+shared filesystem mount. Reference databases remain mounted on the task hosts.
 
-```bash
-export CROMWELL_URL=http://192.168.164.39:39000
-export CROMWELL_INPUT_STORAGE_ENDPOINT=http://192.168.164.39:7070
-export CROMWELL_INPUT_STORAGE_URI=s3://cncb-web-server-mic/files
-export CROMWELL_INPUT_STORAGE_REGION=us-east-1
-export CROMWELL_INPUT_STORAGE_MOUNT_PREFIX=/data/versitygw/data/s3
-```
-
-Set `CROMWELL_INPUT_STORAGE_ACCESS_KEY` and
-`CROMWELL_INPUT_STORAGE_SECRET_KEY` if the S3 service is not available through
-the normal boto3/AWS credential chain. `CROMWELL_INPUT_STORAGE_ENDPOINT` is the
-S3-compatible service address, while `CROMWELL_INPUT_STORAGE_URI` selects the
-bucket and key prefix. `CROMWELL_INPUT_STORAGE_MOUNT_PREFIX` is the filesystem
-root visible to Cromwell. With the example above, an uploaded object is passed
-to Cromwell as `/data/versitygw/data/s3/cncb-web-server-mic/files/...` while
-the upload is also recorded as an S3 URI. Paths that are not local files, such
-as remote mounted reference databases, are left unchanged.
-
-The endpoint, existing bucket, region, and mount above match the administrator's
-`resource/mscan-app/mscan-admin/src/main/resources/application-prod.yml`.
-Supply its S3 credentials through the environment before starting BioAgent;
-the adapter does not automatically read that backend configuration. A live
-probe on 2026-09-25 verified upload and a Cromwell read of the mounted file.
-
-This stages inputs only. The adapter currently collects declared outputs from
-local paths returned by Cromwell, so those paths must be visible to BioAgent.
-Automatic retrieval of remote S3 outputs is not implemented.
+Supply credentials through the environment before starting BioAgent. The
+adapter does not automatically read Mscan's configuration. Detached pipeline
+workers receive the same Cromwell and S3 settings. Unset `CROMWELL_URL` and
+restart BioAgent to return to local execution.
 
 | Name | Visibility | Engine | Use when |
 | --- | --- | --- | --- |

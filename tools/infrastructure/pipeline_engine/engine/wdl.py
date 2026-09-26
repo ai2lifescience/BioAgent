@@ -11,6 +11,7 @@ from urllib.parse import urlparse
 
 from tools.infrastructure.pipeline_engine.engine.config import write_runtime_config
 from tools.infrastructure.pipeline_engine.engine.inputs import pipeline_input_specs, stringify_input_value
+from tools.infrastructure.pipeline_engine.engine.input_storage import OutputDownloader
 from tools.infrastructure.pipeline_engine.engine.outputs import finalize_output_records
 from tools.infrastructure.pipeline_engine.engine.paths import (
     PROJECT_ROOT,
@@ -41,7 +42,10 @@ def run_wdl_pipeline(
     if selected_engine == "cromwell" and not dry_run:
         from tools.infrastructure.pipeline_engine.engine.cromwell import run_cromwell_pipeline
 
-        return run_cromwell_pipeline(context, cromwell_url=cromwell_url)
+        return run_cromwell_pipeline(
+            context,
+            cromwell_url=cromwell_url,
+        )
     if selected_engine not in {"miniwdl", "cromwell"}:
         raise ValueError(
             f"Unsupported WDL engine '{selected_engine}'. Supported engines: miniwdl, cromwell."
@@ -160,19 +164,27 @@ def write_wdl_inputs(context: PipelineContext) -> Path:
     return path
 
 
-def write_wdl_options(context: PipelineContext) -> Path | None:
+def write_wdl_options(
+    context: PipelineContext,
+    output_storage_mount_prefix: str | None = None,
+) -> Path | None:
     """Write optional WDL options JSON into the run directory."""
     value = context.runner_config.get("options_json") or context.runner_config.get("options_file")
-    if not value:
+    if not value and not output_storage_mount_prefix:
         return None
     source = resolve_pipeline_file(
         context.pipeline_dir,
         str(value),
         fallback="options.json",
         label="WDL options file",
-    )
+    ) if value else None
     target = context.run_dir / "options.runtime.json"
-    return write_options_runtime_json(source, target, context.run_dir)
+    return write_options_runtime_json(
+        source,
+        target,
+        context.run_dir,
+        output_storage_mount_prefix=output_storage_mount_prefix,
+    )
 
 
 def load_outputs(path: Path) -> dict[str, Any]:
@@ -187,13 +199,21 @@ def load_outputs(path: Path) -> dict[str, Any]:
 def copy_declared_outputs(
     output_records: list[dict[str, Any]],
     output_map: dict[str, Any],
+    remote_downloader: OutputDownloader | None = None,
 ) -> None:
     """Copy WDL outputs into the Pipeline2Agent-declared artifact paths."""
     for record in output_records:
-        target = Path(str(record.get("path") or ""))
-        if not target or target.exists():
+        if not record.get("path"):
             continue
-        source = output_source(record, output_map)
+        target = Path(str(record["path"]))
+        if target.exists():
+            continue
+        source_value = output_value(record, output_map)
+        if remote_downloader is not None:
+            remote_source = output_value_as_string(source_value)
+            if remote_source and remote_downloader.download(remote_source, target):
+                continue
+        source = path_from_output_value(source_value)
         if source is None or not source.exists():
             continue
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -204,13 +224,29 @@ def copy_declared_outputs(
 
 
 def output_source(record: dict[str, Any], output_map: dict[str, Any]) -> Path | None:
+    return path_from_output_value(output_value(record, output_map))
+
+
+def output_value(record: dict[str, Any], output_map: dict[str, Any]) -> Any:
+    """Return the raw Cromwell value for a declared WDL output."""
     wdl_output = str(record.get("wdl_output") or "")
+    if wdl_output in output_map:
+        return output_map[wdl_output]
     short_name = wdl_output.split(".")[-1] if wdl_output else str(record.get("name") or "")
     for key, value in output_map.items():
         if key != wdl_output and key.split(".")[-1] != short_name:
             continue
-        return path_from_output_value(value)
+        return value
     return None
+
+
+def output_value_as_string(value: Any) -> str | None:
+    """Extract a path or URI from a Cromwell output value."""
+    if isinstance(value, dict):
+        value = value.get("path") or value.get("location") or value.get("value")
+    if isinstance(value, list):
+        return output_value_as_string(value[0]) if value else None
+    return value.strip() if isinstance(value, str) and value.strip() else None
 
 
 def path_from_output_value(value: Any) -> Path | None:

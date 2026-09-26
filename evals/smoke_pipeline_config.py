@@ -121,6 +121,32 @@ class PipelineConfigChecks(unittest.TestCase):
         with self.assertRaises(FileNotFoundError):
             write_wdl_options(missing)
 
+    def test_all_wdl_bundles_generate_s3_output_options(self) -> None:
+        wdl_names = [
+            entry["name"] for entry in service.catalog()
+            if entry.get("engine") == "wdl"
+        ]
+        self.assertEqual(len(wdl_names), 6)
+        for name in wdl_names:
+            with self.subTest(pipeline=name):
+                context = prepare_pipeline_context(
+                    pipeline_name=name,
+                    artifact_dir=str(self.root),
+                )
+                options_path = write_wdl_options(
+                    context,
+                    output_storage_mount_prefix=(
+                        "/data/versitygw/data/s3/cncb-web-server-mic/cromwell/outputs"
+                    ),
+                )
+                self.assertIsNotNone(options_path)
+                options = json.loads(options_path.read_text())
+                self.assertEqual(
+                    options["final_workflow_outputs_dir"],
+                    "/data/versitygw/data/s3/cncb-web-server-mic/cromwell/outputs",
+                )
+                self.assertFalse(options["use_relative_output_paths"])
+
     def test_catalog_defaults_and_explicit_inputs(self) -> None:
         catalog = {item["name"]: item for item in service.catalog()}
         self.assertTrue(all("error" not in item for item in catalog.values()), catalog)

@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/media/data/fuhaoyi/codes/BioAgent/tools/infrastructure/pipeline_engine/engine/cromwell.py", line 145, in run_cromwell_pipeline
+    files, output_records = finalize_output_records(
+                            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/data/fuhaoyi/codes/BioAgent/tools/infrastructure/pipeline_engine/engine/outputs.py", line 116, in finalize_output_records
+    raise FileNotFoundError(
+FileNotFoundError: Required pipeline output file(s) were not created: report: /tmp/bioagent-live-20260926-remote3/sessions/sol-20260926-34_remote_template_wdl/runs/deda5f1716ea45a9ad5891c0ffd5343e/outputs/report.md; metrics: /tmp/bioagent-live-20260926-remote3/sessions/sol-20260926-34_remote_template_wdl/runs/deda5f1716ea45a9ad5891c0ffd5343e/outputs/metrics.json; normalized_sequence: /tmp/bioagent-live-20260926-remote3/sessions/sol-20260926-34_remote_template_wdl/runs/deda5f1716ea45a9ad5891c0ffd5343e/outputs/normalized.fasta
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/media/data/fuhaoyi/codes/BioAgent/tools/infrastructure/pipeline_engine/worker.py", line 42, in work
+    result = execute_engine(root, record)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/data/fuhaoyi/codes/BioAgent/tools/infrastructure/pipeline_engine/service.py", line 433, in execute_engine
+    result = run_wdl_pipeline(
+             ^^^^^^^^^^^^^^^^^
+  File "/media/data/fuhaoyi/codes/BioAgent/tools/infrastructure/pipeline_engine/engine/wdl.py", line 45, in run_wdl_pipeline
+    return run_cromwell_pipeline(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/media/data/fuhaoyi/codes/BioAgent/tools/infrastructure/pipeline_engine/engine/cromwell.py", line 150, in run_cromwell_pipeline
+    raise RuntimeError(
+RuntimeError: Cromwell workflow e7677ed3-89b5-44b2-ab4f-200082a0cf4b succeeded, but output collection failed: Required pipeline output file(s) were not created: report: /tmp/bioagent-live-20260926-remote3/sessions/sol-20260926-34_remote_template_wdl/runs/deda5f1716ea45a9ad5891c0ffd5343e/outputs/report.md; metrics: /tmp/bioagent-live-20260926-remote3/sessions/sol-20260926-34_remote_template_wdl/runs/deda5f1716ea45a9ad5891c0ffd5343e/outputs/metrics.json; normalized_sequence: /tmp/bioagent-live-20260926-remote3/sessions/sol-20260926-34_remote_template_wdl/runs/deda5f1716ea45a9ad5891c0ffd5343e/outputs/normalized.fasta
