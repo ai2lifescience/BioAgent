@@ -22,6 +22,7 @@ class TableResult(FunctionContract):
     rows: list[dict[str, Any]] = []
     offset: int = 0
     total_rows: int | None = None
+    filters: dict[str, Any] = {}
     revision: str = ""
 
 class FigureResult(FunctionContract):

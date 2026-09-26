@@ -1,0 +1,174 @@
+CASE: research_report_final_display
+MODEL: gpt-5.6-sol
+SESSION: sol-20260926-live-research-display-026d0241
+FINAL STATUS: succeeded
+
+===== TURN 1 =====
+PROMPT:
+Research current evidence for phage therapy against multidrug-resistant bacterial infections using PubMed and trusted web sources. Review at least eight sources, compare study type, results, and limitations, write a cited Markdown report to the workspace, and return the exact workspace path, source count, section outline, and findings.
+
+STATUS: succeeded
+RUN ID: 1e090ebb45e140e1adbc9240bd8410b4
+ELAPSED_SECONDS: 294.21
+TOOLS: pubmed_search, web_search, web_fetch, evidence_retrieve, report_review, report_synthesize, report_write
+FILES: ["outputs/pubmed_search/df750dc94c9549ceb4290c51944f09f2/evidence.json", "outputs/web_search/3727dea1b4704102b46d55c1de75c362/evidence.json", "outputs/pubmed_search/d396169f493840608b57361e4e98cf97/evidence.json", "outputs/web_search/a22c74242210415c8ad798f24be58553/evidence.json", "outputs/pubmed_search/25496f449e3e4ffbbfdc257143d84263/evidence.json", "outputs/web_fetch/0c4cef96eff548fab67619fa6e9f03e5/evidence.json", "outputs/pubmed_search/4436d104cb9a44dcb7a31afeb2f2a345/evidence.json", "outputs/web_fetch/56b67bd5e43749e2a9ff0cc6b2a83eb7/evidence.json", "outputs/web_fetch/62a345fe83a44402838f089061e144cd/evidence.json", "outputs/pubmed_search/2166607904c74de28d1f54d15529d7c6/evidence.json", "outputs/web_fetch/797ab752fcdb4875963505794ab7a939/evidence.json", "outputs/pubmed_search/396bde495d26453db4e779ce2fc9947c/evidence.json", "outputs/web_fetch/3e101688ab9c42d99c17827616fb6bb8/evidence.json", "outputs/pubmed_search/05e027ab2da746b4ac8226e294b6ec99/evidence.json", "outputs/pubmed_search/8bf07cb27f80407d9ebfbb2512d526c8/evidence.json", "outputs/pubmed_search/bf77206c44f242f9b2bb0c0ce926eceb/evidence.json", "outputs/evidence_retrieve/1a46aef74dd04259aca8f333fc49a348/evidence.json", "outputs/evidence_retrieve/62d037af35fb470e8e45120dd4d4f5e5/evidence.json", "outputs/report_write/d6dfa71af18e402ba9bf6ee78d8c4c0a/Current_Evidence_for_Bacteriophage_Therapy_Against_MDR_Bacte.md", "outputs/web_search/89b9a50cefbd4b338c897d55525d6e86/evidence.json", "outputs/pubmed_search/139119d1bf51468aa51ab8706f389377/evidence.json", "outputs/web_search/e322c400430948b4b0abe278a7754401/evidence.json", "outputs/web_search/7221e54543b9405991499cc7da5b5dc4/evidence.json", "outputs/pubmed_search/4c8a25faf60a44ca89ae105c9102e0a4/evidence.json", "outputs/pubmed_search/87187680294f4ff1ad4957f088753191/evidence.json", "outputs/web_search/5599325246194217a648bfc25dddcbc2/evidence.json", "outputs/web_search/0c78086c5a8e4b448b9c4306e0e19ee2/evidence.json", "outputs/web_search/67c85382def24e5d8380ec7098a5ee96/evidence.json", "outputs/pubmed_search/8c2e6ea968e543d396ee5121fd446796/evidence.json", "outputs/report_write/bbce0bb4de8f458687a93d6ee5a7510a/Current_Evidence_for_Phage_Therapy_Against_Multidrug-Resista.md"]
+
+ANSWER:
+**Report**
+- Path: `outputs/report_write/bbce0bb4de8f458687a93d6ee5a7510a/Current_Evidence_for_Phage_Therapy_Against_Multidrug-Resista.md`
+- Sources reviewed: **8 PubMed-indexed sources**
+- Outline: Executive summary; Methods; Comparative table; Evidence tiers; Safety; Practical/regulatory challenges; Evidence gaps; Conclusion; Limitations; References.
+- Finding: Phage therapy remains promising but experimental. Preclinical and uncontrolled evidence is encouraging, while controlled clinical evidence is sparse and not convincingly positive.
+- Key limitation: PhagoBurn was negative but severely underdosed because phage titre degraded.
+- Trusted web searches were attempted but returned no usable records; this is disclosed in the report.
+
+===== TURN 2 =====
+PROMPT:
+Read the saved report from the prior turn and render its full substantive contents here: title, all headings, key findings, an evidence or citation table, limitations, conclusion, and exact workspace path. Do not only link to it or provide a one-paragraph summary.
+
+STATUS: succeeded
+RUN ID: 312d321d04e541f89d42509fcc5a1406
+ELAPSED_SECONDS: 32.24
+TOOLS: file_inspection
+FILES: []
+
+ANSWER:
+# Phage therapy for multidrug-resistant bacterial infections
+
+**Evidence currentness date: 26 September 2026**
+
+## Executive summary
+
+Phage therapy is biologically plausible and often effective in laboratory and animal models, including against multidrug-resistant (MDR) organisms and biofilms. However, the reviewed clinical evidence does **not establish efficacy**. Uncontrolled compassionate-use cases cannot separate phage effects from surgery, antibiotics, natural recovery, or selection bias; preclinical findings likewise cannot establish benefit in patients.
+
+The strongest direct evidence is PhagoBurn, a small randomized phase 1/2 trial in *Pseudomonas aeruginosa* burn wounds. Phage treatment reduced bacterial burden more slowly than standard care, and the trial stopped for insufficient efficacy. However, phage titre declined after manufacture: patients received approximately **10² PFU/mL instead of the intended 10⁶ PFU/mL**. Thus, PhagoBurn neither supports efficacy nor cleanly tests an adequately potent formulation.
+
+Safety findings are generally reassuring but too sparse to exclude uncommon harms. Key barriers include strain-specific matching, titre stability, dosing, resistance, biofilm delivery, manufacturing standards, and regulation of personalized or changing cocktails.
+
+## Methods
+
+PubMed searches covered randomized trials, systematic reviews, clinical research, biofilm infections, and MDR organisms. Searches targeting WHO, FDA, NIH, and ClinicalTrials.gov returned no usable sources during this run.
+
+The synthesis therefore uses eight PubMed-indexed sources:
+
+- One randomized trial
+- Systematic reviews and meta-analyses
+- A historical trial reassessment
+- Clinical-case evidence
+- Preclinical evidence
+
+Study type, pathogen or infection, outcomes, and limitations were compared. Full-text appraisal and formal risk-of-bias assessment were not performed.
+
+## Comparative evidence table
+
+| Source | Study type | Infection/pathogen | Main outcome | Principal limitations |
+|---|---|---|---|---|
+| [PhagoBurn](https://pubmed.ncbi.nlm.nih.gov/30292481/) | Randomized phase 1/2 trial; 27 randomized | *P. aeruginosa* burn-wound infection | Bacterial reduction was slower with phage than silver sulfadiazine: median 144 versus 47 hours; HR 0.29 (95% CI 0.10–0.79); stopped for insufficient efficacy | Very small; clinicians unmasked; delivered titre ~10² rather than intended 10⁶ PFU/mL; low-dose resistance; surrogate endpoint |
+| [Historical reassessment](https://pubmed.ncbi.nlm.nih.gov/36069758/) | Meta-analytic reassessment of 17 historical and four analyzable modern trials | Mixed bacterial infections | Historical studies favoured phages (OR 0.21), while modern trials favoured standard treatment or showed no efficacy (OR 2.84) | Few modern trials; heterogeneous eras, methods, and infections |
+| [Biofilm review](https://pubmed.ncbi.nlm.nih.gov/37847552/) | PRISMA systematic review; 80 studies | Resistant biofilms in wounds and implants | Reported biofilm disruption and successful outcomes, often with combined treatment | Mixed preclinical and clinical evidence; combination therapy confounds attribution; no pooled clinical effect |
+| [Gram-positive clinical review](https://pubmed.ncbi.nlm.nih.gov/40424685/) | Systematic review of clinical cases | Resistant Gram-positive infections | Described promising safety and outcomes across cocktails and assisted regimens | Uncontrolled cases; no quantitative outcome estimate; publication and selection bias likely |
+| [Oral-infection review](https://pubmed.ncbi.nlm.nih.gov/39780179/) | Systematic review; 10 reports | Caries, periodontitis, periapical disease, and biofilms | Preliminary antibacterial effects | Small evidence base; uncertain relevance to severe MDR infection; minimal safety reporting |
+| [Staphylococcal-biofilm review](https://pubmed.ncbi.nlm.nih.gov/40635020/) | Systematic review | Drug-resistant staphylococcal biofilms | Whole phages and enzymes appeared promising; combinations may improve removal | Largely mechanistic or preclinical; no pooled clinical estimate |
+| [*S. maltophilia* meta-analysis](https://pubmed.ncbi.nlm.nih.gov/42090589/) | Preclinical meta-analysis; six studies | MDR *Stenotrophomonas maltophilia* | Pooled survival OR 21.10; apparent dose-response | Cannot establish human efficacy; few studies; fixed-effects model; wide subgroup confidence intervals |
+| [Hydrogel-delivery review](https://pubmed.ncbi.nlm.nih.gov/42700800/) | Systematic review; three clinical and 16 preclinical studies | Burn, wound, fracture, prosthetic-joint, and bone infections | Lower burden and improved healing in wound models; feasible local release; inconsistent bone/joint eradication | Clinical cases also received surgery and antibiotics; heterogeneous delivery; limited safety reporting |
+
+## Findings by evidence tier
+
+### Randomized clinical evidence
+
+PhagoBurn provides the strongest causal evidence but did not demonstrate benefit over standard care. Its negative result is clinically important, although the product was substantially under-strength because the titre declined from the intended 10⁶ PFU/mL to approximately 10² PFU/mL.
+
+This four-log discrepancy and low-dose resistance make formulation stability and potency central limitations. Future trials need:
+
+- Release and bedside potency testing
+- Stable formulations
+- Susceptibility testing or “phagograms”
+- Justified dosing
+- Clinically meaningful endpoints
+
+The historical reassessment also cautions against assuming efficacy. Although older studies appeared favourable, four analyzable modern trials collectively indicated non-effectiveness relative to controls. Cross-era heterogeneity and the small modern evidence base prevent firm conclusions.
+
+### Observational clinical evidence
+
+Reviews describe apparently successful treatment of refractory Gram-positive, wound, implant, and fracture-related infections. These cases support feasibility and hypothesis generation.
+
+However, patients commonly also received debridement and systemic antibiotics. Without controls, the contribution of phages cannot be isolated. Selective publication of dramatic successes is also plausible.
+
+### Preclinical evidence
+
+Animal and laboratory evidence is consistently encouraging:
+
+- The *S. maltophilia* meta-analysis reported a large survival association and apparent dose dependence.
+- Hydrogel studies suggest that local matrices can protect phages and extend tissue residence.
+- Staphylococcal and oral-biofilm studies support antibacterial activity.
+- Phage–antibiotic synergy may occur.
+
+These results cannot establish human efficacy. Animal inocula, dosing, treatment timing, immune context, and delivery may not reproduce established MDR infections in patients.
+
+## Safety
+
+PhagoBurn reported adverse events in 3 of 13 phage recipients versus 7 of 13 controls, with no treatment-related deaths. However, it was too small and underdosed to establish safety at therapeutic titres.
+
+Other reviews reported no major adverse effects, but safety reporting was sparse. Current evidence is reassuring yet inadequate to exclude:
+
+- Rare toxicity
+- Inflammatory reactions
+- Immune neutralization
+- Manufacturing contaminants
+- Ecological effects
+- Adverse effects from bacterial lysis
+
+## Practical and regulatory challenges
+
+- **Matching and resistance:** Narrow host ranges require rapid isolate testing; resistance may emerge, especially with inadequate exposure.
+- **Dose and formulation:** Stability, storage, delivery vehicles, pharmacokinetics, and tissue penetration require standardization.
+- **Biofilms and anatomy:** Delivery differs across wounds, implants, lungs, bloodstream, and bone.
+- **Combination therapy:** Possible antibiotic synergy complicates causal evaluation.
+- **Manufacturing:** Cocktails require standardized identity, purity, potency, and screening for undesirable genes or contaminants.
+- **Trial design:** Personalized susceptibility complicates conventional randomization, although adaptive or platform trials remain possible.
+- **Regulation:** Compassionate-use successes do not replace reproducible products and comparative trials.
+
+## Evidence gaps
+
+Research priorities include:
+
+- Adequately powered randomized trials in defined MDR infections
+- Verified potency at administration
+- Dose-ranging and pharmacokinetic studies
+- Standardized phagograms
+- Clinical cure, recurrence, and mortality endpoints
+- Resistance and immune-response monitoring
+- Systematic adverse-event reporting
+- Trials separating phage effects from surgery and antibiotics
+- Comparisons among monophages, cocktails, engineered phages, enzymes, and delivery matrices
+
+## Conclusion
+
+Phage therapy remains a promising **experimental strategy**, not a proven treatment for MDR bacterial infection.
+
+Preclinical activity is substantial, and compassionate-use experience supports feasibility. However, neither uncontrolled cases nor preclinical studies establish efficacy. Controlled evidence is sparse and not convincingly positive.
+
+PhagoBurn was inferior on its primary endpoint, although severe underdosing from titre decay also made it an inadequate test of a potent, stable formulation. Clinical adoption requires standardized manufacturing and susceptibility testing, reliable dose and formulation control, and well-powered comparative trials.
+
+## Limitations of this report
+
+- The synthesis is restricted to eight PubMed abstracts; full texts, protocols, and supplementary data were unavailable.
+- Reviews may contain overlapping primary studies, so the eight sources are not eight independent clinical datasets.
+- Most evidence is preclinical or uncontrolled.
+- MDR status was not consistently reported.
+- Trusted web searches yielded no usable records; no claims from WHO, FDA, NIH, or ClinicalTrials.gov were included.
+
+## References
+
+1. [PhagoBurn trial — PMID 30292481](https://pubmed.ncbi.nlm.nih.gov/30292481/)
+2. [Historical trial reassessment — PMID 36069758](https://pubmed.ncbi.nlm.nih.gov/36069758/)
+3. [Biofilm review — PMID 37847552](https://pubmed.ncbi.nlm.nih.gov/37847552/)
+4. [Resistant Gram-positive review — PMID 40424685](https://pubmed.ncbi.nlm.nih.gov/40424685/)
+5. [Oral-infection review — PMID 39780179](https://pubmed.ncbi.nlm.nih.gov/39780179/)
+6. [Staphylococcal-biofilm review — PMID 40635020](https://pubmed.ncbi.nlm.nih.gov/40635020/)
+7. [*S. maltophilia* meta-analysis — PMID 42090589](https://pubmed.ncbi.nlm.nih.gov/42090589/)
+8. [Hydrogel delivery review — PMID 42700800](https://pubmed.ncbi.nlm.nih.gov/42700800/)
+
+## Exact workspace path
+
+`outputs/report_write/bbce0bb4de8f458687a93d6ee5a7510a/Current_Evidence_for_Phage_Therapy_Against_Multidrug-Resista.md`

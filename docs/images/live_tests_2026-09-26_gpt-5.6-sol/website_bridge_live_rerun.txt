@@ -1,0 +1,367 @@
+PROMPT:
+Introduce the current website. Read the page context, measurements table, and figure, search and read the relevant manual section, then set the group filter to treated and read the updated page, table, and figure before summarizing what changed.
+
+ANSWER:
+**Website Summary**
+- “Sample comparison” page, workflow step **review** (`select → review → export`).
+- Resources: exportable **Measurements** table and **Relative abundance** figure.
+- Manual v2026-09 says to select a cohort with the group filter, inspect Measurements, and export when the complete table is needed.
+
+**What Changed**
+- Filter changed from `all` (revision `comparison-1`) to `treated` (`comparison-2`).
+- Table reduced from 4 to 2 samples: S2 (`0.81`) and S3 (`0.67`).
+- Figure reduced from 6 observations (`0.12, 0.31, 0.24, 0.55, 0.43, 0.72`) to 3 treated observations (`0.31, 0.55, 0.72`).
+- The page remains at the review step; only the displayed cohort changed.
+
+WEBSITE CALLS:
+[
+  {
+    "method": "getPageContext",
+    "arguments": {},
+    "result": {
+      "revision": "comparison-1",
+      "title": "Sample comparison",
+      "url": "http://127.0.0.1:8000/assistant-demo",
+      "selection": {
+        "group": "all"
+      },
+      "filters": {
+        "group": "all"
+      },
+      "workflow": {
+        "step": "review",
+        "steps": [
+          "select",
+          "review",
+          "export"
+        ]
+      },
+      "resources": [
+        {
+          "id": "measurements",
+          "kind": "table",
+          "title": "Measurements",
+          "exportable": true
+        },
+        {
+          "id": "abundance",
+          "kind": "figure",
+          "title": "Relative abundance"
+        }
+      ],
+      "elements": [
+        {
+          "id": "measurements",
+          "label": "Measurements table"
+        },
+        {
+          "id": "filter",
+          "label": "Group filter"
+        }
+      ],
+      "routes": [
+        {
+          "id": "methods",
+          "label": "Methods"
+        }
+      ],
+      "actions": [
+        {
+          "id": "set_group_filter",
+          "description": "Filter samples by group",
+          "parameters": {
+            "group": [
+              "all",
+              "treated",
+              "control"
+            ]
+          }
+        }
+      ],
+      "manual": {
+        "version": "2026-09",
+        "title": "Sample comparison methods"
+      }
+    }
+  },
+  {
+    "method": "readTable",
+    "arguments": {
+      "resource_id": "measurements",
+      "offset": 0,
+      "limit": 200
+    },
+    "result": {
+      "resource_id": "measurements",
+      "title": "Measurements",
+      "columns": [
+        {
+          "name": "sample",
+          "type": "string"
+        },
+        {
+          "name": "group",
+          "type": "string"
+        },
+        {
+          "name": "score",
+          "type": "number"
+        }
+      ],
+      "rows": [
+        {
+          "sample": "S1",
+          "group": "control",
+          "score": 0.42
+        },
+        {
+          "sample": "S2",
+          "group": "treated",
+          "score": 0.81
+        },
+        {
+          "sample": "S3",
+          "group": "treated",
+          "score": 0.67
+        },
+        {
+          "sample": "S4",
+          "group": "control",
+          "score": 0.31
+        }
+      ],
+      "offset": 0,
+      "total_rows": 4,
+      "revision": "comparison-1",
+      "filters": {
+        "group": "all"
+      }
+    }
+  },
+  {
+    "method": "readFigure",
+    "arguments": {
+      "resource_id": "abundance"
+    },
+    "result": {
+      "resource_id": "abundance",
+      "title": "Relative abundance",
+      "description": "6 ordered observations for all",
+      "x_axis": {
+        "label": "Observation"
+      },
+      "y_axis": {
+        "label": "Relative abundance",
+        "unit": "fraction"
+      },
+      "series": [
+        {
+          "name": "Observed",
+          "values": [
+            0.12,
+            0.31,
+            0.24,
+            0.55,
+            0.43,
+            0.72
+          ]
+        }
+      ],
+      "filters": {
+        "group": "all"
+      },
+      "revision": "comparison-1"
+    }
+  },
+  {
+    "method": "searchManual",
+    "arguments": {
+      "query": "group filter treated measurements relative abundance review workflow",
+      "limit": 5
+    },
+    "result": {
+      "version": "2026-09",
+      "sections": [
+        {
+          "id": "methods",
+          "title": "Methods",
+          "excerpt": "Use the group filter to change cohort, then inspect Measurements."
+        }
+      ]
+    }
+  },
+  {
+    "method": "readManual",
+    "arguments": {
+      "section_id": "methods"
+    },
+    "result": {
+      "section_id": "methods",
+      "title": "Methods",
+      "version": "2026-09",
+      "text": "Use the group filter to change cohort, then inspect Measurements. Export data when an analysis needs the complete table."
+    }
+  },
+  {
+    "method": "invokeAction",
+    "arguments": {
+      "action_id": "set_group_filter",
+      "arguments": {
+        "group": "treated"
+      }
+    },
+    "result": {
+      "action_id": "set_group_filter",
+      "message": "Group set to treated",
+      "revision": "comparison-2",
+      "filters": {
+        "group": "treated"
+      }
+    }
+  },
+  {
+    "method": "getPageContext",
+    "arguments": {},
+    "result": {
+      "revision": "comparison-2",
+      "title": "Sample comparison",
+      "url": "http://127.0.0.1:8000/assistant-demo",
+      "selection": {
+        "group": "treated"
+      },
+      "filters": {
+        "group": "treated"
+      },
+      "workflow": {
+        "step": "review",
+        "steps": [
+          "select",
+          "review",
+          "export"
+        ]
+      },
+      "resources": [
+        {
+          "id": "measurements",
+          "kind": "table",
+          "title": "Measurements",
+          "exportable": true
+        },
+        {
+          "id": "abundance",
+          "kind": "figure",
+          "title": "Relative abundance"
+        }
+      ],
+      "elements": [
+        {
+          "id": "measurements",
+          "label": "Measurements table"
+        },
+        {
+          "id": "filter",
+          "label": "Group filter"
+        }
+      ],
+      "routes": [
+        {
+          "id": "methods",
+          "label": "Methods"
+        }
+      ],
+      "actions": [
+        {
+          "id": "set_group_filter",
+          "description": "Filter samples by group",
+          "parameters": {
+            "group": [
+              "all",
+              "treated",
+              "control"
+            ]
+          }
+        }
+      ],
+      "manual": {
+        "version": "2026-09",
+        "title": "Sample comparison methods"
+      }
+    }
+  },
+  {
+    "method": "readTable",
+    "arguments": {
+      "resource_id": "measurements",
+      "offset": 0,
+      "limit": 200
+    },
+    "result": {
+      "resource_id": "measurements",
+      "title": "Measurements",
+      "columns": [
+        {
+          "name": "sample",
+          "type": "string"
+        },
+        {
+          "name": "group",
+          "type": "string"
+        },
+        {
+          "name": "score",
+          "type": "number"
+        }
+      ],
+      "rows": [
+        {
+          "sample": "S2",
+          "group": "treated",
+          "score": 0.81
+        },
+        {
+          "sample": "S3",
+          "group": "treated",
+          "score": 0.67
+        }
+      ],
+      "offset": 0,
+      "total_rows": 2,
+      "revision": "comparison-2",
+      "filters": {
+        "group": "treated"
+      }
+    }
+  },
+  {
+    "method": "readFigure",
+    "arguments": {
+      "resource_id": "abundance"
+    },
+    "result": {
+      "resource_id": "abundance",
+      "title": "Relative abundance",
+      "description": "3 ordered observations for treated",
+      "x_axis": {
+        "label": "Observation"
+      },
+      "y_axis": {
+        "label": "Relative abundance",
+        "unit": "fraction"
+      },
+      "series": [
+        {
+          "name": "Observed",
+          "values": [
+            0.31,
+            0.55,
+            0.72
+          ]
+        }
+      ],
+      "filters": {
+        "group": "treated"
+      },
+      "revision": "comparison-2"
+    }
+  }
+]

@@ -548,6 +548,75 @@
       "screenshot": "remote_metagenomic_assembly.png",
       "dom": "remote_metagenomic_assembly.txt",
       "elapsed_seconds": 117.56
+    },
+    {
+      "case": "website_bridge_live_rerun",
+      "model": "gpt-5.6-sol",
+      "classification": "passed",
+      "runtime_status": "succeeded",
+      "session_id": "sol-20260926-live-website-b15aec3e",
+      "run_id": "03c3e79cd803427e98fc3bd84e6cef1d",
+      "prompt": "Introduce the current website. Read the page context, measurements table, and figure, search and read the relevant manual section, then set the group filter to treated and read the updated page, table, and figure before summarizing what changed.",
+      "tools": [
+        "getPageContext",
+        "readTable",
+        "readFigure",
+        "searchManual",
+        "readManual",
+        "invokeAction",
+        "getPageContext",
+        "readTable",
+        "readFigure"
+      ],
+      "json": "website_bridge_live_rerun.json",
+      "screenshot": "website_bridge_live_rerun.png",
+      "dom": "website_bridge_live_rerun.txt",
+      "sidebar_screenshot": "website_bridge_live_rerun_sidebar.png"
+    },
+    {
+      "case": "knowledge_ingest_query",
+      "model": "gpt-5.6-sol",
+      "classification": "passed",
+      "runtime_status": "succeeded",
+      "session_id": "sol-20260926-live-knowledge-query-9c275b76",
+      "run_ids": [
+        "0dfedaf053d647c08b5265801744340e",
+        "65224586b8664f43b4730ea8a75b2699"
+      ],
+      "prompt": "TURN 1: Build a session-owned durable knowledge collection from https://rest.uniprot.org/uniprotkb/P0A7V8.txt. Crawl only rest.uniprot.org, max_pages=1, max_depth=0. Wait via knowledge_status until terminal; report job_id, collection_id, status, fetched/indexed/chunks, skipped URLs/errors. Do not query the collection yet. TURN 2: Using the collection_id from the prior turn, call knowledge_retrieve only (do not run knowledge_ingest) for: What is the function of E. coli uS4/P0A7V8 and which conserved InterPro domains or sites are reported? Return the answer, each source URL or ID, an excerpt, and the evidence_path.",
+      "tools": [
+        "knowledge_ingest",
+        "knowledge_retrieve",
+        "knowledge_status"
+      ],
+      "json": "knowledge_ingest_query.json",
+      "screenshot": "knowledge_ingest_query.png",
+      "dom": "knowledge_ingest_query.txt"
+    },
+    {
+      "case": "research_report_final_display",
+      "model": "gpt-5.6-sol",
+      "classification": "passed",
+      "runtime_status": "succeeded",
+      "session_id": "sol-20260926-live-research-display-026d0241",
+      "run_ids": [
+        "1e090ebb45e140e1adbc9240bd8410b4",
+        "312d321d04e541f89d42509fcc5a1406"
+      ],
+      "prompt": "TURN 1: Research current evidence for phage therapy against multidrug-resistant bacterial infections using PubMed and trusted web sources. Review at least eight sources, compare study type, results, and limitations, write a cited Markdown report to the workspace, and return the exact workspace path, source count, section outline, and findings. TURN 2: Read the saved report from the prior turn and render its full substantive contents here: title, all headings, key findings, an evidence or citation table, limitations, conclusion, and exact workspace path. Do not only link to it or provide a one-paragraph summary.",
+      "tools": [
+        "evidence_retrieve",
+        "file_inspection",
+        "pubmed_search",
+        "report_review",
+        "report_synthesize",
+        "report_write",
+        "web_fetch",
+        "web_search"
+      ],
+      "json": "research_report_final_display.json",
+      "screenshot": "research_report_final_display.png",
+      "dom": "research_report_final_display.txt"
     }
   ]
 }

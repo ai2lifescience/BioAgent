@@ -8,6 +8,7 @@ import unittest
 from unittest.mock import patch
 
 from harness.website import WebsiteBridge, allowed_sites, check_site, configure_local_demo, issue_ticket
+from tools.function_tools.website.bridge import TableResult
 
 
 class WebsiteDemoConfigurationSmoke(unittest.TestCase):
@@ -52,6 +53,19 @@ class WebsiteDemoConfigurationSmoke(unittest.TestCase):
 
 
 class WebsiteBridgeSmoke(unittest.IsolatedAsyncioTestCase):
+    def test_table_result_accepts_documented_filters(self):
+        result = TableResult.model_validate({
+            "resource_id": "measurements",
+            "title": "Measurements",
+            "columns": [{"name": "score", "type": "number"}],
+            "rows": [{"score": 0.81}],
+            "offset": 0,
+            "total_rows": 1,
+            "filters": {"group": "treated"},
+            "revision": "comparison-2",
+        })
+        self.assertEqual(result.filters, {"group": "treated"})
+
     async def test_authenticated_request_round_trip(self):
         os.environ["AGENT_WEBSITE_SECRET"] = "w" * 40
         os.environ["AGENT_WEBSITE_SITES"] = json.dumps({"fixture": ["https://fixture.test"]})

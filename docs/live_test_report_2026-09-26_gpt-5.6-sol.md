@@ -1,12 +1,12 @@
 # Pipeline2Agent comprehensive live demonstration — gpt-5.6-sol
 
-Run date: 2026-09-26  |  Model: `gpt-5.6-sol`  |  Web server: `http://127.0.0.1:8000`  |  Cases: 32
+Run date: 2026-09-26  |  Model: `gpt-5.6-sol`  |  Web server: `http://127.0.0.1:8000`  |  Cases: 35
 
 This report is a fresh model-specific run. The earlier interrupted DeepSeek batch is kept in a separate directory and is excluded from these conclusions. Every numbered record below contains the exact prompt, observed output, and an embedded browser screenshot. Obsolete local-only and superseded remote attempts were removed. Credentials are omitted from all artifacts.
 
 ## Results at a glance
 
-Runtime classifications: **24 passed**, **4 partial**, **4 blocked**. A top-level SDK `succeeded` status means the agent completed its response; selected pipeline cases can still be classified `blocked` when their requested executable/backend was unavailable.
+Runtime classifications: **27 passed**, **4 partial**, **4 blocked**. A top-level SDK `succeeded` status means the agent completed its response; selected pipeline cases can still be classified `blocked` when their requested executable/backend was unavailable.
 
 | # | Case | Classification | Tools | Evidence |
 |---:|---|---|---|---|
@@ -42,6 +42,9 @@ Runtime classifications: **24 passed**, **4 partial**, **4 blocked**. A top-leve
 | 30 | `remote_template_wdl` | **passed** | `pipeline_shell`, `file_inspection` | [JSON](images/live_tests_2026-09-26_gpt-5.6-sol/remote_template_wdl.json) · [DOM](images/live_tests_2026-09-26_gpt-5.6-sol/remote_template_wdl.txt) · [PNG](images/live_tests_2026-09-26_gpt-5.6-sol/remote_template_wdl.png) |
 | 31 | `remote_metagenomic_qc` | **passed** | `pipeline_shell` | [JSON](images/live_tests_2026-09-26_gpt-5.6-sol/remote_metagenomic_qc.json) · [DOM](images/live_tests_2026-09-26_gpt-5.6-sol/remote_metagenomic_qc.txt) · [PNG](images/live_tests_2026-09-26_gpt-5.6-sol/remote_metagenomic_qc.png) |
 | 32 | `remote_metagenomic_assembly` | **passed** | `pipeline_shell` | [JSON](images/live_tests_2026-09-26_gpt-5.6-sol/remote_metagenomic_assembly.json) · [DOM](images/live_tests_2026-09-26_gpt-5.6-sol/remote_metagenomic_assembly.txt) · [PNG](images/live_tests_2026-09-26_gpt-5.6-sol/remote_metagenomic_assembly.png) |
+| 33 | `website_bridge_live_rerun` | **passed** | `getPageContext`, `readTable`, `readFigure`, `searchManual`, `readManual`, `invokeAction` | [JSON](images/live_tests_2026-09-26_gpt-5.6-sol/website_bridge_live_rerun.json) · [DOM](images/live_tests_2026-09-26_gpt-5.6-sol/website_bridge_live_rerun.txt) · [PNG](images/live_tests_2026-09-26_gpt-5.6-sol/website_bridge_live_rerun.png) · [Sidebar](images/live_tests_2026-09-26_gpt-5.6-sol/website_bridge_live_rerun_sidebar.png) |
+| 34 | `knowledge_ingest_query` | **passed** | `knowledge_ingest`, `knowledge_status`, `knowledge_retrieve` | [JSON](images/live_tests_2026-09-26_gpt-5.6-sol/knowledge_ingest_query.json) · [DOM](images/live_tests_2026-09-26_gpt-5.6-sol/knowledge_ingest_query.txt) · [PNG](images/live_tests_2026-09-26_gpt-5.6-sol/knowledge_ingest_query.png) |
+| 35 | `research_report_final_display` | **passed** | `pubmed_search`, `web_search`, `web_fetch`, `evidence_retrieve`, `report_review`, `report_synthesize`, `report_write`, `file_inspection` | [JSON](images/live_tests_2026-09-26_gpt-5.6-sol/research_report_final_display.json) · [DOM](images/live_tests_2026-09-26_gpt-5.6-sol/research_report_final_display.txt) · [PNG](images/live_tests_2026-09-26_gpt-5.6-sol/research_report_final_display.png) |
 
 ## Coverage map
 
@@ -55,12 +58,12 @@ Runtime classifications: **24 passed**, **4 partial**, **4 blocked**. A top-leve
 | **Genome analysis** | Uploaded PhiX174 FASTA reading, statistics, ORF map, GenBank/FASTA mismatch handling, generated reference/features/map artifacts, and attempted browser activation with explicit embedding blocker. |
 | **Data analysis** | Uploaded CSV profiling, missing/type checks, grouping, summary statistics, plot, grouped CSV, workspace artifact list. |
 | **Documents/workspace** | Uploaded PDF page markers, workspace path resolution, generated reports, source-code upload and bounded code test, an 18-page Paper2Agent-style report with page evidence and a display follow-up. |
-| **Research/reporting** | Web/PubMed search, fetching, database lookup, evidence retrieval, review, synthesis, citation-backed Markdown report, 18-source evidence synthesis, and a second-turn in-web report display. |
-| **Knowledge system** | Allowlisted NCBI ingestion, asynchronous status, evidence retrieval, source URL/ID output, recaptcha limitation handling. |
+| **Research/reporting** | Web/PubMed search, fetching, database lookup, evidence retrieval, review, synthesis, citation-backed Markdown reports, an 18-source synthesis, an eight-source phage-therapy report, and explicit second-turn full-report display. |
+| **Knowledge system** | Allowlisted ingestion from a plain-text UniProt record, asynchronous status polling, a separate second-turn `knowledge_retrieve` query, source URL/ID plus excerpt output, evidence JSON, and the earlier NCBI reCAPTCHA limitation record. |
 | **Selected pipelines** | Scope now includes template_*, metagenomic_de_novo_assembly, metagenomic_read_quality_control, and rna_secondary_structure_prediction; the three requested remote workflows were rerun with the corrected S3/Cromwell settings. |
 | **Pipeline lifecycle** | Catalog/plan validation, bundled examples, approval decisions, bounded execution, polling, result collection, local dependency blockers, remote input staging, output manifests, SHA-256 verification, empty-output detection, and timeout/no-retry handling. |
 | **Coding support** | Code inspection, smallest edit, bounded code test, generated id field, and changed-file reporting. |
-| **Website bridge** | Ticket/connect, context, table, figure, manual, export/action callbacks, revision handling, stale-state disclosure. |
+| **Website bridge** | Ticket/connect, context, table, figure, manual, export/action callbacks, revision handling, post-action context/table/figure verification, the open assistant sidebar, and a regression for documented table filters. |
 | **Guardrails/reliability** | Unsafe biology refusal, missing/unsupported dependencies, truthful partial results, exact errors, redacted evidence, no fabricated outputs, report display verification, remote failure honesty, atomic downloads, and output hashes. |
 
 ## Numbered prompt/output records
@@ -1218,6 +1221,95 @@ The Cromwell status/metadata endpoint later reported `Succeeded`. The declared o
 [Remote status](images/live_tests_2026-09-26_gpt-5.6-sol/remote_metagenomic_assembly_remote_status.json) · [Remote metadata](images/live_tests_2026-09-26_gpt-5.6-sol/remote_metagenomic_assembly_remote_metadata.json) · [Remote outputs](images/live_tests_2026-09-26_gpt-5.6-sol/remote_metagenomic_assembly_remote_outputs.json) · [Late output manifest](images/live_tests_2026-09-26_gpt-5.6-sol/remote_metagenomic_assembly_late_output_downloads.json) · [contigs](images/live_tests_2026-09-26_gpt-5.6-sol/remote_metagenomic_assembly_final_contigs_renamed) · [contig report](images/live_tests_2026-09-26_gpt-5.6-sol/remote_metagenomic_assembly_contig_report) · [species report](images/live_tests_2026-09-26_gpt-5.6-sol/remote_metagenomic_assembly_species_report)
 
 
+### 33. `website_bridge_live_rerun` — passed
+
+- Model: `gpt-5.6-sol`
+- Session: `sol-20260926-live-website-b15aec3e`
+- Run: `03c3e79cd803427e98fc3bd84e6cef1d`
+- Runtime status: `succeeded`
+- Assessment: This follow-up rerun verifies state after `invokeAction`, not only the initial page snapshot. The host returned revision `comparison-2`, a two-row treated table, and three treated figure values.
+
+**Input prompt**
+
+```text
+Introduce the current website. Read the page context, measurements table, and figure, search and read the relevant manual section, then set the group filter to treated and read the updated page, table, and figure before summarizing what changed.
+```
+
+**Observed output**
+
+```text
+The filter changed from all (revision comparison-1) to treated (comparison-2). The Measurements table changed from 4 rows to S2=0.81 and S3=0.67; the Relative abundance figure changed from 6 values to 0.31, 0.55, and 0.72.
+```
+
+The nine host callbacks are recorded in the JSON artifact: initial context/table/figure/manual reads, the filter action, then fresh context/table/figure reads after the revision update. The browser evidence includes the answer view and the open website assistant sidebar.
+
+![33. website bridge live rerun web UI output](images/live_tests_2026-09-26_gpt-5.6-sol/website_bridge_live_rerun.png)
+
+[Open full run JSON](images/live_tests_2026-09-26_gpt-5.6-sol/website_bridge_live_rerun.json) · [Open visible DOM snapshot](images/live_tests_2026-09-26_gpt-5.6-sol/website_bridge_live_rerun.txt) · [Open assistant sidebar](images/live_tests_2026-09-26_gpt-5.6-sol/website_bridge_live_rerun_sidebar.png)
+
+### 34. `knowledge_ingest_query` — passed
+
+- Model: `gpt-5.6-sol`
+- Session: `sol-20260926-live-knowledge-query-9c275b76`
+- Runs: `0dfedaf053d647c08b5265801744340e` (ingest/status), `65224586b8664f43b4730ea8a75b2699` (query)
+- Runtime status: `succeeded` for both turns
+- Assessment: The first turn only ingested and waited for terminal status. A separate second turn called `knowledge_retrieve` using the returned collection ID; it did not call `knowledge_ingest` again.
+
+**Turn 1 prompt**
+
+```text
+Build a session-owned durable knowledge collection from https://rest.uniprot.org/uniprotkb/P0A7V8.txt. Crawl only rest.uniprot.org, max_pages=1, max_depth=0. Wait via knowledge_status until terminal; report job_id, collection_id, status, fetched/indexed/chunks, skipped URLs/errors. Do not query yet.
+```
+
+**Turn 2 prompt**
+
+```text
+Using the collection_id from the prior turn, call knowledge_retrieve only (do not run knowledge_ingest) for: What is the function of E. coli uS4/P0A7V8 and which conserved InterPro domains or sites are reported? Return the answer, each source URL or ID, an excerpt, and the evidence_path.
+```
+
+**Observed output**
+
+```text
+Ingest status: succeeded; fetched/indexed/chunks: 1 / 1 / 59; skipped URLs: 0; errors: none.
+Query result: uS4 initiates 30S assembly, binds 16S rRNA, supports translational accuracy, helps unwind mRNA, and represses the alpha operon. The source was https://rest.uniprot.org/uniprotkb/P0A7V8.txt (P0A7V8); the retrieved domain annotation was S4 RNA-binding, residues 96–156. Evidence: outputs/knowledge_retrieve/b7e7074dc69442f7902ab12726404a95/knowledge_evidence.json.
+```
+
+![34. knowledge ingest and query web UI output](images/live_tests_2026-09-26_gpt-5.6-sol/knowledge_ingest_query.png)
+
+[Open full two-turn JSON](images/live_tests_2026-09-26_gpt-5.6-sol/knowledge_ingest_query.json) · [Open visible DOM snapshot](images/live_tests_2026-09-26_gpt-5.6-sol/knowledge_ingest_query.txt)
+
+### 35. `research_report_final_display` — passed
+
+- Model: `gpt-5.6-sol`
+- Session: `sol-20260926-live-research-display-026d0241`
+- Runs: `1e090ebb45e140e1adbc9240bd8410b4` (research/write), `312d321d04e541f89d42509fcc5a1406` (final display)
+- Runtime status: `succeeded` for both turns
+- Assessment: The first turn reviewed eight PubMed-indexed sources and wrote a cited Markdown report. The second turn used `file_inspection` and printed the report’s title, headings, evidence comparison, limitations, conclusion, references, and exact path in the response.
+
+**Turn 1 prompt**
+
+```text
+Research current evidence for phage therapy against multidrug-resistant bacterial infections using PubMed and trusted web sources. Review at least eight sources, compare study type, results, and limitations, write a cited Markdown report to the workspace, and return the exact workspace path, source count, section outline, and findings.
+```
+
+**Turn 2 prompt**
+
+```text
+Read the saved report from the prior turn and render its full substantive contents here: title, all headings, key findings, an evidence or citation table, limitations, conclusion, and exact workspace path. Do not only link to it or provide a one-paragraph summary.
+```
+
+**Observed output**
+
+```text
+Report: outputs/report_write/bbce0bb4de8f458687a93d6ee5a7510a/Current_Evidence_for_Phage_Therapy_Against_Multidrug-Resista.md
+Sources reviewed: 8 PubMed-indexed sources. Headings displayed: Executive summary, Methods, Comparative table, Evidence tiers, Safety, Practical/regulatory challenges, Evidence gaps, Conclusion, Limitations, References. The report says phage therapy remains promising but experimental; controlled clinical evidence is sparse and not convincingly positive. It records PhagoBurn’s negative result and the important phage-titre degradation/underdosing limitation.
+```
+
+![35. research report final display web UI output](images/live_tests_2026-09-26_gpt-5.6-sol/research_report_final_display.png)
+
+[Open full two-turn JSON](images/live_tests_2026-09-26_gpt-5.6-sol/research_report_final_display.json) · [Open visible DOM snapshot](images/live_tests_2026-09-26_gpt-5.6-sol/research_report_final_display.txt)
+
+
 ## Selected pipeline outcomes
 
 | Pipeline | Result | Evidence |
@@ -1237,12 +1329,12 @@ The Cromwell status/metadata endpoint later reported `Succeeded`. The declared o
 - Offline validation ran 19 checks: 18 passed and 1 failed because `smoke_architecture` still expects an older exact tool trace; the live gpt-5.6-sol cases completed independently. Full validation output was recorded during the run; the repository checkout used for this report does not contain that temporary validation file.
 - The retained local demonstration covers the non-remote template and RNA checks; the requested template WDL, metagenomic assembly, and metagenomic QC executions are represented by the corrected remote runs below.
 - Template Snakemake and template Nextflow remained blocked by unavailable local runtimes, while the corrected remote template WDL and metagenomic assembly executions completed; RNA secondary structure was blocked because RNAfold was unavailable.
-- Knowledge ingestion completed but NCBI returned a reCAPTCHA page, so no substantive passage was claimed.
-- The website bridge completed ten synthetic host callbacks and correctly disclosed stale revision data after the filter action.
+- The original Knowledge record remains a partial NCBI/reCAPTCHA case. The new UniProt two-turn case completed ingestion, terminal status, and a separate cited retrieval query with a nonempty evidence path.
+- The original website record remains a partial stale-revision case. The new rerun completed nine synthetic host callbacks, refreshed context/table/figure after the filter action, and exposed the open assistant sidebar; the documented `TableResult.filters` shape is covered by a regression test.
 - The unsafe biological request was blocked by the input guardrail.
 - The new genome and protein visualization prompts produced verified map/structure artifacts and screenshots of the rendered web response, but both viewer-open requests were honestly reported as unavailable because the session had no trusted website embedding.
 - The Paper2Agent-style document run covered all selectable pages 1–15 and marked pages 16–18 as OCR-limited; the follow-up displayed the report body rather than only its path.
-- The expanded research run reviewed 18 sources and its follow-up displayed the report title, headings, evidence comparison, limitations, and conclusion in the web UI.
+- The earlier expanded research run reviewed 18 sources and displayed its report. The new phage-therapy run independently reviewed eight PubMed sources, wrote a report, and its follow-up rendered the full substantive report contents instead of only a path.
 - Remote Cromwell was reachable at the configured endpoint. Template WDL initially returned an empty output map but later yielded all three S3-verified outputs; the forced assembly run was submitted with `dry_run=false`, exceeded the local 90-second polling bound, and later completed remotely with three S3-verified outputs; the QC workflow completed with verified downloads. No retry or cancellation was performed.
 - The corrected remote configuration propagated Cromwell plus input/output S3 transport settings into detached workers. The offline `evals.smoke_cromwell_outputs` suite passed all **11 tests**.
 - Fresh `template_wdl` execution uploaded its FASTA and reached Cromwell `Succeeded`; its first output response was empty, then a later read-only metadata/output query exposed the declared paths and the three S3 downloads were verified and hashed.
@@ -1253,6 +1345,6 @@ The Cromwell status/metadata endpoint later reported `Succeeded`. The declared o
 ## Supporting artifacts
 
 - [Case manifest](images/live_tests_2026-09-26_gpt-5.6-sol/case_manifest.json)
-- Current run evidence: records 23–29 plus the retained remote executions in records 30–32 in `images/live_tests_2026-09-26_gpt-5.6-sol/` (including S3 manifests and report-display screenshots). Local-only WDL and assembly attempts were removed.
+- Current run evidence: records 23–35 plus the retained remote executions in `images/live_tests_2026-09-26_gpt-5.6-sol/` (including the website rerun, Knowledge two-turn query, Research final-display screenshot, S3 manifests, and report-display screenshots). Local-only WDL and assembly attempts were removed.
 - [Remote Cromwell smoke results](images/live_tests_2026-09-26_gpt-5.6-sol/remote_cromwell_smoke.txt)
 - Record 32 late remote metadata/output evidence is linked in the numbered record above.
