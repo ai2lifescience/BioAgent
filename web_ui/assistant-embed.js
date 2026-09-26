@@ -93,6 +93,8 @@
     let connectionAttempt = 0;
     let connectionTimeout = null;
     const calls = new Map();
+    const contextSyncWaiters = new Map();
+    let contextUpdateSequence = 0;
 
     function post(message) {
       frame.contentWindow?.postMessage({ protocol: 1, ...message }, src.origin);
@@ -104,8 +106,31 @@
       options.onEvent?.({ type: "website-error", message });
     }
 
-    function postContext() {
-      post({ type: "agent-context", context });
+    function postContext(contextUpdateId = "") {
+      post({ type: "agent-context", context, context_update_id: contextUpdateId });
+    }
+
+    // Context changes are normally fire-and-forget from a host page. During a
+    // website request, however, the host callback may change the page
+    // revision and the assistant can immediately issue another request. Wait
+    // for the iframe to persist that context before completing the callback so
+    // the bridge cannot observe the previous revision.
+    function waitForContextSync(contextUpdateId) {
+      if (!binding || !contextUpdateId) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => {
+          contextSyncWaiters.delete(contextUpdateId);
+          reject(new Error("Website context update timed out."));
+        }, 5000);
+        contextSyncWaiters.set(contextUpdateId, { resolve, reject, timer });
+      });
+    }
+
+    async function postContextAndWait() {
+      const contextUpdateId = `${instanceId}:${++contextUpdateSequence}`;
+      const wait = waitForContextSync(contextUpdateId);
+      postContext(contextUpdateId);
+      return wait;
     }
     async function connectWebsite() {
       if (!options.siteId || typeof options.getToken !== "function" || connecting || binding) return;
@@ -141,7 +166,7 @@
           const current = await adapter.getPageContext();
           if (method !== "getPageContext" && current.revision !== message.revision) throw new Error("Page changed; read website_context again.");
           const result = await callback(message.arguments || {}, message);
-          await updateContext();
+          await updateContext(undefined, { waitForSync: true });
           return { result: result || {} };
         } catch (error) {
           return { error: { code: "host_callback_failed", message: String(error?.message || error) } };
@@ -164,10 +189,11 @@
       launcher.setAttribute("aria-expanded", "false");
       (lastFocus || launcher).focus();
     }
-    async function updateContext(nextContext) {
+    async function updateContext(nextContext, { waitForSync = false } = {}) {
       const value = nextContext !== undefined ? nextContext : (adapter.getPageContext ? await adapter.getPageContext() : context);
       context = { ...(value || {}) };
-      postContext();
+      if (waitForSync && binding) await postContextAndWait();
+      else postContext();
       return context;
     }
     function onMessage(event) {
@@ -181,6 +207,11 @@
           connectionAttempt++;
           clearTimeout(connectionTimeout);
           calls.clear();
+          for (const waiter of contextSyncWaiters.values()) {
+            clearTimeout(waiter.timer);
+            waiter.reject(new Error("Website connection was reset before the context update completed."));
+          }
+          contextSyncWaiters.clear();
         }
         postContext();
         connectWebsite();
@@ -191,6 +222,16 @@
         connecting = false;
         clearTimeout(connectionTimeout);
         options.onEvent?.({ type: "website-connected" });
+      }
+      if (event.data?.type === "agent-context-updated" && event.data.session_id === sessionId) {
+        const key = String(event.data.context_update_id || "");
+        const waiter = contextSyncWaiters.get(key);
+        if (waiter) {
+          clearTimeout(waiter.timer);
+          contextSyncWaiters.delete(key);
+          if (event.data.ok === false) waiter.reject(new Error(event.data.error || "Website context update failed."));
+          else waiter.resolve();
+        }
       }
       if (event.data?.type === "agent-event") {
         if (event.data.event?.type === "website-error") { connecting = false; clearTimeout(connectionTimeout); }
@@ -212,6 +253,11 @@
         destroyed = true;
         connectionAttempt++;
         clearTimeout(connectionTimeout);
+        for (const waiter of contextSyncWaiters.values()) {
+          clearTimeout(waiter.timer);
+          waiter.reject(new Error("Assistant drawer was destroyed before the context update completed."));
+        }
+        contextSyncWaiters.clear();
         if (binding) frame.contentWindow?.postMessage({ type: "agent-disconnect" }, src.origin);
         window.removeEventListener("message", onMessage);
         launcher.remove();

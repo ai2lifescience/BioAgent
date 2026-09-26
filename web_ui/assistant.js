@@ -21,6 +21,7 @@
     context: {},
     website: null,
     websitePoll: null,
+    websiteContextQueue: Promise.resolve(),
     websiteRequired: Boolean(query.get("website_site")),
     maxTurns: 5,
   };
@@ -194,10 +195,47 @@
     } catch (error) { appendProgress(`Website response failed: ${error.message}`); }
   }
 
-  async function websiteContextUpdate() {
-    if (!state.website) return;
-    try { await websitePost("website/context", { ...state.website, context: state.context }); }
-    catch (error) { appendProgress(`Website context update failed: ${error.message}`); }
+  async function websiteContextUpdate(context = state.context, website = state.website) {
+    if (!website) throw new Error("Website is not connected.");
+    await websitePost("website/context", { ...website, context });
+  }
+
+  function queueWebsiteContextUpdate(context, contextUpdateId) {
+    const snapshot = { ...(context || {}) };
+    const website = state.website;
+    // The initial context is sent before the binding exists and is included
+    // in the connect payload. It does not need an HTTP context write.
+    if (!website && !contextUpdateId) return Promise.resolve();
+    const task = state.websiteContextQueue.then(async () => {
+      try {
+        await websiteContextUpdate(snapshot, website);
+        if (contextUpdateId && window.parent !== window) {
+          window.parent.postMessage({
+            type: "agent-context-updated",
+            session_id: state.sessionId,
+            context_update_id: contextUpdateId,
+            revision: snapshot.revision || "",
+            ok: true,
+          }, parentOrigin);
+        }
+      } catch (error) {
+        appendProgress(`Website context update failed: ${error.message}`);
+        if (contextUpdateId && window.parent !== window) {
+          window.parent.postMessage({
+            type: "agent-context-updated",
+            session_id: state.sessionId,
+            context_update_id: contextUpdateId,
+            revision: snapshot.revision || "",
+            ok: false,
+            error: error.message,
+          }, parentOrigin);
+        }
+      }
+    });
+    // A failed update must not prevent later context snapshots from being
+    // persisted. The individual task reports its failure to its waiter above.
+    state.websiteContextQueue = task.catch(() => {});
+    return task;
   }
 
   async function loadConfig() {
@@ -398,7 +436,7 @@
     if (window.parent === window || event.source !== window.parent || event.origin !== parentOrigin) return;
     if (!event.data || event.data.type !== "agent-context" || !event.data.context) return;
     setContext(event.data.context);
-    websiteContextUpdate();
+    queueWebsiteContextUpdate(event.data.context, String(event.data.context_update_id || ""));
   });
   window.addEventListener("message", (event) => {
     if (window.parent === window || event.source !== window.parent || event.origin !== parentOrigin) return;
