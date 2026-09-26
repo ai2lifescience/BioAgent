@@ -195,6 +195,21 @@ session-owned feature artifact, then genome_render_map creates the
 genome_map.json artifact and its reference sequence. The result includes an
 interactive genome browser with feature colors, pan and zoom controls, feature
 details on click, a full-sequence reset, and a download link for the map data.
+
+For a no-upload example, let the agent retrieve a public NCBI sequence first,
+then derive ORF features and render the map:
+
+~~~text
+Use ncbi_retrieval to download NCBI accession NC_001422.1 as a FASTA file.
+Then use the downloaded FASTA to find ORFs and render an interactive genome map.
+Return the downloaded path, map path, and reference path.
+~~~
+
+Expected behavior: ncbi_retrieval writes a workspace FASTA and metadata file;
+sequence_find_orfs creates the feature artifact; and genome_render_map writes
+the interactive map plus its reference artifact. This example displays
+predicted ORFs. It does not claim that the FASTA contains GenBank annotations.
+
 For GFF input, provide the matching FASTA and a sequence ID when the files
 contain more than one sequence:
 
