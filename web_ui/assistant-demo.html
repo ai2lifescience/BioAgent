@@ -1,17 +1,149 @@
 <!doctype html>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Assistant Embed Demo</title>
-<style>
-body{margin:0;background:#f3f7f6;color:#173438;font:15px system-ui,sans-serif}main{max-width:1080px;margin:32px auto;padding:0 20px}header{display:flex;justify-content:space-between;align-items:center}section{background:white;border:1px solid #d9e5e4;border-radius:14px;padding:20px;margin-top:20px;box-shadow:0 8px 24px #17343810}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:9px;border-bottom:1px solid #e4eceb}svg{width:100%;height:220px;background:#f8fbfb;border-radius:8px}.pill{border:0;border-radius:999px;padding:9px 14px;background:#dff2ef;color:#115e59;cursor:pointer}@media(max-width:700px){.grid{grid-template-columns:1fr}}
-</style>
-<main><header><div><h1>Sample comparison</h1><p>Independent website fixture: filter, inspect data, and ask the embedded guide.</p></div><button class="pill" id="filter">Show treated</button></header>
-<section class="grid"><div><h2>Relative abundance</h2><svg id="chart" viewBox="0 0 500 220" role="img" aria-label="Relative abundance chart"><polyline points="20,185 110,130 200,150 290,80 380,105 470,45" fill="none" stroke="#159487" stroke-width="5"/><circle cx="290" cy="80" r="7" fill="#115e59"/></svg></div><div><h2>Measurements</h2><table id="measurements"><thead><tr><th>Sample</th><th>Group</th><th>Score</th></tr></thead><tbody></tbody></table></div></section>
-<section><h2>Workflow</h2><p id="workflow">Step 2 of 3: review the comparison.</p><button class="pill" id="methods">Open methods</button></section><div id="assistant-root"></div></main>
-<script>
-const rows=[{sample:"S1",group:"control",score:0.42},{sample:"S2",group:"treated",score:0.81},{sample:"S3",group:"treated",score:0.67},{sample:"S4",group:"control",score:0.31}];let group="all",revision=1;
-function render(){document.querySelector("#measurements tbody").innerHTML=rows.filter(r=>group==="all"||r.group===group).map(r=>"<tr><td>"+r.sample+"</td><td>"+r.group+"</td><td>"+r.score+"</td></tr>").join("");document.querySelector("#filter").textContent=group==="all"?"Show treated":"Show all"} render();
-document.querySelector("#filter").onclick=()=>{group=group==="all"?"treated":"all";revision++;render();assistant&&assistant.updateContext(pageContext())};document.querySelector("#methods").onclick=()=>{location.hash="methods";revision++;assistant&&assistant.updateContext(pageContext())};
-function pageContext(){return {revision:"comparison-"+revision,title:"Sample comparison",url:location.href,selection:{group:group},filters:{group:group},workflow:{step:"review",steps:["select","review","export"]},resources:[{id:"measurements",kind:"table",title:"Measurements",exportable:true},{id:"abundance",kind:"figure",title:"Relative abundance"}],elements:[{id:"measurements",label:"Measurements table"},{id:"filter",label:"Group filter"}],routes:[{id:"methods",label:"Methods"}],actions:[{id:"set_group",description:"Filter group",parameters:{group:["all","treated","control"]}}],manual:{version:"2026-09",title:"Example user manual"}}}
-const dataFor=()=>rows.filter(r=>group==="all"||r.group===group);let assistant;
-(async()=>{const s=document.createElement("script");s.src="/static/assistant-embed.js";document.head.append(s);await new Promise(r=>s.onload=r);assistant=AssistantDrawer.mount({target:document.querySelector("#assistant-root"),src:"/assistant",siteId:"assistant-demo",getToken:()=>fetch("/website/demo-token",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({site_id:"assistant-demo"})}).then(async r=>{const x=await r.json();if(!r.ok)throw new Error(x.error||"Demo ticket request failed");return x.token}),context:pageContext(),adapter:{getPageContext:pageContext,readTable:({resource_id,offset=0,limit=50})=>resource_id==="measurements"?{resource_id:resource_id,title:"Measurements",columns:[{name:"sample",type:"string"},{name:"group",type:"string"},{name:"score",type:"number"}],rows:dataFor().slice(offset,offset+limit),offset:offset,total_rows:dataFor().length,revision:"comparison-"+revision}:{},readFigure:({resource_id})=>({resource_id:resource_id,title:"Relative abundance",description:"Six ordered observations; teal line is the current sample comparison.",x_axis:{label:"Observation",unit:""},y_axis:{label:"Relative abundance",unit:"fraction"},series:[{name:"Observed",values:[.12,.31,.24,.55,.43,.72]}],revision:"comparison-"+revision}),searchManual:({query})=>({version:"2026-09",sections:[{id:"methods",title:"Methods",excerpt:"This page uses a " + query + " workflow."}]}),readManual:()=>({section_id:"methods",title:"Methods",version:"2026-09",text:"Use the filter to change cohort, then inspect Measurements. Export data when an analysis needs the complete table."}),exportData:()=>({filename:"measurements.csv",content:"sample,group,score\n"+dataFor().map(r=>r.sample+","+r.group+","+r.score).join("\n"),content_type:"text/csv"}),highlight:({element_id,message})=>{document.getElementById(element_id)&&document.getElementById(element_id).scrollIntoView({behavior:"smooth"});return {message:message||("Highlighted "+element_id),revision:"comparison-"+revision}},navigate:({route_id})=>{location.hash=route_id;return {message:"Opened "+route_id,revision:"comparison-"+revision}},invokeAction:({action_id,arguments:a})=>{if(action_id==="set_group"){group=["all","treated","control"].includes(a.group)?a.group:"all";revision++;render();return {action_id:action_id,message:"Group set to "+group,revision:"comparison-"+revision}}throw new Error("Unknown action")}}})})();
-</script>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sample comparison | Website bridge demo</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #173438;
+      --muted: #62777b;
+      --line: #d9e5e4;
+      --surface: #ffffff;
+      --page: #eef5f4;
+      --teal: #147e78;
+      --teal-dark: #0d5c58;
+      --mint: #dff2ef;
+      --shadow: 0 14px 34px #17343812;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: radial-gradient(circle at 88% -10%, #d9efeb 0, transparent 36%), var(--page); color: var(--ink); font: 14px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    button { font: inherit; }
+    .page-shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 28px 0 72px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; color: #fff; background: linear-gradient(145deg, #1a9e96, #0f6964); font-size: 18px; box-shadow: 0 8px 18px #126b6530; }
+    .eyebrow { margin: 0 0 2px; color: var(--teal-dark); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .brand strong { font-size: 16px; letter-spacing: -.01em; }
+    .connection { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; color: var(--teal-dark); border: 1px solid #c8e5e1; border-radius: 999px; background: #f7fffd; font-size: 12px; font-weight: 700; }
+    .connection-dot { width: 8px; height: 8px; border-radius: 50%; background: #2aa99b; box-shadow: 0 0 0 4px #2aa99b20; }
+    .hero { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-top: 32px; padding: 30px 32px; border: 1px solid #cfe2df; border-radius: 22px; background: linear-gradient(120deg, #fff, #f7fcfb); box-shadow: var(--shadow); }
+    .hero h1 { margin: 3px 0 8px; font-size: clamp(28px, 4vw, 42px); line-height: 1.05; letter-spacing: -.045em; }
+    .hero p { max-width: 640px; margin: 0; color: var(--muted); font-size: 15px; }
+    .hero-actions { display: flex; flex-direction: column; align-items: end; gap: 10px; min-width: 170px; }
+    .filter-label { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .pill { border: 0; border-radius: 999px; padding: 11px 17px; color: #fff; background: linear-gradient(145deg, #178e86, #0d6964); box-shadow: 0 7px 14px #0d69642b; cursor: pointer; font-weight: 800; transition: transform .16s ease, box-shadow .16s ease; }
+    .pill:hover { transform: translateY(-1px); box-shadow: 0 10px 18px #0d69643b; }
+    .pill[aria-pressed="true"] { background: linear-gradient(145deg, #315e96, #274b78); }
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 18px; }
+    .metric { min-height: 105px; padding: 17px 18px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: 0 7px 20px #1734380a; }
+    .metric-label { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .metric-value { margin-top: 5px; color: var(--ink); font-size: 25px; font-weight: 800; letter-spacing: -.035em; }
+    .metric-note { margin-top: 2px; color: var(--muted); font-size: 11px; }
+    .content-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; margin-top: 18px; }
+    .panel { min-width: 0; padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: 0 9px 24px #1734380c; }
+    .panel-heading { display: flex; align-items: start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+    .panel h2 { margin: 0; font-size: 19px; letter-spacing: -.02em; }
+    .panel-heading p { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+    .panel-tag { flex: none; padding: 5px 9px; border-radius: 999px; color: var(--teal-dark); background: var(--mint); font-size: 11px; font-weight: 800; }
+    .chart-box { overflow: hidden; border: 1px solid #e3eeed; border-radius: 13px; background: linear-gradient(180deg, #fbfefd, #f5faf9); }
+    #chart { display: block; width: 100%; height: 275px; }
+    #chart .grid-line { stroke: #dce9e7; stroke-width: 1; }
+    #chart .axis-label { fill: #74878a; font-size: 11px; }
+    #chart .series-line { fill: none; stroke: var(--teal); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    #chart .series-area { fill: url(#area-fill); }
+    #chart .series-dot { fill: var(--surface); stroke: var(--teal); stroke-width: 3; }
+    .table-wrap { overflow: auto; border: 1px solid #e3eeed; border-radius: 13px; }
+    table { width: 100%; border-collapse: collapse; min-width: 330px; }
+    th, td { padding: 12px 13px; text-align: left; border-bottom: 1px solid #e4eceb; }
+    th { color: var(--muted); background: #f8fbfb; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: #f5faf9; }
+    td.score { color: var(--teal-dark); font-weight: 800; }
+    .workflow-panel { margin-top: 18px; }
+    .workflow-content { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 18px; }
+    .steps { display: flex; align-items: center; gap: 10px; margin-top: 8px; color: var(--muted); font-size: 12px; }
+    .step { display: inline-flex; align-items: center; gap: 6px; }
+    .step-dot { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: #fff; background: var(--teal); font-size: 11px; font-weight: 800; }
+    .step:not(:last-child)::after { content: ""; display: block; width: 28px; height: 1px; margin-left: 2px; background: var(--line); }
+    .manual-card { padding: 13px 15px; border: 1px solid #cde5e1; border-radius: 12px; background: #f3fbf9; }
+    .manual-card strong { display: block; color: var(--teal-dark); font-size: 12px; }
+    .manual-card span { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+    #methods { white-space: nowrap; }
+    @media (max-width: 820px) { .hero { align-items: start; flex-direction: column; } .hero-actions { align-items: start; } .metrics { grid-template-columns: repeat(2, 1fr); } .content-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 520px) { .page-shell { width: min(100% - 24px, 1180px); padding-top: 18px; } .connection { display: none; } .hero { margin-top: 22px; padding: 23px; } .metrics { gap: 10px; } .metric { min-height: 95px; padding: 13px; } .metric-value { font-size: 21px; } .panel { padding: 16px; } .workflow-content { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">↗</span><div><p class="eyebrow">Website bridge fixture</p><strong>Analysis workspace</strong></div></div>
+      <div class="connection"><span class="connection-dot"></span>Trusted website connected</div>
+    </header>
+    <section class="hero" aria-labelledby="page-title">
+      <div><p class="eyebrow">Review workflow · Step 2 of 3</p><h1 id="page-title">Sample comparison</h1><p>Compare treatment response across the current cohort. The embedded assistant can inspect this table, interpret the figure, and apply the registered group filter.</p></div>
+      <div class="hero-actions"><span class="filter-label">Active cohort: <strong id="activeGroup">All samples</strong></span><button class="pill" id="filter" type="button" aria-pressed="false">Show treated cohort</button></div>
+    </section>
+    <section class="metrics" aria-label="Comparison summary">
+      <article class="metric"><div class="metric-label">Samples shown</div><div class="metric-value" id="sampleCount">4</div><div class="metric-note" id="sampleNote">2 control · 2 treated</div></article>
+      <article class="metric"><div class="metric-label">Mean score</div><div class="metric-value" id="meanScore">0.55</div><div class="metric-note">Across visible samples</div></article>
+      <article class="metric"><div class="metric-label">Score spread</div><div class="metric-value" id="scoreSpread">0.50</div><div class="metric-note">Maximum minus minimum</div></article>
+      <article class="metric"><div class="metric-label">Revision</div><div class="metric-value" id="revisionValue">1</div><div class="metric-note">Updates after every action</div></article>
+    </section>
+    <section class="content-grid">
+      <article class="panel" aria-labelledby="figure-title"><div class="panel-heading"><div><h2 id="figure-title">Relative abundance</h2><p id="figureSubtitle">Six ordered observations · all cohorts</p></div><span class="panel-tag">Live figure</span></div><div class="chart-box"><svg id="chart" viewBox="0 0 620 275" role="img" aria-label="Relative abundance chart"><defs><linearGradient id="area-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#159487" stop-opacity=".25"/><stop offset="1" stop-color="#159487" stop-opacity="0"/></linearGradient></defs><g id="chartGrid"></g><path id="chartArea" class="series-area"></path><polyline id="chartLine" class="series-line" points=""></polyline><g id="chartDots"></g><g id="chartLabels"></g></svg></div></article>
+      <article class="panel" aria-labelledby="table-title"><div class="panel-heading"><div><h2 id="table-title">Measurements</h2><p id="tableSubtitle">Showing every sample</p></div><span class="panel-tag">Structured table</span></div><div class="table-wrap"><table id="measurements"><thead><tr><th>Sample</th><th>Group</th><th>Score</th></tr></thead><tbody></tbody></table></div></article>
+    </section>
+    <section class="panel workflow-panel" aria-labelledby="workflow-title"><div class="workflow-content"><div><div class="panel-heading" style="margin-bottom:0"><div><h2 id="workflow-title">Workflow and methods</h2><p id="workflow">Review the comparison, then export the selected cohort for downstream analysis.</p></div></div><div class="steps" aria-label="Workflow progress"><span class="step"><span class="step-dot">1</span>Select</span><span class="step"><span class="step-dot">2</span>Review</span><span class="step"><span class="step-dot" style="background:#d9e5e4;color:#62777b">3</span>Export</span></div></div><div><div class="manual-card"><strong>Methods · v2026-09</strong><span>Use the group filter to change cohort, then inspect Measurements.</span></div><button class="pill" id="methods" type="button" style="margin-top:10px">Open methods</button></div></div></section>
+    <div id="assistant-root"></div>
+  </main>
+  <script>
+    const rows = [{sample: "S1", group: "control", score: 0.42}, {sample: "S2", group: "treated", score: 0.81}, {sample: "S3", group: "treated", score: 0.67}, {sample: "S4", group: "control", score: 0.31}];
+    const abundance = [{value: 0.12, group: "control"}, {value: 0.31, group: "treated"}, {value: 0.24, group: "control"}, {value: 0.55, group: "treated"}, {value: 0.43, group: "control"}, {value: 0.72, group: "treated"}];
+    let group = "all", revision = 1, workflowRoute = "review", assistant;
+    const dataFor = () => rows.filter((row) => group === "all" || row.group === group);
+    const abundanceFor = () => abundance.filter((point) => group === "all" || point.group === group);
+    const labelFor = () => group === "all" ? "All samples" : `${group[0].toUpperCase()}${group.slice(1)} cohort`;
+    const format = (value) => Number(value).toFixed(2);
+    function renderChart() {
+      const values = abundanceFor(), width = 620, height = 275, left = 48, right = 20, top = 20, bottom = 39, plotWidth = width - left - right, plotHeight = height - top - bottom, max = 0.8;
+      const x = (index) => values.length === 1 ? left + plotWidth / 2 : left + (plotWidth * index / (values.length - 1));
+      const y = (value) => top + plotHeight - (value / max * plotHeight);
+      document.querySelector("#chartLine").setAttribute("points", values.map((point, index) => `${x(index).toFixed(1)},${y(point.value).toFixed(1)}`).join(" "));
+      document.querySelector("#chartArea").setAttribute("d", values.length ? `M ${left} ${top + plotHeight} L ${values.map((point, index) => `${x(index).toFixed(1)} ${y(point.value).toFixed(1)}`).join(" L ")} L ${x(values.length - 1)} ${top + plotHeight} Z` : "");
+      document.querySelector("#chartGrid").innerHTML = [0, .2, .4, .6, .8].map((value) => `<line class="grid-line" x1="${left}" x2="${width - right}" y1="${y(value)}" y2="${y(value)}"></line><text class="axis-label" x="10" y="${y(value) + 4}">${value.toFixed(1)}</text>`).join("");
+      document.querySelector("#chartDots").innerHTML = values.map((point, index) => `<circle class="series-dot" cx="${x(index)}" cy="${y(point.value)}" r="5"></circle>`).join("");
+      document.querySelector("#chartLabels").innerHTML = values.map((point, index) => `<text class="axis-label" text-anchor="middle" x="${x(index)}" y="${height - 13}">${index + 1}</text>`).join("");
+      document.querySelector("#figureSubtitle").textContent = `${values.length} ordered observations · ${group === "all" ? "all cohorts" : labelFor().toLowerCase()}`;
+    }
+    function render() {
+      const visible = dataFor(), scores = visible.map((row) => row.score), mean = scores.length ? scores.reduce((sum, value) => sum + value, 0) / scores.length : 0, spread = scores.length ? Math.max(...scores) - Math.min(...scores) : 0;
+      document.querySelector("#measurements tbody").innerHTML = visible.map((row) => `<tr><td>${row.sample}</td><td>${row.group}</td><td class="score">${format(row.score)}</td></tr>`).join("");
+      document.querySelector("#activeGroup").textContent = labelFor(); document.querySelector("#filter").textContent = group === "all" ? "Show treated cohort" : "Show all samples"; document.querySelector("#filter").setAttribute("aria-pressed", String(group !== "all"));
+      document.querySelector("#sampleCount").textContent = String(visible.length); document.querySelector("#sampleNote").textContent = group === "all" ? "2 control · 2 treated" : `${visible.length} ${group} samples`; document.querySelector("#meanScore").textContent = format(mean); document.querySelector("#scoreSpread").textContent = format(spread); document.querySelector("#revisionValue").textContent = String(revision); document.querySelector("#tableSubtitle").textContent = group === "all" ? "Showing every sample" : `Showing ${visible.length} ${group} samples`;
+      renderChart();
+    }
+    render();
+    function pageContext() {
+      return {revision: `comparison-${revision}`, title: "Sample comparison", url: location.href, selection: {group}, filters: {group}, workflow: {step: workflowRoute, steps: ["select", "review", "export"]}, resources: [{id: "measurements", kind: "table", title: "Measurements", exportable: true}, {id: "abundance", kind: "figure", title: "Relative abundance"}], elements: [{id: "measurements", label: "Measurements table"}, {id: "filter", label: "Group filter"}], routes: [{id: "methods", label: "Methods"}], actions: [{id: "set_group_filter", description: "Filter samples by group", parameters: {group: ["all", "treated", "control"]}}], manual: {version: "2026-09", title: "Sample comparison methods"}};
+    }
+    document.querySelector("#filter").addEventListener("click", () => { group = group === "all" ? "treated" : "all"; revision += 1; workflowRoute = "review"; render(); assistant?.updateContext(pageContext()); });
+    document.querySelector("#methods").addEventListener("click", () => { location.hash = "methods"; revision += 1; workflowRoute = "review"; document.querySelector("#workflow").textContent = "Methods opened. Use the group filter to change cohort, then inspect Measurements."; render(); assistant?.updateContext(pageContext()); });
+    (async () => {
+      const script = document.createElement("script"); script.src = "/static/assistant-embed.js"; document.head.append(script); await new Promise((resolve, reject) => { script.onload = resolve; script.onerror = reject; });
+      assistant = AssistantDrawer.mount({target: document.querySelector("#assistant-root"), src: "/assistant", siteId: "assistant-demo", title: "Website assistant", launcherLabel: "Ask assistant", open: true, getToken: () => fetch("/website/demo-token", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({site_id: "assistant-demo"})}).then(async (response) => { const payload = await response.json(); if (!response.ok) throw new Error(payload.error || "Demo ticket request failed"); return payload.token; }), context: pageContext(), adapter: {
+        getPageContext: pageContext,
+        readTable: ({resource_id, offset = 0, limit = 50}) => { if (resource_id !== "measurements") throw new Error(`Unknown table: ${resource_id}`); const visible = dataFor(); return {resource_id, title: "Measurements", columns: [{name: "sample", type: "string"}, {name: "group", type: "string"}, {name: "score", type: "number"}], rows: visible.slice(offset, offset + limit), offset, total_rows: visible.length, revision: `comparison-${revision}`, filters: {group}}; },
+        readFigure: ({resource_id}) => { if (resource_id !== "abundance") throw new Error(`Unknown figure: ${resource_id}`); return {resource_id, title: "Relative abundance", description: `${abundanceFor().length} ordered observations for ${labelFor().toLowerCase()}.`, x_axis: {label: "Observation"}, y_axis: {label: "Relative abundance", unit: "fraction"}, series: [{name: "Observed", values: abundanceFor().map((point) => point.value)}], filters: {group}, revision: `comparison-${revision}`}; },
+        searchManual: ({query}) => ({version: "2026-09", sections: [{id: "methods", title: "Methods", excerpt: `Use the group filter to change cohort, then inspect Measurements (${query}).`}]}),
+        readManual: () => ({section_id: "methods", title: "Methods", version: "2026-09", text: "Use the group filter to change cohort, then inspect Measurements. Export data when an analysis needs the complete table."}),
+        exportData: () => ({filename: "measurements.csv", content: "sample,group,score\n" + dataFor().map((row) => `${row.sample},${row.group},${row.score}`).join("\n"), content_type: "text/csv"}),
+        highlight: ({element_id, message}) => { document.getElementById(element_id)?.scrollIntoView({behavior: "smooth", block: "center"}); return {message: message || `Highlighted ${element_id}`, revision: `comparison-${revision}`}; },
+        navigate: ({route_id}) => { if (route_id !== "methods") throw new Error(`Unknown route: ${route_id}`); location.hash = route_id; return {message: "Opened Methods", revision: `comparison-${revision}`}; },
+        invokeAction: ({action_id, arguments: args}) => { if (action_id !== "set_group_filter") throw new Error(`Unknown action: ${action_id}`); const nextGroup = args?.group; if (!["all", "treated", "control"].includes(nextGroup)) throw new Error("group must be all, treated, or control"); group = nextGroup; revision += 1; workflowRoute = "review"; render(); return {action_id, message: `Group set to ${group}`, revision: `comparison-${revision}`, filters: {group}}; },
+      }});
+    })().catch((error) => console.error("Assistant embed failed", error));
+  </script>
+</body>
+</html>
