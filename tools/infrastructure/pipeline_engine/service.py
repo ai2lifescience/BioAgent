@@ -317,8 +317,10 @@ def status(root: Path, job_id: str) -> dict:
     if record["status"] in {"queued", "running"} and not alive(record):
         record = store.update(job_id, expected={"queued", "running"}, status="interrupted",
                               error="Worker exited without completion; create a new plan to rerun.", finished_at=now())
+    directory = store.directory(job_id)
+    public_directory = directory.relative_to(store.root).as_posix()
     return {**summary(record), "pipeline_name": record["plan"]["pipeline_name"],
-            "logs": {name: f"runs/{job_id}/{name}.log" for name in ("stdout", "stderr")}}
+            "logs": {name: f"{public_directory}/{name}.log" for name in ("stdout", "stderr")}}
 
 
 def wait(root: Path, job_id: str, seconds: float) -> dict:
@@ -373,17 +375,17 @@ def results(root: Path, job_id: str, max_rows: int = 10) -> dict:
                 for _, row in zip(range(max_rows + 1), reader):
                     rows.append(row)
                 tables.append({"name": path.name, "columns": reader.fieldnames, "rows": rows[:max_rows], "truncated": len(rows) > max_rows})
-    archive_path = confined(root, f"runs/{job_id}/results.zip")
+    archive_path = directory / "results.zip"
     with zipfile.ZipFile(archive_path, "w", zipfile.ZIP_DEFLATED) as archive:
         for _, path in selected:
             archive.write(path, path.relative_to(directory).as_posix())
         for name in ("stdout.log", "stderr.log", "plan.json", "output-manifest.json"):
-            path = confined(root, f"runs/{job_id}/{name}")
+            path = directory / name
             if path.is_file():
                 archive.write(path, name)
     return {"status": "succeeded", "job_id": job_id, "pipeline_name": record["plan"]["pipeline_name"],
             "files": [item for item, _ in selected], "metrics": metrics, "tables": tables,
-            "bundle_path": archive_path.relative_to(root).as_posix()}
+            "bundle_path": archive_path.relative_to(store.root).as_posix()}
 
 
 def execute_engine(root: Path, record: dict) -> dict:
@@ -400,7 +402,7 @@ def execute_engine(root: Path, record: dict) -> dict:
     for slot, items in plan["inputs"].items():
         copies = []
         for index, item in enumerate(items):
-            target = confined(root, f"runs/{record['job_id']}/inputs/{slot}/{index}_{Path(item['path']).name}")
+            target = directory / "inputs" / slot / f"{index}_{Path(item['path']).name}"
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(confined(root, item["path"]), target)
             if digest(target) != item["sha256"]:
@@ -410,7 +412,7 @@ def execute_engine(root: Path, record: dict) -> dict:
     atomic_json(directory / "inputs.json", inputs)
     context = prepare_pipeline_context(pipeline_name=plan["pipeline_name"], input_overrides=inputs,
         config_overrides=plan["parameters"], artifact_dir=str(directory), run_id="execution", timeout=plan["timeout_seconds"])
-    output_dir = confined(root, f"runs/{record['job_id']}/outputs")
+    output_dir = directory / "outputs"
     output_dir.mkdir(exist_ok=True)
     context = replace(context, run_dir=output_dir, output_dir=output_dir)
     if plan["engine"] == "shell":

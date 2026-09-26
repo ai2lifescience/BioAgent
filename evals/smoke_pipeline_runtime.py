@@ -20,6 +20,9 @@ def main() -> int:
         inputs = {"reads" if item["workspace_path"].endswith(".txt") else "metadata": item["workspace_path"] for item in staged["files"]}
         plan = service.plan(root, "template_shell", inputs, {})
         assert plan["status"] == "planned"
+        store = service.JobStore(root)
+        assert store.database == root / "runtime" / "agent_runs" / ".pipeline" / "jobs.sqlite3"
+        assert store.directory(plan["plan_id"]) == root / "runtime" / "agent_runs" / plan["plan_id"]
         parsed = parse_command(plan["command"])
         assert parsed.operation == "run" and parsed.plan_id == plan["plan_id"]
         first = dispatch(root, plan["command"])
@@ -32,6 +35,7 @@ def main() -> int:
         assert result["metrics"]["assigned_subtype_count"] == 3
         assert len(result["tables"][0]["rows"]) == 3
         assert result["bundle_path"].endswith("results.zip")
+        assert result["bundle_path"].startswith("runtime/agent_runs/")
     print("local pipeline protocol: ok")
     return 0
 

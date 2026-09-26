@@ -430,8 +430,8 @@ The active workspace is session-scoped. Public paths use this layout:
 uploads/     files uploaded through the UI
 inputs/      explicit website exports and pipeline inputs
 outputs/     generated reports and ordinary artifacts
-runs/        run-specific and pipeline job files
-.pipeline/   private pipeline metadata
+runtime/agent_runs/        pipeline job files and outputs
+runtime/agent_runs/.pipeline/  private pipeline metadata
 ~~~
 
 The UI displays relative paths. Internally, the runtime resolves them under

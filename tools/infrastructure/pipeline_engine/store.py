@@ -11,6 +11,8 @@ import sqlite3
 from uuid import uuid4
 
 TERMINAL = {"succeeded", "failed", "cancelled", "interrupted", "timed_out"}
+PIPELINE_RUN_ROOT = "runtime/agent_runs"
+PIPELINE_STATE_ROOT = f"{PIPELINE_RUN_ROOT}/.pipeline"
 
 
 def now() -> str:
@@ -38,10 +40,10 @@ class JobStore:
     def __init__(self, root: Path):
         self.root = root.resolve()
         self.root.mkdir(parents=True, exist_ok=True)
-        private = self.root / ".pipeline"
+        private = self.root / PIPELINE_STATE_ROOT
         if private.is_symlink():
             raise ValueError("Pipeline state directory cannot be a symlink.")
-        private.mkdir(exist_ok=True, mode=0o700)
+        private.mkdir(parents=True, exist_ok=True, mode=0o700)
         self.database = private / "jobs.sqlite3"
         if self.database.is_symlink():
             raise ValueError("Pipeline database cannot be a symlink.")
@@ -61,7 +63,7 @@ class JobStore:
     def directory(self, job_id: str) -> Path:
         if not re.fullmatch(r"[a-f0-9]{32}", job_id):
             raise ValueError("Invalid job or plan ID.")
-        return confined(self.root, f"runs/{job_id}")
+        return confined(self.root, f"{PIPELINE_RUN_ROOT}/{job_id}")
 
     def create(self, plan: dict) -> dict:
         job_id = uuid4().hex

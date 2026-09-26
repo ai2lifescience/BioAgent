@@ -98,8 +98,8 @@ and response exchange.
   | runtime/session_metadata/       Session metadata + paused approval state    |
   | runtime/knowledge.sqlite3        Collections, chunks, vectors, ingest jobs  |
   | runtime/website_bridge.sqlite3   Website bindings and correlated calls      |
-  | runtime/sessions/<session-id>/   uploads/ inputs/ outputs/ runs/            |
-  |                                 .pipeline/jobs.sqlite3 (pipeline jobs)      |
+  | runtime/sessions/<session-id>/   uploads/ inputs/ outputs/                  |
+  |                                 runtime/agent_runs/ (pipeline jobs)        |
   +-----------------------------------------------------------------------------+
 
   EVENT AND RESULT DELIVERY
@@ -301,7 +301,7 @@ There are three related stores:
 | --- | --- | --- |
 | SDK session history | runtime/agent_sessions.sqlite3 | SDK conversation items and resumable run state |
 | application session metadata | runtime/session_metadata | labels, timestamps, website binding metadata, and UI state |
-| session workspace | runtime/sessions/<session-id> | files, inputs, outputs, runs, and private pipeline data |
+| session workspace | runtime/sessions/<session-id> | files, inputs, outputs, and private pipeline data |
 
 The SDK sandbox is a persistent Unix-local workspace for the session. A
 NoopSnapshotSpec is used because the application manages persistence and cleanup.
@@ -311,8 +311,8 @@ Workspace directories include:
 - uploads for user-provided files;
 - inputs for imported website data and pipeline inputs;
 - outputs for generated reports and artifacts;
-- runs for run-specific material;
-- .pipeline for private pipeline job metadata.
+- runtime/agent_runs for pipeline job files and outputs;
+- runtime/agent_runs/.pipeline for private pipeline job metadata.
 
 tools/infrastructure/workspace/paths.py is the path boundary. It rejects
 absolute paths, traversal, hidden path components, and symlink escapes.
@@ -507,8 +507,9 @@ The protocol supports:
 Pipeline run and cancellation require approval. Discovery, planning, status,
 bounded wait, and result inspection do not.
 
-Pipeline metadata is stored in .pipeline/jobs.sqlite3 within the session
-workspace. Job states are planned, queued, running, succeeded, failed,
+Pipeline metadata is stored in runtime/agent_runs/.pipeline/jobs.sqlite3 within
+the session workspace. Job files and outputs are stored under
+runtime/agent_runs/<job-id>/. Job states are planned, queued, running, succeeded, failed,
 timed_out, cancelled, and interrupted.
 
 The plan hashes the pipeline definition and input files. The worker verifies
