@@ -240,7 +240,7 @@ export function createMessageRenderer({
     if (!decision || (!decision.plan && !decision.arguments)) return "";
     const reviewed = decision.plan ? { action: decision.arguments, plan: decision.plan } : decision.arguments;
     const title = decision.approved ? "Approved pipeline plan" : "Rejected operation plan";
-    return `<details class="run-plan-record" open><summary>${escapeHtml(title)} <span>${escapeHtml(decision.tool_name || "Tool request")}</span></summary><pre>${escapeHtml(JSON.stringify(reviewed, null, 2))}</pre></details>`;
+    return `<details class="run-plan-record"><summary>${escapeHtml(title)} <span>${escapeHtml(decision.tool_name || "Tool request")}</span></summary><pre>${escapeHtml(JSON.stringify(reviewed, null, 2))}</pre></details>`;
   }
 
   function resultDetails(result) {
@@ -250,7 +250,7 @@ export function createMessageRenderer({
     const pipelineOutputs = artifactViewers.collectPipelineOutputRecords(result);
     const hasRuntimeDetails = Boolean(result.runtime || result.trace || result.evidence || result.approval_required);
     const runtimeDetails = hasRuntimeDetails ? `
-      <div class="run-debug" aria-label="Runtime details"${result.approval_decision ? ' data-default-tab="plan"' : ""}>
+      <div class="run-debug" aria-label="Runtime details">
         <div class="run-tabs" role="tablist" aria-label="Runtime detail sections">
           <button type="button" class="run-tab" role="tab" aria-selected="false" data-runtime-tab="runtime"><span>Runtime</span><small>${escapeHtml(status.label)} · ${escapeHtml(formatElapsed(runtime.elapsed_seconds))}</small></button>
           <button type="button" class="run-tab" role="tab" aria-selected="false" data-runtime-tab="plan"><span>Plan &amp; execution</span><small>${(result.trace || []).length} events</small></button>

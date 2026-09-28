@@ -49,7 +49,10 @@ const workspaceDropzone = document.getElementById("workspaceDropzone");
 
 const SIDEBAR_COLLAPSED_KEY = "agent.web.sidebar_collapsed.v3";
 let structureSuffixes = [".cif", ".mmcif", ".pdb"];
-let imageSuffixes = [".svg"];
+// Keep the renderer useful while /config is loading or unavailable. The server
+// may later narrow/extend this list, but common image artifacts should render
+// from saved conversation results on the first page load as well.
+let imageSuffixes = [".gif", ".jpeg", ".jpg", ".png", ".svg", ".webp"];
 
 let runtimeTimer = null;
 let runtimeStartedAt = 0;
@@ -909,12 +912,14 @@ async function init() {
   }
   bindEvents();
   sessionSidebar.render();
-  await loadActiveSession();
   try {
     await loadConfig();
   } catch (error) {
     addMessage("assistant", `Failed to load web configuration: ${error.message}`);
   }
+  // Load configuration before rendering saved messages so artifact viewers
+  // know about image formats when a page is refreshed.
+  await loadActiveSession();
 }
 
 init();
