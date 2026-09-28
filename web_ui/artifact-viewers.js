@@ -76,12 +76,6 @@ export function createArtifactViewers({
   function collectStructureArtifacts(result) {
     const artifacts = [];
     const seen = new Set();
-    for (const item of result?.files || []) {
-      if (item?.kind === "structure") {
-        addStructureArtifact(artifacts, seen, item?.path, item?.label || "structure");
-      }
-    }
-    if (artifacts.length) return artifacts;
 
     const evidence = result?.evidence || {};
     for (const item of evidence.outputs || []) {
@@ -92,6 +86,23 @@ export function createArtifactViewers({
     for (const item of evidence.tool_outputs || []) {
       if (item?.tool === "structure_inspect" || item?.tool === "pdb_download" || item?.tool === "alphafold_download") {
         addStructureArtifact(artifacts, seen, item?.structure_path, item?.pdb_id || item?.summary);
+      }
+    }
+    if (artifacts.length) return artifacts;
+    for (const item of result?.artifacts || []) {
+      if (item?.kind === "structure") {
+        addStructureArtifact(artifacts, seen, item?.path, item?.label || "structure");
+      }
+    }
+    if (artifacts.length) return artifacts;
+    // `result.files` is the whole persistent workspace, so only consult it
+    // for legacy envelopes that explicitly used a structure tool.
+    const structureTools = new Set(["structure_inspect", "pdb_download", "alphafold_download"]);
+    if ([...(evidence.tools || [])].some((tool) => structureTools.has(tool))) {
+      for (const item of result?.files || []) {
+        if (item?.kind === "structure") {
+          addStructureArtifact(artifacts, seen, item?.path, item?.label || "structure");
+        }
       }
     }
     return artifacts;
@@ -107,19 +118,30 @@ export function createArtifactViewers({
   function collectFigureArtifacts(result) {
     const artifacts = [];
     const seen = new Set();
-    for (const item of result?.files || []) {
-      if (item?.kind === "image") {
-        addFigureArtifact(artifacts, seen, item?.path, item?.label || item?.source_skill);
-      }
-    }
-    if (artifacts.length) return artifacts;
-
     const evidence = result?.evidence || {};
     for (const item of evidence.outputs || []) {
       addFigureArtifact(artifacts, seen, item?.image_path, item?.label || item?.summary || item?.tool);
     }
     for (const item of evidence.tool_outputs || []) {
       addFigureArtifact(artifacts, seen, item?.image_path, item?.label || item?.summary || item?.tool);
+    }
+    if (artifacts.length) return artifacts;
+    for (const item of result?.artifacts || []) {
+      if (item?.kind === "image") {
+        addFigureArtifact(artifacts, seen, item?.path, item?.label || item?.source_skill);
+      }
+    }
+    if (artifacts.length) return artifacts;
+    // Plot and pipeline tools predate the explicit image_path projection in
+    // some saved envelopes. Their tool names keep this fallback scoped to
+    // the answer that actually produced an image.
+    const figureTools = new Set(["table_plot", "pipeline_shell", "genome_read_features", "genome_render_map"]);
+    if ([...(evidence.tools || [])].some((tool) => figureTools.has(tool))) {
+      for (const item of result?.files || []) {
+        if (item?.kind === "image") {
+          addFigureArtifact(artifacts, seen, item?.path, item?.label || item?.source_skill);
+        }
+      }
     }
     return artifacts;
   }

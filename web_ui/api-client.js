@@ -11,8 +11,8 @@ async function readJson(response) {
   return payload;
 }
 
-export function createApiClient({ fetchImpl = window.fetch.bind(window) } = {}) {
-  const requestJson = async (url, options = {}) => readJson(await fetchImpl(url, options));
+export function createApiClient({ fetchImpl = window.fetch.bind(window), resolveUrl = (path) => path } = {}) {
+  const requestJson = async (path, options = {}) => readJson(await fetchImpl(resolveUrl(path), options));
 
   return {
     async loadConfig() {
@@ -69,8 +69,8 @@ export function createApiClient({ fetchImpl = window.fetch.bind(window) } = {}) 
       );
     },
 
-    async run(request, { sessionId, modelKey, maxTurns, signal, onFrame } = {}) {
-      const response = await fetchImpl("/run_stream", {
+    async run(request, { sessionId, modelKey, maxTurns, signal, onFrame, website } = {}) {
+      const response = await fetchImpl(resolveUrl("/run_stream"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -78,6 +78,7 @@ export function createApiClient({ fetchImpl = window.fetch.bind(window) } = {}) 
           session_id: sessionId,
           model_key: modelKey,
           max_turns: maxTurns,
+          ...(website ? { website } : {}),
         }),
         signal,
       });

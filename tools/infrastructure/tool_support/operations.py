@@ -87,6 +87,7 @@ async def invoke(context, name: str, handler, arguments: dict[str, Any], output_
     context.tool_results.append(context.public(record))
     result.evidence = EvidenceCollector().collect([record])["citations"]
     known = {item.get("path"): item for item in context.files}
+    context.add_artifacts([item.model_dump(mode="json") for item in result.files])
     for item in result.files:
         known[item.path] = item.model_dump(mode="json")
         context.record("artifact_created", tool=name, **item.model_dump(mode="json"))

@@ -27,9 +27,9 @@ def _has_renderable_result(result: dict[str, Any]) -> bool:
     if not isinstance(evidence, dict):
         evidence = {}
     return bool(
-        result.get("files")
-        or result.get("approval_decision")
+        result.get("approval_decision")
         or result.get("approval_required")
+        or result.get("artifacts")
         or any(evidence.get(key) for key in ("tools", "files", "outputs", "citations"))
     )
 

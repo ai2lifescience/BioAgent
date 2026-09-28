@@ -1,12 +1,12 @@
 import { createApiClient } from "/static/api-client.js";
 import { createSessionState } from "/static/session-state.js";
+import { createSessionSidebar } from "/static/session-sidebar.js";
+import { createWorkspacePanel } from "/static/workspace-panel.js";
 import { createArtifactViewers } from "/static/artifact-viewers.js";
 import { createMessageRenderer } from "/static/message-renderer.js";
 import {
   compactList,
   escapeHtml,
-  fileNameFromPath,
-  formatBytes,
   formatElapsed,
   nowIso,
   titleFromText,
@@ -58,7 +58,7 @@ let requestStopped = false;
 let isRunning = false;
 let isSessionLoading = false;
 let thinkingLogLines = [];
-let workspaceFiles = [];
+let workspacePanel;
 
 const api = createApiClient();
 const sessionStore = createSessionState({ api });
@@ -94,32 +94,35 @@ const AGENT_ICON = `
     <path d="M190 433v39c0 9 7 16 16 16h31v-55" fill="#C9C8C6" stroke="#25283A" stroke-width="9" stroke-linejoin="round"/>
     <path d="M322 433v39c0 9-7 16-16 16h-31v-55" fill="#C9C8C6" stroke="#25283A" stroke-width="9" stroke-linejoin="round"/>
   </svg>`;
-const PIN_ICON = `
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="m9 4 6 0 1 5 3 3v1H5v-1l3-3 1-5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-    <path d="M12 13v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-  </svg>`;
-const EDIT_ICON = `
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="m4 16.5-.8 4.3 4.3-.8L19 8.5 15.5 5 4 16.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-    <path d="m13.8 6.7 3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-  </svg>`;
-const MORE_ICON = `
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/>
-  </svg>`;
 
 const artifactViewers = createArtifactViewers({
   getStructureSuffixes: () => structureSuffixes,
   getImageSuffixes: () => imageSuffixes,
-  workspaceFileUrl: (path, options) => workspaceFileUrl(path, options),
+  workspaceFileUrl: (path, options) => workspacePanel.fileUrl(path, options),
+});
+const sessionSidebar = createSessionSidebar({ sessionList, sessionCount, sessionStore });
+workspacePanel = createWorkspacePanel({
+  elements: {
+    count: workspaceCount,
+    summary: workspaceSummary,
+    list: uploadList,
+    search: workspaceSearch,
+    filter: workspaceFilter,
+    uploadButton,
+    uploadInput,
+    composerFileHint,
+  },
+  api,
+  getSessionId: () => sessionStore.activeSessionId,
+  isBusy: () => isRunning || isSessionLoading,
+  onError: (message) => addMessage("assistant", message),
 });
 
 const messageRenderer = createMessageRenderer({
   chat,
   agentIcon: AGENT_ICON,
   artifactViewers,
-  workspaceFileUrl: (path, options) => workspaceFileUrl(path, options),
+  workspaceFileUrl: (path, options) => workspacePanel.fileUrl(path, options),
   getConfig: () => config,
   formatModelLabel,
   getRunning: () => isRunning,
@@ -230,32 +233,6 @@ function initializeSidebar() {
   setSidebarCollapsed(stored === null ? phoneDefault : stored === "true");
 }
 
-function formatSessionTime(value) {
-  if (!value) return "";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleString([], {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-function formatSessionMeta(session) {
-  const time = formatSessionTime(session.updated_at) || "No activity";
-  const count = Number(session.message_count || 0);
-  const messageText = count === 1 ? "1 message" : `${count} messages`;
-  return `${time} · ${messageText}`;
-}
-
-function sortedSessions() {
-  return [...sessionStore.sessions].sort((left, right) => {
-    if (left.pinned !== right.pinned) return left.pinned ? -1 : 1;
-    return new Date(right.updated_at).getTime() - new Date(left.updated_at).getTime();
-  });
-}
-
 function pipelineCatalogForExamples() {
   const catalog = Array.isArray(config.pipelines) && config.pipelines.length
     ? config.pipelines
@@ -364,38 +341,6 @@ function renderCurrentChat() {
   scrollBottom();
 }
 
-function renderSessionList() {
-  sessionCount.textContent = String(sessionStore.sessions.length);
-  sessionList.innerHTML = "";
-  if (!sessionStore.sessions.length) {
-    sessionList.innerHTML = `<div class="session-empty">No saved chats.</div>`;
-    return;
-  }
-  for (const session of sortedSessions()) {
-    const item = document.createElement("div");
-    item.className = `session-item ${session.id === sessionStore.activeSessionId ? "active" : ""} ${session.pinned ? "pinned" : ""}`;
-    item.dataset.sessionId = session.id;
-    item.innerHTML = `
-      <button class="session-select" type="button">
-        <span class="session-title-row">
-          <span class="session-title">${escapeHtml(session.title || "New chat")}</span>
-          ${session.pinned ? `<span class="session-pinned-badge" aria-label="Pinned">${PIN_ICON}</span>` : ""}
-        </span>
-        <span class="session-meta">${escapeHtml(formatSessionMeta(session))}</span>
-      </button>
-      <div class="session-actions">
-        <button class="session-more" type="button" data-session-menu aria-haspopup="menu" aria-expanded="false" aria-label="Actions for ${escapeHtml(session.title || "session")}" title="Session actions">${MORE_ICON}</button>
-        <div class="session-menu" role="menu" hidden>
-          <button class="session-menu-item" type="button" role="menuitem" data-session-pin aria-pressed="${session.pinned ? "true" : "false"}">${PIN_ICON}<span>${session.pinned ? "Unpin chat" : "Pin chat"}</span></button>
-          <button class="session-menu-item" type="button" role="menuitem" data-session-rename>${EDIT_ICON}<span>Rename chat</span></button>
-          <button class="session-menu-item session-menu-delete" type="button" role="menuitem" data-session-delete><span class="session-menu-x" aria-hidden="true">&times;</span><span>Delete chat</span></button>
-        </div>
-      </div>
-    `;
-    sessionList.appendChild(item);
-  }
-}
-
 function setSessionLoading(loading) {
   isSessionLoading = loading;
   sendButton.disabled = loading;
@@ -420,14 +365,13 @@ function setComposerControlsDisabled(disabled) {
 
 async function loadActiveSession() {
   setSessionLoading(true);
-  workspaceFiles = [];
-  renderWorkspace();
+  workspacePanel.setFiles([]);
   artifactViewers.disposeGenomeViewers(chat);
   chat.textContent = "Loading conversation…";
   try {
     await Promise.all([sessionStore.loadConversation(sessionStore.activeSessionId), loadWorkspace()]);
     renderCurrentChat();
-    renderSessionList();
+    sessionSidebar.render();
     resetThinkingBar();
   } catch (error) {
     renderCurrentChat();
@@ -441,7 +385,7 @@ async function switchSession(sessionId) {
   if (isRunning || isSessionLoading || !sessionId || sessionId === sessionStore.activeSessionId) return;
   sessionStore.activeSessionId = sessionId;
   sessionStore.rememberActiveSession();
-  renderSessionList();
+  sessionSidebar.render();
   await loadActiveSession();
   promptInput.focus();
 }
@@ -455,7 +399,7 @@ async function deleteSessionById(sessionId) {
     if (!sessionStore.sessions.length) sessionStore.sessions = [sessionStore.createSession()];
     if (!sessionStore.sessions.some((session) => session.id === sessionStore.activeSessionId)) sessionStore.activeSessionId = sessionStore.sessions[0].id;
     sessionStore.rememberActiveSession();
-    renderSessionList();
+    sessionSidebar.render();
     await loadActiveSession();
   } catch (error) {
     messageRenderer.renderMessage("assistant", `Could not delete this chat: ${error.message}`);
@@ -474,7 +418,7 @@ async function updateSessionById(sessionId, changes) {
     if (Object.prototype.hasOwnProperty.call(changes, "title")) session.title = String(payload.title || "New chat");
     if (Object.prototype.hasOwnProperty.call(changes, "pinned")) session.pinned = Boolean(payload.pinned);
     session.updated_at = payload.updated_at || nowIso();
-    renderSessionList();
+    sessionSidebar.render();
   } catch (error) {
     messageRenderer.renderMessage("assistant", `Could not update this chat: ${error.message}`);
   } finally {
@@ -498,173 +442,23 @@ async function toggleSessionPin(sessionId) {
   await updateSessionById(sessionId, { pinned: !session.pinned });
 }
 
-function closeSessionMenus() {
-  sessionList.querySelectorAll(".session-menu:not([hidden])").forEach((menu) => {
-    menu.hidden = true;
-    const button = menu.parentElement?.querySelector("[data-session-menu]");
-    button?.setAttribute("aria-expanded", "false");
-  });
-}
-
-function openSessionMenu(item, button) {
-  const menu = item.querySelector(".session-menu");
-  if (!menu) return;
-  const wasOpen = !menu.hidden;
-  closeSessionMenus();
-  if (wasOpen) return;
-  menu.hidden = false;
-  const buttonRect = button.getBoundingClientRect();
-  const menuRect = menu.getBoundingClientRect();
-  const left = Math.max(8, Math.min(buttonRect.right - menuRect.width, window.innerWidth - menuRect.width - 8));
-  const top = Math.max(8, Math.min(buttonRect.bottom + 4, window.innerHeight - menuRect.height - 8));
-  menu.style.left = `${left}px`;
-  menu.style.top = `${top}px`;
-  button.setAttribute("aria-expanded", "true");
-  menu.querySelector("[role=menuitem]")?.focus();
-}
-
 function startNewChat() {
   if (isRunning || isSessionLoading) return;
   const session = sessionStore.createSession();
   sessionStore.sessions.unshift(session);
   sessionStore.activeSessionId = session.id;
   sessionStore.rememberActiveSession();
-  renderSessionList();
-  workspaceFiles = [];
-  renderWorkspace();
+  sessionSidebar.render();
+  workspacePanel.setFiles([]);
   renderCurrentChat();
-  loadWorkspace().catch((error) => console.warn("Failed to load workspace.", error));
+  workspacePanel.load().catch((error) => console.warn("Failed to load workspace.", error));
   resetThinkingBar();
   hideExampleParamPrompt();
   promptInput.focus();
 }
 
-function renderWorkspace() {
-  workspaceCount.textContent = String(workspaceFiles.length);
-  if (composerFileHint) {
-    composerFileHint.textContent = workspaceFiles.length
-      ? `${workspaceFiles.length} file${workspaceFiles.length === 1 ? "" : "s"} attached`
-      : "Add files";
-  }
-  uploadList.classList.toggle("single-file", workspaceFiles.length === 1);
-  uploadList.innerHTML = "";
-  if (!workspaceFiles.length) {
-    workspaceSummary.textContent = "Files are shared with this chat and its tools.";
-    uploadList.innerHTML = `<div class="workspace-empty">No files in this workspace yet.</div>`;
-    return;
-  }
-  const totalBytes = workspaceFiles.reduce((sum, file) => sum + Number(file.size || 0), 0);
-  workspaceSummary.textContent = `${formatBytes(totalBytes)} · available to this chat and its tools`;
-  const query = workspaceSearch.value.trim().toLowerCase();
-  const filter = workspaceFilter.value;
-  const visibleFiles = workspaceFiles.filter((file) => {
-    const path = String(file.workspace_path || file.path || "");
-    if (query && !path.toLowerCase().includes(query)) return false;
-    const category = workspaceFileCategory(file).key;
-    if (filter === "uploads") return category === "uploads";
-    if (filter === "outputs") return category === "outputs";
-    return true;
-  });
-  if (!visibleFiles.length) {
-    uploadList.innerHTML = `<div class="workspace-empty">No matching files.</div>`;
-    return;
-  }
-  const groups = new Map();
-  for (const file of visibleFiles) {
-    const category = workspaceFileCategory(file);
-    if (!groups.has(category.key)) groups.set(category.key, { ...category, files: [] });
-    groups.get(category.key).files.push(file);
-  }
-  const orderedGroups = ["uploads", "outputs"]
-    .map((key) => groups.get(key))
-    .filter(Boolean);
-  for (const group of orderedGroups) {
-    const section = document.createElement("section");
-    section.className = "workspace-group";
-    const heading = document.createElement("div");
-    heading.className = "workspace-group-heading";
-    heading.innerHTML = `<span>${escapeHtml(group.label)}</span><span>${group.files.length}</span>`;
-    const contents = document.createElement("div");
-    contents.className = "workspace-group-files";
-    for (const file of group.files) {
-      const item = document.createElement("div");
-      item.className = "workspace-file";
-      item.dataset.workspacePath = file.workspace_path || file.path || "";
-      const name = file.name || fileNameFromPath(file.workspace_path || file.path);
-      const workspacePath = file.workspace_path || file.path || "";
-      item.innerHTML = `
-        <div class="workspace-file-main">
-          <div class="workspace-file-name" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
-          <div class="workspace-file-meta">${escapeHtml(formatBytes(file.size))} · <span class="workspace-file-kind">${escapeHtml(file.kind || "file")}</span></div>
-          <div class="workspace-file-path" title="${escapeHtml(workspacePath)}">${escapeHtml(workspacePath)}</div>
-        </div>
-        <div class="workspace-file-actions">
-          <a class="workspace-download" href="${escapeHtml(workspaceFileUrl(workspacePath))}" download>Download</a>
-          <button class="workspace-remove" type="button" data-workspace-delete aria-label="Remove ${escapeHtml(name)}">Remove</button>
-        </div>
-      `;
-      contents.appendChild(item);
-    }
-    section.append(heading, contents);
-    uploadList.appendChild(section);
-  }
-}
-
-function workspaceFileCategory(file) {
-  const path = String(file?.workspace_path || file?.path || "");
-  if (path.startsWith("uploads/")) return { key: "uploads", label: "Inputs" };
-  return { key: "outputs", label: "Outputs" };
-}
-
-function workspaceFileUrl(path, options = {}) {
-  const file = workspaceFiles.find((item) => item.path === path || item.workspace_path === path);
-  const params = new URLSearchParams({ path: String(file?.workspace_path || path || "") });
-  if (sessionStore.activeSessionId) params.set("session_id", sessionStore.activeSessionId);
-  if (options.viewer) params.set("viewer", options.viewer);
-  return `/workspace/file?${params.toString()}`;
-}
-
-async function loadWorkspace() {
-  if (!sessionStore.activeSessionId) {
-    workspaceFiles = [];
-    renderWorkspace();
-    return;
-  }
-  const sessionId = sessionStore.activeSessionId;
-  const payload = await api.loadWorkspace(sessionId);
-  if (sessionId !== sessionStore.activeSessionId) return;
-  workspaceFiles = Array.isArray(payload.workspace?.files) ? payload.workspace.files : [];
-  workspaceFiles.sort((left, right) => String(left.workspace_path || "").localeCompare(String(right.workspace_path || "")));
-  renderWorkspace();
-}
-
-async function uploadSelectedFiles(files) {
-  const selected = Array.from(files || []);
-  if (!selected.length || isRunning || isSessionLoading) return;
-  const sessionId = sessionStore.activeSessionId;
-  uploadButton.disabled = true;
-  uploadButton.textContent = "Uploading";
-  try {
-    await api.uploadFiles(sessionId, selected);
-    if (sessionId === sessionStore.activeSessionId) {
-      await loadWorkspace();
-    }
-  } catch (error) {
-    if (sessionId === sessionStore.activeSessionId) addMessage("assistant", `Upload failed: ${error.message}`);
-  } finally {
-    uploadInput.value = "";
-    uploadButton.disabled = isSessionLoading || isRunning;
-    uploadButton.textContent = "Upload";
-  }
-}
-
-async function deleteWorkspaceFile(workspacePath) {
-  if (!workspacePath || isRunning || isSessionLoading) return;
-  const payload = await api.deleteWorkspaceFile(sessionStore.activeSessionId, workspacePath);
-  if (!payload.deleted) {
-    throw new Error(payload.error || "File was not deleted.");
-  }
-  await loadWorkspace();
+function loadWorkspace() {
+  return workspacePanel.load();
 }
 
 function appendThinkingLog(message) {
@@ -745,7 +539,8 @@ function finishThinking(result) {
     session.id = result.session_id;
     sessionStore.activeSessionId = result.session_id;
   }
-  workspaceFiles = Array.isArray(result?.files) ? result.files : workspaceFiles;
+  if (Array.isArray(result?.workspace_files)) workspacePanel.setFiles(result.workspace_files);
+  else if (Array.isArray(result?.files)) workspacePanel.setFiles(result.files);
   const runtime = result?.runtime || {};
   const status = runtime.status || result?.status || "ok";
   const state = status === "error" ? "error" : status === "blocked" ? "warning" : "done";
@@ -827,7 +622,7 @@ function addMessage(role, text, result = null) {
       created_at: nowIso(),
     });
   });
-  renderSessionList();
+  sessionSidebar.render();
   scrollBottom();
 }
 
@@ -1030,10 +825,10 @@ function bindEvents() {
   workspaceRefresh.addEventListener("click", () => {
     loadWorkspace().catch((error) => addMessage("assistant", `Workspace refresh failed: ${error.message}`));
   });
-  workspaceSearch.addEventListener("input", renderWorkspace);
-  workspaceFilter.addEventListener("change", renderWorkspace);
+  workspaceSearch.addEventListener("input", () => workspacePanel.render());
+  workspaceFilter.addEventListener("change", () => workspacePanel.render());
   uploadInput.addEventListener("change", () => {
-    uploadSelectedFiles(uploadInput.files);
+    workspacePanel.uploadSelectedFiles(uploadInput.files);
   });
   workspaceDropzone.addEventListener("click", () => {
     if (!isRunning && !isSessionLoading) uploadInput.click();
@@ -1057,13 +852,13 @@ function bindEvents() {
     });
   }
   workspaceDropzone.addEventListener("drop", (event) => {
-    if (!isRunning && !isSessionLoading) uploadSelectedFiles(event.dataTransfer?.files);
+    if (!isRunning && !isSessionLoading) workspacePanel.uploadSelectedFiles(event.dataTransfer?.files);
   });
   uploadList.addEventListener("click", (event) => {
     const item = event.target.closest(".workspace-file");
     if (!item) return;
     if (event.target.closest("[data-workspace-delete]")) {
-      deleteWorkspaceFile(item.dataset.workspacePath).catch((error) => {
+      workspacePanel.deleteFile(item.dataset.workspacePath).catch((error) => {
         addMessage("assistant", `Remove file failed: ${error.message}`);
       });
     }
@@ -1073,31 +868,31 @@ function bindEvents() {
     if (!item) return;
     const sessionId = item.dataset.sessionId;
     if (event.target.closest("[data-session-menu]")) {
-      openSessionMenu(item, event.target.closest("[data-session-menu]"));
+      sessionSidebar.openMenu(item, event.target.closest("[data-session-menu]"));
       return;
     }
     if (event.target.closest("[data-session-pin]")) {
-      closeSessionMenus();
+      sessionSidebar.closeMenus();
       toggleSessionPin(sessionId);
       return;
     }
     if (event.target.closest("[data-session-rename]")) {
-      closeSessionMenus();
+      sessionSidebar.closeMenus();
       renameSessionById(sessionId);
       return;
     }
     if (event.target.closest("[data-session-delete]")) {
-      closeSessionMenus();
+      sessionSidebar.closeMenus();
       deleteSessionById(sessionId);
       return;
     }
     switchSession(sessionId);
   });
   document.addEventListener("click", (event) => {
-    if (!event.target.closest(".session-item")) closeSessionMenus();
+    if (!event.target.closest(".session-item")) sessionSidebar.closeMenus();
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") closeSessionMenus();
+    if (event.key === "Escape") sessionSidebar.closeMenus();
   });
 }
 
@@ -1113,7 +908,7 @@ async function init() {
     sessionStore.rememberActiveSession();
   }
   bindEvents();
-  renderSessionList();
+  sessionSidebar.render();
   await loadActiveSession();
   try {
     await loadConfig();

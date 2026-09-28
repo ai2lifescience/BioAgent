@@ -110,6 +110,15 @@ http://SERVER_IP:8000/assistant-demo or http://SERVER_IP:8000.
 A local server is a development service. Put an authenticated gateway in front
 of it before exposing it beyond a trusted network.
 
+#### Ubuntu firewall (UFW)
+
+For a server running on port 8000, allow access from anywhere with:
+
+~~~bash
+sudo ufw allow 8000/tcp
+sudo ufw status
+~~~
+
 ## What the web UI provides
 
 The browser UI is a client of the same SDK runtime used by the CLI, notebook

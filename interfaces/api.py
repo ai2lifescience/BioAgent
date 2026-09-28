@@ -11,6 +11,7 @@ from agents import SQLiteSession
 from harness import runtime
 from harness.runtime import delete_session, list_sessions, resume_agent, run_agent, update_session  # noqa: F401
 from harness.sandbox import delete_file, list_files, open_workspace, read_file, upload_file
+from harness.sessions import _has_renderable_result
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 from harness.jobs import get_queue, result_status
 from tools.infrastructure.knowledge import KnowledgeService
@@ -156,9 +157,11 @@ def list_session_messages(session_id: str) -> dict[str, Any]:
                 continue
             if message.get("role") != "assistant":
                 continue
-            while result_index < len(stored_results):
-                entry = stored_results[result_index]
-                result_index += 1
+            # SDK history includes intermediate assistant messages as well as
+            # final answers. Only advance the saved-result cursor on a match;
+            # otherwise one progress message discards every later result.
+            for candidate_index in range(result_index, len(stored_results)):
+                entry = stored_results[candidate_index]
                 if not isinstance(entry, dict):
                     continue
                 # Current metadata stores the request/answer pair so results
@@ -166,14 +169,17 @@ def list_session_messages(session_id: str) -> dict[str, Any]:
                 # persistence. Accept the older direct-result shape too.
                 if "result" in entry:
                     if (
-                        str(entry.get("request") or "") == current_request
-                        and str(entry.get("answer") or "") == str(message.get("text") or "")
+                        str(entry.get("request") or "").strip() == current_request.strip()
+                        and str(entry.get("answer") or "").strip() == str(message.get("text") or "").strip()
                     ):
-                        if isinstance(entry.get("result"), dict):
+                        if isinstance(entry.get("result"), dict) and _has_renderable_result(entry["result"]):
                             message["result"] = entry["result"]
+                        result_index = candidate_index + 1
                         break
                     continue
-                message["result"] = entry
+                if _has_renderable_result(entry):
+                    message["result"] = entry
+                result_index = candidate_index + 1
                 break
         last_approval = metadata.metadata.get("last_approval") if metadata else None
         if isinstance(last_approval, dict):

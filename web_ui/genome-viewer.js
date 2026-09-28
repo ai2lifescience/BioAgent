@@ -48,7 +48,13 @@ export function createGenomeViewers({ workspaceFileUrl }) {
       }
     };
     for (const item of [...(evidence.outputs || []), ...(evidence.tool_outputs || [])]) add(item?.genome_map_path);
-    if (!artifacts.size) {
+    // `result.files` is the whole persistent workspace, not the files created
+    // by this answer. Use it only for older result envelopes that explicitly
+    // ran the genome renderer.
+    if (!artifacts.size && Array.isArray(result?.artifacts)) {
+      for (const item of result.artifacts) if (item?.kind === "genome_map") add(item.path);
+    }
+    if (!artifacts.size && (evidence.tools || []).includes("genome_render_map")) {
       for (const item of result?.files || []) if (item?.kind === "genome_map") add(item.path);
     }
     return [...artifacts.values()];

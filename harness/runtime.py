@@ -20,6 +20,7 @@ from models.openrouter_provider import OpenRouterProvider
 
 from .agent import create_agent
 from .context import AgentRunContext
+from .contracts import normalize_run_result
 from .sessions import SessionMetadata, SessionMetadataStore
 from .sandbox import delete_workspace, list_files, open_workspace, prepare_run, session_root
 from .tracing import AgentHooks, LOCAL_TRACES, configure_tracing
@@ -195,6 +196,7 @@ async def _execute(
         async with open_workspace(session.session_id) as sandbox_session:
             context.sandbox_session = sandbox_session
             context.files = await list_files(sandbox_session)
+            initial_files = {item.get("path"): item for item in context.files if item.get("path")}
             run_config = RunConfig(
                 model_provider=provider,
                 workflow_name="Pipeline2Agent", trace_id=trace_id, group_id=session.session_id,
@@ -222,6 +224,12 @@ async def _execute(
                 public_events.flush()
                 result = streamed
             context.files = await list_files(sandbox_session)
+            changed_files = [
+                item for item in context.files
+                if item.get("path") not in initial_files
+                or item.get("modified_at") != initial_files[item.get("path")].get("modified_at")
+            ]
+            context.add_artifacts(changed_files)
         if result.interruptions:
             snapshot = result.to_state().to_json(context_serializer=lambda _context: {})
             approvals = _approval_details(result.interruptions, context)
@@ -271,10 +279,14 @@ async def _execute(
         "max_turns": max_turns,
         "messages": [{"role": "user", "content": request}, {"role": "assistant", "content": answer}],
         "evidence": evidence, "trace": context.events,
-        "run": run, "files": context.files,
+        "run": run,
+        "workspace_files": context.files,
+        "artifacts": context.artifacts,
+        "files": context.files,
         "approval_decision": approval_decision,
         "runtime": "agents_sdk", "model_key": model_key,
     })
+    response = normalize_run_result(response)
     if snapshot is None:
         # Pauses are not additional conversational exchanges. Persist the
         # structured result only after the complete result envelope exists so
