@@ -24,6 +24,7 @@ class AgentRunContext:
     tool_results: list[dict[str, Any]] = field(default_factory=list)
     events: list[dict[str, Any]] = field(default_factory=list)
     files: list[dict[str, Any]] = field(default_factory=list)
+    artifacts: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def session_id(self) -> str:
@@ -67,3 +68,13 @@ class AgentRunContext:
     def log(self, message: str) -> None:
         if self.log_fn:
             self.log_fn(self.public(message))
+
+    def add_artifacts(self, items: list[dict[str, Any]]) -> None:
+        """Record files produced by the current run, deduplicated by path."""
+
+        known = {str(item.get("path")): item for item in self.artifacts if item.get("path")}
+        for item in items:
+            if not isinstance(item, dict) or not item.get("path"):
+                continue
+            known[str(item["path"])] = dict(item)
+        self.artifacts = list(known.values())

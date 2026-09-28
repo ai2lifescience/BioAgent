@@ -1,3 +1,5 @@
+import { createApiClient } from "/static/api-client.js";
+
 (() => {
   "use strict";
 
@@ -46,6 +48,8 @@
     // Resolve under the current mount point, including a reverse-proxy prefix.
     return new URL(path, window.location.href).href;
   }
+
+  const api = createApiClient({ resolveUrl: apiUrl });
 
   function setContext(context) {
     if (!context || typeof context !== "object" || Array.isArray(context)) return;
@@ -96,7 +100,9 @@
     } else {
       body.textContent = text;
     }
-    const resultFiles = Array.isArray(result?.files) ? result.files : [];
+    const resultFiles = Array.isArray(result?.artifacts)
+      ? result.artifacts
+      : (Array.isArray(result?.files) ? result.files : []);
     const paths = [...new Map(resultFiles
       .map((item) => [item?.workspace_path || item?.path, item])
       .filter(([path]) => typeof path === "string" && path)).entries()];
@@ -244,9 +250,7 @@
     byId("retryConfig").hidden = true;
     status.textContent = "Connecting to assistant…";
     try {
-      const response = await fetch(apiUrl("config"));
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const config = await response.json();
+      const config = await api.loadConfig();
       if (!Array.isArray(config.models) || !config.models.length) throw new Error("No models configured");
       model.replaceChildren();
       for (const item of config.models) {
@@ -283,51 +287,20 @@
     if (!data.length) return null;
     const payload = JSON.parse(data.join("\n"));
     if (event === "log" || event === "status") appendProgress(payload.message || "Working…");
-    if (event === "result") return payload;
+    if (event === "result") return { done: true, result: payload };
     if (event === "error") throw new Error(payload.error || "Agent request failed");
-    return null;
+    return { done: false, result: null };
   }
 
   async function run(request, steps, signal) {
-    const response = await fetch(apiUrl("run_stream"), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        request,
-        session_id: state.sessionId,
-        model_key: model.value,
-        max_turns: steps,
-        website: state.website ? { binding_id: state.website.binding_id, token: state.website.token } : undefined,
-      }),
+    return api.run(request, {
+      sessionId: state.sessionId,
+      modelKey: model.value,
+      maxTurns: steps,
       signal,
+      website: state.website ? { binding_id: state.website.binding_id, token: state.website.token } : undefined,
+      onFrame: handleFrame,
     });
-    if (!response.ok) throw new Error(`Service returned HTTP ${response.status}`);
-    if (!response.body) throw new Error("This browser does not support streaming responses");
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
-    try {
-      while (true) {
-        const { value, done } = await reader.read();
-        buffer += done ? decoder.decode() : decoder.decode(value, { stream: true });
-        let boundary;
-        while ((boundary = /\r?\n\r?\n/.exec(buffer))) {
-          const frame = buffer.slice(0, boundary.index).replace(/\r\n/g, "\n");
-          buffer = buffer.slice(boundary.index + boundary[0].length);
-          const result = handleFrame(frame);
-          if (result) return result;
-        }
-        if (done) break;
-      }
-      if (buffer.trim()) {
-        const result = handleFrame(buffer.replace(/\r\n/g, "\n"));
-        if (result) return result;
-      }
-      throw new Error("Connection closed before an answer arrived. Check Activity before retrying.");
-    } finally {
-      await reader.cancel().catch(() => {});
-      reader.releaseLock();
-    }
   }
 
   async function submitPrompt(event) {
@@ -389,15 +362,10 @@
   async function uploadFiles() {
     const input = byId("uploadInput");
     if (state.busy || !input.files.length) return;
-    const data = new FormData();
-    data.append("session_id", state.sessionId);
-    Array.from(input.files).forEach((file) => data.append("files", file));
     setBusy(true);
     status.textContent = "Uploading files…";
     try {
-      const response = await fetch(apiUrl("workspace/files"), { method: "POST", body: data });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || `HTTP ${response.status}`);
+      const result = await api.uploadFiles(state.sessionId, Array.from(input.files));
       state.sessionId = result.session_id || state.sessionId;
       state.uploads.push(...(result.files || []));
       renderUploads();

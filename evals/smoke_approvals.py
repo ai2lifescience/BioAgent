@@ -22,7 +22,7 @@ from openai.types.responses.response_function_shell_tool_call import ResponseFun
 from harness import runtime
 from harness import sandbox
 from harness.sessions import SessionMetadataStore
-from interfaces import web
+from interfaces import api, web
 
 pipeline_module = importlib.import_module("tools.infrastructure.sdk_adapters.pipeline_shell")
 
@@ -102,6 +102,23 @@ class ApprovalTests(unittest.TestCase):
         result = self.resume(self.pause(), approved=False)
         self.assertEqual(result["status"], "ok", result["answer"])
         self.workflow.assert_not_called()
+
+    def test_reviewed_plan_survives_progress_and_later_turn(self):
+        pending = self.pause(steps=[ModelStep(output=[
+            assistant_message("I will prepare the requested operation."), pipeline(),
+        ])])
+        runtime.STATE_STORE = SessionMetadataStore(self.root / "metadata")
+        restored = api.list_session_messages("test")["pending_approval"]
+        self.assertEqual(restored["approvals"], pending["approvals"])
+        done = self.resume(pending)
+        runtime.run_agent("Thanks", session_id="test", model=ScriptedModel([response("You're welcome.")]))
+        # A later turn clears the last_approval fallback. The reviewed plan
+        # must remain attached to its original result, not to the latest reply.
+        runtime.STATE_STORE = SessionMetadataStore(self.root / "metadata")
+        messages = api.list_session_messages("test")["messages"]
+        completed = next(m for m in messages if m["text"] == done["answer"])
+        self.assertEqual(completed.get("result"), done)
+        self.assertNotIn("approval_decision", (messages[-1].get("result") or {}))
 
     def test_wrong_stale_and_cross_session_ids_do_not_consume_state(self):
         pending = self.pause()

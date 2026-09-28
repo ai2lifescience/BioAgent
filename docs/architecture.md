@@ -177,8 +177,9 @@ specialists.
 | tools/infrastructure | Workspace, providers, knowledge, pipeline engine, tool support, and SDK adapters |
 | tools/runtime_tools | Pipeline definitions and domain-specific pipeline bundles |
 | interfaces | HTTP API, static UI, SSE, workspace API, and website bridge endpoints |
+| web_ui | Shared API transport plus focused session, workspace, artifact, and message modules; `app.js` coordinates the full client |
 | docs | External integration contracts, usage notes, and this architecture reference |
-| evals | Smoke checks for boundaries, transport, tools, jobs, website integration, and pipelines |
+| evals | Smoke checks for boundaries, transport, tools, jobs, website integration, pipelines, and browser contracts |
 
 The top-level legacy composite workflows and the old standalone rag package are not
 runtime entry points. New features should extend the current SDK tool,
@@ -259,6 +260,30 @@ AGENT_RUN_WORKERS defaults to two workers.
 A worker failure changes the run to interrupted. The system does not silently
 replay an interrupted agent run because tool calls can have side effects. A
 caller can create a new run when a retry is appropriate.
+
+### Public run result contract
+
+`harness/contracts.py` defines the versioned JSON envelope shared by direct
+callers, the HTTP API, and both browser clients. The current
+`result_contract_version` is `1` and includes these distinct collections:
+
+| Field | Meaning |
+| --- | --- |
+| `workspace_files` | The complete session workspace inventory at the end of the run |
+| `artifacts` | Files created or changed by this run, including typed viewer metadata |
+| `evidence` | Tool-derived citations, files, and output references that support the answer |
+
+`files` remains a compatibility alias for `workspace_files` while older
+integrations migrate. Viewers select from `artifacts` or evidence associated
+with the current run, so a persistent file from an earlier answer does not
+appear on every later response. New result fields may be added because the
+public model permits forward-compatible metadata, but the named fields above
+are stable.
+
+The full web client and the embedded assistant use the same
+`web_ui/api-client.js` transport for JSON requests, uploads, and SSE frames.
+Client-specific UI state stays in `app.js` or `assistant.js`; shared request
+serialization does not diverge between the two entry points.
 
 ## Streaming, polling, and approvals
 
