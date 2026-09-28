@@ -370,8 +370,10 @@ relevant bounded tests. Show changed workspace-relative files.
 ~~~
 
 Expected behavior: coding_specialist can coordinate code_inspection, code_edit,
-and code_test. Code editing and testing operate inside the active workspace and
-do not use arbitrary host paths. Pipeline execution remains a separate,
+code_test, and python_execute. Code editing and testing operate inside the
+active workspace and do not use arbitrary host paths. Generated Python is saved
+with its hash, runs only after approval, and reports verified workspace-relative
+artifacts and bounded stdout/stderr. Pipeline execution remains a separate,
 approval-aware route.
 
 For a read-only request:
@@ -507,8 +509,9 @@ curl -sS -X POST http://127.0.0.1:8000/approve_stream \
   -d '{"session_id":"SESSION_ID","approved":true,"approval_id":"APPROVAL_ID"}'
 ~~~
 
-Pipeline run and cancellation require approval. Code inspection, code editing,
-and bounded code tests use their direct workspace tool path.
+Pipeline run and cancellation, plus generated Python execution, require
+approval. Code inspection, code editing, and bounded code tests use their
+direct workspace tool path.
 
 ## HTTP endpoints
 

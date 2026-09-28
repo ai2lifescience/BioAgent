@@ -161,7 +161,7 @@ specialists.
 | Knowledge base | `knowledge_ingest`, `knowledge_status`, `knowledge_retrieve`, `evidence_index`, and `evidence_retrieve` for durable session-owned knowledge |
 | Reports | `report_review`, `report_synthesize`, and `report_write` for evidence-bound review, cited drafting, and saved Markdown reports |
 | Workspace and documents | `file_inspection`, `document_read`, `workspace_search`, uploads, downloads, and artifact previews |
-| Coding | `code_inspection`, `code_edit`, and `code_test` inside the active workspace |
+| Coding | `code_inspection`, `code_edit`, `code_test`, and approved `python_execute` inside the active workspace |
 | Pipelines | `pipeline_shell` operations for catalog, files, examples, plans, runs, status, bounded waits, results, and cancellation |
 | Trusted websites | `website_context`, table and figure reads, manual search/read, `website_import_data`, highlights, navigation, and approved host actions |
 | User interaction | Persistent sessions, direct or queued runs, streamed events, approval prompts, status polling, and resumable event delivery |
@@ -397,7 +397,7 @@ call another public model-facing tool to create an implicit workflow.
 | sources | pubmed_search, web_search, web_fetch |
 | knowledge | evidence_index, evidence_retrieve, knowledge_ingest, knowledge_status, knowledge_retrieve |
 | workspace | file_inspection, document_read, workspace_search, report_write |
-| coding | code_inspection, code_edit, code_test |
+| coding | code_inspection, code_edit, code_test, python_execute |
 | website | website_context, website_read_table, website_read_figure, website_search_manual, website_read_manual, website_import_data, website_highlight, website_navigate, website_action |
 
 Data analysis is a capability group rather than a biology subtype. It can profile,
@@ -416,7 +416,7 @@ Current specialists:
 | pipeline_specialist | pipeline catalog, planning, execution, status, results, and cancellation |
 | document_specialist | workspace search, document reading, and file inspection |
 | data_analysis_specialist | table profiling, grouping, plotting, file inspection, and workspace search |
-| coding_specialist | code inspection, code editing, and code tests |
+| coding_specialist | code inspection, code editing, bounded tests, and approved Python execution |
 | website_guide_specialist | trusted website context, tables, figures, manuals, data import, highlights, navigation, actions, and workspace inspection |
 
 The website guide is an Agent-as-tool. It uses the website tools to inspect a

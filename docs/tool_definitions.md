@@ -51,7 +51,7 @@ compose with other operations. Current groups are:
 | sources | PubMed search, web search, and web fetch |
 | knowledge | durable ingestion/status/retrieval and run-local evidence indexing/retrieval |
 | workspace | file inspection, document reading, workspace search, and report writing |
-| coding | code inspection, code editing, and code tests |
+| coding | code inspection, code editing, bounded tests, and approved Python execution |
 | website | trusted page context, tables, figures, manuals, imports, highlights, navigation, and actions |
 
 Each public function tool is defined in one category module under
@@ -238,7 +238,7 @@ Current specialists are:
 | pipeline_specialist | pipeline_shell |
 | document_specialist | Workspace search, document reading, file inspection |
 | data_analysis_specialist | Table tools, file inspection, workspace search |
-| coding_specialist | Code inspection, editing, and tests |
+| coding_specialist | Code inspection, editing, tests, and approved Python execution |
 | website_guide_specialist | Website tools plus table and workspace inspection |
 | report_review | Evidence-bound nested review agent |
 | report_synthesize | Evidence-bound nested synthesis agent |
@@ -330,6 +330,8 @@ explicit user decision. In the current system:
 
 - pipeline run and pipeline cancellation require approval;
 - code_edit and code_test are direct bounded workspace operations;
+- python_execute requires approval and runs generated source with bounded time,
+  output, and workspace-relative artifact limits;
 - read-only tools do not require approval;
 - website actions are authorized by the trusted host and its user permissions.
 
