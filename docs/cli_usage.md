@@ -81,6 +81,7 @@ ShellTool exported by `tools/infrastructure/sdk_adapters`.
 | `report_review` / `report_synthesize` / `report_write` | Review evidence, draft, and save a cited report |
 | `code_inspection` | Inspect or search workspace code |
 | `code_edit` / `code_test` | Bounded direct workspace changes and tests |
+| `python_execute` | Approved generated Python with bounded workspace artifacts |
 The model selects tools from their descriptions and schemas. Atomic capabilities
 compose by passing workspace-relative artifact paths. `report_review` and
 `report_synthesize` are Agents SDK nested-agent tools; deterministic calculations

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -61,6 +62,16 @@ def _approval_details(items: list[Any], context: AgentRunContext | None = None) 
                 detail["plan"] = JobStore(session_root(context.session_id)).get(identifier)["plan"]
             except (ValueError, KeyError, AttributeError, IndexError):
                 pass
+        if item.tool_name == "python_execute" and isinstance(arguments, dict):
+            source = str(arguments.get("code") or "")
+            detail["code_sha256"] = hashlib.sha256(source.encode("utf-8")).hexdigest()
+            detail["code_bytes"] = len(source.encode("utf-8"))
+            detail["code_preview"] = source[:4000]
+            if len(source) > 4000:
+                detail["code_preview"] += "\n# ... preview truncated ..."
+            display_arguments = dict(arguments)
+            display_arguments["code"] = detail["code_preview"]
+            detail["arguments"] = display_arguments
         details.append(detail)
     return details
 

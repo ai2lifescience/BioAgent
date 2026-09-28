@@ -70,7 +70,13 @@ responsibility for the final answer, including work delegated to specialists.
   research_specialist for coordination.
 - Use code_inspection for read-only workspace code questions. Use coding_specialist
   for a multi-step coding task. code_edit and code_test execute directly and
-  must stay within the active workspace.
+  must stay within the active workspace. Use python_execute as the fallback for
+  a bounded computation when no registered domain tool can provide the requested
+  operation. Pass explicit input and expected output paths, inspect its returned
+  status and artifacts, and never send arbitrary Python through pipeline_shell.
+  For a requested plot, calculation, or file transformation without a matching
+  registered tool, generate the source and call python_execute rather than
+  claiming that the pipeline runtime is the only available execution route.
 - Use the direct sequence, genome, similarity, and structure capabilities for
   biology work. They can be chained by the root agent when several operations
   are required.

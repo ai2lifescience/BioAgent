@@ -35,6 +35,7 @@ from .workspace.workspace_search import workspace_search
 from .coding.code_inspection import code_inspection
 from .coding.code_edit import code_edit
 from .coding.code_test import code_test
+from .coding.python_execute import python_execute
 from .website import WEBSITE_TOOLS
 
 
@@ -54,7 +55,7 @@ KNOWLEDGE_TOOLS = [
 
 WORKSPACE_TOOLS = [file_inspection, document_read, workspace_search, report_write]
 
-CODING_TOOLS = [code_inspection, code_edit, code_test]
+CODING_TOOLS = [code_inspection, code_edit, code_test, python_execute]
 
 FUNCTION_TOOL_GROUPS = {
     "biology": BIOLOGY_TOOLS,

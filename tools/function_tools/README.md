@@ -14,7 +14,7 @@ data_analysis/ table_profile, table_group, table_plot
 sources/   pubmed_search, web_search, web_fetch
 knowledge/ evidence_index, evidence_retrieve, knowledge_*
 workspace/ file_inspection, document_read, workspace_search, report_write
-coding/    code_inspection, code_edit, code_test
+coding/    code_inspection, code_edit, code_test, python_execute
 ```
 
 Capabilities compose through data flow: a tool returns a workspace-relative
