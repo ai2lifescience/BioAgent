@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import os
 import re
 from typing import Any
 
@@ -137,7 +138,7 @@ def query_pdb(
             artifact = download_pdb_structure(
                 clean_query,
                 file_format=file_format,
-                output_dir=output_dir or "runtime/pdb",
+                output_dir=output_dir or str(Path(os.getenv("AGENT_PDB_DIR", "runtime/pdb")).expanduser().resolve()),
             )
             result["files"] = [artifact]
         return result
@@ -152,7 +153,7 @@ def query_pdb(
 def download_pdb_structure(
     pdb_id: str,
     file_format: str = "cif",
-    output_dir: str = "runtime/pdb",
+    output_dir: str | None = None,
 ) -> dict[str, Any]:
     clean_id = normalize_pdb_id(pdb_id)
     clean_format = normalize_structure_format(file_format)
@@ -170,7 +171,9 @@ def download_pdb_structure(
     if not response.content:
         raise RuntimeError(f"RCSB PDB returned an empty file for {clean_id}.{clean_format}.")
 
-    output_path = Path(output_dir)
+    output_path = Path(output_dir).expanduser().resolve() if output_dir else Path(
+        os.getenv("AGENT_PDB_DIR", "runtime/pdb")
+    ).expanduser().resolve()
     output_path.mkdir(parents=True, exist_ok=True)
     structure_path = output_file_path(output_path, f"{clean_id}.{clean_format}")
     structure_path.write_bytes(response.content)

@@ -36,7 +36,9 @@ def result_status(result: dict) -> str:
 
 class RunQueue:
     def __init__(self, path: str | Path | None = None, *, max_workers: int | None = None) -> None:
-        self.path = Path(path or os.getenv("AGENT_RUN_DB", "runtime/agent_runs.sqlite3")).resolve()
+        self.path = Path(path).resolve() if path is not None else Path(
+            os.getenv("AGENT_RUN_DB", "runtime/agent_runs.sqlite3")
+        ).expanduser().resolve()
         self.max_workers = max(1, int(max_workers if max_workers is not None else os.getenv("AGENT_RUN_WORKERS", "2")))
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self._init()

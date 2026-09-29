@@ -1,21 +1,24 @@
-"""Browser-facing contract checks for the two web clients."""
+"""Browser-facing checks for the built Vite web clients."""
 
 from __future__ import annotations
 
-import json
 from http.server import ThreadingHTTPServer
+import json
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import threading
 import unittest
-from urllib.request import urlopen
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from interfaces.web import AgentRequestHandler
+import interfaces.web as web
+from interfaces.web import AgentRequestHandler, FRONTEND_DIST_DIR
 
 
 class WebContractTests(unittest.TestCase):
@@ -33,32 +36,78 @@ class WebContractTests(unittest.TestCase):
         cls.thread.join(timeout=2)
 
     def fetch(self, path: str) -> tuple[int, str, str]:
-        with urlopen(self.base_url + path, timeout=10) as response:
+        request = Request(self.base_url + path, method="GET")
+        try:
+            response = urlopen(request, timeout=10)
+        except HTTPError as error:
+            return error.code, error.headers.get_content_type(), error.read().decode("utf-8", errors="replace")
+        with response:
             return response.status, response.headers.get_content_type(), response.read().decode("utf-8")
 
-    def test_root_and_assistant_use_module_clients(self):
-        status, content_type, body = self.fetch("/")
-        self.assertEqual(status, 200)
-        self.assertEqual(content_type, "text/html")
-        self.assertIn('type="module" src="/static/app.js"', body)
-
-        status, content_type, body = self.fetch("/assistant")
-        self.assertEqual(status, 200)
-        self.assertEqual(content_type, "text/html")
-        self.assertIn('type="module" src="./static/assistant.js"', body)
-
-    def test_shared_transport_and_split_module_are_served(self):
-        for path, marker in (
-            ("/static/api-client.js", "export function createApiClient"),
-            ("/static/session-sidebar.js", "export function createSessionSidebar"),
-            ("/static/workspace-panel.js", "export function createWorkspacePanel"),
-            ("/static/app.js", 'from "/static/api-client.js"'),
-            ("/static/assistant.js", 'from "/static/api-client.js"'),
-        ):
-            status, content_type, body = self.fetch(path)
-            self.assertEqual(status, 200, path)
+    def _assert_asset(self, path: str) -> None:
+        status, content_type, body = self.fetch(path)
+        self.assertEqual(status, 200, path)
+        self.assertTrue(body, path)
+        if path.endswith((".js", ".mjs")):
             self.assertEqual(content_type, "application/javascript", path)
-            self.assertIn(marker, body, path)
+        elif path.endswith(".css"):
+            self.assertEqual(content_type, "text/css", path)
+
+    def test_all_route_shells_and_referenced_assets_are_served(self):
+        for route, entry in (
+            ("/", "index.html"),
+            ("/index.html", "index.html"),
+            ("/assistant", "assistant.html"),
+            ("/assistant/", "assistant.html"),
+            ("/assistant.html", "assistant.html"),
+            ("/assistant-demo", "assistant-demo.html"),
+            ("/assistant-demo/", "assistant-demo.html"),
+            ("/assistant-demo.html", "assistant-demo.html"),
+        ):
+            status, content_type, body = self.fetch(route)
+            self.assertEqual(status, 200, route)
+            self.assertEqual(content_type, "text/html", route)
+            self.assertTrue(re.search(r"(?:src|href)=[\"'](?:/static/|\./static/)[^\"']+", body), route)
+            self.assertTrue((FRONTEND_DIST_DIR / entry).exists() or not FRONTEND_DIST_DIR.exists())
+            for asset in re.findall(r"(?:src|href)=[\"']((?:/static/|\./static/)[^\"']+)[\"']", body):
+                self._assert_asset("/" + asset.lstrip("./"))
+
+    def test_public_embed_script_keeps_external_integration_url(self):
+        self._assert_asset("/static/assistant-embed.js")
+        status, _, body = self.fetch("/static/assistant-embed.js")
+        self.assertEqual(status, 200)
+        self.assertIn("assistant", body.lower())
+
+    def test_favicon_and_missing_assets(self):
+        status, content_type, _ = self.fetch("/favicon.svg")
+        self.assertEqual(status, 200)
+        self.assertEqual(content_type, "image/svg+xml")
+        for path in ("/static/does-not-exist.js", "/static/%2e%2e/index.html", "/static/%2Fetc/passwd"):
+            status, _, _ = self.fetch(path)
+            self.assertEqual(status, 404, path)
+
+    def test_missing_frontend_build_has_actionable_diagnostic(self):
+        original = web.FRONTEND_DIST_DIR
+        try:
+            web.FRONTEND_DIST_DIR = Path(original).parent / ".missing-frontend-dist-for-contract-test"
+            status, content_type, body = self.fetch("/")
+        finally:
+            web.FRONTEND_DIST_DIR = original
+        self.assertEqual(status, 503)
+        self.assertEqual(content_type, "text/plain")
+        self.assertIn("npm --prefix frontend ci", body)
+        self.assertIn("npm --prefix frontend run build", body)
+
+    def test_api_remains_available_without_frontend_build(self):
+        original = web.FRONTEND_DIST_DIR
+        try:
+            web.FRONTEND_DIST_DIR = Path(original).parent / ".missing-frontend-dist-for-api-test"
+            status, content_type, body = self.fetch("/health")
+        finally:
+            web.FRONTEND_DIST_DIR = original
+        self.assertEqual(status, 200)
+        self.assertEqual(content_type, "application/json")
+        self.assertIn('"status"', body)
 
     def test_config_is_json_contract(self):
         status, content_type, body = self.fetch("/config")
@@ -82,8 +131,7 @@ class WebContractTests(unittest.TestCase):
             f"{self.base_url}/assistant",
         ]
         completed = subprocess.run(command, capture_output=True, text=True, timeout=20, check=True)
-        self.assertIn('id="status"', completed.stdout)
-        self.assertIn("Ready", completed.stdout)
+        self.assertIn("assistant", completed.stdout.lower())
 
 
 if __name__ == "__main__":

@@ -71,3 +71,39 @@ params:
   time: all-time
   analysis_mode: example
   min_length: 0
+param_overrides:
+  profile:
+    config_key: params.profile
+    default: standard
+    choices:
+    - standard
+    - strict
+    label: Analysis profile
+  subtype:
+    config_key: params.subtype
+    default: subtype1
+    label: Sequence subtype
+  segment:
+    config_key: params.segment
+    default: segment1
+    label: Sequence segment
+  time:
+    config_key: params.time
+    default: all-time
+    label: Time range
+  analysis_mode:
+    config_key: params.analysis_mode
+    default: example
+    label: Analysis mode
+  min_length:
+    config_key: params.min_length
+    default: 0
+    label: Minimum sequence length
+preset_param: profile
+presets:
+  standard:
+    params.analysis_mode: example
+    params.min_length: 0
+  strict:
+    params.analysis_mode: strict
+    params.min_length: 100

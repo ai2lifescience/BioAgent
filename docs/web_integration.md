@@ -52,8 +52,19 @@ filters, workflow, manual, and adapter callbacks; the assistant remains the
 embedded `/assistant` iframe. Run this from the repository root:
 
 ```bash
+npm --prefix frontend ci
+npm --prefix frontend run build
 python -m interfaces.web --host 127.0.0.1 --port 8000
 ```
+
+The React pages are maintained in `frontend/src/features/assistant/` and
+`frontend/src/features/demo/`. Vite builds their HTML entries into
+`frontend/dist/`, which the Python server serves. The public embed client lives
+in `frontend/public/static/assistant-embed.js` and is copied into the build.
+The URLs `/assistant`, `/assistant-demo`, and `/static/assistant-embed.js` stay
+stable; host integrations do not need to know the generated bundle filenames.
+Keep the Python server's working directory at the repository root because its
+default runtime paths are relative to the current process directory.
 
 Open `http://localhost:8000/assistant-demo`. Click the assistant launcher and
 ask it to explain the visible table or figure. The page requests a short-lived

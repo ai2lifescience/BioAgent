@@ -15,7 +15,7 @@ from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from interfaces.web import AgentRequestHandler, WEB_UI_DIR
+from interfaces.web import AgentRequestHandler, FRONTEND_DIST_DIR
 
 
 SESSION_ID = "figure-history"
@@ -39,76 +39,102 @@ RESULT = {
         "approved": True, "tool_name": "python_execute", "arguments": {"code": "print(42)"},
     },
 }
+APPROVED_RESULT = {
+    **RESULT,
+    "answer": "The approved operation saved the figures.",
+}
+PENDING_APPROVAL = {
+    "session_id": SESSION_ID,
+    "answer": "Review the requested operation.",
+    "status": "pending_approval",
+    "approval_required": True,
+    "approvals": [{
+        "approval_id": "fixture",
+        "tool_name": "python_execute",
+        "arguments": {"code": "print(42)"},
+    }],
+}
 
-# Exercise the real modules and DOM on first load, after approval, and on an
-# actual reload. A separate browser profile keeps the user's sessions untouched.
+# Exercise the built React app on first load, after approval, and on an actual
+# reload. A separate browser profile keeps the user's sessions untouched.
 PROBE = """
 <script type="module">
 try {
-  const waitFor = async (condition) => {
+  const waitFor = async (condition, description) => {
     for (let i = 0; i < 500; i++) {
       if (condition()) return;
       await new Promise(resolve => setTimeout(resolve, 10));
     }
-    throw new Error('UI did not become ready');
+    throw new Error('Timed out: ' + description);
   };
   const assert = (value, message) => { if (!value) throw new Error(message); };
-  await waitFor(() => !document.querySelector('#send').disabled
-    && document.querySelectorAll('#chat .message.assistant').length);
+  const messages = () => [...document.querySelectorAll('#chat .message.assistant')];
+  const ready = () => {
+    const send = document.querySelector('.composer #send');
+    return send && !send.disabled && messages().length >= 2;
+  };
+  await waitFor(ready, 'React conversation and composer');
   const configFailed = location.pathname === '/config-failure-test';
   const expected = configFailed ? 3 : 4;
-  const figures = [...document.querySelectorAll('#chat .artifact-figure img')];
-  assert(figures.length === expected, `Expected ${expected} figures, got ${figures.length}`);
-  for (const img of figures) {
-    img.loading = 'eager';
-    await img.decode();
-    assert(img.naturalWidth > 0, 'Figure could not load');
-    assert(new URL(img.src).searchParams.get('session_id') === 'figure-history', 'Wrong session');
-  }
-  const checkDetails = (root) => {
-    assert([...root.querySelectorAll('[data-runtime-panel]')].every(p => p.hidden), 'Runtime panel expanded by default');
-    assert([...root.querySelectorAll('.run-plan-record')].every(p => !p.open), 'Reviewed plan expanded by default');
+  const checkFigures = async (root) => {
+    const figures = [...root.querySelectorAll('.artifact-figure img')];
+    assert(figures.length === expected, `Expected ${expected} figures, got ${figures.length}`);
+    for (const img of figures) {
+      img.loading = 'eager';
+      // `decode()` can remain pending in headless Chrome when a lazy image
+      // was promoted after a reload. Wait for the network completion signal,
+      // then keep the actual natural-size assertion below.
+      await waitFor(() => img.complete, 'figure image load');
+      assert(img.naturalWidth > 0, 'Figure could not load');
+      assert(new URL(img.src).searchParams.get('session_id') === 'figure-history', 'Wrong figure session');
+    }
+  };
+  const checkDetails = async (root) => {
+    const panels = [...root.querySelectorAll('[data-runtime-panel]')];
+    assert(panels.length === 4, 'Execution detail panels are missing');
+    assert(panels.every(p => p.hidden), 'Runtime panel expanded by default');
+    const reviewedPlan = root.querySelector('.run-plan-record');
+    assert(reviewedPlan && !reviewedPlan.open, 'Reviewed plan missing or expanded by default');
     const tab = root.querySelector('[data-runtime-tab="plan"]');
     const panel = root.querySelector('[data-runtime-panel="plan"]');
+    assert(tab && panel, 'Plan tab or panel missing');
     tab.click();
-    assert(!panel.hidden && tab.getAttribute('aria-selected') === 'true', 'Plan cannot expand');
+    await waitFor(() => !panel.hidden && tab.getAttribute('aria-selected') === 'true', 'Plan expands');
     tab.click();
-    assert(panel.hidden && tab.getAttribute('aria-selected') === 'false', 'Plan cannot collapse');
+    await waitFor(() => panel.hidden && tab.getAttribute('aria-selected') === 'false', 'Plan collapses');
   };
-  checkDetails(document.querySelector('#chat .message.assistant'));
+  await checkFigures(messages()[0]);
+  await checkDetails(messages()[0]);
   // The later plain reply sees workspace files but must not repeat the figures.
-  const messages = document.querySelectorAll('#chat .message.assistant');
-  assert(!messages[1].querySelector('.artifact-figure'), 'Unrelated reply repeated figures');
+  assert(messages()[1].textContent.includes("You're welcome."), 'Plain reply is missing');
+  assert(!messages()[1].querySelector('.artifact-figure'), 'Unrelated reply repeated figures');
+  if (configFailed) {
+    assert(document.querySelector('.error-banner')?.textContent.includes('Configuration unavailable'),
+      'Unavailable configuration did not show a recoverable error');
+  }
+  const approvedMessage = () => messages().find(message =>
+    message.querySelector('.message-body')?.textContent.includes('The approved operation saved the figures.'));
   if (!sessionStorage.getItem('reloaded')) {
     if (!configFailed) {
-      const { createMessageRenderer } = await import('/static/message-renderer.js');
-      const { createArtifactViewers } = await import('/static/artifact-viewers.js');
-      const chat = document.createElement('div');
-      document.body.append(chat);
-      let completed = false;
-      const renderer = createMessageRenderer({
-        chat, getConfig: () => ({}), formatModelLabel: m => m.key,
-        workspaceFileUrl: path => '/workspace/file?session_id=figure-history&path=' + encodeURIComponent(path),
-        artifactViewers: createArtifactViewers({
-          getImageSuffixes: () => ['.png', '.jpeg', '.webp', '.bmp'],
-          workspaceFileUrl: path => '/workspace/file?path=' + encodeURIComponent(path),
-        }),
-        getRunning: () => false, getSessionLoading: () => false, onApprovalBusy: () => {},
-        onApprovalResult: result => { renderer.renderMessage('assistant', result.answer, result); completed = true; },
-      });
-      renderer.renderMessage('assistant', 'Review the operation.', {
-        session_id: 'figure-history', approval_required: true,
-        approvals: [{approval_id: 'fixture', tool_name: 'python_execute', arguments: {code: 'print(42)'}}],
-      });
-      assert(chat.querySelector('.approval-plan').open, 'Pending approval must stay reviewable');
-      [...chat.querySelectorAll('button')].find(b => b.textContent === 'Approve').click();
-      await waitFor(() => completed);
-      checkDetails(chat.querySelector('.message:last-child'));
-      assert(chat.querySelector('.message:last-child .artifact-figure'), 'Approved result lost its image');
+      const approval = document.querySelector('#chat .approval-item');
+      assert(approval?.querySelector('.approval-plan')?.open, 'Pending approval must stay reviewable');
+      const approve = [...approval.querySelectorAll('button')].find(button => button.textContent === 'Approve');
+      assert(approve && !approve.disabled, 'React approval button is unavailable');
+      approve.click();
+      await waitFor(() => approvedMessage() && ready(), 'Approved result and unlocked composer');
+      assert(approve.disabled, 'Completed approval can be submitted twice');
+      await checkDetails(approvedMessage());
+      await checkFigures(approvedMessage());
     }
     sessionStorage.setItem('reloaded', 'true');
     location.reload();
   } else {
+    if (!configFailed) {
+      assert(approvedMessage(), 'Approved result was lost after reload');
+      assert(!document.querySelector('#chat .approval-item'), 'Completed approval reappeared after reload');
+      await checkDetails(approvedMessage());
+      await checkFigures(approvedMessage());
+    }
     document.body.dataset.testResult = 'passed';
   }
 } catch (error) {
@@ -122,7 +148,7 @@ class FigureFixtureHandler(AgentRequestHandler):
     def do_GET(self):
         path = urlparse(self.path).path
         if path in {"/reload-test", "/config-failure-test"}:
-            html = (WEB_UI_DIR / "index.html").read_text() + PROBE
+            html = (FRONTEND_DIST_DIR / "index.html").read_text() + PROBE
             self._send_bytes(html.encode(), "text/html; charset=utf-8")
         elif path == "/config":
             if "/config-failure-test" in self.headers.get("Referer", ""):
@@ -133,12 +159,22 @@ class FigureFixtureHandler(AgentRequestHandler):
         elif path == "/sessions":
             self._send_json({"sessions": [{"session_id": SESSION_ID, "title": "Figures"}]})
         elif path == f"/sessions/{SESSION_ID}/messages":
-            self._send_json({"messages": [
+            payload = {"messages": [
                 {"role": "user", "text": "Create figures."},
                 {"role": "assistant", "text": RESULT["answer"], "result": RESULT},
                 {"role": "user", "text": "Thanks"},
                 {"role": "assistant", "text": "You're welcome.", "result": {"files": ARTIFACTS}},
-            ]})
+            ]}
+            if self.server.approved:
+                payload["messages"].append({
+                    "role": "assistant", "text": APPROVED_RESULT["answer"], "result": APPROVED_RESULT,
+                })
+            self._send_json(payload)
+        elif path == "/runs":
+            payload = {"runs": []}
+            if not self.server.approved and "/config-failure-test" not in self.headers.get("Referer", ""):
+                payload["runs"] = [{"status": "pending_approval", "result": PENDING_APPROVAL}]
+            self._send_json(payload)
         elif path == "/workspace":
             self._send_json({"workspace": {"files": ARTIFACTS}})
         elif path == "/workspace/file":
@@ -148,8 +184,13 @@ class FigureFixtureHandler(AgentRequestHandler):
 
     def do_POST(self):
         if self.path == "/approve_stream":
-            self._read_json()
-            data = f"event: result\ndata: {json.dumps(RESULT)}\n\n".encode()
+            payload = self._read_json()
+            self.server.approval_requests.append(payload)
+            if payload != {"session_id": SESSION_ID, "approval_id": "fixture", "approved": True}:
+                self._send_json({"error": "Incorrect approval request"}, status=400)
+                return
+            self.server.approved = True
+            data = f"event: result\ndata: {json.dumps(APPROVED_RESULT)}\n\n".encode()
             self._send_bytes(data, "text/event-stream")
         else:
             super().do_POST()
@@ -171,15 +212,23 @@ class ChatRenderingTests(unittest.TestCase):
         cls.thread.join(timeout=2)
 
     def check_page(self, path):
+        self.server.approved = False
+        self.server.approval_requests = []
         with TemporaryDirectory(prefix="chat-browser-") as profile:
             result = subprocess.run([
                 shutil.which("google-chrome"), "--headless=new", "--no-sandbox",
                 "--disable-gpu", "--disable-dev-shm-usage", "--no-proxy-server",
-                f"--user-data-dir={profile}", "--virtual-time-budget=12000",
+                # The probe performs a real approval round trip and then a full
+                # page reload. Give the second React boot enough virtual time
+                # to restore the approved history before dump-dom snapshots it.
+                f"--user-data-dir={profile}", "--virtual-time-budget=30000",
                 "--dump-dom", self.base_url + path,
             ], capture_output=True, text=True, timeout=25, check=True)
         marker = result.stdout.split("data-test-result=", 1)[-1][:160]
         self.assertIn('data-test-result="passed"', result.stdout, marker)
+        self.assertEqual(self.server.approval_requests, [] if path == "/config-failure-test" else [{
+            "session_id": SESSION_ID, "approval_id": "fixture", "approved": True,
+        }])
 
     def test_saved_and_approved_figures_survive_reload_with_details_collapsed(self):
         self.check_page("/reload-test")

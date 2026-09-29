@@ -19,7 +19,7 @@ from tools.infrastructure.pipeline_engine.engine.paths import (
     resolve_pipeline_file,
     resolve_pipeline_input_path,
 )
-from tools.infrastructure.pipeline_engine.engine.types import PipelineContext
+from tools.infrastructure.pipeline_engine.engine.types import PipelineContext, RuntimeConfigWrite
 from tools.infrastructure.pipeline_engine.engine.wdl_options import write_options_runtime_json
 from tools.infrastructure.pipeline_engine.engine.wdl_runtime import (
     normalize_wdl_engine,
@@ -58,7 +58,7 @@ def run_wdl_pipeline(
         label="WDL workflow",
     )
     runtime_config = write_runtime_config(context)
-    inputs_path = write_wdl_inputs(context)
+    inputs_path = write_wdl_inputs(context, runtime_config)
     options_path = write_wdl_options(context)
     engine_dir = context.run_dir / "wdl_engine"
     engine_dir.mkdir(parents=True, exist_ok=True)
@@ -137,9 +137,27 @@ def run_wdl_pipeline(
     }
 
 
-def write_wdl_inputs(context: PipelineContext) -> Path:
-    """Write miniwdl input JSON from inputs.json and selected runtime files."""
-    inputs = dict(context.raw_config)
+def write_wdl_inputs(
+    context: PipelineContext,
+    runtime_config: RuntimeConfigWrite | None = None,
+) -> Path:
+    """Write WDL input JSON from resolved config and selected runtime files.
+
+    ``write_runtime_config`` applies runner presets and parameter overrides.
+    Use that resolved mapping when an engine run is being prepared; callers
+    that only need the native input fixture can omit it and retain the original
+    config-only behavior.
+    """
+    source_config = (
+        runtime_config.config
+        if runtime_config is not None and runtime_config.config
+        else context.raw_config
+    )
+    inputs = {
+        key: source_config[key]
+        for key in _wdl_input_keys(context)
+        if key in source_config
+    }
     for key, path in context.resolved_input_overrides.items():
         inputs[key] = stringify_input_value(path)
 
@@ -162,6 +180,26 @@ def write_wdl_inputs(context: PipelineContext) -> Path:
     path = context.run_dir / "inputs.runtime.json"
     path.write_text(json.dumps(inputs, indent=2) + "\n", encoding="utf-8")
     return path
+
+
+def _wdl_input_keys(context: PipelineContext) -> set[str]:
+    """Return workflow input keys declared by the runner or native input file."""
+    keys = set(context.raw_config)
+    for spec in pipeline_input_specs(context.runner_config).values():
+        key = str(spec.get("config_key") or "").strip()
+        if key:
+            keys.add(key)
+    for name, spec in (context.runner_config.get("param_overrides") or {}).items():
+        if isinstance(spec, str):
+            keys.add(spec)
+        elif isinstance(spec, dict):
+            key = str(spec.get("config_key") or spec.get("wdl_key") or spec.get("key") or name).strip()
+            if key:
+                keys.add(key)
+    for values in (context.runner_config.get("presets") or {}).values():
+        if isinstance(values, dict):
+            keys.update(str(key) for key in values)
+    return keys
 
 
 def write_wdl_options(

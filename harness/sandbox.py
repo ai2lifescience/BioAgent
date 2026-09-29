@@ -29,7 +29,7 @@ from .tracing import configure_tracing
 if TYPE_CHECKING:
     from .sessions import SessionMetadata
 
-WORKSPACES_DIR = Path(os.getenv("AGENT_SESSIONS_DIR", "runtime/sessions")).resolve()
+WORKSPACES_DIR = Path(os.getenv("AGENT_SESSIONS_DIR", "runtime/sessions")).expanduser().resolve()
 configure_tracing()
 
 

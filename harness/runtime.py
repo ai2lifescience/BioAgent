@@ -29,7 +29,7 @@ from .streaming import PublicEvents, STREAM_SINK
 
 
 STATE_STORE = SessionMetadataStore()
-SESSION_DB = Path(os.getenv("AGENT_SESSION_DB", "runtime/agent_sessions.sqlite3"))
+SESSION_DB = Path(os.getenv("AGENT_SESSION_DB", "runtime/agent_sessions.sqlite3")).expanduser().resolve()
 
 # SDK tracing stays local; each run supplies its own model provider.
 configure_tracing()

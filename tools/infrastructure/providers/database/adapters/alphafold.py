@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import os
 import re
 from typing import Any
 
@@ -68,7 +69,9 @@ def query_alphafold(
             allowed_hosts=ALPHAFOLD_ALLOWED_HOSTS,
             accept="application/octet-stream",
         )
-        destination = Path(output_dir or "runtime/alphafold")
+        destination = Path(output_dir).expanduser().resolve() if output_dir else Path(
+            os.getenv("AGENT_ALPHAFOLD_DIR", "runtime/alphafold")
+        ).expanduser().resolve()
         destination.mkdir(parents=True, exist_ok=True)
         entry_id = re.sub(r"[^A-Za-z0-9_.-]", "_", str(records[0].get("entry_id") or accession))
         output_path = destination / f"{entry_id}.{clean_format}"

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -41,3 +41,4 @@ class RuntimeConfigWrite:
     staged_config_paths: list[dict[str, Any]]
     applied_config_overrides: dict[str, Any]
     output_records: list[dict[str, Any]]
+    config: dict[str, Any] = field(default_factory=dict)

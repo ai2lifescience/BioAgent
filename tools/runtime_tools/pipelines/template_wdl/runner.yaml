@@ -54,3 +54,33 @@ execution:
   dependency_scope: pipeline
   engine: wdl
 label: template_wdl
+param_overrides:
+  profile:
+    wdl_key: TemplateWdl.profile
+    default: standard
+    choices:
+    - standard
+    - strict
+    label: Analysis profile
+  label:
+    wdl_key: TemplateWdl.label
+    default: template_wdl
+    label: Report label
+  min_length:
+    wdl_key: TemplateWdl.min_length
+    default: 0
+    label: Minimum sequence length
+  uppercase:
+    wdl_key: TemplateWdl.uppercase
+    default: true
+    label: Uppercase sequence
+preset_param: profile
+presets:
+  standard:
+    TemplateWdl.profile: standard
+    TemplateWdl.min_length: 0
+    TemplateWdl.uppercase: true
+  strict:
+    TemplateWdl.profile: strict
+    TemplateWdl.min_length: 50
+    TemplateWdl.uppercase: true

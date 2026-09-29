@@ -226,6 +226,12 @@ Supported parameter metadata includes:
 - required: planning must receive a value;
 - choices: valid named values.
 
+For native configs that keep values under a mapping, use a dotted config key such
+as `params.min_length`. The runner resolves that path without flattening the
+native configuration. Presets are applied first, then explicit parameter
+overrides take precedence. WDL input JSON is generated from this resolved
+configuration, so the selected preset and overrides reach the workflow engine.
+
 A pipeline may define preset_param and presets when one selection expands into a
 validated group of runtime values:
 

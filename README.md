@@ -79,13 +79,23 @@ Every natural-language request is handled by the Agents SDK; deterministic funct
 
 ### 4. Start The Web UI
 
+Install Node.js/npm alongside the Python environment, then build the frontend
+from the repository root before starting the server:
+
 ```bash
 conda activate openaisdk
+npm --prefix frontend ci
+npm --prefix frontend run build
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ```
 
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in a browser. Stop the
-server with `Ctrl+C`.
+server with `Ctrl+C`. Rebuild after frontend changes. The React/TypeScript source
+lives in `frontend/`; the server serves its generated `frontend/dist` directory.
+Start the Python server from the repository root shown above: runtime paths are
+relative to the process working directory, so launching it from `frontend/` or
+another directory creates a separate runtime tree.
+For Vite development, see the [frontend guide](frontend/README.md).
 
 WDL pipelines use local miniwdl by default. For [Cromwell execution](docs/web_usage.md#wdl-execution-backend),
 [SOCKS proxy configuration](docs/web_usage.md#proxy-and-lan-access), or LAN access,
@@ -146,7 +156,7 @@ Get KEGG query: eco:b0002
 Download AlphaFold structure for P0A7V8 as cif
 ```
 
-Use the Uploads panel for local input files. Pipeline2Agent stores uploads and outputs
+Use the Workspace panel for local input files. Pipeline2Agent stores uploads and outputs
 under the active session so later requests in the same chat can reuse them.
 
 To allow access from another computer on a trusted local network, run:
@@ -219,7 +229,7 @@ status. Poll `GET /runs/<run_id>` or consume resumable progress from
 
 Embed the assistant as a drawer in a trusted website with the supplied
 `assistant-embed.js` client. To try the integration locally, start the web
-server and open the host-page demo:
+server after building the frontend as above, and open the host-page demo:
 
 ```bash
 python -m interfaces.web --host 127.0.0.1 --port 8000
@@ -285,6 +295,7 @@ print(result["answer"])
 ## Documentation
 
 - [System architecture](docs/architecture.md)
+- [Frontend structure and development](frontend/README.md)
 - [Web UI usage and examples](docs/web_usage.md)
 - [FunctionTool, specialist, and runtime tool definitions](docs/tool_definitions.md)
 - [Pipeline manifest definitions](docs/pipeline_definitions.md)

@@ -126,6 +126,7 @@ def write_runtime_config(
     write_yaml_config(runtime_config, runtime_config_path)
     return RuntimeConfigWrite(
         path=runtime_config_path,
+        config=runtime_config,
         staged_config_paths=[*staged_input_records(context), *input_records, *path_records],
         applied_config_overrides=applied_config_overrides,
         output_records=output_records,
@@ -197,14 +198,18 @@ def apply_runner_param_overrides(
         spec = specs.get(key) or {}
         if isinstance(spec, str):
             target_key = spec
-            default = runtime_config.get(target_key)
+            default = _get_runtime_config_value(runtime_config, target_key)
         elif isinstance(spec, dict):
             target_key = str(spec.get("config_key") or spec.get("wdl_key") or spec.get("key") or key)
-            default = runtime_config.get(target_key, spec.get("default"))
+            default = _get_runtime_config_value(runtime_config, target_key, spec.get("default"))
         else:
             target_key = str(key)
-            default = runtime_config.get(target_key)
-        runtime_config[target_key] = coerce_param_value(default, requested_value)
+            default = _get_runtime_config_value(runtime_config, target_key)
+        _set_runtime_config_value(
+            runtime_config,
+            target_key,
+            coerce_param_value(default, requested_value),
+        )
         applied[str(key)] = requested_value
     return applied
 
@@ -247,9 +252,59 @@ def apply_runner_preset(
     preset_values = presets.get(matched_name)
     if not isinstance(preset_values, dict):
         raise ValueError(f"Pipeline preset '{matched_name}' must be a mapping.")
-    runtime_config.update(copy.deepcopy(preset_values))
+    for key, value in preset_values.items():
+        _set_runtime_config_value(runtime_config, str(key), copy.deepcopy(value))
     requested[preset_param] = matched_name
     return requested
+
+
+def _get_runtime_config_value(
+    runtime_config: dict[str, Any],
+    key: str,
+    default: Any = None,
+) -> Any:
+    """Read a flat key or a dotted path from the runtime configuration.
+
+    WDL inputs use dotted keys such as ``TemplateWdl.min_length`` while the
+    native configs for shell/Nextflow/Snakemake templates commonly nest values
+    under ``params``. Supporting both forms keeps runner manifests portable.
+    """
+    if key in runtime_config:
+        return runtime_config[key]
+    current: Any = runtime_config
+    for part in key.split("."):
+        if not isinstance(current, dict) or part not in current:
+            return default
+        current = current[part]
+    return current
+
+
+def _set_runtime_config_value(runtime_config: dict[str, Any], key: str, value: Any) -> None:
+    """Write a flat key or a dotted path without changing existing flat keys."""
+    if key in runtime_config:
+        runtime_config[key] = value
+        return
+
+    parts = key.split(".")
+    if len(parts) == 1:
+        runtime_config[key] = value
+        return
+
+    # Existing flat engine keys can contain dots (for example
+    # ``TemplateWdl.min_length``). If the first component is not a mapping,
+    # retain that exact key instead of creating a nested structure.
+    if not isinstance(runtime_config.get(parts[0]), dict):
+        runtime_config[key] = value
+        return
+
+    current = runtime_config[parts[0]]
+    for part in parts[1:-1]:
+        child = current.get(part)
+        if not isinstance(child, dict):
+            child = {}
+            current[part] = child
+        current = child
+    current[parts[-1]] = value
 
 
 def _normalize_preset_name(value: Any) -> str:

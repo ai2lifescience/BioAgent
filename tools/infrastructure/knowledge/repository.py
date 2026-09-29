@@ -23,8 +23,9 @@ class KnowledgeRepository:
     """Persist collections, source snapshots, chunks, and job events."""
 
     def __init__(self, path: str | Path | None = None) -> None:
-        configured = path or os.getenv("AGENT_KNOWLEDGE_DB", "runtime/knowledge.sqlite3")
-        self.path = Path(configured).resolve()
+        self.path = Path(path).expanduser().resolve() if path is not None else Path(
+            os.getenv("AGENT_KNOWLEDGE_DB", "runtime/knowledge.sqlite3")
+        ).expanduser().resolve()
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self._init()
 
