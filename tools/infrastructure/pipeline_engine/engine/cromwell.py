@@ -45,7 +45,7 @@ def run_cromwell_pipeline(
         label="WDL workflow",
     )
     runtime_config = write_runtime_config(context)
-    inputs_path = write_wdl_inputs(context)
+    inputs_path = write_wdl_inputs(context, runtime_config)
     output_storage = S3OutputStorage.from_environment()
     if output_storage is not None and output_storage.mount_prefix is None:
         raise ValueError(

@@ -100,7 +100,9 @@ def configure_local_demo(port: int, host: str = "127.0.0.1") -> None:
 
 class WebsiteBridge:
     def __init__(self, path: str | Path | None = None) -> None:
-        self.path = Path(path or os.getenv("AGENT_WEBSITE_DB", "runtime/website_bridge.sqlite3")).resolve()
+        self.path = Path(path).expanduser().resolve() if path is not None else Path(
+            os.getenv("AGENT_WEBSITE_DB", "runtime/website_bridge.sqlite3")
+        ).expanduser().resolve()
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self._init()
 

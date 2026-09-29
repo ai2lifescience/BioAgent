@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import sqlite3
 from typing import Any, Callable
 from uuid import uuid4
 
@@ -188,6 +189,19 @@ def list_session_messages(session_id: str) -> dict[str, Any]:
                     message.setdefault("result", {})["approval_decision"] = last_approval
                     break
         pending = metadata.metadata.get("pending_run") if metadata else None
+        # The metadata snapshot is the normal source for a pending approval.
+        # A detached worker also records the same state in the durable run
+        # queue, so use that record when a page reload races the metadata
+        # write (or when an older session was created before snapshots were
+        # persisted there). This keeps an approval reviewable after reload.
+        if not isinstance(pending, dict) or not isinstance(pending.get("approvals"), list):
+            try:
+                queued = get_queue().pending_for_session(identifier)
+            except (OSError, ValueError, sqlite3.Error):
+                queued = None
+            queued_result = queued.get("result") if isinstance(queued, dict) else None
+            if isinstance(queued_result, dict) and isinstance(queued_result.get("approvals"), list):
+                pending = {"approvals": queued_result["approvals"]}
         return {
             "session_id": identifier,
             "messages": messages,

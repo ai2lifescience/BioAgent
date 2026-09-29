@@ -47,7 +47,9 @@ class SessionMetadata:
 
 class SessionMetadataStore:
     def __init__(self, root: str | Path | None = None) -> None:
-        self.root = Path(root or os.getenv("AGENT_METADATA_DIR", "runtime/session_metadata")).resolve()
+        self.root = Path(root).resolve() if root is not None else Path(
+            os.getenv("AGENT_METADATA_DIR", "runtime/session_metadata")
+        ).expanduser().resolve()
         self._sessions: dict[str, SessionMetadata] = {}
         self._versions: dict[str, tuple[int, int]] = {}
         self._locks: dict[str, _SessionLock] = {}

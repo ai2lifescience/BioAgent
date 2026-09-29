@@ -77,3 +77,39 @@ params:
   sequence_id_column: sequence_id
   subtype_column: subtype
   missing_subtype: unassigned
+param_overrides:
+  profile:
+    config_key: params.profile
+    default: standard
+    choices:
+    - standard
+    - strict
+    label: Normalization profile
+  normalize_mode:
+    config_key: params.normalize_mode
+    default: whitespace
+    label: Normalization mode
+  uppercase:
+    config_key: params.uppercase
+    default: false
+    label: Uppercase sequences
+  sequence_id_column:
+    config_key: params.sequence_id_column
+    default: sequence_id
+    label: Sequence ID column
+  subtype_column:
+    config_key: params.subtype_column
+    default: subtype
+    label: Subtype column
+  missing_subtype:
+    config_key: params.missing_subtype
+    default: unassigned
+    label: Missing subtype value
+preset_param: profile
+presets:
+  standard:
+    params.normalize_mode: whitespace
+    params.uppercase: false
+  strict:
+    params.normalize_mode: lines
+    params.uppercase: true

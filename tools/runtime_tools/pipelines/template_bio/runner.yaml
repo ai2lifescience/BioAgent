@@ -176,3 +176,70 @@ params:
   min_alt_depth: 2
   plot_dpi: 140
   emit_phylogenetic_tree: true
+param_overrides:
+  profile:
+    config_key: params.profile
+    default: standard
+    choices:
+    - standard
+    - quick
+    - stringent
+    label: Analysis profile
+  sample_id:
+    config_key: params.sample_id
+    default: sample_demo
+    label: Sample identifier
+  min_length:
+    config_key: params.min_length
+    default: 12
+    label: Minimum read length
+  min_mean_quality:
+    config_key: params.min_mean_quality
+    default: 20.0
+    label: Minimum mean quality
+  min_base_quality:
+    config_key: params.min_base_quality
+    default: 20
+    label: Minimum base quality
+  min_alt_fraction:
+    config_key: params.min_alt_fraction
+    default: 0.6
+    label: Minimum alternate fraction
+  min_alt_depth:
+    config_key: params.min_alt_depth
+    default: 2
+    label: Minimum alternate depth
+  plot_dpi:
+    config_key: params.plot_dpi
+    default: 140
+    label: Plot resolution
+  emit_phylogenetic_tree:
+    config_key: params.emit_phylogenetic_tree
+    default: true
+    label: Emit phylogenetic tree
+preset_param: profile
+presets:
+  standard:
+    params.min_length: 12
+    params.min_mean_quality: 20.0
+    params.min_base_quality: 20
+    params.min_alt_fraction: 0.6
+    params.min_alt_depth: 2
+    params.plot_dpi: 140
+    params.emit_phylogenetic_tree: true
+  quick:
+    params.min_length: 12
+    params.min_mean_quality: 0.0
+    params.min_base_quality: 0
+    params.min_alt_fraction: 0.5
+    params.min_alt_depth: 1
+    params.plot_dpi: 100
+    params.emit_phylogenetic_tree: false
+  stringent:
+    params.min_length: 50
+    params.min_mean_quality: 30.0
+    params.min_base_quality: 25
+    params.min_alt_fraction: 0.8
+    params.min_alt_depth: 4
+    params.plot_dpi: 180
+    params.emit_phylogenetic_tree: true

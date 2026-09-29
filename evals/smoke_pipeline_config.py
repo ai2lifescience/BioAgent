@@ -17,8 +17,9 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.infrastructure.pipeline_engine.engine.config import load_pipeline_config
+from tools.infrastructure.pipeline_engine.engine.config import load_pipeline_config, write_runtime_config
 from tools.infrastructure.pipeline_engine.engine.runner import prepare_pipeline_context
+from tools.infrastructure.pipeline_engine.engine.types import PipelineContext
 from tools.infrastructure.pipeline_engine.engine.wdl import write_wdl_inputs, write_wdl_options
 from tools.infrastructure.pipeline_engine import service
 
@@ -59,6 +60,127 @@ class PipelineConfigChecks(unittest.TestCase):
         config, _ = load_pipeline_config(self.root, manifest)
         config["nested"]["choice"] = "runtime"
         self.assertEqual(manifest["defaults"]["nested"]["choice"], "manifest")
+
+    def test_wdl_presets_and_overrides_reach_engine_inputs(self) -> None:
+        """Resolved presets must be submitted to miniwdl and Cromwell."""
+        runner_config = {
+            "engine": "wdl",
+            "preset_param": "profile",
+            "param_overrides": {
+                "profile": {"wdl_key": "Greeting.profile"},
+                "heading": {"wdl_key": "Greeting.heading"},
+            },
+            "presets": {
+                "brief": {"Greeting.heading": "Hi", "Greeting.repeat": 1},
+                "detailed": {"Greeting.heading": "Welcome", "Greeting.repeat": 3},
+            },
+        }
+        native_config = {
+            "Greeting.profile": "default",
+            "Greeting.heading": "Hello",
+            "Greeting.repeat": 2,
+        }
+        selected = self.root / "greeting.txt"
+        selected.write_text("Hello world\n", encoding="utf-8")
+        cases = (
+            ({"profile": "detailed"}, {"Greeting.profile": "detailed", "Greeting.heading": "Welcome", "Greeting.repeat": 3}),
+            ({"heading": "Custom greeting"}, {"Greeting.profile": "default", "Greeting.heading": "Custom greeting", "Greeting.repeat": 2}),
+            ({"profile": "brief", "heading": "Custom greeting"}, {"Greeting.profile": "brief", "Greeting.heading": "Custom greeting", "Greeting.repeat": 1}),
+        )
+        for index, (overrides, expected) in enumerate(cases):
+            with self.subTest(overrides=overrides):
+                run_dir = self.root / f"run-{index}"
+                run_dir.mkdir()
+                context = PipelineContext(
+                    pipeline_name="greeting_fixture",
+                    pipeline_dir=self.root,
+                    runner_config=runner_config,
+                    runner_config_path=self.root / "runner.yaml",
+                    raw_config=native_config,
+                    raw_config_path=self.root / "inputs.json",
+                    input_path=selected,
+                    original_input_path=selected,
+                    session_input_path=None,
+                    input_staged=False,
+                    artifact_dir=self.root,
+                    stage_input=False,
+                    config_overrides=overrides,
+                    input_overrides={},
+                    resolved_input_overrides={},
+                    input_override_records=[],
+                    run_dir=run_dir,
+                    output_dir=run_dir / "output",
+                    label="greeting",
+                    timeout=10,
+                )
+                runtime_config = write_runtime_config(context)
+                submitted = json.loads(write_wdl_inputs(context, runtime_config).read_text())
+                self.assertEqual(submitted, expected)
+                self.assertNotIn("run_dir", submitted)
+                self.assertEqual(context.raw_config, native_config)
+
+    def test_nested_template_params_support_presets_and_overrides(self) -> None:
+        """Template params can remain nested while using the shared runner API."""
+        runner_config = {
+            "engine": "shell",
+            "preset_param": "profile",
+            "param_overrides": {
+                "profile": {
+                    "config_key": "params.profile",
+                    "default": "standard",
+                },
+                "min_length": {
+                    "config_key": "params.min_length",
+                    "default": 12,
+                },
+                "uppercase": {
+                    "config_key": "params.uppercase",
+                    "default": False,
+                },
+            },
+            "presets": {
+                "standard": {
+                    "params.min_length": 12,
+                    "params.uppercase": False,
+                },
+                "strict": {
+                    "params.min_length": 50,
+                    "params.uppercase": True,
+                },
+            },
+        }
+        native_config = {"params": {"profile": "standard", "min_length": 4, "uppercase": False}}
+        selected = self.root / "selected.txt"
+        selected.write_text("ACGT\n", encoding="utf-8")
+        context = PipelineContext(
+            pipeline_name="nested_fixture",
+            pipeline_dir=self.root,
+            runner_config=runner_config,
+            runner_config_path=self.root / "runner.yaml",
+            raw_config=native_config,
+            raw_config_path=self.root / "config.yaml",
+            input_path=selected,
+            original_input_path=selected,
+            session_input_path=None,
+            input_staged=False,
+            artifact_dir=self.root,
+            stage_input=False,
+            config_overrides={"profile": "strict", "min_length": "64"},
+            input_overrides={},
+            resolved_input_overrides={},
+            input_override_records=[],
+            run_dir=self.root / "nested-run",
+            output_dir=self.root / "nested-run" / "output",
+            label="nested",
+            timeout=10,
+        )
+        context.run_dir.mkdir()
+        runtime_config = write_runtime_config(context)
+        self.assertEqual(runtime_config.config["params"], {
+            "profile": "strict",
+            "min_length": 64,
+            "uppercase": True,
+        })
 
     def test_explicit_native_files(self) -> None:
         native = self.root / "inputs.json"
@@ -150,7 +272,10 @@ class PipelineConfigChecks(unittest.TestCase):
     def test_catalog_defaults_and_explicit_inputs(self) -> None:
         catalog = {item["name"]: item for item in service.catalog()}
         self.assertTrue(all("error" not in item for item in catalog.values()), catalog)
-        self.assertEqual(catalog["template_shell"]["parameters"]["normalize_mode"], "whitespace")
+        self.assertEqual(
+            catalog["template_shell"]["parameters"]["normalize_mode"]["default"],
+            "whitespace",
+        )
         for name in ("template_shell", "template_wdl"):
             result = service.plan(self.root, name, {}, {})
             self.assertEqual(result["status"], "needs_input")

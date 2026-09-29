@@ -4,6 +4,7 @@ workflow TemplateWdl {
   input {
     File input_fasta
     String label = "template_wdl"
+    String profile = "standard"
     Int min_length = 0
     Boolean uppercase = true
   }
@@ -12,6 +13,7 @@ workflow TemplateWdl {
     input:
       input_fasta = input_fasta,
       label = label,
+      profile = profile,
       min_length = min_length,
       uppercase = uppercase
   }
@@ -27,6 +29,7 @@ task AnalyzeFasta {
   input {
     File input_fasta
     String label
+    String profile
     Int min_length
     Boolean uppercase
   }
@@ -40,6 +43,7 @@ task AnalyzeFasta {
 
     input_path = "~{input_fasta}"
     label = "~{label}"
+    profile = "~{profile}"
     min_length = int("~{min_length}")
     uppercase = "~{uppercase}".lower() == "true"
 
@@ -65,6 +69,7 @@ task AnalyzeFasta {
         "status": "ok",
         "pipeline": "template_wdl",
         "label": label,
+        "profile": profile,
         "sequence_length": len(sequence),
         "min_length": min_length,
         "passes_min_length": len(sequence) >= min_length,
@@ -76,6 +81,7 @@ task AnalyzeFasta {
     with open("report.md", "w", encoding="utf-8") as handle:
         handle.write("# Template WDL Pipeline Report\n\n")
         handle.write(f"- Label: {label}\n")
+        handle.write(f"- Profile: {profile}\n")
         handle.write(f"- Input: {input_path}\n")
         handle.write(f"- Sequence length: {metrics['sequence_length']}\n")
         handle.write(f"- Minimum length: {min_length}\n")

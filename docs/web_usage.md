@@ -15,14 +15,25 @@ For the other model-facing tool contracts, see
 
 ## Start the server
 
-Set the model provider credential in the server environment, then start the
-local web server:
+From the repository root, install the frontend dependencies with Node.js/npm,
+build the UI, set the model provider credential, and start the local web server:
 
 ~~~bash
 conda activate openaisdk
+npm --prefix frontend ci
+npm --prefix frontend run build
 export OPENROUTER_API_KEY="your-key"
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ~~~
+
+The server serves the generated `frontend/dist` directory. Rebuild after
+changing frontend source or public assets; build output is ignored by Git.
+Conversation history, uploads, and job state stay in the repository-root
+`runtime/` directory or configured persistent paths, separate from the build.
+Keep the server's working directory at the repository root; the default runtime
+paths are relative to the current process directory.
+For live Vite development with the Python API running separately, see the
+[frontend guide](../frontend/README.md).
 
 Open one of these pages:
 
@@ -627,6 +638,16 @@ external integration. It defines revisions, callback limits, polling,
 postMessage origin checks, ticket replay protection, and idempotency.
 
 ## Troubleshooting
+
+The server reports that the frontend build is missing:
+
+~~~bash
+npm --prefix frontend ci
+npm --prefix frontend run build
+~~~
+
+Run these commands from the repository root, then reload the page. For a
+deployment, include the complete `frontend/dist/` directory with the server.
 
 Port 8000 already in use:
 

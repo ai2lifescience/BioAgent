@@ -6,9 +6,11 @@ import argparse
 from io import StringIO
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import mimetypes
 import os
 from pathlib import Path
 import re
+import sys
 from time import perf_counter
 import time
 from typing import Any
@@ -49,25 +51,51 @@ from tools.infrastructure.workspace.public import public_payload
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-WEB_UI_DIR = PROJECT_ROOT / "web_ui"
+FRONTEND_DIST_DIR = PROJECT_ROOT / "frontend" / "dist"
+FRONTEND_ENTRYPOINTS = ("index.html", "assistant.html", "assistant-demo.html")
 MAX_UPLOAD_BYTES = int(os.getenv("AGENT_MAX_UPLOAD_BYTES", str(256 * 1024 * 1024)))
-STATIC_FILES = {
-    "/static/approvals.js": (WEB_UI_DIR / "approvals.js", "application/javascript; charset=utf-8"),
-    "/static/ui-utils.js": (WEB_UI_DIR / "ui-utils.js", "application/javascript; charset=utf-8"),
-    "/static/api-client.js": (WEB_UI_DIR / "api-client.js", "application/javascript; charset=utf-8"),
-    "/static/session-state.js": (WEB_UI_DIR / "session-state.js", "application/javascript; charset=utf-8"),
-    "/static/session-sidebar.js": (WEB_UI_DIR / "session-sidebar.js", "application/javascript; charset=utf-8"),
-    "/static/workspace-panel.js": (WEB_UI_DIR / "workspace-panel.js", "application/javascript; charset=utf-8"),
-    "/static/artifact-viewers.js": (WEB_UI_DIR / "artifact-viewers.js", "application/javascript; charset=utf-8"),
-    "/static/message-renderer.js": (WEB_UI_DIR / "message-renderer.js", "application/javascript; charset=utf-8"),
-    "/static/app.css": (WEB_UI_DIR / "app.css", "text/css; charset=utf-8"),
-    "/static/assistant.css": (WEB_UI_DIR / "assistant.css", "text/css; charset=utf-8"),
-    "/static/markdown.js": (WEB_UI_DIR / "markdown.js", "application/javascript; charset=utf-8"),
-    "/static/app.js": (WEB_UI_DIR / "app.js", "application/javascript; charset=utf-8"),
-    "/static/assistant.js": (WEB_UI_DIR / "assistant.js", "application/javascript; charset=utf-8"),
-    "/static/assistant-embed.js": (WEB_UI_DIR / "assistant-embed.js", "application/javascript; charset=utf-8"),
-    "/static/genome-viewer.js": (WEB_UI_DIR / "genome-viewer.js", "application/javascript; charset=utf-8"),
-}
+
+
+def _frontend_asset_path(relative_path: str) -> Path | None:
+    """Resolve a built asset without exposing source files or escaping dist."""
+    try:
+        decoded = unquote(relative_path, errors="strict")
+        if (
+            not decoded
+            or decoded.startswith("/")
+            or "\\" in decoded
+            or "\x00" in decoded
+            or any(part in {".", ".."} for part in decoded.split("/"))
+        ):
+            return None
+        root = FRONTEND_DIST_DIR.resolve()
+        candidate = (root / decoded).resolve()
+        candidate.relative_to(root)
+        return candidate if candidate.is_file() else None
+    except (OSError, RuntimeError, UnicodeError, ValueError):
+        return None
+
+
+def _frontend_build_diagnostic() -> str:
+    return (
+        f"Frontend build is missing or incomplete in {FRONTEND_DIST_DIR}. "
+        "From the repository root, run `npm --prefix frontend ci` followed by "
+        "`npm --prefix frontend run build`. The JSON API remains available."
+    )
+
+
+def _frontend_content_type(path: Path) -> str:
+    # JavaScript's system MIME mapping varies across hosts; modules require a
+    # JavaScript MIME type rather than text/plain or application/octet-stream.
+    content_type = {
+        ".js": "application/javascript",
+        ".mjs": "application/javascript",
+        ".css": "text/css",
+        ".svg": "image/svg+xml",
+    }.get(path.suffix.lower()) or mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+    if content_type.startswith("text/") or content_type in {"application/javascript", "application/json"}:
+        return f"{content_type}; charset=utf-8"
+    return content_type
 
 
 def _model_options() -> list[dict[str, str]]:
@@ -151,7 +179,7 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         path = urlparse(self.path).path
         if path in {"/", "/index.html"}:
-            self._send_file(WEB_UI_DIR / "index.html", "text/html; charset=utf-8")
+            self._send_frontend_page("index.html")
             return
         if path == "/assistant/":
             # Keep relative asset/API URLs working when mounted behind a proxy.
@@ -161,14 +189,17 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             return
         if path in {"/assistant", "/assistant.html"}:
-            self._send_file(WEB_UI_DIR / "assistant.html", "text/html; charset=utf-8")
+            self._send_frontend_page("assistant.html")
             return
-        if path in {"/assistant-demo", "/assistant-demo/"}:
-            self._send_file(WEB_UI_DIR / "assistant-demo.html", "text/html; charset=utf-8")
+        if path in {"/assistant-demo", "/assistant-demo/", "/assistant-demo.html"}:
+            self._send_frontend_page("assistant-demo.html")
             return
-        if path in STATIC_FILES:
-            file_path, content_type = STATIC_FILES[path]
-            self._send_file(file_path, content_type)
+        if path == "/favicon.svg" or path.startswith("/static/"):
+            asset = _frontend_asset_path(path[1:])
+            if asset is None:
+                self._send_json({"error": "not found"}, status=404)
+            else:
+                self._send_file(asset, _frontend_content_type(asset))
             return
         if path == "/health":
             self._send_json({"status": "ok"})
@@ -652,6 +683,13 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             sandbox_html=True,
         )
 
+    def _send_frontend_page(self, filename: str) -> None:
+        page = _frontend_asset_path(filename)
+        if page is None:
+            self._send_text(_frontend_build_diagnostic(), "text/plain; charset=utf-8", status=503)
+            return
+        self._send_file(page, "text/html; charset=utf-8")
+
     def _send_file(
         self,
         path: Path,
@@ -723,6 +761,8 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
 
 
 def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
+    if any(_frontend_asset_path(filename) is None for filename in FRONTEND_ENTRYPOINTS):
+        print(_frontend_build_diagnostic(), file=sys.stderr)
     get_queue().recover()
     server = ThreadingHTTPServer((host, port), AgentRequestHandler)
     configure_local_demo(server.server_port, server.server_address[0])

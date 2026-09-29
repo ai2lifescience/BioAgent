@@ -176,8 +176,9 @@ specialists.
 | tools/agent_tools | Specialist SDK Agents and Agent-as-tool composition |
 | tools/infrastructure | Workspace, providers, knowledge, pipeline engine, tool support, and SDK adapters |
 | tools/runtime_tools | Pipeline definitions and domain-specific pipeline bundles |
-| interfaces | HTTP API, static UI, SSE, workspace API, and website bridge endpoints |
-| web_ui | Shared API transport plus focused session, workspace, artifact, and message modules; `app.js` coordinates the full client |
+| interfaces | HTTP API, generated frontend delivery, SSE, workspace API, and website bridge endpoints |
+| frontend | React/TypeScript pages, shared API transport and components, feature modules, public embed client, and Vite build configuration |
+| runtime | Private persistent databases, session files, and job state; separate from generated frontend assets |
 | docs | External integration contracts, usage notes, and this architecture reference |
 | evals | Smoke checks for boundaries, transport, tools, jobs, website integration, pipelines, and browser contracts |
 
@@ -281,9 +282,10 @@ public model permits forward-compatible metadata, but the named fields above
 are stable.
 
 The full web client and the embedded assistant use the same
-`web_ui/api-client.js` transport for JSON requests, uploads, and SSE frames.
-Client-specific UI state stays in `app.js` or `assistant.js`; shared request
-serialization does not diverge between the two entry points.
+`frontend/src/api.ts` transport for JSON requests, uploads, and SSE frames, with
+shared payload types in `frontend/src/types.ts`. Page state stays in `App.tsx`
+or `features/assistant/AssistantPage.tsx`; shared request serialization does not
+diverge between the two entry points.
 
 ## Streaming, polling, and approvals
 
@@ -580,9 +582,13 @@ The bridge uses postMessage between the host page and the embedded assistant and
 HTTP polling between the assistant server and the host bridge. It is separate
 from agent SSE.
 
-The canonical local fixture is web_ui/assistant-demo.html and is served at
-/assistant-demo. web_ui/assistant-embed.js and web_ui/assistant.js implement
-embedding. The old examples/external-workspace page is not the runtime fixture.
+The canonical local fixture is the React page in
+`frontend/src/features/demo/AssistantDemoPage.tsx`, served at `/assistant-demo`.
+The iframe UI lives in `frontend/src/features/assistant/AssistantPage.tsx` and is
+served at `/assistant`. External websites load the standalone public client from
+`/static/assistant-embed.js`, sourced from
+`frontend/public/static/assistant-embed.js`. The old examples/external-workspace
+page is not the runtime fixture.
 
 The host can implement these callbacks:
 
@@ -637,9 +643,34 @@ Main write endpoints:
 - POST /website/demo-token, /website/connect, /website/context,
   /website/poll, /website/respond, and /website/disconnect implement the bridge.
 
-The UI is split into api-client.js, session-state.js, message-renderer.js,
-artifact-viewers.js, app.js, and approval handling. Workspace artifacts are
-rendered from public metadata and workspace-relative paths.
+### Frontend source and delivery
+
+`frontend/` is the single source directory for browser code. `src/App.tsx`
+composes the main workspace, while `src/features/` contains the assistant and
+demo pages, session navigation, composer, workspace panel, message rendering,
+artifact viewers, and approval controls. The pages share `src/api.ts`,
+`src/types.ts`, the icons in `src/components/icons.tsx`, and an application error
+boundary. Workspace artifacts are rendered from public metadata and
+workspace-relative paths.
+
+Vite builds `index.html`, `assistant.html`, and `assistant-demo.html` into a
+clean `frontend/dist/` directory. Generated JavaScript and CSS have hashed
+filenames under `/static/`; public assets include the stable
+`/static/assistant-embed.js` integration script and favicon. `interfaces/web.py`
+serves this output at the existing page URLs alongside the API. Generated
+output is ignored by Git; deploy the entire build, and make source changes in
+`frontend/src/` or `frontend/public/`. There is no separate `web_ui/` source or
+delivery directory.
+
+Run `npm --prefix frontend ci` and `npm --prefix frontend run build` before
+starting the Python web server. During development, Vite serves frontend
+assets directly and proxies API calls to a separately running backend. See
+the [frontend guide](../frontend/README.md) for commands and backend selection.
+Persistent data remains under the repository-root `runtime/` or configured
+external paths; rebuilding the frontend does not touch it.
+The Python server must be launched with the repository root as its working
+directory because the default runtime paths are relative to the current process
+directory after the legacy path helper was removed.
 
 ## Guardrails and security
 
@@ -685,6 +716,9 @@ Important environment variables include:
 | AGENT_WEBSITE_SITES | exact trusted website origins |
 | AGENT_WEBSITE_SECRET | website bridge HMAC secret |
 | AGENT_WEBSITE_DB | website bridge SQLite database |
+| AGENT_PDB_DIR | root-relative default directory for direct PDB downloads |
+| AGENT_ALPHAFOLD_DIR | root-relative default directory for direct AlphaFold downloads |
+| AGENT_NCBI_DOWNLOAD_DIR | root-relative default prefix for direct NCBI downloads |
 
 ### Choosing an embedding model
 
