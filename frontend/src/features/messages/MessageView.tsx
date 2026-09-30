@@ -6,6 +6,7 @@ import { ArtifactViews, fileUrl } from './ArtifactView';
 import ApprovalControls, { type ApprovalMeta } from './ApprovalControls';
 import { AgentIcon } from '../../components/icons';
 import './messages.css';
+import { RunProgress } from './RunProgress';
 
 export interface MessageViewProps { message: Message; config: AppConfig; sessionId: string; busy: boolean; onApproval: (result: RunResult, meta?: ApprovalMeta) => void; onBusy: (busy: boolean) => void }
 const text = (value: unknown): string => value == null ? '' : typeof value === 'string' ? value : String(value);
@@ -77,7 +78,7 @@ export function MessageView({ message, config, sessionId, busy, onApproval, onBu
   const assistant = message.role === 'assistant';
   return <article className={`message ${message.role}`} aria-label={assistant ? 'Assistant message' : 'Your message'}>
     <div className="message-avatar" aria-hidden="true">{assistant ? <AgentIcon size={34} /> : <span className="message-avatar-label">You</span>}</div>
-    <div className="message-content"><div className="message-body">{assistant ? renderMarkdown(message.text) : <p>{message.text}</p>}{result && assistant && <><ArtifactViews result={result} sessionId={sessionId} imageSuffixes={config.files?.image_suffixes || ['.gif', '.jpeg', '.jpg', '.png', '.svg', '.webp']} />{(result.runtime || result.trace || result.evidence || result.approval_required) && <RunDetails result={result} config={config} sessionId={sessionId} busy={busy} onApproval={onApproval} onBusy={onBusy} />}</>}</div></div>
+    <div className="message-content">{assistant && message.progress && <RunProgress entries={message.progress} />}<div className="message-body">{renderMarkdown(message.text)}{result && assistant && <><ArtifactViews result={result} sessionId={sessionId} imageSuffixes={config.files?.image_suffixes || ['.gif', '.jpeg', '.jpg', '.png', '.svg', '.webp']} />{(result.runtime || result.trace || result.evidence || result.approval_required) && <RunDetails result={result} config={config} sessionId={sessionId} busy={busy} onApproval={onApproval} onBusy={onBusy} />}</>}</div></div>
   </article>;
 }
 

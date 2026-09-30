@@ -45,7 +45,7 @@ Open one of these pages:
 | http://127.0.0.1:8000/health | Server health check |
 | http://127.0.0.1:8000/config | Public model, file, and pipeline configuration |
 
-The default model alias is gpt-5.6-luna and the default maximum is 20 SDK
+The default model alias is gpt-5.6-sol and the default maximum is 20 SDK
 turns. The UI can select another configured model. Model aliases and provider
 model IDs are defined in models/config.py.
 
@@ -484,6 +484,16 @@ artifacts remain available to later turns in the same session.
 The browser normally uses POST /run_stream. The server queues the run, starts a
 detached worker, and sends persisted events as SSE. A disconnected browser can
 recover the same run from its ID.
+
+While a request runs, both chat pages show a small live progress area with the
+current operation and a two-line narration preview. Expand **Activity** to read
+the public updates and tool steps. Internal structured review/draft output is
+excluded from this view. When the result arrives, activity collapses above the
+formatted answer. Reloading or reopening a saved conversation restores that
+activity from the persisted run events, with intermediate narration grouped
+above its final answer. Older conversations use saved narration and available
+tool events when their streamed text lacks scope metadata. Saved runtime events
+also remain available through the existing execution details/API.
 
 For an API client, queue a run:
 

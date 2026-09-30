@@ -295,7 +295,24 @@ results, nested Agent-as-tool events, text deltas, approvals, and errors.
 
 Text deltas are buffered before public path redaction. Function argument deltas
 are not exposed as public content. Workers batch event writes so that long
-streams do not issue one database transaction for every token.
+streams do not issue one database transaction for every token. Batches retain
+agent, parent call, item, content index, and output-kind metadata and never merge
+different scopes. Nested agents with a typed output are marked `structured`;
+the browser shows their tool activity without rendering their JSON as narration.
+Response completion flushes buffered text even when a provider omits
+`response.output_text.done`.
+
+The full chat and compact assistant share a live progress component. It displays
+public narration and tool lifecycle events in a muted, expandable activity area,
+then renders the returned final answer once. Private reasoning and function
+argument deltas are not used as progress text.
+
+Conversation loading rebuilds the same activity/answer layout from the SDK
+message history and persisted run events. It pairs final answers with their
+session's completed runs, replays the public events through the shared progress
+reducer, and folds intermediate narration into the activity section. Older
+unscoped text deltas are ignored; saved narration and tool lifecycle events
+provide the fallback. A missing event log does not prevent the report loading.
 
 The public event API is sequence based:
 
@@ -744,7 +761,7 @@ the model recorded when they were created; create a new collection or rebuild
 an index to re-embed existing content.
 
 Model aliases and the default model are defined in models/config.py. The
-default model key is gpt-5.6-luna and the default maximum agent turns is 20.
+default model key is gpt-5.6-sol and the default maximum agent turns is 20.
 Environment-specific secrets should be supplied outside source control.
 
 ## Testing and operational checks

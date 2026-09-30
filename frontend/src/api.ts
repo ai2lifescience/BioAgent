@@ -1,4 +1,5 @@
-import type { AppConfig, RunResult, SessionSummary, StreamFrame, WorkspaceFile } from './types';
+import type { AppConfig, Message, RunResult, StreamFrame, WorkspaceFile } from './types';
+import { restoreHistory, type SavedRun } from './features/messages/history';
 
 export class ApiError extends Error {
   status: number;
@@ -25,7 +26,7 @@ export function parseSseFrame(frame: string): StreamFrame {
 export interface ApiClient {
   loadConfig(): Promise<AppConfig>;
   listSessions(): Promise<{ sessions: any[] }>;
-  loadMessages(id: string): Promise<{ messages?: any[]; pending_approval?: RunResult }>;
+  loadMessages(id: string): Promise<{ messages?: Message[]; pending_approval?: RunResult }>;
   loadWorkspace(id: string): Promise<{ workspace?: { files?: WorkspaceFile[]; file_count?: number } }>;
   uploadFiles(id: string, files: File[]): Promise<any>;
   deleteWorkspaceFile(id: string, path: string): Promise<any>;
@@ -65,29 +66,31 @@ export function createApiClient(fetchImpl: typeof fetch = window.fetch.bind(wind
   };
   return {
     loadConfig: () => get('/config'), listSessions: () => get('/sessions'), loadMessages: async id => {
-      const payload = await get<{ messages?: any[]; pending_approval?: RunResult }>(`/sessions/${encodeURIComponent(id)}/messages`);
-      if (payload.pending_approval?.approval_required && Array.isArray(payload.pending_approval.approvals) && payload.pending_approval.approvals.length) return payload;
+      const payload = await get<{ messages?: Message[]; pending_approval?: RunResult }>(`/sessions/${encodeURIComponent(id)}/messages`);
+      let runs: SavedRun[] = [];
       // A detached worker writes the durable run before the session history
       // projection. Recover a pending approval from that queue on reload so a
       // browser refresh cannot hide a review that is still actionable.
       try {
-        const queued = await get<{ runs?: any[] }>(`/runs?session_id=${encodeURIComponent(id)}`);
-        const pending = (queued.runs || []).find(item => item?.status === 'pending_approval' && Array.isArray(item?.result?.approvals) && item.result.approvals.length);
-        if (pending) {
-          return {
-            ...payload,
-            pending_approval: {
-              ...(pending.result as RunResult),
-              session_id: id,
-              status: 'pending_approval',
-              approval_required: true,
-            },
+        const queued = await get<{ runs?: SavedRun[] }>(`/runs?session_id=${encodeURIComponent(id)}`);
+        runs = (Array.isArray(queued.runs) ? queued.runs : []).filter(run => run && (!run.session_id || run.session_id === id));
+        const pending = runs.find(item => item.status === 'pending_approval' && item.result?.approvals?.length);
+        if (pending && !payload.pending_approval?.approvals?.length) {
+          payload.pending_approval = {
+            ...pending.result,
+            session_id: id,
+            status: 'pending_approval',
+            approval_required: true,
           };
         }
       } catch {
         // Older deployments may not expose the run listing endpoint.
       }
-      return payload;
+      const messages = await restoreHistory(Array.isArray(payload.messages) ? payload.messages : [], runs, async runId => {
+        const saved = await get<{ events?: StreamFrame[] }>(`/runs/${encodeURIComponent(runId)}/events`);
+        return Array.isArray(saved.events) ? saved.events : [];
+      });
+      return { ...payload, messages };
     },
     loadWorkspace: id => get(`/workspace?session_id=${encodeURIComponent(id)}`),
     uploadFiles: async (id, files) => { const form = new FormData(); form.append('session_id', id); files.forEach(file => form.append('files', file, file.name)); return readJson(await fetchImpl(resolve('/workspace/files'), { method: 'POST', body: form })); },

@@ -237,23 +237,29 @@ def execute_job(queue: RunQueue, run_id: str) -> int:
 
     pending_deltas: list[str] = []
     pending_delta_size = 0
+    pending_metadata: dict = {}
 
     def flush_deltas() -> None:
         nonlocal pending_delta_size
         if pending_deltas:
             queue.event(run_id, "sdk_raw_response", {
-                "sdk_type": "raw_response_event",
-                "data_type": "response.output_text.delta",
+                **pending_metadata,
                 "delta": public_payload("".join(pending_deltas)),
             })
             pending_deltas.clear()
             pending_delta_size = 0
 
     def sdk_event(name: str, payload: dict) -> None:
-        nonlocal pending_delta_size
+        nonlocal pending_delta_size, pending_metadata
         if name == "sdk_raw_response" and payload.get("data_type") == "response.output_text.delta":
             delta = str(payload.get("delta") or "")
             if delta:
+                metadata = {key: value for key, value in payload.items() if key != "delta"}
+                # Nested agents may stream concurrently. Retain their identity
+                # and output kind so prose and structured results cannot mix.
+                if metadata != pending_metadata:
+                    flush_deltas()
+                    pending_metadata = metadata
                 pending_deltas.append(delta)
                 pending_delta_size += len(delta)
                 if pending_delta_size >= 256:

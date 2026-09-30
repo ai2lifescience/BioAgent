@@ -14,7 +14,8 @@ export interface SessionSummary {
   id: string; title: string; message_count: number; last_run_id?: string; created_at: string; updated_at: string; pinned?: boolean;
   messages?: Message[];
 }
-export interface Message { role: Role; text: string; result?: RunResult | null; created_at?: string | null }
+export interface ProgressEntry { id: string; kind: 'text' | 'tool'; text: string; active: boolean; scope: string; stream?: string }
+export interface Message { role: Role; text: string; result?: RunResult | null; created_at?: string | null; progress?: ProgressEntry[] }
 export interface RuntimeInfo { status?: string; elapsed_seconds?: number; model_key?: string; max_turns?: number; tools?: string[]; tool_count?: number; file_count?: number; logs?: string[] }
 export interface TraceEvent { event?: string; type?: string; data?: Record<string, unknown>; [key: string]: unknown }
 export interface Evidence { tools?: string[]; files?: Array<WorkspaceFile | string>; citations?: unknown[]; sources?: unknown[]; outputs?: WorkspaceFile[]; [key: string]: unknown }

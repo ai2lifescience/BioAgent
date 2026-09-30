@@ -21,12 +21,17 @@ class KnowledgeSpider(scrapy.Spider):
         "REDIRECT_MAX_TIMES": 3,
     }
 
-    def __init__(self, spec: dict, *args, **kwargs):
+    def __init__(self, spec: dict, *args, progress=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.spec = spec
         self.domains = validate_domains(spec["allowed_domains"])
         self.seen: set[str] = set()
         self.pages = 0
+        self.progress = progress or (lambda item: None)
+
+    async def start(self):
+        for request in self.start_requests():
+            yield request
 
     def start_requests(self):
         for url in self.spec["seed_urls"]:
@@ -34,15 +39,16 @@ class KnowledgeSpider(scrapy.Spider):
 
     def parse(self, response):
         if self.pages >= self.spec["max_pages"]:
-            self.crawler.engine.close_spider(self, reason="page_limit")
             return
         try:
             canonical = canonical_url(response.url)
             if not _allowed(canonical, self.domains):
+                self._skip(canonical, "URL is outside allowed_domains.")
                 return
             depth = int(response.meta.get("depth", 0))
             page, links = extract_page(canonical, response.text, depth=depth)
-        except ValueError:
+        except (ValueError, AttributeError) as exc:
+            self._skip(response.url, str(exc))
             return
         if page.url in self.seen:
             return
@@ -56,7 +62,14 @@ class KnowledgeSpider(scrapy.Spider):
                 yield scrapy.Request(link, callback=self.parse, errback=self.errback)
 
     def errback(self, failure):
-        return None
+        message = failure.getErrorMessage()
+        response = getattr(failure.value, "response", None)
+        if response is not None:
+            message = f"HTTP {response.status}: {message}"
+        self._skip(failure.request.url, message)
+
+    def _skip(self, url: str, message: str) -> None:
+        self.progress({"url": url, "skipped": 1, "message": message[:300]})
 
 
 __all__ = ["KnowledgeSpider"]
