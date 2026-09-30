@@ -1,0 +1,280 @@
+{
+  "runs": [
+    {
+      "run_id": "d845a675839347e6b9ebd901d4a750c1",
+      "session_id": "web-1790736639463-xou54j",
+      "status": "failed",
+      "model_key": "gpt-5.6-sol",
+      "max_turns": 20,
+      "created_at": "2026-09-30T02:50:40.228535+00:00",
+      "updated_at": "2026-09-30T02:50:44.253745+00:00",
+      "error": "Agent run failed: Error code: 403 - {'error': {'message': 'This model is not available in your region.', 'code': 403, 'metadata': {'routing_funnel': [{'step': 'Initial Endpoints', 'endpoint_count': 7}, {'step': 'Filter by Regional Surcharge', 'endpoint_count': 4}], 'failed_routing_step': 'Gate Endpoints with Geo Restrictions'}}}",
+      "result": {
+        "result_contract_version": 1,
+        "answer": "Agent run failed: Error code: 403 - {'error': {'message': 'This model is not available in your region.', 'code': 403, 'metadata': {'routing_funnel': [{'step': 'Initial Endpoints', 'endpoint_count': 7}, {'step': 'Filter by Regional Surcharge', 'endpoint_count': 4}], 'failed_routing_step': 'Gate Endpoints with Geo Restrictions'}}}",
+        "status": "error",
+        "session_id": "web-1790736639463-xou54j",
+        "approval_required": false,
+        "approvals": [],
+        "evidence": {
+          "retrieval_date": "2026-09-30",
+          "tools": [],
+          "databases": [],
+          "query_terms": [],
+          "record_ids": [],
+          "citations": [],
+          "urls": [],
+          "files": [],
+          "outputs": [],
+          "tool_outputs": [],
+          "tool_errors": []
+        },
+        "trace": [
+          {
+            "timestamp": "2026-09-30T02:50:42.802354+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "run_started",
+            "data": {
+              "request": "Build a new session-owned durable knowledge collection from https://rest.uniprot.org/uniprotkb/P0A7V8.txt using knowledge_ingest. Set seed_urls=[\"https://rest.uniprot.org/uniprotkb/P0A7V8.txt\"], allowed_domains=[\"rest.uniprot.org\"], max_pages=1, max_depth=0. Use only knowledge_ingest and knowledge_status in this turn. Poll knowledge_status until the job reaches a terminal state. Report job_id, collection_id, status, fetched/indexed/chunks, skipped URLs and all errors. Treat this new collection as usable only if indexed > 0 and chunks > 0. If it is empty or failed, explain the reported error and stop. Do not retrieve or answer biological questions yet.",
+              "model_key": "gpt-5.6-sol"
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:42.822118+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "sdk_trace_started",
+            "data": {
+              "trace_id": "trace_4d4971aa407a412c8a53c9185e6239ab"
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:42.826384+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "sdk_span_finished",
+            "data": {
+              "trace_id": "trace_4d4971aa407a412c8a53c9185e6239ab",
+              "span_id": "span_1e46806dd02f445abaed9685",
+              "parent_id": "span_1dd7a0b12faf4facb3b99920",
+              "span_type": "guardrail",
+              "name": "bio_safety_input",
+              "model": null,
+              "started_at": "2026-09-30T02:50:42.826051+00:00",
+              "ended_at": "2026-09-30T02:50:42.826136+00:00",
+              "has_error": false
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:42.827451+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "sdk_span_finished",
+            "data": {
+              "trace_id": "trace_4d4971aa407a412c8a53c9185e6239ab",
+              "span_id": "span_81cce35099764bd1a7703873",
+              "parent_id": "span_e1cdb80604b14596b231ae98",
+              "span_type": "custom",
+              "name": "sandbox.running",
+              "model": null,
+              "started_at": "2026-09-30T02:50:42.827123+00:00",
+              "ended_at": "2026-09-30T02:50:42.827203+00:00",
+              "has_error": false
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:42.827817+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "sdk_span_finished",
+            "data": {
+              "trace_id": "trace_4d4971aa407a412c8a53c9185e6239ab",
+              "span_id": "span_c782c273ec7843858e2d665e",
+              "parent_id": "span_e1cdb80604b14596b231ae98",
+              "span_type": "custom",
+              "name": "sandbox.running",
+              "model": null,
+              "started_at": "2026-09-30T02:50:42.827530+00:00",
+              "ended_at": "2026-09-30T02:50:42.827586+00:00",
+              "has_error": false
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:42.831767+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "sdk_span_finished",
+            "data": {
+              "trace_id": "trace_4d4971aa407a412c8a53c9185e6239ab",
+              "span_id": "span_9329e00a282c43ef82a0228a",
+              "parent_id": "span_e1cdb80604b14596b231ae98",
+              "span_type": "custom",
+              "name": "sandbox.exec",
+              "model": null,
+              "started_at": "2026-09-30T02:50:42.828022+00:00",
+              "ended_at": "2026-09-30T02:50:42.831511+00:00",
+              "has_error": false
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:42.834721+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "sdk_span_finished",
+            "data": {
+              "trace_id": "trace_4d4971aa407a412c8a53c9185e6239ab",
+              "span_id": "span_e378db4140244c9896643f86",
+              "parent_id": "span_e1cdb80604b14596b231ae98",
+              "span_type": "custom",
+              "name": "sandbox.exec",
+              "model": null,
+              "started_at": "2026-09-30T02:50:42.831817+00:00",
+              "ended_at": "2026-09-30T02:50:42.834468+00:00",
+              "has_error": false
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:42.835561+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "sdk_span_finished",
+            "data": {
+              "trace_id": "trace_4d4971aa407a412c8a53c9185e6239ab",
+              "span_id": "span_e1cdb80604b14596b231ae98",
+              "parent_id": "span_1dd7a0b12faf4facb3b99920",
+              "span_type": "custom",
+              "name": "sandbox.prepare_agent",
+              "model": null,
+              "started_at": "2026-09-30T02:50:42.826467+00:00",
+              "ended_at": "2026-09-30T02:50:42.835321+00:00",
+              "has_error": false
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:42.836312+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "agent_started",
+            "data": {
+              "agent": "Pipeline2Agent",
+              "message": "Agent started: Pipeline2Agent."
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:42.999054+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "model_requested",
+            "data": {
+              "agent": "Pipeline2Agent"
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:44.234089+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "sdk_span_finished",
+            "data": {
+              "trace_id": "trace_4d4971aa407a412c8a53c9185e6239ab",
+              "span_id": "span_345a8fe7caae4366975b07fb",
+              "parent_id": "span_0c9b810289ad4ca8923720a3",
+              "span_type": "generation",
+              "name": null,
+              "model": "openai/gpt-5.6-sol",
+              "started_at": "2026-09-30T02:50:43.002252+00:00",
+              "ended_at": "2026-09-30T02:50:44.233128+00:00",
+              "has_error": true
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:44.235474+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "sdk_span_finished",
+            "data": {
+              "trace_id": "trace_4d4971aa407a412c8a53c9185e6239ab",
+              "span_id": "span_0c9b810289ad4ca8923720a3",
+              "parent_id": "span_49f34bdd6bf347958e748f02",
+              "span_type": "turn",
+              "name": null,
+              "model": null,
+              "started_at": "2026-09-30T02:50:42.836142+00:00",
+              "ended_at": "2026-09-30T02:50:44.234753+00:00",
+              "has_error": false
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:44.236416+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "sdk_span_finished",
+            "data": {
+              "trace_id": "trace_4d4971aa407a412c8a53c9185e6239ab",
+              "span_id": "span_49f34bdd6bf347958e748f02",
+              "parent_id": "span_1dd7a0b12faf4facb3b99920",
+              "span_type": "agent",
+              "name": "Pipeline2Agent",
+              "model": null,
+              "started_at": "2026-09-30T02:50:42.836066+00:00",
+              "ended_at": "2026-09-30T02:50:44.235710+00:00",
+              "has_error": true
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:44.237162+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "sdk_span_finished",
+            "data": {
+              "trace_id": "trace_4d4971aa407a412c8a53c9185e6239ab",
+              "span_id": "span_1dd7a0b12faf4facb3b99920",
+              "parent_id": null,
+              "span_type": "task",
+              "name": "Pipeline2Agent",
+              "model": null,
+              "started_at": "2026-09-30T02:50:42.822210+00:00",
+              "ended_at": "2026-09-30T02:50:44.236505+00:00",
+              "has_error": false
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:44.237417+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "sdk_trace_finished",
+            "data": {
+              "trace_id": "trace_4d4971aa407a412c8a53c9185e6239ab"
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:44.242144+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "run_failed",
+            "data": {
+              "error": "Error code: 403 - {'error': {'message': 'This model is not available in your region.', 'code': 403, 'metadata': {'routing_funnel': [{'step': 'Initial Endpoints', 'endpoint_count': 7}, {'step': 'Filter by Regional Surcharge', 'endpoint_count': 4}], 'failed_routing_step': 'Gate Endpoints with Geo Restrictions'}}}",
+              "error_type": "PermissionDeniedError"
+            }
+          },
+          {
+            "timestamp": "2026-09-30T02:50:44.244159+00:00",
+            "session_id": "web-1790736639463-xou54j",
+            "event": "run_finished",
+            "data": {
+              "status": "error",
+              "tool_count": 0
+            }
+          }
+        ],
+        "workspace_files": [],
+        "artifacts": [],
+        "files": [],
+        "max_turns": 20,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Build a new session-owned durable knowledge collection from https://rest.uniprot.org/uniprotkb/P0A7V8.txt using knowledge_ingest. Set seed_urls=[\"https://rest.uniprot.org/uniprotkb/P0A7V8.txt\"], allowed_domains=[\"rest.uniprot.org\"], max_pages=1, max_depth=0. Use only knowledge_ingest and knowledge_status in this turn. Poll knowledge_status until the job reaches a terminal state. Report job_id, collection_id, status, fetched/indexed/chunks, skipped URLs and all errors. Treat this new collection as usable only if indexed > 0 and chunks > 0. If it is empty or failed, explain the reported error and stop. Do not retrieve or answer biological questions yet."
+          },
+          {
+            "role": "assistant",
+            "content": "Agent run failed: Error code: 403 - {'error': {'message': 'This model is not available in your region.', 'code': 403, 'metadata': {'routing_funnel': [{'step': 'Initial Endpoints', 'endpoint_count': 7}, {'step': 'Filter by Regional Surcharge', 'endpoint_count': 4}], 'failed_routing_step': 'Gate Endpoints with Geo Restrictions'}}}"
+          }
+        ],
+        "run": {
+          "run_id": "fb0b8f42-8ec1-41a7-8d07-a3305276f574",
+          "session_dir": ".",
+          "runtime_dir": "runs/fb0b8f42-8ec1-41a7-8d07-a3305276f574",
+          "workspace_dir": "outputs"
+        },
+        "approval_decision": null,
+        "runtime": "agents_sdk",
+        "model_key": "gpt-5.6-sol"
+      }
+    }
+  ]
+}

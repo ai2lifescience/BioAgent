@@ -41,6 +41,7 @@ class ScrapyCrawler:
                 await process.stdin.drain()
                 process.stdin.close()
                 complete = False
+                error = None
                 async for line in process.stdout:
                     item = json.loads(line)
                     if item["type"] == "page":
@@ -49,9 +50,11 @@ class ScrapyCrawler:
                         progress(item["progress"])
                     elif item["type"] == "complete":
                         complete = True
+                    elif item["type"] == "error":
+                        error = str(item["message"])[:1000]
                 code = await process.wait()
-                if code or not complete:
-                    raise ValueError("Scrapy crawl failed. Check the worker logs.")
+                if code or not complete or error:
+                    raise ValueError(f"Scrapy crawl failed: {error or 'worker exited without completing the crawl.'}")
         finally:
             if process.returncode is None:
                 process.terminate()

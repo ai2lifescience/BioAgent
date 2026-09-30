@@ -9,7 +9,8 @@ const safeUrl = (value: string): string => {
 
 function inline(text: string): ReactNode[] {
   const output: ReactNode[] = [];
-  const pattern = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+["']([^"']*)["'])?\)|\[([^\]]+)\]\(([^)\s]+)(?:\s+["']([^"']*)["'])?\)|(`+)([\s\S]*?)\7|\*\*([\s\S]*?)\*\*|__([\s\S]*?)__|~~([\s\S]*?)~~|_([^_\n]+)_|\*([^*\n]+)\*/g;
+  // Underscores inside tool names, paths, and scientific identifiers are literal.
+  const pattern = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+["']([^"']*)["'])?\)|\[([^\]]+)\]\(([^)\s]+)(?:\s+["']([^"']*)["'])?\)|(`+)([\s\S]*?)\7|\*\*([\s\S]*?)\*\*|(?<![\p{L}\p{N}_])__([\s\S]*?)__(?![\p{L}\p{N}_])|~~([\s\S]*?)~~|(?<![\p{L}\p{N}_])_([^_\n]+)_(?![\p{L}\p{N}_])|\*([^*\n]+)\*/gu;
   let cursor = 0; let match: RegExpExecArray | null; let index = 0;
   while ((match = pattern.exec(text))) {
     if (match.index > cursor) output.push(text.slice(cursor, match.index));

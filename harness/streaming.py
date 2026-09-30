@@ -12,7 +12,8 @@ def nested_stream(payload) -> None:
     if sink:
         call = payload.get("tool_call")
         sink(payload["event"], agent=payload["agent"].name,
-             parent_call_id=getattr(call, "call_id", None))
+             parent_call_id=getattr(call, "call_id", None),
+             structured_output=getattr(payload["agent"], "output_type", None) is not None)
 
 
 class PublicEvents:
@@ -20,14 +21,16 @@ class PublicEvents:
         self.context, self.emit = context, emit
         self.pending: dict[tuple, tuple[str, dict]] = {}
 
-    def __call__(self, event, *, agent=None, parent_call_id=None):
+    def __call__(self, event, *, agent=None, parent_call_id=None, structured_output=False):
         kind = str(getattr(event, "type", "sdk_event"))
-        payload = {"sdk_type": kind, "agent": agent, "parent_call_id": parent_call_id}
+        payload = {"sdk_type": kind, "agent": agent, "parent_call_id": parent_call_id,
+                   "content_kind": "structured" if structured_output else "narration"}
         if kind == "raw_response_event":
             data = event.data
             subtype = str(getattr(data, "type", "raw_response"))
             payload["data_type"] = subtype
             payload["item_id"] = getattr(data, "item_id", None)
+            payload["content_index"] = getattr(data, "content_index", None)
             if subtype == "response.output_text.delta":
                 key = (agent, parent_call_id, payload["item_id"], getattr(data, "content_index", None))
                 text = self.pending.get(key, ("", payload))[0] + str(getattr(data, "delta", ""))
@@ -38,7 +41,9 @@ class PublicEvents:
                 if boundary:
                     self.emit("sdk_raw_response", self.context.public({**payload, "delta": text[:boundary]}))
                 return
-            if subtype == "response.output_text.done":
+            # Some compatible providers omit output_text.done. Flush the last
+            # word before their response boundary, never into the next message.
+            if subtype in {"response.output_text.done", "response.completed", "response.failed", "response.incomplete"}:
                 self.flush(agent=agent, parent_call_id=parent_call_id)
                 self.emit("sdk_raw_response", self.context.public(payload))
                 return

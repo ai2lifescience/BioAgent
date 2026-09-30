@@ -4,6 +4,8 @@ import { createApiClient } from '../../api';
 import type { AppConfig, Message, RunResult, StreamFrame, WorkspaceFile } from '../../types';
 import { workspacePathOf } from '../../types';
 import { MessageView } from '../messages/MessageView';
+import { RunProgress } from '../messages/RunProgress';
+import { useRunProgress } from '../messages/useRunProgress';
 import { AgentIcon } from '../../components/icons';
 import './assistant.css';
 
@@ -51,8 +53,7 @@ export function AssistantPage() {
   const [config, setConfig] = useState<AppConfig>(emptyConfig);
   const [selectedModel, setSelectedModel] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
-  const [streamingMessages, setStreamingMessages] = useState<Message[]>([]);
-  const [streamingDraft, setStreamingDraft] = useState('');
+  const { entries: progressEntries, reset: resetProgress, onFrame: onProgressFrame, finish: finishProgress } = useRunProgress();
   const [prompt, setPrompt] = useState('');
   const [files, setFiles] = useState<WorkspaceFile[]>([]);
   const [context, setContext] = useState<AssistantContext>(() => {
@@ -73,8 +74,6 @@ export function AssistantPage() {
   const [uploading, setUploading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const websitePollRef = useRef(false);
-  const streamingMessagesRef = useRef<Message[]>([]);
-  const streamingDraftRef = useRef('');
   const websiteQueueRef = useRef(Promise.resolve());
   const websiteRef = useRef<WebsiteBinding | null>(null);
   const sessionRef = useRef(sessionId);
@@ -92,42 +91,11 @@ export function AssistantPage() {
     setLogs(previous => [...previous, line].slice(-40));
   }, []);
 
-  const resetStreaming = useCallback(() => {
-    streamingMessagesRef.current = [];
-    streamingDraftRef.current = '';
-    setStreamingMessages([]);
-    setStreamingDraft('');
-  }, []);
-
-  const appendStreamDelta = useCallback((delta: unknown) => {
-    const value = String(delta || '');
-    if (!value) return;
-    streamingDraftRef.current += value;
-    setStreamingDraft(streamingDraftRef.current);
-  }, []);
-
-  const finishStreamedResponse = useCallback(() => {
-    const text = streamingDraftRef.current;
-    if (text.trim()) {
-      const next = [...streamingMessagesRef.current, { role: 'assistant' as const, text, created_at: new Date().toISOString() }];
-      streamingMessagesRef.current = next;
-      setStreamingMessages(next);
-    }
-    streamingDraftRef.current = '';
-    setStreamingDraft('');
-  }, []);
-
   const appendCompletedRun = useCallback((result: RunResult) => {
-    const streamed = [...streamingMessagesRef.current];
-    if (streamingDraftRef.current.trim()) streamed.push({ role: 'assistant', text: streamingDraftRef.current, created_at: new Date().toISOString() });
     const answer = String(result.answer || 'No answer returned.');
-    const last = streamed[streamed.length - 1];
-    const incoming = last?.role === 'assistant' && last.text.trim() === answer.trim()
-      ? streamed.map((item, index) => index === streamed.length - 1 ? { ...item, result } : item)
-      : [...streamed, { role: 'assistant' as const, text: answer, result, created_at: new Date().toISOString() }];
-    resetStreaming();
-    setMessages(previous => [...previous, ...incoming]);
-  }, [resetStreaming]);
+    const activity = finishProgress(answer);
+    setMessages(previous => [...previous, { role: 'assistant', text: answer, result, progress: activity, created_at: new Date().toISOString() }]);
+  }, [finishProgress]);
 
   const websitePost = useCallback(async <T,>(path: string, body: unknown): Promise<T> => {
     const response = await fetch(apiUrl(path), {
@@ -248,7 +216,7 @@ export function AssistantPage() {
     event?.preventDefault();
     const text = prompt.trim();
     if (!text || busy || !ready || (websiteRequired && !websiteRef.current)) return;
-    setPrompt(''); resetStreaming(); setMessages(previous => [...previous, { role: 'user', text, created_at: new Date().toISOString() }]);
+    setPrompt(''); resetProgress(); setMessages(previous => [...previous, { role: 'user', text, created_at: new Date().toISOString() }]);
     setLogs([]); setBusy(true); setStatus('Working on your request…'); setWebsiteError('');
     const controller = new AbortController(); abortRef.current = controller;
     try {
@@ -257,10 +225,7 @@ export function AssistantPage() {
         website: websiteRef.current ? { binding_id: websiteRef.current.binding_id, token: websiteRef.current.token } : undefined,
         onFrame: (frame: StreamFrame) => {
           if (frame.event === 'log' || frame.event === 'status') appendLog(frame.payload.message);
-          if (frame.event === 'sdk_raw_response') {
-            if (frame.payload.data_type === 'response.output_text.delta') appendStreamDelta(frame.payload.delta);
-            else if (frame.payload.data_type === 'response.output_text.done') finishStreamedResponse();
-          }
+          onProgressFrame(frame);
         },
       };
       const result = await api.run(text, runOptions);
@@ -268,14 +233,13 @@ export function AssistantPage() {
       appendCompletedRun(result);
       setStatus('Ready');
     } catch (error) {
-      const partial = [...streamingMessagesRef.current];
-      if (streamingDraftRef.current.trim()) partial.push({ role: 'assistant', text: streamingDraftRef.current, created_at: new Date().toISOString() });
-      resetStreaming();
-      if (partial.length) setMessages(previous => [...previous, ...partial]);
-      if ((error as Error).name !== 'AbortError') { const messageText = error instanceof Error ? error.message : String(error); setMessages(previous => [...previous, { role: 'assistant', text: messageText, created_at: new Date().toISOString() }]); setStatus('Request failed. You can try again.'); }
-      else setStatus('Stopped waiting. Work already started on the server may continue.');
+      const stopped = (error as Error).name === 'AbortError';
+      const text = stopped ? 'Stopped waiting. Work already started on the server may continue.' : `Request failed: ${error instanceof Error ? error.message : String(error)}`;
+      const activity = finishProgress();
+      setMessages(previous => [...previous, { role: 'assistant', text, progress: activity, created_at: new Date().toISOString() }]);
+      setStatus(stopped ? text : 'Request failed. You can try again.');
     } finally { abortRef.current = null; setBusy(false); }
-  }, [api, appendCompletedRun, appendLog, appendStreamDelta, busy, config, finishStreamedResponse, prompt, ready, resetStreaming, selectedModel, websiteRequired]);
+  }, [api, appendCompletedRun, appendLog, busy, config, finishProgress, onProgressFrame, prompt, ready, resetProgress, selectedModel, websiteRequired]);
 
   const upload = useCallback(async (list: FileList | null) => {
     if (!list?.length || busy || uploading) return;
@@ -288,9 +252,9 @@ export function AssistantPage() {
   const newChat = useCallback(() => {
     if (busy) return;
     const binding = websiteRef.current; if (binding) void websitePost('website/disconnect', binding).catch(() => undefined);
-    websiteRef.current = null; setWebsite(null); const next = createSessionId(); resetStreaming(); setSessionId(next); setMessages([]); setFiles([]); setLogs([]); setPrompt(''); setStatus(ready ? 'Ready' : 'Connecting to assistant…');
+    websiteRef.current = null; setWebsite(null); const next = createSessionId(); resetProgress(); setSessionId(next); setMessages([]); setFiles([]); setLogs([]); setPrompt(''); setStatus(ready ? 'Ready' : 'Connecting to assistant…');
     postParent({ type: 'agent-ready', session_id: next });
-  }, [busy, postParent, ready, resetStreaming, websitePost]);
+  }, [busy, postParent, ready, resetProgress, websitePost]);
 
   useEffect(() => { const onKey = (event: globalThis.KeyboardEvent) => { if (event.key === 'Escape' && window.parent !== window) postParent({ type: 'agent-close' }); }; window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey); }, [postParent]);
 
@@ -302,12 +266,11 @@ export function AssistantPage() {
     {!embedded && <header className="assistant-header"><div className="assistant-brand"><AssistantLogo /><div><strong>Assistant</strong><small>Your analysis companion</small></div></div><button id="newChat" className="assistant-text-button" type="button" onClick={newChat} disabled={busy}>New chat</button></header>}
     {contextChips.length > 0 && <div id="contextSummary" className="assistant-context-summary" aria-label="Current workspace context">{contextChips}</div>}
     <section id="messages" className="assistant-messages" role="log" aria-live="polite">
-      {!messages.length && !streamingMessages.length && !streamingDraft && <div className="assistant-welcome"><AssistantLogo large /><h1>How can I help?</h1><p>Ask about your results or attach a file to get started.</p><button id="welcomePrompt" className="assistant-suggestion" type="button" onClick={() => setPrompt('Help me understand a results table.')}>Help me understand a results table</button></div>}
+      {!messages.length && !busy && <div className="assistant-welcome"><AssistantLogo large /><h1>How can I help?</h1><p>Ask about your results or attach a file to get started.</p><button id="welcomePrompt" className="assistant-suggestion" type="button" onClick={() => setPrompt('Help me understand a results table.')}>Help me understand a results table</button></div>}
       {messages.map((message, index) => <div className="assistant-message-shell" key={`${message.created_at || 'message'}-${index}`}><MessageView message={message} config={config} sessionId={sessionId} busy={busy} onApproval={(next, meta) => { if (!meta?.intermediate) setMessages(previous => [...previous, { role: 'assistant', text: String(next.answer || ''), result: next, created_at: new Date().toISOString() }]); }} onBusy={setBusy} />{fileLinks(message.result)}</div>)}
-      {streamingMessages.map((message, index) => <div className="assistant-message-shell" key={`streamed-${message.created_at || 'message'}-${index}`}><MessageView message={message} config={config} sessionId={sessionId} busy={busy} onApproval={() => undefined} onBusy={setBusy} /></div>)}
-      {streamingDraft && <div className="assistant-message-shell" key="streaming-draft"><MessageView message={{ role: 'assistant', text: streamingDraft }} config={config} sessionId={sessionId} busy={busy} onApproval={() => undefined} onBusy={setBusy} /></div>}
+      {busy && <RunProgress entries={progressEntries} running />}
     </section>
-    <div className="assistant-progress"><span id="status" role="status">{status}</span>{configError && <button id="retryConfig" type="button" className="assistant-text-button" onClick={() => window.location.reload()}>Retry connection</button>}{websiteError && <button id="retryWebsite" type="button" className="assistant-text-button" onClick={() => window.location.reload()}>Retry website connection</button>}<details id="progressDetails" hidden={!logs.length}><summary>Activity</summary><pre id="progressLog">{logs.join('\n')}</pre></details></div>
+    <div className="assistant-progress"><span id="status" role="status">{status}</span>{configError && <button id="retryConfig" type="button" className="assistant-text-button" onClick={() => window.location.reload()}>Retry connection</button>}{websiteError && <button id="retryWebsite" type="button" className="assistant-text-button" onClick={() => window.location.reload()}>Retry website connection</button>}<details id="progressDetails" hidden={!logs.length}><summary>Logs</summary><pre id="progressLog">{logs.join('\n')}</pre></details></div>
     <form id="composer" className="assistant-composer" onSubmit={submit}><ul id="uploadList" className="assistant-file-list" hidden={!files.length}>{files.map(file => <li key={workspacePathOf(file)}>{fileLabel(file)}</li>)}</ul><label className="assistant-sr-only" htmlFor="prompt">Message assistant</label><textarea id="prompt" rows={2} value={prompt} onChange={event => setPrompt(event.target.value)} onKeyDown={onPromptKeyDown} disabled={busy} placeholder="Ask assistant…" /><div className="assistant-model-row"><label htmlFor="model">Model</label><select id="model" disabled={busy || !ready} value={selectedModel} onChange={event => setSelectedModel(event.target.value)}>{config.models.map(model => <option key={model.key} value={model.key}>{modelLabel(model)}</option>)}</select></div><div className="assistant-actions"><label className="assistant-attach"><input id="uploadInput" type="file" multiple hidden onChange={event => upload(event.target.files)} />Attach</label><button id="stop" type="button" className="assistant-stop" hidden={!busy} onClick={() => abortRef.current?.abort()}>Stop waiting</button><button id="send" type="submit" className="assistant-send" disabled={busy || !ready || (websiteRequired && !websiteRef.current)}>{busy ? 'Working…' : <>Send <span aria-hidden="true">↑</span></>}</button></div></form>
   </main>;
 }

@@ -15,14 +15,21 @@ def execute(store: KnowledgeService, job_id: str) -> int:
     spec = store.jobs.job_spec(job_id)
     if spec["status"] not in {"queued", "running", "indexing"}:
         return 0
+    progress = {
+        "discovered": 0, "fetched": 0, "indexed": 0, "skipped": 0, "chunks": 0,
+        "skipped_urls": [], "errors": [],
+    }
     try:
-        progress = {"discovered": 0, "fetched": 0, "indexed": 0, "skipped": 0}
-
         def on_progress(item: dict) -> None:
             if item.get("fetched"):
                 progress["fetched"] = int(item["fetched"])
             if item.get("skipped"):
                 progress["skipped"] += int(item["skipped"])
+                url = str(item.get("url", ""))
+                if url and url not in progress["skipped_urls"] and len(progress["skipped_urls"]) < 100:
+                    progress["skipped_urls"].append(url)
+            if item.get("message") and len(progress["errors"]) < 100:
+                progress["errors"].append({"url": str(item.get("url", "")), "message": str(item["message"])[:300]})
             if item.get("url"):
                 progress["last_url"] = str(item["url"])
             store.jobs.update_progress(job_id, progress=progress)
@@ -35,6 +42,10 @@ def execute(store: KnowledgeService, job_id: str) -> int:
             )
         )
         progress["discovered"] = len(pages)
+        progress["fetched"] = len(pages)
+        if not pages:
+            detail = f" Last error: {progress['errors'][-1]['message']}" if progress["errors"] else ""
+            raise ValueError(f"No readable pages were fetched; no content was indexed.{detail}")
         changed = store.indexer.changed_pages(collection_id=spec["collection_id"], session_id=spec["session_id"], pages=pages)
         progress["skipped"] += len(pages) - len(changed)
         store.jobs.update_status(job_id, "indexing", progress=progress)
@@ -48,10 +59,12 @@ def execute(store: KnowledgeService, job_id: str) -> int:
             pages=changed, vectors=vectors,
         )
         progress.update(indexed=indexed["indexed"], skipped=progress["skipped"] + indexed["skipped"], chunks=indexed["chunks"])
+        if not store.collection(spec["collection_id"], session_id=spec["session_id"])["chunks"]:
+            raise ValueError("The crawl produced no indexable content; the knowledge collection is empty.")
         store.jobs.update_status(job_id, "succeeded", progress=progress)
         return 0
     except Exception as exc:
-        store.jobs.update_status(job_id, "failed", error=str(exc)[:1000])
+        store.jobs.update_status(job_id, "failed", error=str(exc)[:1000], progress=progress)
         return 1
     finally:
         store.dispatch()

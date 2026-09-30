@@ -1,0 +1,286 @@
+{
+  "test_date": "2026-09-30",
+  "model_key": "gpt-oss",
+  "cases": [
+    {
+      "case_id": "connection_probe",
+      "session_id": "live-probe-20260930-direct",
+      "prompt": "Analyze this DNA sequence and report its GC content: ACGTACGT.",
+      "status": "ok",
+      "tools": [
+        "sequence_stats"
+      ],
+      "answer": "**GC content:** 50 % (4 G/C bases out of 8 total).",
+      "tool_errors": [
+        {
+          "tool": "sequence_stats",
+          "error": "Invalid JSON input for tool sequence_stats",
+          "error_type": "ModelBehaviorError"
+        }
+      ],
+      "screenshot": "workspace-controls.png",
+      "observed_outcome": "The inherited proxy failed in the initial probe. The direct-connection model returned 50% GC, but the only sequence_stats result was an input-validation error; the final answer was not tool-verified."
+    },
+    {
+      "session_id": "live-seq-20260930",
+      "prompt": "Use sequence_stats, sequence_reverse_complement, sequence_find_orfs, and sequence_translate on this DNA sequence (all four tools explicitly). Return verified length, GC%, reverse complement, ORFs, and translation: ATGAAATAGCCCGGGTTT.",
+      "metadata_path": "runtime/session_metadata/live-seq-20260930.json",
+      "message_index": 0,
+      "status": "error",
+      "tools": [
+        "sequence_stats",
+        "sequence_reverse_complement",
+        "sequence_find_orfs"
+      ],
+      "tool_errors": [
+        {
+          "tool": "sequence_find_orfs",
+          "error": "Invalid JSON input for tool sequence_find_orfs",
+          "error_type": "ModelBehaviorError"
+        }
+      ],
+      "case_id": "sequence_tools",
+      "result_file": "live/sequence_tools.json"
+    },
+    {
+      "session_id": "live-translate-20260930",
+      "prompt": "Call sequence_translate on this DNA sequence with frame 0 and report the returned amino-acid sequence: ATGAAATAG.",
+      "metadata_path": "runtime/session_metadata/live-translate-20260930.json",
+      "message_index": 0,
+      "status": "ok",
+      "tools": [
+        "sequence_translate"
+      ],
+      "tool_errors": [
+        {
+          "tool": "sequence_translate",
+          "error": "Invalid JSON input for tool sequence_translate",
+          "error_type": "ModelBehaviorError"
+        }
+      ],
+      "observed_outcome": "Final session status ok, but sequence_translate failed schema validation three times; no successful translation tool result was recorded.",
+      "case_id": "sequence_translate",
+      "result_file": "live/sequence_translate.json"
+    },
+    {
+      "session_id": "live-structure-20260930",
+      "prompt": "Use pdb_download to download PDB 1A3N as mmCIF, then use structure_inspect on the returned workspace path. Report the file path and verified chains, residues, atoms, method, and resolution.",
+      "metadata_path": "runtime/session_metadata/live-structure-20260930.json",
+      "message_index": 0,
+      "status": "ok",
+      "tools": [
+        "pdb_download",
+        "structure_inspect"
+      ],
+      "tool_errors": [],
+      "case_id": "structure_tools",
+      "result_file": "live/structure_tools.json"
+    },
+    {
+      "session_id": "live-retrieval-20260930",
+      "prompt": "Use ncbi_retrieval to download accession NC_001422.1 as one FASTA record, then use file_inspection on the returned FASTA. Report paths and sequence metadata.",
+      "metadata_path": "runtime/session_metadata/live-retrieval-20260930.json",
+      "message_index": 0,
+      "status": "ok",
+      "tools": [
+        "ncbi_retrieval",
+        "file_inspection"
+      ],
+      "tool_errors": [],
+      "case_id": "retrieval_tools",
+      "result_file": "live/retrieval_tools.json"
+    },
+    {
+      "session_id": "live-db-blast-20260930",
+      "prompt": "Use alphafold_download for UniProt accession P0A7V8 in CIF format, use database_lookup for P0A7V8 in UniProt, and use blast_search with query sequence ATGCGTAAACCCGGGTTT (report whether it is submitted or completed). Execute all three tools and summarize only observed results.",
+      "metadata_path": "runtime/session_metadata/live-db-blast-20260930.json",
+      "message_index": 0,
+      "status": "ok",
+      "tools": [
+        "alphafold_download",
+        "database_lookup",
+        "blast_search"
+      ],
+      "tool_errors": [],
+      "case_id": "database_blast_alphafold",
+      "result_file": "live/database_blast_alphafold.json"
+    },
+    {
+      "session_id": "live-data-code-20260930",
+      "prompt": "Use file_inspection on uploads/ffb46617f019_measurements.csv, workspace_search to find the phrase \"treated cohort\" in uploads/28ab57bb04b6_notes.txt, table_profile on uploads/ffb46617f019_measurements.csv, table_group grouped by group with score, table_plot for score, code_inspection on uploads/f9bf3c5bc00b_analysis.py, and code_test on uploads/f9bf3c5bc00b_analysis.py. Then use report_write to save a short Markdown report of the observed results. Execute the requested tools and return every artifact path.",
+      "metadata_path": "runtime/session_metadata/live-data-code-20260930.json",
+      "message_index": 0,
+      "status": "ok",
+      "tools": [
+        "file_inspection",
+        "workspace_search",
+        "table_profile",
+        "table_group",
+        "table_plot",
+        "code_inspection",
+        "code_test",
+        "report_write"
+      ],
+      "tool_errors": [],
+      "case_id": "data_workspace_coding",
+      "result_file": "live/data_workspace_coding.json"
+    },
+    {
+      "session_id": "live-document-20260930",
+      "prompt": "Use document_read on the uploaded PDF at uploads/c8b3c6564813_pipeline_agent_introduction.pdf, read the first page, and summarize only what is returned with page markers.",
+      "metadata_path": "runtime/session_metadata/live-document-20260930.json",
+      "message_index": 0,
+      "status": "ok",
+      "tools": [
+        "document_read"
+      ],
+      "tool_errors": [],
+      "case_id": "document_read",
+      "result_file": "live/document_read.json"
+    },
+    {
+      "session_id": "live-genome-20260930",
+      "prompt": "Use genome_read_features on uploads/3d712971b4c3_test.gb, then genome_render_map using its returned feature artifact. Return the generated map and reference paths and explain whether features are annotated.",
+      "metadata_path": "runtime/session_metadata/live-genome-20260930.json",
+      "message_index": 0,
+      "status": "ok",
+      "tools": [
+        "code_inspection",
+        "genome_read_features",
+        "genome_render_map"
+      ],
+      "tool_errors": [],
+      "case_id": "genome_map_tools",
+      "result_file": "live/genome_map_tools.json"
+    },
+    {
+      "session_id": "live-research-20260930",
+      "prompt": "Use pubmed_search and web_search to collect bounded evidence about PhiX174 genome organization. Use web_fetch on one returned HTTPS source if possible. Then use evidence_index and evidence_retrieve on the returned evidence paths, use the research specialist (including report_review and report_synthesize), and use report_write to save a cited Markdown report. Return tool names, source IDs, and the report path. Stop and report exact errors if a network source is unavailable.",
+      "metadata_path": "runtime/session_metadata/live-research-20260930.json",
+      "message_index": 0,
+      "status": "ok",
+      "tools": [
+        "pubmed_search",
+        "web_search"
+      ],
+      "tool_errors": [
+        {
+          "tool": "web_search",
+          "error": "",
+          "error_type": "ConnectTimeout"
+        }
+      ],
+      "case_id": "research_reporting",
+      "result_file": "live/research_reporting.json"
+    },
+    {
+      "session_id": "live-research-20260930",
+      "prompt": "Continue from the PubMed evidence already saved in this session. Call evidence_index on outputs/pubmed_search/8210655c6d6f47ef832ea5fb44666816/evidence.json, then evidence_retrieve for the question \"What is PhiX174 genome organization?\", then use report_review and report_synthesize on the retrieved evidence, and finally call report_write to save the cited Markdown report. If any call fails, continue with the remaining calls and report exact errors.",
+      "metadata_path": "runtime/session_metadata/live-research-20260930.json",
+      "message_index": 1,
+      "status": "ok",
+      "tools": [
+        "evidence_index",
+        "evidence_retrieve",
+        "report_review",
+        "report_synthesize",
+        "report_write"
+      ],
+      "tool_errors": [],
+      "case_id": "research_followup",
+      "result_file": "live/research_followup.json"
+    },
+    {
+      "session_id": "live-knowledge-20260930",
+      "prompt": "Start a bounded knowledge collection using knowledge_ingest for https://example.org with allowed domain example.org, max_pages 1 and max_depth 0. Then call knowledge_status on the returned job ID and knowledge_retrieve for the question \"What is the Example Domain page?\". Return exact collection/job IDs and errors; do not invent content.",
+      "metadata_path": "runtime/session_metadata/live-knowledge-20260930.json",
+      "message_index": 0,
+      "status": "ok",
+      "tools": [
+        "knowledge_ingest",
+        "knowledge_status",
+        "knowledge_retrieve"
+      ],
+      "tool_errors": [],
+      "case_id": "knowledge_tools",
+      "result_file": "live/knowledge_tools.json"
+    },
+    {
+      "session_id": "live-webfetch-20260930",
+      "prompt": "Call web_fetch on https://example.org with a bounded character limit and report the returned title, URL, and excerpt. Do not use other tools.",
+      "metadata_path": "runtime/session_metadata/live-webfetch-20260930.json",
+      "message_index": 0,
+      "status": "ok",
+      "tools": [
+        "web_fetch"
+      ],
+      "tool_errors": [],
+      "case_id": "web_fetch",
+      "result_file": "live/web_fetch.json"
+    },
+    {
+      "session_id": "live-coding-edit-python-20260930",
+      "prompt": "Use code_edit on uploads/db2444b9d32d_calc.py to change the function to return 2 + 3, then use code_test on that path. Finally use python_execute with bounded code that writes the exact text 5 to outputs/result.txt; pass output_paths explicitly as [\"outputs/result.txt\"]. Report all observed statuses and paths.",
+      "metadata_path": "runtime/session_metadata/live-coding-edit-python-20260930.json",
+      "message_index": 0,
+      "status": "ok",
+      "tools": [
+        "code_inspection",
+        "code_edit",
+        "code_test",
+        "python_execute"
+      ],
+      "tool_errors": [
+        {
+          "tool": "code_test",
+          "error": "python -m pytest failed with exit code 1.",
+          "error_type": "TEST_FAILED"
+        },
+        {
+          "tool": "python_execute",
+          "error": "Python execution exited with code 1. Missing expected outputs: outputs/result.txt.",
+          "error_type": "PYTHON_EXECUTION_FAILED"
+        }
+      ],
+      "observed_outcome": "code_edit succeeded; code_test returned error (pytest exit 1); python_execute failed once and succeeded on retry.",
+      "case_id": "coding_edit_python",
+      "result_file": "live/coding_edit_python.json"
+    },
+    {
+      "session_id": "assistant_c84cab9a374f468593cb861e5a9293a2",
+      "prompt": "Use website_context, website_read_table, website_read_figure, website_search_manual, website_read_manual, website_import_data, website_highlight, website_navigate, and website_action. First read current context, read the Measurements table and Relative abundance figure, search and read the Methods manual, import the measurements resource, highlight the measurements element, navigate to Methods, and invoke the set_group_filter action with group treated. Report every observed result, including revisions, and do not invent values.",
+      "metadata_path": "runtime/session_metadata/assistant_c84cab9a374f468593cb861e5a9293a2.json",
+      "message_index": 0,
+      "status": "ok",
+      "tools": [
+        "website_action"
+      ],
+      "tool_errors": [
+        {
+          "tool": "website_action",
+          "error": "arguments_json must be a JSON object",
+          "error_type": "ValueError"
+        }
+      ],
+      "case_id": "website_run",
+      "result_file": "live/website_run.json",
+      "tools_started": [
+        "website_context",
+        "website_read_table",
+        "website_read_figure",
+        "website_search_manual",
+        "website_read_manual",
+        "website_import_data",
+        "website_highlight",
+        "website_navigate",
+        "website_action",
+        "website_action"
+      ],
+      "screenshots": [
+        "frontend-demo-initial.png",
+        "website-before-send.png",
+        "website-after.png"
+      ]
+    }
+  ]
+}
