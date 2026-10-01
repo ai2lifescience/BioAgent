@@ -42,6 +42,7 @@ RESULT = {
 APPROVED_RESULT = {
     **RESULT,
     "answer": "The approved operation saved the figures.",
+    "approval_decision": {**RESULT["approval_decision"], "approval_id": "fixture"},
 }
 PENDING_APPROVAL = {
     "session_id": SESSION_ID,
@@ -68,7 +69,7 @@ try {
     throw new Error('Timed out: ' + description);
   };
   const assert = (value, message) => { if (!value) throw new Error(message); };
-  const messages = () => [...document.querySelectorAll('#chat .message.assistant')];
+  const messages = () => [...document.querySelectorAll('#chat .message.assistant:not([data-approval-message="true"])')];
   const ready = () => {
     const send = document.querySelector('.composer #send');
     return send && !send.disabled && messages().length >= 2;
@@ -93,8 +94,7 @@ try {
     const panels = [...root.querySelectorAll('[data-runtime-panel]')];
     assert(panels.length === 4, 'Execution detail panels are missing');
     assert(panels.every(p => p.hidden), 'Runtime panel expanded by default');
-    const reviewedPlan = root.querySelector('.run-plan-record');
-    assert(reviewedPlan && !reviewedPlan.open, 'Reviewed plan missing or expanded by default');
+    assert(!root.querySelector('.approval-item'), 'A duplicate approval box was added to the result');
     const tab = root.querySelector('[data-runtime-tab="plan"]');
     const panel = root.querySelector('[data-runtime-panel="plan"]');
     assert(tab && panel, 'Plan tab or panel missing');
@@ -116,13 +116,15 @@ try {
     message.querySelector('.message-body')?.textContent.includes('The approved operation saved the figures.'));
   if (!sessionStorage.getItem('reloaded')) {
     if (!configFailed) {
-      const approval = document.querySelector('#chat .approval-item');
+      const approval = document.querySelector('#chat .approval-item[data-approval-id="fixture"]');
       assert(approval?.querySelector('.approval-plan')?.open, 'Pending approval must stay reviewable');
       const approve = [...approval.querySelectorAll('button')].find(button => button.textContent === 'Approve');
       assert(approve && !approve.disabled, 'React approval button is unavailable');
       approve.click();
       await waitFor(() => approvedMessage() && ready(), 'Approved result and unlocked composer');
       assert(approve.disabled, 'Completed approval can be submitted twice');
+      assert(approval.isConnected, 'Original approval box was replaced after clicking');
+      assert(!approval.querySelector('.approval-plan').open, 'Submitted approval must collapse');
       await checkDetails(approvedMessage());
       await checkFigures(approvedMessage());
     }
@@ -131,7 +133,10 @@ try {
   } else {
     if (!configFailed) {
       assert(approvedMessage(), 'Approved result was lost after reload');
-      assert(!document.querySelector('#chat .approval-item'), 'Completed approval reappeared after reload');
+      const approval = document.querySelector('#chat .approval-item[data-approval-id="fixture"]');
+      assert(approval, 'Original approval disappeared after reload');
+      assert(!approval.querySelector('.approval-plan').open, 'Restored decision must default to collapsed');
+      assert([...approval.querySelectorAll('button')].every(button => button.disabled), 'Restored approval can be submitted twice');
       await checkDetails(approvedMessage());
       await checkFigures(approvedMessage());
     }

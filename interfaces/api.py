@@ -16,6 +16,7 @@ from harness.sessions import _has_renderable_result
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 from harness.jobs import get_queue, result_status
 from tools.infrastructure.knowledge import KnowledgeService
+from tools.infrastructure.workspace.public import public_payload
 
 
 def enqueue_request(
@@ -152,6 +153,15 @@ def list_session_messages(session_id: str) -> dict[str, Any]:
             stored_results = []
         result_index = 0
         current_request = ""
+        workspace_root = (metadata.metadata.get("run") or {}).get("session_dir") if metadata else None
+
+        def same_public_text(left, right):
+            # The SDK stores original text; result envelopes redact host and
+            # runtime paths. Compare the same public projection so a final
+            # pipeline answer keeps its evidence and saved activity on reload.
+            return public_payload(str(left or "").strip(), workspace_root) == public_payload(
+                str(right or "").strip(), workspace_root)
+
         for message in messages:
             if message.get("role") == "user":
                 current_request = str(message.get("text") or "")
@@ -170,8 +180,8 @@ def list_session_messages(session_id: str) -> dict[str, Any]:
                 # persistence. Accept the older direct-result shape too.
                 if "result" in entry:
                     if (
-                        str(entry.get("request") or "").strip() == current_request.strip()
-                        and str(entry.get("answer") or "").strip() == str(message.get("text") or "").strip()
+                        same_public_text(entry.get("request"), current_request)
+                        and same_public_text(entry.get("answer"), message.get("text"))
                     ):
                         if isinstance(entry.get("result"), dict) and _has_renderable_result(entry["result"]):
                             message["result"] = entry["result"]

@@ -114,6 +114,11 @@ class RunQueue:
             if approval_id not in {item["approval_id"] for item in result.get("approvals", [])}:
                 raise ValueError("Unknown or expired approval_id for this session.")
             run_id = row["run_id"]
+            # Preserve the original review before consuming the pending result.
+            # Reloading during execution must restore the same, now disabled,
+            # approval controls even though the final answer is not ready yet.
+            reviewed = next(item for item in result["approvals"] if item["approval_id"] == approval_id)
+            self._event(db, run_id, "approval_decision", {**reviewed, "approved": approved})
             decision = json.dumps({"approved": approved, "approval_id": approval_id})
             db.execute("UPDATE runs SET status='queued', approval=?, result=NULL, error=NULL, pid=NULL, updated_at=? WHERE run_id=?",
                        (decision, now(), run_id))
