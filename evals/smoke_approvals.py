@@ -22,6 +22,7 @@ from openai.types.responses.response_function_shell_tool_call import ResponseFun
 from harness import runtime
 from harness import sandbox
 from harness.sessions import SessionMetadataStore
+from harness.jobs import RunQueue
 from interfaces import api, web
 
 pipeline_module = importlib.import_module("tools.infrastructure.sdk_adapters.pipeline_shell")
@@ -102,6 +103,23 @@ class ApprovalTests(unittest.TestCase):
         result = self.resume(self.pause(), approved=False)
         self.assertEqual(result["status"], "ok", result["answer"])
         self.workflow.assert_not_called()
+
+    def test_queue_keeps_original_review_when_approval_is_consumed(self):
+        for approved in [True, False]:
+            queue = RunQueue(self.root / f"reviews-{approved}.sqlite3")
+            review = {"approval_id": "review", "tool_name": "pipeline_shell",
+                      "arguments": {"commands": ["agent-pipeline run --plan-id fixture"]},
+                      "plan": {"pipeline_name": "metagenomic_read_quality_control"}}
+            with patch.object(queue, "dispatch"):
+                run = queue.enqueue("Run quality control", "review-session", "fixture", 5)
+                queue.update(run["run_id"], "pending_approval", result={"approvals": [review]})
+                resumed = queue.resume("review-session", approved, "review")
+                self.assertIsNone(resumed["result"])
+                restored = RunQueue(queue.path)
+                events = [event["payload"] for event in restored.events(run["run_id"])
+                          if event["event"] == "approval_decision"]
+                self.assertEqual(events, [{**review, "approved": approved}])
+                self.assertIsNone(queue.resume("review-session", approved, "review"))
 
     def test_reviewed_plan_survives_progress_and_later_turn(self):
         pending = self.pause(steps=[ModelStep(output=[

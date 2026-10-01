@@ -15,7 +15,7 @@ export interface SessionSummary {
   messages?: Message[];
 }
 export interface ProgressEntry { id: string; kind: 'text' | 'tool'; text: string; active: boolean; scope: string; stream?: string }
-export interface Message { role: Role; text: string; result?: RunResult | null; created_at?: string | null; progress?: ProgressEntry[] }
+export interface Message { role: Role; text: string; result?: RunResult | null; created_at?: string | null; progress?: ProgressEntry[]; approvalCard?: boolean }
 export interface RuntimeInfo { status?: string; elapsed_seconds?: number; model_key?: string; max_turns?: number; tools?: string[]; tool_count?: number; file_count?: number; logs?: string[] }
 export interface TraceEvent { event?: string; type?: string; data?: Record<string, unknown>; [key: string]: unknown }
 export interface Evidence { tools?: string[]; files?: Array<WorkspaceFile | string>; citations?: unknown[]; sources?: unknown[]; outputs?: WorkspaceFile[]; [key: string]: unknown }
@@ -24,7 +24,7 @@ export interface RunResult {
   trace?: TraceEvent[]; evidence?: Evidence; artifacts?: WorkspaceFile[]; files?: WorkspaceFile[]; workspace_files?: WorkspaceFile[];
   approval_required?: boolean; approvals?: Approval[]; pending_approval?: boolean; [key: string]: unknown;
 }
-export interface Approval { approval_id: string; tool_name?: string; arguments?: Record<string, unknown>; description?: string }
+export interface Approval { approval_id: string; tool_name?: string; arguments?: Record<string, unknown>; description?: string; plan?: unknown; approved?: boolean }
 export interface StreamFrame { event: string; payload: Record<string, any> }
 
 export function sessionIdOf(value: any): string { return String(value?.session_id ?? value?.id ?? '') }

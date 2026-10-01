@@ -33,10 +33,9 @@ not establish successful execution of every tool, live coverage of every
 specialist, or interaction coverage for every structure/genome viewer control.
 Most tool cases retain JSON results rather than a dedicated viewer screenshot.
 
-The later [knowledge-system test](knowledge_system_test_report_2026-09-30.md)
-reproduces and fixes empty ingestion, verifies live GPT-5.6 Sol ingestion and
-retrieval, and includes dedicated screenshots, tested prompts and remaining
-frontend display issues.
+Later knowledge-system testing reproduced and fixed empty ingestion and verified
+live GPT-5.6 Sol ingestion and retrieval. Its separate report and evidence assets
+are no longer retained in this repository.
 
 ## Environment
 
