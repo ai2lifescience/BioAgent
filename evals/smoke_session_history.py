@@ -169,6 +169,27 @@ class SessionHistoryTests(unittest.TestCase):
         self.assertNotIn("result", messages[1])
         self.assertNotIn("result", messages[-1])
 
+    def test_pipeline_path_projection_preserves_saved_result(self):
+        session = runtime.STATE_STORE.create_session(session_id="pipeline_paths")
+        sandbox.prepare_run(session)
+        request = "Inspect the completed pipeline."
+        sdk_answer = "Outputs: runtime/agent_runs/" + "a" * 32 + "/results.zip"
+        result = {"answer": "Outputs: [internal path]", "status": "ok",
+                  "evidence": {"tools": ["pipeline_shell"]}}
+        runtime.STATE_STORE.record_exchange(session, request, result["answer"], result)
+        sdk_session = SQLiteSession(session.session_id, db_path=runtime.SESSION_DB)
+        try:
+            asyncio.run(sdk_session.add_items([
+                {"role": "user", "content": request},
+                {"role": "assistant", "content": "Checking the saved results."},
+                {"role": "assistant", "content": sdk_answer},
+            ]))
+        finally:
+            sdk_session.close()
+        messages = api.list_session_messages(session.session_id)["messages"]
+        self.assertNotIn("result", messages[1])
+        self.assertEqual(messages[-1]["result"], result)
+
 
 if __name__ == "__main__":
     unittest.main()

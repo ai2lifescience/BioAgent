@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { AppConfig, Message, RunResult, TraceEvent, WorkspaceFile } from '../../types';
+import type { AppConfig, Message, RunResult, TraceEvent, WorkspaceFile, StreamFrame } from '../../types';
 import { workspacePathOf } from '../../types';
 import renderMarkdown from './markdown';
 import { ArtifactViews, fileUrl } from './ArtifactView';
@@ -8,7 +8,7 @@ import { AgentIcon } from '../../components/icons';
 import './messages.css';
 import { RunProgress } from './RunProgress';
 
-export interface MessageViewProps { message: Message; config: AppConfig; sessionId: string; busy: boolean; onApproval: (result: RunResult, meta?: ApprovalMeta) => void; onBusy: (busy: boolean) => void }
+export interface MessageViewProps { message: Message; config: AppConfig; sessionId: string; busy: boolean; onApproval: (result: RunResult, meta?: ApprovalMeta) => void; onBusy: (busy: boolean) => void; onProgress?: (frame: StreamFrame) => void }
 const text = (value: unknown): string => value == null ? '' : typeof value === 'string' ? value : String(value);
 const record = (value: unknown): Record<string, unknown> => value && typeof value === 'object' ? value as Record<string, unknown> : {};
 const toolLabel = (tool: unknown): string => ({ database_lookup: 'Database lookup', genome_read_features: 'Read genome features', alphafold_download: 'Download AlphaFold structure', document_read: 'Read document', file_inspection: 'Inspect file', genome_render_map: 'Open genome browser', ncbi_retrieval: 'Retrieve NCBI records', pdb_download: 'Download PDB structure', pipeline_shell: 'Run pipeline command', pipeline_specialist: 'Pipeline specialist', structure_inspect: 'Inspect protein structure', sequence_stats: 'Measure sequence', sequence_find_orfs: 'Find sequence ORFs', report_review: 'Review evidence', report_synthesize: 'Draft cited report', report_write: 'Save cited report', blast_search: 'BLAST search' } as Record<string, string>)[text(tool)] || text(tool).replaceAll('_', ' ') || 'Agent operation';
@@ -22,7 +22,7 @@ function Evidence({ result, sessionId }: { result: RunResult; sessionId: string 
   const evidence = record(result.evidence); const list = (value: unknown): unknown[] => Array.isArray(value) ? value : []; const links = list(evidence.citations).map((item, i) => { const value = record(item); const label = typeof item === 'string' ? item : `${text(value.title || value.name || value.id) || 'Citation'}${value.source || value.pmid || value.year ? ` · ${text(value.source || value.pmid || value.year)}` : ''}`; return value.url ? <a key={i} href={text(value.url)} target="_blank" rel="noopener noreferrer">{label}</a> : <span key={i}>{label}</span>; }); const paths = list(evidence.files).map(item => typeof item === 'string' ? item : workspacePathOf(record(item) as WorkspaceFile)).filter(Boolean).map(path => <a key={path} href={fileUrl(sessionId, path)} title={path}>{path.split('/').pop()}</a>); const Group = ({ title, values }: { title: string; values: React.ReactNode[] }) => values.length ? <section className="evidence-group"><h4>{title}</h4><ul>{values.map((value, i) => <li key={i}>{value}</li>)}</ul></section> : null; return <div className="evidence-panel"><Group title="Tools used" values={list(evidence.tools).map(value => <span key={text(value)}>{toolLabel(value)}</span>)} /><Group title="Databases" values={list(evidence.databases).map(value => <span key={text(value)}>{text(value)}</span>)} /><Group title="Queries" values={list(evidence.query_terms).map(value => <span key={text(value)}>{text(value)}</span>)} /><Group title="Records" values={list(evidence.record_ids).map(value => <span key={text(value)}>{text(value)}</span>)} /><Group title="Files" values={paths} /><Group title="Sources" values={links} /><Group title="Links" values={list(evidence.urls).map(value => <a key={text(value)} href={text(value)} target="_blank" rel="noopener noreferrer">{text(value)}</a>)} /> <Group title="Errors" values={list(evidence.tool_errors).map((value, i) => <span key={i}>{text(record(value).error || record(value).tool || value)}</span>)} />{list(evidence.outputs).length ? <Group title="Tool results" values={list(evidence.outputs).map((value, i) => <span key={i}><strong>{toolLabel(record(value).tool)}</strong> {text(record(value).summary || record(value).status || 'Result returned.')}</span>)} /> : null}</div>;
 }
 
-function RunDetails({ result, config, sessionId, busy, onApproval, onBusy }: { result: RunResult; config: AppConfig; sessionId: string; busy: boolean; onApproval: MessageViewProps['onApproval']; onBusy: (busy: boolean) => void }) {
+function RunDetails({ result, config, sessionId, busy, onApproval, onBusy, onProgress }: { result: RunResult; config: AppConfig; sessionId: string; busy: boolean; onApproval: MessageViewProps['onApproval']; onBusy: (busy: boolean) => void; onProgress?: (frame: StreamFrame) => void }) {
   const [tab, setTab] = useState<string | null>(null);
   const tabRef = useRef<string | null>(null);
   const [approvalResult, setApprovalResult] = useState(result);
@@ -54,10 +54,7 @@ function RunDetails({ result, config, sessionId, busy, onApproval, onBusy }: { r
   };
   const handleApproval = (next: RunResult, meta?: ApprovalMeta) => { if (meta?.intermediate) setApprovalResult(next); onApproval(next, meta); };
   const filteredTrace = trace.filter(event => !['sdk_span_finished', 'sdk_trace_started', 'sdk_trace_finished'].includes(text(event.event)));
-  const decision = record(result.approval_decision);
-  const reviewedPlan = decision.plan ? { action: decision.arguments, plan: decision.plan } : decision.arguments;
   return <div className="run-debug" aria-label="Runtime details">
-    {decision.approved !== undefined && reviewedPlan != null && <details className="run-plan-record" open={false}><summary>{decision.approved ? 'Approved pipeline plan' : 'Rejected operation plan'} <span>{text(decision.tool_name) || 'Tool request'}</span></summary><pre>{JSON.stringify(reviewedPlan, null, 2)}</pre></details>}
     <div className="run-tabs" role="tablist">
       {tabs.map(([key, label]) => <button key={key} data-runtime-tab={key} type="button" role="tab" aria-selected={tab === key} className={tab === key ? 'is-active' : ''} onClick={event => setSelectedTab(event, key)}><span>{key === 'runtime' ? 'Runtime' : key === 'plan' ? 'Plan & execution' : key[0].toUpperCase() + key.slice(1)}</span><small>{label}</small></button>)}
     </div>
@@ -70,15 +67,15 @@ function RunDetails({ result, config, sessionId, busy, onApproval, onBusy }: { r
     </section>
     <section className="run-panel" data-runtime-panel="evidence" hidden={tab !== 'evidence'}><Evidence result={result} sessionId={sessionId} /></section>
     <section className="run-panel" data-runtime-panel="trace" hidden={tab !== 'trace'}><div className="trace-log">{trace.length ? trace.map((event, i) => <div className="trace-row" key={i}><time>{text(event.timestamp || '—')}</time><code>{text(event.event || event.type || 'event')}</code><span>{Object.entries(record(event.data)).filter(([key, value]) => value !== null && value !== '' && key !== 'timestamp').slice(0, 6).map(([key, value]) => `${key}=${typeof value === 'object' ? JSON.stringify(value) : text(value)}`).join(' · ') || 'No event details'}</span></div>) : <div className="run-empty">No trace events were returned.</div>}</div></section>
-    <ApprovalControls result={approvalResult} busy={busy} onResult={handleApproval} onBusy={onBusy} />
+    <ApprovalControls result={approvalResult} busy={busy} onResult={handleApproval} onBusy={onBusy} onProgress={onProgress} />
   </div>;
 }
-export function MessageView({ message, config, sessionId, busy, onApproval, onBusy }: MessageViewProps) {
+export function MessageView({ message, config, sessionId, busy, onApproval, onBusy, onProgress }: MessageViewProps) {
   const result = message.result || null;
   const assistant = message.role === 'assistant';
-  return <article className={`message ${message.role}`} aria-label={assistant ? 'Assistant message' : 'Your message'}>
+  return <article className={`message ${message.role}`} data-approval-message={Boolean(message.approvalCard || result?.approval_required)} aria-label={assistant ? 'Assistant message' : 'Your message'}>
     <div className="message-avatar" aria-hidden="true">{assistant ? <AgentIcon size={34} /> : <span className="message-avatar-label">You</span>}</div>
-    <div className="message-content">{assistant && message.progress && <RunProgress entries={message.progress} />}<div className="message-body">{renderMarkdown(message.text)}{result && assistant && <><ArtifactViews result={result} sessionId={sessionId} imageSuffixes={config.files?.image_suffixes || ['.gif', '.jpeg', '.jpg', '.png', '.svg', '.webp']} />{(result.runtime || result.trace || result.evidence || result.approval_required) && <RunDetails result={result} config={config} sessionId={sessionId} busy={busy} onApproval={onApproval} onBusy={onBusy} />}</>}</div></div>
+    <div className="message-content">{assistant && message.progress && <RunProgress entries={message.progress} />}<div className="message-body">{renderMarkdown(message.text)}{result && assistant && (message.approvalCard ? <ApprovalControls result={result} busy={busy} onResult={onApproval} onBusy={onBusy} onProgress={onProgress} /> : <><ArtifactViews result={result} sessionId={sessionId} imageSuffixes={config.files?.image_suffixes || ['.gif', '.jpeg', '.jpg', '.png', '.svg', '.webp']} />{(result.runtime || result.trace || result.evidence || result.approval_required) && <RunDetails result={result} config={config} sessionId={sessionId} busy={busy} onApproval={onApproval} onBusy={onBusy} onProgress={onProgress} />}</>)}</div></div>
   </article>;
 }
 

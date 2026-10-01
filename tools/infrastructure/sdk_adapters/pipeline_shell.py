@@ -47,9 +47,13 @@ Do not modify job state or pipeline definitions through filesystem tools.
 Use existing data retrieval tools to obtain requested public data before planning;
 use example files only when the user requested examples. The agent selects data
 and parameters; deterministic code validates them.
-A queued/running job is not a successful pipeline. When the user's task includes
-analysis, wait briefly and collect results automatically if it succeeds. For long
-jobs return the job ID and status; do not promise unsolicited background messages.
+A queued/running job is not a successful pipeline. After starting a job, perform
+at most one short status/wait check. If it is still active, END your current
+response with a brief progress update; do not keep calling wait or status in a
+loop. The runtime will monitor it without consuming model turns, then supply
+verified terminal results so you can finish the original request automatically,
+including any requested analysis. Do not ask the user to check again or claim
+completion before receiving those results.
 On later requests inspect existing jobs. Never rerun to review outputs. Do not
 automatically retry failed/interrupted jobs. Preserve logs and explain failures.
 
