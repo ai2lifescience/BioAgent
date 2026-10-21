@@ -1,4 +1,4 @@
-# Metagenomic pathogen identification
+# Metagenomic pathogen identification based alignment
 
 This WDL 1.0 workflow performs post-QC pathogen detection against optional
 bacterial, viral, fungal, and parasite minimap2 indexes. It arbitrates hits

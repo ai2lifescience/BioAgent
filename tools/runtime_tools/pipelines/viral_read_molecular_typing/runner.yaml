@@ -1,0 +1,189 @@
+name: viral_read_molecular_typing
+display_name: Viral read molecular typing
+description: Process viral FASTQ reads, generate a consensus sequence, and run configured Nextclade molecular typing.
+visibility: public
+use_when:
+- the user has raw viral FASTQ or FASTQ.GZ reads and wants influenza or SARS-CoV-2 molecular typing
+- the user wants paired-end or single-end read processing followed by consensus and Nextclade results
+avoid_when:
+- the user already has an assembled or consensus FASTA and does not need read processing
+- the user requests an unsupported pathogen or an unrestricted clinical diagnosis
+input_summary: Read 1, optional read 2, and one supported pathogen; reference and Nextclade resources are deployment-managed.
+output_summary: Typing CSV, Nextclade TSV and JSON, consensus FASTA, and final BAM alignment.
+limitations: Results depend on the selected pathogen resources, coverage, the Docker image, Nextclade data release, and Cromwell execution.
+examples:
+- Run viral molecular typing on these H1N1 FASTQ reads.
+- Type this paired-end SARS-CoV-2 read set and return the consensus and Nextclade files.
+engine: wdl
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 7200
+resources:
+  max_cores: 16
+  max_memory_mb: 32768
+inputs:
+  read1:
+    label: Read 1 FASTQ
+    wdl_key: run_molecular_typing.file1Path
+    required: true
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Required single-end read file or paired-end read 1.
+  read2:
+    label: Read 2 FASTQ
+    wdl_key: run_molecular_typing.file2Path
+    required: false
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Optional paired-end read 2. Leave empty for single-end data.
+param_overrides:
+  sample:
+    wdl_key: run_molecular_typing.sample
+    default: SAMPLE
+  pathogen:
+    wdl_key: run_molecular_typing.pathogen
+    label: Pathogen
+    required: true
+    choices:
+    - H1N1
+    - H3N2
+    - SARS_CoV_2
+  min_length:
+    wdl_key: run_molecular_typing.MIN_LENGTH
+    default: '35'
+  min_qual:
+    wdl_key: run_molecular_typing.MIN_QUAL
+    default: '20'
+  threads:
+    wdl_key: run_molecular_typing.THREADS
+    default: '16'
+  task_cpu:
+    wdl_key: run_molecular_typing.task_cpu
+    default: 16
+  docker_image:
+    wdl_key: run_molecular_typing.docker_image
+    default: cncb/molecular-wdl:v1.0
+preset_param: pathogen
+presets:
+  H1N1:
+    run_molecular_typing.type: meta
+    run_molecular_typing.pathogen: H1N1
+    run_molecular_typing.REF:
+    - /data/zhaomh/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna
+    - /data/zhaomh/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna.amb
+    - /data/zhaomh/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna.ann
+    - /data/zhaomh/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna.bwt
+    - /data/zhaomh/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna.fai
+    - /data/zhaomh/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna.pac
+    - /data/zhaomh/program/database/molecular_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna.sa
+    run_molecular_typing.NEXTCLADE_DATASET:
+    - /data/zhaomh/program/database/molecular_database/h1n1/h1n1pdm_ha_CY121680.20251125/reference.fasta
+    - /data/zhaomh/program/database/molecular_database/h1n1/h1n1pdm_ha_CY121680.20251125/genome_annotation.gff3
+    - /data/zhaomh/program/database/molecular_database/h1n1/h1n1pdm_ha_CY121680.20251125/tree.json
+    - /data/zhaomh/program/database/molecular_database/h1n1/h1n1pdm_ha_CY121680.20251125/pathogen.json
+    run_molecular_typing.THREADS: '16'
+    run_molecular_typing.task_cpu: 16
+    run_molecular_typing.MIN_LENGTH: '35'
+    run_molecular_typing.MIN_QUAL: '20'
+    run_molecular_typing.docker_image: cncb/molecular-wdl:v1.0
+    run_molecular_typing.HA_REFNAME: NC_026433.1
+    run_molecular_typing.REFNAME: null
+    run_molecular_typing.EXPECTED_LEN: null
+  H3N2:
+    run_molecular_typing.type: meta
+    run_molecular_typing.pathogen: H3N2
+    run_molecular_typing.REF:
+    - /data/zhaomh/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta
+    - /data/zhaomh/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta.amb
+    - /data/zhaomh/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta.ann
+    - /data/zhaomh/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta.bwt
+    - /data/zhaomh/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta.fai
+    - /data/zhaomh/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta.pac
+    - /data/zhaomh/program/database/molecular_database/h3n2/H3N2_Darwin2021.fasta.sa
+    run_molecular_typing.NEXTCLADE_DATASET:
+    - /data/zhaomh/program/database/molecular_database/h3n2/h3n2_ha_EPI1857216.20260205/reference.fasta
+    - /data/zhaomh/program/database/molecular_database/h3n2/h3n2_ha_EPI1857216.20260205/genome_annotation.gff3
+    - /data/zhaomh/program/database/molecular_database/h3n2/h3n2_ha_EPI1857216.20260205/tree.json
+    - /data/zhaomh/program/database/molecular_database/h3n2/h3n2_ha_EPI1857216.20260205/pathogen.json
+    run_molecular_typing.THREADS: '16'
+    run_molecular_typing.task_cpu: 16
+    run_molecular_typing.MIN_LENGTH: '35'
+    run_molecular_typing.MIN_QUAL: '20'
+    run_molecular_typing.docker_image: cncb/molecular-wdl:v1.0
+    run_molecular_typing.HA_REFNAME: PX230021.1
+    run_molecular_typing.REFNAME: null
+    run_molecular_typing.EXPECTED_LEN: null
+  SARS_CoV_2:
+    run_molecular_typing.type: meta
+    run_molecular_typing.pathogen: SARS_CoV_2
+    run_molecular_typing.REF:
+    - /data/zhaomh/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna
+    - /data/zhaomh/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna.amb
+    - /data/zhaomh/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna.ann
+    - /data/zhaomh/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna.bwt
+    - /data/zhaomh/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna.fai
+    - /data/zhaomh/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna.pac
+    - /data/zhaomh/program/database/molecular_database/sars/GCF_009858895.2_ASM985889v3_genomic.fna.sa
+    run_molecular_typing.NEXTCLADE_DATASET:
+    - /data/zhaomh/program/database/molecular_database/sars/SARS_cov2.20260205/reference.fasta
+    - /data/zhaomh/program/database/molecular_database/sars/SARS_cov2.20260205/genome_annotation.gff3
+    - /data/zhaomh/program/database/molecular_database/sars/SARS_cov2.20260205/tree.json
+    - /data/zhaomh/program/database/molecular_database/sars/SARS_cov2.20260205/pathogen.json
+    run_molecular_typing.THREADS: '8'
+    run_molecular_typing.task_cpu: 8
+    run_molecular_typing.MIN_LENGTH: '35'
+    run_molecular_typing.MIN_QUAL: '20'
+    run_molecular_typing.docker_image: cncb/molecular-wdl:v1.0
+    run_molecular_typing.HA_REFNAME: null
+    run_molecular_typing.REFNAME: NC_045512.2
+    run_molecular_typing.EXPECTED_LEN: '29903'
+outputs:
+  result_csv:
+    label: Typing result CSV
+    wdl_output: run_molecular_typing.result_csv
+    target: data/output/result.csv
+    kind: table
+    required: true
+    description: Pathogen typing summary produced by the workflow.
+  nextclade_tsv:
+    label: Nextclade TSV
+    wdl_output: run_molecular_typing.nextclade_tsv
+    target: data/output/nextclade.tsv
+    kind: table
+    required: true
+    description: Nextclade tabular result.
+  nextclade_json:
+    label: Nextclade JSON
+    wdl_output: run_molecular_typing.nextclade_json
+    target: data/output/nextclade.json
+    kind: json
+    required: true
+    description: Nextclade machine-readable result.
+  consensus_fasta:
+    label: Consensus FASTA
+    wdl_output: run_molecular_typing.consensus_fa
+    target: data/output/consensus.fa
+    kind: sequence
+    required: true
+    description: Consensus sequence generated from the reads.
+  final_bam:
+    label: Final BAM alignment
+    wdl_output: run_molecular_typing.final_bam_out
+    target: data/output/final.bam
+    kind: alignment
+    required: true
+    description: Final read alignment used by the typing workflow.
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl

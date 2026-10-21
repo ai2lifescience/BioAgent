@@ -1,0 +1,133 @@
+name: snp
+display_name: Bacterial and viral variant analysis
+description: Call mutations from one bacterial or viral FASTQ sample or assembled genome FASTA.
+visibility: public
+use_when:
+- the user wants bacterial or viral SNP and variant results from one sample
+- the user has single-end or paired-end FASTQ reads, or one assembled genome FASTA
+avoid_when:
+- the user wants a multi-sample phylogenetic tree
+- the user wants molecular typing or clinical risk interpretation
+input_summary: One FASTQ read file or assembled FASTA, optional read 2 for metagenome mode, and an optional reference FASTA.
+output_summary: SNP matrix or alignment, variants TSV, and variants summary.
+limitations: The matrix output is TSV or FASTA according to the selected mode. Reference databases must be visible to the Cromwell task container. This WDL skips tree building.
+examples:
+- Call bacterial variants from this paired-end FASTQ sample.
+- Analyze mutations in this assembled SARS-CoV-2 genome FASTA.
+engine: wdl
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 28800
+resources:
+  max_cores: 8
+  max_memory_mb: 32768
+inputs:
+  sequence_file1:
+    label: Read 1 FASTQ or assembled genome FASTA
+    wdl_key: MutationAnalysis.file1Path
+    required: true
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    - .fasta
+    - .fa
+    - .fna
+    - .fas
+    - .fasta.gz
+    - .fa.gz
+    - .fna.gz
+    description: FASTQ in metagenome mode or one assembly FASTA in genome mode.
+  sequence_file2:
+    label: Optional read 2 FASTQ
+    wdl_key: MutationAnalysis.file2Path
+    required: false
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Paired-end read 2; use only with metagenome input_type.
+  reference_fasta:
+    label: Optional reference FASTA
+    wdl_key: MutationAnalysis.reference
+    required: false
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    - .fas
+    description: Local reference sequence when not resolving one from a configured database.
+param_overrides:
+  input_type:
+    wdl_key: MutationAnalysis.input_type
+    label: Input type
+    required: true
+    choices:
+    - metagenome
+    - genome
+  organism:
+    wdl_key: MutationAnalysis.organism
+    label: Organism type
+    required: true
+    choices:
+    - bacteria
+    - virus
+  species:
+    wdl_key: MutationAnalysis.species
+  taxonid:
+    wdl_key: MutationAnalysis.taxonid
+  reference_accession:
+    wdl_key: MutationAnalysis.reference_accession
+  threads:
+    wdl_key: MutationAnalysis.threads
+    default: 8
+  min_coverage:
+    wdl_key: MutationAnalysis.min_coverage
+    default: 0.9
+  window_size:
+    wdl_key: MutationAnalysis.window_size
+    default: 50
+  step_size:
+    wdl_key: MutationAnalysis.step_size
+    default: 10
+  sd_threshold:
+    wdl_key: MutationAnalysis.sd_threshold
+    default: 3.0
+  aligner:
+    wdl_key: MutationAnalysis.aligner
+    default: auto
+  docker_image:
+    wdl_key: MutationAnalysis.docker_image
+    default: cncb/snp-mutation:v1.0
+outputs:
+  snp_matrix:
+    label: SNP matrix or alignment
+    wdl_output: MutationAnalysis.snp_matrix
+    target: data/output/snp_matrix
+    kind: file
+    required: true
+    description: TSV matrix or FASTA alignment, depending on the analysis mode.
+  variants_tsv:
+    label: Variants TSV
+    wdl_output: MutationAnalysis.variants_tsv
+    target: data/output/variants.tsv
+    kind: table
+    required: true
+    description: Variant calls produced by the workflow.
+  variants_summary:
+    label: Variants summary
+    wdl_output: MutationAnalysis.variants_summary
+    target: data/output/variants_summary.txt
+    kind: text
+    required: true
+    description: Text summary of the variant analysis.
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl

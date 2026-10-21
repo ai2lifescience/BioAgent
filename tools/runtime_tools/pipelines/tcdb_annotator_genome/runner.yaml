@@ -1,0 +1,191 @@
+name: tcdb_annotator_genome
+display_name: TCDB genome annotation
+description: Annotate an assembled genome or protein FASTA against TCDB and produce transporter, transmembrane, and summary reports.
+visibility: public
+use_when:
+- the user has an assembled genome FASTA or a predicted protein FASTA and wants TCDB annotation
+- the TCDB BLAST or DIAMOND databases and metadata table are available to the Cromwell task container
+avoid_when:
+- the user has raw metagenomic reads and wants read-level TCDB screening
+- the user wants read quality control, assembly, or clinical risk interpretation
+input_summary: Exactly one genome FASTA or protein FASTA, plus mounted TCDB BLAST/DIAMOND databases and metadata.
+output_summary: TCDB hit and summary tables, optional transmembrane predictions, annotation QC/status files, a manifest, and a Markdown report.
+limitations: The workflow does not assemble reads or perform read QC. Database paths, TMbed model resources when enabled, and the pipeline directory must be visible inside the task container. Genome input runs Prodigal before protein alignment; protein input skips gene prediction.
+examples:
+- Annotate this assembled bacterial genome against TCDB.
+- Annotate this predicted protein FASTA and run the configured transmembrane prediction.
+engine: wdl
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 86400
+resources:
+  max_cores: 8
+  max_memory_mb: 32768
+inputs:
+  genome_fasta:
+    label: Genome FASTA
+    wdl_key: TcdbAnnotatorGenome.genome_fasta
+    required: false
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    - .fas
+    - .fasta.gz
+    - .fa.gz
+    - .fna.gz
+    - .fas.gz
+    description: Assembled nucleotide FASTA. Provide this or protein_fasta, but not both.
+  protein_fasta:
+    label: Protein FASTA
+    wdl_key: TcdbAnnotatorGenome.protein_fasta
+    required: false
+    accepts:
+    - .fasta
+    - .fa
+    - .faa
+    - .fas
+    - .fasta.gz
+    - .fa.gz
+    - .faa.gz
+    - .fas.gz
+    description: Predicted protein FASTA. Provide this or genome_fasta, but not both.
+param_overrides:
+  sample_id:
+    wdl_key: TcdbAnnotatorGenome.sample_id
+    default: GCF_000006765.1_ASM676v1_genomic
+  blast_db:
+    wdl_key: TcdbAnnotatorGenome.blast_db
+    default: /data/zhaomh/program/database/tcdb/2026-08-23/blastdb/tcdb
+    description: Mounted TCDB BLAST database.
+  diamond_db:
+    wdl_key: TcdbAnnotatorGenome.diamond_db
+    default: /data/zhaomh/program/database/tcdb/2026-08-23/diamond/tcdb
+    description: Mounted TCDB DIAMOND database.
+  metadata:
+    wdl_key: TcdbAnnotatorGenome.metadata
+    default: /data/zhaomh/program/database/tcdb/2026-08-23/normalized/tcdb_metadata.tsv
+    description: Mounted TCDB metadata table.
+  db_version:
+    wdl_key: TcdbAnnotatorGenome.db_version
+    default: TCDB 2026-08-23
+  backend:
+    wdl_key: TcdbAnnotatorGenome.backend
+    default: blast
+    choices:
+    - blast
+    - diamond
+  threads:
+    wdl_key: TcdbAnnotatorGenome.threads
+    default: 8
+  genome_context:
+    wdl_key: TcdbAnnotatorGenome.genome_context
+    default: complete
+    choices:
+    - complete
+    - metagenome
+  min_contig_length:
+    wdl_key: TcdbAnnotatorGenome.min_contig_length
+    default: 0
+  tm_prediction:
+    wdl_key: TcdbAnnotatorGenome.tm_prediction
+    default: off
+  tmbed_model_dir:
+    wdl_key: TcdbAnnotatorGenome.tmbed_model_dir
+    default: ""
+    description: Mounted TMbed model directory when TMbed prediction is enabled.
+  tmbed_module:
+    wdl_key: TcdbAnnotatorGenome.tmbed_module
+    default: tmbed
+  tmbed_use_gpu:
+    wdl_key: TcdbAnnotatorGenome.tmbed_use_gpu
+    default: false
+  tmbed_batch_size:
+    wdl_key: TcdbAnnotatorGenome.tmbed_batch_size
+    default: 1000
+  min_identity:
+    wdl_key: TcdbAnnotatorGenome.min_identity
+    default: 30.0
+  min_query_coverage:
+    wdl_key: TcdbAnnotatorGenome.min_query_coverage
+    default: 50.0
+  min_subject_coverage:
+    wdl_key: TcdbAnnotatorGenome.min_subject_coverage
+    default: 0.0
+  max_evalue:
+    wdl_key: TcdbAnnotatorGenome.max_evalue
+    default: 0.00001
+  max_target_seqs:
+    wdl_key: TcdbAnnotatorGenome.max_target_seqs
+    default: 25
+  min_alignment_length:
+    wdl_key: TcdbAnnotatorGenome.min_alignment_length
+    default: 0
+  docker_image:
+    wdl_key: TcdbAnnotatorGenome.docker_image
+    default: cncb/tcdb-annotator:v1.0
+  memory_gb:
+    wdl_key: TcdbAnnotatorGenome.memory_gb
+    default: 32
+  disk_gb:
+    wdl_key: TcdbAnnotatorGenome.disk_gb
+    default: 100
+outputs:
+  hits:
+    label: TCDB hits
+    wdl_output: TcdbAnnotatorGenome.hits
+    target: data/output/tcdb_hits.tsv
+    kind: table
+    required: true
+    description: Hit-level TCDB annotations.
+  summary:
+    label: TCDB summary
+    wdl_output: TcdbAnnotatorGenome.summary
+    target: data/output/tcdb_summary.tsv
+    kind: table
+    required: true
+    description: Sample-level TCDB annotation summary.
+  tm_predictions:
+    label: Transmembrane predictions
+    wdl_output: TcdbAnnotatorGenome.tm_predictions
+    target: data/output/tm_predictions.tsv
+    kind: table
+    required: true
+    description: Transmembrane predictions emitted by the TCDB workflow.
+  qc:
+    label: Annotation QC
+    wdl_output: TcdbAnnotatorGenome.qc
+    target: data/output/qc.json
+    kind: file
+    required: true
+    description: QC information emitted by the TCDB workflow.
+  status:
+    label: Annotation status
+    wdl_output: TcdbAnnotatorGenome.status
+    target: data/output/status.json
+    kind: file
+    required: true
+    description: Workflow status JSON.
+  manifest:
+    label: Annotation manifest
+    wdl_output: TcdbAnnotatorGenome.manifest
+    target: data/output/manifest.json
+    kind: file
+    required: true
+    description: Output manifest JSON.
+  report:
+    label: TCDB report
+    wdl_output: TcdbAnnotatorGenome.report
+    target: data/output/report.md
+    kind: file
+    required: true
+    description: Markdown report generated by the workflow.
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl
+
