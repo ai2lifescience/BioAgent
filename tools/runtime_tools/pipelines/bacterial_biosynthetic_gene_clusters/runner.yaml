@@ -1,0 +1,128 @@
+name: bacterial_bgc_detection
+display_name: Bacterial biosynthetic gene clusters
+description: Detect bacterial biosynthetic gene clusters from an assembled genome FASTA or raw reads using antiSMASH or GECCO.
+visibility: public
+use_when:
+- the user wants bacterial secondary-metabolite or biosynthetic gene cluster detection
+- the user has an assembled genome FASTA or single-end/paired-end sequencing reads
+avoid_when:
+- the user only needs read quality control or taxonomic identification
+- the user wants defense-system or secretion-system annotation
+input_summary: One required genome FASTA or read 1 FASTQ as the main input, an optional read 2 FASTQ for metagenome mode, and the BacBGC task image.
+output_summary: BGC cluster, gene, and feature tables.
+limitations: Set input_type to genome for an assembled FASTA or metagenome for read 1 with optional read 2. Metagenome mode runs fastp and MEGAHIT before antiSMASH/GECCO. Results depend on image, resources, contig length, and backend/database behavior.
+examples:
+- Detect biosynthetic gene clusters in this bacterial genome FASTA.
+- Assemble these metagenomic reads and identify bacterial secondary-metabolite clusters.
+engine: wdl
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: bacbgc.wdl
+inputs_json: input.json
+options_json: options.json
+timeout: 86400
+resources:
+  max_cores: 32
+  max_memory_mb: 65536
+inputs:
+  sequence_file1:
+    label: Main sequence file
+    wdl_key: BacBGC.file1Path
+    required: true
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    - .fas
+    - .fasta.gz
+    - .fa.gz
+    - .fna.gz
+    - .fas.gz
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Assembled genome FASTA in genome mode, or read 1 FASTQ in metagenome mode.
+  sequence_file2:
+    label: Read 2 FASTQ (optional)
+    wdl_key: BacBGC.file2Path
+    required: false
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Optional paired-end read 2 used only in metagenome mode
+param_overrides:
+  input_type:
+    wdl_key: BacBGC.input_type
+    label: Input type
+    required: true
+    choices:
+    - genome
+    - metagenome
+  sample_id:
+    wdl_key: BacBGC.sample_id
+    default: GCF_000006765.1_ASM676v1_genomic
+  docker_image:
+    wdl_key: BacBGC.docker_image
+    default: cncb/bacbgc:v2
+  threads:
+    wdl_key: BacBGC.threads
+    default: 32
+  min_contig_length:
+    wdl_key: BacBGC.min_contig_length
+    default: 1000
+  genome_context:
+    wdl_key: BacBGC.genome_context
+    default: auto
+    choices:
+    - auto
+    - complete
+    - metagenome
+  bgc_backend:
+    wdl_key: BacBGC.bgc_backend
+    default: gecco
+    choices:
+    - auto
+    - gecco
+    - antismash
+  gecco_threshold:
+    wdl_key: BacBGC.gecco_threshold
+    default: 0.8
+  gecco_min_cds:
+    wdl_key: BacBGC.gecco_min_cds
+    default: 3
+  memory_gb:
+    wdl_key: BacBGC.memory_gb
+    default: 64
+  disk_gb:
+    wdl_key: BacBGC.disk_gb
+    default: 200
+outputs:
+  bgc_clusters:
+    label: BGC clusters
+    wdl_output: BacBGC.bgc_clusters
+    target: data/output/bgc_clusters.tsv
+    kind: table
+    required: true
+    description: Detected biosynthetic gene cluster calls.
+  bgc_genes:
+    label: BGC genes
+    wdl_output: BacBGC.bgc_genes
+    target: data/output/bgc_genes.tsv
+    kind: table
+    required: true
+    description: Genes associated with detected biosynthetic gene clusters.
+  bgc_features:
+    label: BGC features
+    wdl_output: BacBGC.bgc_features
+    target: data/output/bgc_features.tsv
+    kind: table
+    required: true
+    description: Parsed BGC feature annotations.
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl
