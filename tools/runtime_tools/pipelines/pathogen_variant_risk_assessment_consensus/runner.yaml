@@ -1,0 +1,137 @@
+name: consensus-risk
+display_name: Pathogen consensus variant risk assessment
+description: Analyze an existing pathogen consensus FASTA, annotate variants, and produce a pathogen-specific risk report.
+visibility: public
+use_when:
+- the user already has a consensus FASTA and wants configured H1N1, H3N2, or SARS-CoV-2 variant risk analysis
+- the user does not need raw-read alignment or consensus generation
+avoid_when:
+- the user has raw FASTQ reads that still need variant calling
+- the user requests unsupported pathogens or unrestricted clinical diagnosis
+input_summary: One consensus FASTA and one supported pathogen; reference, snpEff, segment, and risk annotation resources are deployment-managed.
+output_summary: Final variant risk report and complete workflow output archive.
+limitations: Results depend on the selected pathogen resources, consensus quality, Docker image, snpEff data, and Cromwell execution. This workflow consumes a consensus FASTA and does not generate one from reads.
+examples:
+- Assess variant risk from this H1N1 consensus FASTA.
+- Run the configured SARS-CoV-2 consensus risk analysis.
+engine: wdl
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 7200
+resources:
+  max_cores: 16
+  max_memory_mb: 32768
+inputs:
+  consensus_fasta:
+    label: Consensus FASTA
+    wdl_key: ConsensusRisk.consensus_fasta
+    required: true
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    - .fas
+    description: Consensus or assembled pathogen sequence in FASTA format.
+param_overrides:
+  sample_id:
+    wdl_key: ConsensusRisk.sample_id
+    default: SAMPLE
+  pathogen:
+    wdl_key: ConsensusRisk.pathogen
+    label: Pathogen
+    required: true
+    choices:
+    - H1N1
+    - H3N2
+    - SARS_CoV_2
+  log_tag:
+    wdl_key: ConsensusRisk.log_tag
+    default: SAMPLE
+  threads:
+    wdl_key: ConsensusRisk.threads
+    default: 16
+  snpeff_java_mem_gb:
+    wdl_key: ConsensusRisk.snpeff_java_mem_gb
+    default: 32
+  docker_image:
+    wdl_key: ConsensusRisk.docker_image
+    default: cncb/risk-wdl:v1.0
+preset_param: pathogen
+presets:
+  H1N1:
+    ConsensusRisk.pathogen: H1N1
+    ConsensusRisk.log_tag: H1N1
+    ConsensusRisk.reference_fasta: /data/zhaomh/program/database/risk_database/h1n1/GCF_001343785.1_ViralMultiSegProj274766_genomic.fna
+    ConsensusRisk.snpeff_config: /data/zhaomh/program/database/risk_database/h1n1/snpeff_h1n1.config
+    ConsensusRisk.snpeff_db: Influenza_A_H1N1
+    ConsensusRisk.snpeff_data_tarball: /data/zhaomh/program/database/risk_database/h1n1/snpEff_H1N1.tar.gz
+    ConsensusRisk.segments_tsv: /data/zhaomh/program/database/risk_database/h1n1/h1n1_segments.tsv
+    ConsensusRisk.reference_label: A/California/07/2009(H1N1)
+    ConsensusRisk.risk_annotation_h: /data/zhaomh/program/database/risk_database/h1n1/H1N1_H_risk_annotation.tsv
+    ConsensusRisk.risk_annotation_n: /data/zhaomh/program/database/risk_database/h1n1/H1N1_N_risk_annotation.tsv
+    ConsensusRisk.spike_risk_annotation: null
+    ConsensusRisk.threads: 16
+    ConsensusRisk.snpeff_java_mem_gb: 32
+    ConsensusRisk.docker_image: cncb/risk-wdl:v1.0
+    ConsensusRisk.cpu: 16
+    ConsensusRisk.memory_gb: 32
+    ConsensusRisk.disk_gb: 100
+  H3N2:
+    ConsensusRisk.pathogen: H3N2
+    ConsensusRisk.log_tag: H3N2
+    ConsensusRisk.reference_fasta: /data/zhaomh/program/database/risk_database/h3n2/H3N2_Darwin2021.fasta
+    ConsensusRisk.snpeff_config: /data/zhaomh/program/database/risk_database/h3n2/snpeff_h3n2.config
+    ConsensusRisk.snpeff_db: Influenza_A_H3N2
+    ConsensusRisk.snpeff_data_tarball: /data/zhaomh/program/database/risk_database/h3n2/snpEff_H3N2.tar.gz
+    ConsensusRisk.segments_tsv: /data/zhaomh/program/database/risk_database/h3n2/h3n2_segments.tsv
+    ConsensusRisk.reference_label: A/Darwin/2021(H3N2)
+    ConsensusRisk.risk_annotation_h: /data/zhaomh/program/database/risk_database/h3n2/H3N2_H_risk_annotation.tsv
+    ConsensusRisk.risk_annotation_n: /data/zhaomh/program/database/risk_database/h3n2/H3N2_N_risk_annotation.tsv
+    ConsensusRisk.spike_risk_annotation: null
+    ConsensusRisk.threads: 16
+    ConsensusRisk.snpeff_java_mem_gb: 32
+    ConsensusRisk.docker_image: cncb/risk-wdl:v1.0
+    ConsensusRisk.cpu: 16
+    ConsensusRisk.memory_gb: 32
+    ConsensusRisk.disk_gb: 100
+  SARS_CoV_2:
+    ConsensusRisk.pathogen: SARS_CoV_2
+    ConsensusRisk.log_tag: SARS-CoV-2
+    ConsensusRisk.reference_fasta: /data/zhaomh/program/database/risk_database/SARS_cov2/GCF_009858895.2_ASM985889v3_genomic.fna
+    ConsensusRisk.snpeff_config: /data/zhaomh/program/database/risk_database/SARS_cov2/snpeff_sars_cov2.config
+    ConsensusRisk.snpeff_db: SARS-CoV-2
+    ConsensusRisk.snpeff_data_tarball: /data/zhaomh/program/database/risk_database/SARS_cov2/snpEff_SARS_cov2.tar.gz
+    ConsensusRisk.segments_tsv: /data/zhaomh/program/database/risk_database/SARS_cov2/sars_cov2_segments.tsv
+    ConsensusRisk.reference_label: Wuhan-Hu-1(SARS-CoV-2)
+    ConsensusRisk.risk_annotation_h: null
+    ConsensusRisk.risk_annotation_n: null
+    ConsensusRisk.spike_risk_annotation: /data/zhaomh/program/database/risk_database/SARS_cov2/SARS_COV2_spike_risk_annotation.tsv
+    ConsensusRisk.threads: 16
+    ConsensusRisk.snpeff_java_mem_gb: 32
+    ConsensusRisk.docker_image: cncb/risk-wdl:v1.0
+    ConsensusRisk.cpu: 16
+    ConsensusRisk.memory_gb: 32
+    ConsensusRisk.disk_gb: 100
+outputs:
+  final_report:
+    label: Final variant risk report
+    wdl_output: ConsensusRisk.final_report
+    target: data/output/final_variant_risk_report.tsv
+    kind: table
+    required: true
+    description: Pathogen-specific variant risk report produced by the workflow.
+  output_archive:
+    label: Complete risk assessment output
+    wdl_output: ConsensusRisk.output_tar
+    target: data/output/consensus_risk_output.tar
+    kind: archive
+    required: true
+    description: Complete workflow output archive.
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl

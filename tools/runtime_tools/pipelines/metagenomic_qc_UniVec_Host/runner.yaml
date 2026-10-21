@@ -1,0 +1,152 @@
+name: mngs_pipeline
+display_name: Metagenomic qc UniVec Host
+description: Trim adapters, remove configured host sequences and UniVec contaminants, and summarize read QC results for one metagenomic sample.
+visibility: public
+use_when:
+- the user wants adapter trimming, host removal, or UniVec filtering for metagenomic FASTQ reads
+- the user has single-end or paired-end reads and the required host/UniVec resources are mounted
+avoid_when:
+- the user already has cleaned reads and only needs pathogen identification
+- the user wants genome assembly, taxonomic profiling, or variant interpretation
+input_summary: Required read 1, optional read 2, optional custom host FASTA, and deployment-managed host and UniVec resources.
+output_summary: Cleaned read files, one QC summary row, and a MultiQC HTML report.
+limitations: Results depend on adapter sequences, host selection or custom host index, UniVec resources, Docker image, resource allocation, and Cromwell execution. Mounted indexes must be visible inside the task container.
+examples:
+- Quality-filter these paired-end metagenomic reads and remove the configured host and UniVec sequences.
+- Process this single-end read file with the configured adapter and host-removal settings.
+engine: wdl
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 86400
+resources:
+  max_cores: 8
+  max_memory_mb: 32768
+inputs:
+  read1:
+    label: Read 1 FASTQ
+    wdl_key: ReadQc.fastq_r1
+    required: true
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Required single-end read or paired-end read 1.
+  read2:
+    label: Read 2 FASTQ
+    wdl_key: ReadQc.fastq_r2
+    required: false
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Optional paired-end read 2; its presence selects paired-end processing.
+  host_fasta:
+    label: Optional custom host FASTA
+    wdl_key: ReadQc.host_fasta
+    required: false
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    - .fas
+    description: Optional host FASTA used to build a temporary Bowtie2 index when host_name is cleared.
+param_overrides:
+  sample_id:
+    wdl_key: ReadQc.sample_id
+    default: SRR12883954
+  remove_adapters:
+    wdl_key: ReadQc.remove_adapters
+    default: true
+  adapter_r1:
+    wdl_key: ReadQc.adapter_r1
+    default: CTGTCTCTTATACACATCT
+  adapter_r2:
+    wdl_key: ReadQc.adapter_r2
+    default: CTGTCTCTTATACACATCT
+  remove_host:
+    wdl_key: ReadQc.remove_host
+    default: true
+  host_name:
+    wdl_key: ReadQc.host_name
+    default: Rattus_norvegicus
+    description: Preset host name under host_index_root; leave empty when using host_fasta.
+  host_index_root:
+    wdl_key: ReadQc.host_index_root
+    default: /data/zhaomh/program/database/qc_database/hosts/indexes
+    description: Mounted root containing host Bowtie2 indexes.
+  trimmomatic_slidingwindow:
+    wdl_key: ReadQc.trimmomatic_slidingwindow
+    default: 4:20
+  trimmomatic_leading:
+    wdl_key: ReadQc.trimmomatic_leading
+    default: 3
+  trimmomatic_trailing:
+    wdl_key: ReadQc.trimmomatic_trailing
+    default: 3
+  trimmomatic_minlen:
+    wdl_key: ReadQc.trimmomatic_minlen
+    default: 36
+  host_bowtie2_preset:
+    wdl_key: ReadQc.host_bowtie2_preset
+    default: --very-sensitive-local
+  remove_univec:
+    wdl_key: ReadQc.remove_univec
+    default: true
+  univec_index_prefix:
+    wdl_key: ReadQc.univec_index_prefix
+    default: /data/zhaomh/program/database/qc_database/references/UniVec_Core/bowtie2/index
+    description: Mounted UniVec_Core Bowtie2 index prefix.
+  univec_bowtie2_preset:
+    wdl_key: ReadQc.univec_bowtie2_preset
+    default: --very-sensitive-local
+  docker_image:
+    wdl_key: ReadQc.docker_image
+    default: cncb/qc-pipeline:v1.0
+  threads:
+    wdl_key: ReadQc.threads
+    default: 8
+  memory_gb:
+    wdl_key: ReadQc.memory_gb
+    default: 32
+  disk_gb:
+    wdl_key: ReadQc.disk_gb
+    default: 200
+outputs:
+  clean_r1:
+    label: Cleaned read 1
+    wdl_output: ReadQc.clean_r1
+    target: data/output/clean.R1.fastq.gz
+    kind: sequence
+    required: true
+    description: Cleaned single-end reads or paired-end read 1.
+  clean_r2:
+    label: Cleaned read 2
+    wdl_output: ReadQc.clean_r2
+    target: data/output/clean.R2.fastq.gz
+    kind: sequence
+    required: false
+    description: Cleaned paired-end read 2, absent for single-end input.
+  qc_summary:
+    label: QC summary
+    wdl_output: ReadQc.qc_summary
+    target: data/output/qc_summary.tsv
+    kind: table
+    required: true
+    description: Aggregated raw, trimming, UniVec, host-removal, and final-read counts.
+  multiqc_html:
+    label: MultiQC report
+    wdl_output: ReadQc.multiqc_html
+    target: data/output/multiqc_report.html
+    kind: file
+    required: true
+    description: Aggregated FastQC and trimming/filtering report.
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl

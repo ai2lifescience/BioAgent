@@ -1,0 +1,151 @@
+name: phi_annotator_metagenome
+display_name: PHI-base metagenome read annotation
+description: Screen metagenomic FASTQ reads against PHI-base with DIAMOND blastx and produce read-level pathogen-host interaction annotations.
+visibility: public
+use_when:
+- the user has single-end or paired-end metagenomic FASTQ reads and wants PHI-base read-level annotation
+- the PHI-base DIAMOND database and metadata table are available to the Cromwell task container
+avoid_when:
+- the user has an assembled genome and wants genome-level PHI-base annotation
+- the user wants read quality control, assembly, or clinical risk interpretation
+input_summary: Required read 1, optional read 2, and the mounted PHI-base DIAMOND database and metadata table.
+output_summary: PHI-base hit, read-hit, and summary tables, annotation QC/status files, a manifest, and a Markdown report.
+limitations: This workflow runs DIAMOND blastx directly on reads and does not assemble or perform upstream read QC. The optional R2 is scanned as an additional FASTQ and is not paired during annotation. Database paths and the pipeline directory must be visible inside the task container.
+examples:
+- Annotate these paired-end metagenomic reads against PHI-base.
+- Screen this single-end FASTQ for PHI-base read hits.
+engine: wdl
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 86400
+resources:
+  max_cores: 8
+  max_memory_mb: 32768
+inputs:
+  read1:
+    label: Read 1 FASTQ
+    wdl_key: PhiAnnotatorMetagenome.fastq_r1
+    required: true
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Required single-end read or paired-end read 1.
+  read2:
+    label: Read 2 FASTQ
+    wdl_key: PhiAnnotatorMetagenome.fastq_r2
+    required: false
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Optional second FASTQ. It is scanned together with read 1 without PE pairing.
+param_overrides:
+  sample_id:
+    wdl_key: PhiAnnotatorMetagenome.sample_id
+    default: SRR3405414
+  diamond_db:
+    wdl_key: PhiAnnotatorMetagenome.diamond_db
+    default: /data/zhaomh/program/database/phibase/5.6/diamond/phibase5.dmnd
+    description: Mounted PHI-base DIAMOND database.
+  metadata:
+    wdl_key: PhiAnnotatorMetagenome.metadata
+    default: /data/zhaomh/program/database/phibase/5.6/normalized/phibase5_metadata.tsv
+    description: Mounted PHI-base metadata table.
+  db_version:
+    wdl_key: PhiAnnotatorMetagenome.db_version
+    default: PHI-base 5.6
+  threads:
+    wdl_key: PhiAnnotatorMetagenome.threads
+    default: 8
+  min_read_length:
+    wdl_key: PhiAnnotatorMetagenome.min_read_length
+    default: 0
+  min_identity:
+    wdl_key: PhiAnnotatorMetagenome.min_identity
+    default: 80.0
+  min_query_coverage:
+    wdl_key: PhiAnnotatorMetagenome.min_query_coverage
+    default: 0.0
+  min_subject_coverage:
+    wdl_key: PhiAnnotatorMetagenome.min_subject_coverage
+    default: 0.0
+  max_evalue:
+    wdl_key: PhiAnnotatorMetagenome.max_evalue
+    default: 0.00001
+  max_target_seqs:
+    wdl_key: PhiAnnotatorMetagenome.max_target_seqs
+    default: 25
+  min_alignment_length:
+    wdl_key: PhiAnnotatorMetagenome.min_alignment_length
+    default: 30
+  docker_image:
+    wdl_key: PhiAnnotatorMetagenome.docker_image
+    default: cncb/phi-annotator:v1.0
+  memory_gb:
+    wdl_key: PhiAnnotatorMetagenome.memory_gb
+    default: 32
+  disk_gb:
+    wdl_key: PhiAnnotatorMetagenome.disk_gb
+    default: 200
+outputs:
+  hits:
+    label: PHI-base hits
+    wdl_output: PhiAnnotatorMetagenome.hits
+    target: data/output/phi_hits.tsv
+    kind: table
+    required: true
+    description: Aggregated PHI-base annotations.
+  read_hits:
+    label: PHI-base read hits
+    wdl_output: PhiAnnotatorMetagenome.read_hits
+    target: data/output/phi_read_hits.tsv
+    kind: table
+    required: true
+    description: Read-level PHI-base hits.
+  summary:
+    label: PHI-base summary
+    wdl_output: PhiAnnotatorMetagenome.summary
+    target: data/output/phi_summary.tsv
+    kind: table
+    required: true
+    description: Sample-level PHI-base annotation summary.
+  qc:
+    label: Annotation QC
+    wdl_output: PhiAnnotatorMetagenome.qc
+    target: data/output/qc.json
+    kind: file
+    required: true
+    description: QC information emitted by the PHI-base workflow.
+  status:
+    label: Annotation status
+    wdl_output: PhiAnnotatorMetagenome.status
+    target: data/output/status.json
+    kind: file
+    required: true
+    description: Workflow status JSON.
+  manifest:
+    label: Annotation manifest
+    wdl_output: PhiAnnotatorMetagenome.manifest
+    target: data/output/manifest.json
+    kind: file
+    required: true
+    description: Output manifest JSON.
+  report:
+    label: PHI-base report
+    wdl_output: PhiAnnotatorMetagenome.report
+    target: data/output/report.md
+    kind: file
+    required: true
+    description: Markdown report generated by the workflow.
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl
+

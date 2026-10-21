@@ -1,0 +1,82 @@
+name: strain-coptr
+display_name: Metagenomic growth rate calculation
+description: Estimate genome-by-sample replication rates as log2(PTR) from metagenomic reads with the configured CoPTR reference and index resources.
+visibility: public
+use_when:
+- the user has single-end or paired-end metagenomic FASTQ reads and wants CoPTR replication-rate estimates
+- the CoPTR reference genomes and index are available at paths visible to the Cromwell task container
+avoid_when:
+- the user still needs read quality control, adapter trimming, or host removal
+- the user wants taxonomic profiling, assembly, or clinical risk interpretation
+input_summary: Required read 1, optional read 2,  and sample parameters.
+output_summary: One CSV containing genome-by-sample log2(PTR) estimates.
+limitations: Results depend on read quality, reference genomes, CoPTR index, minimum-read threshold, Docker image, and Cromwell execution. The reference and index directories must already be visible inside the task container.
+examples:
+- Estimate CoPTR replication rates from this paired-end metagenomic sample.
+- Run single-end CoPTR analysis and return the log2(PTR) CSV.
+engine: wdl
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 86400
+resources:
+  max_cores: 16
+  max_memory_mb: 65536
+inputs:
+  read1:
+    label: Read 1 FASTQ
+    wdl_key: StrainCoPTR.fastq_r1
+    required: true
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Required single-end read or paired-end read 1.
+  read2:
+    label: Read 2 FASTQ
+    wdl_key: StrainCoPTR.fastq_r2
+    required: false
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Optional paired-end read 2.
+param_overrides:
+  sample_id:
+    wdl_key: StrainCoPTR.sample_id
+    default: SAMPLE
+  min_reads:
+    wdl_key: StrainCoPTR.min_reads
+    default: 2500
+  threads:
+    wdl_key: StrainCoPTR.threads
+    default: 16
+  docker_image:
+    wdl_key: StrainCoPTR.docker_image
+    default: cncb/strain-coptr:v1.0
+  cpu:
+    wdl_key: StrainCoPTR.cpu
+    default: 16
+  memory_gb:
+    wdl_key: StrainCoPTR.memory_gb
+    default: 64
+  disk_gb:
+    wdl_key: StrainCoPTR.disk_gb
+    default: 500
+outputs:
+  log2ptr_csv:
+    label: CoPTR log2 PTR estimates
+    wdl_output: StrainCoPTR.log2ptr_csv
+    target: data/output/coptr_log2ptr.csv
+    kind: table
+    required: true
+    description: Genome-by-sample replication-rate estimates produced by CoPTR.
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl

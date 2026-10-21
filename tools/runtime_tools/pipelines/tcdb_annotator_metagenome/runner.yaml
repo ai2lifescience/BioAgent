@@ -1,0 +1,151 @@
+name: tcdb_annotator_metagenome
+display_name: TCDB metagenome read annotation
+description: Screen metagenomic FASTQ reads against TCDB with DIAMOND blastx and produce read-level transporter annotations.
+visibility: public
+use_when:
+- the user has single-end or paired-end metagenomic FASTQ reads and wants read-level TCDB annotation
+- the TCDB DIAMOND database and metadata table are available to the Cromwell task container
+avoid_when:
+- the user has an assembled genome and wants genome-level TCDB annotation
+- the user wants read quality control, assembly, or clinical risk interpretation
+input_summary: Required read 1, optional read 2, and the mounted TCDB DIAMOND database and metadata table.
+output_summary: TCDB hit, read-hit, and summary tables, annotation QC/status files, a manifest, and a Markdown report.
+limitations: This workflow runs DIAMOND blastx directly on reads and does not assemble or perform upstream read QC. The optional R2 is scanned as an additional FASTQ and is not paired during annotation. TMbed is disabled in this mode. Database paths and the pipeline directory must be visible inside the task container.
+examples:
+- Annotate these paired-end metagenomic reads against TCDB.
+- Screen this single-end FASTQ for TCDB read hits.
+engine: wdl
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 86400
+resources:
+  max_cores: 8
+  max_memory_mb: 32768
+inputs:
+  read1:
+    label: Read 1 FASTQ
+    wdl_key: TcdbAnnotatorMetagenome.fastq_r1
+    required: true
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Required single-end read or paired-end read 1.
+  read2:
+    label: Read 2 FASTQ
+    wdl_key: TcdbAnnotatorMetagenome.fastq_r2
+    required: false
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Optional second FASTQ. It is scanned together with read 1 without PE pairing.
+param_overrides:
+  sample_id:
+    wdl_key: TcdbAnnotatorMetagenome.sample_id
+    default: SRR3405414
+  diamond_db:
+    wdl_key: TcdbAnnotatorMetagenome.diamond_db
+    default: /data/zhaomh/program/database/tcdb/2026-08-23/diamond/tcdb
+    description: Mounted TCDB DIAMOND database.
+  metadata:
+    wdl_key: TcdbAnnotatorMetagenome.metadata
+    default: /data/zhaomh/program/database/tcdb/2026-08-23/normalized/tcdb_metadata.tsv
+    description: Mounted TCDB metadata table.
+  db_version:
+    wdl_key: TcdbAnnotatorMetagenome.db_version
+    default: TCDB 2026-08-23
+  threads:
+    wdl_key: TcdbAnnotatorMetagenome.threads
+    default: 8
+  min_read_length:
+    wdl_key: TcdbAnnotatorMetagenome.min_read_length
+    default: 0
+  min_identity:
+    wdl_key: TcdbAnnotatorMetagenome.min_identity
+    default: 80.0
+  min_query_coverage:
+    wdl_key: TcdbAnnotatorMetagenome.min_query_coverage
+    default: 0.0
+  min_subject_coverage:
+    wdl_key: TcdbAnnotatorMetagenome.min_subject_coverage
+    default: 0.0
+  max_evalue:
+    wdl_key: TcdbAnnotatorMetagenome.max_evalue
+    default: 0.00001
+  max_target_seqs:
+    wdl_key: TcdbAnnotatorMetagenome.max_target_seqs
+    default: 25
+  min_alignment_length:
+    wdl_key: TcdbAnnotatorMetagenome.min_alignment_length
+    default: 30
+  docker_image:
+    wdl_key: TcdbAnnotatorMetagenome.docker_image
+    default: cncb/tcdb-annotator:v1.0
+  memory_gb:
+    wdl_key: TcdbAnnotatorMetagenome.memory_gb
+    default: 32
+  disk_gb:
+    wdl_key: TcdbAnnotatorMetagenome.disk_gb
+    default: 200
+outputs:
+  hits:
+    label: TCDB hits
+    wdl_output: TcdbAnnotatorMetagenome.hits
+    target: data/output/tcdb_hits.tsv
+    kind: table
+    required: true
+    description: Aggregated TCDB annotations.
+  read_hits:
+    label: TCDB read hits
+    wdl_output: TcdbAnnotatorMetagenome.read_hits
+    target: data/output/tcdb_read_hits.tsv
+    kind: table
+    required: true
+    description: Read-level TCDB hits.
+  summary:
+    label: TCDB summary
+    wdl_output: TcdbAnnotatorMetagenome.summary
+    target: data/output/tcdb_summary.tsv
+    kind: table
+    required: true
+    description: Sample-level TCDB annotation summary.
+  qc:
+    label: Annotation QC
+    wdl_output: TcdbAnnotatorMetagenome.qc
+    target: data/output/qc.json
+    kind: file
+    required: true
+    description: QC information emitted by the TCDB workflow.
+  status:
+    label: Annotation status
+    wdl_output: TcdbAnnotatorMetagenome.status
+    target: data/output/status.json
+    kind: file
+    required: true
+    description: Workflow status JSON.
+  manifest:
+    label: Annotation manifest
+    wdl_output: TcdbAnnotatorMetagenome.manifest
+    target: data/output/manifest.json
+    kind: file
+    required: true
+    description: Output manifest JSON.
+  report:
+    label: TCDB report
+    wdl_output: TcdbAnnotatorMetagenome.report
+    target: data/output/report.md
+    kind: file
+    required: true
+    description: Markdown report generated by the workflow.
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl
+

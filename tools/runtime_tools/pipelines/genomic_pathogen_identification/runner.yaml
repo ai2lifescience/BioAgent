@@ -1,0 +1,144 @@
+name: mash-identify
+display_name: Genomic pathogen identification
+description: Identify likely bacterial, fungal, parasitic, and viral pathogens from an assembled or consensus FASTA using Mash sketches and configured annotation tables.
+visibility: public
+use_when:
+- the user has an assembled or consensus FASTA and wants Mash-based pathogen identification
+- the Mash databases and annotation tables are available at paths visible to the Cromwell task container
+avoid_when:
+- the user has raw FASTQ reads that still need quality control or assembly
+- the user wants a strain-level analysis, variant risk assessment, or unrestricted clinical diagnosis
+input_summary: One assembled or consensus FASTA; Mash databases and annotation files are deployment-managed resources.
+output_summary: Summary identification TSV, per-contig calls TSV, annotated hits TSV, and four Mash distance tables.
+limitations: Results depend on the configured Mash databases, annotation releases, query FASTA quality, Docker image, resource allocation, and Cromwell execution. All reference files must already be visible inside the task container.
+examples:
+- Identify pathogens in this assembled metagenomic FASTA with the configured Mash databases.
+- Run Mash identification on this consensus FASTA and return annotated hits and distance tables.
+engine: wdl
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 14400
+resources:
+  max_cores: 16
+  max_memory_mb: 32768
+inputs:
+  query_fasta:
+    label: Query FASTA
+    wdl_key: MashIdentify.query_fasta
+    required: true
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    - .fas
+    description: Assembled or consensus nucleotide FASTA to identify.
+param_overrides:
+  sample_id:
+    wdl_key: MashIdentify.sample_id
+    default: SAMPLE
+  mash_db_bacteria:
+    wdl_key: MashIdentify.mash_db_bacteria
+    default: /data/zhaomh/program/database/mash_database/bacteria_k21_s5k.msh
+    description: Mounted bacterial Mash database.
+  mash_db_fungi:
+    wdl_key: MashIdentify.mash_db_fungi
+    default: /data/zhaomh/program/database/mash_database/fungi_k21_s5k.msh
+    description: Mounted fungal Mash database.
+  mash_db_parasite:
+    wdl_key: MashIdentify.mash_db_parasite
+    default: /data/zhaomh/program/database/mash_database/parasite_k21_s10k.msh
+    description: Mounted parasite Mash database.
+  mash_db_virus:
+    wdl_key: MashIdentify.mash_db_virus
+    default: /data/zhaomh/program/database/mash_database/rvdb_virus_k16_s5k.msh
+    description: Mounted viral Mash database.
+  virus_annotation:
+    wdl_key: MashIdentify.virus_annotation
+    default: /data/zhaomh/program/database/mash_database/Filtered_RVDBv31_taxonomy.tab
+    description: Mounted virus taxonomy annotation table.
+  pathogen_annotation:
+    wdl_key: MashIdentify.pathogen_annotation
+    default: /data/zhaomh/program/database/mash_database/Filtered_Total_Pathogen_Annotation_New_species_b3fp1_final.tsv
+    description: Mounted pathogen annotation table.
+  threads:
+    wdl_key: MashIdentify.threads
+    default: 16
+  sketch_k16:
+    wdl_key: MashIdentify.sketch_k16
+    default: 16
+  sketch_s_k16:
+    wdl_key: MashIdentify.sketch_s_k16
+    default: 5000
+  sketch_k21:
+    wdl_key: MashIdentify.sketch_k21
+    default: 21
+  sketch_s_k21_5k:
+    wdl_key: MashIdentify.sketch_s_k21_5k
+    default: 5000
+  sketch_s_k21_10k:
+    wdl_key: MashIdentify.sketch_s_k21_10k
+    default: 10000
+  threshold_max_dist:
+    wdl_key: MashIdentify.threshold_max_dist
+    default: 0.05
+  threshold_max_pvalue:
+    wdl_key: MashIdentify.threshold_max_pvalue
+    default: 1e-10
+  threshold_min_shared:
+    wdl_key: MashIdentify.threshold_min_shared
+    default: 200
+  threshold_near_best_delta:
+    wdl_key: MashIdentify.threshold_near_best_delta
+    default: 0.005
+  threshold_near_best_ratio:
+    wdl_key: MashIdentify.threshold_near_best_ratio
+    default: 1.1
+  docker_image:
+    wdl_key: MashIdentify.docker_image
+    default: cncb/mash-identify:v1.0
+  cpu:
+    wdl_key: MashIdentify.cpu
+    default: 16
+  memory_gb:
+    wdl_key: MashIdentify.memory_gb
+    default: 32
+  disk_gb:
+    wdl_key: MashIdentify.disk_gb
+    default: 100
+outputs:
+  summary_tsv:
+    label: Identification summary TSV
+    wdl_output: MashIdentify.summary_tsv
+    target: data/output/summary.tsv
+    kind: table
+    required: true
+    description: Sample-level Mash identification summary.
+  per_contig_call_tsv:
+    label: Per-contig calls TSV
+    wdl_output: MashIdentify.per_contig_call_tsv
+    target: data/output/per_contig_call.tsv
+    kind: table
+    required: true
+    description: Per-contig identification calls produced by the post-processing step.
+  annotated_hits_tsv:
+    label: Annotated hits TSV
+    wdl_output: MashIdentify.annotated_hits_tsv
+    target: data/output/annotated_hits.tsv
+    kind: table
+    required: true
+    description: Mash hits combined with the configured pathogen annotations.
+  mash_dist_tsv:
+    label: Mash distance tables
+    wdl_output: MashIdentify.mash_dist_tsv
+    target: data/output/mash_dist
+    kind: table
+    required: true
+    description: Four Mash distance TSV files for bacteria, fungi, parasites, and viruses.
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl

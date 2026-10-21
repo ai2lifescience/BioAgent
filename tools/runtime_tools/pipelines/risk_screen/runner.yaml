@@ -1,0 +1,125 @@
+name: risk_screen
+display_name: ScreenMec biosafety sequence screening
+description: Screen an assembled or consensus FASTA for biorisk, toxin-related, pathogen, and low-concern sequence signals using the configured ScreenMec databases.
+visibility: public
+use_when:
+- the user has an assembled or consensus FASTA and wants biosafety or pathogen sequence screening
+- the ScreenMec databases, annotation files, and taxon data are available at paths visible to the Cromwell task container
+avoid_when:
+- the user has raw FASTQ reads that still need quality control or assembly
+- the user wants ordinary taxonomic profiling, strain typing, or unrestricted clinical interpretation
+input_summary: One assembled or consensus FASTA; ScreenMec databases, annotations, and taxon data are deployment-managed resources.
+output_summary: One ScreenMec TSV containing the cascaded biorisk, functional, pathogen, and low-concern screening results.
+limitations: Results depend on the configured databases and annotations, query FASTA quality, Docker image, resource allocation, and Cromwell execution. All reference resources must already be visible inside the task container.
+examples:
+- Screen this assembled FASTA with the configured ScreenMec biosafety databases.
+- Run cascaded biorisk and pathogen sequence screening on this consensus FASTA.
+engine: wdl
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 86400
+resources:
+  max_cores: 40
+  max_memory_mb: 65536
+inputs:
+  query_fasta:
+    label: Query FASTA
+    wdl_key: ScreenMec.query_fasta
+    required: true
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    - .fas
+    description: Assembled or consensus nucleotide FASTA to screen.
+param_overrides:
+  sample_id:
+    wdl_key: ScreenMec.sample_id
+    default: SAMPLE
+  threads:
+    wdl_key: ScreenMec.threads
+    default: 40
+  biorisk_index:
+    wdl_key: ScreenMec.biorisk_index
+    default: /data/zhaomh/program/database/screenmec_database/ScreenMec/biorisk
+    description: Mounted Bowtie2 biorisk index prefix.
+  uniref_db:
+    wdl_key: ScreenMec.uniref_db
+    default: /data/zhaomh/program/database/screenmec_database/SeqScreenDB_23.4/blast/UNIREF100.mini
+    description: Mounted UniRef100 BLAST protein database prefix.
+  funsocs_tsv:
+    wdl_key: ScreenMec.funsocs_tsv
+    default: /data/zhaomh/program/database/screenmec_database/SeqScreenDB_23.4/funsocs.tsv
+    description: Mounted FunSoCs annotation table.
+  funsocs_pck:
+    wdl_key: ScreenMec.funsocs_pck
+    default: /data/zhaomh/program/database/screenmec_database/SeqScreenDB_23.4/funsocs.pck
+    description: Mounted FunSoCs serialized database.
+  nt_db:
+    wdl_key: ScreenMec.nt_db
+    default: /data/zhaomh/program/database/screenmec_database/commec-dbs/nt_blast/core_nt
+    description: Mounted NT BLAST database prefix.
+  regulated_taxids:
+    wdl_key: ScreenMec.regulated_taxids
+    default: /data/zhaomh/program/database/screenmec_database/commec-dbs/biorisk/reg_taxids.txt
+    description: Mounted regulated taxonomy ID list.
+  taxonkit_data_dir:
+    wdl_key: ScreenMec.taxonkit_data_dir
+    default: /data/zhaomh/program/database/screenmec_database/ScreenMec/taxonkit
+    description: Mounted TaxonKit data directory.
+  benign_fasta_db:
+    wdl_key: ScreenMec.benign_fasta_db
+    default: /data/zhaomh/program/database/screenmec_database/commec-dbs/low_concern/benign.fasta
+    description: Mounted low-concern benign-sequence BLAST database prefix.
+  blastx_evalue:
+    wdl_key: ScreenMec.blastx_evalue
+    default: 1e-10
+  blastx_max_target_seqs:
+    wdl_key: ScreenMec.blastx_max_target_seqs
+    default: 500
+  blastn_evalue:
+    wdl_key: ScreenMec.blastn_evalue
+    default: 10
+  blastn_max_target_seqs:
+    wdl_key: ScreenMec.blastn_max_target_seqs
+    default: 50
+  blastn_culling_limit:
+    wdl_key: ScreenMec.blastn_culling_limit
+    default: 5
+  low_concern_min_coverage:
+    wdl_key: ScreenMec.low_concern_min_coverage
+    default: 0.8
+  low_concern_max_evalue:
+    wdl_key: ScreenMec.low_concern_max_evalue
+    default: 1e-05
+  low_concern_min_identity:
+    wdl_key: ScreenMec.low_concern_min_identity
+    default: 90.0
+  docker_image:
+    wdl_key: ScreenMec.docker_image
+    default: cncb/screenmec:v1.0
+  cpu:
+    wdl_key: ScreenMec.cpu
+    default: 40
+  memory_gb:
+    wdl_key: ScreenMec.memory_gb
+    default: 64
+  disk_gb:
+    wdl_key: ScreenMec.disk_gb
+    default: 300
+outputs:
+  result_tsv:
+    label: ScreenMec screening result
+    wdl_output: ScreenMec.result_tsv
+    target: data/output/screenmec.tsv
+    kind: table
+    required: true
+    description: Cascaded ScreenMec sequence screening result.
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl

@@ -1,0 +1,158 @@
+name: phi_annotator_genome
+display_name: PHI-base genome annotation
+description: Annotate an assembled genome or protein FASTA against PHI-base and produce pathogen-host interaction hits and a summary report.
+visibility: public
+use_when:
+- the user has an assembled genome FASTA or a predicted protein FASTA and wants PHI-base annotation
+- the PHI-base DIAMOND database and metadata table are available to the Cromwell task container
+avoid_when:
+- the user has raw metagenomic reads and wants read-level PHI-base screening
+- the user wants read quality control, assembly, or clinical risk interpretation
+input_summary: Exactly one genome FASTA or protein FASTA, plus the mounted PHI-base DIAMOND database and metadata table.
+output_summary: PHI-base hit and summary tables, annotation QC/status files, a manifest, and a Markdown report.
+limitations: The workflow does not assemble reads or perform read QC. Database paths and the pipeline directory must be visible inside the task container. Genome input runs Prodigal before DIAMOND; protein input skips gene prediction.
+examples:
+- Annotate this assembled bacterial genome against PHI-base.
+- Annotate this predicted protein FASTA with the configured PHI-base database.
+engine: wdl
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 86400
+resources:
+  max_cores: 8
+  max_memory_mb: 32768
+inputs:
+  genome_fasta:
+    label: Genome FASTA
+    wdl_key: PhiAnnotatorGenome.genome_fasta
+    required: false
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    - .fas
+    - .fasta.gz
+    - .fa.gz
+    - .fna.gz
+    - .fas.gz
+    description: Assembled nucleotide FASTA. Provide this or protein_fasta, but not both.
+  protein_fasta:
+    label: Protein FASTA
+    wdl_key: PhiAnnotatorGenome.protein_fasta
+    required: false
+    accepts:
+    - .fasta
+    - .fa
+    - .faa
+    - .fas
+    - .fasta.gz
+    - .fa.gz
+    - .faa.gz
+    - .fas.gz
+    description: Predicted protein FASTA. Provide this or genome_fasta, but not both.
+param_overrides:
+  sample_id:
+    wdl_key: PhiAnnotatorGenome.sample_id
+    default: GCF_000006765.1_ASM676v1_genomic
+  diamond_db:
+    wdl_key: PhiAnnotatorGenome.diamond_db
+    default: /data/zhaomh/program/database/phibase/5.6/diamond/phibase5.dmnd
+    description: Mounted PHI-base DIAMOND database.
+  metadata:
+    wdl_key: PhiAnnotatorGenome.metadata
+    default: /data/zhaomh/program/database/phibase/5.6/normalized/phibase5_metadata.tsv
+    description: Mounted PHI-base metadata table.
+  db_version:
+    wdl_key: PhiAnnotatorGenome.db_version
+    default: PHI-base 5.6
+  threads:
+    wdl_key: PhiAnnotatorGenome.threads
+    default: 8
+  genome_context:
+    wdl_key: PhiAnnotatorGenome.genome_context
+    default: complete
+    choices:
+    - complete
+    - metagenome
+  min_contig_length:
+    wdl_key: PhiAnnotatorGenome.min_contig_length
+    default: 0
+  min_identity:
+    wdl_key: PhiAnnotatorGenome.min_identity
+    default: 30.0
+  min_query_coverage:
+    wdl_key: PhiAnnotatorGenome.min_query_coverage
+    default: 50.0
+  min_subject_coverage:
+    wdl_key: PhiAnnotatorGenome.min_subject_coverage
+    default: 0.0
+  max_evalue:
+    wdl_key: PhiAnnotatorGenome.max_evalue
+    default: 0.00001
+  max_target_seqs:
+    wdl_key: PhiAnnotatorGenome.max_target_seqs
+    default: 25
+  min_alignment_length:
+    wdl_key: PhiAnnotatorGenome.min_alignment_length
+    default: 0
+  docker_image:
+    wdl_key: PhiAnnotatorGenome.docker_image
+    default: cncb/phi-annotator:v1.0
+  memory_gb:
+    wdl_key: PhiAnnotatorGenome.memory_gb
+    default: 32
+  disk_gb:
+    wdl_key: PhiAnnotatorGenome.disk_gb
+    default: 100
+outputs:
+  hits:
+    label: PHI-base hits
+    wdl_output: PhiAnnotatorGenome.hits
+    target: data/output/phi_hits.tsv
+    kind: table
+    required: true
+    description: Hit-level PHI-base annotations.
+  summary:
+    label: PHI-base summary
+    wdl_output: PhiAnnotatorGenome.summary
+    target: data/output/phi_summary.tsv
+    kind: table
+    required: true
+    description: Sample-level PHI-base annotation summary.
+  qc:
+    label: Annotation QC
+    wdl_output: PhiAnnotatorGenome.qc
+    target: data/output/qc.json
+    kind: file
+    required: true
+    description: QC information emitted by the PHI-base workflow.
+  status:
+    label: Annotation status
+    wdl_output: PhiAnnotatorGenome.status
+    target: data/output/status.json
+    kind: file
+    required: true
+    description: Workflow status JSON.
+  manifest:
+    label: Annotation manifest
+    wdl_output: PhiAnnotatorGenome.manifest
+    target: data/output/manifest.json
+    kind: file
+    required: true
+    description: Output manifest JSON.
+  report:
+    label: PHI-base report
+    wdl_output: PhiAnnotatorGenome.report
+    target: data/output/report.md
+    kind: file
+    required: true
+    description: Markdown report generated by the workflow.
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl
+
