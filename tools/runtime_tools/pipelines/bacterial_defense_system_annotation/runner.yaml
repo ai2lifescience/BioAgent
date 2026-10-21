@@ -1,0 +1,119 @@
+name: bacterial_defense_finder
+display_name: Bacterial defense system annotation
+description: Identify bacterial defense systems and associated genes from an assembled genome FASTA or raw reads with DefenseFinder.
+visibility: public
+use_when:
+- the user wants bacterial defense-system annotation or DefenseFinder results
+- the user has an assembled genome FASTA or single-end/paired-end sequencing reads
+avoid_when:
+- the user only needs read quality control, taxonomic identification, or biosynthetic gene cluster detection
+- the user wants TCDB, phage, or general functional annotation
+input_summary: One required genome FASTA or read 1 FASTQ as the main input, an optional read 2 FASTQ for metagenome mode, and a mounted DefenseFinder models directory.
+output_summary: Defense-system calls, defense-associated genes, and raw HMMER hit tables.
+limitations: Set input_type to genome for an assembled FASTA or metagenome for read 1 with optional read 2. Metagenome mode runs fastp and MEGAHIT before DefenseFinder. The DefenseFinder models directory and the BacDef image must be available to the Cromwell task container.
+examples:
+- Find defense systems in this bacterial genome FASTA.
+- Assemble these metagenomic reads and run DefenseFinder annotation.
+engine: wdl
+cromwell_api_version: v1
+cromwell_poll_interval: 5
+cromwell_visibility_timeout: 300
+workflow: workflow.wdl
+inputs_json: inputs.json
+options_json: options.json
+timeout: 86400
+resources:
+  max_cores: 8
+  max_memory_mb: 49152
+inputs:
+  sequence_file1:
+    label: Main sequence file
+    wdl_key: BacDef.file1Path
+    required: true
+    accepts:
+    - .fasta
+    - .fa
+    - .fna
+    - .fas
+    - .fasta.gz
+    - .fa.gz
+    - .fna.gz
+    - .fas.gz
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Assembled genome FASTA in genome mode, or read 1 FASTQ in metagenome mode.
+  sequence_file2:
+    label: Read 2 FASTQ (optional)
+    wdl_key: BacDef.file2Path
+    required: false
+    accepts:
+    - .fastq
+    - .fq
+    - .fastq.gz
+    - .fq.gz
+    description: Optional paired-end read 2 used only in metagenome mode.
+param_overrides:
+  input_type:
+    wdl_key: BacDef.input_type
+    label: Input type
+    required: true
+    choices:
+    - genome
+    - metagenome
+  sample_id:
+    wdl_key: BacDef.sample_id
+    default: GCF_000006765.1_ASM676v1_genomic
+  defensefinder_models_dir:
+    wdl_key: BacDef.defensefinder_models_dir
+    default: /data/zhaomh/program/database/bac_database/models/DefenseFinder_compat
+    description: Mounted DefenseFinder_compat models directory.
+  docker_image:
+    wdl_key: BacDef.docker_image
+    default: cncb/bacdef:v2
+  threads:
+    wdl_key: BacDef.threads
+    default: 8
+  min_contig_length:
+    wdl_key: BacDef.min_contig_length
+    default: 1000
+  genome_context:
+    wdl_key: BacDef.genome_context
+    default: auto
+    choices:
+    - auto
+    - complete
+    - metagenome
+  memory_gb:
+    wdl_key: BacDef.memory_gb
+    default: 48
+  disk_gb:
+    wdl_key: BacDef.disk_gb
+    default: 150
+outputs:
+  defense_systems:
+    label: Defense systems
+    wdl_output: BacDef.defense_systems
+    target: data/output/defense_systems.tsv
+    kind: table
+    required: true
+    description: DefenseFinder bacterial defense-system calls.
+  defense_genes:
+    label: Defense genes
+    wdl_output: BacDef.defense_genes
+    target: data/output/defense_genes.tsv
+    kind: table
+    required: true
+    description: Genes associated with detected defense systems.
+  defense_hmmer_hits:
+    label: Defense HMMER hits
+    wdl_output: BacDef.defense_hmmer_hits
+    target: data/output/defense_hmmer_hits.tsv
+    kind: table
+    required: true
+    description: Raw HMMER hits collected by the BacDef workflow.
+execution:
+  boundary: container
+  dependency_scope: pipeline
+  engine: wdl
