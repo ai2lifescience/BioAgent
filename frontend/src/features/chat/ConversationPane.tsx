@@ -10,7 +10,7 @@ import { RunProgress } from '../messages/RunProgress';
 import { useRunProgress } from '../messages/useRunProgress';
 import { LineIcon } from '../../components/icons';
 
-export type ConversationStatus = 'idle' | 'queued' | 'running' | 'pending_approval' | 'uploading' | 'reconnecting' | 'succeeded' | 'failed';
+export type ConversationStatus = 'idle' | 'queued' | 'running' | 'cancelling' | 'cancelled' | 'pending_approval' | 'uploading' | 'reconnecting' | 'succeeded' | 'failed';
 const api = createApiClient(undefined, '', 'poll');
 const nowIso = () => new Date().toISOString();
 function workspaceFiles(value: unknown): WorkspaceFile[] {
@@ -33,6 +33,8 @@ export function ConversationPane({ sessionId, active, config, onStatus, onMessag
   const [turns, setTurns] = useState(config.default_max_turns || 20);
   const [loading, setLoading] = useState(true);
   const [running, setRunning] = useState(false);
+  const [activeRunId, setActiveRunId] = useState<string | null>(null);
+  const [stopping, setStopping] = useState(false);
   const [pending, setPending] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [status, setStatus] = useState<ConversationStatus>('idle');
@@ -55,7 +57,9 @@ export function ConversationPane({ sessionId, active, config, onStatus, onMessag
     setFiles(workspaceFiles(payload.workspace?.files));
   }, [sessionId]);
   const frame = useCallback((value: StreamFrame) => {
-    if (value.event === 'run_status' && ['queued', 'running'].includes(value.payload.status)) setStatus(value.payload.status);
+    if (['run_status', 'queued', 'cancelling'].includes(value.event) && value.payload.run_id) setActiveRunId(String(value.payload.run_id));
+    if (value.event === 'run_status' && ['queued', 'running', 'cancelling'].includes(value.payload.status)) setStatus(value.payload.status);
+    if (value.event === 'cancelling' || (value.event === 'run_status' && value.payload.status === 'cancelling')) { setStopping(true); setStatus('cancelling'); }
     if (value.event === 'connection') setConnection(String(value.payload.message || ''));
     onFrame(value);
   }, [onFrame]);
@@ -65,15 +69,17 @@ export function ConversationPane({ sessionId, active, config, onStatus, onMessag
     setMessages(previous => [...previous, { role: 'assistant', text: answer, result, progress: activity, created_at: nowIso() }]);
     const review = Boolean(result.approval_required);
     setPending(review);
-    setStatus(review ? 'pending_approval' : ['failed', 'blocked', 'interrupted'].includes(result.run_status || '') ? 'failed' : 'succeeded');
+    setStatus(review ? 'pending_approval' : result.run_status === 'cancelled' || result.status === 'cancelled' ? 'cancelled' : ['failed', 'blocked', 'interrupted'].includes(result.run_status || '') ? 'failed' : 'succeeded');
+    setActiveRunId(null); setStopping(false);
     setRunning(false); occupied.current = false;
-    setConnection('');
+    setConnection(''); setError('');
     if (result.workspace_files || result.files) setFiles(workspaceFiles(result.workspace_files ?? result.files));
     void refreshFiles().catch(() => undefined);
     onMessage(sessionId);
   }, [finish, onMessage, refreshFiles, sessionId]);
 
   const watch = useCallback(async (runId: string, signal: AbortSignal) => {
+    setActiveRunId(runId);
     occupied.current = true; setRunning(true); setPending(false); reset();
     try { complete(await api.watchRun(runId, signal, frame)); }
     catch (caught) {
@@ -99,6 +105,7 @@ export function ConversationPane({ sessionId, active, config, onStatus, onMessag
         await watch(history.active_run.run_id, signal);
       } else {
         occupied.current = false; setRunning(false); setPending(Boolean(history.pending_approval));
+        setActiveRunId(null); setStopping(false);
         setStatus(history.pending_approval ? 'pending_approval' : failedSubmission ? 'failed' : 'idle'); setConnection(''); reset();
         if (failedSubmission) { setError(failedSubmission.error); setPrompt(previous => previous || failedSubmission.draft); }
       }
@@ -120,6 +127,7 @@ export function ConversationPane({ sessionId, active, config, onStatus, onMessag
     const text = prompt.trim();
     if (!text || occupied.current || pending || loading || uploading) return;
     occupied.current = true; setRunning(true); setStatus('queued'); setError(''); reset(); setPrompt('');
+    setActiveRunId(null); setStopping(false);
     setMessages(previous => [...previous, { role: 'user', text, created_at: nowIso() }]); onMessage(sessionId, text);
     const current = new AbortController(); controller.current = current;
     try { complete(await api.run(text, { sessionId, modelKey: model, maxTurns: turns, signal: current.signal, onFrame: frame })); }
@@ -129,6 +137,17 @@ export function ConversationPane({ sessionId, active, config, onStatus, onMessag
       // A POST response can be lost after enqueue. Restore the existing job;
       // never resubmit automatically or allow a second run over unknown work.
       await restore(current.signal, { error: `Request failed: ${(caught as Error).message}`, draft: text });
+    }
+  };
+  const stop = async () => {
+    if (!activeRunId || stopping) return;
+    setStopping(true); setStatus('cancelling'); setError('');
+    try {
+      await api.cancelRun(activeRunId);
+      // Keep watching for server confirmation; aborting fetch would only hide work.
+    } catch (caught) {
+      setStopping(false); setStatus('reconnecting');
+      setError(`Could not confirm Stop: ${(caught as Error).message}. Retry Stop or reconnect.`);
     }
   };
   const upload = async (selected: FileList | File[] | null) => {
@@ -162,12 +181,13 @@ export function ConversationPane({ sessionId, active, config, onStatus, onMessag
               } else { complete(next); }
             }} />)
           : <QuickStarts capabilities={config.capabilities} pipelines={config.pipelines || []} isolated={config.isolated_execution} onChoose={setPrompt} />}
-        {running && <><p className="run-notice" role="status">{status === 'queued' ? 'Queued' : 'Working'} — you can switch chats or start another conversation.</p><RunProgress entries={progress.entries} running /></>}
+        {running && <><p className="run-notice" role="status">{stopping ? 'Stopping' : status === 'queued' ? 'Queued' : 'Working'} — you can switch chats or start another conversation.</p><RunProgress entries={progress.entries} running /></>}
         {pending && !running && <p className="run-notice">Review the pending approval above before sending another message.</p>}
       </div></div>
       <Composer models={config.models} prompt={prompt} onPromptChange={setPrompt} fileCount={files.length} running={running}
         disabled={loading || pending || uploading} model={model} turns={turns} onModelChange={setModel} onTurnsChange={setTurns}
-        onSubmit={submit} onAttach={() => inputRef.current?.click()} sendId={active ? 'send' : undefined} />
+        onSubmit={submit} onStop={stop} stopping={stopping} stopDisabled={!activeRunId}
+        onAttach={() => inputRef.current?.click()} sendId={active ? 'send' : undefined} />
     </main>
     <WorkspacePanel maxFileBytes={config.storage_limits?.file_bytes} sessionId={sessionId} files={files} search={workspaceSearch} filter={workspaceFilter}
       busy={running || pending || loading} uploading={uploading} mobileOpen={active && workspaceOpen} onClose={() => setWorkspaceOpen(false)}

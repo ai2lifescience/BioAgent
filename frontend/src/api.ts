@@ -30,6 +30,7 @@ export interface ApiClient {
   loadMessages(id: string, requireRunState?: boolean): Promise<{ messages?: Message[]; pending_approval?: RunResult; active_run?: SavedRun }>;
   listRuns(): Promise<{ runs: SavedRun[] }>;
   watchRun(id: string, signal: AbortSignal, onFrame: (frame: StreamFrame) => void): Promise<RunResult>;
+  cancelRun(id: string): Promise<SavedRun>;
   loadWorkspace(id: string): Promise<{ workspace?: { files?: WorkspaceFile[]; file_count?: number } }>;
   uploadFiles(id: string, files: File[]): Promise<any>;
   deleteWorkspaceFile(id: string, path: string): Promise<any>;
@@ -68,8 +69,9 @@ export function createApiClient(fetchImpl: typeof fetch = (...args) => window.fe
       }
       const job = saved.run;
       onFrame({ event: 'connection', payload: { message: '' } });
-      if (job.status !== status) {
-        status = job.status || '';
+      const nextStatus = job.cancel_requested && job.status === 'running' ? 'cancelling' : job.status || '';
+      if (nextStatus !== status) {
+        status = nextStatus;
         onFrame({ event: 'run_status', payload: { run_id: id, status } });
       }
       for (const event of saved.events) {
@@ -79,7 +81,7 @@ export function createApiClient(fetchImpl: typeof fetch = (...args) => window.fe
         // is not the result of this execution; the durable row is authoritative.
         if (!['result', 'error'].includes(event.event)) onFrame(event);
       }
-      if (!['queued', 'running'].includes(status)) {
+      if (!['queued', 'running', 'cancelling'].includes(status)) {
         if (!job.result) job.result = { answer: job.error || 'Agent run failed.', status: 'error', session_id: job.session_id };
         const result = { ...job.result, job_id: id, run_status: status,
           runtime: { ...job.result.runtime, status, job_id: id } };
@@ -94,6 +96,7 @@ export function createApiClient(fetchImpl: typeof fetch = (...args) => window.fe
     // Never retry a POST: a lost response may still have created the job.
     const job = await get<SavedRun>(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal });
     if (!job.run_id) throw new Error('The server did not return a run ID.');
+    onFrame({ event: 'run_status', payload: { run_id: job.run_id, status: job.status || 'queued' } });
     return watchRun(job.run_id, signal, onFrame);
   };
   const stream = async (path: string, body: unknown, signal: AbortSignal, onFrame: (frame: StreamFrame) => void): Promise<RunResult> => {
@@ -119,6 +122,9 @@ export function createApiClient(fetchImpl: typeof fetch = (...args) => window.fe
     throw new Error('Agent stream ended before returning a result.');
   };
   return {
+    cancelRun: id => get(`/runs/${encodeURIComponent(id)}/cancel`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}',
+    }),
     watchRun,
     listRuns: () => get('/runs'),
     createSession: () => get('/sessions', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }),

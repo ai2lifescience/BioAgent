@@ -27,6 +27,34 @@ def state(status):
 
 
 class CompletionTests(unittest.IsolatedAsyncioTestCase):
+    async def test_stop_during_submission_records_job_before_cancellation(self):
+        from threading import Event
+        from importlib import import_module
+        adapter = import_module('tools.infrastructure.sdk_adapters.pipeline_shell')
+        started, release = Event(), Event()
+        context = self.context(); context.tool_results = []; context.sandbox_session = None
+        request = SimpleNamespace(ctx_wrapper=SimpleNamespace(context=context),
+            data=SimpleNamespace(action=SimpleNamespace(commands=[f'agent-pipeline run --plan-id {JOB}'], timeout_ms=None)))
+        def submit(*args):
+            started.set()
+            if not release.wait(5): raise TimeoutError('fixture submit not released')
+            return state('queued')
+        with patch('isolation.isolated_execution', return_value=False), patch.object(adapter, 'dispatch', side_effect=submit):
+            task = asyncio.create_task(adapter.execute_local_pipeline_command(request))
+            try:
+                self.assertTrue(await asyncio.to_thread(started.wait, 3))
+                task.cancel()
+                await asyncio.sleep(0)
+                release.set()
+                with self.assertRaises(asyncio.CancelledError): await task
+            finally:
+                release.set()
+                await asyncio.gather(task, return_exceptions=True)
+        self.assertEqual(context.tool_results[0]['result']['job_id'], JOB)
+        with patch('isolation.isolated_execution', return_value=False), patch.object(runtime.pipeline_service, 'cancel', return_value=state('cancelled')) as cancel:
+            await runtime._cancel_started_pipelines(context)
+        cancel.assert_called_once_with(Path('/tmp/fixture'), JOB)
+
     def context(self):
         context = SimpleNamespace(run={'session_dir': '/tmp/fixture'}, tool_results=[launched()], events=[], public=lambda value: value)
         context.record = lambda event, **data: context.events.append({'event': event, 'data': data})
@@ -72,6 +100,32 @@ class CompletionTests(unittest.IsolatedAsyncioTestCase):
 
 
 class RuntimeCompletionTests(unittest.TestCase):
+    def test_stop_while_waiting_cancels_launched_pipeline_and_preserves_history(self):
+        @function_tool
+        async def launch_test(ctx: RunContextWrapper[AgentRunContext]) -> str:
+            ctx.context.tool_results.append(launched())
+            return 'Pipeline is running.'
+        model = ScriptedModel([
+            ModelStep(output=[function_call('launch_test', {}, call_id='launch')]),
+            ModelStep(output=[assistant_message('Pipeline is running.')]),
+        ])
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            with patch.object(runtime, 'STATE_STORE', SessionMetadataStore(root/'metadata')), \
+                 patch.object(runtime, 'SESSION_DB', root/'sessions.sqlite3'), \
+                 patch.object(sandbox, 'WORKSPACES_DIR', root/'workspaces'), \
+                 patch.object(runtime, 'create_agent', return_value=Agent(name='fixture', model=model, tools=[launch_test])), \
+                 patch.object(runtime.pipeline_service, 'status', return_value=state('running')), \
+                 patch.object(runtime.pipeline_service, 'cancel', return_value=state('cancelling')) as cancel:
+                result = runtime.run_agent('Run fixture.', session_id='stop-fixture', model=model,
+                                           cancel_requested=lambda: len(model.calls) >= 2)
+                history = list_session_messages('stop-fixture')['messages']
+        self.assertEqual(result['status'], 'cancelled')
+        self.assertIn('pending or unconfirmed', result['answer'])
+        self.assertEqual(history[-1]['text'], result['answer'])
+        self.assertEqual(len(model.calls), 2)
+        cancel.assert_called_once_with(root/'workspaces'/'stop-fixture', JOB)
+
     def check_runtime(self, max_turns=5, *, inspect_after_completion=False):
         @function_tool
         async def launch_test(ctx: RunContextWrapper[AgentRunContext]) -> str:

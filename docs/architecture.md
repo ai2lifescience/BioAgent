@@ -256,7 +256,7 @@ The canonical queue and worker implementation is harness/jobs.py. There are no
 separate job_queue.py or job_worker.py runtime services. The module contains the
 SQLite queue, claim/update operations, worker entry point, and event persistence.
 The default run database is runtime/agent_runs.sqlite3 and
-AGENT_RUN_WORKERS defaults to two workers.
+AGENT_RUN_WORKERS defaults to three workers.
 
 A worker failure changes the run to interrupted. The system does not silently
 replay an interrupted agent run because tool calls can have side effects. A

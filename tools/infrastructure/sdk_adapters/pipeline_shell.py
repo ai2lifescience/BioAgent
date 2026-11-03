@@ -114,6 +114,7 @@ async def execute_local_pipeline_command(request: ShellCommandRequest) -> ShellR
     context = request.ctx_wrapper.context
     commands = request.data.action.commands
     command = commands[0] if len(commands) == 1 else ""
+    cancelled = False
     try:
         if len(commands) != 1:
             raise ValueError("Send exactly one agent-pipeline command per shell call.")
@@ -124,9 +125,19 @@ async def execute_local_pipeline_command(request: ShellCommandRequest) -> ShellR
             raise ValueError("--seconds exceeds the shell action timeout_ms budget.")
         if isolated_execution():
             from tools.infrastructure.pipeline_engine.broker import dispatch as executor
-            value = await asyncio.to_thread(executor, workspace(context), command, access=context.execution_access)
+            operation = asyncio.to_thread(executor, workspace(context), command, access=context.execution_access)
         else:
-            value = await asyncio.to_thread(dispatch, workspace(context), command)
+            operation = asyncio.to_thread(dispatch, workspace(context), command)
+        if args.operation == 'run':
+            # A submitted remote job must be recorded before Stop can cancel it.
+            task = asyncio.create_task(operation)
+            try:
+                value = await asyncio.shield(task)
+            except asyncio.CancelledError:
+                cancelled = True
+                value = await task
+        else:
+            value = await operation
         value.setdefault("status", "ok")
         code = 1 if value["status"] == "error" else 0
     except Exception as exc:
@@ -138,6 +149,8 @@ async def execute_local_pipeline_command(request: ShellCommandRequest) -> ShellR
                               "status": "error" if code else "ok", "error": value.get("error")}]}
     context.tool_results.append(record)
     context.record("pipeline_command_finished", command=command, status=value["status"])
+    if cancelled:
+        raise asyncio.CancelledError
     if context.sandbox_session is not None:
         from tools.infrastructure.workspace.sdk import list_files
         context.files = await list_files(context.sandbox_session)

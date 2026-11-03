@@ -14,6 +14,13 @@ from playwright.sync_api import sync_playwright, expect
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def cancel_job(state, run_id):
+    run = state.runs[run_id]
+    result = {'status': 'cancelled', 'answer': 'Stopped this request.', 'session_id': run['session_id']}
+    run.update(status='cancelled', result=result)
+    state.history[run['session_id']].append({'role': 'assistant', 'text': result['answer'], 'result': result})
+
+
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT / 'frontend/dist'), **kwargs)
@@ -89,6 +96,13 @@ class Handler(SimpleHTTPRequestHandler):
             run = next(run for run in state.runs.values() if run['session_id'] == payload['session_id'])
             run.update(status='running', result=None)
             self.json(run, 202)
+        elif self.path.startswith('/runs/') and self.path.endswith('/cancel'):
+            rid = self.path.split('/')[2]
+            state.cancellations.append(rid)
+            run = state.runs[rid]
+            if run['status'] == 'queued': cancel_job(state, rid)
+            elif run['status'] == 'running': run['cancel_requested'] = True
+            self.json(run)
         else:
             self.json({'error': 'Unexpected POST ' + self.path}, 404)
 
@@ -103,6 +117,7 @@ def main():
     server.sessions = ['chat-1', 'chat-2']
     server.history, server.runs, server.events, server.files = {}, {}, {}, {}
     server.submissions, server.approvals, server.cursors = [], [], []
+    server.cancellations = []
     server.disconnect = False
     server.upload_release = Event()
     thread = Thread(target=server.serve_forever, daemon=True)
@@ -230,8 +245,29 @@ def main():
             select('chat-8')
             expect(pane('chat-8')).to_be_attached()
             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+            expect(pane('chat-8').get_by_role('button', name='Stop current request', exact=True)).to_be_enabled()
+            pane('chat-8').get_by_role('button', name='Stop current request', exact=True).click()
+            expect(row('chat-8').locator('.session-run-status')).to_have_text('Stopped')
+            expect(pane('chat-8')).to_contain_text('Stopped this request.')
+            page.reload()
+            expect(pane('chat-8')).to_contain_text('Stopped this request.')
+            page.set_viewport_size({'width': 1440, 'height': 1000})
+            server.runs['run-4']['status'] = 'running'
+            select('chat-4')
+            expect(pane('chat-4').get_by_role('button', name='Stop current request', exact=True)).to_be_enabled()
+            pane('chat-4').get_by_role('button', name='Stop current request', exact=True).click()
+            expect(row('chat-4').locator('.session-run-status')).to_have_text('Stopping')
+            expect(pane('chat-4').get_by_role('button', name='Stopping current request')).to_be_disabled()
+            select('chat-5')
+            expect(pane('chat-5').get_by_role('button', name='Stop current request', exact=True)).to_be_enabled()
+            cancel_job(server, 'run-4')
+            expect(row('chat-4').locator('.session-run-status')).to_have_text('Stopped')
+            assert server.runs['run-5']['status'] == 'queued'
+            assert server.cancellations == ['run-8', 'run-4']
+            assert len(server.submissions) == 8
+            assert not errors, errors
             browser.close()
-            print('PASS: concurrent chats, drafts, result/file isolation, eight jobs, reload recovery, approvals, reconnect, failure, mobile navigation; no model calls.')
+            print('PASS: concurrent chats, drafts, isolation, reload, approvals, reconnect, mobile navigation, queued/running Stop and cancellation confirmation; no model calls.')
     finally:
         server.upload_release.set()
         server.shutdown()

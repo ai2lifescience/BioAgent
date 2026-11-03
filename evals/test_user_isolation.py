@@ -181,6 +181,35 @@ class UserIsolationTests(unittest.TestCase):
             self.assertEqual(self.request('/run', method='POST', cookie=self.bob_cookie,
                 body={'session_id': self.bob_sid, 'request': 'hello'})[0], 403)
 
+    def test_stop_is_owned_idempotent_and_cannot_overwrite_a_completed_run(self):
+        with principal_scope(self.alice):
+            self.queue.update(self.job['run_id'], 'running')
+        path = f"/runs/{self.job['run_id']}/cancel"
+        self.assertEqual(self.request(path, method='POST', body={}, cookie=self.bob_cookie)[0], 404)
+        self.assertEqual(self.request(path, method='POST', body={}, cookie=self.alice_cookie,
+                                      headers={'Origin': 'http://evil.test'})[0], 401)
+        code, _, data = self.request(path, method='POST', body={}, cookie=self.alice_cookie)
+        self.assertEqual(code, 200)
+        self.assertTrue(json.loads(data)['cancel_requested'])
+        self.request(path, method='POST', body={}, cookie=self.alice_cookie)
+        with principal_scope(self.alice):
+            events = self.queue.events(self.job['run_id'])
+            self.assertEqual(sum(item['event'] == 'cancelling' for item in events), 1)
+            self.queue.update(self.job['run_id'], 'succeeded', result={'status': 'ok', 'answer': 'Completed before Stop.'})
+        payload = json.loads(self.request(path, method='POST', body={}, cookie=self.alice_cookie)[2])
+        self.assertEqual(payload['status'], 'succeeded')
+
+    def test_queued_stop_never_launches_or_accepts_a_late_worker_result(self):
+        with principal_scope(self.bob):
+            job = self.queue.enqueue('queued fixture', self.bob_sid, 'fixture', 1)
+        path = f"/runs/{job['run_id']}/cancel"
+        payload = json.loads(self.request(path, method='POST', body={}, cookie=self.bob_cookie)[2])
+        self.assertEqual(payload['status'], 'cancelled')
+        self.assertEqual(payload['result']['answer'], 'Stopped before execution.')
+        with principal_scope(self.bob):
+            self.assertEqual(jobs.execute_job(self.queue, job['run_id']), 0)
+            self.assertEqual(self.queue.update(job['run_id'], 'succeeded')['status'], 'cancelled')
+
     def test_list_filters_and_owner_can_download(self):
         payload = json.loads(self.request("/sessions", cookie=self.bob_cookie)[2])
         self.assertEqual([s["session_id"] for s in payload["sessions"]], [self.bob_sid])

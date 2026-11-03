@@ -364,7 +364,10 @@ The shared broker and remote WDL path enforce these rules:
 - Output downloads must map into configured S3 storage and contain this workflow's
   ID as a path component. There is no fallback to reading a host-local path.
   Completed jobs register owned remote artifact references, including their size
-  and object version/ETag. Downloads stream through the authenticated server;
+  and object version/ETag. For filesystem-backed S3 gateways that omit both,
+  references retain the modification timestamp and size; downloads validate both
+  against the GET response before serving it. This fallback detects metadata
+  changes but is not a cryptographic content-identity guarantee. Downloads stream through the authenticated server;
   storage credentials remain private. Workspace **Import** copies a selected
   artifact into local storage and records its SHA-256 checksum. ZIP bundles are
   generated only when requested, use a temporary disk reservation, and are removed
@@ -378,8 +381,9 @@ The shared broker and remote WDL path enforce these rules:
   retried with `results`; they do not launch another workflow.
 - A background reconciler polls persisted active jobs every five seconds between
   polling rounds. Recoverable service outages
-  retain their IDs and are retried; successful remote jobs have a ten-minute output
-  collection recovery window after their execution deadline.
+  retain their IDs and are retried. Once Cromwell confirms success, the job is
+  marked successful even if output registration fails; `artifact_status` reports
+  availability separately. Retrying `results` retries collection, never execution.
 
 After updating, install requirements, rebuild the worker image and frontend, then
 restart the server with the Cromwell/S3 environment above:
@@ -618,7 +622,7 @@ Session files larger than 32 MiB no longer prevent unrelated tool operations.
 ## Concurrent conversations in the web UI
 
 Separate conversations can run at the same time. `AGENT_RUN_WORKERS` controls
-the server-wide agent concurrency (default `2`); excess jobs wait in the queue.
+the server-wide agent concurrency (default `3`); excess jobs wait in the queue.
 The queue allows one active run or pending approval per session. This limit is
 separate from Docker tool-worker resource limits.
 
@@ -628,3 +632,11 @@ or another chat’s composer. Conflicting edits in the working chat stay disable
 Short event polls keep browser connections available; reload reconnects to
 existing queued/running jobs without resubmitting them. Drafts remain in page
 memory until reload/logout. Closing the page does not cancel backend work.
+
+The main chat's **Stop** button sends an authenticated cancellation request to
+`POST /runs/<run_id>/cancel`. Queued requests stop before execution. Running
+requests cancel cooperatively, clean up active tool calls, and request cancellation
+of pipelines launched by that request. The button shows **Stopping** until the
+agent confirms cancellation; remote workflows may still be awaiting their backend's
+abort confirmation. Other conversations are unaffected. Reloading an active chat
+restores its Stop control. Closing or navigating away from a chat does not stop it.

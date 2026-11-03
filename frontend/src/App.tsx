@@ -64,7 +64,7 @@ export default function App() {
         const stored = localStorage.getItem(ACTIVE_SESSION_KEY);
         const id = loaded.some(item => item.id === stored) ? stored! : loaded[0].id;
         // Also reconnect to work that was running in another chat before reload.
-        const live = jobs.runs.filter(run => ['queued', 'running', 'pending_approval'].includes(run.status || '') && loaded.some(item => item.id === run.session_id));
+        const live = jobs.runs.filter(run => ['queued', 'running', 'cancelling', 'pending_approval'].includes(run.status || '') && loaded.some(item => item.id === run.session_id));
         setStatuses(Object.fromEntries(live.map(run => [run.session_id!, run.status as ConversationStatus])));
         setVisited([...new Set([id, ...live.map(run => run.session_id!)])]);
         setActiveId(id);
@@ -89,7 +89,7 @@ export default function App() {
     // Keep one unused conversation available, including its draft and uploads.
     // Prefer the selected one so repeated clicks do not move between old blanks.
     const unused = (session: SessionSummary) => session.message_count === 0 && !session.last_run_id
-      && !['queued', 'running', 'pending_approval', 'reconnecting'].includes(statuses[session.id]);
+      && !['queued', 'running', 'cancelling', 'pending_approval', 'reconnecting'].includes(statuses[session.id]);
     const existing = sessions.find(session => session.id === activeId && unused(session)) || sessions.find(unused);
     if (existing) { selectSession(existing.id); return; }
     creatingRef.current = true;
@@ -97,7 +97,7 @@ export default function App() {
     try { const session = await newSession(); setSessions(previous => [session, ...previous]); selectSession(session.id); }
     finally { creatingRef.current = false; setCreating(false); }
   };
-  const locked = (id: string) => ['queued', 'running', 'pending_approval', 'uploading', 'reconnecting'].includes(statuses[id]);
+  const locked = (id: string) => ['queued', 'running', 'cancelling', 'pending_approval', 'uploading', 'reconnecting'].includes(statuses[id]);
   const update = async (id: string, changes: { title?: string; pinned?: boolean }) => {
     if (locked(id)) return;
     await api.updateSession(id, changes);

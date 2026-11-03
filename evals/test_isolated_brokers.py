@@ -321,6 +321,88 @@ class PipelineBrokerTests(unittest.TestCase):
         self.assertEqual(client.get_object.call_args.kwargs['IfMatch'], 'v1')
         self.assertNotIn('VersionId', client.get_object.call_args.kwargs)
 
+    def test_gateway_outputs_without_etag_use_timestamp_and_size(self):
+        from datetime import datetime, timezone, timedelta
+        from unittest.mock import Mock
+        from tools.infrastructure.pipeline_engine.engine.input_storage import S3OutputStorage
+        identifier = self.plan()['plan_id']; private = broker._owned(self.root, access=self.access)
+        store = JobStore(private); remote_id = str(uuid4())
+        stamp = datetime(2026, 11, 3, 12, 0, tzinfo=timezone.utc)
+        data = b'count\n7\n'
+        record = store.update(identifier, status='running', remote_id=remote_id,
+            remote_base='http://cromwell.invalid', deadline=10**12, output_records=[{
+                'name': 'report', 'wdl_output': 'Fixture.report',
+                'path': str(store.directory(identifier) / 'outputs/report.tsv')}])
+        client = Mock()
+        client.head_object.return_value = {'ContentLength': len(data), 'LastModified': stamp}
+        storage = S3OutputStorage('bucket', 'outputs', client)
+        with patch.object(S3OutputStorage, 'from_environment', return_value=storage), \
+             patch.object(broker, '_http', return_value={'outputs': {'Fixture.report': f's3://bucket/outputs/{remote_id}/report.tsv'}}):
+            completed = broker._collect(private, record)
+            self.assertEqual(completed['status'], 'succeeded')
+            artifact = broker._remote_file(completed, 0)
+            self.assertEqual(completed['result']['output_records'][0]['remote']['last_modified'], stamp.isoformat())
+            client.get_object.return_value = {'Body': io.BytesIO(data), 'ContentLength': len(data), 'LastModified': stamp}
+            with broker.remote_stream(self.root, artifact['path'], access=self.access) as (response, _):
+                self.assertEqual(response['Body'].read(), data)
+            client.get_object.return_value = {'Body': io.BytesIO(data[1:4]), 'ContentLength': 3,
+                'LastModified': stamp, 'ContentRange': f'bytes 1-3/{len(data)}'}
+            with broker.remote_stream(self.root, artifact['path'], access=self.access, byte_range='bytes=1-3') as (response, _):
+                self.assertEqual(response['Body'].read(), data[1:4])
+            self.assertEqual(client.get_object.call_args.kwargs['Range'], 'bytes=1-3')
+            body = io.BytesIO(data[1:4])
+            client.get_object.return_value = {'Body': body, 'ContentLength': 3,
+                'LastModified': stamp, 'ContentRange': f'bytes 0-2/{len(data)}'}
+            with self.assertRaisesRegex(ValueError, 'invalid byte range'):
+                with broker.remote_stream(self.root, artifact['path'], access=self.access, byte_range='bytes=1-3'): pass
+            self.assertTrue(body.closed)
+            for metadata in ({'LastModified': stamp + timedelta(seconds=1), 'ContentLength': len(data)},
+                             {'LastModified': stamp, 'ContentLength': len(data) + 1},
+                             {'ContentLength': len(data)}):
+                with self.subTest(metadata=metadata):
+                    body = io.BytesIO(data)
+                    client.get_object.return_value = {'Body': body, **metadata}
+                    with self.assertRaisesRegex(ValueError, 'changed'):
+                        with broker.remote_stream(self.root, artifact['path'], access=self.access): pass
+                    self.assertTrue(body.closed)
+            with principal_scope(Principal('bob')), self.assertRaises(AccessDenied):
+                with broker.remote_stream(self.root, artifact['path'], access=self.access): pass
+
+            # Recovering a previously unavailable result must clear its old warning.
+            store.update(identifier, artifact_status='unavailable', error='previous storage failure')
+            client.get_object.return_value = {'Body': io.BytesIO(data), 'ContentLength': len(data), 'LastModified': stamp}
+            result = broker.dispatch(self.root, f'agent-pipeline results --job-id {identifier}', access=self.access)
+            self.assertEqual(result['artifact_status'], 'available')
+            self.assertIsNone(result['error'])
+            self.assertEqual(result['previews'][0]['text'], data.decode())
+
+    def test_output_failure_does_not_leave_completed_workflow_running(self):
+        identifier = self.plan()['plan_id']; private = broker._owned(self.root, access=self.access)
+        store = JobStore(private)
+        store.update(identifier, status='running', remote_id=str(uuid4()),
+                     remote_base='http://cromwell.invalid', deadline=10**12)
+        with patch.object(broker, '_http', return_value={'status': 'Succeeded'}) as request, \
+             patch.object(broker, '_collect', side_effect=ValueError('storage metadata unavailable')):
+            state = broker.dispatch(self.root, f'agent-pipeline status --job-id {identifier}', access=self.access)
+            self.assertEqual(state['status'], 'succeeded')
+            self.assertEqual(state['artifact_status'], 'unavailable')
+            results = broker.dispatch(self.root, f'agent-pipeline results --job-id {identifier}', access=self.access)
+            self.assertEqual(results['status'], 'succeeded')
+            self.assertEqual(results['files'], [])
+            self.assertIn('warning', results)
+            request.assert_called_once()
+            self.assertEqual(request.call_args.args[1], 'GET')
+        recovered = store.update(identifier, artifact_status='available', error=None, result={'output_records': []})
+        # Recollection is read-only relative to execution: it never starts a new job.
+        store.update(identifier, artifact_status='unavailable')
+        with patch.object(broker, '_collect', return_value=recovered) as collect, \
+             patch.object(broker.service, 'results', return_value={'status': 'succeeded', 'files': [], 'tables': []}), \
+             patch.object(broker, '_http') as request:
+            result = broker.dispatch(self.root, f'agent-pipeline results --job-id {identifier}', access=self.access)
+            self.assertEqual(result['status'], 'succeeded')
+            collect.assert_called_once()
+            request.assert_not_called()
+
     def test_large_remote_outputs_are_references_and_stream_on_import(self):
         from unittest.mock import Mock
         from tools.infrastructure.pipeline_engine.engine.input_storage import S3OutputStorage

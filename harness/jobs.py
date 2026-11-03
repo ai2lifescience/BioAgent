@@ -17,7 +17,7 @@ from tools.infrastructure.workspace.public import public_payload
 from auth import AccessDenied, Principal, current_principal, principal_scope
 
 
-TERMINAL = {"succeeded", "failed", "blocked", "pending_approval", "interrupted"}
+TERMINAL = {"succeeded", "failed", "blocked", "pending_approval", "interrupted", "cancelled"}
 
 
 def now() -> str:
@@ -26,6 +26,8 @@ def now() -> str:
 
 def result_status(result: dict) -> str:
     status = result.get("status")
+    if status == "cancelled":
+        return "cancelled"
     if status == "pending_approval":
         return "pending_approval"
     if status == "error":
@@ -40,7 +42,7 @@ class RunQueue:
         self.path = Path(path).resolve() if path is not None else Path(
             os.getenv("AGENT_RUN_DB", "runtime/agent_runs.sqlite3")
         ).expanduser().resolve()
-        self.max_workers = max(1, int(max_workers if max_workers is not None else os.getenv("AGENT_RUN_WORKERS", "2")))
+        self.max_workers = max(1, int(max_workers if max_workers is not None else os.getenv("AGENT_RUN_WORKERS", "3")))
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self._init()
 
@@ -71,6 +73,8 @@ class RunQueue:
                 db.execute("ALTER TABLE runs ADD COLUMN approval TEXT")
             if "owner_user_id" not in {row["name"] for row in db.execute("PRAGMA table_info(runs)")}:
                 db.execute("ALTER TABLE runs ADD COLUMN owner_user_id TEXT")
+            if "cancel_requested" not in {row["name"] for row in db.execute("PRAGMA table_info(runs)")}:
+                db.execute("ALTER TABLE runs ADD COLUMN cancel_requested INTEGER NOT NULL DEFAULT 0")
             db.execute("""CREATE TABLE IF NOT EXISTS run_events (
                 run_id TEXT NOT NULL, sequence INTEGER NOT NULL, event TEXT NOT NULL,
                 payload TEXT NOT NULL, created_at TEXT NOT NULL,
@@ -102,6 +106,27 @@ class RunQueue:
                 VALUES (?, ?, ?, ?, ?, 'queued', ?, ?, ?)""",
                 (run_id, identifier, request, model_key, max(1, int(max_turns)), timestamp, timestamp, current_principal().user_id))
             self._event(db, run_id, "queued", {"message": "Agent run queued.", "run_id": run_id, "session_id": identifier})
+        self.dispatch()
+        return self.get(run_id)
+
+    def cancel(self, run_id: str) -> dict:
+        """Request cooperative cancellation; never signal an unverified process ID."""
+        with self.db(write=True) as db:
+            row = db.execute("SELECT * FROM runs WHERE run_id=?", (run_id,)).fetchone()
+            if row is None:
+                raise ValueError("No such agent run.")
+            self._require_owner(row)
+            if row['status'] == 'queued':
+                answer = 'Stopped before execution.'
+                result = {'status': 'cancelled', 'answer': answer, 'session_id': row['session_id'],
+                          'messages': [{'role': 'user', 'content': row['request']},
+                                       {'role': 'assistant', 'content': answer}]}
+                db.execute("UPDATE runs SET status='cancelled', cancel_requested=1, result=?, updated_at=? WHERE run_id=?",
+                           (json.dumps(result), now(), run_id))
+                self._event(db, run_id, 'cancelled', {'status': 'cancelled'})
+            elif row['status'] == 'running' and not row['cancel_requested']:
+                db.execute("UPDATE runs SET cancel_requested=1, updated_at=? WHERE run_id=?", (now(), run_id))
+                self._event(db, run_id, 'cancelling', {'message': 'Stopping this request…', 'run_id': run_id})
         self.dispatch()
         return self.get(run_id)
 
@@ -204,6 +229,8 @@ class RunQueue:
     def update(self, run_id: str, status: str, *, result: dict | None = None, error: str | None = None) -> dict:
         self.get(run_id)
         with self.db(write=True) as db:
+            if db.execute("SELECT status FROM runs WHERE run_id=?", (run_id,)).fetchone()['status'] == 'cancelled':
+                return self.get(run_id)
             db.execute("UPDATE runs SET status=?, result=?, error=?, updated_at=? WHERE run_id=?",
                        (status, json.dumps(result) if result is not None else None, error, now(), run_id))
             self._event(db, run_id, status, {"status": status, **({"error": error} if error else {})})
@@ -301,12 +328,14 @@ def _execute_owned_job(queue: RunQueue, run_id: str) -> int:
     try:
         from .runtime import resume_agent, run_agent
         if job.get("approval"):
-            result = resume_agent(job["session_id"], **job["approval"], log_fn=log, event_fn=sdk_event)
+            result = resume_agent(job["session_id"], **job["approval"], log_fn=log, event_fn=sdk_event,
+                                  cancel_requested=lambda: bool(queue.get(run_id).get('cancel_requested')))
         else:
             result = run_agent(
                 job["request"], session_id=job["session_id"],
                 model_key=job["model_key"], max_turns=job["max_turns"],
                 log_fn=log, event_fn=sdk_event,
+                cancel_requested=lambda: bool(queue.get(run_id).get('cancel_requested')),
             )
         flush_deltas()
         queue_status = result_status(result)

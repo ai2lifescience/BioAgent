@@ -104,7 +104,7 @@ export function SessionSidebar({
         <div className="session-list" role="list">
           {ordered.length ? ordered.map(item => {
             const state = statuses[item.id];
-            const protectedSession = ['queued', 'running', 'pending_approval', 'uploading', 'reconnecting'].includes(state);
+            const protectedSession = ['queued', 'running', 'cancelling', 'pending_approval', 'uploading', 'reconnecting'].includes(state);
             const selected = activeId === item.id; const actionBusy = busyId === item.id;
             return <div key={item.id} className={`session-row ${selected ? 'active' : ''}`} role="listitem" data-session-id={item.id}>
               {renameId === item.id ? <form className="session-rename" onSubmit={event => { event.preventDefault(); submitRename(); }}>
@@ -112,7 +112,7 @@ export function SessionSidebar({
                 <button type="submit" disabled={actionBusy || !renameValue.trim()}>Save</button><button type="button" onClick={() => setRenameId(null)}>Cancel</button>
               </form> : <>
                 <button className="session-button" type="button" disabled={disabled || actionBusy} onClick={() => { closeActions(); setError(''); void Promise.resolve(onSelect(item.id)).catch(caught => setError(caught instanceof Error ? caught.message : 'Could not open this chat.')); closeMobile(); }}>
-                  <strong>{item.title || 'New chat'}</strong>{state && state !== 'idle' && <span className={`session-run-status status-${state}`} role="status">{({ queued: 'Queued', running: 'Running', pending_approval: 'Needs approval', uploading: 'Uploading', reconnecting: 'Reconnecting', succeeded: 'Completed', failed: 'Failed' } as Record<string, string>)[state]}</span>}<span>{formatTime(item.updated_at)} · {item.message_count || item.messages?.length || 0} {Number(item.message_count || item.messages?.length || 0) === 1 ? 'message' : 'messages'}</span>
+                  <strong>{item.title || 'New chat'}</strong>{state && state !== 'idle' && <span className={`session-run-status status-${state}`} role="status">{({ queued: 'Queued', running: 'Running', cancelling: 'Stopping', cancelled: 'Stopped', pending_approval: 'Needs approval', uploading: 'Uploading', reconnecting: 'Reconnecting', succeeded: 'Completed', failed: 'Failed' } as Record<string, string>)[state]}</span>}<span>{formatTime(item.updated_at)} · {item.message_count || item.messages?.length || 0} {Number(item.message_count || item.messages?.length || 0) === 1 ? 'message' : 'messages'}</span>
                 </button>
                 {item.pinned && <span className="pinned" title="Pinned"><Icon name="pin" /></span>}
                 <button className="session-more" type="button" disabled={disabled || actionBusy || protectedSession} aria-haspopup="menu" aria-expanded={menuId === item.id} aria-label={`Actions for ${item.title || 'chat'}`} onClick={() => setMenuId(menuId === item.id ? null : item.id)}><Icon name="more" /></button>

@@ -1,7 +1,7 @@
 import type { Approval, Message, ProgressEntry, RunResult, StreamFrame } from '../../types';
 import { advanceProgress, completedProgress } from './progress';
 
-export interface SavedRun { run_id?: string; session_id?: string; request?: string; created_at?: string; result?: RunResult; status?: string }
+export interface SavedRun { run_id?: string; session_id?: string; request?: string; created_at?: string; result?: RunResult; status?: string; cancel_requested?: boolean | number }
 
 function savedRequest(run: SavedRun): string | undefined {
   // Public run metadata omits the original prompt. Completed result envelopes

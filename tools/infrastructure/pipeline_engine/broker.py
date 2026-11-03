@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 import copy
+from datetime import datetime, timezone
 import fcntl
 import json
 import math
@@ -223,7 +224,7 @@ def _start(private, identifier, access: WorkspaceAccess):
 
 
 def _summary(record):
-    allowed = ('job_id', 'plan_id', 'status', 'created_at', 'started_at', 'finished_at', 'updated_at', 'error', 'remote_id')
+    allowed = ('job_id', 'plan_id', 'status', 'created_at', 'started_at', 'finished_at', 'updated_at', 'error', 'remote_id', 'artifact_status')
     return {**{key: record[key] for key in allowed if key in record}, 'pipeline_name': record['plan']['pipeline_name']}
 
 
@@ -237,6 +238,13 @@ def _output_key(storage, source, remote_id):
     if '..' in parts or remote_id not in parts or parsed.query or parsed.fragment:
         raise ValueError('Output is outside this workflow.')
     return parsed.netloc, parsed.path.lstrip('/')
+
+
+def _last_modified(value):
+    """Normalize S3 timestamps for gateways that omit object versions and ETags."""
+    if not isinstance(value, datetime) or value.tzinfo is None:
+        return None
+    return value.astimezone(timezone.utc).isoformat()
 
 
 def _collect(private, record):
@@ -268,15 +276,17 @@ def _collect(private, record):
             metadata = storage.client.head_object(Bucket=bucket, Key=key)
             size = int(metadata['ContentLength'])
             if size < 0: raise ValueError('Invalid remote artifact size.')
-            if not metadata.get('ETag') and metadata.get('VersionId') in {None, '', 'null'}:
-                raise ValueError('Output storage did not provide an immutable object reference.')
+            last_modified = _last_modified(metadata.get('LastModified'))
+            if not metadata.get('ETag') and metadata.get('VersionId') in {None, '', 'null'} and not last_modified:
+                raise ValueError('Output storage did not provide a version, ETag, or modification timestamp.')
             artifact = dict(item)
             if isinstance(raw, list):
                 artifact.update(name=f"{item.get('name', 'output')}[{index}]",
                                 path=str(target.with_name(f'{target.stem}-{index}{target.suffix}')))
             collected.append({**artifact, 'exists': False, 'size': size,
                               'remote': {'bucket': bucket, 'key': key, 'etag': metadata.get('ETag'),
-                                         'version_id': metadata.get('VersionId')}})
+                                         'version_id': metadata.get('VersionId'),
+                                         'last_modified': last_modified}})
     atomic_json(store.directory(record['job_id']) / 'output-manifest.json', collected)
     return store.update(record['job_id'], status='succeeded', finished_at=now(), artifact_status='available', error=None, result={'output_records': collected})
 
@@ -316,7 +326,7 @@ def _status(private, identifier):
     except Exception as exc:
         # Polling/download failures are recoverable; preserve the remote ID and
         # never turn a failed fetch into another submission or a false success.
-        if status == 'Succeeded' and time.time() > record['deadline'] + 600:
+        if status == 'Succeeded':
             record = store.update(identifier, status='succeeded', finished_at=now(), artifact_status='unavailable',
                 error='Remote workflow succeeded; artifact registration is unavailable. Retry results to register outputs.')
         return {**_summary(record), 'warning': 'Remote status or output collection is temporarily unavailable; retry status.',
@@ -334,7 +344,7 @@ def _remote_file(record, index):
 
 @contextmanager
 def remote_stream(root, path, *, access, byte_range=None):
-    """Resolve owned immutable remote references; storage credentials stay server-side."""
+    """Resolve owned remote references and validate their stored object identity."""
     from tools.infrastructure.pipeline_engine.engine.input_storage import S3OutputStorage
     parts = PurePosixPath(path).parts
     if len(parts) != 4 or parts[0] != 'pipeline-artifacts':
@@ -350,8 +360,17 @@ def remote_stream(root, path, *, access, byte_range=None):
     remote = item['remote']
     _output_key(storage, f"s3://{remote['bucket']}/{remote['key']}", record['remote_id'])
     arguments = {'Bucket': remote['bucket'], 'Key': remote['key']}
+    timestamp_guard = False
     if remote.get('version_id') not in {None, '', 'null'}: arguments['VersionId'] = remote['version_id']
     elif remote.get('etag'): arguments['IfMatch'] = remote['etag']
+    elif remote.get('last_modified'):
+        # Files written directly into a gateway's backing filesystem may have
+        # neither ETag nor VersionId. Validate the actual GET response instead
+        # of assuming the gateway implements conditional requests correctly.
+        timestamp_guard = True
+    else:
+        raise ValueError('Remote artifact has no stored identity metadata.')
+    expected_size = item['size']
     if byte_range:
         match = re.fullmatch(r'bytes=(\d*)-(\d*)', byte_range)
         if not match or not any(match.groups()) or not item['size']: raise ValueError('Unsatisfiable byte range.')
@@ -363,8 +382,15 @@ def remote_stream(root, path, *, access, byte_range=None):
             start, end = max(0, item['size'] - int(right)), item['size'] - 1
         if start > end or start >= item['size']: raise ValueError('Unsatisfiable byte range.')
         arguments['Range'] = f'bytes={start}-{end}'
+        expected_size = end - start + 1
     response = storage.client.get_object(**arguments)
     try:
+        if timestamp_guard:
+            if (_last_modified(response.get('LastModified')) != remote['last_modified']
+                    or response.get('ContentLength') != expected_size):
+                raise ValueError('Remote artifact changed since completion; refusing to serve changed content.')
+            if byte_range and response.get('ContentRange') != f'bytes {start}-{end}/{item["size"]}':
+                raise ValueError('Output storage returned an invalid byte range.')
         yield response, item
     finally:
         response['Body'].close()
@@ -408,7 +434,13 @@ def _publish(root, private, identifier, max_rows, access: WorkspaceAccess):
         return {**status, 'files': []}
     record = JobStore(private).get(identifier)
     if record.get('artifact_status') == 'unavailable':
-        record = _collect(private, record)
+        try:
+            record = _collect(private, record)
+            status = _summary(record)
+        except Exception as exc:
+            return {**_summary(record), 'files': [],
+                    'warning': 'The workflow succeeded, but its outputs are not available yet. Retry results after checking output storage.',
+                    'error_type': type(exc).__name__}
     if any(item.get('remote') for item in record.get('result', {}).get('output_records', [])):
         files = [_remote_file(record, i) for i, item in enumerate(record['result']['output_records']) if item.get('remote')]
         previews, remaining = [], limits().preview_bytes

@@ -501,7 +501,7 @@ never the submission. Reloading reconnects to queued/running conversations. Draf
 survive chat switching within the page; they are not persisted across reloads.
 
 The embedded assistant still uses `POST /run_stream` for its single conversation.
-Both transports use the same durable queue. `AGENT_RUN_WORKERS` defaults to **2**
+Both transports use the same durable queue. `AGENT_RUN_WORKERS` defaults to **3**
 concurrent agent runs across the server; additional runs queue. Each session permits
 one active run or pending approval. Docker tool isolation is independent of this
 queue setting. Backend jobs continue when the browser disconnects.

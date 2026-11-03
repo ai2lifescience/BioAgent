@@ -38,6 +38,57 @@ SESSION_DB = Path(os.getenv("AGENT_SESSION_DB", "runtime/agent_sessions.sqlite3"
 configure_tracing()
 
 
+async def _cancel_started_pipelines(context):
+    """Stop only pipelines launched by this request, including resumed approvals."""
+    identifiers = set()
+    for item in context.tool_results:
+        if item.get('tool') != 'pipeline_shell':
+            continue
+        try:
+            args = parse_command(item.get('arguments', {}).get('command', ''))
+            if args.operation == 'run': identifiers.add(args.plan_id)
+        except ValueError:
+            continue
+    from isolation import isolated_execution
+    root = Path(context.run['session_dir'])
+    stopped = []
+    for identifier in sorted(identifiers):
+        try:
+            if isolated_execution():
+                from tools.infrastructure.pipeline_engine.broker import dispatch
+                result = await asyncio.to_thread(dispatch, root, f'agent-pipeline cancel --job-id {identifier}',
+                                                 access=context.execution_access)
+            else:
+                result = await asyncio.to_thread(pipeline_service.cancel, root, identifier)
+            stopped.append({'job_id': identifier, 'status': result['status']})
+        except Exception as exc:
+            stopped.append({'job_id': identifier, 'status': 'unknown', 'error_type': type(exc).__name__})
+    context.record('pipeline_stop_requested', jobs=stopped)
+    return stopped
+
+
+async def _with_cancellation(operation, check, session_id):
+    """Cancel the async runtime cooperatively so its tool cleanup can finish."""
+    if check is None:
+        return await operation
+    task = asyncio.create_task(operation)
+    try:
+        while not task.done():
+            await asyncio.wait({task}, timeout=0.25)
+            if not task.done() and check():
+                task.cancel()
+                break
+        try:
+            return await task
+        except asyncio.CancelledError:
+            # Cancellation before acquiring the session lock has no tool work.
+            return {'status': 'cancelled', 'answer': 'Stopped.', 'session_id': session_id or ''}
+    finally:
+        if not task.done():
+            task.cancel()
+            await asyncio.gather(task, return_exceptions=True)
+
+
 async def _collect_started_pipelines(context, emit=None, *, poll_interval=2.0):
     """Collect pipelines started by this request without spending model turns."""
     started, collected = set(), set()
@@ -356,6 +407,20 @@ async def _execute(
         else:
             answer = completion_answer if completion_answer is not None else str(result.final_output or "")
             status = "ok"
+    except asyncio.CancelledError:
+        stopped = await _cancel_started_pipelines(context)
+        answer = 'Stopped this request.'
+        if stopped:
+            answer += '\n\nPipeline status:\n' + '\n'.join(
+                f"- `{item['job_id']}`: {item['status']}" for item in stopped)
+            if any(item['status'] not in {'cancelled', 'succeeded', 'failed', 'timed_out'} for item in stopped):
+                answer += '\nRemote cancellation is still pending or unconfirmed; the workflow may continue until the backend confirms it.'
+        status = 'cancelled'
+        snapshot = None
+        approvals = []
+        session.metadata.pop('pending_run', None)
+        await sdk_session.add_items([{'role': 'assistant', 'content': answer}])
+        context.record('run_cancelled')
     except InputGuardrailTripwireTriggered:
         answer = (
             "I can’t help with actionable biological procedures that could increase "
@@ -422,12 +487,15 @@ def run_agent(
     model: Model | None = None,
     event_fn: Callable[[str, dict[str, Any]], None] | None = None,
     website_binding: dict[str, Any] | None = None,
+    cancel_requested: Callable[[], bool] | None = None,
 ) -> dict[str, Any]:
     """Synchronous wrapper for CLI, HTTP, and notebook callers."""
     try:
         asyncio.get_running_loop()
     except RuntimeError:
-        return asyncio.run(async_run_agent(request, session_id, model_key, max_turns, log_fn, model, event_fn, website_binding))
+        return asyncio.run(_with_cancellation(
+            async_run_agent(request, session_id, model_key, max_turns, log_fn, model, event_fn, website_binding),
+            cancel_requested, session_id))
     raise RuntimeError("An event loop is already running; await async_run_agent instead.")
 
 
@@ -435,12 +503,15 @@ def resume_agent(
     session_id: str, approved: bool, approval_id: str, *,
     log_fn: Callable[[str], None] | None = None,
     event_fn: Callable[[str, dict[str, Any]], None] | None = None,
+    cancel_requested: Callable[[], bool] | None = None,
 ) -> dict[str, Any]:
     """Synchronous wrapper for :func:`async_resume_agent`."""
     try:
         asyncio.get_running_loop()
     except RuntimeError:
-        return asyncio.run(async_resume_agent(session_id, approved, approval_id, log_fn=log_fn, event_fn=event_fn))
+        return asyncio.run(_with_cancellation(
+            async_resume_agent(session_id, approved, approval_id, log_fn=log_fn, event_fn=event_fn),
+            cancel_requested, session_id))
     raise RuntimeError("An event loop is already running; await async_resume_agent instead.")
 
 

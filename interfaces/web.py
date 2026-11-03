@@ -31,6 +31,7 @@ from interfaces.api import (
     enqueue_request,
     enqueue_approval,
     get_run,
+    cancel_run,
     get_run_events,
     get_knowledge_job,
     get_knowledge_job_events,
@@ -157,7 +158,7 @@ def _public_job(job: dict[str, Any]) -> dict[str, Any]:
     """Return queue metadata without the original prompt or host internals."""
     result = {
         key: job.get(key)
-        for key in ("run_id", "session_id", "status", "model_key", "max_turns", "created_at", "updated_at", "error")
+        for key in ("run_id", "session_id", "status", "model_key", "max_turns", "created_at", "updated_at", "error", "cancel_requested")
     }
     if job.get("result") is not None:
         result["result"] = public_payload(job["result"])
@@ -265,6 +266,10 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
     @authenticated_request
     def do_POST(self) -> None:
         path = urlparse(self.path).path
+        if re.fullmatch(r'/runs/[a-f0-9]{32}/cancel', path):
+            self._read_json()
+            self._send_json(_public_job(cancel_run(path.split('/')[2])))
+            return
         if path == "/sessions":
             self._send_json(create_session(), status=201)
             return

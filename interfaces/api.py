@@ -76,6 +76,11 @@ def get_run(run_id: str) -> dict[str, Any]:
     return job
 
 
+def cancel_run(run_id: str) -> dict[str, Any]:
+    get_run(run_id)  # Require both run ownership and active session access.
+    return get_queue().cancel(run_id)
+
+
 def get_run_events(run_id: str, after: int = -1) -> list[dict[str, Any]]:
     get_run(run_id)
     return get_queue().events(str(run_id or "").strip(), int(after))
