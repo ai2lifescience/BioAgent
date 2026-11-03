@@ -2,12 +2,13 @@
 from __future__ import annotations
 
 import asyncio
+import base64
 from collections import deque
 import ipaddress
 import os
 import re
 import socket
-from urllib.parse import parse_qs, unquote, urljoin, urlparse, urlunparse
+from urllib.parse import parse_qs, unquote, urljoin, urlparse, urlunparse, urlencode
 
 import httpx2
 from bs4 import BeautifulSoup
@@ -95,7 +96,38 @@ async def _read_response(response, *, max_bytes: int) -> str:
     return data.decode(response.encoding or "utf-8", errors="replace")
 
 
+async def _broker_page(url, *, allowed_domains=None, tool='web_fetch', max_bytes=MAX_PAGE_BYTES):
+    from isolation.network import fetch
+    current = canonical_url(url)
+    for redirect in range(4):
+        if allowed_domains and not _allowed(current, allowed_domains):
+            raise ValueError('Source is outside the allowed domains.')
+        reply = await asyncio.to_thread(fetch, current, tool)
+        if 300 <= reply['status'] < 400:
+            target = reply['headers'].get('Location')
+            if not target or redirect == 3:
+                raise ValueError('Web source has an invalid redirect or exceeded three redirects.')
+            current = canonical_url(urljoin(current, target))
+            continue
+        if not 200 <= reply['status'] < 300:
+            raise ValueError(f"Web source returned HTTP {reply['status']}.")
+        content_type = reply['headers'].get('Content-Type', '').lower()
+        if not any(kind in content_type for kind in ('text/html', 'text/plain', 'application/xhtml+xml')):
+            raise ValueError('Web source is not an HTML or text page.')
+        content = base64.b64decode(reply['body'], validate=True)
+        if len(content) > max_bytes:
+            raise ValueError('Web source exceeds the configured byte limit.')
+        text = content.decode('utf-8', errors='replace')
+        if tool == 'web_search' and (reply['status'] == 202 or 'challenge-form' in text.lower()):
+            raise ValueError('Search requires browser verification; supply explicit seed URLs.')
+        return current, text
+    raise ValueError('Web source could not be fetched.')
+
+
 async def fetch_page(url: str, *, allowed_domains: list[str] | None = None) -> tuple[str, str]:
+    from isolation import isolated_execution
+    if isolated_execution():
+        return await _broker_page(url, allowed_domains=allowed_domains)
     current = canonical_url(url)
     async with httpx2.AsyncClient(timeout=20, follow_redirects=False, **_client_options()) as client:
         for redirect in range(4):
@@ -140,10 +172,15 @@ def extract_page(url: str, raw: str, *, depth: int) -> tuple[KnowledgePage, list
 async def discover(query: str, domains: list[str], limit: int) -> list[str]:
     """Discover bounded public URLs through DuckDuckGo result pages."""
     term = query + (" (" + " OR ".join(f"site:{domain}" for domain in domains) + ")" if domains else "")
-    async with httpx2.AsyncClient(timeout=20, follow_redirects=False, **_client_options()) as client:
-        async with client.stream("GET", "https://html.duckduckgo.com/html/", params={"q": term}, headers={"User-Agent": USER_AGENT}) as response:
-            response.raise_for_status()
-            html = await _read_response(response, max_bytes=MAX_SEARCH_BYTES)
+    from isolation import isolated_execution
+    if isolated_execution():
+        _, html = await _broker_page('https://html.duckduckgo.com/html/?' + urlencode({'q': term}),
+                                     tool='web_search', max_bytes=MAX_SEARCH_BYTES)
+    else:
+        async with httpx2.AsyncClient(timeout=20, follow_redirects=False, **_client_options()) as client:
+            async with client.stream("GET", "https://html.duckduckgo.com/html/", params={"q": term}, headers={"User-Agent": USER_AGENT}) as response:
+                response.raise_for_status()
+                html = await _read_response(response, max_bytes=MAX_SEARCH_BYTES)
     soup = BeautifulSoup(html, "html.parser")
     found: list[str] = []
     for node in soup.select(".result a.result__a"):

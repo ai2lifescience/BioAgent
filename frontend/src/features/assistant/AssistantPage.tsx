@@ -16,14 +16,6 @@ type AssistantContext = Record<string, unknown>;
 const contextLabels: Record<string, string> = { project_id: 'Project', sample_id: 'Sample', result_type: 'Results' };
 const emptyConfig: AppConfig = { default_model_key: '', default_max_turns: 5, models: [] };
 
-function createSessionId() {
-  const random = globalThis.crypto?.randomUUID?.();
-  if (random) return `assistant_${random.replaceAll('-', '')}`;
-  const bytes = new Uint8Array(16);
-  globalThis.crypto?.getRandomValues(bytes);
-  return `assistant_${Array.from(bytes, (value) => value.toString(16).padStart(2, '0')).join('')}`;
-}
-
 function parentOriginFromQuery() {
   try {
     const raw = new URLSearchParams(window.location.search).get('parent_origin') || window.location.origin;
@@ -49,7 +41,7 @@ export function AssistantPage() {
   const parentOrigin = useMemo(parentOriginFromQuery, []);
   const embedded = query.get('embedded') === '1';
   const websiteRequired = Boolean(query.get('website_site'));
-  const [sessionId, setSessionId] = useState(createSessionId);
+  const [sessionId, setSessionId] = useState('');
   const [config, setConfig] = useState<AppConfig>(emptyConfig);
   const [selectedModel, setSelectedModel] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -194,7 +186,7 @@ export function AssistantPage() {
       }
     };
     window.addEventListener('message', onMessage);
-    postParent({ type: 'agent-ready', session_id: sessionRef.current });
+    if (sessionRef.current) postParent({ type: 'agent-ready', session_id: sessionRef.current });
     return () => window.removeEventListener('message', onMessage);
   }, [appendLog, connectWebsite, postParent, queueContextUpdate, setSafeContext, websitePost]);
 
@@ -203,14 +195,17 @@ export function AssistantPage() {
     (async () => {
       try {
         const loaded = await api.loadConfig();
+        const created = await api.createSession();
         if (cancelled) return;
+        sessionRef.current = created.session_id; setSessionId(created.session_id);
+        postParent({ type: 'agent-ready', session_id: created.session_id });
         setConfig(loaded); setSelectedModel(loaded.default_model_key || loaded.models[0]?.key || ''); setReady(true); setConfigError(''); setStatus(websiteRef.current ? 'Connected to website' : 'Ready');
       } catch (error) {
         if (!cancelled) { setConfigError(error instanceof Error ? error.message : String(error)); setStatus('Could not connect to assistant.'); }
       }
     })();
     return () => { cancelled = true; abortRef.current?.abort(); };
-  }, [api]);
+  }, [api, postParent]);
 
   const submit = useCallback(async (event?: FormEvent) => {
     event?.preventDefault();
@@ -246,15 +241,21 @@ export function AssistantPage() {
     setUploading(true); setStatus('Uploading files…');
     try { const result = await api.uploadFiles(sessionRef.current, Array.from(list)); setSessionId(String(result.session_id || sessionRef.current)); setFiles(previous => [...previous, ...workspaceFiles(result.files)]); setStatus('Files attached.'); }
     catch (error) { setStatus(`Upload failed: ${error instanceof Error ? error.message : String(error)}`); }
-    finally { setUploading(false); }
+    finally {
+      try { const payload = await api.loadWorkspace(sessionRef.current); setFiles(workspaceFiles(payload.workspace?.files)); } catch { /* Keep the upload error and retry on refresh. */ }
+      setUploading(false);
+    }
   }, [api, busy, uploading]);
 
-  const newChat = useCallback(() => {
+  const newChat = useCallback(async () => {
     if (busy) return;
+    let next: string;
+    try { next = (await api.createSession()).session_id; }
+    catch (error) { setStatus(`Could not create chat: ${(error as Error).message}`); return; }
     const binding = websiteRef.current; if (binding) void websitePost('website/disconnect', binding).catch(() => undefined);
-    websiteRef.current = null; setWebsite(null); const next = createSessionId(); resetProgress(); setSessionId(next); setMessages([]); setFiles([]); setLogs([]); setPrompt(''); setStatus(ready ? 'Ready' : 'Connecting to assistant…');
+    websiteRef.current = null; setWebsite(null); sessionRef.current = next; resetProgress(); setSessionId(next); setMessages([]); setFiles([]); setLogs([]); setPrompt(''); setStatus(ready ? 'Ready' : 'Connecting to assistant…');
     postParent({ type: 'agent-ready', session_id: next });
-  }, [busy, postParent, ready, resetProgress, websitePost]);
+  }, [api, busy, postParent, ready, resetProgress, websitePost]);
 
   useEffect(() => { const onKey = (event: globalThis.KeyboardEvent) => { if (event.key === 'Escape' && window.parent !== window) postParent({ type: 'agent-close' }); }; window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey); }, [postParent]);
 

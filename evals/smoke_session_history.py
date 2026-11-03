@@ -16,6 +16,7 @@ from agents.testing import ModelStep, ScriptedModel, assistant_message, function
 from harness import runtime, sandbox
 from harness.contracts import normalize_run_result
 from harness.sessions import SessionMetadataStore, _has_renderable_result
+from auth import AccessDenied
 from interfaces import api
 
 
@@ -44,7 +45,8 @@ class SessionHistoryTests(unittest.TestCase):
             {"role": "user", "text": "Hello"},
             {"role": "assistant", "text": "Hello back."},
         ])
-        self.assertEqual(api.list_session_messages("other")["messages"], [])
+        with self.assertRaises(AccessDenied):
+            api.list_session_messages("other")
         self.assertEqual(runtime.list_sessions()[0]["message_count"], 2)
 
     def test_history_exposes_pending_controls_without_private_run_snapshot(self):

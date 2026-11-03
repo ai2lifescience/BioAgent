@@ -10,7 +10,7 @@ from agents import Agent, RunContextWrapper, function_tool
 from agents.testing import ModelStep, ScriptedModel, assistant_message, function_call
 from harness import runtime, sandbox
 from harness.context import AgentRunContext
-from harness.pipeline_completion import collect_started_pipelines
+from harness.runtime import _collect_started_pipelines
 from harness.sessions import SessionMetadataStore
 from interfaces.api import list_session_messages
 
@@ -35,13 +35,13 @@ class CompletionTests(unittest.IsolatedAsyncioTestCase):
     async def test_queued_running_success_collects_once_without_resubmission(self):
         context, events = self.context(), []
         verified = {**state('succeeded'), 'files': [], 'bundle_path': 'runtime/agent_runs/fixture/results.zip'}
-        with patch('harness.pipeline_completion.service.status', side_effect=[state(s) for s in ['queued', 'running', 'running', 'succeeded']]), patch(
-            'harness.pipeline_completion.service.results', return_value=verified
-        ) as results, patch('harness.pipeline_completion.service.start') as start:
-            completed = await collect_started_pipelines(context, lambda name, data: events.append(data), poll_interval=0)
+        with patch('harness.runtime.pipeline_service.status', side_effect=[state(s) for s in ['queued', 'running', 'running', 'succeeded']]), patch(
+            'harness.runtime.pipeline_service.results', return_value=verified
+        ) as results, patch('harness.runtime.pipeline_service.start') as start:
+            completed = await _collect_started_pipelines(context, lambda name, data: events.append(data), poll_interval=0)
             self.assertEqual(completed, [verified])
             self.assertEqual([item['status'] for item in events], ['queued', 'running', 'succeeded'])
-            self.assertEqual(await collect_started_pipelines(context, poll_interval=0), [])
+            self.assertEqual(await _collect_started_pipelines(context, poll_interval=0), [])
             results.assert_called_once_with(Path('/tmp/fixture'), JOB)
             start.assert_not_called()
 
@@ -49,25 +49,25 @@ class CompletionTests(unittest.IsolatedAsyncioTestCase):
         for status in ['failed', 'cancelled', 'timed_out', 'interrupted']:
             with self.subTest(status=status):
                 context = self.context()
-                with patch('harness.pipeline_completion.service.status', return_value=state(status)), patch('harness.pipeline_completion.service.results') as results:
-                    self.assertEqual((await collect_started_pipelines(context))[0]['status'], status)
-                    self.assertEqual(await collect_started_pipelines(context), [])
+                with patch('harness.runtime.pipeline_service.status', return_value=state(status)), patch('harness.runtime.pipeline_service.results') as results:
+                    self.assertEqual((await _collect_started_pipelines(context))[0]['status'], status)
+                    self.assertEqual(await _collect_started_pipelines(context), [])
                     results.assert_not_called()
 
     async def test_unverified_outputs_are_not_reported_as_success(self):
         context = self.context()
-        with patch('harness.pipeline_completion.service.status', return_value=state('succeeded')), patch('harness.pipeline_completion.service.results', side_effect=ValueError('Output hash changed')):
-            result = (await collect_started_pipelines(context))[0]
+        with patch('harness.runtime.pipeline_service.status', return_value=state('succeeded')), patch('harness.runtime.pipeline_service.results', side_effect=ValueError('Output hash changed')):
+            result = (await _collect_started_pipelines(context))[0]
         self.assertEqual(result['status'], 'error')
         self.assertIn('Output hash changed', result['error'])
         self.assertEqual(result['files'], [])
-        self.assertEqual(await collect_started_pipelines(context), [])
+        self.assertEqual(await _collect_started_pipelines(context), [])
 
     async def test_unrelated_jobs_and_already_collected_outputs_are_not_monitored(self):
         for records in [[], [launched(), {'tool': 'pipeline_shell', 'arguments': {'command': f'agent-pipeline results --job-id {JOB}'}, 'result': state('succeeded')}]]:
             context = self.context(); context.tool_results = records
-            with patch('harness.pipeline_completion.service.status') as status:
-                self.assertEqual(await collect_started_pipelines(context), [])
+            with patch('harness.runtime.pipeline_service.status') as status:
+                self.assertEqual(await _collect_started_pipelines(context), [])
                 status.assert_not_called()
 
 
@@ -94,9 +94,9 @@ class RuntimeCompletionTests(unittest.TestCase):
             root = Path(directory)
             with patch.object(runtime, 'STATE_STORE', SessionMetadataStore(root/'metadata')), patch.object(runtime, 'SESSION_DB', root/'sessions.sqlite3'), patch.object(sandbox, 'WORKSPACES_DIR', root/'workspaces'), patch.object(
                 runtime, 'create_agent', return_value=Agent(name='fixture', model=model, tools=[launch_test, inspect_test])
-            ), patch('harness.pipeline_completion.service.status', side_effect=[state('running'), state('succeeded')]), patch(
-                'harness.pipeline_completion.service.results', return_value={**state('succeeded'), 'files': [], 'bundle_path': 'outputs/results.zip'}
-            ), patch('harness.pipeline_completion.asyncio.sleep', new=AsyncMock()):
+            ), patch('harness.runtime.pipeline_service.status', side_effect=[state('running'), state('succeeded')]), patch(
+                'harness.runtime.pipeline_service.results', return_value={**state('succeeded'), 'files': [], 'bundle_path': 'outputs/results.zip'}
+            ), patch('harness.runtime.asyncio.sleep', new=AsyncMock()):
                 result = runtime.run_agent('Run the demonstration pipeline.', session_id='completion', model=model, max_turns=max_turns)
                 history = list_session_messages('completion')['messages']
         self.assertEqual(result['status'], 'ok', result['answer'])

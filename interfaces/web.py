@@ -24,6 +24,7 @@ from tools.infrastructure.workspace import (
     can_view_structure_artifact,
 )
 from interfaces.api import (
+    create_session,
     delete_session,
     delete_workspace_file,
     handle_approval,
@@ -37,11 +38,14 @@ from interfaces.api import (
     list_sessions,
     list_session_messages,
     list_workspace_files,
-    read_workspace_file,
     update_session_metadata,
-    write_workspace_file,
 )
-from harness.sandbox import relative_file_path
+from auth import AuthError, auth_mode, current_principal
+from interfaces.auth import authenticated_request, configure_server
+from harness.sandbox import relative_file_path, execution_access
+from isolation.limits import limits, public_limits
+from isolation.files import open_regular
+from interfaces.uploads import Uploads, multipart, publish
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODELS
 from tools.infrastructure.pipeline_engine import service as pipeline_service
 from harness.jobs import TERMINAL, get_queue
@@ -173,9 +177,17 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
 
     server_version = "Pipeline2AgentHTTP/1.1"
 
+    def end_headers(self) -> None:
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        if getattr(self, "_auth_cookie", None):
+            self.send_header("Set-Cookie", self._auth_cookie)
+        super().end_headers()
+
     def log_message(self, format: str, *args: Any) -> None:
         return
 
+    @authenticated_request
     def do_GET(self) -> None:
         path = urlparse(self.path).path
         if path in {"/", "/index.html"}:
@@ -205,13 +217,21 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             self._send_json({"status": "ok"})
             return
         if path == "/config":
+            from isolation import isolated_execution
+            from tools.capabilities import describe
+            pipelines = pipeline_service.catalog(compact=True)
             self._send_json(
                 {
                     "default_model_key": DEFAULT_AGENT_MODEL_KEY,
                     "default_max_turns": DEFAULT_MAX_TURNS,
                     "models": _model_options(),
                     "files": artifact_suffix_config(),
-                    "pipelines": pipeline_service.catalog(compact=True),
+                    "storage_limits": public_limits(),
+                    "isolated_execution": isolated_execution(),
+                    # Onboarding lists all workflows; execution authorization is
+                    # enforced separately by the isolated pipeline broker.
+                    "pipelines": pipelines,
+                    "capabilities": describe(pipelines),
                 }
             )
             return
@@ -234,15 +254,37 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
         if path == "/workspace":
             self._handle_workspace()
             return
+        if path.startswith("/workspace/uploads/"):
+            self._send_json(Uploads(execution_access()).status(path.rsplit("/", 1)[-1]))
+            return
         if path == "/workspace/file":
             self._handle_workspace_file()
             return
         self._send_json({"error": "not found"}, status=404)
 
+    @authenticated_request
     def do_POST(self) -> None:
         path = urlparse(self.path).path
+        if path == "/sessions":
+            self._send_json(create_session(), status=201)
+            return
         if path.startswith("/website/"):
             self._handle_website(path[len("/website/"):])
+            return
+        if path == '/workspace/pipeline-artifacts/materialize':
+            from tools.infrastructure.pipeline_engine.broker import materialize
+            body = self._read_json(); access = execution_access()
+            file = materialize(access.workspace(body.get('session_id', '')), body.get('path', ''), access=access)
+            self._send_json({'session_id': body['session_id'], 'files': [file]})
+            return
+        if path == "/workspace/uploads":
+            body = self._read_json()
+            row = Uploads(execution_access()).create(body.get('session_id', ''), body.get('filename', ''), body.get('size', 0))
+            self._send_json(row, status=201)
+            return
+        if path.startswith('/workspace/uploads/') and path.endswith('/complete'):
+            file = Uploads(execution_access()).complete(path.split('/')[-2])
+            self._send_json({'session_id': file['session_id'], 'files': [file]})
             return
         if path == "/workspace/files":
             self._handle_workspace_upload()
@@ -253,8 +295,8 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
         if path == "/approve":
             self._handle_approval()
             return
-        if path == "/approve_stream":
-            self._handle_approval_stream()
+        if path in {"/approve_stream", "/approve_async"}:
+            self._handle_approval_stream(stream=path == "/approve_stream")
             return
         if path != "/run":
             self._send_json({"error": "not found"}, status=404)
@@ -262,8 +304,15 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
 
         self._handle_run()
 
+    @authenticated_request
     def do_PATCH(self) -> None:
         path = urlparse(self.path).path
+        if path.startswith('/workspace/uploads/'):
+            row = Uploads(execution_access()).append(path.rsplit('/', 1)[-1],
+                int(self.headers.get('Upload-Offset', '-1')), self.rfile,
+                int(self.headers.get('Content-Length', '0')))
+            self._send_json(row)
+            return
         prefix = "/sessions/"
         if not path.startswith(prefix):
             self._send_json({"error": "not found"}, status=404)
@@ -287,6 +336,8 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 return
             result = update_session_metadata(session_id, title=title, pinned=pinned)
             self._send_json(result)
+        except AuthError:
+            raise
         except Exception as exc:
             self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
 
@@ -316,11 +367,13 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 max_turns=result.get("max_turns"),
             )
             self._send_json(result)
+        except AuthError:
+            raise
         except Exception as exc:
             self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
 
-    def _handle_approval_stream(self) -> None:
-        """Queue an approval decision and stream the durable resumed run."""
+    def _handle_approval_stream(self, *, stream: bool = True) -> None:
+        """Queue a decision; return its durable job or stream the resumed run."""
         try:
             payload = self._read_json()
             session_id = str(payload.get("session_id", "")).strip()
@@ -342,13 +395,23 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 return
         except ConnectionAbortedError:
             return
+        except AuthError:
+            raise
         except Exception as exc:
             self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
             return
-        self._stream_run(job["run_id"])
+        if stream:
+            self._stream_run(job["run_id"])
+        else:
+            self._send_json(_public_job(job), status=202)
 
+    @authenticated_request
     def do_DELETE(self) -> None:
         path = urlparse(self.path).path
+        if path.startswith('/workspace/uploads/'):
+            Uploads(execution_access()).cancel(path.rsplit('/', 1)[-1])
+            self._send_json({'cancelled': True})
+            return
         if path.startswith("/workspace/files/"):
             self._handle_delete_workspace_file(path)
             return
@@ -380,6 +443,8 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 website=payload.get("website") if isinstance(payload.get("website"), dict) else None,
             )
             self._send_json(_public_job(job), status=202)
+        except AuthError:
+            raise
         except Exception as exc:
             self._send_json(
                 {
@@ -408,6 +473,8 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             )
         except ConnectionAbortedError:
             return
+        except AuthError:
+            raise
         except Exception as exc:
             # Enqueue failures happen before SSE headers are sent. Once the
             # stream is established, _stream_run reports terminal errors itself.
@@ -431,7 +498,7 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 secret = os.getenv("AGENT_WEBSITE_SECRET", "")
                 if len(secret) < 32:
                     raise ValueError("AGENT_WEBSITE_SECRET must be configured with at least 32 characters")
-                result = {"token": issue_ticket(secret, site_id=site_id, origin=origin, subject="assistant-demo-user")}
+                result = {"token": issue_ticket(secret, site_id=site_id, origin=origin, subject=current_principal().user_id)}
             elif operation == "connect":
                 result = bridge.connect(
                     ticket=str(payload.get("ticket", "")), site_id=str(payload.get("site_id", "")),
@@ -455,6 +522,8 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 self._send_json({"error": "not found"}, status=404)
                 return
             self._send_json(result)
+        except AuthError:
+            raise
         except Exception as exc:
             self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
 
@@ -502,34 +571,32 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
                 )
                 return
 
-            raw = self.rfile.read(length)
+            access = execution_access()
             boundary = _multipart_boundary(self.headers.get("Content-Type", ""))
-            parts = _parse_multipart(raw, boundary)
-            session_id = ""
-            files: list[dict[str, Any]] = []
-
-            for part in parts:
-                if part.get("name") == "session_id" and not part.get("filename"):
-                    session_id = part["data"].decode("utf-8", errors="replace").strip()
-                    break
-
-            for part in parts:
-                filename = str(part.get("filename") or "").strip()
-                if not filename:
-                    continue
-                file_entry = write_workspace_file(
-                    session_id=session_id or None,
-                    filename=filename,
-                    data=part["data"],
-                    content_type=str(part.get("content_type") or ""),
-                )
-                session_id = str(file_entry.get("session_id") or session_id)
-                files.append(file_entry)
+            spool = access.metadata_root / '.upload-spool'
+            spool.mkdir(mode=0o700, parents=True, exist_ok=True)
+            files = []
+            from isolation.storage import reserve, release
+            reservation = reserve(access, None, length, kind='multipart', seconds=3600)
+            try:
+                with multipart(self.rfile, length, boundary, spool) as parts:
+                    session_id = next((part['path'].read_text().strip() for part in parts
+                                       if part['name'] == 'session_id' and part['filename'] is None), '')
+                    if not session_id:
+                        session_id = create_session()['session_id']
+                    access.ownership.require(session_id)
+                    for part in parts:
+                        if part['filename']:
+                            files.append(publish(access, session_id, part['filename'], part['path'], part['size'], reservation=reservation, stable_name=False))
+            finally:
+                release(access, reservation)
 
             if not files:
                 self._send_json({"error": "no files were uploaded"}, status=400)
                 return
             self._send_json({"session_id": session_id, "files": files})
+        except AuthError:
+            raise
         except Exception as exc:
             self._send_json(
                 {
@@ -644,10 +711,15 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
 
     def _read_json(self) -> dict[str, Any]:
         length = int(self.headers.get("Content-Length", "0"))
+        if length < 0 or length > 1024 * 1024:
+            raise ValueError("JSON request body is too large.")
         raw = self.rfile.read(length)
         if not raw:
             return {}
-        return json.loads(raw.decode("utf-8"))
+        payload = json.loads(raw.decode("utf-8"))
+        if not isinstance(payload, dict):
+            raise ValueError("JSON request body must be an object.")
+        return payload
 
     def _handle_workspace_file(self) -> None:
         parsed = urlparse(self.path)
@@ -663,17 +735,66 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
         except ValueError as exc:
             self._send_json({"error": str(exc)}, status=400)
             return
-        try:
-            data = read_workspace_file(session_id, file_path.as_posix())
-        except Exception as exc:
-            self._send_json({"error": str(exc)}, status=404)
+        access = execution_access()
+        access.ownership.require(session_id)
+        root = access.workspace(session_id)
+        if file_path.parts[0] == 'pipeline-bundles':
+            from tools.infrastructure.pipeline_engine.broker import bundle_stream
+            if len(file_path.parts) != 3 or file_path.name != 'results.zip': raise ValueError('Invalid bundle path.')
+            with bundle_stream(root, file_path.parts[1], access=access) as stream:
+                self._stream_file(stream, 'application/zip')
             return
+        if file_path.parts[0] == 'pipeline-artifacts':
+            from tools.infrastructure.pipeline_engine.broker import remote_stream
+            requested = self.headers.get('Range')
+            if requested and not re.fullmatch(r'bytes=\d*-\d*', requested):
+                self._send_json({'error': 'Only one byte range is supported.'}, status=416)
+                return
+            started = False
+            try:
+                with remote_stream(root, file_path.as_posix(), access=access, byte_range=requested) as (response, item):
+                    started = True
+                    self.send_response(206 if requested else 200)
+                    self.send_header('Content-Type', artifact_content_type(file_path))
+                    self.send_header('Content-Length', str(response['ContentLength']))
+                    self.send_header('Accept-Ranges', 'bytes')
+                    if response.get('ContentRange'): self.send_header('Content-Range', response['ContentRange'])
+                    if artifact_content_type(file_path).startswith('text/html'):
+                        self.send_header('Content-Security-Policy', "sandbox; default-src 'none'; img-src data:; style-src 'unsafe-inline'")
+                    self.end_headers()
+                    try:
+                        while chunk := response['Body'].read(1024 * 1024): self.wfile.write(chunk)
+                    except (BrokenPipeError, ConnectionResetError): pass
+            except AuthError:
+                raise
+            except Exception as exc:
+                if started:
+                    self.close_connection = True
+                elif isinstance(exc, ValueError):
+                    self._send_json({'error': str(exc)}, status=416 if requested else 400)
+                else:
+                    self._send_json({'error': 'Remote artifact is temporarily unavailable.'}, status=502)
+            return
+        if viewer_format != 'pdb':
+            try:
+                with open_regular(root, file_path.as_posix()) as stream:
+                    self._stream_file(stream, artifact_content_type(file_path), sandbox_html=True)
+            except (FileNotFoundError, OSError, ValueError):
+                self._send_json({'error': 'File not found.'}, status=404)
+            return
+        with open_regular(root, file_path.as_posix()) as stream:
+            if os.fstat(stream.fileno()).st_size > 32 * 1024 * 1024:
+                self._send_json({'error': 'Structure is too large for this viewer; download the original file.'}, status=413)
+                return
+            data = stream.read()
         if viewer_format == "pdb":
             if not can_view_structure_artifact(file_path):
                 self._send_json({"error": "viewer=pdb is only available for structure artifacts"}, status=400)
                 return
             try:
                 self._send_text(_structure_viewer_pdb_text(data, file_path), "chemical/x-pdb; charset=utf-8")
+            except AuthError:
+                raise
             except Exception as exc:
                 self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=500)
             return
@@ -700,8 +821,48 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
         if not path.exists() or not path.is_file():
             self._send_json({"error": "not found"}, status=404)
             return
-        data = path.read_bytes()
-        self._send_bytes(data, content_type, status, sandbox_html)
+        with path.open('rb') as stream:
+            self._stream_file(stream, content_type, sandbox_html=sandbox_html, status=status)
+
+    def _stream_file(self, stream, content_type, *, sandbox_html=False, status=200):
+        size = os.fstat(stream.fileno()).st_size
+        start, end = 0, size - 1
+        requested = self.headers.get('Range')
+        if requested:
+            match = re.fullmatch(r'bytes=(\d*)-(\d*)', requested)
+            try:
+                if not match or not any(match.groups()) or not size: raise ValueError()
+                left, right = match.groups()
+                if left:
+                    start = int(left); end = min(int(right), size - 1) if right else size - 1
+                else:
+                    count = int(right)
+                    if count <= 0: raise ValueError()
+                    start = max(0, size - count)
+                if start > end or start >= size: raise ValueError()
+            except ValueError:
+                self.send_response(416)
+                self.send_header('Content-Range', f'bytes */{size}')
+                self.send_header('Content-Length', '0'); self.end_headers()
+                return
+            status = 206
+        self.send_response(status)
+        self.send_header('Content-Type', content_type)
+        self.send_header('Accept-Ranges', 'bytes')
+        if status == 206: self.send_header('Content-Range', f'bytes {start}-{end}/{size}')
+        if sandbox_html and content_type.startswith('text/html'):
+            self.send_header('Content-Security-Policy', "sandbox; default-src 'none'; img-src data:; style-src 'unsafe-inline'")
+        self.send_header('Content-Length', str(max(0, end - start + 1)))
+        self.end_headers()
+        stream.seek(start)
+        remaining = max(0, end - start + 1)
+        try:
+            while remaining:
+                chunk = stream.read(min(1024 * 1024, remaining))
+                if not chunk: break
+                self.wfile.write(chunk); remaining -= len(chunk)
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
     def _send_bytes(
         self, data: bytes, content_type: str, status: int = 200, sandbox_html: bool = False,
@@ -732,6 +893,7 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             return
 
     def _send_stream_headers(self) -> None:
+        self._streaming = True
         self.send_response(200)
         self.send_header("Content-Type", "text/event-stream; charset=utf-8")
         self.send_header("Cache-Control", "no-cache")
@@ -761,13 +923,27 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
 
 
 def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
+    configure_server(host)
     if any(_frontend_asset_path(filename) is None for filename in FRONTEND_ENTRYPOINTS):
         print(_frontend_build_diagnostic(), file=sys.stderr)
     get_queue().recover()
     server = ThreadingHTTPServer((host, port), AgentRequestHandler)
-    configure_local_demo(server.server_port, server.server_address[0])
-    print(f"Pipeline2Agent web UI running at http://{host}:{port}")
-    server.serve_forever()
+    if auth_mode() == "local":
+        configure_local_demo(server.server_port, server.server_address[0])
+    print(f"Pipeline2Agent web UI running at http://{host}:{server.server_port}")
+    print(f"Access mode: {auth_mode()}", flush=True)
+    from isolation import isolated_execution, start_worker_reaper
+    reaper = start_worker_reaper(execution_access().metadata_root) if isolated_execution() else None
+    from tools.infrastructure.pipeline_engine.broker import start_reconciler
+    reconciler = start_reconciler(execution_access().metadata_root) if isolated_execution() else None
+    try:
+        server.serve_forever()
+    finally:
+        if reaper:
+            reaper.set()
+        if reconciler:
+            reconciler.set()
+        server.server_close()
 
 
 def _structure_viewer_pdb_text(data: bytes, path: Path) -> str:
@@ -790,69 +966,6 @@ def _multipart_boundary(content_type: str) -> bytes:
     if not boundary:
         raise ValueError("multipart boundary is empty")
     return boundary.encode("utf-8")
-
-
-def _parse_multipart(raw: bytes, boundary: bytes) -> list[dict[str, Any]]:
-    delimiter = b"--" + boundary
-    parts: list[dict[str, Any]] = []
-    for section in raw.split(delimiter):
-        if not section or section in {b"--", b"--\r\n", b"--\n"}:
-            continue
-        if section.startswith(b"\r\n"):
-            section = section[2:]
-        elif section.startswith(b"\n"):
-            section = section[1:]
-        if section.endswith(b"--"):
-            section = section[:-2]
-        if section.endswith(b"\r\n"):
-            section = section[:-2]
-        elif section.endswith(b"\n"):
-            section = section[:-1]
-
-        header_bytes, separator, body = section.partition(b"\r\n\r\n")
-        if not separator:
-            header_bytes, separator, body = section.partition(b"\n\n")
-        if not separator:
-            continue
-
-        headers = _parse_multipart_headers(header_bytes)
-        disposition = _parse_header_params(headers.get("content-disposition", ""))
-        parts.append(
-            {
-                "name": disposition.get("name", ""),
-                "filename": disposition.get("filename", ""),
-                "content_type": headers.get("content-type", ""),
-                "headers": headers,
-                "data": body,
-            }
-        )
-    return parts
-
-
-def _parse_multipart_headers(raw: bytes) -> dict[str, str]:
-    headers: dict[str, str] = {}
-    for line in raw.decode("utf-8", errors="replace").splitlines():
-        if ":" not in line:
-            continue
-        key, value = line.split(":", 1)
-        headers[key.strip().lower()] = value.strip()
-    return headers
-
-
-def _parse_header_params(value: str) -> dict[str, str]:
-    params: dict[str, str] = {}
-    parts = [part.strip() for part in value.split(";") if part.strip()]
-    if parts:
-        params[""] = parts[0].lower()
-    for part in parts[1:]:
-        if "=" not in part:
-            continue
-        key, raw_value = part.split("=", 1)
-        clean = raw_value.strip()
-        if len(clean) >= 2 and clean[0] == clean[-1] == '"':
-            clean = clean[1:-1].replace(r"\"", '"')
-        params[key.strip().lower()] = clean
-    return params
 
 
 def main() -> int:

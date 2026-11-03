@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from typing import Any, Callable
 
 from tools.infrastructure.tool_support.context import OperationContext
+from auth import current_principal
 
 
 def _now() -> str:
@@ -25,10 +26,16 @@ class AgentRunContext:
     events: list[dict[str, Any]] = field(default_factory=list)
     files: list[dict[str, Any]] = field(default_factory=list)
     artifacts: list[dict[str, Any]] = field(default_factory=list)
+    owner_user_id: str = field(default_factory=lambda: current_principal().user_id)
 
     @property
     def session_id(self) -> str:
         return str(self.session.session_id)
+
+    @property
+    def execution_access(self):
+        from .sandbox import execution_access
+        return execution_access()
 
     @property
     def run(self) -> dict[str, Any]:
@@ -42,6 +49,7 @@ class AgentRunContext:
     def user_context(self) -> dict[str, Any]:
         return {
             "session_id": self.session_id,
+            "owner_user_id": self.owner_user_id,
             "files": [dict(item) for item in self.files],
             "_agent_context": self,
             **self.run,

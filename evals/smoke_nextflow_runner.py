@@ -27,6 +27,8 @@ def _fake_nextflow_run(command: list[str], **_kwargs: object) -> subprocess.Comp
     config = yaml.safe_load(params_path.read_text(encoding="utf-8")) or {}
     assert Path(config["agent_config_path"]) == params_path
     output_dir = Path(config["nextflow_output_dir"])
+    assert config["bioagent_config_path"] == config["agent_config_path"]
+    assert Path(config["bioagent_config_path"]).is_file()
     output_dir.mkdir(parents=True, exist_ok=True)
     if "-preview" not in command:
         metrics = {

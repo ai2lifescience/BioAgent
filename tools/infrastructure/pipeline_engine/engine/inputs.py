@@ -70,15 +70,15 @@ def default_input_slot(input_specs: dict[str, dict[str, Any]]) -> str:
     return next(iter(input_specs), "input")
 
 
-def normalize_input_overrides(input_overrides: dict[str, Any] | None) -> dict[str, str]:
+def normalize_input_overrides(input_overrides: dict[str, Any] | None) -> dict[str, Any]:
     if input_overrides is None:
         return {}
     if not isinstance(input_overrides, dict):
         raise ValueError("input_overrides must be a mapping from input slot to path.")
     return {
-        safe_label(str(slot), "input"): str(path).strip()
+        safe_label(str(slot), "input"): [str(item).strip() for item in path] if isinstance(path, list) else str(path).strip()
         for slot, path in input_overrides.items()
-        if str(path).strip()
+        if path is not None and str(path).strip()
     }
 
 

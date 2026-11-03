@@ -96,7 +96,12 @@ async def needs_approval(ctx, action, call_id) -> bool:
     if args.operation == "run":
         # Ensure there is a concrete plan for the approval UI to display.
         try:
-            plan = JobStore(workspace(ctx.context)).get(args.plan_id)
+            from isolation import isolated_execution
+            if isolated_execution():
+                from tools.infrastructure.pipeline_engine.broker import get_plan
+                plan = get_plan(workspace(ctx.context), args.plan_id, access=ctx.context.execution_access)
+            else:
+                plan = JobStore(workspace(ctx.context)).get(args.plan_id)
             if plan.get("plan", {}).get("dry_run"):
                 return False
         except ValueError:
@@ -105,6 +110,7 @@ async def needs_approval(ctx, action, call_id) -> bool:
 
 
 async def execute_local_pipeline_command(request: ShellCommandRequest) -> ShellResult:
+    from isolation import isolated_execution
     context = request.ctx_wrapper.context
     commands = request.data.action.commands
     command = commands[0] if len(commands) == 1 else ""
@@ -116,7 +122,11 @@ async def execute_local_pipeline_command(request: ShellCommandRequest) -> ShellR
         timeout = request.data.action.timeout_ms
         if args.operation == "wait" and timeout and args.seconds * 1000 > timeout:
             raise ValueError("--seconds exceeds the shell action timeout_ms budget.")
-        value = await asyncio.to_thread(dispatch, workspace(context), command)
+        if isolated_execution():
+            from tools.infrastructure.pipeline_engine.broker import dispatch as executor
+            value = await asyncio.to_thread(executor, workspace(context), command, access=context.execution_access)
+        else:
+            value = await asyncio.to_thread(dispatch, workspace(context), command)
         value.setdefault("status", "ok")
         code = 1 if value["status"] == "error" else 0
     except Exception as exc:

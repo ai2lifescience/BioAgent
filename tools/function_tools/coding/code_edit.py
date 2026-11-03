@@ -35,7 +35,10 @@ def _operation(*, path, content, expected_sha256=None, context):
     if target.is_dir():
         raise ValueError("The edit path is a directory.")
     if expected_sha256 is not None:
-        digest = hashlib.sha256(target.read_bytes()).hexdigest() if target.is_file() else None
+        digest = None
+        if target.is_file():
+            with target.open('rb') as stream:
+                digest = hashlib.file_digest(stream, 'sha256').hexdigest()
         if digest != expected_sha256:
             raise ValueError("The file changed since inspection; refresh it before editing.")
     target.parent.mkdir(parents=True, exist_ok=True)

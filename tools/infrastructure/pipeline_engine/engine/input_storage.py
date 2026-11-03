@@ -306,12 +306,15 @@ def upload_local_file_values(
     *,
     pipeline_name: str,
     run_id: str,
+    input_keys: set[str] | None = None,
 ) -> list[dict[str, Any]]:
     """Upload local file values in a WDL inputs JSON and rewrite it in place.
 
     Strings that are not existing local regular files are preserved.  This is
     intentional: mounted reference database paths can remain as paths that
     already exist inside the remote task environment.
+    Isolated callers restrict input_keys to declared file slots, so plain text
+    parameters cannot accidentally upload a similarly named host file.
     """
     try:
         payload = json.loads(inputs_path.read_text(encoding="utf-8"))
@@ -351,7 +354,8 @@ def upload_local_file_values(
         }
         return cromwell_path
 
-    rewritten = rewrite(payload)
+    rewritten = (rewrite(payload) if input_keys is None else
+                 {key: rewrite(value) if key in input_keys else value for key, value in payload.items()})
     inputs_path.write_text(json.dumps(rewritten, indent=2) + "\n", encoding="utf-8")
     return list(uploaded.values())
 

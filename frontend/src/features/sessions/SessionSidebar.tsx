@@ -9,6 +9,8 @@ export interface SessionSidebarProps {
   collapsed?: boolean;
   mobileOpen?: boolean;
   disabled?: boolean;
+  creating?: boolean;
+  statuses?: Record<string, string>;
   onToggle: () => void;
   onMobileClose?: () => void;
   onSelect: (id: string) => void | Promise<void>;
@@ -29,7 +31,7 @@ function formatTime(value: string | undefined) {
 }
 
 export function SessionSidebar({
-  sessions, activeId, collapsed = false, mobileOpen = false, disabled = false,
+  sessions, activeId, collapsed = false, mobileOpen = false, disabled = false, creating = false, statuses = {},
   onToggle, onMobileClose, onSelect, onNew, onRename, onPin, onDelete,
 }: SessionSidebarProps) {
   const [menuId, setMenuId] = useState<string | null>(null);
@@ -95,29 +97,31 @@ export function SessionSidebar({
     </div>
     {mobileOpen && onMobileClose && <button className="sidebar-scrim" type="button" aria-label="Close navigation" onClick={onMobileClose} />}
     <div className="side-content">
-      <button className="new-chat" type="button" disabled={disabled} onClick={() => { closeActions(); setError(''); void Promise.resolve(onNew()).then(closeMobile).catch(caught => setError(caught instanceof Error ? caught.message : 'Could not create a new chat.')); }}><Icon name="plus" /><span>New chat</span></button>
+      <button className="new-chat" type="button" disabled={disabled || creating} onClick={() => { closeActions(); setError(''); void Promise.resolve(onNew()).then(closeMobile).catch(caught => setError(caught instanceof Error ? caught.message : 'Could not create a new chat.')); }}><Icon name="plus" /><span>New chat</span></button>
       <section className="panel sessions-panel" aria-labelledby="sessions-heading">
         <div className="panel-heading"><div><span id="sessions-heading" className="eyebrow">Conversations</span><span className="panel-subtitle">{sessions.length} saved</span></div></div>
         {error && <div className="session-action-error" role="status">{error}</div>}
         <div className="session-list" role="list">
           {ordered.length ? ordered.map(item => {
+            const state = statuses[item.id];
+            const protectedSession = ['queued', 'running', 'pending_approval', 'uploading', 'reconnecting'].includes(state);
             const selected = activeId === item.id; const actionBusy = busyId === item.id;
-            return <div key={item.id} className={`session-row ${selected ? 'active' : ''}`} role="listitem">
+            return <div key={item.id} className={`session-row ${selected ? 'active' : ''}`} role="listitem" data-session-id={item.id}>
               {renameId === item.id ? <form className="session-rename" onSubmit={event => { event.preventDefault(); submitRename(); }}>
                 <input ref={renameRef} value={renameValue} maxLength={80} aria-label="Chat name" onChange={event => setRenameValue(event.target.value)} onKeyDown={submitRename} disabled={actionBusy} />
                 <button type="submit" disabled={actionBusy || !renameValue.trim()}>Save</button><button type="button" onClick={() => setRenameId(null)}>Cancel</button>
               </form> : <>
                 <button className="session-button" type="button" disabled={disabled || actionBusy} onClick={() => { closeActions(); setError(''); void Promise.resolve(onSelect(item.id)).catch(caught => setError(caught instanceof Error ? caught.message : 'Could not open this chat.')); closeMobile(); }}>
-                  <strong>{item.title || 'New chat'}</strong><span>{formatTime(item.updated_at)} · {item.message_count || item.messages?.length || 0} {Number(item.message_count || item.messages?.length || 0) === 1 ? 'message' : 'messages'}</span>
+                  <strong>{item.title || 'New chat'}</strong>{state && state !== 'idle' && <span className={`session-run-status status-${state}`} role="status">{({ queued: 'Queued', running: 'Running', pending_approval: 'Needs approval', uploading: 'Uploading', reconnecting: 'Reconnecting', succeeded: 'Completed', failed: 'Failed' } as Record<string, string>)[state]}</span>}<span>{formatTime(item.updated_at)} · {item.message_count || item.messages?.length || 0} {Number(item.message_count || item.messages?.length || 0) === 1 ? 'message' : 'messages'}</span>
                 </button>
                 {item.pinned && <span className="pinned" title="Pinned"><Icon name="pin" /></span>}
-                <button className="session-more" type="button" disabled={disabled || actionBusy} aria-haspopup="menu" aria-expanded={menuId === item.id} aria-label={`Actions for ${item.title || 'chat'}`} onClick={() => setMenuId(menuId === item.id ? null : item.id)}><Icon name="more" /></button>
+                <button className="session-more" type="button" disabled={disabled || actionBusy || protectedSession} aria-haspopup="menu" aria-expanded={menuId === item.id} aria-label={`Actions for ${item.title || 'chat'}`} onClick={() => setMenuId(menuId === item.id ? null : item.id)}><Icon name="more" /></button>
                 {menuId === item.id && <div className="session-menu" role="menu">
                   <button type="button" role="menuitem" onClick={() => void run(item.id, () => onPin(item.id, !item.pinned))}><Icon name="pin" />{item.pinned ? 'Unpin chat' : 'Pin chat'}</button>
                   <button type="button" role="menuitem" onClick={() => beginRename(item)}><Icon name="edit" />Rename chat</button>
                   <button type="button" role="menuitem" className="danger" onClick={() => { setMenuId(null); setDeleteId(item.id); }}><Icon name="trash" />Delete chat</button>
                 </div>}
-                {deleteId === item.id && <div className="session-delete-confirm" role="alertdialog" aria-label="Delete chat confirmation"><span>Delete this chat?</span><button type="button" onClick={() => void run(item.id, () => onDelete(item.id))} disabled={actionBusy}>Delete</button><button type="button" onClick={() => setDeleteId(null)}>Cancel</button></div>}
+                {deleteId === item.id && <div className="session-delete-confirm" role="alertdialog" aria-label="Delete chat confirmation"><span>Delete this chat?</span><button type="button" onClick={() => void run(item.id, () => onDelete(item.id))} disabled={actionBusy || protectedSession}>Delete</button><button type="button" onClick={() => setDeleteId(null)}>Cancel</button></div>}
               </>}
             </div>;
           }) : <div className="session-empty">Your conversations will appear here.</div>}

@@ -45,6 +45,7 @@ def run_nextflow_pipeline(
         {
             "cores": resolved_cores,
             "agent_config_path": str(context.run_dir / "config.runtime.yaml"),
+            "bioagent_config_path": str(context.run_dir / "config.runtime.yaml"),
             "nextflow_output_dir": str(engine_output_dir),
         },
     )

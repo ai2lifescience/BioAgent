@@ -248,12 +248,26 @@ class PipelineConfigChecks(unittest.TestCase):
             entry["name"] for entry in service.catalog()
             if entry.get("engine") == "wdl"
         ]
-        self.assertEqual(len(wdl_names), 6)
+        # Installed plugins determine catalog size; keep the baseline fixture
+        # required without pinning the number of application workflows.
+        self.assertIn("template_wdl", wdl_names)
+        baseline = prepare_pipeline_context(
+            pipeline_name="template_wdl", artifact_dir=str(self.root),
+        )
         for name in wdl_names:
             with self.subTest(pipeline=name):
-                context = prepare_pipeline_context(
+                # Options generation is independent of user input and reference
+                # files, which deployment-specific bundles may not ship locally.
+                directory, manifest, _ = service.definition(name)
+                run_dir = self.root / name
+                run_dir.mkdir()
+                context = replace(
+                    baseline,
                     pipeline_name=name,
-                    artifact_dir=str(self.root),
+                    pipeline_dir=directory,
+                    runner_config=manifest,
+                    run_dir=run_dir,
+                    output_dir=run_dir,
                 )
                 options_path = write_wdl_options(
                     context,

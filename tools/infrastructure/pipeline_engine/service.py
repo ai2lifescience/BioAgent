@@ -349,7 +349,7 @@ def cancel(root: Path, job_id: str) -> dict:
     return summary(updated)
 
 
-def results(root: Path, job_id: str, max_rows: int = 10) -> dict:
+def results(root: Path, job_id: str, max_rows: int = 10, *, include_bundle: bool = True) -> dict:
     if not 1 <= max_rows <= 50:
         raise ValueError("Table preview limit must be between 1 and 50.")
     store = JobStore(root)
@@ -376,20 +376,21 @@ def results(root: Path, job_id: str, max_rows: int = 10) -> dict:
                     rows.append(row)
                 tables.append({"name": path.name, "columns": reader.fieldnames, "rows": rows[:max_rows], "truncated": len(rows) > max_rows})
     archive_path = directory / "results.zip"
-    with zipfile.ZipFile(archive_path, "w", zipfile.ZIP_DEFLATED) as archive:
-        for _, path in selected:
-            archive.write(path, path.relative_to(directory).as_posix())
-        for name in ("stdout.log", "stderr.log", "plan.json", "output-manifest.json"):
-            path = directory / name
-            if path.is_file():
-                archive.write(path, name)
+    if include_bundle:
+        with zipfile.ZipFile(archive_path, "w", zipfile.ZIP_DEFLATED) as archive:
+            for _, path in selected:
+                archive.write(path, path.relative_to(directory).as_posix())
+            for name in ("stdout.log", "stderr.log", "plan.json", "output-manifest.json"):
+                path = directory / name
+                if path.is_file():
+                    archive.write(path, name)
     return {"status": "succeeded", "job_id": job_id, "pipeline_name": record["plan"]["pipeline_name"],
             "files": [item for item, _ in selected], "metrics": metrics, "tables": tables,
-            "bundle_path": archive_path.relative_to(store.root).as_posix()}
+            "bundle_path": archive_path.relative_to(store.root).as_posix() if include_bundle else None}
 
 
-def execute_engine(root: Path, record: dict) -> dict:
-    """Reuse all four engine adapters with immutable input copies and job-local outputs."""
+def prepare_execution(root: Path, record: dict, *, snapshot_inputs: bool = True):
+    """Build the common engine context; isolated callers already own private snapshots."""
     from tools.infrastructure.pipeline_engine.engine.inputs import pipeline_input_specs
     from tools.infrastructure.pipeline_engine.engine.runner import prepare_pipeline_context
     plan = record["plan"]
@@ -402,19 +403,34 @@ def execute_engine(root: Path, record: dict) -> dict:
     for slot, items in plan["inputs"].items():
         copies = []
         for index, item in enumerate(items):
-            target = directory / "inputs" / slot / f"{index}_{Path(item['path']).name}"
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(confined(root, item["path"]), target)
+            source = confined(root, item["path"])
+            target = source
+            if snapshot_inputs:
+                target = directory / "inputs" / slot / f"{index}_{Path(item['path']).name}"
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, target)
             if digest(target) != item["sha256"]:
                 raise ValueError("Input changed while being staged.")
             copies.append(str(target))
-        inputs[slot] = ";".join(copies) if specs[slot]["multiple"] else copies[0]
+        inputs[slot] = copies if specs[slot]["multiple"] else copies[0]
     atomic_json(directory / "inputs.json", inputs)
     context = prepare_pipeline_context(pipeline_name=plan["pipeline_name"], input_overrides=inputs,
         config_overrides=plan["parameters"], artifact_dir=str(directory), run_id="execution", timeout=plan["timeout_seconds"])
     output_dir = directory / "outputs"
     output_dir.mkdir(exist_ok=True)
-    context = replace(context, run_dir=output_dir, output_dir=output_dir)
+    selected_runner_config = copy.deepcopy(context.runner_config)
+    for key in ("wdl_engine", "cromwell_url"):
+        if plan.get(key):
+            selected_runner_config[key] = plan[key]
+    return replace(context, run_dir=output_dir, output_dir=output_dir,
+                   runner_config=selected_runner_config)
+
+
+def execute_engine(root: Path, record: dict) -> dict:
+    """Reuse all four engine adapters with immutable input copies and job-local outputs."""
+    plan = record["plan"]
+    context = prepare_execution(root, record)
+    output_dir = context.output_dir
     if plan["engine"] == "shell":
         from tools.infrastructure.pipeline_engine.engine.shell import run_shell_pipeline
         result = run_shell_pipeline(context)
@@ -426,12 +442,6 @@ def execute_engine(root: Path, record: dict) -> dict:
         result = run_nextflow_pipeline(context, cores=plan["cores"], dry_run=plan["dry_run"])
     else:
         from tools.infrastructure.pipeline_engine.engine.wdl import run_wdl_pipeline
-        selected_runner_config = copy.deepcopy(context.runner_config)
-        if plan.get("wdl_engine"):
-            selected_runner_config["wdl_engine"] = plan["wdl_engine"]
-        if plan.get("cromwell_url"):
-            selected_runner_config["cromwell_url"] = plan["cromwell_url"]
-        context = replace(context, runner_config=selected_runner_config)
         result = run_wdl_pipeline(
             context,
             dry_run=plan["dry_run"],

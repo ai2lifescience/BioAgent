@@ -20,6 +20,7 @@ import socket
 import sqlite3
 import time
 from uuid import uuid4
+from auth import AccessDenied, current_principal
 
 
 PROTOCOL = 1
@@ -124,6 +125,8 @@ class WebsiteBridge:
     def _init(self) -> None:
         with self.db(True) as db:
             db.execute("CREATE TABLE IF NOT EXISTS bindings (binding_id TEXT PRIMARY KEY, token_hash TEXT NOT NULL, site_id TEXT NOT NULL, origin TEXT NOT NULL, subject TEXT NOT NULL, session_id TEXT NOT NULL, instance_id TEXT NOT NULL, revision TEXT, context TEXT NOT NULL, capabilities TEXT NOT NULL, expires_at REAL NOT NULL, revoked INTEGER NOT NULL DEFAULT 0)")
+            if "owner_user_id" not in {row["name"] for row in db.execute("PRAGMA table_info(bindings)")}:
+                db.execute("ALTER TABLE bindings ADD COLUMN owner_user_id TEXT")
             db.execute("CREATE TABLE IF NOT EXISTS calls (call_id TEXT PRIMARY KEY, binding_id TEXT NOT NULL, run_id TEXT, method TEXT NOT NULL, arguments TEXT NOT NULL, revision TEXT, deadline REAL NOT NULL, status TEXT NOT NULL, result TEXT, error TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL)")
             db.execute("CREATE TABLE IF NOT EXISTS ticket_nonces (jti TEXT PRIMARY KEY, expires_at REAL NOT NULL)")
             db.execute("CREATE INDEX IF NOT EXISTS calls_pending ON calls(binding_id,status)")
@@ -138,15 +141,23 @@ class WebsiteBridge:
             raise ValueError("AGENT_WEBSITE_SECRET must be configured with at least 32 characters")
         check_site(site_id, origin)
         payload = verify_ticket(ticket, secret, site_id=site_id, origin=origin)
+        principal = current_principal()
+        if payload.get("sub") != principal.user_id:
+            raise AccessDenied("Website ticket identity does not match the signed-in user.")
         if not isinstance(context, dict) or len(json.dumps(context).encode()) > MAX_CONTEXT_BYTES:
             raise ValueError("website context is invalid or too large")
         binding_id, token = uuid4().hex, secrets.token_urlsafe(32)
+        from .runtime import STATE_STORE
+        # The iframe may be opening a new conversation. Claim its ID atomically
+        # and reject existing conversations owned by any other identity.
+        with STATE_STORE.locked_session(session_id):
+            pass
         with self.db(True) as db:
             try:
                 db.execute("INSERT INTO ticket_nonces VALUES (?, ?)", (str(payload["jti"]), float(payload["exp"])))
             except sqlite3.IntegrityError as exc:
                 raise ValueError("website ticket has already been used") from exc
-            db.execute("INSERT INTO bindings VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", (binding_id, self._hash(token), site_id, origin, str(payload.get("sub", "")), session_id, instance_id, str(context.get("revision", "")), json.dumps(context), json.dumps(capabilities), time.time() + 8 * 3600))
+            db.execute("INSERT INTO bindings VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)", (binding_id, self._hash(token), site_id, origin, str(payload.get("sub", "")), session_id, instance_id, str(context.get("revision", "")), json.dumps(context), json.dumps(capabilities), time.time() + 8 * 3600, principal.user_id))
         return {"binding_id": binding_id, "token": token, "protocol": PROTOCOL, "session_id": session_id}
 
     def _binding(self, binding_id: str, token: str) -> sqlite3.Row:
@@ -154,7 +165,16 @@ class WebsiteBridge:
             row = db.execute("SELECT * FROM bindings WHERE binding_id=? AND token_hash=? AND revoked=0 AND expires_at>?", (binding_id, self._hash(token), time.time())).fetchone()
         if row is None:
             raise ValueError("website binding is missing, expired, or revoked")
+        if row["owner_user_id"] != current_principal().user_id:
+            raise AccessDenied("Website binding not found.")
+        from .runtime import STATE_STORE
+        STATE_STORE.ownership.require(row["session_id"])
         return row
+
+    def revoke_user(self, user_id: str) -> None:
+        """Called only by the authenticated logout boundary."""
+        with self.db(True) as db:
+            db.execute("UPDATE bindings SET revoked=1 WHERE owner_user_id=?", (user_id,))
 
     def context(self, binding_id: str, token: str, value: dict) -> dict:
         row = self._binding(binding_id, token)

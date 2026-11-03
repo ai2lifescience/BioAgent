@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import os
 from pathlib import Path
 
 from tools.infrastructure.tool_support.embeddings import embed_texts
@@ -12,6 +13,21 @@ from .service import KnowledgeService
 
 
 def execute(store: KnowledgeService, job_id: str) -> int:
+    from auth import OwnershipStore, Principal, auth_mode, database, principal_scope
+    if auth_mode() == "multiuser":
+        spec = store.jobs.job_spec(job_id)
+        ownership = OwnershipStore(Path(os.getenv("AGENT_METADATA_DIR", "runtime/session_metadata")).expanduser().resolve())
+        with database(ownership.path) as db:
+            owner = db.execute("SELECT user_id FROM owners WHERE session_id=? AND deleted=0", (spec["session_id"],)).fetchone()
+        if not owner:
+            store.jobs.update_status(job_id, "failed", error="Session has no active owner.")
+            return 1
+        with principal_scope(Principal(owner["user_id"])):
+            return _execute_owned(store, job_id)
+    return _execute_owned(store, job_id)
+
+
+def _execute_owned(store: KnowledgeService, job_id: str) -> int:
     spec = store.jobs.job_spec(job_id)
     if spec["status"] not in {"queued", "running", "indexing"}:
         return 0

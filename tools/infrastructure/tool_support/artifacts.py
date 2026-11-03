@@ -14,7 +14,9 @@ from tools.infrastructure.workspace.artifacts import workspace_file_metadata
 from .evidence_models import EvidenceArtifact, EvidenceRecord
 
 
-def input_path(context, path: str, suffixes: tuple[str, ...] = (), max_bytes: int = 32 * 1024 * 1024) -> Path:
+def input_path(context, path: str, suffixes: tuple[str, ...] = (), max_bytes: int | None = None) -> Path:
+    from isolation.limits import limits
+    max_bytes = limits().file_bytes if max_bytes is None else max_bytes
     source = resolve_session_path(context, path)
     if not source.is_file():
         raise ValueError(f"Workspace file does not exist: {path}")

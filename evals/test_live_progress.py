@@ -1,7 +1,7 @@
 """Stream boundaries and nested-output regressions; no model/API calls."""
 from types import SimpleNamespace
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import MagicMock, patch
 
 from harness.jobs import execute_job
 from harness.streaming import PublicEvents, STREAM_SINK, nested_stream
@@ -46,7 +46,8 @@ class LiveProgressStreamTests(unittest.TestCase):
             self.assertNotIn("delta", events[-1])
 
     def test_worker_preserves_metadata_when_nested_streams_interleave(self):
-        queue = Mock()
+        queue = MagicMock()
+        queue.db.return_value.__enter__.return_value.execute.return_value.fetchone.return_value = {"owner_user_id": "fixture-owner"}
         queue.get.return_value = {"status": "running", "request": "test", "session_id": "fixture", "model_key": "fixture", "max_turns": 5}
 
         def run_agent(*args, event_fn, **kwargs):

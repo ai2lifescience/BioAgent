@@ -16,6 +16,9 @@ from agents.exceptions import InputGuardrailTripwireTriggered, MaxTurnsExceeded
 from agents.tracing import gen_trace_id
 
 from tools.infrastructure.tool_support.evidence import EvidenceCollector
+from tools.infrastructure.pipeline_engine import service as pipeline_service
+from tools.infrastructure.pipeline_engine.commands import parse_command
+from tools.infrastructure.pipeline_engine.store import TERMINAL as PIPELINE_TERMINAL_STATUSES
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 from models.openrouter_provider import OpenRouterProvider
 
@@ -26,7 +29,6 @@ from .sessions import SessionMetadata, SessionMetadataStore
 from .sandbox import delete_workspace, list_files, open_workspace, prepare_run, session_root
 from .tracing import AgentHooks, LOCAL_TRACES, configure_tracing
 from .streaming import PublicEvents, STREAM_SINK
-from .pipeline_completion import collect_started_pipelines
 
 
 STATE_STORE = SessionMetadataStore()
@@ -34,6 +36,65 @@ SESSION_DB = Path(os.getenv("AGENT_SESSION_DB", "runtime/agent_sessions.sqlite3"
 
 # SDK tracing stays local; each run supplies its own model provider.
 configure_tracing()
+
+
+async def _collect_started_pipelines(context, emit=None, *, poll_interval=2.0):
+    """Collect pipelines started by this request without spending model turns."""
+    started, collected = set(), set()
+    for item in context.tool_results:
+        if item.get("tool") != "pipeline_shell":
+            continue
+        try:
+            args = parse_command(item.get("arguments", {}).get("command", ""))
+        except ValueError:
+            continue
+        value = item.get("result", {})
+        if args.operation == "run" and value.get("status") in {"queued", "running", "succeeded"}:
+            started.add(args.plan_id)
+        elif args.operation == "results" and value.get("status") == "succeeded":
+            collected.add(args.job_id)
+    collected.update(event.get("data", {}).get("job_id") for event in context.events
+                     if event.get("event") == "pipeline_completion_collected")
+    pending = started - collected
+    if not pending:
+        return []
+    root = Path(context.run["session_dir"])
+    from isolation import isolated_execution
+    async def query(operation, job_id):
+        if isolated_execution():
+            from tools.infrastructure.pipeline_engine.broker import dispatch
+            return await asyncio.to_thread(dispatch, root, f'agent-pipeline {operation} --job-id {job_id}',
+                                           access=context.execution_access)
+        return await asyncio.to_thread(getattr(pipeline_service, operation), root, job_id)
+    previous, completed = {}, []
+    while pending:
+        for job_id in sorted(pending):
+            value = await query('status', job_id)
+            status = value["status"]
+            if previous.get(job_id) != status:
+                progress = {"job_id": job_id, "pipeline_name": value["pipeline_name"], "status": status}
+                context.record("pipeline_job_status", **progress)
+                if emit:
+                    emit("pipeline_job_status", context.public(progress))
+                previous[job_id] = status
+            if status not in PIPELINE_TERMINAL_STATUSES:
+                continue
+            if status == "succeeded":
+                try:
+                    value = await query('results', job_id)
+                except (ValueError, OSError) as exc:
+                    value = {**value, "status": "error", "error": f"Output verification failed: {exc}", "files": []}
+            # Preserve the actual read-only result in the same evidence contract
+            # as model-issued pipeline_shell commands. Never submit another run.
+            value = context.public(value)
+            command = f"agent-pipeline results --job-id {job_id}"
+            context.tool_results.append({"tool": "pipeline_shell", "arguments": {"command": command}, "result": value})
+            context.record("pipeline_completion_collected", job_id=job_id, status=value["status"])
+            completed.append(value)
+            pending.remove(job_id)
+        if pending:
+            await asyncio.sleep(poll_interval)
+    return completed
 
 
 def _approval_details(items: list[Any], context: AgentRunContext | None = None) -> list[dict[str, Any]]:
@@ -55,12 +116,18 @@ def _approval_details(items: list[Any], context: AgentRunContext | None = None) 
             "arguments": arguments,
         }
         if item.tool_name == "pipeline_shell" and context and isinstance(arguments, dict):
-            from tools.infrastructure.pipeline_engine.commands import parse_command
             from tools.infrastructure.pipeline_engine.store import JobStore
             try:
                 args = parse_command(arguments["commands"][0])
                 identifier = args.plan_id if args.operation == "run" else args.job_id
-                detail["plan"] = JobStore(session_root(context.session_id)).get(identifier)["plan"]
+                from isolation import isolated_execution
+                if isolated_execution():
+                    from tools.infrastructure.pipeline_engine.broker import get_plan, public_plan
+                    record = get_plan(session_root(context.session_id), identifier, access=context.execution_access)
+                    record['plan'] = public_plan(record['plan'])
+                else:
+                    record = JobStore(session_root(context.session_id)).get(identifier)
+                detail["plan"] = record["plan"]
             except (ValueError, KeyError, AttributeError, IndexError):
                 pass
         if item.tool_name == "python_execute" and isinstance(arguments, dict):
@@ -141,6 +208,8 @@ async def _execute(
     decision: tuple[int, bool] | None = None,
 ) -> dict[str, Any]:
     """Run or resume through the same SDK and result-collection path."""
+    from isolation import require_execution_policy
+    require_execution_policy()
     context = AgentRunContext(
         session=session, model_key=model_key, log_fn=log_fn,
         tool_results=list(pending.get("tool_results", [])) if pending else [],
@@ -246,7 +315,7 @@ async def _execute(
                     turn_limit_error, result, remaining_turns = exc, None, 0
                 if result is not None and result.interruptions:
                     break
-                completed = await collect_started_pipelines(context, event_fn)
+                completed = await _collect_started_pipelines(context, event_fn)
                 completion_results.extend(completed)
                 if not completed:
                     if turn_limit_error and not completion_results:
@@ -380,6 +449,7 @@ def delete_session(session_id: str) -> bool:
     identifier = str(session_id or "").strip()
     if not identifier:
         return False
+    STATE_STORE.ownership.require(identifier)
     session_db = Path(SESSION_DB)
     session_db.parent.mkdir(parents=True, exist_ok=True)
     sdk_session = SQLiteSession(identifier, db_path=session_db)

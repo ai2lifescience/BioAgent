@@ -9,7 +9,7 @@ export default defineConfig({
   // development forwards API/SSE requests without CORS workarounds.
   server: {
     proxy: Object.fromEntries([
-      '/config', '/health', '/sessions', '/workspace', '/run_stream',
+      '/auth', '/config', '/health', '/sessions', '/workspace', '/run_stream',
       '/approve_stream', '/runs', '/knowledge', '/website', '/static',
     ].map(path => [path, { target: process.env.VITE_BACKEND_URL || 'http://127.0.0.1:8000', changeOrigin: false }])),
   },

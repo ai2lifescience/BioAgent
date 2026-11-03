@@ -106,7 +106,7 @@ def write_runtime_config(
     runtime_config.update(
         {
             "pipeline_name": context.pipeline_name,
-            "input_path": str(context.input_path),
+            "input_path": stringify_input_value(context.resolved_input_overrides.get("input_path", context.input_path)),
             "original_input_path": str(context.original_input_path),
             "session_input_path": str(context.session_input_path or ""),
             "input_staged": context.input_staged,
