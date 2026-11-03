@@ -7,6 +7,7 @@ import { LineIcon } from '../../components/icons';
 export interface WorkspacePanelProps {
   sessionId: string;
   files: WorkspaceFile[];
+  maxFileBytes?: number;
   search: string;
   filter: 'all' | 'uploads' | 'outputs' | string;
   busy?: boolean;
@@ -30,7 +31,7 @@ function nameOf(file: WorkspaceFile, path: string) { return file.name || path.sp
 function fileUrl(sessionId: string, path: string) { return `/workspace/file?session_id=${encodeURIComponent(sessionId)}&path=${encodeURIComponent(path)}`; }
 
 export function WorkspacePanel({
-  sessionId, files, search, filter, busy = false, uploading = false, mobileOpen = false, onClose,
+  sessionId, files, maxFileBytes, search, filter, busy = false, uploading = false, mobileOpen = false, onClose,
   onSearch, onFilter, onUpload, onRefresh, onDelete,
 }: WorkspacePanelProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -47,6 +48,7 @@ export function WorkspacePanel({
 
   const selectFiles = (list: FileList | File[] | null | undefined) => {
     const chosen = Array.from(list || []); if (!chosen.length || busy || uploading) return;
+    if (maxFileBytes && chosen.some(file => file.size > maxFileBytes)) { setError(`Maximum file size: ${bytes(maxFileBytes)}.`); return; }
     setError(''); void Promise.resolve(onUpload(chosen)).catch(caught => setError(caught instanceof Error ? caught.message : 'Upload failed.'));
   };
   const refresh = () => {
@@ -60,6 +62,16 @@ export function WorkspacePanel({
   };
   const drop = (event: DragEvent<HTMLDivElement>) => { event.preventDefault(); setDragging(false); selectFiles(event.dataTransfer.files); };
   const onDropKey = (event: KeyboardEvent<HTMLDivElement>) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); inputRef.current?.click(); } };
+  const importRemote = async (path: string) => {
+    setRefreshing(true); setError('');
+    try {
+      const response = await fetch('/workspace/pipeline-artifacts/materialize', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ session_id: sessionId, path }) });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Import failed.');
+      await onRefresh();
+    } catch (caught) { setError(caught instanceof Error ? caught.message : 'Import failed.'); }
+    finally { setRefreshing(false); }
+  };
   const remove = (path: string) => { setError(''); setPendingDelete(path); };
   const confirmRemove = () => {
     if (!pendingDelete) return;
@@ -70,15 +82,15 @@ export function WorkspacePanel({
   return <aside className={`right-sidebar workspace-drawer ${mobileOpen ? 'mobile-open' : ''}`} aria-label="Workspace files">
     {mobileOpen && onClose && <button className="workspace-scrim" type="button" aria-label="Close workspace" onClick={onClose} />}
     <section className="panel workspace-panel">
-      <div className="panel-heading workspace-heading"><div><span className="eyebrow">Workspace</span><span className="panel-subtitle">{files.length} in this workspace</span></div>{mobileOpen && onClose && <button className="icon-button workspace-close" type="button" onClick={onClose} aria-label="Close workspace"><LineIcon name="close" /></button>}</div>
+      <div className="panel-heading workspace-heading"><div><span className="eyebrow">Workspace</span><span className="panel-subtitle">{files.length} files{maxFileBytes ? ` · Up to ${bytes(maxFileBytes)} per upload` : ''}</span></div>{mobileOpen && onClose && <button className="icon-button workspace-close" type="button" onClick={onClose} aria-label="Close workspace"><LineIcon name="close" /></button>}</div>
       <div className="workspace-actions" aria-label="Workspace actions"><button className="workspace-refresh-button" type="button" onClick={refresh} disabled={busy || uploading || refreshing} aria-busy={refreshing} aria-label={refreshing ? 'Refreshing workspace' : 'Refresh workspace'} title={refreshing ? 'Refreshing workspace' : 'Refresh workspace'}><LineIcon name="refresh" size={16} /><span>{refreshing ? 'Refreshing…' : 'Refresh'}</span></button><button className="upload-button" type="button" onClick={() => inputRef.current?.click()} disabled={busy || uploading || refreshing}><LineIcon name="clip" size={16} /><span>{uploading ? 'Uploading…' : 'Upload files'}</span></button></div>
       <input ref={inputRef} hidden type="file" multiple onChange={event => { selectFiles(event.target.files); event.currentTarget.value = ''; }} />
       <div className={`dropzone ${dragging ? 'dragging' : ''}`} role="button" tabIndex={0} onClick={() => inputRef.current?.click()} onKeyDown={onDropKey} onDragEnter={event => { event.preventDefault(); setDragging(true); }} onDragOver={event => { event.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={drop}><strong>{uploading ? 'Uploading files…' : 'Drop files here'}</strong><span>or choose Upload</span></div>
-      <div className="workspace-summary">{files.length ? `${bytes(totalBytes)} · available to this chat and its tools` : 'Files are shared with this chat and its tools.'}</div>
+      <div className="workspace-summary">{files.length ? `${bytes(totalBytes)} · local files and remote outputs` : 'Files are shared with this chat and its tools.'}</div>
       {error && <div className="workspace-error" role="status">{error}</div>}
       <div className="workspace-filters"><input value={search} onChange={event => onSearch(event.target.value)} placeholder="Find a file" aria-label="Find a workspace file" /><select value={filter} onChange={event => onFilter(event.target.value)} aria-label="Filter workspace files"><option value="all">All files</option><option value="uploads">Inputs</option><option value="outputs">Outputs</option></select></div>
       <div className="workspace-list">
-        {!visible.length ? <div className="workspace-empty">{files.length ? 'No matching files.' : 'No files in this workspace yet.'}</div> : (['uploads', 'outputs'] as const).map(group => groups[group].length ? <div className="file-group" key={group}><div className="file-group-title"><span>{group === 'uploads' ? 'Inputs' : 'Outputs'}</span><span>{groups[group].length}</span></div>{groups[group].map(file => { const path = workspacePathOf(file); const name = nameOf(file, path); return <div className="file-item" key={path}><div className="file-info"><strong title={name}>{name}</strong><span>{bytes(file.size)} · {file.kind || 'file'}</span><small title={path}>{path}</small></div><div className="file-actions"><a href={fileUrl(sessionId, path)} download>Download</a><button type="button" onClick={() => remove(path)} disabled={busy || uploading}>Remove</button></div></div>; })}</div> : null)}
+        {!visible.length ? <div className="workspace-empty">{files.length ? 'No matching files.' : 'No files in this workspace yet.'}</div> : (['uploads', 'outputs'] as const).map(group => groups[group].length ? <div className="file-group" key={group}><div className="file-group-title"><span>{group === 'uploads' ? 'Inputs' : 'Outputs'}</span><span>{groups[group].length}</span></div>{groups[group].map(file => { const path = workspacePathOf(file); const name = nameOf(file, path); return <div className="file-item" key={path}><div className="file-info"><strong title={name}>{name}</strong><span>{bytes(file.size)} · {file.remote ? 'remote output' : file.kind || 'file'}</span><small title={path}>{path}</small></div><div className="file-actions"><a href={fileUrl(sessionId, path)} download>Download</a><button type="button" onClick={() => file.remote ? void importRemote(path) : remove(path)} disabled={busy || uploading || refreshing}>{file.remote ? 'Import' : 'Remove'}</button></div></div>; })}</div> : null)}
       </div>
     </section>
     {pendingDelete && <div className="workspace-delete-confirm" role="alertdialog" aria-label="Remove file confirmation"><span>Remove this file?</span><button type="button" onClick={confirmRemove}>Remove</button><button type="button" onClick={() => setPendingDelete(null)}>Cancel</button></div>}

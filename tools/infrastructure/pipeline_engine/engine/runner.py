@@ -138,10 +138,11 @@ def prepare_pipeline_context(
             f"Pipeline {resolved_pipeline_name} requires request input_path or "
             f"top-level input_path in {raw_config_path}."
         )
+    primary_input = input_value[0] if isinstance(input_value, list) else input_value
     original_input = (
-        input_value
-        if isinstance(input_value, Path)
-        else resolve_pipeline_input_path(str(input_value), pipeline_dir)
+        primary_input
+        if isinstance(primary_input, Path)
+        else resolve_pipeline_input_path(str(primary_input), pipeline_dir)
     )
     if not original_input.exists():
         raise FileNotFoundError(f"Input file not found: {original_input}")
@@ -150,12 +151,20 @@ def prepare_pipeline_context(
     resolved_artifact_dir = resolve_optional_artifact_dir(artifact_dir)
     clean_config_overrides = normalize_config_overrides(config_overrides)
 
-    staged_input = stage_pipeline_input(original_input, resolved_artifact_dir) if stage_input else None
+    staged_input = stage_pipeline_input(original_input, resolved_artifact_dir) if stage_input and not isinstance(input_value, list) else None
     resolved_input = staged_input or original_input
+    resolved_value = input_value
+    if isinstance(input_value, list):
+        if stage_input:
+            resolved_value = [stage_pipeline_input(path, resolved_artifact_dir) or path for path in input_value]
+            resolved_input = resolved_value[0]
+            staged_input = resolved_input if resolved_artifact_dir else None
+    else:
+        resolved_value = resolved_input
     if default_config_key in resolved_input_overrides:
-        resolved_input_overrides[default_config_key] = resolved_input
+        resolved_input_overrides[default_config_key] = resolved_value
     elif "input_path" in resolved_input_overrides:
-        resolved_input_overrides["input_path"] = resolved_input
+        resolved_input_overrides["input_path"] = resolved_value
 
     resolved_run_dir = resolve_pipeline_run_dir(
         artifact_dir=resolved_artifact_dir,

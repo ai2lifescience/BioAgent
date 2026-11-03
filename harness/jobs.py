@@ -14,9 +14,10 @@ from threading import Lock, Thread
 from uuid import uuid4
 
 from tools.infrastructure.workspace.public import public_payload
+from auth import AccessDenied, Principal, current_principal, principal_scope
 
 
-TERMINAL = {"succeeded", "failed", "blocked", "pending_approval", "interrupted"}
+TERMINAL = {"succeeded", "failed", "blocked", "pending_approval", "interrupted", "cancelled"}
 
 
 def now() -> str:
@@ -25,6 +26,8 @@ def now() -> str:
 
 def result_status(result: dict) -> str:
     status = result.get("status")
+    if status == "cancelled":
+        return "cancelled"
     if status == "pending_approval":
         return "pending_approval"
     if status == "error":
@@ -39,7 +42,7 @@ class RunQueue:
         self.path = Path(path).resolve() if path is not None else Path(
             os.getenv("AGENT_RUN_DB", "runtime/agent_runs.sqlite3")
         ).expanduser().resolve()
-        self.max_workers = max(1, int(max_workers if max_workers is not None else os.getenv("AGENT_RUN_WORKERS", "2")))
+        self.max_workers = max(1, int(max_workers if max_workers is not None else os.getenv("AGENT_RUN_WORKERS", "3")))
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self._init()
 
@@ -68,6 +71,10 @@ class RunQueue:
             )""")
             if "approval" not in {row["name"] for row in db.execute("PRAGMA table_info(runs)")}:
                 db.execute("ALTER TABLE runs ADD COLUMN approval TEXT")
+            if "owner_user_id" not in {row["name"] for row in db.execute("PRAGMA table_info(runs)")}:
+                db.execute("ALTER TABLE runs ADD COLUMN owner_user_id TEXT")
+            if "cancel_requested" not in {row["name"] for row in db.execute("PRAGMA table_info(runs)")}:
+                db.execute("ALTER TABLE runs ADD COLUMN cancel_requested INTEGER NOT NULL DEFAULT 0")
             db.execute("""CREATE TABLE IF NOT EXISTS run_events (
                 run_id TEXT NOT NULL, sequence INTEGER NOT NULL, event TEXT NOT NULL,
                 payload TEXT NOT NULL, created_at TEXT NOT NULL,
@@ -95,10 +102,31 @@ class RunQueue:
             if active:
                 raise ValueError("This session already has an active run.")
             db.execute("""INSERT INTO runs
-                (run_id,session_id,request,model_key,max_turns,status,created_at,updated_at)
-                VALUES (?, ?, ?, ?, ?, 'queued', ?, ?)""",
-                (run_id, identifier, request, model_key, max(1, int(max_turns)), timestamp, timestamp))
+                (run_id,session_id,request,model_key,max_turns,status,created_at,updated_at,owner_user_id)
+                VALUES (?, ?, ?, ?, ?, 'queued', ?, ?, ?)""",
+                (run_id, identifier, request, model_key, max(1, int(max_turns)), timestamp, timestamp, current_principal().user_id))
             self._event(db, run_id, "queued", {"message": "Agent run queued.", "run_id": run_id, "session_id": identifier})
+        self.dispatch()
+        return self.get(run_id)
+
+    def cancel(self, run_id: str) -> dict:
+        """Request cooperative cancellation; never signal an unverified process ID."""
+        with self.db(write=True) as db:
+            row = db.execute("SELECT * FROM runs WHERE run_id=?", (run_id,)).fetchone()
+            if row is None:
+                raise ValueError("No such agent run.")
+            self._require_owner(row)
+            if row['status'] == 'queued':
+                answer = 'Stopped before execution.'
+                result = {'status': 'cancelled', 'answer': answer, 'session_id': row['session_id'],
+                          'messages': [{'role': 'user', 'content': row['request']},
+                                       {'role': 'assistant', 'content': answer}]}
+                db.execute("UPDATE runs SET status='cancelled', cancel_requested=1, result=?, updated_at=? WHERE run_id=?",
+                           (json.dumps(result), now(), run_id))
+                self._event(db, run_id, 'cancelled', {'status': 'cancelled'})
+            elif row['status'] == 'running' and not row['cancel_requested']:
+                db.execute("UPDATE runs SET cancel_requested=1, updated_at=? WHERE run_id=?", (now(), run_id))
+                self._event(db, run_id, 'cancelling', {'message': 'Stopping this request…', 'run_id': run_id})
         self.dispatch()
         return self.get(run_id)
 
@@ -110,6 +138,7 @@ class RunQueue:
             row = db.execute("SELECT * FROM runs WHERE session_id=? AND status='pending_approval'", (session_id,)).fetchone()
             if row is None:
                 return None
+            self._require_owner(row)
             result = json.loads(row["result"] or "{}")
             if approval_id not in {item["approval_id"] for item in result.get("approvals", [])}:
                 raise ValueError("Unknown or expired approval_id for this session.")
@@ -133,7 +162,7 @@ class RunQueue:
                 active = db.execute("SELECT COUNT(*) FROM runs WHERE status='running'").fetchone()[0]
                 if active >= self.max_workers:
                     return
-                row = db.execute("SELECT run_id FROM runs WHERE status='queued' ORDER BY updated_at, run_id LIMIT 1").fetchone()
+                row = db.execute("SELECT run_id FROM runs WHERE status='queued' AND owner_user_id IS NOT NULL ORDER BY updated_at, run_id LIMIT 1").fetchone()
                 if row is None:
                     return
                 run_id = row["run_id"]
@@ -171,11 +200,17 @@ class RunQueue:
             row = db.execute("SELECT * FROM runs WHERE run_id=?", (run_id,)).fetchone()
         if not row:
             raise ValueError("No such agent run.")
+        self._require_owner(row)
         result = dict(row)
         for key in ("result", "approval"):
             if result.get(key):
                 result[key] = json.loads(result[key])
         return result
+
+    @staticmethod
+    def _require_owner(row) -> None:
+        if row["owner_user_id"] != current_principal().user_id:
+            raise AccessDenied("Run not found.")
 
     def pending_for_session(self, session_id: str) -> dict | None:
         with self.db() as db:
@@ -183,25 +218,31 @@ class RunQueue:
         return self.get(row["run_id"]) if row else None
 
     def list(self, session_id: str | None = None) -> list[dict]:
+        owner = current_principal().user_id
         with self.db() as db:
             if session_id:
-                rows = db.execute("SELECT run_id FROM runs WHERE session_id=? ORDER BY created_at DESC LIMIT 100", (session_id,)).fetchall()
+                rows = db.execute("SELECT run_id FROM runs WHERE session_id=? AND owner_user_id=? ORDER BY created_at DESC LIMIT 100", (session_id, owner)).fetchall()
             else:
-                rows = db.execute("SELECT run_id FROM runs ORDER BY created_at DESC LIMIT 100").fetchall()
+                rows = db.execute("SELECT run_id FROM runs WHERE owner_user_id=? ORDER BY created_at DESC LIMIT 100", (owner,)).fetchall()
         return [self.get(row["run_id"]) for row in rows]
 
     def update(self, run_id: str, status: str, *, result: dict | None = None, error: str | None = None) -> dict:
+        self.get(run_id)
         with self.db(write=True) as db:
+            if db.execute("SELECT status FROM runs WHERE run_id=?", (run_id,)).fetchone()['status'] == 'cancelled':
+                return self.get(run_id)
             db.execute("UPDATE runs SET status=?, result=?, error=?, updated_at=? WHERE run_id=?",
                        (status, json.dumps(result) if result is not None else None, error, now(), run_id))
             self._event(db, run_id, status, {"status": status, **({"error": error} if error else {})})
         return self.get(run_id)
 
     def event(self, run_id: str, event: str, payload: dict) -> None:
+        self.get(run_id)
         with self.db(write=True) as db:
             self._event(db, run_id, event, payload)
 
     def events(self, run_id: str, after: int = -1) -> list[dict]:
+        self.get(run_id)
         with self.db() as db:
             rows = db.execute("SELECT sequence,event,payload,created_at FROM run_events WHERE run_id=? AND sequence>? ORDER BY sequence", (run_id, after)).fetchall()
         return [{"sequence": r["sequence"], "event": r["event"], "payload": json.loads(r["payload"]), "created_at": r["created_at"]} for r in rows]
@@ -232,6 +273,17 @@ def get_queue() -> RunQueue:
 
 def execute_job(queue: RunQueue, run_id: str) -> int:
     """Execute one durable agent run in the worker process."""
+    # Only the local worker entrypoint may reconstruct identity from a trusted
+    # persisted job. No web endpoint accepts an owner supplied by its caller.
+    with queue.db() as db:
+        row = db.execute("SELECT owner_user_id FROM runs WHERE run_id=?", (run_id,)).fetchone()
+    if not row or not row["owner_user_id"]:
+        raise AccessDenied("Run has no owner; migrate it explicitly before execution.")
+    with principal_scope(Principal(row["owner_user_id"])):
+        return _execute_owned_job(queue, run_id)
+
+
+def _execute_owned_job(queue: RunQueue, run_id: str) -> int:
     job = queue.get(run_id)
     if job["status"] not in {"queued", "running"}:
         return 0
@@ -276,12 +328,14 @@ def execute_job(queue: RunQueue, run_id: str) -> int:
     try:
         from .runtime import resume_agent, run_agent
         if job.get("approval"):
-            result = resume_agent(job["session_id"], **job["approval"], log_fn=log, event_fn=sdk_event)
+            result = resume_agent(job["session_id"], **job["approval"], log_fn=log, event_fn=sdk_event,
+                                  cancel_requested=lambda: bool(queue.get(run_id).get('cancel_requested')))
         else:
             result = run_agent(
                 job["request"], session_id=job["session_id"],
                 model_key=job["model_key"], max_turns=job["max_turns"],
                 log_fn=log, event_fn=sdk_event,
+                cancel_requested=lambda: bool(queue.get(run_id).get('cancel_requested')),
             )
         flush_deltas()
         queue_status = result_status(result)

@@ -18,6 +18,20 @@
    - Evaluate [GitHub MCP](https://github.com/github/github-mcp-server) and [DeepWiki MCP](https://docs.devin.ai/work-with-devin/deepwiki-mcp) for repository and documentation access.
    - Support server configuration, connection lifecycle, authentication, and tool filtering.
 
+## Remaining work for isolated multi-user execution
+
+Registration, ownership checks, Docker workers, brokered public retrieval, and
+owned remote `template_wdl` jobs are implemented. Live checks on 2026-11-03
+verified public retrieval and a synthetic Cromwell/S3 workflow at `.46`.
+See [validation scope](user_isolation.md#live-validation-2026-11-03).
+
+- Audit and add adapters for other network tools and durable knowledge ingestion.
+- Audit additional workflow parameter interpolation, reference inputs, and output
+  contracts before expanding the isolated pipeline catalog beyond `template_wdl`.
+- Add a reconciliation UI for ambiguous remote submissions and storage retention
+  controls for private input snapshots and completed remote objects.
+- Add account-wide model spending and storage quotas for public deployments.
+
 ## MCP integration notes
 
 MCP (Model Context Protocol) standardizes how an AI application discovers and

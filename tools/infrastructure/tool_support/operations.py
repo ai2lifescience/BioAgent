@@ -7,7 +7,9 @@ import inspect
 import multiprocessing
 import os
 import signal
+from contextlib import nullcontext
 from typing import Any
+from auth import Principal, principal_scope
 
 from .context import OperationContext
 from .evidence import EvidenceCollector
@@ -17,7 +19,9 @@ def _calculate(send, handler, arguments: dict[str, Any], metadata: dict[str, Any
     if hasattr(os, "setsid"):
         os.setsid()
     try:
-        value = handler(context=OperationContext(name, metadata), **arguments)
+        owner = metadata.get("owner_user_id")
+        with principal_scope(Principal(owner)) if owner else nullcontext():
+            value = handler(context=OperationContext(name, metadata), **arguments)
         send.send((True, value))
     except Exception as exc:
         send.send((False, f"{type(exc).__name__}: {exc}"))
@@ -68,7 +72,16 @@ async def invoke(context, name: str, handler, arguments: dict[str, Any], output_
     context.record("tool_started", tool=name)
     try:
         operation_context = OperationContext(name, metadata)
-        value = await handler(context=operation_context, **arguments) if inspect.iscoroutinefunction(handler) else await calculate(handler, arguments, metadata, name)
+        from isolation import isolated_execution, calculate as isolated_calculate
+        if isolated_execution():
+            from isolation.policy import SERVICE_TOOLS
+            if name in SERVICE_TOOLS:
+                from tools.infrastructure.knowledge.broker import calculate as service_calculate
+                value = await service_calculate(name, arguments, metadata, access=context.execution_access)
+            else:
+                value = await isolated_calculate(handler, arguments, metadata, name, access=context.execution_access)
+        else:
+            value = await handler(context=operation_context, **arguments) if inspect.iscoroutinefunction(handler) else await calculate(handler, arguments, metadata, name)
         result = output_type.model_validate(context.public(value))
     except asyncio.CancelledError:
         context.record("tool_cancelled", tool=name)

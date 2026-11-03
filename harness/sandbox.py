@@ -42,6 +42,13 @@ def session_root(session_id: str) -> Path:
     return root
 
 
+def execution_access():
+    """Supply application-owned stores and paths to the isolation infrastructure."""
+    from isolation import WorkspaceAccess
+    from . import runtime
+    return WorkspaceAccess(runtime.STATE_STORE.ownership, WORKSPACES_DIR)
+
+
 def prepare_run(session: SessionMetadata) -> dict[str, str]:
     """Set per-run paths inside the session workspace."""
     root = session_root(session.session_id)
@@ -125,4 +132,9 @@ def delete_workspace(session_id: str) -> None:
 
 def sandbox_capabilities() -> list[Filesystem]:
     """Filesystem capabilities accompany the guarded local pipeline ShellTool."""
+    from isolation import isolated_execution
+    if isolated_execution():
+        # All model-directed filesystem changes go through the container-backed
+        # workspace tools. The host SDK filesystem remains an API implementation.
+        return []
     return [Filesystem()]

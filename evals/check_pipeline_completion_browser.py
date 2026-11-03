@@ -20,33 +20,40 @@ PLAN = {'pipeline_name': PIPELINE, 'engine': 'wdl', 'wdl_engine': 'cromwell',
 
 class PipelineHandler(Handler):
     def do_POST(self):
-        if self.path not in {'/run_stream', '/approve_stream'}:
+        if self.path == '/sessions':
+            return super().do_POST()
+        if self.path not in {'/run_stream', '/run', '/approve_stream', '/approve_async'}:
             self.send_error(404)
             return
         body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
         self.server.requests.append((self.path, body))
         session_id = body['session_id']
-        self.send_response(200)
-        self.send_header('Content-Type', 'text/event-stream')
-        self.end_headers()
+        polling = self.path in {'/run', '/approve_async'}
+        if not polling:
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/event-stream')
+            self.end_headers()
         frames = self.server.events.setdefault('pipeline-fixture', [])
 
         def emit(event, payload):
-            frames.append({'event': event, 'payload': payload})
+            frames.append({'sequence': len(frames), 'event': event, 'payload': payload})
+            if polling: return
             self.wfile.write(f'event: {event}\ndata: {json.dumps(payload)}\n\n'.encode())
             self.wfile.flush()
 
-        if self.path == '/run_stream':
+        if self.path in {'/run_stream', '/run'}:
             result = {'session_id': session_id, 'status': 'pending_approval', 'answer': 'Review this pipeline.',
                       'approval_required': True, 'approvals': [{'approval_id': 'review', 'tool_name': 'pipeline_shell',
                       'arguments': {'commands': ['agent-pipeline run --plan-id fixture']}, 'plan': PLAN}]}
             self.server.history[session_id] = [{'role': 'user', 'text': body['request']}]
             self.server.runs.append({'run_id': 'pipeline-fixture', 'session_id': session_id,
                                     'status': 'pending_approval', 'result': result})
+            if polling: self.json(self.server.runs[-1])
             emit('result', result)
             return
         assert body['approved'] is True
         self.server.runs[-1].update(status='running', result=None)
+        if polling: self.json(self.server.runs[-1])
         emit('approval_decision', {'approved': True, 'approval_id': 'review', 'tool_name': 'pipeline_shell',
                                   'arguments': {'commands': ['agent-pipeline run --plan-id fixture']}, 'plan': PLAN})
         status = {'job_id': 'fixture', 'pipeline_name': PIPELINE, 'status': 'running'}

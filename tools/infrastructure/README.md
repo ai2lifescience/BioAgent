@@ -38,3 +38,14 @@ The old `tools/common/` and `tools/workspace/` implementation paths were
 removed after their callers migrated. `tools/runtime_tools/pipelines/` remains
 the separate runtime pipeline catalog. New shared infrastructure code should
 import from `tools/infrastructure/` directly.
+
+Authentication and disposable tool isolation are shared root-level packages:
+`auth/` and `isolation/`. Tool adapters import their public APIs directly and pass
+application-owned access settings explicitly. `pipeline_engine/service.py` builds
+the execution context for both ordinary and isolated jobs. The engine adapters,
+including Cromwell preparation and its REST client, are the single implementation
+of workflow execution. `pipeline_engine/broker.py` wraps them with ownership,
+private staging, credential-bearing transport, quotas, durable job reconciliation,
+and scoped artifact publication; local engines run through the same service in
+Docker workers. Its reconciliation thread is separate from Docker cleanup. See
+[the isolation guide](../../docs/user_isolation.md#code-organization).

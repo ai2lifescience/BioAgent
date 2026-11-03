@@ -159,13 +159,10 @@ Download AlphaFold structure for P0A7V8 as cif
 Use the Workspace panel for local input files. Pipeline2Agent stores uploads and outputs
 under the active session so later requests in the same chat can reuse them.
 
-To allow access from another computer on a trusted local network, run:
-
-```bash
-python -B -m interfaces.web --host 0.0.0.0 --port 8000
-```
-
-Then open `http://<SERVER_LAN_IP>:8000` from the other computer.
+Loopback startup defaults to personal use. Running with `--host 0.0.0.0` automatically
+enables account login, public registration, and isolated Docker tool workers.
+See [User accounts and isolation](docs/user_isolation.md) for the worker image build,
+LAN access, supported tools, HTTPS deployment, and existing-conversation migration.
 
 ## Architecture
 

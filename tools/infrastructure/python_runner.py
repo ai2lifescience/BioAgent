@@ -31,13 +31,15 @@ from tools.infrastructure.tool_support.context import OperationContext
 from tools.infrastructure.workspace import session_root, workspace_output_path
 
 
+from isolation.limits import limits
+
 MAX_CODE_BYTES = 256 * 1024
 MAX_INPUT_FILES = 16
-MAX_INPUT_FILE_BYTES = 32 * 1024 * 1024
-MAX_INPUT_TOTAL_BYTES = 128 * 1024 * 1024
+MAX_INPUT_FILE_BYTES = limits().file_bytes
+MAX_INPUT_TOTAL_BYTES = limits().worker_bytes
 MAX_OUTPUT_FILES = 64
-MAX_OUTPUT_FILE_BYTES = 64 * 1024 * 1024
-MAX_OUTPUT_TOTAL_BYTES = 128 * 1024 * 1024
+MAX_OUTPUT_FILE_BYTES = limits().file_bytes
+MAX_OUTPUT_TOTAL_BYTES = limits().worker_bytes
 MAX_CAPTURE_BYTES = 64 * 1024
 MAX_TIMEOUT_SECONDS = 120
 

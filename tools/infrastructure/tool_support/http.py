@@ -62,23 +62,32 @@ def request_http(
             json=json_data,
             headers=headers,
             timeout=timeout,
+            stream=True,
         )
         if response.status_code not in RETRY_STATUS_CODES or attempt >= retries:
             break
-        time.sleep(_retry_delay(response, attempt))
+        delay = _retry_delay(response, attempt)
+        response.close()
+        time.sleep(delay)
 
     if response is None:  # pragma: no cover - defensive guard
         raise RuntimeError("HTTP request produced no response.")
-    response.raise_for_status()
-    content_length = response.headers.get("Content-Length")
-    if content_length:
-        try:
-            if int(content_length) > max_response_bytes:
-                raise RuntimeError("HTTP response exceeded the configured size limit.")
-        except ValueError:
-            pass
-    if len(response.content) > max_response_bytes:
-        raise RuntimeError("HTTP response exceeded the configured size limit.")
+    try:
+        response.raise_for_status()
+        content_length = response.headers.get('Content-Length')
+        if content_length:
+            try: declared = int(content_length)
+            except ValueError: declared = 0
+            if declared > max_response_bytes: raise RuntimeError('HTTP response exceeded the configured size limit.')
+        data = bytearray()
+        for chunk in response.iter_content(65536):
+            data.extend(chunk)
+            if len(data) > max_response_bytes: raise RuntimeError('HTTP response exceeded the configured size limit.')
+        response._content = bytes(data)
+        response._content_consumed = True
+    finally:
+        response.close()
+
     return response
 
 

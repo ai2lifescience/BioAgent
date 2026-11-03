@@ -256,7 +256,7 @@ The canonical queue and worker implementation is harness/jobs.py. There are no
 separate job_queue.py or job_worker.py runtime services. The module contains the
 SQLite queue, claim/update operations, worker entry point, and event persistence.
 The default run database is runtime/agent_runs.sqlite3 and
-AGENT_RUN_WORKERS defaults to two workers.
+AGENT_RUN_WORKERS defaults to three workers.
 
 A worker failure changes the run to interrupted. The system does not silently
 replay an interrupted agent run because tool calls can have side effects. A
@@ -579,6 +579,46 @@ but local execution does not automatically containerize every engine. Local
 process limits include per-process memory limits; aggregate cgroup isolation is
 a deployment concern.
 
+The local and isolated executors share `service.prepare_execution()` and the
+engine adapters. The isolated multi-user profile routes `pipeline_shell` and the
+pipeline specialist through `tools/infrastructure/pipeline_engine/broker.py`.
+Shell, Snakemake and Nextflow execute through `service.execute_engine()` in Docker.
+WDL uses the same `engine/cromwell.py` preparation and REST client as the ordinary
+executor, with a bounded, credential-bearing transport supplied by the broker.
+The broker owns private snapshots, ownership checks, quotas, persisted remote IDs,
+restart reconciliation, and workflow-scoped S3 artifact registration. It does not
+generate WDL submissions independently. Workflow policy remains separate from
+engine compatibility. See [current limits and validation](user_isolation.md).
+
+## User ownership
+
+Authentication and execution isolation are reusable root packages: `auth/` and
+`isolation/`. Auth has no dependency on Docker or the agent runtime. Isolation
+accepts an explicit `WorkspaceAccess` with the ownership store and workspace root;
+`harness.sandbox.execution_access()` wires those application dependencies. The
+container supervisor and remote pipeline reconciler have separate lifecycles,
+started and stopped by the web server.
+
+`auth/` defines trusted principals, local/password authentication,
+and an immutable session ownership registry. HTTP authentication in
+`interfaces/auth.py` establishes a context-local principal; application services
+check ownership before accessing session resources. Jobs persist their owner
+and reconstruct execution identity in detached workers. The frontend wraps all
+three page entries in `AuthGate` for registration, login, logout, and account-state changes.
+See [User accounts and isolation](user_isolation.md) for configuration and
+migration. `isolation/supervisor.py` supervises Docker tool workers in multi-user mode;
+`isolation/worker.py` runs the registered operation with selected inputs in a
+private disk-backed staging directory. JSON carries control messages, not file
+bodies. The server retains credentials and account/queue databases. Containers
+mount only their disposable staging directories, have no direct network, and
+return bounded JSON. The supervisor validates and streams changed files into
+the owned workspace after the container stops. Storage quotas and reservations
+are separate from memory and preview budgets. Model-facing
+tools that lack this boundary are excluded from the isolated profile.
+`isolation/network.py` supplies public GET requests to `web_fetch`, `web_search`,
+and `pubmed_search` over bounded JSON frames on the worker pipes. DNS pinning and
+redirect validation block private addresses; raw network access remains disabled.
+
 ## Trusted website embedding
 
 The website bridge lets a trusted external website expose structured context
@@ -708,9 +748,16 @@ Important boundaries are:
 - website secrets never enter public run metadata;
 - durable workers do not automatically replay interrupted side effects.
 
-A deployment that needs stronger isolation should run workers in containers or a
-sandboxed service and configure filesystem, network, CPU, and memory limits at
-that deployment boundary.
+Multi-user tool workers run in unprivileged containers with filesystem, network,
+CPU, memory, process, and time limits. Local personal mode retains the existing
+executor. Public provider and embedding requests use capability-specific host
+brokers; durable knowledge operations use fixed ownership-checked service methods.
+Installed shell, Snakemake, and Nextflow plugins run in detached container workers;
+WDL plugins use the Cromwell/S3 broker. `pipeline_engine/contracts.py` selects the
+adapter from the manifest, separately from `isolation/pipeline_policy.py` execution
+exclusions. The selected local plugin folder is mounted read-only; user files still
+use private staging. Readiness is reported by `tools/capabilities.py`;
+see [supported routes and limits](user_isolation.md#what-is-isolated).
 
 ## Configuration
 

@@ -12,7 +12,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 
-RunStatus = Literal["ok", "error", "blocked", "pending_approval"]
+RunStatus = Literal["ok", "error", "blocked", "pending_approval", "cancelled"]
 
 
 class PublicRunResult(BaseModel):

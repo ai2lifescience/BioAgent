@@ -17,6 +17,9 @@ class HttpCrawler:
 
 
 def get_crawler(backend: str | None = None) -> Crawler:
+    from isolation import isolated_execution
+    if isolated_execution():
+        return HttpCrawler()
     selected = (backend or os.getenv("AGENT_KNOWLEDGE_CRAWLER", "auto")).strip().lower()
     if selected not in {"auto", "http", "scrapy"}:
         raise ValueError("AGENT_KNOWLEDGE_CRAWLER must be auto, http, or scrapy.")

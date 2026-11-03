@@ -24,7 +24,7 @@ class PipelineContext:
     artifact_dir: Path | None
     stage_input: bool
     config_overrides: dict[str, Any]
-    input_overrides: dict[str, str]
+    input_overrides: dict[str, Any]
     resolved_input_overrides: dict[str, Any]
     input_override_records: list[dict[str, Any]]
     run_dir: Path

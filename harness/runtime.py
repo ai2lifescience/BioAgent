@@ -16,6 +16,9 @@ from agents.exceptions import InputGuardrailTripwireTriggered, MaxTurnsExceeded
 from agents.tracing import gen_trace_id
 
 from tools.infrastructure.tool_support.evidence import EvidenceCollector
+from tools.infrastructure.pipeline_engine import service as pipeline_service
+from tools.infrastructure.pipeline_engine.commands import parse_command
+from tools.infrastructure.pipeline_engine.store import TERMINAL as PIPELINE_TERMINAL_STATUSES
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 from models.openrouter_provider import OpenRouterProvider
 
@@ -26,7 +29,6 @@ from .sessions import SessionMetadata, SessionMetadataStore
 from .sandbox import delete_workspace, list_files, open_workspace, prepare_run, session_root
 from .tracing import AgentHooks, LOCAL_TRACES, configure_tracing
 from .streaming import PublicEvents, STREAM_SINK
-from .pipeline_completion import collect_started_pipelines
 
 
 STATE_STORE = SessionMetadataStore()
@@ -34,6 +36,116 @@ SESSION_DB = Path(os.getenv("AGENT_SESSION_DB", "runtime/agent_sessions.sqlite3"
 
 # SDK tracing stays local; each run supplies its own model provider.
 configure_tracing()
+
+
+async def _cancel_started_pipelines(context):
+    """Stop only pipelines launched by this request, including resumed approvals."""
+    identifiers = set()
+    for item in context.tool_results:
+        if item.get('tool') != 'pipeline_shell':
+            continue
+        try:
+            args = parse_command(item.get('arguments', {}).get('command', ''))
+            if args.operation == 'run': identifiers.add(args.plan_id)
+        except ValueError:
+            continue
+    from isolation import isolated_execution
+    root = Path(context.run['session_dir'])
+    stopped = []
+    for identifier in sorted(identifiers):
+        try:
+            if isolated_execution():
+                from tools.infrastructure.pipeline_engine.broker import dispatch
+                result = await asyncio.to_thread(dispatch, root, f'agent-pipeline cancel --job-id {identifier}',
+                                                 access=context.execution_access)
+            else:
+                result = await asyncio.to_thread(pipeline_service.cancel, root, identifier)
+            stopped.append({'job_id': identifier, 'status': result['status']})
+        except Exception as exc:
+            stopped.append({'job_id': identifier, 'status': 'unknown', 'error_type': type(exc).__name__})
+    context.record('pipeline_stop_requested', jobs=stopped)
+    return stopped
+
+
+async def _with_cancellation(operation, check, session_id):
+    """Cancel the async runtime cooperatively so its tool cleanup can finish."""
+    if check is None:
+        return await operation
+    task = asyncio.create_task(operation)
+    try:
+        while not task.done():
+            await asyncio.wait({task}, timeout=0.25)
+            if not task.done() and check():
+                task.cancel()
+                break
+        try:
+            return await task
+        except asyncio.CancelledError:
+            # Cancellation before acquiring the session lock has no tool work.
+            return {'status': 'cancelled', 'answer': 'Stopped.', 'session_id': session_id or ''}
+    finally:
+        if not task.done():
+            task.cancel()
+            await asyncio.gather(task, return_exceptions=True)
+
+
+async def _collect_started_pipelines(context, emit=None, *, poll_interval=2.0):
+    """Collect pipelines started by this request without spending model turns."""
+    started, collected = set(), set()
+    for item in context.tool_results:
+        if item.get("tool") != "pipeline_shell":
+            continue
+        try:
+            args = parse_command(item.get("arguments", {}).get("command", ""))
+        except ValueError:
+            continue
+        value = item.get("result", {})
+        if args.operation == "run" and value.get("status") in {"queued", "running", "succeeded"}:
+            started.add(args.plan_id)
+        elif args.operation == "results" and value.get("status") == "succeeded":
+            collected.add(args.job_id)
+    collected.update(event.get("data", {}).get("job_id") for event in context.events
+                     if event.get("event") == "pipeline_completion_collected")
+    pending = started - collected
+    if not pending:
+        return []
+    root = Path(context.run["session_dir"])
+    from isolation import isolated_execution
+    async def query(operation, job_id):
+        if isolated_execution():
+            from tools.infrastructure.pipeline_engine.broker import dispatch
+            return await asyncio.to_thread(dispatch, root, f'agent-pipeline {operation} --job-id {job_id}',
+                                           access=context.execution_access)
+        return await asyncio.to_thread(getattr(pipeline_service, operation), root, job_id)
+    previous, completed = {}, []
+    while pending:
+        for job_id in sorted(pending):
+            value = await query('status', job_id)
+            status = value["status"]
+            if previous.get(job_id) != status:
+                progress = {"job_id": job_id, "pipeline_name": value["pipeline_name"], "status": status}
+                context.record("pipeline_job_status", **progress)
+                if emit:
+                    emit("pipeline_job_status", context.public(progress))
+                previous[job_id] = status
+            if status not in PIPELINE_TERMINAL_STATUSES:
+                continue
+            if status == "succeeded":
+                try:
+                    value = await query('results', job_id)
+                except (ValueError, OSError) as exc:
+                    value = {**value, "status": "error", "error": f"Output verification failed: {exc}", "files": []}
+            # Preserve the actual read-only result in the same evidence contract
+            # as model-issued pipeline_shell commands. Never submit another run.
+            value = context.public(value)
+            command = f"agent-pipeline results --job-id {job_id}"
+            context.tool_results.append({"tool": "pipeline_shell", "arguments": {"command": command}, "result": value})
+            context.record("pipeline_completion_collected", job_id=job_id, status=value["status"])
+            completed.append(value)
+            pending.remove(job_id)
+        if pending:
+            await asyncio.sleep(poll_interval)
+    return completed
 
 
 def _approval_details(items: list[Any], context: AgentRunContext | None = None) -> list[dict[str, Any]]:
@@ -55,12 +167,18 @@ def _approval_details(items: list[Any], context: AgentRunContext | None = None) 
             "arguments": arguments,
         }
         if item.tool_name == "pipeline_shell" and context and isinstance(arguments, dict):
-            from tools.infrastructure.pipeline_engine.commands import parse_command
             from tools.infrastructure.pipeline_engine.store import JobStore
             try:
                 args = parse_command(arguments["commands"][0])
                 identifier = args.plan_id if args.operation == "run" else args.job_id
-                detail["plan"] = JobStore(session_root(context.session_id)).get(identifier)["plan"]
+                from isolation import isolated_execution
+                if isolated_execution():
+                    from tools.infrastructure.pipeline_engine.broker import get_plan, public_plan
+                    record = get_plan(session_root(context.session_id), identifier, access=context.execution_access)
+                    record['plan'] = public_plan(record['plan'])
+                else:
+                    record = JobStore(session_root(context.session_id)).get(identifier)
+                detail["plan"] = record["plan"]
             except (ValueError, KeyError, AttributeError, IndexError):
                 pass
         if item.tool_name == "python_execute" and isinstance(arguments, dict):
@@ -141,6 +259,8 @@ async def _execute(
     decision: tuple[int, bool] | None = None,
 ) -> dict[str, Any]:
     """Run or resume through the same SDK and result-collection path."""
+    from isolation import require_execution_policy
+    require_execution_policy()
     context = AgentRunContext(
         session=session, model_key=model_key, log_fn=log_fn,
         tool_results=list(pending.get("tool_results", [])) if pending else [],
@@ -246,7 +366,7 @@ async def _execute(
                     turn_limit_error, result, remaining_turns = exc, None, 0
                 if result is not None and result.interruptions:
                     break
-                completed = await collect_started_pipelines(context, event_fn)
+                completed = await _collect_started_pipelines(context, event_fn)
                 completion_results.extend(completed)
                 if not completed:
                     if turn_limit_error and not completion_results:
@@ -287,6 +407,20 @@ async def _execute(
         else:
             answer = completion_answer if completion_answer is not None else str(result.final_output or "")
             status = "ok"
+    except asyncio.CancelledError:
+        stopped = await _cancel_started_pipelines(context)
+        answer = 'Stopped this request.'
+        if stopped:
+            answer += '\n\nPipeline status:\n' + '\n'.join(
+                f"- `{item['job_id']}`: {item['status']}" for item in stopped)
+            if any(item['status'] not in {'cancelled', 'succeeded', 'failed', 'timed_out'} for item in stopped):
+                answer += '\nRemote cancellation is still pending or unconfirmed; the workflow may continue until the backend confirms it.'
+        status = 'cancelled'
+        snapshot = None
+        approvals = []
+        session.metadata.pop('pending_run', None)
+        await sdk_session.add_items([{'role': 'assistant', 'content': answer}])
+        context.record('run_cancelled')
     except InputGuardrailTripwireTriggered:
         answer = (
             "I can’t help with actionable biological procedures that could increase "
@@ -353,12 +487,15 @@ def run_agent(
     model: Model | None = None,
     event_fn: Callable[[str, dict[str, Any]], None] | None = None,
     website_binding: dict[str, Any] | None = None,
+    cancel_requested: Callable[[], bool] | None = None,
 ) -> dict[str, Any]:
     """Synchronous wrapper for CLI, HTTP, and notebook callers."""
     try:
         asyncio.get_running_loop()
     except RuntimeError:
-        return asyncio.run(async_run_agent(request, session_id, model_key, max_turns, log_fn, model, event_fn, website_binding))
+        return asyncio.run(_with_cancellation(
+            async_run_agent(request, session_id, model_key, max_turns, log_fn, model, event_fn, website_binding),
+            cancel_requested, session_id))
     raise RuntimeError("An event loop is already running; await async_run_agent instead.")
 
 
@@ -366,12 +503,15 @@ def resume_agent(
     session_id: str, approved: bool, approval_id: str, *,
     log_fn: Callable[[str], None] | None = None,
     event_fn: Callable[[str, dict[str, Any]], None] | None = None,
+    cancel_requested: Callable[[], bool] | None = None,
 ) -> dict[str, Any]:
     """Synchronous wrapper for :func:`async_resume_agent`."""
     try:
         asyncio.get_running_loop()
     except RuntimeError:
-        return asyncio.run(async_resume_agent(session_id, approved, approval_id, log_fn=log_fn, event_fn=event_fn))
+        return asyncio.run(_with_cancellation(
+            async_resume_agent(session_id, approved, approval_id, log_fn=log_fn, event_fn=event_fn),
+            cancel_requested, session_id))
     raise RuntimeError("An event loop is already running; await async_resume_agent instead.")
 
 
@@ -380,6 +520,7 @@ def delete_session(session_id: str) -> bool:
     identifier = str(session_id or "").strip()
     if not identifier:
         return False
+    STATE_STORE.ownership.require(identifier)
     session_db = Path(SESSION_DB)
     session_db.parent.mkdir(parents=True, exist_ok=True)
     sdk_session = SQLiteSession(identifier, db_path=session_db)

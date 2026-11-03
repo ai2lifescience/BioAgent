@@ -9,6 +9,13 @@ from .models import KnowledgeSearchHit
 from .repository import KnowledgeRepository
 
 
+def _require_owner(session_id: str) -> None:
+    from auth import auth_mode
+    if auth_mode() == "multiuser":
+        from harness.runtime import STATE_STORE
+        STATE_STORE.ownership.require(session_id)
+
+
 class KnowledgeService:
     """Compose persistence, job lifecycle, and indexing behind the SDK tools."""
 
@@ -29,6 +36,7 @@ class KnowledgeService:
         max_depth: int,
         refresh: bool,
     ) -> dict:
+        _require_owner(session_id)
         job_id = self.repository.create_job(
             session_id=session_id, request=request, collection_id=collection_id,
             seed_urls=seed_urls, allowed_domains=allowed_domains,
@@ -52,16 +60,19 @@ class KnowledgeService:
         return self.jobs.job_spec(job_id)
 
     def get_job(self, job_id: str, *, session_id: str) -> dict:
+        _require_owner(session_id)
         self.repository.get_job_row(job_id, session_id=session_id)
         self.dispatch()
         return self.jobs.get_job(job_id, session_id=session_id)
 
     def events(self, job_id: str, *, session_id: str, after: int = -1) -> list[dict]:
+        _require_owner(session_id)
         self.repository.get_job_row(job_id, session_id=session_id)
         self.dispatch()
         return self.jobs.events(job_id, session_id=session_id, after=after)
 
     def list_jobs(self, *, session_id: str, collection_id: str | None = None) -> list[dict]:
+        _require_owner(session_id)
         return self.jobs.list_jobs(session_id=session_id, collection_id=collection_id)
 
     def update_progress(self, job_id: str, *, progress: dict, event: str = "progress") -> None:
@@ -71,12 +82,15 @@ class KnowledgeService:
         self.jobs.update_status(job_id, status, error=error, progress=progress)
 
     def collection(self, collection_id: str, *, session_id: str) -> dict:
+        _require_owner(session_id)
         return self.repository.get_collection(collection_id, session_id=session_id)
 
     def changed_pages(self, *, collection_id: str, session_id: str, pages):
+        _require_owner(session_id)
         return self.indexer.changed_pages(collection_id=collection_id, session_id=session_id, pages=pages)
 
     def upsert_pages(self, *, collection_id: str, session_id: str, pages, vectors, chunk_chars=1200, overlap=180):
+        _require_owner(session_id)
         return self.indexer.index(
             collection_id=collection_id, session_id=session_id, pages=pages, vectors=vectors,
             chunk_chars=chunk_chars, overlap=overlap,
@@ -86,6 +100,7 @@ class KnowledgeService:
         self, *, collection_id: str, session_id: str, question: str,
         query_vector: list[float], top_k: int,
     ) -> list[KnowledgeSearchHit]:
+        _require_owner(session_id)
         return self.indexer.retrieve(
             collection_id=collection_id, session_id=session_id,
             question=question, query_vector=query_vector, top_k=top_k,
