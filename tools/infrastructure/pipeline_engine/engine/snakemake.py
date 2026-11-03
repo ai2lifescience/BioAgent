@@ -46,7 +46,7 @@ def run_snakemake_pipeline(
 
     completed = subprocess.run(
         command,
-        cwd=str(PROJECT_ROOT),
+        cwd=str(context.run_dir),
         text=True,
         capture_output=True,
         timeout=context.timeout,

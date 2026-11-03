@@ -21,7 +21,9 @@ from tools.infrastructure.tool_support.artifacts import output
 class InspectionResult(FunctionContract):
     path: str
     bytes: int
-    line_count: int
+    line_count: int | None = None
+    truncated: bool = False
+    next_offset: int | None = None
     suffix: str
     preview: list[str]
     file_type: Literal["fasta", "table", "text"]
@@ -31,22 +33,31 @@ class InspectionResult(FunctionContract):
     columns: list[str] = Field(default_factory=list)
 
 
-def inspect_bio_file(path: str, max_preview_lines: int = 20) -> dict[str, Any]:
+def inspect_bio_file(path: str, max_preview_lines: int = 20, offset: int = 0) -> dict[str, Any]:
     file_path = Path(path)
     if not file_path.exists():
         raise FileNotFoundError(f"File not found: {path}")
     if not file_path.is_file():
         raise ValueError(f"Path is not a file: {path}")
 
-    if file_path.stat().st_size > 32 * 1024 * 1024:
-        raise ValueError("File exceeds the 32 MB inspection limit.")
-    text = file_path.read_text(encoding="utf-8", errors="replace")
+    from isolation.limits import limits
+    if offset < 0: raise ValueError('offset must be nonnegative.')
+    size = file_path.stat().st_size
+    if offset > size: raise ValueError('offset exceeds file size.')
+    with file_path.open('rb') as stream:
+        stream.seek(offset)
+        data = stream.read(limits().preview_bytes)
+    text = data.decode('utf-8', errors='replace')
+    truncated = offset > 0 or offset + len(data) < size
+    preview_bytes = len(b"".join(data.splitlines(keepends=True)[:max_preview_lines]))
     lines = text.splitlines()
     suffix = file_path.suffix.lower()
     result: dict[str, Any] = {
         "path": str(file_path),
         "bytes": file_path.stat().st_size,
-        "line_count": len(lines),
+        "line_count": None if truncated else len(lines),
+        "truncated": truncated,
+        "next_offset": offset + preview_bytes if max_preview_lines and offset + preview_bytes < size else None,
         "suffix": suffix,
         "preview": lines[:max_preview_lines],
     }
@@ -56,7 +67,7 @@ def inspect_bio_file(path: str, max_preview_lines: int = 20) -> dict[str, Any]:
         result.update(
             {
                 "file_type": "fasta",
-                "record_count": len(records),
+                "record_count": None if truncated else len(records),
                 "sequence_ids": [record["id"] for record in records[:50]],
             }
         )
@@ -66,7 +77,7 @@ def inspect_bio_file(path: str, max_preview_lines: int = 20) -> dict[str, Any]:
         result.update(
             {
                 "file_type": "table",
-                "row_count": len(rows),
+                "row_count": None if truncated else len(rows),
                 "columns": list(rows[0].keys()) if rows else [],
             }
         )
@@ -99,9 +110,9 @@ def _parse_fasta_text(text: str) -> list[dict[str, str]]:
     return records
 
 
-def _operation(*, path, max_preview_lines=20, context):
+def _operation(*, path, max_preview_lines=20, offset=0, context):
     source, public = select_workspace_file(context, path)
-    result = inspect_bio_file(str(source), max_preview_lines)
+    result = inspect_bio_file(str(source), max_preview_lines, offset)
     result["path"] = public
     return output(result)
 
@@ -111,10 +122,11 @@ async def file_inspection(
     ctx: RunContextWrapper[AgentRunContext],
     path: Annotated[str, Field(description="Existing workspace-relative file path.")],
     max_preview_lines: Annotated[int, Field(ge=0, le=200)] = 20,
+    offset: Annotated[int, Field(ge=0, description="Byte offset for the next preview page.")] = 0,
 ) -> FunctionResult[InspectionResult]:
     """Inspect file format, size, columns, IDs, and preview lines."""
     return await invoke(ctx.context, "file_inspection", _operation,
-                              {"path": path, "max_preview_lines": max_preview_lines}, FunctionResult[InspectionResult])
+                              {"path": path, "max_preview_lines": max_preview_lines, "offset": offset}, FunctionResult[InspectionResult])
 
 
 __all__ = ["file_inspection"]

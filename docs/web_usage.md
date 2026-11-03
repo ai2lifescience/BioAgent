@@ -5,6 +5,13 @@ by interfaces/web.py. It covers the full SDK agent, session workspaces, durable
 runs, atomic tools, specialist agents, pipelines, knowledge ingestion, and
 trusted website embedding.
 
+Tool availability depends on the execution mode. Public multi-user mode uses
+Docker tool workers with brokered `web_fetch`, `web_search`, and `pubmed_search`.
+The Cromwell/S3 broker enables `template_wdl` as an owned detached job. Other
+network tools, durable knowledge ingestion, and other pipelines remain restricted.
+The broader pipeline and crawling sections below describe the local/trusted executor. See
+[User accounts and isolated workers](user_isolation.md) for the mode boundaries.
+
 For the repository architecture, see [architecture.md](architecture.md). For
 the external host-page contract, see
 [web_integration.md](web_integration.md).
@@ -43,7 +50,7 @@ Open one of these pages:
 | http://127.0.0.1:8000/assistant | Compact assistant iframe surface |
 | http://127.0.0.1:8000/assistant-demo | Trusted external-website embedding demo |
 | http://127.0.0.1:8000/health | Server health check |
-| http://127.0.0.1:8000/config | Public model, file, and pipeline configuration |
+| http://127.0.0.1:8000/config | Model, file, and pipeline configuration; login required in multi-user mode |
 
 The default model alias is gpt-5.6-sol and the default maximum is 20 SDK
 turns. The UI can select another configured model. Model aliases and provider
@@ -56,13 +63,14 @@ models and re-indexing behavior, see
 
 ### WDL execution backend
 
-WDL pipelines use local miniwdl and Docker by default. For the remote Mscan
-Cromwell server, configure S3 input uploads and output downloads before
-starting BioAgent:
+In the local/trusted executor, WDL pipelines use local miniwdl and Docker by
+default. For the remote Mscan Cromwell server, configure S3 input uploads and
+output downloads before starting BioAgent. The following addresses and storage
+access were verified on 2026-11-03:
 
 ~~~bash
-export CROMWELL_URL=http://192.168.164.39:39000
-export CROMWELL_INPUT_STORAGE_ENDPOINT=http://192.168.164.39:7070
+export CROMWELL_URL=http://192.168.164.46:39000
+export CROMWELL_INPUT_STORAGE_ENDPOINT=http://192.168.164.46:7070
 export CROMWELL_INPUT_STORAGE_URI=s3://cncb-web-server-mic/files
 export CROMWELL_INPUT_STORAGE_REGION=us-east-1
 export CROMWELL_INPUT_STORAGE_MOUNT_PREFIX=/data/versitygw/data/s3
@@ -71,9 +79,15 @@ export CROMWELL_INPUT_STORAGE_SECRET_KEY='your-s3-secret-key'
 # Output downloads reuse the input-storage endpoint, region, and credentials.
 export CROMWELL_OUTPUT_STORAGE_URI=s3://cncb-web-server-mic/cromwell/outputs
 export CROMWELL_OUTPUT_STORAGE_MOUNT_PREFIX=/data/versitygw/data/s3/cncb-web-server-mic/cromwell/outputs
-export CROMWELL_OUTPUT_STORAGE_EXECUTION_PATH_PREFIXES=/data/cromwell-workspace/cromwell-executions,/cromwell-share/cloud_cromwell/cromwell-executions
+export CROMWELL_OUTPUT_STORAGE_EXECUTION_PATH_PREFIXES=/data/zhaomh/cromwell-workspace/cromwell-executions,/cromwell-share/cloud_cromwell/cromwell-executions
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ~~~
+
+These settings configure the host-side Cromwell/S3 adapter. In isolated mode,
+`pipeline_shell` exposes the audited `template_wdl` through this broker; containers
+retain no network interface or credentials. A live synthetic template workflow
+completed and its outputs downloaded successfully. See the
+[live validation findings](user_isolation.md#live-validation-2026-11-03) for scope.
 
 BioAgent uploads local inputs to S3, submits the workflow through Cromwell's
 REST API, and downloads the outputs declared in `runner.yaml` from S3 after
@@ -109,17 +123,10 @@ export AGENT_PROXY=socks5h://127.0.0.1:10801
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ~~~
 
-For another computer on the same trusted LAN:
-
-~~~bash
-python -B -m interfaces.web --host 0.0.0.0 --port 8000
-~~~
-
-Find the server address with hostname -I and open
-http://SERVER_IP:8000/assistant-demo or http://SERVER_IP:8000.
-
-A local server is a development service. Put an authenticated gateway in front
-of it before exposing it beyond a trusted network.
+Local mode is restricted to loopback. For direct LAN access, start with
+`--host 0.0.0.0`; this enables login, registration, and Docker tool workers.
+See [User accounts and isolation](user_isolation.md) for the worker image build,
+supported tools, HTTPS deployment, and existing-conversation migration.
 
 #### Ubuntu firewall (UFW)
 
@@ -145,7 +152,12 @@ helpers, and programmatic API.
   downloadable artifacts.
 - Durable runs continue after an HTTP request or browser stream disconnects.
 - Approval prompts are shown for pipeline execution and cancellation.
-- The Stop control stops the browser from waiting; it does not kill an already
+- The main workspace lets you switch conversations or create another chat while
+  work continues. Each conversation owns its draft, progress, messages, files,
+  and approvals. The sidebar shows queued, running, approval, and completion states.
+- Only conflicting actions in the working conversation are blocked. You can draft
+  its next message, but send it after the current run or approval finishes.
+- The embedded assistant’s Stop control stops waiting; it does not kill an already
   running backend job.
 
 The web UI never needs a host filesystem path. Public paths such as
@@ -481,9 +493,18 @@ artifacts remain available to later turns in the same session.
 
 ## Durable runs, streaming, and approvals
 
-The browser normally uses POST /run_stream. The server queues the run, starts a
-detached worker, and sends persisted events as SSE. A disconnected browser can
-recover the same run from its ID.
+The main workspace submits once with `POST /run`, then reads incremental events
+from `GET /runs/<id>/events?after=<sequence>` using short requests. Approvals use
+`POST /approve_async` and the same event polling. This keeps background jobs from
+occupying all browser connections. Transient connection failures retry event reads,
+never the submission. Reloading reconnects to queued/running conversations. Drafts
+survive chat switching within the page; they are not persisted across reloads.
+
+The embedded assistant still uses `POST /run_stream` for its single conversation.
+Both transports use the same durable queue. `AGENT_RUN_WORKERS` defaults to **2**
+concurrent agent runs across the server; additional runs queue. Each session permits
+one active run or pending approval. Docker tool isolation is independent of this
+queue setting. Backend jobs continue when the browser disconnects.
 
 While a request runs, both chat pages show a small live progress area with the
 current operation and a two-line narration preview. Expand **Activity** to read
@@ -560,6 +581,7 @@ direct workspace tool path.
 | GET /runs/<id> | Read one run status and public result |
 | GET /runs/<id>/events?after=N | Read resumable events |
 | POST /approve | Resume an approval through the synchronous API |
+| POST /approve_async | Queue approval resume and return durable job metadata (202) |
 | POST /approve_stream | Queue approval resume and stream persisted events |
 
 ### Workspace and knowledge endpoints
@@ -699,10 +721,24 @@ A run appears stuck:
 - The pipeline shell accepts only the allowlisted agent-pipeline protocol.
 - Knowledge crawlers use bounded public HTTP/Scrapy access; they are not a
   general private-network browser.
-- The local server does not provide complete multi-user authorization. Use an
-  authenticated reverse proxy or application gateway for shared deployments.
+- Multi-user mode authenticates accounts and checks ownership of sessions,
+  files, runs, approvals, and bridge bindings. Tool code uses Docker workers;
+  supported public retrieval and remote WDL jobs use separate authenticated
+  brokers, with private plan state and bounded output import. Use HTTPS for internet-facing account access.
 - Durable workers do not silently replay interrupted side effects.
 
 For implementation changes, update [architecture.md](architecture.md),
 [web_integration.md](web_integration.md), and the relevant smoke tests
 together.
+
+
+## Large-file transfers
+
+The Workspace uploader uses resumable 8 MiB chunks, with a configurable 5 GiB
+per-file default. Reselect the same file after an interruption to resume. Local
+files and pipeline downloads stream from the server and support byte ranges.
+Remote pipeline outputs remain in object storage until you select **Import**;
+**Download** does not require a local workspace copy. ZIP bundles are created on
+demand, rather than duplicated into every session. See
+[storage settings and upload endpoints](user_isolation.md#file-storage-and-large-uploads)
+for the session/account quotas and worker budgets.

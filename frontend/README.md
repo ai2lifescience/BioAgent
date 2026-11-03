@@ -4,8 +4,10 @@ The workspace, embedded assistant, and host-page demo are React + TypeScript app
 
 ## Structure
 
-- `src/api.ts` owns typed JSON and SSE transport, including abortable runs.
+- `src/components/AuthGate.tsx` gates all pages on local identity or an authenticated login, and clears displayed state on logout/account changes. See [account setup](../docs/user_isolation.md).
+- `src/api.ts` owns typed JSON, SSE, and resumable event polling. The main workspace uses short polls; the single embedded conversation retains SSE.
 - `src/types.ts` defines the backend envelopes shared by chat, sessions, workspace files, evidence, and runtime traces.
+- `src/features/chat/ConversationPane.tsx` owns one conversation’s state and background run monitoring. Visited panes stay mounted while hidden so switching cannot redirect pending callbacks to another chat.
 - `src/App.tsx` composes the workspace shell from session navigation, quick starts, chat messages, runtime details, the composer, and workspace files.
 - `src/features/` groups the assistant, demo, chat composer, messages and artifact viewers, session navigation, and workspace panel by responsibility.
 - `src/components/icons.tsx` is the shared legacy robot mark and line-icon set used by every page; `AppErrorBoundary.tsx` turns malformed runtime payloads into a recoverable UI state.
@@ -52,3 +54,10 @@ VITE_BACKEND_URL=http://127.0.0.1:8123 npm --prefix frontend run dev
 The backend is required for sessions, uploads, runs, and the website bridge. Website embedding also requires the exact browser origin to be allowed by the backend; see the [integration guide](../docs/web_integration.md).
 
 Conversation databases, uploaded files, and job state remain in the repository-root `runtime/` directory (or configured external persistence paths). They are separate from this directory and are never part of the Vite build.
+
+## Browser concurrency check
+
+After building, run `python -m evals.check_web_multitasking` with Playwright and
+Chrome installed. It exercises overlapping jobs, chat switching, drafts,
+background uploads, approvals, reconnection and reload against local fixtures.
+It does not call models or execute pipelines.

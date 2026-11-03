@@ -29,31 +29,41 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_response(200); self.send_header('Content-Type', 'application/json'); self.send_header('Content-Length', str(len(body))); self.end_headers(); self.wfile.write(body)
     def do_GET(self):
         path = urlparse(self.path).path
-        if path == '/config': self.json({'default_model_key': 'fixture', 'default_max_turns': 20, 'models': [{'key': 'fixture', 'label': 'UI test fixture'}]})
+        if path == '/auth/status': self.json({'mode': 'local', 'user': {'id': 'fixture', 'name': 'Fixture'}})
+        elif path == '/config': self.json({'default_model_key': 'fixture', 'default_max_turns': 20, 'models': [{'key': 'fixture', 'label': 'UI test fixture'}]})
         elif path == '/sessions': self.json({'sessions': [{'session_id': 'progress-fixture', 'title': 'Research progress'}]})
         elif path.endswith('/messages'): self.json({'messages': self.server.history.get(unquote(path.split('/')[2]), [])})
         elif path == '/workspace': self.json({'workspace': {'files': []}})
         elif path == '/runs':
             session_id = parse_qs(urlparse(self.path).query).get('session_id', [''])[0]
-            self.json({'runs': [{key: value for key, value in run.items() if key != 'request'} for run in reversed(self.server.runs) if run['session_id'] == session_id]})
+            self.json({'runs': [{key: value for key, value in run.items() if key != 'request'} for run in reversed(self.server.runs) if not session_id or run['session_id'] == session_id]})
         elif path.startswith('/runs/') and path.endswith('/events'):
             if getattr(self.server, 'events_unavailable', False):
                 self.send_error(503); return
-            self.json({'events': self.server.events.get(path.split('/')[2], [])})
+            run_id = path.split('/')[2]
+            after = int(parse_qs(urlparse(self.path).query).get('after', [-1])[0])
+            self.json({'run': next(run for run in self.server.runs if run['run_id'] == run_id), 'events': [event for event in self.server.events.get(run_id, []) if event.get('sequence', 0) > after]})
         else:
             if path == '/assistant': self.path = '/assistant.html'
             super().do_GET()
     def do_POST(self):
-        if self.path != '/run_stream': self.send_error(404); return
+        if self.path == '/sessions':
+            self.rfile.read(int(self.headers.get('Content-Length', 0)))
+            self.json({'session_id': 'progress-fixture'}); return
+        if self.path not in ('/run_stream', '/run'): self.send_error(404); return
         body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
         self.server.requests.append(body)
         run_id = f'fixture-{len(self.server.requests):04d}'
         run = {'run_id': run_id, 'session_id': body['session_id'], 'request': body['request'], 'created_at': run_id, 'status': 'running'}
         self.server.runs.append(run)
         frames = self.server.events.setdefault(run_id, [])
-        self.send_response(200); self.send_header('Content-Type', 'text/event-stream'); self.send_header('Cache-Control', 'no-cache'); self.end_headers()
+        polling = self.path == '/run'
+        if polling: self.json(run)
+        else:
+            self.send_response(200); self.send_header('Content-Type', 'text/event-stream'); self.send_header('Cache-Control', 'no-cache'); self.end_headers()
         def emit(name, data):
-            frames.append({'event': name, 'payload': data})
+            frames.append({'sequence': len(frames), 'event': name, 'payload': data})
+            if polling: return
             self.wfile.write(f'event: {name}\ndata: {json.dumps(data)}\n\n'.encode()); self.wfile.flush()
         def raw(kind, delta=None, agent=None, parent=None, structured=False):
             emit('sdk_raw_response', {'data_type': kind, 'delta': delta, 'agent': agent, 'parent_call_id': parent, 'item_id': '__fake_id__', 'content_index': 0, 'content_kind': 'structured' if structured else 'narration'})
@@ -78,6 +88,7 @@ class Handler(SimpleHTTPRequestHandler):
             # completion proves the progress was rendered live.
             self.server.release.wait(25)
             if body['request'] == 'error':
+                run.update(status='failed', error='Fixture connection failed')
                 emit('error', {'error': 'Fixture connection failed'}); return
             tool('report_review', 'review', True)
             tool('research_specialist', 'research', True)
@@ -207,7 +218,7 @@ def check_browser(OUT):
                         server.events_unavailable = False
                 page.close()
             for route in ['/', '/assistant']:
-                for mode in ['stop', 'error']:
+                for mode in (['error'] if route == '/' else ['stop', 'error']):
                     server.release.clear()
                     server.history = {}; server.runs = []; server.events = {}
                     page = browser.new_page()

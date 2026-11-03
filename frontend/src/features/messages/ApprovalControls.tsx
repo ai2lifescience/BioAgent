@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Approval, RunResult, StreamFrame } from '../../types';
 import { createApiClient } from '../../api';
 
@@ -6,13 +6,15 @@ export interface ApprovalMeta { approved?: boolean; intermediate?: boolean; item
 interface Props { result: RunResult; busy: boolean; onResult: (result: RunResult, meta?: ApprovalMeta) => void; onBusy: (busy: boolean) => void; onProgress?: (frame: StreamFrame) => void }
 
 export default function ApprovalControls({ result, busy, onResult, onBusy, onProgress }: Props) {
-  const [status, setStatus] = useState<Record<string, string>>({}); const api = createApiClient();
+  const [status, setStatus] = useState<Record<string, string>>({}); const api = createApiClient(undefined, '', 'poll');
+  const controllerRef = useRef<AbortController | null>(null);
+  useEffect(() => () => controllerRef.current?.abort(), []);
   const [planOpen, setPlanOpen] = useState<Record<string, boolean>>({});
   if (!Array.isArray(result.approvals) || !result.approvals.length) return null;
   const decide = async (item: Approval, approved: boolean) => {
     if (busy || !result.approval_required || item.approved !== undefined || status[item.approval_id]) return; const key = item.approval_id; onBusy(true); setStatus(prev => ({ ...prev, [key]: approved ? 'Approval submitted. Execution is in progress…' : 'Rejection submitted. Finishing the request…' }));
     setPlanOpen(prev => ({ ...prev, [key]: false }));
-    const controller = new AbortController();
+    const controller = new AbortController(); controllerRef.current = controller;
     try {
       const next = await api.approve({ session_id: result.session_id, approval_id: key, approved }, controller.signal, frame => {
         onProgress?.(frame);
@@ -34,7 +36,7 @@ export default function ApprovalControls({ result, busy, onResult, onBusy, onPro
         setStatus(prev => ({ ...prev, [key]: approved ? 'Approved. Execution details are shown in the next run panel.' : 'Rejected. No pipeline execution was started.' }));
         onResult({ ...next, approval_decision: decision }, { approved, item });
       }
-    } catch (error) { setStatus(prev => ({ ...prev, [key]: error instanceof Error ? error.message : String(error) })); } finally { onBusy(false); }
+    } catch (error) { if (controller.signal.aborted) return; setStatus(prev => ({ ...prev, [key]: error instanceof Error ? error.message : String(error) })); } finally { if (!controller.signal.aborted) onBusy(false); }
   };
   return <div className="tool-approvals">{result.approvals.map(item => {
     const plan = item.plan;

@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import json
 import os
+from dataclasses import dataclass
+from contextlib import ExitStack
 from pathlib import Path
 import time
-from typing import Any
+from typing import Any, Callable
 from urllib.parse import urlsplit
 
 import requests
@@ -21,7 +23,7 @@ from tools.infrastructure.pipeline_engine.engine.input_storage import (
 )
 from tools.infrastructure.pipeline_engine.engine.outputs import finalize_output_records
 from tools.infrastructure.pipeline_engine.engine.paths import read_json, resolve_pipeline_file
-from tools.infrastructure.pipeline_engine.engine.types import PipelineContext
+from tools.infrastructure.pipeline_engine.engine.types import PipelineContext, RuntimeConfigWrite
 from tools.infrastructure.pipeline_engine.engine.wdl import (
     copy_declared_outputs,
     output_path_by_name,
@@ -33,11 +35,29 @@ from tools.infrastructure.pipeline_engine.engine.wdl import (
 TERMINAL_STATUSES = {"Succeeded", "Failed", "Aborted"}
 
 
-def run_cromwell_pipeline(
+@dataclass(frozen=True)
+class PreparedWorkflow:
+    workflow_path: Path
+    inputs_path: Path
+    options_path: Path | None
+    runtime_config: RuntimeConfigWrite
+    uploaded_inputs: list[dict[str, Any]]
+
+
+def prepare_workflow(
     context: PipelineContext,
-    cromwell_url: str | None = None,
-) -> dict[str, Any]:
-    """Submit WDL to Cromwell Server, wait for completion, and collect outputs."""
+    *,
+    input_storage: S3InputUploader | None,
+    output_storage: S3OutputStorage | None,
+    run_id: str | None = None,
+    input_keys: set[str] | None = None,
+    options_overrides: dict[str, Any] | None = None,
+) -> PreparedWorkflow:
+    """Prepare the same manifest-defined submission for local and isolated callers.
+
+    The caller supplies storage credentials and any boundary-specific restrictions.
+    This layer owns workflow resolution, config generation and upload serialization.
+    """
     workflow_path = resolve_pipeline_file(
         context.pipeline_dir,
         str(context.runner_config.get("workflow") or "workflow.wdl"),
@@ -46,7 +66,6 @@ def run_cromwell_pipeline(
     )
     runtime_config = write_runtime_config(context)
     inputs_path = write_wdl_inputs(context, runtime_config)
-    output_storage = S3OutputStorage.from_environment()
     if output_storage is not None and output_storage.mount_prefix is None:
         raise ValueError(
             "CROMWELL_OUTPUT_STORAGE_URI is configured, but no Cromwell-visible output "
@@ -60,23 +79,82 @@ def run_cromwell_pipeline(
             output_storage.mount_prefix if output_storage is not None else None
         ),
     )
-    outputs_json = context.run_dir / "wdl.outputs.json"
-    metadata_json = context.run_dir / "wdl.metadata.json"
-    input_storage = S3InputUploader.from_environment()
+    if options_overrides:
+        settings = read_json(options_path)
+        settings.update(options_overrides)
+        options_path.write_text(json.dumps(settings, indent=2) + "\n", encoding="utf-8")
     uploaded_inputs: list[dict[str, Any]] = []
     if input_storage is not None:
-        run_id = context.run_dir.parent.name
         uploaded_inputs = upload_local_file_values(
             inputs_path,
             input_storage,
             pipeline_name=context.pipeline_name,
-            run_id=run_id,
+            run_id=run_id or context.run_dir.parent.name,
+            input_keys=input_keys,
         )
         write_upload_manifest(
-            context.run_dir / "cromwell.input_uploads.json",
-            input_storage,
-            uploaded_inputs,
+            context.run_dir / "cromwell.input_uploads.json", input_storage, uploaded_inputs,
         )
+    return PreparedWorkflow(workflow_path, inputs_path, options_path, runtime_config, uploaded_inputs)
+
+
+class CromwellClient:
+    """Shared Cromwell protocol with an optional caller-owned HTTP boundary.
+
+    ``request`` accepts (method, suffix, **kwargs) and returns a decoded object.
+    It controls credentials, redirects, timeouts and response limits when supplied.
+    """
+
+    def __init__(self, base_url: str, api_version: str = "v1", *,
+                 headers: dict[str, str] | None = None, request: Callable | None = None):
+        if not api_version or not api_version.isalnum():
+            raise ValueError("Invalid Cromwell API version.")
+        self.base_url = base_url
+        self.api_version = api_version
+        self.headers = headers if headers is not None else cromwell_headers()
+        self.request = request
+
+    def submit(self, prepared: PreparedWorkflow) -> dict[str, Any]:
+        return submit_workflow(self.base_url, self.api_version, prepared.workflow_path,
+                               prepared.inputs_path, prepared.options_path, self.headers,
+                               request=self.request)
+
+    def read(self, workflow_id: str, resource: str) -> dict[str, Any] | None:
+        if resource not in {"status", "outputs", "metadata"}:
+            raise ValueError("Unsupported Cromwell resource.")
+        suffix = f"/{workflow_id}/{resource}"
+        if self.request is not None:
+            return self.request("GET", suffix)
+        url = f"{self.base_url}/api/workflows/{self.api_version}{suffix}"
+        return (get_workflow_status if resource == "status" else get_json)(url, self.headers)
+
+    def abort(self, workflow_id: str) -> dict[str, Any]:
+        suffix = f"/{workflow_id}/abort"
+        if self.request is not None:
+            return self.request("POST", suffix)
+        response = requests.post(f"{self.base_url}/api/workflows/{self.api_version}{suffix}",
+                                 headers=self.headers, timeout=60)
+        ensure_success(response, "abort workflow")
+        return response_json(response, "abort workflow")
+
+
+def workflow_outputs(payload: dict[str, Any]) -> dict[str, Any]:
+    outputs = payload.get("outputs")
+    return outputs if isinstance(outputs, dict) else payload
+
+
+def run_cromwell_pipeline(
+    context: PipelineContext,
+    cromwell_url: str | None = None,
+) -> dict[str, Any]:
+    """Submit WDL to Cromwell Server, wait for completion, and collect outputs."""
+    input_storage = S3InputUploader.from_environment()
+    output_storage = S3OutputStorage.from_environment()
+    prepared = prepare_workflow(context, input_storage=input_storage, output_storage=output_storage)
+    workflow_path, inputs_path, options_path = prepared.workflow_path, prepared.inputs_path, prepared.options_path
+    runtime_config, uploaded_inputs = prepared.runtime_config, prepared.uploaded_inputs
+    outputs_json = context.run_dir / "wdl.outputs.json"
+    metadata_json = context.run_dir / "wdl.metadata.json"
 
     base_url = cromwell_base_url(explicit_url=cromwell_url)
     api_version = str(context.runner_config.get("cromwell_api_version") or "v1").strip()
@@ -89,14 +167,8 @@ def run_cromwell_pipeline(
         float(context.runner_config.get("cromwell_visibility_timeout") or 300),
     )
     headers = cromwell_headers()
-    submission = submit_workflow(
-        base_url,
-        api_version,
-        workflow_path,
-        inputs_path,
-        options_path,
-        headers,
-    )
+    client = CromwellClient(base_url, api_version, headers=headers)
+    submission = client.submit(prepared)
     workflow_id = str(submission["id"])
     submission_status = str(submission.get("status") or "Submitted")
     submission_json = context.run_dir / "cromwell.submission.json"
@@ -115,10 +187,7 @@ def run_cromwell_pipeline(
         visibility_timeout=visibility_timeout,
         initial_status=submission_status,
     )
-    metadata = get_json(
-        f"{base_url}/api/workflows/{api_version}/{workflow_id}/metadata",
-        headers,
-    )
+    metadata = client.read(workflow_id, "metadata")
     metadata_json.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
 
     if status != "Succeeded":
@@ -127,14 +196,9 @@ def run_cromwell_pipeline(
             f"Cromwell workflow {workflow_id} finished with status {status}: {details}"
         )
 
-    output_response = get_json(
-        f"{base_url}/api/workflows/{api_version}/{workflow_id}/outputs",
-        headers,
-    )
+    output_response = client.read(workflow_id, "outputs")
     outputs_json.write_text(json.dumps(output_response, indent=2) + "\n", encoding="utf-8")
-    output_map = output_response.get("outputs")
-    if not isinstance(output_map, dict):
-        output_map = output_response
+    output_map = workflow_outputs(output_response)
     try:
         copy_declared_outputs(
             runtime_config.output_records,
@@ -252,28 +316,29 @@ def submit_workflow(
     inputs_path: Path,
     options_path: Path | None,
     headers: dict[str, str],
+    *,
+    request: Callable | None = None,
 ) -> dict[str, Any]:
     url = f"{base_url}/api/workflows/{api_version}"
     try:
-        with workflow_path.open("rb") as workflow_handle, inputs_path.open("rb") as inputs_handle:
+        with ExitStack() as stack:
+            workflow_handle = stack.enter_context(workflow_path.open("rb"))
+            inputs_handle = stack.enter_context(inputs_path.open("rb"))
             files: dict[str, Any] = {
                 "workflowSource": (workflow_path.name, workflow_handle, "application/octet-stream"),
                 "workflowInputs": (inputs_path.name, inputs_handle, "application/json"),
             }
             if options_path:
-                with options_path.open("rb") as options_handle:
-                    files["workflowOptions"] = (
-                        options_path.name,
-                        options_handle,
-                        "application/json",
-                    )
-                    response = requests.post(url, files=files, headers=headers, timeout=60)
+                options_handle = stack.enter_context(options_path.open("rb"))
+                files["workflowOptions"] = (options_path.name, options_handle, "application/json")
+            if request is not None:
+                payload = request("POST", "", files=files)
             else:
                 response = requests.post(url, files=files, headers=headers, timeout=60)
+                ensure_success(response, "submit workflow")
+                payload = response_json(response, "submit workflow")
     except requests.RequestException as exc:
         raise RuntimeError(f"Could not submit workflow to Cromwell at {base_url}: {exc}") from exc
-    ensure_success(response, "submit workflow")
-    payload = response_json(response, "submit workflow")
     workflow_id = str(payload.get("id") or "").strip()
     if not workflow_id:
         raise RuntimeError(f"Cromwell submission response did not include a workflow id: {payload}")
@@ -292,7 +357,7 @@ def wait_for_workflow(
     visibility_timeout: float = 300,
     initial_status: str = "Submitted",
 ) -> str:
-    url = f"{base_url}/api/workflows/{api_version}/{workflow_id}/status"
+    client = CromwellClient(base_url, api_version, headers=headers)
     started_at = time.monotonic()
     deadline = started_at + timeout
     visibility_deadline = min(deadline, started_at + visibility_timeout)
@@ -302,7 +367,7 @@ def wait_for_workflow(
     # interval to expose the ID before the first status request.
     time.sleep(min(poll_interval, max(0.0, deadline - time.monotonic())))
     while True:
-        payload = get_workflow_status(url, headers)
+        payload = client.read(workflow_id, "status")
         if payload is None:
             now = time.monotonic()
             if now >= visibility_deadline:

@@ -17,6 +17,16 @@ from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS
 from harness.jobs import get_queue, result_status
 from tools.infrastructure.knowledge import KnowledgeService
 from tools.infrastructure.workspace.public import public_payload
+from isolation import require_execution_policy
+
+
+def require_session_access(session_id: str) -> None:
+    runtime.STATE_STORE.ownership.require(str(session_id or "").strip())
+
+
+def create_session() -> dict[str, str]:
+    with runtime.STATE_STORE.locked_session(None) as (session, _):
+        return {"session_id": session.session_id}
 
 
 def enqueue_request(
@@ -33,6 +43,7 @@ def enqueue_request(
     # and prevents invalid IDs from leaving orphaned queue rows.
     turns = max(1, min(int(max_turns), 20))
     with runtime.STATE_STORE.locked_session(identifier, request) as (session, _):
+        require_execution_policy()
         if session.metadata.get("pending_run"):
             raise ValueError("Resolve the pending tool approval before sending another request.")
         binding = None
@@ -54,31 +65,41 @@ def enqueue_request(
 
 def enqueue_approval(session_id: str, approved: bool, approval_id: str) -> dict[str, Any] | None:
     """Resume a web job in a detached worker, retaining its existing run ID."""
+    require_session_access(session_id)
+    require_execution_policy()
     return get_queue().resume(session_id, approved, approval_id)
 
 
 def get_run(run_id: str) -> dict[str, Any]:
-    return get_queue().get(str(run_id or "").strip())
+    job = get_queue().get(str(run_id or "").strip())
+    require_session_access(job["session_id"])
+    return job
 
 
 def get_run_events(run_id: str, after: int = -1) -> list[dict[str, Any]]:
+    get_run(run_id)
     return get_queue().events(str(run_id or "").strip(), int(after))
 
 
 def get_knowledge_job(job_id: str, session_id: str) -> dict[str, Any]:
     """Return one session-owned durable knowledge job."""
+    require_session_access(session_id)
     return KnowledgeService().get_job(str(job_id or "").strip(), session_id=str(session_id or "").strip())
 
 
 def get_knowledge_job_events(job_id: str, session_id: str, after: int = -1) -> list[dict[str, Any]]:
     """Return resumable knowledge ingestion events for one session."""
+    require_session_access(session_id)
     return KnowledgeService().events(
         str(job_id or "").strip(), session_id=str(session_id or "").strip(), after=int(after)
     )
 
 
 def list_runs(session_id: str | None = None) -> list[dict[str, Any]]:
-    return get_queue().list(str(session_id or "").strip() or None)
+    if session_id:
+        require_session_access(session_id)
+    owned = runtime.STATE_STORE.ownership.owned_ids()
+    return [job for job in get_queue().list(str(session_id or "").strip() or None) if job["session_id"] in owned]
 
 
 def handle_request(
@@ -99,6 +120,7 @@ def handle_approval(
     log_fn: Callable[[str], None] | None = None,
 ) -> dict[str, Any]:
     """Approve or reject the pending SDK tool call for a session."""
+    require_session_access(session_id)
     result = resume_agent(session_id, approved, approval_id, log_fn=log_fn)
     queue = get_queue()
     pending = queue.pending_for_session(session_id)
@@ -130,6 +152,7 @@ def list_session_messages(session_id: str) -> dict[str, Any]:
     identifier = str(session_id or "").strip()
     if not identifier:
         return {"session_id": None, "messages": []}
+    require_session_access(identifier)
     metadata = runtime.STATE_STORE.get_session(identifier)
 
     async def _list() -> dict[str, Any]:
@@ -250,18 +273,15 @@ def write_workspace_file(
     content_type: str = "",
 ) -> dict[str, Any]:
     """Store one uploaded file in the SDK sandbox workspace."""
-    import asyncio
-    from uuid import uuid4
-    identifier = str(session_id or "").strip() or str(uuid4())
-
-    async def _store() -> dict[str, Any]:
-        async with open_workspace(identifier) as workspace:
-            result = await upload_file(workspace, filename, data)
-            result["session_id"] = identifier
-            return result
-
+    import tempfile
+    from harness.sandbox import execution_access
+    from isolation.storage import publish
+    identifier = str(session_id or '').strip() or str(uuid4())
     with runtime.STATE_STORE.locked_session(identifier):
-        return asyncio.run(_store())
+        with tempfile.TemporaryDirectory() as temporary:
+            source = Path(temporary) / 'data'
+            source.write_bytes(data)
+            return publish(execution_access(), identifier, filename, source, len(data))
 
 
 def list_workspace_files(session_id: str | None) -> dict[str, Any]:
@@ -270,17 +290,24 @@ def list_workspace_files(session_id: str | None) -> dict[str, Any]:
     identifier = str(session_id or "").strip()
     if not identifier:
         return {"session_id": None, "files": []}
+    require_session_access(identifier)
 
     async def _list() -> dict[str, Any]:
         async with open_workspace(identifier) as workspace:
             return {"session_id": identifier, "files": await list_files(workspace)}
 
-    return asyncio.run(_list())
+    result = asyncio.run(_list())
+    from harness.sandbox import execution_access
+    from tools.infrastructure.pipeline_engine.broker import remote_files
+    access = execution_access()
+    result['files'].extend(remote_files(access.workspace(identifier), access=access))
+    return result
 
 
 def delete_workspace_file(session_id: str, path: str) -> bool:
     """Delete one workspace file using its workspace-relative path."""
     import asyncio
+    require_session_access(session_id)
 
     async def _delete() -> bool:
         try:
@@ -296,6 +323,7 @@ def delete_workspace_file(session_id: str, path: str) -> bool:
 def read_workspace_file(session_id: str, path: str) -> bytes:
     """Read one workspace file through the SDK sandbox filesystem."""
     import asyncio
+    require_session_access(session_id)
 
     async def _read() -> bytes:
         async with open_workspace(session_id) as workspace:

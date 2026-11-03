@@ -33,10 +33,12 @@ class SearchResult(FunctionContract):
     matches: list[Match]
     sources: list[dict[str, Any]]
     summary: str
+    truncated: bool = False
+    skipped_files: list[dict[str, str]] = []
+    partial_files: list[str] = []
 
 
 TEXT_SUFFIXES = {".txt", ".md", ".markdown", ".csv", ".tsv", ".json", ".yaml", ".yml", ".log", ".html"}
-MAX_FILE_BYTES = 32 * 1024 * 1024
 MAX_PDF_PAGES = 500
 MAX_SNIPPET_CHARS = 500
 
@@ -56,15 +58,28 @@ def _operation(
         raise ValueError("query must contain searchable words.")
 
     matches: list[dict[str, Any]] = []
+    skipped, partial = [], []
     for item in candidates:
+        public = str(item.get("workspace_path") or item.get("path") or "")
         source = _source_path(context, item)
-        if not source or not source.is_file() or source.stat().st_size > MAX_FILE_BYTES:
+        if not source or not source.is_file():
+            skipped.append({"path": public, "reason": "File is unavailable."})
             continue
         suffix = source.suffix.lower()
         if suffix == ".pdf":
-            matches.extend(_search_pdf(source, item, terms, clean_query, max_results - len(matches)))
+            from tools.infrastructure.workspace.pdf import MAX_PDF_BYTES
+            if source.stat().st_size > MAX_PDF_BYTES:
+                skipped.append({'path': public, 'reason': 'PDF exceeds the parser budget.'})
+                continue
+            state = {}
+            matches.extend(_search_pdf(source, item, terms, clean_query, max_results - len(matches), state))
+            if state.get('truncated'): partial.append(public)
         elif suffix in TEXT_SUFFIXES:
-            matches.extend(_search_text(source, item, terms, clean_query, max_results - len(matches)))
+            state = {}
+            matches.extend(_search_text(source, item, terms, clean_query, max_results - len(matches), state))
+            if state.get('truncated'): partial.append(public)
+        else:
+            skipped.append({'path': public, 'reason': 'Unsupported text search format.'})
         if len(matches) >= max_results:
             break
 
@@ -83,6 +98,8 @@ def _operation(
     return output({
         "query": clean_query,
         "matched_count": len(matches),
+        "skipped_files": skipped, "partial_files": partial,
+        "truncated": bool(skipped or partial or len(matches) >= max_results),
         "workspace_paths": files,
         "matches": matches,
         "sources": sources,
@@ -112,10 +129,11 @@ def _source_path(context: OperationContext, item: dict[str, Any]) -> Path | None
         return None
 
 
-def _search_text(source: Path, item: dict[str, Any], terms: list[str], query: str, limit: int) -> list[dict[str, Any]]:
-    text = source.read_text(encoding="utf-8", errors="replace")
+def _search_text(source: Path, item: dict[str, Any], terms: list[str], query: str, limit: int, state=None) -> list[dict[str, Any]]:
+    from isolation.text import scan_lines
+    state = {} if state is None else state
     results = []
-    for line_number, line in enumerate(text.splitlines(), start=1):
+    for line_number, line in scan_lines(source, state):
         lower = line.lower()
         if query.lower() not in lower and not all(term in lower for term in terms):
             continue
@@ -125,8 +143,9 @@ def _search_text(source: Path, item: dict[str, Any], terms: list[str], query: st
     return results
 
 
-def _search_pdf(source: Path, item: dict[str, Any], terms: list[str], query: str, limit: int) -> list[dict[str, Any]]:
+def _search_pdf(source: Path, item: dict[str, Any], terms: list[str], query: str, limit: int, state=None) -> list[dict[str, Any]]:
     reader = PdfReader(str(source), strict=False)
+    if state is not None: state['truncated'] = len(reader.pages) > MAX_PDF_PAGES
     results = []
     for page_number, page in enumerate(reader.pages[:MAX_PDF_PAGES], start=1):
         text = (page.extract_text() or "").strip()

@@ -15,6 +15,8 @@ from threading import Lock, RLock
 from typing import Any
 from uuid import uuid4
 
+from auth import OwnershipStore
+
 
 def now() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -54,6 +56,7 @@ class SessionMetadataStore:
         self._versions: dict[str, tuple[int, int]] = {}
         self._locks: dict[str, _SessionLock] = {}
         self._lock = RLock()
+        self.ownership = OwnershipStore(self.root)
 
     def _path(self, session_id: str) -> Path:
         if not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", session_id):
@@ -61,6 +64,7 @@ class SessionMetadataStore:
         return self.root / f"{session_id}.json"
 
     def save(self, session: SessionMetadata) -> None:
+        self.ownership.require(session.session_id)
         with self._lock:
             path = self._path(session.session_id)
             path.parent.mkdir(parents=True, exist_ok=True)
@@ -75,6 +79,8 @@ class SessionMetadataStore:
         with self._lock:
             identifier = str(session_id or uuid4()).strip()
             self._path(identifier)
+            workspace = Path(os.getenv("AGENT_SESSIONS_DIR", "runtime/sessions")) / identifier
+            self.ownership.claim(identifier, legacy_exists=self._path(identifier).exists() or workspace.exists())
             session = SessionMetadata(session_id=identifier, user_request=user_request)
             session.metadata["title"] = " ".join(user_request.split())[:64] or "New chat"
             self._sessions[identifier] = session
@@ -88,6 +94,7 @@ class SessionMetadataStore:
                 self._sessions.pop(session_id, None)
                 self._versions.pop(session_id, None)
                 return None
+            self.ownership.require(session_id)
             stat = path.stat()
             version = (stat.st_mtime_ns, stat.st_ino)
             if session_id in self._sessions and self._versions.get(session_id) == version:
@@ -181,9 +188,11 @@ class SessionMetadataStore:
         self.save(session)
 
     def list_sessions(self) -> list[dict[str, Any]]:
+        owned = self.ownership.owned_ids()
         if self.root.exists():
             for path in self.root.glob("*.json"):
-                self.get_session(path.stem)
+                if path.stem in owned:
+                    self.get_session(path.stem)
         with self._lock:
             sessions = [
                 {"session_id": s.session_id, "title": s.metadata.get("title", "New chat"),
@@ -192,7 +201,7 @@ class SessionMetadataStore:
                  "last_message": s.metadata.get("last_message", ""),
                  "last_run_id": s.metadata.get("last_run_id"),
                  "pinned": bool(s.metadata.get("pinned", False))}
-                for s in self._sessions.values()
+                for s in self._sessions.values() if s.session_id in owned
             ]
         return sorted(
             sessions,
@@ -209,6 +218,7 @@ class SessionMetadataStore:
     ) -> dict[str, Any]:
         """Update user-editable session metadata and return its sidebar summary."""
         identifier = str(session_id or "").strip()
+        self.ownership.require(identifier)
         with self.locked_session(identifier) as (session, _):
             if title is not None:
                 cleaned = " ".join(str(title).split())[:80]
@@ -228,6 +238,7 @@ class SessionMetadataStore:
         }
 
     def delete_session(self, session_id: str) -> bool:
+        self.ownership.require(session_id)
         lock = self._session_lock(session_id)
         if not lock.acquire(blocking=False):
             return False
@@ -237,6 +248,7 @@ class SessionMetadataStore:
                 self._sessions.pop(session_id, None)
                 self._versions.pop(session_id, None)
                 self._path(session_id).unlink(missing_ok=True)
+                self.ownership.delete(session_id)
                 return exists
         finally:
             lock.release()

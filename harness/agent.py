@@ -47,6 +47,10 @@ responsibility for the final answer, including work delegated to specialists.
 - Use pdb_download for an RCSB PDB file and structure_inspect for analysis of
   an existing structure file. Chain the two tools when the user asks to
   download and analyze a PDB ID.
+- The web UI automatically renders an interactive 3D viewer for PDB/mmCIF
+  structure artifacts returned by these tools. There is no separate viewer
+  tool to call. Return the actual structure path and inspection results;
+  do not claim that a viewer tool must be registered first.
 - Use sequence_stats for metrics, sequence_find_orfs for ORFs, and
   sequence_translate for translation. Use genome_read_features before
   genome_render_map; use structure_inspect for structure measurements and
@@ -158,9 +162,18 @@ def create_agent(
     """Build agent definitions; resolve model aliases through the run's provider."""
     selected_model = model if model is not None else model_key
     default_manifest = Manifest(root=sandbox_root) if sandbox_root else None
+    from isolation import isolated_execution
+    instructions = INSTRUCTIONS + PIPELINE_INSTRUCTIONS
+    if isolated_execution():
+        instructions += "\nThis run uses isolated tool workers. web_fetch, web_search and pubmed_search use a public GET broker. " \
+            "pipeline_shell uses an owned remote Cromwell broker; call catalog for supported workflows. " \
+            "The audited template_wdl is currently supported; use it only for requested demonstrations. " \
+            "An approval executes the immutable input snapshot saved with the plan. Jobs survive server restarts. " \
+            "Raw sockets, arbitrary shell pipelines, durable knowledge ingestion and SDK filesystem tools remain unavailable. " \
+            "Use only supplied tools; do not bypass these boundaries. Each workspace transfer is limited to 32 MiB."
     return SandboxAgent(
         name="Pipeline2Agent",
-        instructions=INSTRUCTIONS + PIPELINE_INSTRUCTIONS,
+        instructions=instructions,
         model=selected_model,
         tools=build_all_tools(selected_model),
         input_guardrails=[INPUT_GUARDRAIL],

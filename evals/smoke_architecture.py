@@ -3,8 +3,11 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 from pathlib import Path
 import sys
+import tempfile
+from unittest.mock import patch
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
@@ -12,7 +15,8 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from agents.testing import ModelStep, ScriptedModel, assistant_message, function_call
 from openai.types.responses.response_function_shell_tool_call import ResponseFunctionShellToolCall
-from harness import runtime
+from harness import runtime, sandbox
+from harness.sessions import SessionMetadataStore
 from harness.agent import create_agent
 from tools.agent_tools import (
     build_coding,
@@ -25,6 +29,23 @@ from tools.function_tools import FUNCTION_TOOLS
 
 
 def main() -> int:
+    # Keep this smoke check independent of ownerless legacy test sessions or
+    # a developer's multi-user deployment settings and persisted conversations.
+    with tempfile.TemporaryDirectory() as temporary, \
+         patch.dict(os.environ, {
+             'AGENT_AUTH_MODE': 'local', 'AGENT_WORKER_BACKEND': 'local',
+             'AGENT_METADATA_DIR': str(Path(temporary) / 'metadata'),
+             'AGENT_SESSIONS_DIR': str(Path(temporary) / 'workspaces'),
+             'AGENT_SESSION_DB': str(Path(temporary) / 'history.sqlite3'),
+         }):
+        root = Path(temporary)
+        with patch.object(runtime, 'STATE_STORE', SessionMetadataStore(root / 'metadata')), \
+             patch.object(runtime, 'SESSION_DB', root / 'history.sqlite3'), \
+             patch.object(sandbox, 'WORKSPACES_DIR', root / 'workspaces'):
+            return _run_checks()
+
+
+def _run_checks() -> int:
     tools = list(FUNCTION_TOOLS)
     agent = create_agent("gpt-oss", model=ScriptedModel())
     names = {tool.name for tool in agent.tools}
@@ -60,7 +81,6 @@ def main() -> int:
     }
     assert {builder(ScriptedModel()).name for builder in specialist_builders} == set(specialist_builders.values())
 
-    runtime.SESSION_DB = PROJECT_ROOT / "runtime" / "smoke_agents.sqlite3"
     model = ScriptedModel([
         ModelStep(output=[function_call("sequence_stats", {"source": {"sequence": "ACGT", "path": None, "sequence_type": "auto"}, "max_records": 100}, call_id="call-1")]),
         ModelStep(output=[assistant_message("The sequence has 50% GC content.")]),

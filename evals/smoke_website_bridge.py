@@ -4,6 +4,7 @@ import asyncio
 import json
 import os
 import tempfile
+from pathlib import Path
 import unittest
 from unittest.mock import patch
 
@@ -53,6 +54,18 @@ class WebsiteDemoConfigurationSmoke(unittest.TestCase):
 
 
 class WebsiteBridgeSmoke(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        from harness import runtime
+        from harness.sessions import SessionMetadataStore
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        settings = patch.dict(os.environ, {"AGENT_AUTH_MODE": "local", "AGENT_SESSIONS_DIR": temporary.name + "/workspaces"})
+        settings.start()
+        self.addCleanup(settings.stop)
+        state = patch.object(runtime, "STATE_STORE", SessionMetadataStore(Path(temporary.name) / "metadata"))
+        state.start()
+        self.addCleanup(state.stop)
+
     def test_table_result_accepts_documented_filters(self):
         result = TableResult.model_validate({
             "resource_id": "measurements",
@@ -70,7 +83,7 @@ class WebsiteBridgeSmoke(unittest.IsolatedAsyncioTestCase):
         os.environ["AGENT_WEBSITE_SECRET"] = "w" * 40
         os.environ["AGENT_WEBSITE_SITES"] = json.dumps({"fixture": ["https://fixture.test"]})
         bridge = WebsiteBridge(tempfile.mktemp(prefix="website-smoke-", suffix=".sqlite3"))
-        ticket = issue_ticket("w" * 40, site_id="fixture", origin="https://fixture.test", subject="user")
+        ticket = issue_ticket("w" * 40, site_id="fixture", origin="https://fixture.test", subject="local")
         binding = bridge.connect(ticket=ticket, site_id="fixture", origin="https://fixture.test", instance_id="browser", session_id="session", context={"revision": "1"}, capabilities=["readTable"])
         credentials = {"binding_id": binding["binding_id"], "token": binding["token"]}
 
@@ -89,7 +102,7 @@ class WebsiteBridgeSmoke(unittest.IsolatedAsyncioTestCase):
         os.environ["AGENT_WEBSITE_SECRET"] = "w" * 40
         os.environ["AGENT_WEBSITE_SITES"] = json.dumps({"fixture": ["https://fixture.test"]})
         bridge = WebsiteBridge(tempfile.mktemp(prefix="website-smoke-", suffix=".sqlite3"))
-        ticket = issue_ticket("w" * 40, site_id="fixture", origin="https://fixture.test", subject="user")
+        ticket = issue_ticket("w" * 40, site_id="fixture", origin="https://fixture.test", subject="local")
         kwargs = dict(ticket=ticket, site_id="fixture", origin="https://fixture.test", instance_id="browser", session_id="session", context={}, capabilities=[])
         bridge.connect(**kwargs)
         with self.assertRaises(ValueError):

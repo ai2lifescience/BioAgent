@@ -41,10 +41,10 @@ class InspectionResult(FunctionContract):
     query: str | None = None
     matches: list[Match] = Field(default_factory=list)
     matched_count: int = 0
+    partial_files: list[str] = Field(default_factory=list)
     summary: str
 
 
-MAX_READ_BYTES = 512 * 1024
 IGNORED_NAMES = {".git", ".venv", "__pycache__", "node_modules", "runtime"}
 
 
@@ -60,6 +60,17 @@ def _operation(
     operation = str(operation or "tree").strip().lower()
     if operation not in {"tree", "read", "search"}:
         raise ValueError("operation must be tree, read, or search.")
+    if operation == "tree" and 'file_inventory' in (context.user_context or {}):
+        listing = context.user_context['file_inventory']
+        candidate = Path(path or '.')
+        if candidate.is_absolute() or '..' in candidate.parts: raise ValueError('Path must stay inside the workspace.')
+        prefix = '' if candidate == Path('.') else candidate.as_posix()
+        listing = {key: value for key, value in listing.items() if all(not part.startswith('.') and part not in IGNORED_NAMES for part in Path(key).parts)}
+        names = [name for name in listing if not prefix or name == prefix or name.startswith(prefix + '/')]
+        if prefix and not names: raise FileNotFoundError(f'Workspace path is not available: {path}')
+        entries = [{'path': name, 'bytes': listing[name], 'suffix': Path(name).suffix} for name in sorted(names)[:max_matches]]
+        return output({'operation': operation, 'path': path or '.', 'entries': entries,
+                       'truncated': len(names) > len(entries), 'summary': f'Listed {len(entries)} workspace path(s).'})
     if operation == "tree":
         target = resolve_session_path(context, path or ".")
         if not target.exists():
@@ -74,8 +85,9 @@ def _operation(
         return output({"operation": operation, "path": _public_path(target, root), "content": content, "truncated": target.stat().st_size > max_chars, "sha256": _sha256(target), "summary": f"Read {_public_path(target, root)}."})
     if not query or len(query.strip()) < 2:
         raise ValueError("search operation requires a query of at least two characters.")
-    matches = _search(root, query, min(max(int(max_matches), 1), 200), max_chars)
-    return output({"operation": operation, "query": query, "matches": matches, "matched_count": len(matches), "summary": f"Found {len(matches)} code match(es)."})
+    partial = []
+    matches = _search(root, query, min(max(int(max_matches), 1), 200), max_chars, partial)
+    return output({"operation": operation, "query": query, "matches": matches, "matched_count": len(matches), "partial_files": partial, "truncated": bool(partial or len(matches) >= max_matches), "summary": f"Found {len(matches)} code match(es)."})
 
 def _public_path(path: Path, root: Path) -> str:
     return path.relative_to(root).as_posix() if path != root else "."
@@ -100,25 +112,24 @@ def _tree(target: Path, root: Path, limit: int) -> list[dict[str, Any]]:
 def _read_text(path: Path, max_chars: int) -> str:
     if not path.is_file():
         raise FileNotFoundError(f"Workspace file is not available: {path.name}")
-    if path.stat().st_size > MAX_READ_BYTES:
-        raise ValueError("The file is too large for bounded inspection.")
     try:
-        return path.read_text(encoding="utf-8", errors="replace")[:max_chars]
+        with path.open(encoding='utf-8', errors='replace') as stream:
+            return stream.read(max_chars)
     except UnicodeDecodeError as exc:
         raise ValueError("The selected file is not a readable text file.") from exc
 
-def _search(root: Path, query: str, limit: int, max_chars: int) -> list[dict[str, Any]]:
+def _search(root: Path, query: str, limit: int, max_chars: int, partial=None) -> list[dict[str, Any]]:
     matches = []
     needle = query.lower()
+    from isolation.text import scan_lines
     for path in _iter_files(root):
-        if path.stat().st_size > MAX_READ_BYTES:
-            continue
-        text = path.read_text(encoding="utf-8", errors="replace")
-        for line, value in enumerate(text.splitlines(), 1):
+        state = {}
+        for line, value in scan_lines(path, state):
             if needle in value.lower():
                 matches.append({"path": _public_path(path, root), "line": line, "excerpt": value[:max_chars]})
                 if len(matches) >= limit:
                     return matches
+        if state.get('truncated') and partial is not None: partial.append(_public_path(path, root))
     return matches
 
 def _sha256(path: Path) -> str:

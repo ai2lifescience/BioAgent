@@ -2,14 +2,18 @@ export type Role = 'user' | 'assistant';
 
 export interface ModelOption { key: string; label?: string; cost_tier?: string; deployment?: string; model?: string }
 export interface Pipeline { name: string; display_name?: string; parameters?: Record<string, { required?: boolean; choices?: string[] }> }
+export interface Capability { status: 'available' | 'needs_configuration' | 'unsupported'; reason: string; execution?: string }
 export interface AppConfig {
+  capabilities?: { tools: Record<string, Capability>; pipelines: Record<string, Capability>; quick_starts: Record<string, Capability> };
   default_model_key: string;
   default_max_turns: number;
   models: ModelOption[];
   files?: { structure_suffixes?: string[]; image_suffixes?: string[] };
   pipelines?: Pipeline[];
+  isolated_execution?: boolean;
+  storage_limits?: { file_bytes: number; upload_bytes: number; session_bytes: number; account_bytes: number; upload_chunk_bytes: number; preview_bytes: number };
 }
-export interface WorkspaceFile { path?: string; workspace_path?: string; name?: string; size?: number; kind?: string }
+export interface WorkspaceFile { path?: string; workspace_path?: string; name?: string; size?: number; kind?: string; remote?: boolean }
 export interface SessionSummary {
   id: string; title: string; message_count: number; last_run_id?: string; created_at: string; updated_at: string; pinned?: boolean;
   messages?: Message[];
