@@ -280,8 +280,10 @@ parameters, resource limits, definition hashes, and declared outputs.
 
 ## Website tools
 
-Website tools are ordinary SDK FunctionTools backed by the authenticated
-harness/website.py bridge. They do not create a second agent runtime.
+Website tools in `tools/function_tools/website/` are ordinary SDK FunctionTools
+backed by authenticated `web_bridge/` services. The website guide lives in
+`tools/agent_tools/specialist/website_guide.py` and uses the shared specialist
+factory. These tools do not create a second agent runtime.
 
 | Tool | Purpose |
 | --- | --- |
@@ -295,12 +297,13 @@ harness/website.py bridge. They do not create a second agent runtime.
 | website_navigate | Navigate to a registered host route |
 | website_action | Invoke a host-registered action |
 
-For a current-page question, the root instructions require website_context first.
+For a current-page question with a website binding, the root instructions use
+website_observe first; website_context adds optional structured metadata.
 The website guide can then call the narrower reads or actions. Website data is
 untrusted source material and cannot override agent instructions or safety rules.
 
 The host page owns authentication, authorization, DOM access, tables, figures,
-manuals, and actions. The bridge exposes only structured registered resources.
+manuals, and actions. The bridge supports rendered-page observation and structured registered resources.
 Read [web_integration.md](web_integration.md) for tickets, revisions, polling,
 postMessage validation, size limits, and callback contracts.
 
@@ -394,3 +397,12 @@ When adding a runtime tool or pipeline:
 4. Require approval for consequential execution or cancellation.
 5. Persist job status, logs, outputs, and hashes.
 6. Add smoke coverage for planning and execution.
+
+### Website browser and backend transfer tools
+
+`website_observe` reads the actual host tab through the generic DOM observer.
+`website_connections`, `website_search`, `website_pull`, `website_push`,
+`website_transfer_status`, and `website_transfer_retry` are registered for both
+standalone and embedded agents. They run through the authenticated backend
+connector, independent of an open browser. See
+[web bridge protocol](../web_bridge/README.md#independent-browser-and-transfer-modules).

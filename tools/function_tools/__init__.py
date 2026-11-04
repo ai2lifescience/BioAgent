@@ -36,7 +36,7 @@ from .coding.code_inspection import code_inspection
 from .coding.code_edit import code_edit
 from .coding.code_test import code_test
 from .coding.python_execute import python_execute
-from .website import WEBSITE_TOOLS
+from tools.function_tools.website import WEBSITE_TOOLS
 
 
 BIOLOGY_TOOLS = [

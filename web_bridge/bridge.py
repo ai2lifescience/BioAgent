@@ -16,11 +16,11 @@ import json
 import os
 from pathlib import Path
 import secrets
-import socket
 import sqlite3
 import time
 from uuid import uuid4
-from auth import AccessDenied, current_principal
+from .ports import get_host
+from .config import allowed_sites as allowed_sites, check_site, configure_local_demo as configure_local_demo, signing_secret
 
 
 PROTOCOL = 1
@@ -61,42 +61,12 @@ def verify_ticket(token: str, secret: str, *, site_id: str, origin: str) -> dict
     return payload
 
 
-def allowed_sites() -> dict[str, list[str]]:
-    try:
-        raw = json.loads(os.getenv("AGENT_WEBSITE_SITES", "{}"))
-        return {str(site): [str(origin) for origin in origins] for site, origins in raw.items() if isinstance(origins, list)}
-    except json.JSONDecodeError as exc:
-        raise ValueError("AGENT_WEBSITE_SITES must be a JSON object") from exc
-
-
-def check_site(site_id: str, origin: str) -> None:
-    if origin not in allowed_sites().get(site_id, []):
-        raise ValueError(f"Website origin {origin!r} is not configured for {site_id!r} in AGENT_WEBSITE_SITES.")
-
-
-def configure_local_demo(port: int, host: str = "127.0.0.1") -> None:
-    """Trust the demo's listening addresses; never widen explicit settings.
-
-    The generated signing secret is process-local and inherited by detached
-    workers. Real external websites still configure their shared secret and
-    origins explicitly. A fresh server invalidates unconsumed demo tickets.
-    """
-    if "AGENT_WEBSITE_SITES" not in os.environ:
-        hosts = {"localhost", "127.0.0.1"}
-        if host == "0.0.0.0":
-            # Resolve this machine's addresses, not the browser's Host header.
-            # The wildcard listen address itself is not a browser origin.
-            try:
-                addresses = socket.getaddrinfo(socket.gethostname(), port, socket.AF_INET, socket.SOCK_STREAM)
-                hosts.update(address[4][0] for address in addresses if address[4][0] != "0.0.0.0")
-            except OSError:
-                pass  # Explicit AGENT_WEBSITE_SITES also supports unresolved hosts/proxies.
-        else:
-            hosts.add(host)
-        os.environ["AGENT_WEBSITE_SITES"] = json.dumps({"assistant-demo": [
-            f"http://{address}:{port}" for address in sorted(hosts)
-        ]})
-    os.environ.setdefault("AGENT_WEBSITE_SECRET", secrets.token_urlsafe(48))
+LEGACY_RUN_PREFIX = (
+    "An authenticated trusted website is embedded in this run. "
+    "For any question about the current website, page, visible data, "
+    "or workflow, call website_context first and ground the answer "
+    "in its result.\n\nUser request:\n"
+)
 
 
 class WebsiteBridge:
@@ -136,27 +106,29 @@ class WebsiteBridge:
         return hashlib.sha256(token.encode()).hexdigest()
 
     def connect(self, *, ticket: str, site_id: str, origin: str, instance_id: str, session_id: str, context: dict, capabilities: list[str]) -> dict:
-        secret = os.getenv("AGENT_WEBSITE_SECRET", "")
-        if len(secret) < 32:
-            raise ValueError("AGENT_WEBSITE_SECRET must be configured with at least 32 characters")
+        secret = signing_secret(site_id)
         check_site(site_id, origin)
         payload = verify_ticket(ticket, secret, site_id=site_id, origin=origin)
-        principal = current_principal()
+        principal = get_host().current_user()
         if payload.get("sub") != principal.user_id:
-            raise AccessDenied("Website ticket identity does not match the signed-in user.")
+            raise get_host().access_denied("Website ticket identity does not match the signed-in user.")
         if not isinstance(context, dict) or len(json.dumps(context).encode()) > MAX_CONTEXT_BYTES:
             raise ValueError("website context is invalid or too large")
         binding_id, token = uuid4().hex, secrets.token_urlsafe(32)
-        from .runtime import STATE_STORE
-        # The iframe may be opening a new conversation. Claim its ID atomically
-        # and reject existing conversations owned by any other identity.
-        with STATE_STORE.locked_session(session_id):
-            pass
+        previous = get_host().ensure_session(session_id)
         with self.db(True) as db:
             try:
                 db.execute("INSERT INTO ticket_nonces VALUES (?, ?)", (str(payload["jti"]), float(payload["exp"])))
             except sqlite3.IntegrityError as exc:
                 raise ValueError("website ticket has already been used") from exc
+            # Reattach an open browser to the binding retained by a detached run.
+            # Rotating its credential would strand pending callbacks in that worker.
+            old = db.execute('SELECT * FROM bindings WHERE binding_id=? AND owner_user_id=? AND site_id=? AND origin=? AND session_id=? AND revoked=0',
+                             (previous.get('binding_id'), principal.user_id, site_id, origin, session_id)).fetchone()
+            if old and self._hash(previous.get('token', '')) == old['token_hash']:
+                db.execute('UPDATE bindings SET context=?,revision=?,capabilities=?,instance_id=?,expires_at=? WHERE binding_id=?',
+                           (json.dumps(context), str(context.get('revision', '')), json.dumps(capabilities), instance_id, time.time() + 8 * 3600, old['binding_id']))
+                return {'binding_id': old['binding_id'], 'token': previous['token'], 'protocol': PROTOCOL, 'session_id': session_id}
             db.execute("INSERT INTO bindings VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)", (binding_id, self._hash(token), site_id, origin, str(payload.get("sub", "")), session_id, instance_id, str(context.get("revision", "")), json.dumps(context), json.dumps(capabilities), time.time() + 8 * 3600, principal.user_id))
         return {"binding_id": binding_id, "token": token, "protocol": PROTOCOL, "session_id": session_id}
 
@@ -165,10 +137,9 @@ class WebsiteBridge:
             row = db.execute("SELECT * FROM bindings WHERE binding_id=? AND token_hash=? AND revoked=0 AND expires_at>?", (binding_id, self._hash(token), time.time())).fetchone()
         if row is None:
             raise ValueError("website binding is missing, expired, or revoked")
-        if row["owner_user_id"] != current_principal().user_id:
-            raise AccessDenied("Website binding not found.")
-        from .runtime import STATE_STORE
-        STATE_STORE.ownership.require(row["session_id"])
+        if row["owner_user_id"] != get_host().current_user().user_id:
+            raise get_host().access_denied("Website binding not found.")
+        get_host().require_session(row["session_id"])
         return row
 
     def revoke_user(self, user_id: str) -> None:
@@ -199,12 +170,13 @@ class WebsiteBridge:
         row = self._binding(binding["binding_id"], binding["token"])
         with self.db(True) as db:
             current = json.loads(row["context"])
+            timeout = 900 if method == "importResource" else REQUEST_TIMEOUT
             requested_revision = str(arguments.pop("_revision", "") or row["revision"])
             if requested_revision and requested_revision != str(current.get("revision", "")):
                 raise ValueError("website page changed; refresh context before reading it")
             call_id = uuid4().hex
-            db.execute("INSERT INTO calls VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', NULL, NULL, ?, ?)", (call_id, row["binding_id"], run_id, method, json.dumps(arguments), requested_revision, time.time() + REQUEST_TIMEOUT, _now(), _now()))
-        deadline = time.monotonic() + REQUEST_TIMEOUT
+            db.execute("INSERT INTO calls VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', NULL, NULL, ?, ?)", (call_id, row["binding_id"], run_id, method, json.dumps(arguments), requested_revision, time.time() + timeout, _now(), _now()))
+        deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
             with self.db() as db:
                 call = db.execute("SELECT * FROM calls WHERE call_id=?", (call_id,)).fetchone()

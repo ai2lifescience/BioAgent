@@ -462,7 +462,7 @@ an authenticated gateway. Project sharing and ownership transfer are not impleme
 ```bash
 python -m unittest evals.test_user_isolation evals.test_isolated_workers evals.test_isolated_brokers -v
 AGENT_TEST_DOCKER=1 python -m unittest evals.test_isolated_workers evals.test_isolated_brokers -v
-python -m unittest evals.smoke_session_history evals.smoke_website_bridge evals.smoke_web_contract evals.smoke_approvals -v
+python -m unittest evals.smoke_session_history web_bridge.tests.test_protocol evals.smoke_web_contract evals.smoke_approvals -v
 AGENT_TEST_DOCKER=1 python -m unittest evals.test_tool_compatibility -v
 npm --prefix frontend run build
 ```

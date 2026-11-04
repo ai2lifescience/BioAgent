@@ -103,6 +103,25 @@ class SessionHistoryTests(unittest.TestCase):
         self.assertEqual(payload["files"], payload["workspace_files"])
         self.assertTrue(_has_renderable_result(payload))
 
+    def test_legacy_website_prompt_restores_artifact_links(self):
+        from web_bridge.bridge import LEGACY_RUN_PREFIX
+        session = runtime.STATE_STORE.create_session(session_id='website-history')
+        result = {'artifacts': [{'path': 'outputs/report.md'}]}
+        runtime.STATE_STORE.record_exchange(session, 'Explain the table', 'Report ready.', result)
+        async def save():
+            sdk = SQLiteSession(session.session_id, db_path=runtime.SESSION_DB)
+            try:
+                await sdk.add_items([
+                    {'role': 'user', 'content': LEGACY_RUN_PREFIX + 'Explain the table'},
+                    {'role': 'assistant', 'content': 'Report ready.'},
+                ])
+            finally:
+                sdk.close()
+        asyncio.run(save())
+        messages = api.list_session_messages(session.session_id)['messages']
+        self.assertEqual(messages[0]['text'], 'Explain the table')
+        self.assertEqual(messages[1]['result'], result)
+
     def test_progress_messages_do_not_consume_final_results(self):
         result = runtime.run_agent(
             "Analyze ACGT", session_id="progress",

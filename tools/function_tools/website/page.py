@@ -2,13 +2,15 @@
 from __future__ import annotations
 from typing import Any, Annotated
 import json
+from uuid import uuid4
 from agents import RunContextWrapper
 from pydantic import Field
 from harness.context import AgentRunContext
-from harness.sandbox import session_root
-from harness.website import get_bridge
 from tools.infrastructure.tool_support.decorators import bio_function_tool
 from tools.infrastructure.tool_support.results import FunctionContract, FunctionResult
+from web_bridge.bridge import get_bridge
+from web_bridge.ports import get_host
+import asyncio
 
 class ContextResult(FunctionContract):
     revision: str = ""
@@ -47,6 +49,7 @@ class ActionResult(FunctionContract):
     model_config = {"extra": "allow"}
 
 class ImportResult(FunctionContract):
+    partial: bool = False
     path: str
     filename: str
     bytes: int
@@ -94,13 +97,38 @@ async def website_import_data(ctx: RunContextWrapper[AgentRunContext], resource_
     content = value.get("content", "")
     if not isinstance(content, str) or len(content.encode()) > 512 * 1024:
         raise ValueError("website export must be UTF-8 text under 512 KiB")
-    root = session_root(ctx.context.session_id)
-    target = root / "inputs" / filename
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(content, encoding="utf-8")
-    relative = target.relative_to(root).as_posix()
-    file = {"path": relative, "workspace_path": relative, "name": target.name, "kind": "file", "content_type": str(value.get("content_type") or "text/plain"), "size": target.stat().st_size, "modified_at": target.stat().st_mtime_ns}
-    return FunctionResult[ImportResult](status="ok", data=ImportResult(path=relative, filename=filename, bytes=file["size"]), files=[file])
+    from web_bridge.conversations import WebsiteAccounts
+    file = get_host().publish_text(ctx.context.session_id, filename, content.encode('utf-8'), ctx.context.execution_access)
+    relative = file['path']
+    binding = get_bridge().get_binding(**{key: _binding(ctx)[key] for key in ('binding_id', 'token')})
+    with WebsiteAccounts().bridge.db(True) as db:
+        db.execute('INSERT INTO website_imports VALUES (?,?,?,?,?,?)',
+                   (uuid4().hex, ctx.context.session_id, binding['site_id'], resource_id, binding['context'].get('revision', ''), json.dumps(file)))
+    return FunctionResult[ImportResult](status="ok", data=ImportResult(path=relative, filename=filename, bytes=file["size"], partial=bool(value.get("partial"))), files=[file])
+
+class ResourcesResult(FunctionContract):
+    resources: list[dict[str, Any]] = []
+    total: int = 0
+    offset: int = 0
+
+@bio_function_tool(timeout=60)
+async def website_list_resources(ctx: RunContextWrapper[AgentRunContext], sample_id: str = "", offset: int = 0, limit: int = 50) -> FunctionResult[ResourcesResult]:
+    """List authorized samples, source files and analysis outputs. Empty sample ID uses the selected sample, or lists all available resources on other pages."""
+    value = await _call(ctx, "listResources", {"sample_id": sample_id, "offset": max(0, offset), "limit": min(200, max(1, limit))})
+    return FunctionResult[ResourcesResult](status="ok", data=ResourcesResult.model_validate(value))
+
+@bio_function_tool(timeout=900)
+async def website_import_resource(ctx: RunContextWrapper[AgentRunContext], resource_id: str) -> FunctionResult[ImportResult]:
+    """Stream a file from the website into this session, using an ID from website_list_resources. Use this for FASTQ, FASTA and result files before analysis; no manual upload is needed."""
+    value = await _call(ctx, "importResource", {"resource_id": resource_id})
+    file = value.get("file") or {}
+    # A callback is untrusted: only return a file actually published by the authenticated backend.
+    path = file.get("path", "")
+    workspace_files = await asyncio.to_thread(get_host().list_files, ctx.context.session_id)
+    saved = next((f for f in workspace_files if (f.get('workspace_path') or f.get('path')) == path), None)
+    if not saved:
+        raise ValueError("Website did not publish the resource into this session.")
+    return FunctionResult[ImportResult](status="ok", data=ImportResult(path=path, filename=saved.get('name') or path.rsplit('/',1)[-1], bytes=saved.get('size',0)), files=[saved])
 
 @bio_function_tool(timeout=60)
 async def website_highlight(ctx: RunContextWrapper[AgentRunContext], element_id: Annotated[str, Field(min_length=1, max_length=120)], message: Annotated[str, Field(max_length=500)] = "") -> FunctionResult[ActionResult]:
@@ -124,6 +152,4 @@ async def website_action(ctx: RunContextWrapper[AgentRunContext], action_id: Ann
     value = await _call(ctx, "invokeAction", {"action_id": action_id, "arguments": arguments})
     return FunctionResult[ActionResult](status="ok", data=ActionResult.model_validate(value))
 
-WEBSITE_TOOLS = [website_context, website_read_table, website_read_figure, website_search_manual, website_read_manual, website_import_data, website_highlight, website_navigate, website_action]
-
-__all__ = ["WEBSITE_TOOLS"]
+PAGE_TOOLS = [website_list_resources, website_import_resource, website_context, website_read_table, website_read_figure, website_search_manual, website_read_manual, website_import_data, website_highlight, website_navigate, website_action]

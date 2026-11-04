@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  resolve: { dedupe: ['react', 'react-dom'] },
   base: '/',
   // Keep `npm run dev` connected to the stdlib API server. The static
   // production build is still served by interfaces.web, while local Vite

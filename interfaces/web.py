@@ -50,7 +50,7 @@ from interfaces.uploads import Uploads, multipart, publish
 from models.config import DEFAULT_AGENT_MODEL_KEY, DEFAULT_MAX_TURNS, DEFAULT_MODELS
 from tools.infrastructure.pipeline_engine import service as pipeline_service
 from harness.jobs import TERMINAL, get_queue
-from harness.website import check_site, configure_local_demo, get_bridge, issue_ticket
+from web_bridge import configure_local_demo, handle_browser
 from tools.infrastructure.knowledge.models import TERMINAL_JOB_STATUSES
 from tools.infrastructure.workspace.public import public_payload
 
@@ -181,6 +181,9 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
     def end_headers(self) -> None:
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
+        from web_bridge import response_headers
+        for name, value in response_headers(self).items():
+            self.send_header(name, value)
         if getattr(self, "_auth_cookie", None):
             self.send_header("Set-Cookie", self._auth_cookie)
         super().end_headers()
@@ -274,7 +277,7 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             self._send_json(create_session(), status=201)
             return
         if path.startswith("/website/"):
-            self._handle_website(path[len("/website/"):])
+            handle_browser(self, path[len("/website/"):])
             return
         if path == '/workspace/pipeline-artifacts/materialize':
             from tools.infrastructure.pipeline_engine.broker import materialize
@@ -486,51 +489,6 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
             return
         self._stream_run(job["run_id"])
-
-    def _handle_website(self, operation: str) -> None:
-        """Authenticate and proxy the small browser-to-host website protocol."""
-        try:
-            payload = self._read_json()
-            bridge = get_bridge()
-            if operation == "demo-token":
-                site_id = str(payload.get("site_id", "")).strip()
-                origin = str(self.headers.get("Origin") or "").strip()
-                if site_id != "assistant-demo" or not origin:
-                    raise ValueError("assistant-demo token requires the configured browser origin")
-                if urlparse(origin).netloc != self.headers.get("Host"):
-                    raise ValueError("Demo tickets are only issued to this server's own host page.")
-                check_site(site_id, origin)
-                secret = os.getenv("AGENT_WEBSITE_SECRET", "")
-                if len(secret) < 32:
-                    raise ValueError("AGENT_WEBSITE_SECRET must be configured with at least 32 characters")
-                result = {"token": issue_ticket(secret, site_id=site_id, origin=origin, subject=current_principal().user_id)}
-            elif operation == "connect":
-                result = bridge.connect(
-                    ticket=str(payload.get("ticket", "")), site_id=str(payload.get("site_id", "")),
-                    origin=str(payload.get("origin", "")), instance_id=str(payload.get("instance_id", "")),
-                    session_id=str(payload.get("session_id", "")), context=payload.get("context") or {},
-                    capabilities=[str(x) for x in payload.get("capabilities", [])],
-                )
-            elif operation == "context":
-                result = bridge.context(str(payload.get("binding_id", "")), str(payload.get("token", "")), payload.get("context") or {})
-            elif operation == "poll":
-                result = {"requests": bridge.pending(str(payload.get("binding_id", "")), str(payload.get("token", "")))}
-            elif operation == "respond":
-                result = bridge.respond(
-                    str(payload.get("binding_id", "")), str(payload.get("token", "")), str(payload.get("call_id", "")),
-                    result=payload.get("result"), error=payload.get("error"), revision=str(payload.get("revision", "")),
-                )
-            elif operation == "disconnect":
-                bridge.disconnect(str(payload.get("binding_id", "")), str(payload.get("token", "")))
-                result = {"disconnected": True}
-            else:
-                self._send_json({"error": "not found"}, status=404)
-                return
-            self._send_json(result)
-        except AuthError:
-            raise
-        except Exception as exc:
-            self._send_json({"error": str(exc), "error_type": type(exc).__name__}, status=400)
 
     def _handle_workspace(self) -> None:
         parsed = urlparse(self.path)

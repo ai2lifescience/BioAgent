@@ -6,7 +6,7 @@ from .data_analysis import build_data_analysis
 from .document import build_document
 from .pipeline import build_pipeline
 from .research import build_research
-from .website_guide import build_website_guide
+from tools.agent_tools.specialist.website_guide import build_website_guide
 
 
 __all__ = [
