@@ -2,7 +2,7 @@
 
 Build first: npm --prefix frontend run build
 Run: python -m evals.check_live_progress_browser
-Optional: --screenshots docs/images/frontend_test_2026-09-30
+Optional: --screenshots docs/test_report/frontend_test_2026-09-30
 Uses only a local SSE fixture; never calls a model or the user's web server.
 """
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer

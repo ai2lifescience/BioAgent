@@ -120,8 +120,8 @@ def _auth_endpoint(handler, path: str) -> bool:
         if auth_mode() == "multiuser":
             principal = AuthStore().authenticate(_credential(handler))
             AuthStore().logout(principal)
-            from harness.website import get_bridge
-            get_bridge().revoke_user(principal.user_id)
+            from web_bridge import revoke_user
+            revoke_user(principal.user_id)
         handler._auth_cookie = f"{COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0" + ("; Secure" if secure_cookie() else "")
         handler._send_json({"signed_out": True})
         return True
@@ -133,9 +133,13 @@ def authenticated_request(method):
     def wrapper(handler):
         handler._streaming = False
         handler._auth_cookie = None
+        handler._website_download_name = None
         try:
             _check_origin(handler)
             path = urlparse(handler.path).path
+            from web_bridge import handle_public
+            if handle_public(handler, path):
+                return
             if _auth_endpoint(handler, path):
                 return
             public = handler.command == "GET" and (

@@ -8,7 +8,7 @@ mean every requested tool succeeded.
 
 This report combines the frontend interaction review and whole-system results.
 All retained screenshots, prompts, and result records are in
-[the report asset folder](images/frontend_test_2026-09-30/). Identical screenshot
+[the report asset folder](frontend_test_2026-09-30/). Identical screenshot
 copies were consolidated, with their original bytes preserved.
 
 ## Scope and execution plan
@@ -139,16 +139,16 @@ Generate the sample data programmatically, execute the code, save the plot as a 
 
 The rendered result shows the plot, its workspace path, and the file panel.
 
-![Saved synthetic plot rendered in the workspace](images/frontend_test_2026-09-30/workspace.png)
+![Saved synthetic plot rendered in the workspace](frontend_test_2026-09-30/workspace.png)
 
 ### Compact assistant
 
 Open `/assistant`, verify the Ready state and composer, and use New chat to
 reset the conversation. These control checks did not submit a new model prompt.
 
-![Compact assistant initial page](images/frontend_test_2026-09-30/assistant.png)
+![Compact assistant initial page](frontend_test_2026-09-30/assistant.png)
 
-![Compact assistant controls after the reset check](images/frontend_test_2026-09-30/assistant-controls.png)
+![Compact assistant controls after the reset check](frontend_test_2026-09-30/assistant-controls.png)
 
 ### Website demo controls
 
@@ -156,9 +156,9 @@ Open `/assistant-demo`, wait for the trusted connection, close the drawer,
 select the treated cohort, open Methods, and reopen the drawer. The drawer
 opens by default and overlays some host controls; closing it exposes them.
 
-![Website demo with its initial connected assistant drawer](images/frontend_test_2026-09-30/assistant-demo.png)
+![Website demo with its initial connected assistant drawer](frontend_test_2026-09-30/assistant-demo.png)
 
-![Website demo after cohort filtering and Methods navigation](images/frontend_test_2026-09-30/assistant-demo-controls.png)
+![Website demo after cohort filtering and Methods navigation](frontend_test_2026-09-30/assistant-demo-controls.png)
 
 ### Mobile workspace
 
@@ -166,7 +166,7 @@ At 390 × 844 px, open and close the navigation and workspace drawers. The saved
 screenshot shows the final collapsed-drawer state and the NCBI retrieval prompt;
 it does not show that request's completed result.
 
-![Mobile workspace after checking the drawers](images/frontend_test_2026-09-30/mobile-workspace.png)
+![Mobile workspace after checking the drawers](frontend_test_2026-09-30/mobile-workspace.png)
 
 ## Testing prompts and observed results
 
@@ -175,7 +175,7 @@ paths are the exact paths used in those sessions; a new upload receives a new
 path. The research follow-up depends on evidence created in the original
 research session.
 
-Each case links its retained result. The [prompt manifest](images/frontend_test_2026-09-30/test_prompts.json)
+Each case links its retained result. The [prompt manifest](frontend_test_2026-09-30/test_prompts.json)
 also records session IDs, tool names, and errors recovered from session
 metadata. Only the website run retains a full structured trace in this asset
 folder; most other JSON files are compact summaries.
@@ -192,9 +192,9 @@ Analyze this DNA sequence and report its GC content: ACGTACGT.
 
 **Observed result:** **Model connection verified; tool validation failed.** The direct-connection run returned an answer of **50% GC** (4 of 8 bases), but the only `sequence_stats` result was `Invalid JSON input for tool sequence_stats`. The final answer was not tool-verified. The earlier attempt failed before tool execution because the inherited proxy URL scheme was unsupported.
 
-[Recovered prompt and result](images/frontend_test_2026-09-30/test_prompts.json)
+[Recovered prompt and result](frontend_test_2026-09-30/test_prompts.json)
 
-![Workspace displaying the sequence-statistics probe](images/frontend_test_2026-09-30/workspace-controls.png)
+![Workspace displaying the sequence-statistics probe](frontend_test_2026-09-30/workspace-controls.png)
 
 ### 2. Sequence tool chain
 
@@ -210,7 +210,7 @@ Use sequence_stats, sequence_reverse_complement, sequence_find_orfs, and sequenc
 
 **Recorded tools:** `sequence_stats`, `sequence_reverse_complement`, `sequence_find_orfs`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/sequence_tools.json)
+[Saved result JSON](frontend_test_2026-09-30/live/sequence_tools.json)
 
 ### 3. Separate translation request
 
@@ -226,7 +226,7 @@ Call sequence_translate on this DNA sequence with frame 0 and report the returne
 
 **Recorded tools:** `sequence_translate`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/sequence_translate.json)
+[Saved result JSON](frontend_test_2026-09-30/live/sequence_translate.json)
 
 ### 4. PDB download and structure inspection
 
@@ -242,7 +242,7 @@ Use pdb_download to download PDB 1A3N as mmCIF, then use structure_inspect on th
 
 **Recorded tools:** `pdb_download`, `structure_inspect`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/structure_tools.json)
+[Saved result JSON](frontend_test_2026-09-30/live/structure_tools.json)
 
 ### 5. NCBI retrieval and file inspection
 
@@ -258,7 +258,7 @@ Use ncbi_retrieval to download accession NC_001422.1 as one FASTA record, then u
 
 **Recorded tools:** `ncbi_retrieval`, `file_inspection`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/retrieval_tools.json)
+[Saved result JSON](frontend_test_2026-09-30/live/retrieval_tools.json)
 
 ### 6. AlphaFold, database lookup, and BLAST submission
 
@@ -274,7 +274,7 @@ Use alphafold_download for UniProt accession P0A7V8 in CIF format, use database_
 
 **Recorded tools:** `alphafold_download`, `database_lookup`, `blast_search`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/database_blast_alphafold.json)
+[Saved result JSON](frontend_test_2026-09-30/live/database_blast_alphafold.json)
 
 ### 7. Table analysis, workspace search, and code inspection
 
@@ -290,7 +290,7 @@ Use file_inspection on uploads/ffb46617f019_measurements.csv, workspace_search t
 
 **Recorded tools:** `file_inspection`, `workspace_search`, `table_profile`, `table_group`, `table_plot`, `code_inspection`, `code_test`, `report_write`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/data_workspace_coding.json)
+[Saved result JSON](frontend_test_2026-09-30/live/data_workspace_coding.json)
 
 ### 8. Uploaded PDF reading
 
@@ -306,7 +306,7 @@ Use document_read on the uploaded PDF at uploads/c8b3c6564813_pipeline_agent_int
 
 **Recorded tools:** `document_read`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/document_read.json)
+[Saved result JSON](frontend_test_2026-09-30/live/document_read.json)
 
 ### 9. Genome features and map artifacts
 
@@ -322,7 +322,7 @@ Use genome_read_features on uploads/3d712971b4c3_test.gb, then genome_render_map
 
 **Recorded tools:** `code_inspection`, `genome_read_features`, `genome_render_map`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/genome_map_tools.json)
+[Saved result JSON](frontend_test_2026-09-30/live/genome_map_tools.json)
 
 ### 10. Initial research and reporting request
 
@@ -338,7 +338,7 @@ Use pubmed_search and web_search to collect bounded evidence about PhiX174 genom
 
 **Recorded tools:** `pubmed_search`, `web_search`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/research_reporting.json)
+[Saved result JSON](frontend_test_2026-09-30/live/research_reporting.json)
 
 ### 11. Evidence indexing and reporting follow-up
 
@@ -354,7 +354,7 @@ Continue from the PubMed evidence already saved in this session. Call evidence_i
 
 **Recorded tools:** `evidence_index`, `evidence_retrieve`, `report_review`, `report_synthesize`, `report_write`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/research_followup.json)
+[Saved result JSON](frontend_test_2026-09-30/live/research_followup.json)
 
 ### 12. Knowledge ingestion, status, and retrieval
 
@@ -370,7 +370,7 @@ Start a bounded knowledge collection using knowledge_ingest for https://example.
 
 **Recorded tools:** `knowledge_ingest`, `knowledge_status`, `knowledge_retrieve`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/knowledge_tools.json)
+[Saved result JSON](frontend_test_2026-09-30/live/knowledge_tools.json)
 
 ### 13. Bounded web-page fetch
 
@@ -386,7 +386,7 @@ Call web_fetch on https://example.org with a bounded character limit and report 
 
 **Recorded tools:** `web_fetch`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/web_fetch.json)
+[Saved result JSON](frontend_test_2026-09-30/live/web_fetch.json)
 
 ### 14. Code editing, testing, and Python execution
 
@@ -402,7 +402,7 @@ Use code_edit on uploads/db2444b9d32d_calc.py to change the function to return 2
 
 **Recorded tools:** `code_inspection`, `code_edit`, `code_test`, `python_execute`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/coding_edit_python.json)
+[Saved result JSON](frontend_test_2026-09-30/live/coding_edit_python.json)
 
 ### 15. Live website bridge across all nine callbacks
 
@@ -418,19 +418,19 @@ Use website_context, website_read_table, website_read_figure, website_search_man
 
 **Recorded tools:** `website_context`, `website_read_table`, `website_read_figure`, `website_search_manual`, `website_read_manual`, `website_import_data`, `website_highlight`, `website_navigate`, `website_action`.
 
-[Saved result JSON](images/frontend_test_2026-09-30/live/website_run.json)
+[Saved result JSON](frontend_test_2026-09-30/live/website_run.json)
 
-[Compact run summary](images/frontend_test_2026-09-30/live/website_run_summary.json) · [Browser text](images/frontend_test_2026-09-30/website-live-dom.txt) · [Browser capture summary](images/frontend_test_2026-09-30/website-live-summary.json)
+[Compact run summary](frontend_test_2026-09-30/live/website_run_summary.json) · [Browser text](frontend_test_2026-09-30/website-live-dom.txt) · [Browser capture summary](frontend_test_2026-09-30/website-live-summary.json)
 
 The browser capture script waited for a second assistant-message element and timed out after the backend had completed. This was a capture-selector problem; the completed run and its rendered response were retained.
 
 The three retained screenshots show the live demo connected, the composer before submission, and the host page after the action.
 
-![Live demo connected before the request](images/frontend_test_2026-09-30/frontend-demo-initial.png)
+![Live demo connected before the request](frontend_test_2026-09-30/frontend-demo-initial.png)
 
-![Website tool prompt entered before sending, with its final lines visible](images/frontend_test_2026-09-30/website-before-send.png)
+![Website tool prompt entered before sending, with its final lines visible](frontend_test_2026-09-30/website-before-send.png)
 
-![Website response and treated-cohort result after the live request](images/frontend_test_2026-09-30/website-after.png)
+![Website response and treated-cohort result after the live request](frontend_test_2026-09-30/website-after.png)
 
 ## User message formatting follow-up
 
@@ -444,11 +444,11 @@ checks with mocked API responses exercised sending on both the full workspace an
 compact assistant at desktop and mobile widths, plus reloading the workspace.
 They verified that the submitted text was unchanged, formatting persisted, long
 code stayed inside its bubble and HTML remained escaped. These were rendering
-checks, without another live model call. [Check results](images/frontend_test_2026-09-30/user-bubble-checks.json).
+checks, without another live model call. [Check results](frontend_test_2026-09-30/user-bubble-checks.json).
 
-![Formatted knowledge prompt in a sent user bubble](images/frontend_test_2026-09-30/user-bubble-desktop.png)
+![Formatted knowledge prompt in a sent user bubble](frontend_test_2026-09-30/user-bubble-desktop.png)
 
-[Mobile screenshot](images/frontend_test_2026-09-30/user-bubble-mobile.png).
+[Mobile screenshot](frontend_test_2026-09-30/user-bubble-mobile.png).
 
 ## Findings and follow-up
 
@@ -489,8 +489,8 @@ snapshot, and the recovered prompt manifest:
 
 ```text
 docs/
-  frontend_test_report_2026-09-30.md
-  images/
+  test_report/
+    frontend_test_report_2026-09-30.md
     frontend_test_2026-09-30/
       *.png
       test_prompts.json
@@ -537,17 +537,17 @@ The fixture includes nested review/draft JSON and intentionally omits
   separated narration; keyboard expand/collapse; one formatted final report;
   retained activity; horizontal overflow; JavaScript errors; and stop/error
   recovery on both routes.
-- [Browser results](images/frontend_test_2026-09-30/live-progress-checks.json).
+- [Browser results](frontend_test_2026-09-30/live-progress-checks.json).
 
 Screenshots were visually inspected:
 
 | View | Screenshot |
 | --- | --- |
-| Desktop, live | [Muted live progress](images/frontend_test_2026-09-30/live-progress-desktop.png) |
-| Expanded activity | [Public narration and tool steps](images/frontend_test_2026-09-30/live-progress-expanded.png) |
-| Mobile, live | [Mobile progress](images/frontend_test_2026-09-30/live-progress-mobile.png) |
-| Compact assistant | [Compact progress](images/frontend_test_2026-09-30/live-progress-compact.png) |
-| Completed | [Collapsed activity and final report](images/frontend_test_2026-09-30/live-progress-completed.png) |
+| Desktop, live | [Muted live progress](frontend_test_2026-09-30/live-progress-desktop.png) |
+| Expanded activity | [Public narration and tool steps](frontend_test_2026-09-30/live-progress-expanded.png) |
+| Mobile, live | [Mobile progress](frontend_test_2026-09-30/live-progress-mobile.png) |
+| Compact assistant | [Compact progress](frontend_test_2026-09-30/live-progress-compact.png) |
+| Completed | [Collapsed activity and final report](frontend_test_2026-09-30/live-progress-completed.png) |
 
 These captures use fixture data and an isolated browser profile. Existing live
 servers and research sessions were left running.
@@ -582,8 +582,8 @@ Validation:
 
 Evidence:
 
-- [Reloaded desktop activity](images/frontend_test_2026-09-30/live-progress-reloaded-desktop.png)
-- [Reloaded mobile activity](images/frontend_test_2026-09-30/live-progress-reloaded-mobile.png)
-- [Existing research conversation after reload](images/frontend_test_2026-09-30/live-progress-existing-reloaded.png)
-- [Existing conversation checks](images/frontend_test_2026-09-30/live-progress-existing-reload-checks.json)
-- [Browser regression results](images/frontend_test_2026-09-30/live-progress-checks.json)
+- [Reloaded desktop activity](frontend_test_2026-09-30/live-progress-reloaded-desktop.png)
+- [Reloaded mobile activity](frontend_test_2026-09-30/live-progress-reloaded-mobile.png)
+- [Existing research conversation after reload](frontend_test_2026-09-30/live-progress-existing-reloaded.png)
+- [Existing conversation checks](frontend_test_2026-09-30/live-progress-existing-reload-checks.json)
+- [Browser regression results](frontend_test_2026-09-30/live-progress-checks.json)

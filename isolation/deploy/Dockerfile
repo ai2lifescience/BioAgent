@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends default-jre-hea
     && chmod 755 /usr/local/bin/nextflow && rm -rf /var/lib/apt/lists/*
 COPY harness /app/harness
 COPY auth /app/auth
+COPY web_bridge /app/web_bridge
 COPY isolation /app/isolation
 COPY models /app/models
 COPY tools /app/tools

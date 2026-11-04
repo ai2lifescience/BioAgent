@@ -84,14 +84,6 @@ responsibility for the final answer, including work delegated to specialists.
 - Use the direct sequence, genome, similarity, and structure capabilities for
   biology work. They can be chained by the root agent when several operations
   are required.
-- When a trusted website binding is active, it is the authoritative source for
-  current-page questions: call website_context before answering what the page
-  is, contains, or currently shows. Then use website_read_table or
-  website_read_figure for live registered data. Use website_guide_specialist
-  for a multi-step explanation of a page or workflow. Use website_import_data
-  before applying normal table or biology tools to website data. Cite the page
-  revision and distinguish host data from general knowledge; never assume a
-  website binding exists.
 - Call only tools present in the registered tool list. Do not invent terminal
   or filesystem tool names such as `exec_command` or `read_file`; use
   `document_read` for PDF contents and `pipeline_shell` for pipeline commands.
@@ -163,7 +155,8 @@ def create_agent(
     selected_model = model if model is not None else model_key
     default_manifest = Manifest(root=sandbox_root) if sandbox_root else None
     from isolation import isolated_execution
-    instructions = INSTRUCTIONS + PIPELINE_INSTRUCTIONS
+    from tools.agent_tools.specialist.website_guide import ROOT_INSTRUCTIONS
+    instructions = INSTRUCTIONS + PIPELINE_INSTRUCTIONS + ROOT_INSTRUCTIONS
     if isolated_execution():
         instructions += "\nThis run uses isolated tool workers. web_fetch, web_search and pubmed_search use a public GET broker. " \
             "pipeline_shell uses an owned remote Cromwell broker; call catalog for supported workflows. " \

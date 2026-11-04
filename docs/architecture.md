@@ -71,7 +71,7 @@ and response exchange.
     |     |     -> chunks + embeddings -> knowledge.sqlite3 -> cited retrieval
     |     |
     |     +-- website
-    |           -> harness/website.py -> authenticated host-page bridge [A]
+    |           -> web_bridge/bridge.py -> authenticated host-page bridge [A]
     |
     +-- Agent.as_tool: tools/agent_tools/
     |     |
@@ -108,7 +108,7 @@ and response exchange.
     Tool and API serialization -> public workspace-relative paths
 
   [A] TRUSTED WEBSITE DATA AND ACTIONS
-    Website tools <-> harness/website.py <-> assistant iframe <-> trusted host
+    Website tools <-> web_bridge/bridge.py <-> assistant iframe <-> trusted host
     Server <-> iframe: HTTP polling; iframe <-> host: checked postMessage
     Host adapter: page context, tables, figures, manual, exports, UI actions
     Explicit website_import_data -> inputs/ -> normal analysis tools
@@ -170,7 +170,7 @@ specialists.
 
 | Area | Responsibility |
 | --- | --- |
-| harness | SDK runtime context, sessions, streaming, approvals, jobs, sandbox setup, guardrails, and website transport |
+| harness | SDK runtime context, sessions, streaming, approvals, jobs, sandbox setup, and guardrails |
 | models | OpenRouter model provider, model aliases, and wire-format adaptation |
 | tools/function_tools | Atomic public SDK FunctionTools grouped by user capability |
 | tools/agent_tools | Specialist SDK Agents and Agent-as-tool composition |
@@ -417,7 +417,7 @@ call another public model-facing tool to create an implicit workflow.
 | knowledge | evidence_index, evidence_retrieve, knowledge_ingest, knowledge_status, knowledge_retrieve |
 | workspace | file_inspection, document_read, workspace_search, report_write |
 | coding | code_inspection, code_edit, code_test, python_execute |
-| website | website_context, website_read_table, website_read_figure, website_search_manual, website_read_manual, website_import_data, website_highlight, website_navigate, website_action |
+| website | website_observe, website_connections, website_search, website_pull, website_push, website_transfer_status, website_transfer_retry, website_context, website_read_table, website_read_figure, website_search_manual, website_read_manual, website_import_data, website_highlight, website_navigate, website_action |
 
 Data analysis is a capability group rather than a biology subtype. It can profile,
 group, and plot tables from any trusted workspace domain.
@@ -621,11 +621,18 @@ redirect validation block private addresses; raw network access remains disabled
 
 ## Trusted website embedding
 
+The bridge implementation is owned by the root `web_bridge/` package. Its core
+calls `ports.HostServices`; `adapters/bioagent.py` supplies the application's
+account, session and storage services. Agent-facing website tools belong to
+`tools/function_tools/website/`, with the specialist in
+`tools/agent_tools/specialist/website_guide.py`. They call the SDK-independent
+bridge services. The web server and runtime keep small integration hooks. See [module organization](../web_bridge/README.md).
+
 The website bridge lets a trusted external website expose structured context
 and actions to an embedded agent. The full external developer contract is in
 [docs/web_integration.md](web_integration.md).
 
-harness/website.py provides:
+web_bridge/bridge.py provides:
 
 - exact origin allowlisting through AGENT_WEBSITE_SITES;
 - HMAC authentication through AGENT_WEBSITE_SECRET;
@@ -640,11 +647,11 @@ HTTP polling between the assistant server and the host bridge. It is separate
 from agent SSE.
 
 The canonical local fixture is the React page in
-`frontend/src/features/demo/AssistantDemoPage.tsx`, served at `/assistant-demo`.
+`web_bridge/frontend/demo/AssistantDemoPage.tsx`, served at `/assistant-demo`.
 The iframe UI lives in `frontend/src/features/assistant/AssistantPage.tsx` and is
 served at `/assistant`. External websites load the standalone public client from
 `/static/assistant-embed.js`, sourced from
-`frontend/public/static/assistant-embed.js`. The old examples/external-workspace
+`web_bridge/frontend/embed.ts` (built to `frontend/dist/static/assistant-embed.js`). The old examples/external-workspace
 page is not the runtime fixture.
 
 The host can implement these callbacks:
@@ -662,7 +669,7 @@ The host can implement these callbacks:
 Context is structured data and accessible manual text, not arbitrary DOM pixels.
 The host must return only data it is willing to expose. Website data enters the
 normal workspace only when the user or agent explicitly calls
-website_import_data, which writes a UTF-8 export beneath inputs.
+website_import_data, which publishes a unique quota-accounted UTF-8 export beneath uploads.
 
 When no explicit AGENT_WEBSITE_SITES is configured, the local server can add
 trusted localhost and detected LAN origins for development. An explicit
@@ -817,7 +824,7 @@ The architecture smoke suite is intentionally boundary oriented:
 
 - evals.smoke_architecture;
 - evals.smoke_function_boundary;
-- evals.smoke_website_bridge;
+- web_bridge.tests.test_protocol;
 - evals.smoke_knowledge;
 - evals.smoke_session_artifacts;
 - evals.smoke_session_history;
@@ -852,3 +859,11 @@ When adding a capability:
 9. Update docs/web_integration.md when the website contract changes.
 10. Update this document when a runtime boundary, public endpoint, or persistence
     model changes.
+
+The independent `web_bridge/browser/` and `web_bridge/transfer/` modules separate
+actual host-tab observation from backend data exchange. Transfer commands persist
+in the bridge database and carry the mapped external subject, selected file
+manifest and opaque destination. Website backends advertise their destination
+fields, poll commands, renew leases and acknowledge receipts. MSCAN-specific
+project/sample creation stays in its adapter; standalone sessions are accessible
+only through the command's scoped file/upload grants.

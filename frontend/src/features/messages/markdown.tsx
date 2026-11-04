@@ -1,3 +1,4 @@
+import { AuthenticatedImage } from './AuthenticatedImage';
 import type { ElementType, ReactNode } from 'react';
 
 const safeUrl = (value: string): string => {
@@ -16,7 +17,7 @@ function inline(text: string): ReactNode[] {
     if (match.index > cursor) output.push(text.slice(cursor, match.index));
     if (match[1] !== undefined) {
       const url = safeUrl(match[2]);
-      output.push(url ? <img key={index++} src={url} alt={match[1]} title={match[3]} loading="lazy" /> : match[0]);
+      output.push(url ? <AuthenticatedImage key={index++} src={url} alt={match[1]} title={match[3]} loading="lazy" /> : match[0]);
     } else if (match[4] !== undefined) {
       const url = safeUrl(match[5]);
       output.push(url ? <a key={index++} href={url} title={match[6]} target={/^https?:/i.test(url) ? '_blank' : undefined} rel={/^https?:/i.test(url) ? 'noopener noreferrer' : undefined}>{match[4]}</a> : match[0]);

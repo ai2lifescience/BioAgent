@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AssistantDrawer, type AssistantDrawerHandle } from '../assistant/assistantEmbed';
+import { AssistantDrawer, type AssistantDrawerHandle } from '../embed';
 import './demo.css';
 
 type Row = { sample: string; group: 'control' | 'treated'; score: number };

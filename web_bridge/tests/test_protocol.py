@@ -8,8 +8,8 @@ from pathlib import Path
 import unittest
 from unittest.mock import patch
 
-from harness.website import WebsiteBridge, allowed_sites, check_site, configure_local_demo, issue_ticket
-from tools.function_tools.website.bridge import TableResult
+from web_bridge.bridge import WebsiteBridge, allowed_sites, check_site, configure_local_demo, issue_ticket
+from tools.function_tools.website.page import TableResult
 
 
 class WebsiteDemoConfigurationSmoke(unittest.TestCase):
@@ -19,7 +19,7 @@ class WebsiteDemoConfigurationSmoke(unittest.TestCase):
         self.addCleanup(environment.stop)
 
     def test_wildcard_listener_trusts_discovered_address(self):
-        with patch("harness.website.socket.getaddrinfo", return_value=[
+        with patch("web_bridge.config.socket.getaddrinfo", return_value=[
             (2, 1, 6, "", ("192.168.75.56", 8000)),
         ]):
             configure_local_demo(8000, "0.0.0.0")
@@ -48,7 +48,7 @@ class WebsiteDemoConfigurationSmoke(unittest.TestCase):
                     check_site("assistant-demo", "http://192.168.75.56:8000")
 
     def test_address_lookup_failure_retains_localhost(self):
-        with patch("harness.website.socket.getaddrinfo", side_effect=OSError("unresolved hostname")):
+        with patch("web_bridge.config.socket.getaddrinfo", side_effect=OSError("unresolved hostname")):
             configure_local_demo(8000, "0.0.0.0")
         self.assertEqual(allowed_sites(), {"assistant-demo": ["http://127.0.0.1:8000", "http://localhost:8000"]})
 

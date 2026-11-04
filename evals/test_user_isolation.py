@@ -13,7 +13,8 @@ import threading
 import unittest
 from unittest.mock import patch
 
-from harness import runtime, sandbox, jobs, website
+from harness import runtime, sandbox, jobs
+from web_bridge import bridge as website
 from auth import AccessDenied, AuthError, AuthStore, Principal, current_principal, principal_scope, database
 from harness.sessions import SessionMetadataStore
 from interfaces import api

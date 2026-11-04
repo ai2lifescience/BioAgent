@@ -334,12 +334,21 @@ def _status(private, identifier):
     return _summary(record)
 
 
+def _transfer_provenance(record, item):
+    """Public result identity, without execution paths, inputs or storage credentials."""
+    return {'job_id': record['job_id'], 'pipeline_name': record.get('plan', {}).get('pipeline_name', ''),
+            'output_key': item.get('wdl_output') or item.get('name', ''),
+            'output_name': item.get('name', ''), 'output_kind': item.get('kind', 'file'),
+            'completed_at': record.get('finished_at', record.get('created_at', ''))}
+
+
 def _remote_file(record, index):
     item = record['result']['output_records'][index]
     name = Path(item.get('path') or item.get('name') or 'artifact').name
     path = f"pipeline-artifacts/{record['job_id']}/{index}/{name}"
     return {'name': name, 'path': path, 'workspace_path': path, 'size': item['size'],
-            'remote': True, 'artifact_id': f"{record['job_id']}:{index}"}
+            'remote': True, 'artifact_id': f"{record['job_id']}:{index}",
+            'pipeline_result': _transfer_provenance(record, item)}
 
 
 @contextmanager
@@ -428,6 +437,62 @@ def remote_files(root, *, access):
             for index, item in enumerate(record.get('result', {}).get('output_records', [])) if item.get('remote')]
 
 
+def bundle_file(root, path, *, access):
+    """Describe a virtual ZIP after checking this session's succeeded job manifest.
+
+    Size/checksum are determined when streaming, not guessed from output sizes.
+    """
+    parts = path.split('/')
+    if len(parts) != 3 or parts[0] != 'pipeline-bundles' or parts[2] != 'results.zip':
+        raise ValueError('Invalid pipeline bundle path.')
+    record = JobStore(_owned(root, access)).get(parts[1])
+    if record['status'] != 'succeeded': raise ValueError('Results require a succeeded job.')
+    return {'path': path, 'workspace_path': path, 'name': 'results.zip',
+            'content_type': 'application/zip', 'virtual': True, 'kind': 'pipeline_bundle'}
+
+
+def bundle_transfer_files(root, path, *, access):
+    """Include manifest members so receivers can import results without unpacking ZIPs."""
+    bundle = bundle_file(root, path, access=access)
+    private = _owned(root, access)
+    identifier = path.split('/')[1]
+    record = JobStore(private).get(identifier)
+    outputs = record.get('result', {}).get('output_records', [])
+    if record.get('artifact_status') == 'unavailable':
+        raise ValueError('Pipeline outputs are not available yet; refresh results before pushing.')
+    available = [index for index, item in enumerate(outputs)
+                 if item.get('remote') or item.get('exists') or item.get('required', True)]
+    if all(outputs[index].get('remote') for index in available):
+        members = [_remote_file(record, index) for index in available]
+    else:
+        # Use the normal publication boundary for older, locally collected jobs.
+        members = _publish(root, private, identifier, 1, access).get('files', [])
+        if len(members) != len(available):
+            raise ValueError('Not all pipeline bundle outputs are available for transfer.')
+    return [bundle, *members]
+
+
+def published_transfer_file(root, path, *, access):
+    """Recover provenance for a published local output only while its content matches."""
+    parts = path.split('/')
+    if len(parts) < 4 or parts[:2] != ['outputs', 'pipelines']:
+        raise ValueError('Invalid published pipeline output.')
+    private = _owned(root, access)
+    store = JobStore(private)
+    record = store.get(parts[2])
+    if record['status'] != 'succeeded': raise ValueError('Results require a succeeded job.')
+    for item in record.get('result', {}).get('output_records', []):
+        if item.get('remote') or not item.get('exists'): continue
+        source = confined(private, item['workspace_path'])
+        target = (Path('outputs') / 'pipelines' / parts[2] / source.relative_to(store.directory(parts[2]))).as_posix()
+        if target == path:
+            identity = fingerprint(root, path)
+            if identity['sha256'] != item['sha256']: raise ValueError('Published pipeline output has changed.')
+            return {'path':path, 'workspace_path':path, 'name':Path(path).name, **identity,
+                    'pipeline_result':_transfer_provenance(record,item)}
+    raise ValueError('File is not a declared output of this job.')
+
+
 def _publish(root, private, identifier, max_rows, access: WorkspaceAccess):
     status = _status(private, identifier)
     if status['status'] != 'succeeded':
@@ -470,6 +535,7 @@ def _publish(root, private, identifier, max_rows, access: WorkspaceAccess):
             with open_regular(private, item['workspace_path']) as incoming, (stage / target).open('wb') as output:
                 copy_stream(incoming, output, limits().file_bytes)
             item['workspace_path'] = item['path'] = target
+            item['pipeline_result'] = _transfer_provenance(record, item)
         with storage_lock(access):
             check_quota(access, root.name, max(0, sum(inventory(stage).values()) - sum(v['size'] for v in before.values())))
             import_staged(root, before, stage)

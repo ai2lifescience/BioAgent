@@ -48,7 +48,7 @@ def enqueue_request(
             raise ValueError("Resolve the pending tool approval before sending another request.")
         binding = None
         if website is not None:
-            from harness.website import get_bridge
+            from web_bridge import get_bridge
             binding = get_bridge().binding_for_run(
                 str(website.get("binding_id", "")), str(website.get("token", "")), identifier
             )
@@ -57,6 +57,8 @@ def enqueue_request(
         # enqueue succeeds, so a rejected duplicate cannot alter active work.
         if binding:
             session.metadata["website_binding"] = binding
+            from web_bridge import record_run
+            record_run(job['run_id'], identifier, binding)
         else:
             session.metadata.pop("website_binding", None)
         session.metadata["last_run_id"] = job["run_id"]
@@ -174,6 +176,9 @@ def list_session_messages(session_id: str) -> dict[str, Any]:
             if role not in {"user", "assistant"}:
                 continue
             text = _session_item_text(item.get("content"))
+            if role == 'user':
+                from web_bridge import clean_user_message
+                text = clean_user_message(text)
             if text:
                 messages.append({"role": role, "text": text})
         stored_results = metadata.metadata.get("message_results", []) if metadata else []

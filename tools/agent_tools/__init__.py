@@ -10,6 +10,7 @@ from .specialist import (
     build_document,
     build_pipeline,
     build_research,
+    build_website_guide,
 )
 
 
@@ -28,6 +29,7 @@ __all__ = [
     "build_document",
     "build_pipeline",
     "build_research",
+    "build_website_guide",
     "build_specialist_tools",
     "build_report_review",
     "build_report_synthesize",

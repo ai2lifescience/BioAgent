@@ -8,7 +8,7 @@ import { AgentIcon } from '../../components/icons';
 import './messages.css';
 import { RunProgress } from './RunProgress';
 
-export interface MessageViewProps { message: Message; config: AppConfig; sessionId: string; busy: boolean; onApproval: (result: RunResult, meta?: ApprovalMeta) => void; onBusy: (busy: boolean) => void; onProgress?: (frame: StreamFrame) => void }
+export interface MessageViewProps { showDetails?: boolean; message: Message; config: AppConfig; sessionId: string; busy: boolean; onApproval: (result: RunResult, meta?: ApprovalMeta) => void; onBusy: (busy: boolean) => void; onProgress?: (frame: StreamFrame) => void }
 const text = (value: unknown): string => value == null ? '' : typeof value === 'string' ? value : String(value);
 const record = (value: unknown): Record<string, unknown> => value && typeof value === 'object' ? value as Record<string, unknown> : {};
 const toolLabel = (tool: unknown): string => ({ database_lookup: 'Database lookup', genome_read_features: 'Read genome features', alphafold_download: 'Download AlphaFold structure', document_read: 'Read document', file_inspection: 'Inspect file', genome_render_map: 'Open genome browser', ncbi_retrieval: 'Retrieve NCBI records', pdb_download: 'Download PDB structure', pipeline_shell: 'Run pipeline command', pipeline_specialist: 'Pipeline specialist', structure_inspect: 'Inspect protein structure', sequence_stats: 'Measure sequence', sequence_find_orfs: 'Find sequence ORFs', report_review: 'Review evidence', report_synthesize: 'Draft cited report', report_write: 'Save cited report', blast_search: 'BLAST search' } as Record<string, string>)[text(tool)] || text(tool).replaceAll('_', ' ') || 'Agent operation';
@@ -70,12 +70,15 @@ function RunDetails({ result, config, sessionId, busy, onApproval, onBusy, onPro
     <ApprovalControls result={approvalResult} busy={busy} onResult={handleApproval} onBusy={onBusy} onProgress={onProgress} />
   </div>;
 }
-export function MessageView({ message, config, sessionId, busy, onApproval, onBusy, onProgress }: MessageViewProps) {
+export function MessageView({ message, config, sessionId, busy, onApproval, onBusy, onProgress, showDetails = true }: MessageViewProps) {
   const result = message.result || null;
   const assistant = message.role === 'assistant';
+  const [inlineApproval, setInlineApproval] = useState(result);
+  useEffect(() => setInlineApproval(result), [result]);
+  const handleInlineApproval = (next: RunResult, meta?: ApprovalMeta) => { if (meta?.intermediate) setInlineApproval(next); onApproval(next, meta); };
   return <article className={`message ${message.role}`} data-approval-message={Boolean(message.approvalCard || result?.approval_required)} aria-label={assistant ? 'Assistant message' : 'Your message'}>
     <div className="message-avatar" aria-hidden="true">{assistant ? <AgentIcon size={34} /> : <span className="message-avatar-label">You</span>}</div>
-    <div className="message-content">{assistant && message.progress && <RunProgress entries={message.progress} />}<div className="message-body">{renderMarkdown(message.text)}{result && assistant && (message.approvalCard ? <ApprovalControls result={result} busy={busy} onResult={onApproval} onBusy={onBusy} onProgress={onProgress} /> : <><ArtifactViews result={result} sessionId={sessionId} imageSuffixes={config.files?.image_suffixes || ['.gif', '.jpeg', '.jpg', '.png', '.svg', '.webp']} />{(result.runtime || result.trace || result.evidence || result.approval_required) && <RunDetails result={result} config={config} sessionId={sessionId} busy={busy} onApproval={onApproval} onBusy={onBusy} onProgress={onProgress} />}</>)}</div></div>
+    <div className="message-content">{assistant && message.progress && <RunProgress entries={message.progress} />}<div className="message-body">{renderMarkdown(message.text)}{result && assistant && (message.approvalCard ? <ApprovalControls result={result} busy={busy} onResult={onApproval} onBusy={onBusy} onProgress={onProgress} /> : <><ArtifactViews result={result} sessionId={sessionId} imageSuffixes={config.files?.image_suffixes || ['.gif', '.jpeg', '.jpg', '.png', '.svg', '.webp']} />{showDetails && (result.runtime || result.trace || result.evidence || result.approval_required) && <RunDetails result={result} config={config} sessionId={sessionId} busy={busy} onApproval={onApproval} onBusy={onBusy} onProgress={onProgress} />}{!showDetails && <ApprovalControls result={inlineApproval || result} busy={busy} onResult={handleInlineApproval} onBusy={onBusy} onProgress={onProgress} />}</>)}</div></div>
   </article>;
 }
 
