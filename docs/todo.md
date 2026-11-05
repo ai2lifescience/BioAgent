@@ -20,17 +20,30 @@
 
 ## Remaining work for isolated multi-user execution
 
-Registration, ownership checks, Docker workers, brokered public retrieval, and
-owned remote `template_wdl` jobs are implemented. Live checks on 2026-11-03
+Registration, ownership checks, Docker workers, supported provider and embedding
+brokers, durable knowledge operations, and session/account storage quotas are
+implemented. Compatible installed pipelines use Docker or Cromwell/S3 according
+to their engine and deployment settings. Live checks on 2026-11-03
 verified public retrieval and a synthetic Cromwell/S3 workflow at `.46`.
 See [validation scope](user_isolation.md#live-validation-2026-11-03).
 
-- Audit and add adapters for other network tools and durable knowledge ingestion.
-- Audit additional workflow parameter interpolation, reference inputs, and output
-  contracts before expanding the isolated pipeline catalog beyond `template_wdl`.
+- Extend provider/engine coverage as new tool requirements arise, retaining
+  ownership, parameter, reference-input and output-boundary checks.
 - Add a reconciliation UI for ambiguous remote submissions and storage retention
   controls for private input snapshots and completed remote objects.
-- Add account-wide model spending and storage quotas for public deployments.
+- Add account-wide model spending budgets for public deployments. File storage
+  quotas already exist; deployment-level filesystem quotas provide harder disk limits.
+
+## Remaining work for website interoperability
+
+- Validate production MSCAN CAS sign-in with real accounts; recorded live bridge
+  checks used the development login bypass.
+- Add an explicit account unlink workflow; logout currently revokes site sessions
+  and bindings while retaining the identity mapping.
+- Refresh MSCAN views when a receipt's native import status changes without a new
+  receipt ID.
+- Replace the legacy 32 MiB workspace-transfer wording in the root prompt with
+  the current separate storage and response limits.
 
 ## MCP integration notes
 

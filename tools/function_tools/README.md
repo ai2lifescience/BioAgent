@@ -15,11 +15,14 @@ sources/   pubmed_search, web_search, web_fetch
 knowledge/ evidence_index, evidence_retrieve, knowledge_*
 workspace/ file_inspection, document_read, workspace_search, report_write
 coding/    code_inspection, code_edit, code_test, python_execute
+website/   rendered-page observation, structured callbacks, linked-site search,
+           data/result push and pull, transfer status and retries
 ```
 
 Capabilities compose through data flow: a tool returns a workspace-relative
 artifact path and the agent may pass that path to the next tool. This is not
-hidden Python dispatch.
+hidden Python dispatch. Website tools call SDK-independent services in
+`web_bridge/`; the website-specific adapters own destination and native result mappings.
 
 Agents choose each step through the SDK tool loop. `report_review` and
 `report_synthesize` are `Agent.as_tool()` capabilities in

@@ -52,7 +52,7 @@ compose with other operations. Current groups are:
 | knowledge | durable ingestion/status/retrieval and run-local evidence indexing/retrieval |
 | workspace | file inspection, document reading, workspace search, and report writing |
 | coding | code inspection, code editing, bounded tests, and approved Python execution |
-| website | trusted page context, tables, figures, manuals, imports, highlights, navigation, and actions |
+| website | rendered-page observation, structured reads/actions, account connections, and backend data/result transfers |
 
 Each public function tool is defined in one category module under
 tools/function_tools. The module should own:
@@ -287,12 +287,21 @@ factory. These tools do not create a second agent runtime.
 
 | Tool | Purpose |
 | --- | --- |
+| website_observe | Read the connected host tab's rendered page without custom context hooks |
+| website_connections | List linked sites and their advertised backend capabilities |
+| website_search | Search owned website projects, samples and resources |
+| website_pull | Stream a selected website resource into the current session |
+| website_push | Send selected session files or owned remote outputs to a website destination |
+| website_transfer_status | Read a queued transfer's status, result or failure |
+| website_transfer_retry | Retry a failed transfer using its existing ID |
 | website_context | Read the current structured page snapshot |
 | website_read_table | Read one bounded page of a registered table |
 | website_read_figure | Read structured chart values and semantics |
 | website_search_manual | Search the host manual |
 | website_read_manual | Read one versioned manual section |
-| website_import_data | Export host data into inputs/ as an explicit workspace artifact |
+| website_import_data | Export small UTF-8 host data into uploads/ as an explicit workspace artifact |
+| website_list_resources | List authorized resources through the connected host adapter |
+| website_import_resource | Ask the host adapter to stream a selected resource into the session |
 | website_highlight | Highlight a registered host element |
 | website_navigate | Navigate to a registered host route |
 | website_action | Invoke a host-registered action |

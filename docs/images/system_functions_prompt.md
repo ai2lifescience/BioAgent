@@ -63,7 +63,7 @@ Use the existing `system_functions.png` as the edit target. Preserve its exact 1
 
 ## Font-color refinement — reference image
 
-The current figure was refined with the built-in `image_gen` tool using [`good font color.png`](good%20font%20color.png) as the font-color reference. The six updated pipeline panels and all content were preserved. Typography, arrows, and text-like linework now use a darker, muted deep navy/slate treatment matching the reference instead of the overly bright saturated blue.
+The current figure was refined with the built-in `image_gen` tool using a local reference named `good font color.png` (not included in this repository) as the font-color reference. The six updated pipeline panels and all content were preserved. Typography, arrows, and text-like linework now use a darker, muted deep navy/slate treatment matching the reference instead of the overly bright saturated blue.
 
 ### Refinement constraints
 

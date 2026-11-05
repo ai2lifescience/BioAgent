@@ -111,7 +111,8 @@ and response exchange.
     Website tools <-> web_bridge/bridge.py <-> assistant iframe <-> trusted host
     Server <-> iframe: HTTP polling; iframe <-> host: checked postMessage
     Host adapter: page context, tables, figures, manual, exports, UI actions
-    Explicit website_import_data -> inputs/ -> normal analysis tools
+    Explicit website_import_data / website_pull -> uploads/ -> analysis tools
+    Linked backend connector <-> durable search/pull/push commands and receipts
 ```
 
 Agent runs, knowledge ingestion, and pipeline execution have separate job
@@ -176,8 +177,10 @@ specialists.
 | tools/agent_tools | Specialist SDK Agents and Agent-as-tool composition |
 | tools/infrastructure | Workspace, providers, knowledge, pipeline engine, tool support, and SDK adapters |
 | tools/runtime_tools | Pipeline definitions and domain-specific pipeline bundles |
-| interfaces | HTTP API, generated frontend delivery, SSE, workspace API, and website bridge endpoints |
-| frontend | React/TypeScript pages, shared API transport and components, feature modules, public embed client, and Vite build configuration |
+| interfaces | HTTP API, generated frontend delivery, SSE, workspace API, and delegation to bridge endpoints |
+| auth / isolation | Account identity, session ownership, execution policy and disposable worker boundaries |
+| web_bridge | Generic identity mapping, browser observation, transfers, embed SDK and website adapters |
+| frontend | React/TypeScript assistant/workspace pages, shared API transport and components, and Vite build configuration |
 | runtime | Private persistent databases, session files, and job state; separate from generated frontend assets |
 | docs | External integration contracts, usage notes, and this architecture reference |
 | evals | Smoke checks for boundaries, transport, tools, jobs, website integration, pipelines, and browser contracts |
@@ -352,8 +355,8 @@ NoopSnapshotSpec is used because the application manages persistence and cleanup
 
 Workspace directories include:
 
-- uploads for user-provided files;
-- inputs for imported website data and pipeline inputs;
+- uploads for user-provided files, website text exports and backend pulls;
+- inputs for staged pipeline example/input files;
 - outputs for generated reports and artifacts;
 - runtime/agent_runs for pipeline job files and outputs;
 - runtime/agent_runs/.pipeline for private pipeline job metadata.
@@ -417,7 +420,7 @@ call another public model-facing tool to create an implicit workflow.
 | knowledge | evidence_index, evidence_retrieve, knowledge_ingest, knowledge_status, knowledge_retrieve |
 | workspace | file_inspection, document_read, workspace_search, report_write |
 | coding | code_inspection, code_edit, code_test, python_execute |
-| website | website_observe, website_connections, website_search, website_pull, website_push, website_transfer_status, website_transfer_retry, website_context, website_read_table, website_read_figure, website_search_manual, website_read_manual, website_import_data, website_highlight, website_navigate, website_action |
+| website | website_observe, website_connections, website_search, website_pull, website_push, website_transfer_status, website_transfer_retry, website_context, website_read_table, website_read_figure, website_search_manual, website_read_manual, website_import_data, website_list_resources, website_import_resource, website_highlight, website_navigate, website_action |
 
 Data analysis is a capability group rather than a biology subtype. It can profile,
 group, and plot tables from any trusted workspace domain.
@@ -628,17 +631,20 @@ account, session and storage services. Agent-facing website tools belong to
 `tools/agent_tools/specialist/website_guide.py`. They call the SDK-independent
 bridge services. The web server and runtime keep small integration hooks. See [module organization](../web_bridge/README.md).
 
-The website bridge lets a trusted external website expose structured context
-and actions to an embedded agent. The full external developer contract is in
+The website bridge links accounts, observes the rendered host page, and exchanges
+data/results through backend connectors. Structured page callbacks enrich DOM
+observation; backend transfers also work from standalone chats without an open tab.
+The full external developer contract is in
 [docs/web_integration.md](web_integration.md).
 
-web_bridge/bridge.py provides:
+The bridge package provides:
 
-- exact origin allowlisting through AGENT_WEBSITE_SITES;
-- HMAC authentication through AGENT_WEBSITE_SECRET;
-- one-use demo tickets;
+- per-site service credentials, signing keys and exact origins through
+  AGENT_WEBSITE_CLIENTS_FILE or AGENT_WEBSITE_CLIENTS;
+- optional AGENT_WEBSITE_SITES origin overrides and AGENT_WEBSITE_SECRET fallback;
+- external identity mapping, single-use login codes and binding tickets;
 - session, site, and instance-scoped bindings;
-- SQLite request and response records;
+- SQLite browser requests/responses, transfer commands and delivery records;
 - an eight-hour binding lifetime;
 - request timeout and context/result size limits.
 
@@ -666,15 +672,19 @@ The host can implement these callbacks:
 - navigate;
 - invokeAction.
 
-Context is structured data and accessible manual text, not arbitrary DOM pixels.
-The host must return only data it is willing to expose. Website data enters the
-normal workspace only when the user or agent explicitly calls
-website_import_data, which publishes a unique quota-accounted UTF-8 export beneath uploads.
+The SDK supplies rendered DOM observation and route-change detection without
+requiring these callbacks. Images/canvas are identified but pixels are not
+interpreted. The host must return only authorized data. website_import_data
+publishes a quota-accounted UTF-8 export beneath uploads; website_import_resource
+and website_pull stream authorized files into the same owned workspace.
+website_push sends selected local files or owned remote pipeline artifacts to an
+adapter-defined destination. Native record import is distinct from file delivery.
 
 When no explicit AGENT_WEBSITE_SITES is configured, the local server can add
 trusted localhost and detected LAN origins for development. An explicit
-allowlist always takes precedence. Production sites should use exact origins
-and a stable secret.
+allowlist always takes precedence. Independent production sites configure per-site
+credentials and origins and exchange single-use codes for in-memory iframe bearer
+logins. This flow does not rely on third-party cookies.
 
 Website binding metadata is private session state. The website secret and
 binding internals are excluded from public model and run metadata.
@@ -773,8 +783,8 @@ Important environment variables include:
 | Variable | Purpose |
 | --- | --- |
 | OPENROUTER_API_KEY | model provider credential |
-| OPENROUTER_BASE_URL | OpenRouter-compatible API base URL |
-| AGENT_MODEL | model alias or provider model identifier |
+| OPENROUTER_API_BASE | OpenRouter-compatible API base URL |
+| AGENT_MODEL_KEY | default configured model alias |
 | EMBEDDING_MODEL | embedding model identifier; defaults to `nvidia/llama-nemotron-embed-vl-1b-v2:free`, with `openai/text-embedding-3-small` and `qwen/qwen3-embedding-8b` also supported |
 | AGENT_SESSION_DB | SDK SQLiteSession database |
 | AGENT_METADATA_DIR | application session metadata directory |
@@ -787,6 +797,8 @@ Important environment variables include:
 | AGENT_WEBSITE_SITES | exact trusted website origins |
 | AGENT_WEBSITE_SECRET | website bridge HMAC secret |
 | AGENT_WEBSITE_DB | website bridge SQLite database |
+| AGENT_WEBSITE_CLIENTS_FILE | private JSON configuration for independent website clients |
+| AGENT_WEBSITE_CLIENTS | inline client configuration; overrides the file |
 | AGENT_PDB_DIR | root-relative default directory for direct PDB downloads |
 | AGENT_ALPHAFOLD_DIR | root-relative default directory for direct AlphaFold downloads |
 | AGENT_NCBI_DOWNLOAD_DIR | root-relative default prefix for direct NCBI downloads |

@@ -145,10 +145,11 @@ Use only the fields required by the selected engine. WDL bundles may also use
 cromwell_api_version, cromwell_poll_interval, and
 cromwell_visibility_timeout when they support a Cromwell backend.
 
-The execution boundary describes the intended dependency boundary. Local shell,
-Snakemake, Nextflow, and miniwdl execution still runs through the configured
-local worker unless deployment infrastructure provides containers. Do not claim
-that a manifest alone creates a security container.
+The execution boundary describes deployment intent; a manifest alone does not
+create a security container. Local/trusted execution uses the configured local
+engine. In isolated multi-user mode, Shell, Snakemake and Nextflow use disposable
+Docker workers and WDL uses the host-side Cromwell/S3 broker. Dependencies must
+be available in the chosen environment. See [execution modes](user_isolation.md#startup-modes).
 
 Pipeline dependencies should be supplied by the pipeline deployment or its
 declared container image. Do not tell the agent to install workflow

@@ -97,7 +97,8 @@ relative to the process working directory, so launching it from `frontend/` or
 another directory creates a separate runtime tree.
 For Vite development, see the [frontend guide](frontend/README.md).
 
-WDL pipelines use local miniwdl by default. For [Cromwell execution](docs/web_usage.md#wdl-execution-backend),
+In local/trusted mode, WDL pipelines use miniwdl by default; isolated mode uses
+Cromwell/S3. For [Cromwell execution](docs/web_usage.md#wdl-execution-backend),
 [SOCKS proxy configuration](docs/web_usage.md#proxy-and-lan-access), or LAN access,
 see the web usage guide.
 
@@ -234,7 +235,8 @@ python -m interfaces.web --host 127.0.0.1 --port 8000
 
 Then open [http://localhost:8000/assistant-demo](http://localhost:8000/assistant-demo)
 and ask the embedded assistant about the page's table or chart. A host page can
-mount the assistant with a signed ticket and a page-context adapter:
+mount the assistant with a single-use login code and a signed binding ticket.
+The SDK observes the rendered page; optional callbacks add structured context:
 
 ![Embedded assistant demo](docs/images/assistant_embed_demo.png)
 
@@ -248,17 +250,26 @@ const assistant = AssistantDrawer.mount({
   target: document.getElementById("assistant-root"),
   src: "https://agent.example.com/assistant",
   siteId: "lab-portal",
+  getAuthorization: async () => {
+    const response = await fetch("/assistant-bootstrap", {method: "POST"});
+    if (!response.ok) throw new Error("Website sign-in failed");
+    return response.json(); // {code}, obtained by the host backend
+  },
   getToken: async () => {
     const response = await fetch("/assistant-token", {method: "POST"});
+    if (!response.ok) throw new Error("Assistant connection failed");
     return (await response.json()).token;
   },
-  adapter: {getPageContext: async () => pageSnapshot()},
+  // Optional: adapter: {getPageContext: async () => pageSnapshot()},
 });
 </script>
 ```
 
-See the [web integration guide](docs/web_integration.md) for signed tickets,
-trusted origins, data and action callbacks, and the complete adapter contract.
+The two host endpoints call BioAgent's generic backend connector using a private
+service credential and the website's authenticated user identity. See the
+[web integration guide](docs/web_integration.md) for account linking, page
+observation, natural-language push/pull and the complete adapter contract, or
+[MSCAN setup](docs/mscan_web_bridge.md) for the reference integration.
 
 
 ### Python
@@ -273,6 +284,11 @@ print(result["answer"])
 
 
 ## Pipeline Notes
+
+The dependency notes below describe local/trusted execution. Multi-user isolated
+execution runs Shell, Snakemake and Nextflow in the worker image and uses the
+host-side Cromwell/S3 broker for WDL; dependencies must be available in the
+selected execution environment.
 
 - Shell pipelines use the local shell environment.
 - Snakemake pipelines require the `snakemake` package included in
@@ -294,6 +310,9 @@ print(result["answer"])
 - [System architecture](docs/architecture.md)
 - [Frontend structure and development](frontend/README.md)
 - [Web UI usage and examples](docs/web_usage.md)
+- [Accounts and isolated execution](docs/user_isolation.md)
+- [Generic website integration](docs/web_integration.md)
+- [MSCAN web bridge setup and usage](docs/mscan_web_bridge.md)
 - [FunctionTool, specialist, and runtime tool definitions](docs/tool_definitions.md)
 - [Pipeline manifest definitions](docs/pipeline_definitions.md)
 - [Pipeline engine, file handling, and adding pipelines](docs/architecture.md#pipeline-engine)

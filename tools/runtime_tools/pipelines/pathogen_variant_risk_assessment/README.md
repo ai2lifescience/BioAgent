@@ -24,7 +24,8 @@ BioAgent defaults to local miniwdl when `CROMWELL_URL` is unset. For Cromwell
 submission, configure and verify its endpoint before starting BioAgent:
 
 ```bash
-export CROMWELL_URL=http://192.168.164.39:39000
+# Replace YOUR_CROMWELL_HOST with your deployment hostname or IP.
+export CROMWELL_URL=http://YOUR_CROMWELL_HOST:39000
 curl "$CROMWELL_URL/engine/v1/status"
 ```
 
@@ -68,3 +69,10 @@ Use `pipeline_name: pathogen_variant_risk_assessment` with `read1` and optional
 Risk annotations are reference- and threshold-dependent evidence, not a general
 clinical risk score. Coverage, contamination, reference choice, and database
 versions can change the interpretation.
+
+## BioAgent execution modes
+
+The miniwdl fallback above applies to local/trusted execution. In isolated
+multi-user mode, WDL uses the host-side Cromwell/S3 broker and does not fall back
+to host miniwdl. Configure the complete input/output storage settings described
+in the [deployment guide](../../../../docs/web_usage.md#wdl-execution-backend).

@@ -450,12 +450,23 @@ The UI obtains session IDs through `POST /sessions`. Existing API clients can
 propose new IDs for uploads/runs, but cannot replace an existing owner's claim.
 Back up authentication, ownership, metadata, history, and queue databases together.
 
-In multi-user mode, an embedded assistant must be signed in. Website tickets
-must name the authenticated BioAgent user ID in `sub` and select an owned session.
-Configure `AGENT_WEBSITE_SECRET` and `AGENT_WEBSITE_SITES` explicitly; automatic
-demo signing remains local-only. Mscan SSO/token exchange is future work and needs
-a verified identity mapping. Third-party iframe cookie restrictions may require
-an authenticated gateway. Project sharing and ownership transfer are not implemented.
+In multi-user mode, the web bridge maps a trusted website's authenticated
+`(site_id, external_subject)` to a BioAgent account. New external identities receive
+separate accounts; an administrator can explicitly link an existing account before
+first use. Usernames and email addresses are not automatically matched. Linked
+access uses the account's normal permissions, including session and file ownership.
+
+The website backend authenticates with a private service credential configured
+through `AGENT_WEBSITE_CLIENTS_FILE` or `AGENT_WEBSITE_CLIENTS`. The embedded
+assistant exchanges a single-use login code for an in-memory bearer credential,
+so this flow does not depend on third-party cookies. Website logout revokes that
+site's login sessions and bindings; it does not remove the persistent identity
+mapping. Project sharing and ownership transfer are not implemented.
+
+See [the generic web integration guide](web_integration.md#independent-website-accounts-and-durable-results)
+for identity linking, credentials, origins, and data exchange, and
+[the MSCAN web bridge guide](mscan_web_bridge.md) for MSCAN installation and usage.
+The isolation rules in this document apply to standalone and embedded use alike.
 
 ## Verification
 
