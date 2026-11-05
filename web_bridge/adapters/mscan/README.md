@@ -152,6 +152,12 @@ or use the production database. The destination must not already exist.
 
 ## Run
 
+For normal `python -m interfaces.web`, `java -jar` and `pnpm dev` startup, see
+[Everyday startup](../../../docs/mscan_web_bridge.md#everyday-startup). Export the
+bridge settings in the agent and backend terminals using the existing private
+client configuration. Direct Java startup preserves MSCAN's normal scheduler settings.
+The commands below are an optional launcher alternative.
+
 From the repository root, use three terminals. Keep your existing model,
 Cromwell and object-storage environment variables in the agent terminal.
 
