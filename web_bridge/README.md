@@ -190,16 +190,17 @@ Repeated delivery IDs reuse the committed receipt. Its native downloads use
 single-use, sixty-second tickets; file and sample ownership is checked before
 issuing and consuming them.
 
-The MSCAN adapter recognizes the QC pipeline's `qc_counts.tsv` / input-count TSV
-format and updates the existing three QC read-count fields after validating the
-counts. Older completed deliveries do not replace newer QC metrics. Other output
-formats remain available as attached files under **Agent results → Received by
-MSCAN** and can be imported back into an agent conversation. Native interpretation
-of another pipeline's domain-specific results belongs in the MSCAN adapter;
-the generic bridge transports its files without requiring such interpretation.
+The MSCAN adapter imports registered result formats into native analysis records;
+see [analysis result exchange](#analysis-result-exchange) for the format contracts.
+Older completed deliveries do not replace newer native results. Other formats
+remain attached files and can be pulled back into an agent conversation. Received
+and native files appear under **Download files** on the sample toolbar; the old
+Agent results panel has been removed. Native interpretation belongs in the
+website adapter; generic file transport does not require a native importer.
 
-The installer adds only the adapter mount/context hook, a result-refresh hook,
-logout hook, and the one-use download route to MSCAN's existing application.
+The installer changes two existing frontend files for the assistant mount and
+sample context, refresh and download hooks. Backend services, the logout hook
+and the one-use download route are supplied by added adapter classes.
 Source pipeline definitions and execution policies are unchanged.
 
 
@@ -304,12 +305,14 @@ selected artifact paths, and streams pull uploads through a command-specific
 grant. It cannot enumerate unrelated standalone sessions. Leases renew during
 long transfers; after a backend crash the same command can resume after expiry.
 Retries reuse IDs, files and destination records. Browser/model code never sees
-the service secret. MSCAN currently processes one transfer at a time; agent chats
-and pipelines remain independently concurrent.
+the service secret. MSCAN reserves worker capacity before leasing and processes
+up to `bioagent.transfer-workers` commands concurrently (default 3). Active IDs
+are excluded from its polls, and writes to the same sample are serialized within
+one backend process. Agent chats and pipelines have separate concurrency limits.
 
 | Service endpoint | Contract |
 |---|---|
-| `POST commands` | Advertise optional `capabilities` and lease one queued command for the authenticated site |
+| `POST commands` | Advertise optional `capabilities`, optionally exclude active `exclude_ids`, and lease at most one queued or expired command for the authenticated site |
 | `POST command-heartbeat` | Renew its current ID/lease for 120 seconds |
 | `POST command-ack` | Persist success/result or failure; current lease required |
 | `GET command-artifact?id=...&path=...` | Stream only a selected push artifact |
@@ -321,7 +324,7 @@ All paths use the `/website/service/` prefix. Commands include `id`, `subject`,
 contain destination IDs, a stable receipt and source-registration status. Sites
 must store a receipt before acknowledging and handle repeat command IDs.
 
-## Latest live acceptance
+## Recorded live acceptance — modular observer/transfer update
 
 The modular observer/transfer update was exercised against the running agent
 and MSCAN development deployment. Evidence is in
@@ -331,8 +334,9 @@ FASTQ and report roundtrips, paired source roles, FASTA registration, source
 preservation, a failed-command retry, lost-ack replay, checksums, native sample
 visibility and live SPA navigation. The generic browser test also exercises a
 page with no registered adapter and a failing optional structured-context hook.
-The bridge suite passes 42 tests; architecture, frontend, Maven and worker-image
-build checks pass. These checks used MSCAN's development login bypass, not
+At that validation point, the bridge suite passed 42 tests; architecture,
+frontend, Maven and worker-image build checks passed. These historical checks used
+MSCAN's development login bypass, not
 production CAS authentication.
 
 ## Native MSCAN QC import and embedded presentation

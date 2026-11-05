@@ -5,11 +5,12 @@ by interfaces/web.py. It covers the full SDK agent, session workspaces, durable
 runs, atomic tools, specialist agents, pipelines, knowledge ingestion, and
 trusted website embedding.
 
-Tool availability depends on the execution mode. Public multi-user mode uses
-Docker tool workers with brokered `web_fetch`, `web_search`, and `pubmed_search`.
-The Cromwell/S3 broker enables `template_wdl` as an owned detached job. Other
-network tools, durable knowledge ingestion, and other pipelines remain restricted.
-The broader pipeline and crawling sections below describe the local/trusted executor. See
+Tool availability depends on the execution mode and configured dependencies.
+Public multi-user mode uses Docker tool workers, host brokers for supported
+network providers and embeddings, and ownership-checked durable knowledge services.
+Compatible installed Shell, Snakemake and Nextflow pipelines use Docker workers;
+WDL pipelines use the Cromwell/S3 broker. `GET /config` reports configured
+availability; execution still enforces workflow policy and ownership. See
 [User accounts and isolated workers](user_isolation.md) for the mode boundaries.
 
 For the repository architecture, see [architecture.md](architecture.md). For
@@ -84,16 +85,16 @@ python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ~~~
 
 These settings configure the host-side Cromwell/S3 adapter. In isolated mode,
-`pipeline_shell` exposes the audited `template_wdl` through this broker; containers
-retain no network interface or credentials. A live synthetic template workflow
+`pipeline_shell` routes compatible installed WDL workflows through this broker;
+containers retain no network interface or credentials. A live synthetic template workflow
 completed and its outputs downloaded successfully. See the
 [live validation findings](user_isolation.md#live-validation-2026-11-03) for scope.
 
-BioAgent uploads local inputs to S3, submits the workflow through Cromwell's
-REST API, and downloads the outputs declared in `runner.yaml` from S3 after
-success. Downloaded files are validated and hashed in the local job directory.
-Transfer records are saved as `cromwell.input_uploads.json` and
-`cromwell.output_downloads.json`.
+BioAgent uploads declared local file inputs to S3 and submits the workflow through
+Cromwell's REST API. The ordinary executor downloads declared outputs and records
+checksums and transfer logs in the job directory. The isolated broker registers
+owned remote artifact references after completion; downloads stream on demand,
+and Workspace **Import** materializes a local copy for file-analysis tools.
 
 The mount prefixes describe existing paths on the Cromwell/task hosts.
 BioAgent only needs access to the Cromwell and S3 endpoints; no shared mount
@@ -105,12 +106,15 @@ Supply credentials through the environment, outside Git. Restart BioAgent
 after changing these settings. New plans save the selected backend and URL;
 detached workers receive the S3 transport settings.
 
-To return to local execution:
+For the local/trusted executor, return to miniwdl by unsetting the remote URL:
 
 ~~~bash
 unset CROMWELL_URL
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ~~~
+
+This does not disable an explicitly configured multi-user/Docker mode. Isolated
+WDL execution requires Cromwell/S3; it does not fall back to host miniwdl.
 
 ### Proxy and LAN access
 
@@ -417,8 +421,8 @@ Introduce the current website. Identify the visible workflow, available tables
 and figures, and the relevant manual sections.
 ~~~
 
-Expected behavior: website_context is called before answering page-specific
-questions. The website-guide specialist can then use
+Expected behavior: website_observe reads the current rendered page;
+website_context adds optional structured metadata. The website-guide specialist can use
 website_read_table, website_read_figure, website_search_manual, and
 website_read_manual.
 
@@ -440,7 +444,8 @@ profile it, and plot the distribution by treatment group.
 ~~~
 
 Expected behavior: website_import_data writes an explicit UTF-8 export under
-inputs/, then normal table tools analyze the imported artifact.
+uploads/, then normal table tools analyze the imported artifact. For backend
+files, use website_search and website_pull instead; they do not require a tab.
 
 For a registered UI action:
 
@@ -476,8 +481,8 @@ a path.
 The active workspace is session-scoped. Public paths use this layout:
 
 ~~~text
-uploads/     files uploaded through the UI
-inputs/      explicit website exports and pipeline inputs
+uploads/     UI uploads, website text exports and backend pulls
+inputs/      staged pipeline example/input files
 outputs/     generated reports and ordinary artifacts
 runtime/agent_runs/        pipeline job files and outputs
 runtime/agent_runs/.pipeline/  private pipeline metadata
@@ -615,9 +620,10 @@ POST /run_stream. The binding does not remove any existing root tools.
 
 ## Embed the assistant in a trusted website
 
-The canonical local demonstration is /assistant-demo. A real host website should
-use the same iframe helper but provide its own authenticated ticket endpoint and
-host adapter:
+The canonical local demonstration is /assistant-demo. An independent website
+provides authenticated backend endpoints for a single-use login code and a
+signed binding ticket. Use the generic service connector described in
+[web_integration.md](web_integration.md#independent-website-accounts-and-durable-results):
 
 ~~~html
 <div id="agent-root"></div>
@@ -627,8 +633,14 @@ host adapter:
     target: document.getElementById("agent-root"),
     src: "https://agent.example.com/assistant",
     siteId: "lab-portal",
+    getAuthorization: async () => {
+      const response = await fetch("/assistant-bootstrap", {method: "POST"});
+      if (!response.ok) throw new Error("Website sign-in failed");
+      return response.json(); // {code} obtained by the host backend
+    },
     getToken: async () => {
       const response = await fetch("/assistant-token", {method: "POST"});
+      if (!response.ok) throw new Error("Assistant connection failed");
       return (await response.json()).token;
     },
     adapter: {
@@ -649,21 +661,20 @@ host adapter:
 </script>
 ~~~
 
-getPageContext is required. Implement only callbacks supported by the host.
-Use stable resource, route, element, and action IDs. Return structured JSON,
-not arbitrary DOM or screenshots. The host owns authentication and must enforce
-the logged-in user's permissions.
+All adapter callbacks, including getPageContext, are optional. The SDK observes
+the rendered page and route changes automatically; structured callbacks add
+application-specific data. Use stable resource, route, element and action IDs.
+The host owns authentication and must enforce the logged-in user's permissions.
 
-Configure exact trusted origins:
+Configure `AGENT_WEBSITE_CLIENTS_FILE` with private per-site service credentials,
+signing keys and exact browser origins. Use the JSON example in the integration
+guide; the host backend receives only its service credential. The iframe exchanges
+the login code for an in-memory bearer credential, then binds its session with
+the separate signed ticket. No third-party cookies are required for this flow.
 
-~~~bash
-export AGENT_WEBSITE_SITES='{"lab-portal":["https://lab.example.com"]}'
-export AGENT_WEBSITE_SECRET='a-long-random-shared-secret-at-least-32-characters'
-~~~
-
-The signing secret stays on the server. The browser receives a short-lived
-ticket and then a session-scoped binding token. Website data is imported into
-the normal workspace only through an explicit website_import_data operation.
+Small text exports use website_import_data. Larger files use backend streaming
+through website_pull or an optional website_import_resource callback. Natural-language
+website_push transfers selected results to a linked destination without UI buttons.
 
 Read [web_integration.md](web_integration.md) before deploying an
 external integration. It defines revisions, callback limits, polling,
@@ -700,7 +711,7 @@ The assistant answers about a website without consulting it:
 
 1. Confirm the website connection indicator is active.
 2. Ask for the current website or visible figure explicitly.
-3. The runtime instruction requires website_context for page-specific questions.
+3. Use website_observe for the rendered page and website_context for extra structured metadata.
 4. If the binding expired, reconnect the host page.
 
 A run appears stuck:

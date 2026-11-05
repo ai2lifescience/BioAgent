@@ -9,11 +9,11 @@ The workspace, embedded assistant, and host-page demo are React + TypeScript app
 - `src/types.ts` defines the backend envelopes shared by chat, sessions, workspace files, evidence, and runtime traces.
 - `src/features/chat/ConversationPane.tsx` owns one conversation’s state and background run monitoring. Visited panes stay mounted while hidden so switching cannot redirect pending callbacks to another chat.
 - `src/App.tsx` composes the workspace shell from session navigation, quick starts, chat messages, runtime details, the composer, and workspace files.
-- `src/features/` groups the assistant, demo, chat composer, messages and artifact viewers, session navigation, and workspace panel by responsibility.
+- `src/features/` groups the assistant, chat composer, messages and artifact viewers, session navigation, and workspace panel by responsibility. The generic host-page demo and bridge frontend components live in `web_bridge/frontend/` at the repository root.
 - `src/components/icons.tsx` is the shared legacy robot mark and line-icon set used by every page; `AppErrorBoundary.tsx` turns malformed runtime payloads into a recoverable UI state.
 - `src/styles.css` defines the workspace design system; feature styles live beside their components.
 - `index.html`, `assistant.html`, and `assistant-demo.html` are the three Vite page entries. Their public URLs remain `/`, `/assistant`, and `/assistant-demo`.
-- `public/static/assistant-embed.js` is the standalone client for external websites, published at the stable `/static/assistant-embed.js` URL. `public/favicon.svg` supplies the app icon.
+- `web_bridge/frontend/embed.ts` at the repository root is the standalone embed-client source. The build emits `dist/static/assistant-embed.js`, served at the stable `/static/assistant-embed.js` URL. `public/favicon.svg` supplies the app icon.
 - `dist/` contains generated HTML and hashed JavaScript/CSS assets under `static/`. It is ignored by Git and recreated on each build. Do not edit it directly.
 
 ## Build and run

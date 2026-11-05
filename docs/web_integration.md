@@ -1,19 +1,38 @@
-# Embed the full assistant in a trusted website
+# Connect an external website to BioAgent
 
-This contract describes protocol version **1**. The host website owns its pages,
-tables, charts, workflow and login. BioAgent supplies an iframe drawer, the full
-assistant, and an additional `website_guide` specialist. The host does not import
-BioAgent workspace components. Its data does not become an assistant workspace
-file until an explicit `website_import_data` call exports it.
+The web bridge provides three independent capabilities:
+
+| Function | How it works |
+| --- | --- |
+| Account linking | Map the website's authenticated subject to a BioAgent account and sign in the embedded assistant through a single-use code. |
+| Push/pull data and results | Use natural-language tools and a backend connector to discover files, pull them into an owned session, or push results to a website destination. These operations do not require an open browser tab. |
+| Understand the current webpage | Observe the rendered host page and navigation through the embed SDK, with optional structured tables, figures, manuals and actions. This requires a connected host tab. |
+
+The host retains its login, data model, storage and workflows. BioAgent supplies
+the full assistant and the `website_guide_specialist` tool; the host does not
+import BioAgent workspace components. Reading a page does not automatically copy
+its files into a workspace. Use `website_pull` for backend resources,
+`website_import_resource` for adapter-provided resources, or `website_import_data`
+for small inline text exports before running file-analysis tools.
+
+This guide describes the generic integration and browser protocol version **1**.
+See [user isolation](user_isolation.md) for account and worker deployment, and
+[the MSCAN guide](mscan_web_bridge.md) for MSCAN installation and usage.
 
 ## Architecture and SDK requirements
 
 ```mermaid
 sequenceDiagram
     participant Host as Independent website + adapter
+    participant Backend as Website backend connector
     participant UI as Assistant iframe
     participant Queue as Durable run / website request stores
     participant SDK as Agents SDK Runner
+    Host->>Backend: Bootstrap using website login
+    Backend->>Queue: Authenticated identity mapping + login grant
+    Queue-->>Host: Single-use code (through backend)
+    Host->>UI: Authorize with code
+    UI->>Queue: Exchange code for in-memory bearer login
     Host->>UI: connect (signed ticket, capabilities, page context)
     UI->>Queue: bind website to assistant session
     UI->>Queue: submit ordinary full assistant run
@@ -25,12 +44,18 @@ sequenceDiagram
     UI->>Queue: authenticated response
     Queue-->>SDK: resume awaiting FunctionTool
     SDK-->>UI: native SDK events and final answer
+    Note over Backend,SDK: Backend transfers also work from standalone chats
+    SDK->>Queue: Queue owned search / pull / push command
+    Backend->>Queue: Lease command with service credential
+    Backend->>Backend: Check ownership, transfer files, import supported results
+    Backend->>Queue: Acknowledge receipt or failure
+    SDK->>Queue: Check transfer status
 ```
 
-* The root keeps **all** existing biology, data analysis, search, knowledge,
-  coding, files, reports, pipelines and specialist capabilities. Website mode
-  adds capabilities; it does not replace the root with a restricted chatbot.
-* `website_guide` is an SDK **Agent.as_tool()**, with the same shared run context
+* Website mode adds tools to the ordinary root agent. Existing analysis,
+  search, files, pipelines and specialist capabilities remain subject to the
+  same account, execution policy and deployment configuration.
+* `website_guide_specialist` is an SDK **Agent.as_tool()**, with the same shared run context
   as the root. Its job is explanation and guidance grounded in the current page,
   measured data and manual. It delegates computational work back to the root.
 * Website reads/actions are small SDK FunctionTools. The bridge is application
@@ -44,6 +69,12 @@ sequenceDiagram
 
 The implementation uses native `function_tool`, `Agent.as_tool`, run context and
 `Runner.run_streamed`; see the [OpenAI tools guide](https://developers.openai.com/api/docs/guides/tools).
+
+Generic connection services live in `web_bridge/`; agent-facing function tools
+live in `tools/function_tools/website/`, and the specialist lives in
+`tools/agent_tools/specialist/website_guide.py`. Website-specific authentication,
+destination creation and native result import belong to adapters. See the
+[module layout](../web_bridge/README.md#organization) for the dependency boundary.
 
 ## Quick start: the embedded host-page demo
 
@@ -88,7 +119,9 @@ or third-party cookies. Never put service or signing secrets in browser code.
 The [independent web bridge module](../web_bridge/README.md) owns the connector in `web_bridge/identity.py`,
 `web_bridge/conversations.py` and `web_bridge/http.py`. It has no MSCAN
 schema dependencies. [The MSCAN reference adapter](../web_bridge/adapters/mscan/README.md)
-adds one backend controller and small frontend hooks.
+adds a controller, backend connection/transfer/import services and frontend hooks.
+Its installer changes two existing frontend files and adds adapter-owned files;
+existing MSCAN backend source files remain unchanged.
 
 Configure `AGENT_WEBSITE_CLIENTS_FILE` with the absolute path to a private JSON
 file outside version control. Each site has a different random service secret,
@@ -166,6 +199,9 @@ subscribes to the frontend logout action. MSCAN's original login/security source
 files remain unchanged. Server revocation
 is bounded by a timeout; if the agent is unavailable, host logout still completes
 and a warning is logged. An unreachable agent's remaining login expires normally.
+Revocation does not delete the persistent external identity mapping. There is
+currently no public unlink endpoint or unlink CLI; do not describe logout as
+permanently disconnecting the two accounts.
 
 ## Host integration API
 
@@ -205,7 +241,8 @@ const assistant = AssistantDrawer.mount({
   },
 });
 
-// Await after route, selection, filter, chart or workflow changes.
+// Route and DOM changes are observed automatically. Call this after changing
+// structured state that is not reflected in the DOM, such as a selection ID.
 await assistant.updateContext();
 assistant.open();
 // After a backend file import completes, refresh the iframe's attachment list.
@@ -217,8 +254,10 @@ assistant.destroy();
 Only implement callbacks your website supports. `getPageContext` is optional;
 the SDK supplies a generic observer of the actual rendered page. All callbacks may return promises. Their second argument
 contains `call_id`, `run_id`, `revision` and `deadline` for correlation and
-idempotency. `updateContext(snapshot)` accepts an already built snapshot;
-`updateContext()` calls `getPageContext`. Existing context-only mounts still work.
+idempotency. `updateContext(snapshot)` merges supplied metadata with a fresh DOM
+snapshot; `updateContext()` obtains optional structured context and the observed
+page. Observed page fields take precedence. A failed or timed-out structured hook
+does not prevent DOM observation. Existing context-only mounts still work.
 `onEvent` receives connection, run, error and result notifications; it is not a
 replacement for callback results. `open()`/`close()` control the drawer.
 
@@ -250,6 +289,7 @@ Website URLs are public HTTP(S) URLs, never server filesystem paths.
 
 | Callback / SDK tool | Required result |
 | --- | --- |
+| Built-in `observePage` / `website_observe` | Current URL, revision, headings, visible text, controls and DOM table IDs. Supplied by the embed SDK; no page-specific callback is required. |
 | `getPageContext` / `website_context` | Snapshot above. Only `revision` and `title` are mandatory; other fields depend on the website. |
 | `readTable` / `website_read_table` | `{resource_id, title, columns:[{name,type,unit?}], rows:[{column:value}], offset, total_rows, filters?}`. Return at most the requested limit (1–200); do not imply a page is the whole dataset. |
 | `readFigure` / `website_read_figure` | `{resource_id,title,description,x_axis?,y_axis?,series?,filters?,source_table?}`. Axes include units; series include actual values. Report missing values explicitly. This version reads structured chart data; it does **not** claim visual inspection of screenshots or pixels. |
@@ -260,8 +300,11 @@ Website URLs are public HTTP(S) URLs, never server filesystem paths.
 | `navigate` / `website_navigate` | `{route_id,message}` after SPA navigation. Publish a new snapshot. A full page reload disconnects the old bridge. |
 | `invokeAction` / `website_action` | `{action_id,message,...}` after the host validates parameters and performs a registered action. Publish changed context. |
 
-The agent cannot inspect arbitrary cross-origin DOM. The adapter runs in the
-host window, where it can use the website's own authenticated API and UI state.
+The observer runs in the host window; it is not a separate remote browser and
+cannot inspect arbitrary tabs or cross-origin iframe contents. It reads rendered
+DOM tables, not rows that the website has not loaded. Canvas and images are
+identified, but their pixels are not interpreted. Optional callbacks can use the
+website's own authenticated API and UI state for richer data.
 Never expose passwords, cookies, access tokens or unrelated DOM via context.
 Do not send the whole database or manual on every question. Keep page context
 under 64 KiB, each callback result under 512 KiB, and fetch larger tables in
@@ -275,10 +318,17 @@ Manual lookup here is live and host-owned; it does not silently ingest the manua
 
 ## Trust and authentication
 
-Configure `AGENT_WEBSITE_SITES` as `{site_id: [exact_origin, ...]}`. Wildcards and
-opaque origins are not accepted. Set a secret of at least 32 characters using
-`AGENT_WEBSITE_SECRET`. An embedding website backend authenticates its user and
-returns a short-lived ticket. The browser never receives the signing secret.
+For independent websites, configure per-site service credentials, signing keys
+and exact origins through `AGENT_WEBSITE_CLIENTS_FILE` as described above.
+`AGENT_WEBSITE_SITES` can override origins per site (an explicit empty object
+disables all sites); `AGENT_WEBSITE_SECRET` is the fallback signing key used by
+the demo or clients without a per-site key. Secrets require at least 32 characters.
+Wildcards and opaque origins are not accepted. Browsers never receive service
+credentials or signing keys.
+
+The single-use bootstrap code authenticates the iframe's BioAgent login. The
+separate signed ticket binds an owned conversation to the current website tab.
+These are different credentials with different purposes.
 
 Ticket format: `base64url(payload_json).base64url(HMAC_SHA256(secret, encoded_payload))`,
 without base64 padding. Payload contains `{site_id, origin, sub, exp, jti}`;
@@ -286,9 +336,9 @@ without base64 padding. Payload contains `{site_id, origin, sub, exp, jti}`;
 nonce, and `sub` is the mapped **internal BioAgent user ID**. Each ticket is used once.
 The generic service issues tickets for you; external backends do not need to
 know the mapped ID or the signing key.
-The example server demonstrates this using only Python's standard library. Its
-token endpoint is for local demonstration; replace its fixed subject with your
-login identity and normal CSRF protection in a real host application.
+The built-in `/website/demo-token` endpoint uses the current BioAgent principal
+and is restricted to the server's own demo host page. Independent websites use
+their authenticated backend and the service endpoints above.
 
 Both windows check exact `event.origin` and `event.source`. Tickets travel through
 `postMessage` to the named iframe origin, never URL parameters. The iframe trades
@@ -305,8 +355,9 @@ for deployment, registration, legacy data migration, and worker configuration.
 
 Multi-user tool execution uses Docker containers with bounded workspace exchange
 and no direct network. Approved public providers and embeddings use host brokers;
-durable knowledge operations use an ownership-checked service. Bundled pipeline
-templates run through the isolated pipeline broker. `GET /config` reports per-tool,
+durable knowledge operations use an ownership-checked service. Compatible installed
+pipelines run through the existing pipeline execution service and isolation broker.
+`GET /config` reports per-tool,
 pipeline, and Quick start readiness. Website callbacks remain in the authenticated
 host-side broker. See [supported routes and limits](user_isolation.md#what-is-isolated).
 
@@ -326,7 +377,7 @@ with `{call_id,run_id,method,arguments,revision,deadline}`. The host replies wit
 | `POST /website/poll` | Binding credentials → `{requests:[...]}`. Poll while mounted; this also works during approval resume and SSE reconnect. |
 | `POST /website/respond` | Binding credentials + correlated response; duplicates with identical content are accepted, conflicting/stale responses rejected. |
 | `POST /website/disconnect` | Binding credentials → revocation. |
-| `POST /run` or `/run_stream` | Normal payload plus `website:{binding_id,token}`. Returns the ordinary durable job/stream. All root tools remain available. |
+| `POST /run` or `/run_stream` | Normal payload plus `website:{binding_id,token}`. Returns the ordinary durable job/stream with the account's usual tool availability. |
 | `GET /runs/{id}` and `/runs/{id}/events?after={sequence}` | Existing durable status/event polling. The drawer uses these to recover a dropped run stream. |
 
 Run events include `website_tool_request` as a notification, without credentials.
@@ -399,23 +450,53 @@ belong to the website adapter, not to the generic delivery queue. MSCAN groups
 its adapter into [connection, data transfer, result importers and resources](../web_bridge/adapters/mscan/README.md#code-organization).
 
 Signed-in users push and pull through natural-language tools in
-`tools/function_tools/website/transfer.py`, backed by `web_bridge/transfer/`; no transfer buttons are required. See the
-[module protocol](../web_bridge/README.md#independent-browser-and-transfer-modules)
-for backend command polling, destination creation, scoped uploads and retries.
-Transferring files from a standalone session does not grant access to unrelated
-conversations.
+`tools/function_tools/website/transfer.py`, backed by `web_bridge/transfer/`.
+They work from standalone conversations with a linked external identity and a
+running backend connector; no browser tab or transfer buttons are required.
 
-Pushing a pipeline results ZIP also transfers the individual outputs from its
-owned job manifest, so MSCAN can populate its native QC view. File delivery and
-native import are reported separately (`native_qc_applied` and `qc`); a stored
-archive alone is not proof of native QC registration.
+| Tool | Purpose |
+| --- | --- |
+| `website_connections` | List linked sites, advertised destination fields/import formats and last backend contact. |
+| `website_search` | Find owned projects, samples and resources; use returned IDs to resolve ambiguity. |
+| `website_pull` | Copy a selected resource into the current owned session. |
+| `website_push` | Send selected files or owned pipeline outputs to a destination. `create_missing` requests destination creation where the adapter supports it. |
+| `website_transfer_status` | Obtain the completed file path, receipt or failure. A queued/running response is not completion. |
+| `website_transfer_retry` | Retry a failed transfer using its existing command ID. |
+
+Destination fields are opaque to the generic queue. The website adapter validates
+them, enforces permissions and creates any requested missing entities. A transfer
+grants access only to its selected files/session, not unrelated conversations.
+Search, pull and push commands share the following backend protocol:
+
+| Service endpoint | Contract |
+| --- | --- |
+| `POST /website/service/commands` | Advertise optional `capabilities` and lease at most one queued or expired command. Optional `exclude_ids` excludes locally active commands for this poll. |
+| `POST /website/service/command-heartbeat` | Renew the current `{id, lease}` for 120 seconds. |
+| `POST /website/service/command-ack` | Acknowledge `{id, lease, ok, result}` after persisting the result/receipt. |
+| `GET /website/service/command-artifact?id=...&path=...` | Download a selected artifact from an active push command. |
+| `POST /website/service/uploads` with `command_id` | Authorize a pull upload to that command's owner and session; use the normal chunk/completion endpoints. |
+
+Reserve backend capacity before leasing, renew leases during long transfers,
+and persist stable receipts so an acknowledgement retry does not duplicate data.
+Commands survive browser closure and server restarts; a failed command can be
+retried after its reported error is resolved. The adapter must remain running to
+process commands. See the [module protocol](../web_bridge/README.md#independent-browser-and-transfer-modules)
+for implementation details.
+
+Pushing an owned pipeline results ZIP also includes available individual outputs
+from its job manifest, with result provenance for the adapter's native importers.
+Remote outputs can be transferred without first materializing them in the local
+workspace. A stored archive alone is not proof that native analysis records were
+populated.
 
 MSCAN now has a separate [analysis import module](../web_bridge/README.md#analysis-result-exchange)
-that reuses its native result parsers. Push receipts distinguish file delivery
-from native import for each pipeline job, including missing outputs, incompatible
+that reuses its native result parsers. Push receipts distinguish `file_delivery`
+from `native_imports` for each pipeline job, including missing outputs, incompatible
 sample types, unknown formats and failures. Native result files can also be
 searched and pulled into an agent session. The normal sample toolbar exposes
-received and native files across analysis tabs.
+received and native files across analysis tabs through **Download files**. There
+is no separate Agent results panel. The embedded assistant hides the detailed
+Runtime/Plan/Evidence/Trace panel; the standalone assistant retains it.
 
 Native import depends on the output format having a registered mapping; generic
 file exchange supports additional pipelines without such a mapping. Consult the
@@ -427,3 +508,6 @@ MSCAN leases transfer commands only when a worker slot is available
 can include `exclude_ids`, a list of active command IDs, to avoid re-leasing a
 locally running command if its heartbeat was delayed. Exclusion lasts only for
 that poll request; durable expiry/retry still applies after the process stops.
+Writes for the same sample are serialized within one MSCAN backend process;
+independent transfers can progress concurrently. This is separate from BioAgent's
+agent-run and pipeline-job limits.
