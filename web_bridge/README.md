@@ -2,7 +2,7 @@
 
 This package owns the external-website connection: identity mapping, embedded
 sign-in, page callbacks, conversations, file-transfer endpoints, result access,
-browser SDK and reference website adapters. It runs inside the existing agent
+browser SDK and host-integration contracts. It runs inside the existing agent
 server and workers; it does not start a separate agent execution service.
 
 ## Organization
@@ -21,7 +21,7 @@ web_bridge/
 ├── transfer/                   # Independent chat-driven transfer commands
 ├── adapters/
 │   ├── bioagent.py              # Existing account, session, file and run services
-│   └── mscan/                   # Reference website adapter and installer
+│   └── mscan/                   # MSCAN client configuration, guide and test probes
 ├── frontend/
 │   ├── embed.ts                # Single source for the website embedding SDK
 │   ├── build.mjs               # Produces /static/assistant-embed.js
@@ -91,17 +91,15 @@ Frontend development forwards `/static` to the agent, so build the SDK before
 using a new checkout's development server.
 
 See the [protocol and API guide](../docs/web_integration.md) and
-[MSCAN setup](adapters/mscan/README.md). MSCAN's canonical adapter sources are
-here because the development checkout under `resource/` is ignored by Git.
+[MSCAN setup](adapters/mscan/README.md). Runnable MSCAN frontend and backend
+integration code is tracked only in the sibling `mscan` and `mscan-app`
+repositories.
 
 ```bash
-python web_bridge/adapters/mscan/install.py
-python web_bridge/adapters/mscan/run.py agent
-# In separate terminals:
-python web_bridge/adapters/mscan/run.py backend
-python web_bridge/adapters/mscan/run.py frontend
+python -B -m interfaces.web --host 0.0.0.0 --port 8000
+# Start ../mscan-app and ../mscan directly in separate terminals.
 
-# Explicit identity linking, with the server's configuration/environment:
+# Explicit identity linking for sites that do not use shared_user_id:
 python -m web_bridge.identity SITE_ID EXTERNAL_USER_ID AGENT_USERNAME
 ```
 
@@ -126,7 +124,8 @@ python -B -m evals.check_web_multitasking
 # Opt-in live checks: running MSCAN/agent, real model calls and remote template WDL.
 python -B -m web_bridge.tests.check_mscan --pipeline
 python -B -m web_bridge.tests.check_mscan --pipeline-only --detach
-python -B -m web_bridge.tests.check_mscan_logout
+python -B -m web_bridge.tests.check_mscan_logout \
+  --jar ../mscan-app/mscan-admin/target/mscan-admin.jar
 ```
 
 The core boundary test rejects direct imports of host implementation modules.
@@ -181,14 +180,13 @@ Remote pipeline artifacts stream through the existing artifact server. Plain
 answers without output files and unsuccessful runs are not published as analyses.
 The browser does not participate in delivery.
 
-MSCAN's receiver stores artifacts and receipts under `BIOAGENT_RESULTS_ROOT`
-(default `./data/agent-results` relative to its backend; the launcher uses
-`runtime/website-integration/mscan-results`). This storage belongs to MSCAN and
-should be persistent and backed up. Each receipt records the owning external
-user, target sample, agent run, filenames, sizes and computed SHA256 checksums.
-Repeated delivery IDs reuse the committed receipt. Its native downloads use
-single-use, sixty-second tickets; file and sample ownership is checked before
-issuing and consuming them.
+MSCAN's receiver stores artifacts and receipts under `bioagent.results-root`
+(default `./data/agent-results` relative to its backend). This storage belongs
+to MSCAN and should be persistent and backed up. Each receipt records the owning
+external user, target sample, verified files and native-import outcome. Repeated
+delivery IDs reuse the committed receipt. Native downloads use single-use,
+sixty-second tickets; file and sample ownership is checked before issuing and
+consuming them.
 
 The MSCAN adapter imports registered result formats into native analysis records;
 see [analysis result exchange](#analysis-result-exchange) for the format contracts.
@@ -198,9 +196,10 @@ and native files appear under **Download files** on the sample toolbar; the old
 Agent results panel has been removed. Native interpretation belongs in the
 website adapter; generic file transport does not require a native importer.
 
-The installer changes two existing frontend files for the assistant mount and
-sample context, refresh and download hooks. Backend services, the logout hook
-and the one-use download route are supplied by added adapter classes.
+The direct integration changes two existing frontend files for the assistant
+mount, sample context, refresh and download hooks, plus `application-druid.yml`
+for connector settings. Backend services, the logout hook and the one-use
+download route are supplied by added adapter classes.
 Source pipeline definitions and execution policies are unchanged.
 
 
@@ -236,12 +235,10 @@ web_bridge/
   browser/service.py       SDK-independent host-page observation
   frontend/observer.ts     generic DOM observer in the user's host tab
   transfer/service.py      durable commands, ownership, leases, upload grants
-  adapters/mscan/
-    data_transfer/
-      AssistantTransferService.java  MSCAN discovery, destinations, source registration
-      AssistantDeliveryService.java  verified file delivery and durable receipts
-    result_importers/                format registry, native imports and QC parsing
-    resources/                       native result discovery and downloads
+
+Sibling host repositories:
+  mscan/src/integrations/bioagent/    embedded UI, context and resources
+  mscan-app/.../common/               endpoints, transfers, imports and security
 ```
 
 The agent-facing layer is owned by the main tool system:
@@ -258,7 +255,7 @@ tools/
 ```
 
 Dependencies flow from the agent through `tools/` into `web_bridge/` services.
-Account linking, transfers, browser communication and site adapters stay in the
+Identity mapping, transfers, browser communication and site adapters stay in the
 bridge; other modules can use those services without tool decorators.
 
 The browser SDK reads rendered text, headings, controls and HTML/ARIA tables.
@@ -273,7 +270,8 @@ must be installed on the external site to observe the user's actual tab. It does
 not silently connect to an arbitrary browser or copy browser login cookies.
 
 Backend transfer works without a browser tab and without a website conversation.
-The ordinary agent account must have an explicit external identity link. Tools:
+The agent account must have a resolved external identity mapping, either an
+explicit administrator link or a trusted adapter's `shared_user_id` mode. Tools:
 
 - `website_connections`: list linked sites, destination fields and backend capabilities.
 - `website_search`: search owned projects, samples and downloadable resources.
@@ -370,8 +368,10 @@ checked against their recorded checksum. The transport has no MSCAN program list
 
 MSCAN-specific code is [organized by function](adapters/mscan/README.md#code-organization).
 The [minimal installation](adapters/mscan/README.md#minimal-mscan-changes) modifies
-only two existing frontend files; backend integration is supplied by added adapter classes.
-Native importers live in `adapters/mscan/result_importers/`:
+two existing frontend files and the local backend profile directly; backend Java
+integration is supplied by added adapter classes tracked in `mscan-app`.
+Native importers live in MSCAN's
+`mscan-admin/src/main/java/com/mscan/web/controller/common/` package:
 
 - `ResultImporterRegistry` declares format contracts and binds MSCAN's existing
   native parsers.
@@ -382,7 +382,7 @@ Native importers live in `adapters/mscan/result_importers/`:
 - `NativeImportContext` supplies only that import's stored output metadata to
   the parser on the current thread. It clears its context on success or failure;
   importing a result cannot submit another workflow.
-- `resources/NativeResultResources` exposes owned object-storage files from QC,
+- `NativeResultResources` exposes owned object-storage files from QC,
   assembly, functional annotation, classification, annotation, bacterial-system
   and SNP records for search, downloads and natural-language pulls. Each resource
   resolution rechecks sample ownership and the native row. Structured native
@@ -446,8 +446,8 @@ python -B -m web_bridge.tests.check_analysis_imports --username YOUR_TEST_USER
 ```
 
 This writes clearly named test projects/samples, a session and small synthetic
-import fixtures; it does not execute biological pipelines. The account must
-already be linked to a running MSCAN connector. It checks source registration,
+import fixtures; it does not execute biological pipelines. The account identity
+must already resolve through a running MSCAN connector. It checks source registration,
 native import and pull across the four sample types and registered formats, plus
 incomplete, incompatible and unknown formats, failed-import retries, older-result
 preservation and structured JSON exports. Live validation also imported the user's
@@ -460,5 +460,5 @@ The native ownership/field checks and QC parser checks can run without services,
 after building the installed MSCAN adapter (JDK `java` and `javac` on `PATH`):
 
 ```sh
-python -B -m web_bridge.tests.check_mscan_java
+python -B -m web_bridge.tests.check_mscan_java --root ../mscan-app
 ```

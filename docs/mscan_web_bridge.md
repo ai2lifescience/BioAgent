@@ -9,7 +9,7 @@ and push data and analysis results back to MSCAN.
 
 | Function | Purpose |
 | --- | --- |
-| **Account linking** | Connect the MSCAN identity to an agent account and enforce access to the user's own data. |
+| **Unified identity** | Reuse the authenticated MSCAN SSO user ID in the agent and enforce access to the user's own data. |
 | **Push/pull data and results** | Find and pull authorized files into an agent session; push selected data and results back to MSCAN, creating named projects or samples when requested. |
 | **Browser-based page understanding** | Observe the current page, follow navigation and read visible content so the agent understands what the user is viewing. |
 
@@ -25,17 +25,21 @@ installation, complete the setup below first.
 
 ## First-time setup
 
-The installer adds adapter-owned files and changes two existing frontend files.
-It does not modify existing backend sources or require a database migration.
+The integration code is maintained directly in the sibling `mscan` and
+`mscan-app` repositories. There is no adapter installation command and MSCAN
+does not import configuration files from the BioAgent checkout. The integration
+adds adapter-owned files, changes two frontend host files and adds a `bioagent`
+section to the backend's local `application-druid.yml` profile. It does not
+require a database migration.
 The [technical reference](#technical-reference) lists the exact changes and checks.
 
 ### 1. Prepare the applications
 
-Run the following commands from the **BioAgent repository root**. The default
-directory layout is:
+The development workspace uses three independent sibling repositories:
 
 ```text
-resource/mscan/
+mscan_projects/
+├── BioAgent/       # Agent server and generic web bridge
 ├── mscan/          # MSCAN Vue frontend
 └── mscan-app/      # MSCAN Java backend
 ```
@@ -43,7 +47,7 @@ resource/mscan/
 Have the agent's Python dependencies, Java 17, Maven, Node.js and pnpm available.
 Install each frontend's dependencies using its package configuration. MSCAN's
 normal database, Redis, object storage and login configuration must already work;
-the bridge installer does not provision those services.
+the bridge integration does not provision those services.
 
 In this development environment, activate `openaisdk` first:
 
@@ -51,25 +55,21 @@ In this development environment, activate `openaisdk` first:
 conda activate openaisdk
 ```
 
-The local `pnpm-workspace.yaml` has an earlier setup fix adding
-`packages: ['.']`. If the original frontend reports `packages field missing or
-empty`, add that field while retaining its other settings. This package-manager
-fix is separate from the web bridge and is not applied by `install.py`.
+If the frontend reports `packages field missing or empty`, ensure its
+`pnpm-workspace.yaml` retains `packages: ['.']`. This package-manager setting is
+separate from the web bridge.
 
-### 2. Install the adapter
+### 2. Verify the direct integration
 
-```bash
-python web_bridge/adapters/mscan/install.py
-```
+The frontend adapter must exist under `mscan/src/integrations/bioagent/`, with
+mount/context hooks in `src/App.vue` and
+`src/views/sampleProgramResults/index.vue`. The backend adapter must exist under
+`mscan-app/mscan-admin/src/main/java/com/mscan/web/controller/common/`.
+These are ordinary tracked source files in their respective repositories.
 
-For a different MSCAN location, pass the directory containing both projects:
-
-```bash
-python web_bridge/adapters/mscan/install.py /path/to/mscan-root
-```
-
-You do not need to manually edit the two frontend hooks. The installer preserves
-line endings, avoids whole-file formatting and can be run repeatedly.
+No BioAgent-side MSCAN installer or duplicate host source is retained. When the
+bridge contract changes, apply the required source changes directly to `mscan`
+and `mscan-app`, preserving host-specific changes.
 
 ### 3. Configure the connection
 
@@ -84,9 +84,32 @@ python web_bridge/adapters/mscan/run.py init \
   --origins http://localhost:8848,http://127.0.0.1:8848,http://YOUR_SERVER_IP:8848
 ```
 
-This creates `runtime/website-integration/clients.json` with private service
-credentials and exact allowed MSCAN origins. Repeating `init` retains the
-existing keys and updates the origins. Keep this file private and outside Git.
+This configures BioAgent's private
+`runtime/website-integration/clients.json`, including the service/signing
+credentials, exact allowed MSCAN origins and shared-SSO identity mode.
+
+Configure the matching backend values directly in
+`mscan-app/mscan-admin/src/main/resources/application-druid.yml`:
+
+```yaml
+bioagent:
+  enabled: true
+  url: http://127.0.0.1:8000
+  public-url: ""
+  site-id: mscan
+  secret: "MATCH_THE_MSCAN_SECRET_IN_CLIENTS_JSON"
+  origins: "http://localhost:8848,http://127.0.0.1:8848,http://YOUR_SERVER_IP:8848"
+  results-root: ./data/agent-results
+  transfer-workers: 3
+  transfer-poll-ms: 2000
+  delivery-poll-ms: 5000
+```
+
+`url` is used by Java. `public-url` is used by browsers; when empty, MSCAN uses
+the current browser hostname on port 8000. The `secret`, site ID and origins must
+match BioAgent's client entry, but MSCAN keeps its own configuration and has no
+runtime file dependency on BioAgent. Treat the YAML as sensitive after placing
+the service secret in it. Restart both services after changing either side.
 
 ### 4. Install dependencies and build
 
@@ -94,9 +117,9 @@ From the BioAgent repository root:
 
 ```bash
 npm --prefix frontend ci
-pnpm --dir resource/mscan/mscan install --frozen-lockfile
+pnpm --dir ../mscan install --frozen-lockfile
 npm --prefix frontend run build
-mvn -f resource/mscan/mscan-app/pom.xml clean package -DskipTests
+mvn -f ../mscan-app/pom.xml clean package -DskipTests
 ```
 
 If the agent uses Docker workers, build its worker image as described in
@@ -110,21 +133,18 @@ For a production MSCAN frontend deployment, also build its static files and
 deploy the generated output through your existing hosting setup:
 
 ```bash
-pnpm --dir resource/mscan/mscan run build:pro
+pnpm --dir ../mscan run build:pro
 ```
 
 The development frontend uses Vite and does not require that production build.
-
-If you want to reuse an existing standalone agent account, complete
-[account linking](#account-linking-and-login) before opening the embedded assistant.
 
 ## Everyday startup
 
 After [first-time setup](#install-the-web-bridge-in-mscan), use your normal Python,
 Java and pnpm commands in three separate terminals. The examples use this
-checkout at `/media/data/fuhaoyi/codes/BioAgent` and browser address
-`192.168.75.56`; replace these if your deployment differs. Replace the credential
-placeholders with your private values. Stop an existing instance before starting
+workspace under `/media/data/fuhaoyi/codes/`, with `BioAgent`, `mscan` and
+`mscan-app` as siblings. Replace the paths, browser address and credential
+placeholders for your deployment. Stop an existing instance before starting
 another on the same port.
 
 ### Terminal 1 — agent
@@ -158,17 +178,7 @@ python -B -m interfaces.web --host 0.0.0.0 --port 8000
 
 ```bash
 conda activate openaisdk
-cd /media/data/fuhaoyi/codes/BioAgent
-
-export BIOAGENT_ENABLED=true
-export BIOAGENT_URL=http://127.0.0.1:8000
-export BIOAGENT_PUBLIC_URL=http://192.168.75.56:8000
-export BIOAGENT_ORIGINS=http://localhost:8848,http://127.0.0.1:8848,http://192.168.75.56:8848
-export BIOAGENT_RESULTS_ROOT="$PWD/runtime/website-integration/mscan-results"
-
-export BIOAGENT_SECRET="$(python -c 'import json; print(json.load(open("runtime/website-integration/clients.json"))["mscan"]["secret"])')"
-
-cd resource/mscan/mscan-app
+cd /media/data/fuhaoyi/codes/mscan-app
 
 mvn clean package -DskipTests &&
 java -jar mscan-admin/target/mscan-admin.jar \
@@ -179,48 +189,43 @@ java -jar mscan-admin/target/mscan-admin.jar \
 
 ```bash
 conda activate openaisdk
-cd /media/data/fuhaoyi/codes/BioAgent/resource/mscan/mscan
+cd /media/data/fuhaoyi/codes/mscan
 
 pnpm install --frozen-lockfile &&
 pnpm dev
 ```
 
-Open `http://192.168.75.56:8000` for the standalone agent or
-`http://192.168.75.56:8848` for MSCAN. Sign in using your configured MSCAN login,
+Open `http://YOUR_SERVER_IP:8000` for the standalone agent or
+`http://YOUR_SERVER_IP:8848` for MSCAN. Sign in using your configured MSCAN login,
 select a sample and open **Ask assistant**. Local MSCAN access can use
 `http://localhost:8848`. Its browser origin must be allowed in both
-`BIOAGENT_ORIGINS` and the agent's private client configuration.
+MSCAN's `bioagent.origins` and the agent's private client configuration.
 
-The agent reads `runtime/website-integration/clients.json`; the backend export
-loads the matching service credential from that same file before changing
-directories. If reading it fails, stop and complete connection configuration
-before starting Java. These exports enable the bridge without a startup helper.
+From the BioAgent root, the agent automatically discovers
+`runtime/website-integration/clients.json` when neither client environment
+variable is set. The explicit export above also prevents ambiguity when a
+different working directory is used. MSCAN reads only its own
+`application-druid.yml`; it does not read BioAgent's runtime files. Keep the two
+sides' site ID, service secret and allowed origins consistent.
 
 You do **not** need Maven or `pnpm install` for every restart. Rebuild the backend
 after code changes; install dependencies after their declarations or lockfiles
 change. Keep real API and storage keys in your private environment, outside Git.
 
-## Account linking and login
+## Unified identity and login
 
 The service credential identifies **MSCAN's backend** to the agent. MSCAN's
 user login identifies **the person**. `run.py init` generates the service and
 signing secrets; it does not know or store a user's login password.
 
-The agent maps `(site_id, MSCAN user ID)` to an agent account. On first use, an
-unlinked MSCAN identity gets a separate agent account. Usernames and email
-addresses are not automatically matched. To use an existing agent account, an
-administrator can link it **before the first connection**:
-
-```bash
-# Run from the BioAgent root, with the same configuration/database as the server.
-unset AGENT_WEBSITE_CLIENTS
-export AGENT_WEBSITE_CLIENTS_FILE="$PWD/runtime/website-integration/clients.json"
-python -m web_bridge.identity mscan MSCAN_USER_ID AGENT_USERNAME
-```
-
-Use MSCAN's actual internal user ID, not an assumed display name. Reassigning an
-identity already linked to another agent account is rejected. Account mappings
-are stored in the authentication database, not in `clients.json`.
+For the MSCAN adapter, `run.py init` enables shared SSO user IDs. The authenticated
+Java backend sends the verified MSCAN user ID and username together with the
+authenticated subject; browser-supplied identities are not accepted. The agent
+validates that the two user IDs match, then creates or reuses the account with
+that same user ID. The same verified SSO ID can therefore resolve to the same
+agent account across sites configured for this mode. No manual account-link
+command is required. Existing external mappings take precedence so upgrades do
+not orphan prior conversations or artifacts.
 
 The development login bypass supplies a configured development user without a
 login screen. Restore real MSCAN login for distinct users; the adapter reads the
@@ -261,10 +266,10 @@ downloadable file. See the [supported importer contracts](../web_bridge/README.m
 
 | Symptom | What to check |
 | --- | --- |
-| **Ask assistant** is missing | Start the backend with `BIOAGENT_ENABLED=true` and the matching service credential. Confirm the agent is running and reachable at `BIOAGENT_PUBLIC_URL`; reload MSCAN. |
-| Origin is rejected | Match the browser's exact scheme, hostname and port in `clients.json` and `BIOAGENT_ORIGINS`. Check any explicit `AGENT_WEBSITE_SITES` override. Restart affected services after changes. |
-| Connection or sign-in fails | Confirm both processes use the same MSCAN service secret and that MSCAN has an authenticated user (or the development bypass). Java uses `BIOAGENT_URL`; browsers use `BIOAGENT_PUBLIC_URL`. |
-| `clients.json` cannot be read | Run `run.py init` for first-time setup or correct the file path. Run the backend credential export from the BioAgent root, before `cd resource/mscan/mscan-app`. |
+| **Ask assistant** is missing | Set `bioagent.enabled: true` in MSCAN's active profile. Confirm the agent is running and reachable at `bioagent.public-url` (or the derived browser-host URL), then reload MSCAN. |
+| Origin is rejected | Match the browser's exact scheme, hostname and port in BioAgent's `clients.json` and MSCAN's `bioagent.origins`. Check any explicit `AGENT_WEBSITE_SITES` override. Restart affected services after changes. |
+| Connection or sign-in fails | Confirm both sides use the same site ID and service secret and that MSCAN has an authenticated user (or the development bypass). Java uses `bioagent.url`; browsers use `bioagent.public-url`. |
+| `clients.json` cannot be read | Run `run.py init` from the BioAgent root or correct `AGENT_WEBSITE_CLIENTS_FILE`, then restart BioAgent. MSCAN does not read this file. |
 | Transfer remains queued/running | Check `website_transfer_status` and the MSCAN backend logs. The backend connector must remain running. A queued response is not a completed transfer. |
 | Files arrived but native results are missing | Inspect `native_imports` for missing output roles, incompatible sample types, unsupported formats or parser errors. Resolve the reported cause before retrying a failed transfer. |
 | Native results exist but the page is stale | Reload the selected sample/view. Automatic refresh can miss status-only receipt updates; verify the import receipt before assuming a transfer failed. |
@@ -278,61 +283,37 @@ For generic API, origin and transfer contracts, see [web integration](web_integr
 
 | Change | Required action |
 | --- | --- |
-| MSCAN adapter source | Rerun `install.py`, rebuild the affected frontend/backend and restart it. Installed copies under `resource/mscan/` are replaced by the installer. |
+| MSCAN adapter source | Apply the change directly in the tracked `mscan` or `mscan-app` integration files, rebuild the affected project and restart it. |
 | Agent frontend or embed SDK | Run `npm --prefix frontend run build`, then reload the browser. |
 | Agent Python code | Restart the agent; rebuild its worker image when worker/tool code changes. |
 | Dependencies or lockfiles | Reinstall the affected dependencies and rebuild that application/image. |
-| Private client origins or service credentials | Keep agent and MSCAN settings consistent, re-export values and restart affected services. Rerunning `init` preserves existing secrets and updates origins. |
+| Client origins, URLs or service credentials | Update BioAgent's private client entry and MSCAN's `application-druid.yml` directly, keep their site ID/secret/origins consistent, then restart both services. |
 
 Keep the existing private configuration and account databases across restarts.
 You do not need to rerun `init` or relink users for ordinary restarts.
 
-### Custom configuration and optional launcher
+### Custom configuration
 
-For normal startup, use the [three terminals above](#everyday-startup).
-`run.py` remains an optional alternative that loads configuration and starts each
-process for you. Do not run both methods on the same ports:
+For normal startup, use the [three terminals above](#everyday-startup). BioAgent's
+agent-only launcher remains available:
 
 ```bash
-# Terminal 1: agent (port 8000)
 python web_bridge/adapters/mscan/run.py agent
-
-# Terminal 2: MSCAN backend (its configured port, 8080 in this checkout)
-python web_bridge/adapters/mscan/run.py backend
-
-# Terminal 3: MSCAN development frontend (8848 in this checkout)
-python web_bridge/adapters/mscan/run.py frontend
 ```
 
-With direct commands, select an alternative private config by exporting
-`AGENT_WEBSITE_CLIENTS_FILE=/absolute/path/to/clients.json` in the agent terminal
-and using that same file in the backend's `BIOAGENT_SECRET` command. Clear an
-inline `AGENT_WEBSITE_CLIENTS` override as shown above. If you explicitly set
-`AGENT_WEBSITE_SITES`, keep it consistent with the configured browser origins.
-For separate hosts, set `BIOAGENT_URL` to an address reachable by Java and
-`BIOAGENT_PUBLIC_URL` to an address reachable by users' browsers.
-`BIOAGENT_RESULTS_ROOT` selects persistent result storage. Direct Java startup
-keeps MSCAN's normal scheduler configuration;
+Select an alternative private BioAgent client config by exporting
+`AGENT_WEBSITE_CLIENTS_FILE=/absolute/path/to/clients.json`. Clear an inline
+`AGENT_WEBSITE_CLIENTS` override as shown above. If you explicitly set
+`AGENT_WEBSITE_SITES`, keep it consistent with both configured origin lists.
+For separate hosts, set MSCAN's `bioagent.url` to an address reachable by Java
+and `bioagent.public-url` to an address reachable by users' browsers.
+`bioagent.results-root` selects persistent MSCAN-owned result storage. Direct
+Java startup keeps MSCAN's normal scheduler configuration;
 append `--scheduled.cromwellPoll.enabled=false` only when you want polling disabled.
 
-For a non-default checkout, add `--mscan-root /path/to/mscan-root` to the
-optional backend/frontend launcher commands. For separate hosts with the launcher,
-set both agent addresses:
-
-```bash
-python web_bridge/adapters/mscan/run.py backend \
-  --agent-url https://agent.example.com \
-  --public-url https://agent.example.com
-```
-
-`--agent-url` must be reachable from Java; `--public-url` must be reachable from
-users' browsers. The backend launcher disables MSCAN's background workflow
-poller for integration development; add `--enable-scheduler` when that MSCAN
-service should run. Agent pipeline execution is configured separately.
-
-MSCAN processes up to three bridge transfer commands concurrently by default. Set `BIOAGENT_TRANSFER_WORKERS`
-in the backend environment to change that limit; writes to the same sample remain
-serialized within that backend process.
+MSCAN processes up to three bridge transfer commands concurrently by default.
+Change `bioagent.transfer-workers` in `application-druid.yml` to adjust that
+limit; writes to the same sample remain serialized within that backend process.
 
 ## Technical reference
 
@@ -350,7 +331,7 @@ services directly without the agent tool layer.
 flowchart TD
     User[User] --> Login
 
-    subgraph Identity["1. Account linking"]
+    subgraph Identity["1. Unified identity"]
         Login[MSCAN login] --> Link[Map MSCAN identity to agent account]
         Link --> Access[Linked identity and ownership checks]
     end
@@ -382,26 +363,29 @@ flowchart TD
     Agent -->|Answer and results| User
 ```
 
-### Installation baseline
+### Direct integration baseline
 
-The installation procedure was checked against the original `resource/mscan.zip`
-and `resource/mscan-app.zip`. A different MSCAN version may need its frontend
-hooks adapted. Maintain integration sources in `web_bridge/adapters/mscan/`.
+The runnable integration is tracked directly in the sibling `mscan` and
+`mscan-app` repositories. BioAgent retains only the client configuration helper,
+integration guide and reusable validation probes under
+`web_bridge/adapters/mscan/`; it does not retain duplicate Java, Vue or
+TypeScript host sources.
 
 ### Existing MSCAN files changed
 
-Paths in this table are relative to the MSCAN frontend, `resource/mscan/mscan/`.
+Paths below are relative to the workspace containing the three repositories.
 
-| File | What the installer adds | Purpose |
+| File | Direct change | Purpose |
 | --- | --- | --- |
-| `src/App.vue` | `AssistantBridge` import and component | Mount the embedded assistant across page navigation |
-| `src/views/sampleProgramResults/index.vue` | Context registration, result-refresh listener, component refresh key and `SampleFileMenu` | Share the selected sample and tab, refresh received results and provide downloads |
+| `mscan/src/App.vue` | `AssistantBridge` import and component | Mount the embedded assistant across page navigation |
+| `mscan/src/views/sampleProgramResults/index.vue` | Context registration, result-refresh listener, component refresh key and `SampleFileMenu` | Share the selected sample and tab, refresh received results and provide downloads |
+| `mscan-app/mscan-admin/src/main/resources/application-druid.yml` | Direct `bioagent.*` settings | Configure the connector without cross-project file references |
 
-MSCAN's existing backend Java files, database services, pipeline definitions,
+MSCAN's existing framework/security Java sources, database services, pipeline definitions,
 `SecurityConfig.java`, `CasClientConfig.java`, frontend user store and QC panel
-remain unchanged on a clean installation.
+remain unchanged.
 
-### New adapter files installed
+### Adapter files maintained in MSCAN
 
 | Destination | Added files |
 | --- | --- |
@@ -414,30 +398,24 @@ an added filter chain scoped to GET `/assistant/received-download/*`; the
 controller validates the expiring, one-use ticket and resource ownership.
 Other routes retain MSCAN's existing authentication.
 
-On upgrades from older bridge installations, the installer removes its exact
-legacy edits from the user store, CAS configuration and security configuration,
-as well as renamed adapter classes and their stale compiled output. It preserves
-unrelated host customizations.
+Older bridge patches in the user store, CAS configuration and security
+configuration are not required by this version. Remove only known legacy bridge
+insertions and preserve unrelated host customizations.
 
-### Verify installation
+### Verify the direct integration
 
-With the original ZIPs present, check installation in a temporary clean copy:
-
-```bash
-python -B -m web_bridge.tests.check_mscan_install
-```
-
-This compares original files byte for byte, verifies that only the two frontend
-files change, and checks repeat installation. It does not modify the running
-checkout. After building MSCAN, run the adapter checks:
+Build the directly integrated projects and run the adapter checks:
 
 ```bash
-python -B -m web_bridge.tests.check_mscan_java
-python -B -m web_bridge.tests.check_mscan_logout
-node web_bridge/adapters/mscan/tests/check_sample_files.mjs
+pnpm --dir ../mscan type:check
+mvn -f ../mscan-app/pom.xml clean package -DskipTests
+python -B -m web_bridge.tests.check_mscan_java --root ../mscan-app
+python -B -m web_bridge.tests.check_mscan_logout \
+  --jar ../mscan-app/mscan-admin/target/mscan-admin.jar
 ```
 
-These cover native resource ownership, result importing, QC formats, scoped
-download security, bounded transfer concurrency, same-name file downloads and logout revocation. They do not run analysis pipelines.
+These cover frontend typing, backend compilation, native resource ownership,
+result importing, QC formats, scoped download security, bounded transfer
+concurrency and logout revocation. They do not run analysis pipelines.
 For browser acceptance checks and their requirements, see
 [Validate](../web_bridge/adapters/mscan/README.md#validate).

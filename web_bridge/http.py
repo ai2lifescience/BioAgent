@@ -64,7 +64,7 @@ def handle_service(handler, path):
         handler._send_json(result)
         return True
     subject = text_id(body.get('subject') or handler.headers.get('X-Website-Subject'), 'external subject')
-    principal = Federation().identity(site, subject)
+    principal = Federation().identity(site, subject, body.get('identity'))
     with get_host().user_scope(principal.user_id):
         accounts = WebsiteAccounts()
         if operation in {'bootstrap', 'ticket'} and handler.command == 'POST':

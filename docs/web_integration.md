@@ -118,14 +118,20 @@ or third-party cookies. Never put service or signing secrets in browser code.
 
 The [independent web bridge module](../web_bridge/README.md) owns the connector in `web_bridge/identity.py`,
 `web_bridge/conversations.py` and `web_bridge/http.py`. It has no MSCAN
-schema dependencies. [The MSCAN reference adapter](../web_bridge/adapters/mscan/README.md)
-adds a controller, backend connection/transfer/import services and frontend hooks.
-Its installer changes two existing frontend files and adds adapter-owned files;
-existing MSCAN backend source files remain unchanged.
+schema dependencies. [The MSCAN integration](../web_bridge/adapters/mscan/README.md)
+adds a controller, backend connection/transfer/import services and frontend hooks
+in the sibling host repositories.
+The runnable integration is tracked directly in the sibling `mscan` and
+`mscan-app` repositories: it changes two existing frontend files, adds
+adapter-owned frontend/backend files and configures the backend's local
+`application-druid.yml` profile. It does not import files from BioAgent at
+runtime.
 
 Configure `AGENT_WEBSITE_CLIENTS_FILE` with the absolute path to a private JSON
-file outside version control. Each site has a different random service secret,
-an agent-only signing secret, and exact allowed browser origins:
+file outside version control. When neither client environment variable is set,
+the server also checks `runtime/website-integration/clients.json` relative to its
+working directory. Each site has a different random service secret, an agent-only
+signing secret, and exact allowed browser origins:
 
 ```json
 {
@@ -159,10 +165,19 @@ An explicitly linked website is trusted to authenticate as that account. The
 embedded assistant uses its normal account permissions; use separate provisioned
 accounts when a website must not share an existing standalone account's data.
 
+A trusted SSO adapter can instead opt into `"identity_mode": "shared_user_id"`.
+Its backend must send an `identity` object whose `user_id` exactly matches the
+authenticated `subject`, plus a non-empty `username`. The bridge then creates or
+reuses the BioAgent account with that verified user ID, including across sites
+using the same mode. Existing `(site_id, external_subject)` mappings continue to
+win for upgrade compatibility. Use this only when the sites and BioAgent share
+one authoritative user-ID namespace; the MSCAN `run.py init` command configures
+this mode automatically.
+
 | Backend endpoint | Input and result |
 | --- | --- |
-| `POST /website/service/bootstrap` | `{subject, origin, scope_key?}` → single-use login `code` (60 seconds). Creates or restores the user's current website conversation. Default scope is `workspace`. |
-| `POST /website/service/ticket` | `{subject, origin}` → short-lived bridge `token`. The service resolves the internal account ID. |
+| `POST /website/service/bootstrap` | `{subject, identity?, origin, scope_key?}` → single-use login `code` (60 seconds). Creates or restores the user's current website conversation. Default scope is `workspace`. |
+| `POST /website/service/ticket` | `{subject, identity?, origin}` → short-lived bridge `token`. The service resolves the internal account ID. |
 | `POST /website/service/results` | `{subject, scope_key?}` → conversations, recent runs (up to 100 per conversation), original page context, answers and workspace file metadata. |
 | `POST /website/service/uploads` | `{subject, session_id, resource_id, revision, filename, size}` → resumable upload state. A repeated source/revision reuses a matching upload or completed file. |
 | `PATCH /website/service/uploads/{upload_id}` | Raw bytes, `Upload-Offset`, `Content-Length`, and `X-Website-Subject`. Uses the ordinary owned-upload quotas and chunk limit. |
@@ -193,7 +208,7 @@ open; completion events are a UI refresh hint, not the durable result store.
 Page callbacks need a live host browser; detached pipeline execution does not.
 
 On host logout, call `revoke` from the authenticated backend before invalidating
-the host session, and destroy the drawer. The MSCAN reference adapter hooks its
+the host session, and destroy the drawer. The MSCAN integration hooks its
 existing token invalidation service through an added Spring aspect and also
 subscribes to the frontend logout action. MSCAN's original login/security source
 files remain unchanged. Server revocation

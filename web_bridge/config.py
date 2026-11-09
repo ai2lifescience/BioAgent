@@ -9,8 +9,11 @@ from .ports import get_host
 
 def clients() -> dict:
     raw = os.getenv('AGENT_WEBSITE_CLIENTS')
-    if raw is None and os.getenv('AGENT_WEBSITE_CLIENTS_FILE'):
-        raw = Path(os.environ['AGENT_WEBSITE_CLIENTS_FILE']).read_text()
+    if raw is None:
+        configured = os.getenv('AGENT_WEBSITE_CLIENTS_FILE')
+        path = Path(configured).expanduser() if configured else Path('runtime/website-integration/clients.json')
+        if path.is_file():
+            raw = path.read_text(encoding='utf-8')
     value = json.loads(raw or '{}')
     if not isinstance(value, dict):
         raise ValueError('AGENT_WEBSITE_CLIENTS must be an object.')

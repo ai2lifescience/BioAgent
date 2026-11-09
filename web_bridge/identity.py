@@ -1,8 +1,4 @@
-"""Server-to-server website identities and single-use browser login grants.
-
-A website may assert its own external subjects, never an internal account ID.
-Existing accounts can only be linked by the administrator CLI below.
-"""
+"""Server-to-server website identities and single-use browser login grants."""
 from __future__ import annotations
 
 import hashlib
@@ -21,20 +17,36 @@ class Federation:
             db.execute('CREATE TABLE IF NOT EXISTS website_grants (digest TEXT PRIMARY KEY, site_id TEXT, origin TEXT, user_id TEXT, session_id TEXT, expires REAL)')
             db.execute('CREATE TABLE IF NOT EXISTS website_logins (digest TEXT PRIMARY KEY, site_id TEXT, user_id TEXT)')
 
-    def identity(self, site_id, subject):
+    def identity(self, site_id, subject, identity=None):
         text_id(subject, 'external subject')
+        shared_user_id = clients().get(site_id, {}).get('identity_mode') == 'shared_user_id'
+        username = None
+        if identity is not None:
+            if not isinstance(identity, dict) or identity.get('user_id') != subject:
+                raise ValueError('Website identity does not match the authenticated subject.')
+            username = text_id(identity.get('username'), 'external username')
         with get_host().identity_transaction() as db:
-            identity = db.execute('SELECT user_id FROM external_identities WHERE site_id=? AND subject=?', (site_id, subject)).fetchone()
-            row = db.user(identity['user_id']) if identity else None
+            mapping = db.execute('SELECT user_id FROM external_identities WHERE site_id=? AND subject=?', (site_id, subject)).fetchone()
+            row = db.user(mapping['user_id']) if mapping else None
             if row:
                 if row['disabled']:
                     raise get_host().auth_error('This account is disabled.')
                 return get_host().principal(row['user_id'], row['username'])
-            identifier = uuid4().hex
-            username = 'website_' + identifier
-            db.create_user(identifier, username)
-            db.execute('INSERT INTO external_identities VALUES (?,?,?)', (site_id, subject, identifier))
-            return get_host().principal(identifier, username)
+            identifier = subject if shared_user_id else uuid4().hex
+            row = db.user(identifier)
+            if row:
+                if row['disabled']:
+                    raise get_host().auth_error('This account is disabled.')
+            else:
+                account_name = username if shared_user_id and username else 'website_' + identifier
+                db.create_user(identifier, account_name)
+                row = {'user_id': identifier, 'username': account_name, 'disabled': 0}
+            db.execute(
+                'INSERT INTO external_identities VALUES (?,?,?) '
+                'ON CONFLICT(site_id,subject) DO UPDATE SET user_id=excluded.user_id',
+                (site_id, subject, identifier),
+            )
+            return get_host().principal(row['user_id'], row['username'])
 
     def link(self, site_id, subject, username):
         if site_id not in clients():
