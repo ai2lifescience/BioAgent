@@ -35,8 +35,8 @@ public class ResultImportCheck {
     public static void main(String[] args) throws Exception {
         var registry=new ResultImporterRegistry(unused(IAssemblyResultService.class),unused(IMetaxResultService.class),
             unused(IFuncReadsResultService.class),unused(IFuncAssemblyResultService.class),unused(IAnnotatorResultService.class),
-            unused(IMetadataProcessService.class),unused(IStrainProfileService.class),unused(IStrainCoptrService.class));
-        if(registry.capabilities().size()!=15)throw new AssertionError("Format registrations lost");
+            unused(IMetadataProcessService.class),unused(IStrainProfileService.class),unused(IStrainCoptrService.class),unused(IGenomeTracingService.class),unused(IStrainCoptrResultService.class));
+        if(registry.capabilities().size()!=17)throw new AssertionError("Format registrations lost");
         var tx=unused(PlatformTransactionManager.class);var qc=new Qc(tx);
         var imports=new ResultImportService(null,null,tx,registry,qc);
         Path dir=Files.createTempDirectory("result-import-check-");
@@ -58,6 +58,16 @@ public class ResultImportCheck {
             if(!state(unknown,NEW).equals("unsupported")||!Boolean.FALSE.equals(unknown.get("native_import_failed")))throw new AssertionError("File-only fallback lost");
             var outcome=((List<Map<String,Object>>)unknown.get("native_imports")).get(0);
             if(!"imported".equals(((Map<?,?>)outcome.get("generic_import")).get("state")))throw new AssertionError("Generic delivery outcome missing");
+            var array=imports.apply("owner","sample","genomic","delivery",dir,List.of(file("a",NEW,2,"Custom.array"),file("b",NEW,2,"Custom.array"))).get(0);
+            if(!"Custom".equals(array.get("format"))||String.valueOf(array.get("message")).contains("Duplicate"))throw new AssertionError("Legitimate array rejected as duplicate roles");
+            var ambiguous=imports.apply("owner","sample","meta","delivery",dir,List.of(file("a",NEW,2,"metax.profile"),file("b",NEW,2,"metax.profile"))).get(0);
+            if(!"incomplete".equals(ambiguous.get("state")))throw new AssertionError("Ambiguous native scalar accepted");
+            String emptyId="e".repeat(64);Files.writeString(dir.resolve(emptyId),"log2(PTR):genome_id/sample_id,reads\n");
+            var empty=imports.apply("owner","sample","meta","delivery",dir,List.of(file(emptyId,NEW,2,"StrainCoPTR.log2ptr_csv"))).get(0);
+            if(!"empty".equals(empty.get("state")))throw new AssertionError("Header-only growth must not run the native parser or overwrite records");
+            Files.writeString(dir.resolve(emptyId),"id,reads\nexample,1\n");
+            if(!ResultImportService.hasDataRow(dir.resolve(emptyId)))throw new AssertionError("Nonempty CSV treated as empty");
+            Files.delete(dir.resolve(emptyId));
             System.out.println("PASS importer registry, job scoping, retry, newer-result preservation, sample types and file-only fallback");
         } finally {
             Files.deleteIfExists(dir.resolve("old"));Files.deleteIfExists(dir.resolve("new"));Files.deleteIfExists(dir);

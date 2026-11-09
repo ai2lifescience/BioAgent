@@ -1,0 +1,225 @@
+{
+  "pipeline": "pathogen_variant_risk_assessment_consensus",
+  "engine": "wdl",
+  "manifest_sha256": "b812a7a292d908878a900cbdd04a3ae8adc18f67f641916ecd2921c860a99127",
+  "selected_for_execution": false,
+  "execution_status": "not_executed",
+  "scope_note": "Contract and inert-transfer verification only; biological workflow/example outside the live execution safety scope.",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/pathogen_variant_risk_assessment_consensus/data/input/H3N2_PX908176.1_HA.fasta",
+      "bytes": 1909,
+      "sha256": "70ff1f3ec4780c00908da5d7046f164f7345b0d59f0d99f39563fba3951f274e"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "consensus_fasta"
+    ],
+    "outputs": [
+      "final_report",
+      "output_archive"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/ae6ef3d13c14487cb11cc9d598593716_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "pathogen_variant_risk_assessment_consensus_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "9d2663ec18f3404a9a6dd77585a6e73c",
+      "response": {
+        "transfer_id": "9d2663ec18f3404a9a6dd77585a6e73c",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "ae6ef3d13c14487cb11cc9d598593716_contract-check.json",
+              "id": "192ad52febb331f66861b71329dae51e97bed641043e73b6f9eb01edfa9ef372",
+              "source_path": "uploads/ae6ef3d13c14487cb11cc9d598593716_contract-check.json",
+              "size": 197,
+              "sha256": "33a046f6e680569998f57f45e2ed7754ca60b76ce10bb4037f2fdd851367ba54",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "9d2663ec18f3404a9a6dd77585a6e73c",
+          "target": {
+            "sample_id": "478f7a08a58d3df1962a0156f089a3a8",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "pathogen_variant_risk_assessment_consensus_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "478f7a08a58d3df1962a0156f089a3a8"
+      },
+      "transfer_id": "ce96313170614907b46f83c9a5571ae3",
+      "response": {
+        "transfer_id": "ce96313170614907b46f83c9a5571ae3",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "33a046f6e680569998f57f45e2ed7754ca60b76ce10bb4037f2fdd851367ba54",
+              "kind": "analysis_output",
+              "sample_id": "478f7a08a58d3df1962a0156f089a3a8",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 197,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "ae6ef3d13c14487cb11cc9d598593716_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:9d2663ec18f3404a9a6dd77585a6e73c:192ad52febb331f66861b71329dae51e97bed641043e73b6f9eb01edfa9ef372",
+              "id": "192ad52febb331f66861b71329dae51e97bed641043e73b6f9eb01edfa9ef372",
+              "source_path": "uploads/ae6ef3d13c14487cb11cc9d598593716_contract-check.json",
+              "sample_name": "pathogen_variant_risk_assessment_consensus_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:478f7a08a58d3df1962a0156f089a3a8",
+              "importable": false,
+              "sample_name": "pathogen_variant_risk_assessment_consensus_contract_only",
+              "data_type": "meta",
+              "sample_id": "478f7a08a58d3df1962a0156f089a3a8"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:9d2663ec18f3404a9a6dd77585a6e73c:192ad52febb331f66861b71329dae51e97bed641043e73b6f9eb01edfa9ef372"
+      },
+      "transfer_id": "2258e4bff032433ba04243bf44296751",
+      "response": {
+        "transfer_id": "2258e4bff032433ba04243bf44296751",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "71535a95-796a-4d53-a5bb-e6d0bc89f2e8",
+            "path": "uploads/41478fdb97e54639b64fbee2db3f73ce_ae6ef3d13c14487cb11cc9d598593716_contract-check.json",
+            "workspace_path": "uploads/41478fdb97e54639b64fbee2db3f73ce_ae6ef3d13c14487cb11cc9d598593716_contract-check.json",
+            "name": "ae6ef3d13c14487cb11cc9d598593716_contract-check.json",
+            "size": 197,
+            "sha256": "33a046f6e680569998f57f45e2ed7754ca60b76ce10bb4037f2fdd851367ba54",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "71535a95-796a-4d53-a5bb-e6d0bc89f2e8",
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "478f7a08a58d3df1962a0156f089a3a8",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "pathogen_variant_risk_assessment_consensus_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "ae6ef3d13c14487cb11cc9d598593716_contract-check.json",
+      "resource_id": "result:9d2663ec18f3404a9a6dd77585a6e73c:192ad52febb331f66861b71329dae51e97bed641043e73b6f9eb01edfa9ef372",
+      "state": "succeeded",
+      "bytes": 197,
+      "sha256": "33a046f6e680569998f57f45e2ed7754ca60b76ce10bb4037f2fdd851367ba54",
+      "expected_sha256": "33a046f6e680569998f57f45e2ed7754ca60b76ce10bb4037f2fdd851367ba54",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "33a046f6e680569998f57f45e2ed7754ca60b76ce10bb4037f2fdd851367ba54",
+      "kind": "analysis_output",
+      "sample_id": "478f7a08a58d3df1962a0156f089a3a8",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 197,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "ae6ef3d13c14487cb11cc9d598593716_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:9d2663ec18f3404a9a6dd77585a6e73c:192ad52febb331f66861b71329dae51e97bed641043e73b6f9eb01edfa9ef372",
+      "id": "192ad52febb331f66861b71329dae51e97bed641043e73b6f9eb01edfa9ef372",
+      "source_path": "uploads/ae6ef3d13c14487cb11cc9d598593716_contract-check.json",
+      "sample_name": "pathogen_variant_risk_assessment_consensus_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:478f7a08a58d3df1962a0156f089a3a8",
+      "importable": false,
+      "sample_name": "pathogen_variant_risk_assessment_consensus_contract_only",
+      "data_type": "meta",
+      "sample_id": "478f7a08a58d3df1962a0156f089a3a8"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 16.35,
+  "test_finished": true
+}

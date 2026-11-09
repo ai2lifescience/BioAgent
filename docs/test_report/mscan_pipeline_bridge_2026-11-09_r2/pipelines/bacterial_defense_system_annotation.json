@@ -1,0 +1,227 @@
+{
+  "pipeline": "bacterial_defense_system_annotation",
+  "engine": "wdl",
+  "manifest_sha256": "148d251ab762b16a6b1c9c1d2e5a3963439a926b7d679020ef071a4f50cf6759",
+  "selected_for_execution": false,
+  "execution_status": "not_executed",
+  "scope_note": "Contract and inert-transfer verification only; biological workflow/example outside the live execution safety scope.",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/bacterial_defense_system_annotation/data/input/bacdef_demo_pao1.fasta",
+      "bytes": 6342768,
+      "sha256": "3e9335fb76772d324537b0c4c8cc7935e8b467b2acb0fae0c6e6dbeb2f227117"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "sequence_file1",
+      "sequence_file2"
+    ],
+    "outputs": [
+      "defense_systems",
+      "defense_genes",
+      "defense_hmmer_hits"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/bd465d0c62f94731a2bc9f9c1e81ccee_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "bacterial_defense_system_annotation_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "db4d67a6dbc6434ea5852aa415c5a722",
+      "response": {
+        "transfer_id": "db4d67a6dbc6434ea5852aa415c5a722",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "bd465d0c62f94731a2bc9f9c1e81ccee_contract-check.json",
+              "id": "9ddb30b7aa2c7b68d7b65e47ec3fb2a9f614298eac9c10a43a88231824cb760a",
+              "source_path": "uploads/bd465d0c62f94731a2bc9f9c1e81ccee_contract-check.json",
+              "size": 190,
+              "sha256": "14242e4697fd498088994375ac1467fbd98faa58c987eb2a732817d918e0b303",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "db4d67a6dbc6434ea5852aa415c5a722",
+          "target": {
+            "sample_id": "b8890c00cd733bc2b94af83934c13f57",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "bacterial_defense_system_annotation_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "b8890c00cd733bc2b94af83934c13f57"
+      },
+      "transfer_id": "82ac4897563e47899c48d7d43e9481ae",
+      "response": {
+        "transfer_id": "82ac4897563e47899c48d7d43e9481ae",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "14242e4697fd498088994375ac1467fbd98faa58c987eb2a732817d918e0b303",
+              "kind": "analysis_output",
+              "sample_id": "b8890c00cd733bc2b94af83934c13f57",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 190,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "bd465d0c62f94731a2bc9f9c1e81ccee_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:db4d67a6dbc6434ea5852aa415c5a722:9ddb30b7aa2c7b68d7b65e47ec3fb2a9f614298eac9c10a43a88231824cb760a",
+              "id": "9ddb30b7aa2c7b68d7b65e47ec3fb2a9f614298eac9c10a43a88231824cb760a",
+              "source_path": "uploads/bd465d0c62f94731a2bc9f9c1e81ccee_contract-check.json",
+              "sample_name": "bacterial_defense_system_annotation_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:b8890c00cd733bc2b94af83934c13f57",
+              "importable": false,
+              "sample_name": "bacterial_defense_system_annotation_contract_only",
+              "data_type": "meta",
+              "sample_id": "b8890c00cd733bc2b94af83934c13f57"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:db4d67a6dbc6434ea5852aa415c5a722:9ddb30b7aa2c7b68d7b65e47ec3fb2a9f614298eac9c10a43a88231824cb760a"
+      },
+      "transfer_id": "00cd9cec46f449ca8daafffe785097f0",
+      "response": {
+        "transfer_id": "00cd9cec46f449ca8daafffe785097f0",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "56435e24-91de-4ad4-8be3-6da3d89cebf0",
+            "path": "uploads/be7a9846f2d5415b9f45e9ebc3bbc092_bd465d0c62f94731a2bc9f9c1e81ccee_contract-check.json",
+            "workspace_path": "uploads/be7a9846f2d5415b9f45e9ebc3bbc092_bd465d0c62f94731a2bc9f9c1e81ccee_contract-check.json",
+            "name": "bd465d0c62f94731a2bc9f9c1e81ccee_contract-check.json",
+            "size": 190,
+            "sha256": "14242e4697fd498088994375ac1467fbd98faa58c987eb2a732817d918e0b303",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "56435e24-91de-4ad4-8be3-6da3d89cebf0",
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "b8890c00cd733bc2b94af83934c13f57",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "bacterial_defense_system_annotation_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "bd465d0c62f94731a2bc9f9c1e81ccee_contract-check.json",
+      "resource_id": "result:db4d67a6dbc6434ea5852aa415c5a722:9ddb30b7aa2c7b68d7b65e47ec3fb2a9f614298eac9c10a43a88231824cb760a",
+      "state": "succeeded",
+      "bytes": 190,
+      "sha256": "14242e4697fd498088994375ac1467fbd98faa58c987eb2a732817d918e0b303",
+      "expected_sha256": "14242e4697fd498088994375ac1467fbd98faa58c987eb2a732817d918e0b303",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "14242e4697fd498088994375ac1467fbd98faa58c987eb2a732817d918e0b303",
+      "kind": "analysis_output",
+      "sample_id": "b8890c00cd733bc2b94af83934c13f57",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 190,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "bd465d0c62f94731a2bc9f9c1e81ccee_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:db4d67a6dbc6434ea5852aa415c5a722:9ddb30b7aa2c7b68d7b65e47ec3fb2a9f614298eac9c10a43a88231824cb760a",
+      "id": "9ddb30b7aa2c7b68d7b65e47ec3fb2a9f614298eac9c10a43a88231824cb760a",
+      "source_path": "uploads/bd465d0c62f94731a2bc9f9c1e81ccee_contract-check.json",
+      "sample_name": "bacterial_defense_system_annotation_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:b8890c00cd733bc2b94af83934c13f57",
+      "importable": false,
+      "sample_name": "bacterial_defense_system_annotation_contract_only",
+      "data_type": "meta",
+      "sample_id": "b8890c00cd733bc2b94af83934c13f57"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 16.29,
+  "test_finished": true
+}

@@ -200,7 +200,8 @@ website adapter; generic file transport does not require a native importer.
 
 The installer changes three existing frontend files for the assistant mount,
 sample context, refresh and download hooks, and the synthetic-sample result-component
-selection. Backend services, the logout hook
+selection. Two import-only parser entry points also update four existing backend
+files (two interfaces and their implementations). Backend services, the logout hook
 and the one-use download route are supplied by added adapter classes.
 Source pipeline definitions and execution policies are unchanged.
 
@@ -371,7 +372,8 @@ checked against their recorded checksum. The transport has no MSCAN program list
 
 MSCAN-specific code is [organized by function](adapters/mscan/README.md#code-organization).
 The [minimal installation](adapters/mscan/README.md#minimal-mscan-changes) modifies
-three existing frontend files; backend integration is supplied by added adapter classes.
+three existing frontend files and adds import-only parser entry points in four
+backend files; the rest of the backend integration is supplied by added adapter classes.
 Native importers live in `adapters/mscan/result_importers/`:
 
 - `ResultImporterRegistry` declares format contracts and binds MSCAN's existing

@@ -9,7 +9,7 @@ const { files, error, download } = useSampleFiles(() => props.sampleId);
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item v-for="file in files" :key="file.resource_id" :command="file.resource_id">{{
-          file.name
+          file.label
         }}</el-dropdown-item>
       </el-dropdown-menu>
     </template>

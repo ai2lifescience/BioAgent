@@ -1,0 +1,713 @@
+{
+  "pipeline": "metax_classification_abundance_analysis",
+  "engine": "wdl",
+  "manifest_sha256": "bea58e678577b49bba755ea70b1de68d1d34578143d012c0ecf3d34a62c027fa",
+  "selected_for_execution": true,
+  "execution_status": "succeeded",
+  "scope_note": "",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/metax_classification_abundance_analysis/data/input/metax_demo_R1.fastq.gz",
+      "bytes": 8952270,
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/metax_classification_abundance_analysis/data/input/metax_demo_R2.fastq.gz",
+      "bytes": 10923663,
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "reads",
+      "reads2"
+    ],
+    "outputs": [
+      "profile"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "pipeline-bundles/a243fd64bc15429ea4c8f08c2605a669/results.zip",
+          "uploads/examples/metax_classification_abundance_analysis-c52b88e94bdf44b49e071109dc17bb1a/metax_demo_R1.fastq.gz",
+          "uploads/examples/metax_classification_abundance_analysis-c52b88e94bdf44b49e071109dc17bb1a/metax_demo_R2.fastq.gz"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "metax_classification_abundance_analysis",
+          "data_type": "meta",
+          "source_slots": {
+            "R1": "uploads/examples/metax_classification_abundance_analysis-c52b88e94bdf44b49e071109dc17bb1a/metax_demo_R1.fastq.gz",
+            "R2": "uploads/examples/metax_classification_abundance_analysis-c52b88e94bdf44b49e071109dc17bb1a/metax_demo_R2.fastq.gz"
+          }
+        },
+        "create_missing": true
+      },
+      "transfer_id": "60201f9118f542f8bf14651c2eabb557",
+      "response": {
+        "transfer_id": "60201f9118f542f8bf14651c2eabb557",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "registered",
+            "slots": {
+              "R2": "94303a16ef7d3a9c95a1f7147574d507",
+              "R1": "2a21494df835325f8051baf34a515ea9"
+            }
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "results.zip",
+              "id": "161a4ecaa59c39edcb8608e39b97cc2351786e30f10d761d0cdb91b52bf6bee0",
+              "source_path": "pipeline-bundles/a243fd64bc15429ea4c8f08c2605a669/results.zip",
+              "size": 443,
+              "sha256": "906867d62442cd4527e1870d34bf54a7166e9202cb8d76cf5b8cf4a7b62f97a7",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "size": 712,
+              "sha256": "9b5255ffc30dd546553ce596e888bd9c5f3f53a4b199f812c01d0e4107f27b04",
+              "name": "profile.txt",
+              "id": "301c5ac8be4d26c722fc472005ad63997bea892b4e99212dac9b90ba5e56e023",
+              "source_path": "pipeline-artifacts/a243fd64bc15429ea4c8f08c2605a669/0/profile.txt",
+              "pipeline_result": {
+                "job_id": "a243fd64bc15429ea4c8f08c2605a669",
+                "pipeline_name": "metax_classification_abundance_analysis",
+                "output_key": "metax.profile",
+                "output_name": "profile",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:51:30.987528+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "Chaphamavirus galliform3\t3052108\tspecies\t2.00000\t0.07457\t38.08212\t0.07457\t0.07318\t1.00000\t0.82300\t0.06665\t0.06556\t1.00000\nAveparvovirus galliform1\t3051983\tspecies\t1.00000\t0.04489\t22.92625\t0.04489\t0.04489\t1.00000\t0.25433\t0.02777\t0.02778\t1.00000\nAlpharetrovirus avileu\t3426267\tspecies\t1.00000\t0.03267\t16.68196\t0.03267\t0.03267\t1.00000\t0.28603\t0.02333\t0.02381\t1.00000\nSicinivirus ahiberni\t3432442\tspecies\t2.00000\t0.01939\t9.90323\t0.01939\t0.01930\t1.00000\t0.26883\t0.04042\t0.04040\t1.00000\nMegrivirus aturhepa\t3430779\tspecies\t2.00000\t0.01405\t7.17756\t0.01405\t0.01401\t1.00000\t0.36115\t0.04127\t0.04123\t1.00000\nAnativirus biphaco\t2734519\tspecies\t1.00000\t0.01024\t5.22887\t0.01024\t0.01024\t1.00000\t0.25402\t0.02218\t0.02222\t1.00000\n"
+              }
+            },
+            {
+              "name": "metax_demo_R1.fastq.gz",
+              "id": "435d0dc59353fe983d3fa7055dc64d661226e6b1be7917e7ce325aec0b9323c3",
+              "source_path": "uploads/examples/metax_classification_abundance_analysis-c52b88e94bdf44b49e071109dc17bb1a/metax_demo_R1.fastq.gz",
+              "size": 8952270,
+              "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "name": "metax_demo_R2.fastq.gz",
+              "id": "0f751bf7c8137c2028ac2d9256b9b4f2b32c1555e107abfc56bdcf63748bb1b9",
+              "source_path": "uploads/examples/metax_classification_abundance_analysis-c52b88e94bdf44b49e071109dc17bb1a/metax_demo_R2.fastq.gz",
+              "size": 10923663,
+              "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            }
+          ],
+          "native_imports": [
+            {
+              "job_id": "a243fd64bc15429ea4c8f08c2605a669",
+              "files_delivered": true,
+              "generic_import": {
+                "artifact_count": 1,
+                "access": "Search or pull the attached sample files; native records are a separate outcome.",
+                "state": "imported"
+              },
+              "pipeline": "metax_classification_abundance_analysis",
+              "format": "metax",
+              "program": "metax",
+              "state": "imported",
+              "message": "Native result imported."
+            }
+          ],
+          "qc": {},
+          "receipt_id": "60201f9118f542f8bf14651c2eabb557",
+          "target": {
+            "sample_id": "33a1181ba7d53642af52ede66678f68d",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "metax_classification_abundance_analysis",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "33a1181ba7d53642af52ede66678f68d"
+      },
+      "transfer_id": "d4812cde35614b199280d866257ffe7e",
+      "response": {
+        "transfer_id": "d4812cde35614b199280d866257ffe7e",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "native_analysis_output",
+              "sample_id": "33a1181ba7d53642af52ede66678f68d",
+              "name": "profile.txt",
+              "data_type": "meta",
+              "resource_id": "native:33a1181ba7d53642af52ede66678f68d:metax:a260f7abc50645815c4ba85e3a384bb0:profilePath",
+              "program": "metax",
+              "importable": true,
+              "sample_name": "metax_classification_abundance_analysis"
+            },
+            {
+              "size": 443,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "native_analysis_record",
+              "sample_id": "33a1181ba7d53642af52ede66678f68d",
+              "name": "metax-a260f7abc50645815c4ba85e3a384bb0.json",
+              "data_type": "meta",
+              "resource_id": "native:33a1181ba7d53642af52ede66678f68d:metax:a260f7abc50645815c4ba85e3a384bb0:record",
+              "program": "metax",
+              "importable": true,
+              "sample_name": "metax_classification_abundance_analysis"
+            },
+            {
+              "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+              "kind": "analysis_output",
+              "sample_id": "33a1181ba7d53642af52ede66678f68d",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 10923663,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "metax_demo_R2.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "result:60201f9118f542f8bf14651c2eabb557:0f751bf7c8137c2028ac2d9256b9b4f2b32c1555e107abfc56bdcf63748bb1b9",
+              "id": "0f751bf7c8137c2028ac2d9256b9b4f2b32c1555e107abfc56bdcf63748bb1b9",
+              "source_path": "uploads/examples/metax_classification_abundance_analysis-c52b88e94bdf44b49e071109dc17bb1a/metax_demo_R2.fastq.gz",
+              "sample_name": "metax_classification_abundance_analysis"
+            },
+            {
+              "sha256": "906867d62442cd4527e1870d34bf54a7166e9202cb8d76cf5b8cf4a7b62f97a7",
+              "kind": "analysis_output",
+              "sample_id": "33a1181ba7d53642af52ede66678f68d",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 443,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "results.zip",
+              "data_type": "meta",
+              "resource_id": "result:60201f9118f542f8bf14651c2eabb557:161a4ecaa59c39edcb8608e39b97cc2351786e30f10d761d0cdb91b52bf6bee0",
+              "id": "161a4ecaa59c39edcb8608e39b97cc2351786e30f10d761d0cdb91b52bf6bee0",
+              "source_path": "pipeline-bundles/a243fd64bc15429ea4c8f08c2605a669/results.zip",
+              "sample_name": "metax_classification_abundance_analysis"
+            },
+            {
+              "sha256": "9b5255ffc30dd546553ce596e888bd9c5f3f53a4b199f812c01d0e4107f27b04",
+              "kind": "analysis_output",
+              "sample_id": "33a1181ba7d53642af52ede66678f68d",
+              "pipeline_result": {
+                "job_id": "a243fd64bc15429ea4c8f08c2605a669",
+                "pipeline_name": "metax_classification_abundance_analysis",
+                "output_key": "metax.profile",
+                "output_name": "profile",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:51:30.987528+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "Chaphamavirus galliform3\t3052108\tspecies\t2.00000\t0.07457\t38.08212\t0.07457\t0.07318\t1.00000\t0.82300\t0.06665\t0.06556\t1.00000\nAveparvovirus galliform1\t3051983\tspecies\t1.00000\t0.04489\t22.92625\t0.04489\t0.04489\t1.00000\t0.25433\t0.02777\t0.02778\t1.00000\nAlpharetrovirus avileu\t3426267\tspecies\t1.00000\t0.03267\t16.68196\t0.03267\t0.03267\t1.00000\t0.28603\t0.02333\t0.02381\t1.00000\nSicinivirus ahiberni\t3432442\tspecies\t2.00000\t0.01939\t9.90323\t0.01939\t0.01930\t1.00000\t0.26883\t0.04042\t0.04040\t1.00000\nMegrivirus aturhepa\t3430779\tspecies\t2.00000\t0.01405\t7.17756\t0.01405\t0.01401\t1.00000\t0.36115\t0.04127\t0.04123\t1.00000\nAnativirus biphaco\t2734519\tspecies\t1.00000\t0.01024\t5.22887\t0.01024\t0.01024\t1.00000\t0.25402\t0.02218\t0.02222\t1.00000\n"
+              },
+              "size": 712,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "profile.txt",
+              "data_type": "meta",
+              "resource_id": "result:60201f9118f542f8bf14651c2eabb557:301c5ac8be4d26c722fc472005ad63997bea892b4e99212dac9b90ba5e56e023",
+              "id": "301c5ac8be4d26c722fc472005ad63997bea892b4e99212dac9b90ba5e56e023",
+              "source_path": "pipeline-artifacts/a243fd64bc15429ea4c8f08c2605a669/0/profile.txt",
+              "sample_name": "metax_classification_abundance_analysis"
+            },
+            {
+              "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+              "kind": "analysis_output",
+              "sample_id": "33a1181ba7d53642af52ede66678f68d",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 8952270,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "metax_demo_R1.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "result:60201f9118f542f8bf14651c2eabb557:435d0dc59353fe983d3fa7055dc64d661226e6b1be7917e7ce325aec0b9323c3",
+              "id": "435d0dc59353fe983d3fa7055dc64d661226e6b1be7917e7ce325aec0b9323c3",
+              "source_path": "uploads/examples/metax_classification_abundance_analysis-c52b88e94bdf44b49e071109dc17bb1a/metax_demo_R1.fastq.gz",
+              "sample_name": "metax_classification_abundance_analysis"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:33a1181ba7d53642af52ede66678f68d",
+              "importable": false,
+              "sample_name": "metax_classification_abundance_analysis",
+              "data_type": "meta",
+              "sample_id": "33a1181ba7d53642af52ede66678f68d"
+            },
+            {
+              "size": 8952270,
+              "kind": "source_file",
+              "sample_id": "33a1181ba7d53642af52ede66678f68d",
+              "name": "metax_demo_R1.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "source:meta:33a1181ba7d53642af52ede66678f68d:R1",
+              "slot": "R1",
+              "id": "2a21494df835325f8051baf34a515ea9",
+              "sample_name": "metax_classification_abundance_analysis"
+            },
+            {
+              "size": 10923663,
+              "kind": "source_file",
+              "sample_id": "33a1181ba7d53642af52ede66678f68d",
+              "name": "metax_demo_R2.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "source:meta:33a1181ba7d53642af52ede66678f68d:R2",
+              "slot": "R2",
+              "id": "94303a16ef7d3a9c95a1f7147574d507",
+              "sample_name": "metax_classification_abundance_analysis"
+            }
+          ],
+          "total": 9,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:60201f9118f542f8bf14651c2eabb557:0f751bf7c8137c2028ac2d9256b9b4f2b32c1555e107abfc56bdcf63748bb1b9"
+      },
+      "transfer_id": "05eed9565fd6488ea7b851f9c8d95c63",
+      "response": {
+        "transfer_id": "05eed9565fd6488ea7b851f9c8d95c63",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "780969f4-0a25-44c7-b0ab-e61b25fa87b9",
+            "path": "uploads/b882a0c13f2d47abbf0d9fd97bd64b45_metax_demo_R2.fastq.gz",
+            "workspace_path": "uploads/b882a0c13f2d47abbf0d9fd97bd64b45_metax_demo_R2.fastq.gz",
+            "name": "metax_demo_R2.fastq.gz",
+            "size": 10923663,
+            "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+            "kind": "upload",
+            "content_type": "application/gzip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:60201f9118f542f8bf14651c2eabb557:161a4ecaa59c39edcb8608e39b97cc2351786e30f10d761d0cdb91b52bf6bee0"
+      },
+      "transfer_id": "bca050a9ac7e420e9d268b9333673864",
+      "response": {
+        "transfer_id": "bca050a9ac7e420e9d268b9333673864",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "780969f4-0a25-44c7-b0ab-e61b25fa87b9",
+            "path": "uploads/96fe92ba4bd749d08f1e8a68275ac3b5_results.zip",
+            "workspace_path": "uploads/96fe92ba4bd749d08f1e8a68275ac3b5_results.zip",
+            "name": "results.zip",
+            "size": 443,
+            "sha256": "906867d62442cd4527e1870d34bf54a7166e9202cb8d76cf5b8cf4a7b62f97a7",
+            "kind": "upload",
+            "content_type": "application/zip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:60201f9118f542f8bf14651c2eabb557:301c5ac8be4d26c722fc472005ad63997bea892b4e99212dac9b90ba5e56e023"
+      },
+      "transfer_id": "690d77c93fa44d209e2a6e6fc0ac4bac",
+      "response": {
+        "transfer_id": "690d77c93fa44d209e2a6e6fc0ac4bac",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "780969f4-0a25-44c7-b0ab-e61b25fa87b9",
+            "path": "uploads/da5951da75d54348b21df28bb650da8a_profile.txt",
+            "workspace_path": "uploads/da5951da75d54348b21df28bb650da8a_profile.txt",
+            "name": "profile.txt",
+            "size": 712,
+            "sha256": "9b5255ffc30dd546553ce596e888bd9c5f3f53a4b199f812c01d0e4107f27b04",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:60201f9118f542f8bf14651c2eabb557:435d0dc59353fe983d3fa7055dc64d661226e6b1be7917e7ce325aec0b9323c3"
+      },
+      "transfer_id": "9f22e923739b45d3ae15470630c542d6",
+      "response": {
+        "transfer_id": "9f22e923739b45d3ae15470630c542d6",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "780969f4-0a25-44c7-b0ab-e61b25fa87b9",
+            "path": "uploads/835b15d790294248b965f6325794c3bc_metax_demo_R1.fastq.gz",
+            "workspace_path": "uploads/835b15d790294248b965f6325794c3bc_metax_demo_R1.fastq.gz",
+            "name": "metax_demo_R1.fastq.gz",
+            "size": 8952270,
+            "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+            "kind": "upload",
+            "content_type": "application/gzip"
+          }
+        }
+      }
+    }
+  ],
+  "attempt_history": [
+    {
+      "pipeline": "metax_classification_abundance_analysis",
+      "engine": "wdl",
+      "manifest_sha256": "bea58e678577b49bba755ea70b1de68d1d34578143d012c0ecf3d34a62c027fa",
+      "selected_for_execution": true,
+      "execution_status": "setup_failed",
+      "scope_note": "",
+      "examples": [
+        {
+          "path": "tools/runtime_tools/pipelines/metax_classification_abundance_analysis/data/input/metax_demo_R1.fastq.gz",
+          "bytes": 8952270,
+          "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265"
+        },
+        {
+          "path": "tools/runtime_tools/pipelines/metax_classification_abundance_analysis/data/input/metax_demo_R2.fastq.gz",
+          "bytes": 10923663,
+          "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0"
+        }
+      ],
+      "contract": {
+        "valid": true,
+        "inputs": [
+          "reads",
+          "reads2"
+        ],
+        "outputs": [
+          "profile"
+        ]
+      },
+      "transfers": [],
+      "session_id": "2f2cab66-9239-419d-87ac-dd96e46000ea",
+      "assigned_inputs": {
+        "reads": "uploads/examples/metax_classification_abundance_analysis-cf44c5e6b11349d29729b170b742c41f/metax_demo_R1.fastq.gz",
+        "reads2": "uploads/examples/metax_classification_abundance_analysis-cf44c5e6b11349d29729b170b742c41f/metax_demo_R2.fastq.gz"
+      },
+      "parameter_overrides": {},
+      "plan_id": "fbbc457cfe66418b9cc7881543af2bd0",
+      "harness_error": "ValueError: Remote job limit reached (2 per account, 16 server-wide).",
+      "elapsed_seconds": 0.89,
+      "test_finished": true
+    }
+  ],
+  "session_id": "780969f4-0a25-44c7-b0ab-e61b25fa87b9",
+  "assigned_inputs": {
+    "reads": "uploads/examples/metax_classification_abundance_analysis-c52b88e94bdf44b49e071109dc17bb1a/metax_demo_R1.fastq.gz",
+    "reads2": "uploads/examples/metax_classification_abundance_analysis-c52b88e94bdf44b49e071109dc17bb1a/metax_demo_R2.fastq.gz"
+  },
+  "parameter_overrides": {},
+  "plan_id": "a243fd64bc15429ea4c8f08c2605a669",
+  "job_id": "a243fd64bc15429ea4c8f08c2605a669",
+  "last_state": {
+    "job_id": "a243fd64bc15429ea4c8f08c2605a669",
+    "plan_id": "a243fd64bc15429ea4c8f08c2605a669",
+    "status": "succeeded",
+    "created_at": "2026-11-09T06:43:11.665088+00:00",
+    "started_at": "2026-11-09T06:43:11.938884+00:00",
+    "finished_at": "2026-11-09T06:51:30.987528+00:00",
+    "updated_at": "2026-11-09T06:51:30.988373+00:00",
+    "error": null,
+    "remote_id": "c58ab7c3-e2fc-4ab7-b50a-7c177777647e",
+    "artifact_status": "available",
+    "pipeline_name": "metax_classification_abundance_analysis"
+  },
+  "results": {
+    "job_id": "a243fd64bc15429ea4c8f08c2605a669",
+    "plan_id": "a243fd64bc15429ea4c8f08c2605a669",
+    "status": "succeeded",
+    "created_at": "2026-11-09T06:43:11.665088+00:00",
+    "started_at": "2026-11-09T06:43:11.938884+00:00",
+    "finished_at": "2026-11-09T06:51:30.987528+00:00",
+    "updated_at": "2026-11-09T06:51:30.988373+00:00",
+    "error": null,
+    "remote_id": "c58ab7c3-e2fc-4ab7-b50a-7c177777647e",
+    "artifact_status": "available",
+    "pipeline_name": "metax_classification_abundance_analysis",
+    "files": [
+      {
+        "name": "profile.txt",
+        "path": "pipeline-artifacts/a243fd64bc15429ea4c8f08c2605a669/0/profile.txt",
+        "workspace_path": "pipeline-artifacts/a243fd64bc15429ea4c8f08c2605a669/0/profile.txt",
+        "size": 712,
+        "remote": true,
+        "artifact_id": "a243fd64bc15429ea4c8f08c2605a669:0",
+        "pipeline_result": {
+          "job_id": "a243fd64bc15429ea4c8f08c2605a669",
+          "pipeline_name": "metax_classification_abundance_analysis",
+          "output_key": "metax.profile",
+          "output_name": "profile",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T06:51:30.987528+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/a243fd64bc15429ea4c8f08c2605a669/0/profile.txt",
+        "text": "Chaphamavirus galliform3\t3052108\tspecies\t2.00000\t0.07457\t38.08212\t0.07457\t0.07318\t1.00000\t0.82300\t0.06665\t0.06556\t1.00000\nAveparvovirus galliform1\t3051983\tspecies\t1.00000\t0.04489\t22.92625\t0.04489\t0.04489\t1.00000\t0.25433\t0.02777\t0.02778\t1.00000\nAlpharetrovirus avileu\t3426267\tspecies\t1.00000\t0.03267\t16.68196\t0.03267\t0.03267\t1.00000\t0.28603\t0.02333\t0.02381\t1.00000\nSicinivirus ahiberni\t3432442\tspecies\t2.00000\t0.01939\t9.90323\t0.01939\t0.01930\t1.00000\t0.26883\t0.04042\t0.04040\t1.00000\nMegrivirus aturhepa\t3430779\tspecies\t2.00000\t0.01405\t7.17756\t0.01405\t0.01401\t1.00000\t0.36115\t0.04127\t0.04123\t1.00000\nAnativirus biphaco\t2734519\tspecies\t1.00000\t0.01024\t5.22887\t0.01024\t0.01024\t1.00000\t0.25402\t0.02218\t0.02222\t1.00000\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/a243fd64bc15429ea4c8f08c2605a669/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "transfer_scope": "actual bundled inputs and execution outputs",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "33a1181ba7d53642af52ede66678f68d",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "metax_classification_abundance_analysis",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [
+    {
+      "job_id": "a243fd64bc15429ea4c8f08c2605a669",
+      "files_delivered": true,
+      "generic_import": {
+        "artifact_count": 1,
+        "access": "Search or pull the attached sample files; native records are a separate outcome.",
+        "state": "imported"
+      },
+      "pipeline": "metax_classification_abundance_analysis",
+      "format": "metax",
+      "program": "metax",
+      "state": "imported",
+      "message": "Native result imported."
+    }
+  ],
+  "roundtrip_files": [
+    {
+      "name": "metax_demo_R2.fastq.gz",
+      "resource_id": "result:60201f9118f542f8bf14651c2eabb557:0f751bf7c8137c2028ac2d9256b9b4f2b32c1555e107abfc56bdcf63748bb1b9",
+      "state": "succeeded",
+      "bytes": 10923663,
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+      "expected_sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+      "matches": true
+    },
+    {
+      "name": "results.zip",
+      "resource_id": "result:60201f9118f542f8bf14651c2eabb557:161a4ecaa59c39edcb8608e39b97cc2351786e30f10d761d0cdb91b52bf6bee0",
+      "state": "succeeded",
+      "bytes": 443,
+      "sha256": "906867d62442cd4527e1870d34bf54a7166e9202cb8d76cf5b8cf4a7b62f97a7",
+      "expected_sha256": "906867d62442cd4527e1870d34bf54a7166e9202cb8d76cf5b8cf4a7b62f97a7",
+      "matches": true
+    },
+    {
+      "name": "profile.txt",
+      "resource_id": "result:60201f9118f542f8bf14651c2eabb557:301c5ac8be4d26c722fc472005ad63997bea892b4e99212dac9b90ba5e56e023",
+      "state": "succeeded",
+      "bytes": 712,
+      "sha256": "9b5255ffc30dd546553ce596e888bd9c5f3f53a4b199f812c01d0e4107f27b04",
+      "expected_sha256": "9b5255ffc30dd546553ce596e888bd9c5f3f53a4b199f812c01d0e4107f27b04",
+      "matches": true
+    },
+    {
+      "name": "metax_demo_R1.fastq.gz",
+      "resource_id": "result:60201f9118f542f8bf14651c2eabb557:435d0dc59353fe983d3fa7055dc64d661226e6b1be7917e7ce325aec0b9323c3",
+      "state": "succeeded",
+      "bytes": 8952270,
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+      "expected_sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "native_analysis_output",
+      "sample_id": "33a1181ba7d53642af52ede66678f68d",
+      "name": "profile.txt",
+      "data_type": "meta",
+      "resource_id": "native:33a1181ba7d53642af52ede66678f68d:metax:a260f7abc50645815c4ba85e3a384bb0:profilePath",
+      "program": "metax",
+      "importable": true,
+      "sample_name": "metax_classification_abundance_analysis"
+    },
+    {
+      "size": 443,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "native_analysis_record",
+      "sample_id": "33a1181ba7d53642af52ede66678f68d",
+      "name": "metax-a260f7abc50645815c4ba85e3a384bb0.json",
+      "data_type": "meta",
+      "resource_id": "native:33a1181ba7d53642af52ede66678f68d:metax:a260f7abc50645815c4ba85e3a384bb0:record",
+      "program": "metax",
+      "importable": true,
+      "sample_name": "metax_classification_abundance_analysis"
+    },
+    {
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+      "kind": "analysis_output",
+      "sample_id": "33a1181ba7d53642af52ede66678f68d",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 10923663,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "metax_demo_R2.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "result:60201f9118f542f8bf14651c2eabb557:0f751bf7c8137c2028ac2d9256b9b4f2b32c1555e107abfc56bdcf63748bb1b9",
+      "id": "0f751bf7c8137c2028ac2d9256b9b4f2b32c1555e107abfc56bdcf63748bb1b9",
+      "source_path": "uploads/examples/metax_classification_abundance_analysis-c52b88e94bdf44b49e071109dc17bb1a/metax_demo_R2.fastq.gz",
+      "sample_name": "metax_classification_abundance_analysis"
+    },
+    {
+      "sha256": "906867d62442cd4527e1870d34bf54a7166e9202cb8d76cf5b8cf4a7b62f97a7",
+      "kind": "analysis_output",
+      "sample_id": "33a1181ba7d53642af52ede66678f68d",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 443,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "results.zip",
+      "data_type": "meta",
+      "resource_id": "result:60201f9118f542f8bf14651c2eabb557:161a4ecaa59c39edcb8608e39b97cc2351786e30f10d761d0cdb91b52bf6bee0",
+      "id": "161a4ecaa59c39edcb8608e39b97cc2351786e30f10d761d0cdb91b52bf6bee0",
+      "source_path": "pipeline-bundles/a243fd64bc15429ea4c8f08c2605a669/results.zip",
+      "sample_name": "metax_classification_abundance_analysis"
+    },
+    {
+      "sha256": "9b5255ffc30dd546553ce596e888bd9c5f3f53a4b199f812c01d0e4107f27b04",
+      "kind": "analysis_output",
+      "sample_id": "33a1181ba7d53642af52ede66678f68d",
+      "pipeline_result": {
+        "job_id": "a243fd64bc15429ea4c8f08c2605a669",
+        "pipeline_name": "metax_classification_abundance_analysis",
+        "output_key": "metax.profile",
+        "output_name": "profile",
+        "output_kind": "table",
+        "completed_at": "2026-11-09T06:51:30.987528+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "Chaphamavirus galliform3\t3052108\tspecies\t2.00000\t0.07457\t38.08212\t0.07457\t0.07318\t1.00000\t0.82300\t0.06665\t0.06556\t1.00000\nAveparvovirus galliform1\t3051983\tspecies\t1.00000\t0.04489\t22.92625\t0.04489\t0.04489\t1.00000\t0.25433\t0.02777\t0.02778\t1.00000\nAlpharetrovirus avileu\t3426267\tspecies\t1.00000\t0.03267\t16.68196\t0.03267\t0.03267\t1.00000\t0.28603\t0.02333\t0.02381\t1.00000\nSicinivirus ahiberni\t3432442\tspecies\t2.00000\t0.01939\t9.90323\t0.01939\t0.01930\t1.00000\t0.26883\t0.04042\t0.04040\t1.00000\nMegrivirus aturhepa\t3430779\tspecies\t2.00000\t0.01405\t7.17756\t0.01405\t0.01401\t1.00000\t0.36115\t0.04127\t0.04123\t1.00000\nAnativirus biphaco\t2734519\tspecies\t1.00000\t0.01024\t5.22887\t0.01024\t0.01024\t1.00000\t0.25402\t0.02218\t0.02222\t1.00000\n"
+      },
+      "size": 712,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "profile.txt",
+      "data_type": "meta",
+      "resource_id": "result:60201f9118f542f8bf14651c2eabb557:301c5ac8be4d26c722fc472005ad63997bea892b4e99212dac9b90ba5e56e023",
+      "id": "301c5ac8be4d26c722fc472005ad63997bea892b4e99212dac9b90ba5e56e023",
+      "source_path": "pipeline-artifacts/a243fd64bc15429ea4c8f08c2605a669/0/profile.txt",
+      "sample_name": "metax_classification_abundance_analysis"
+    },
+    {
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+      "kind": "analysis_output",
+      "sample_id": "33a1181ba7d53642af52ede66678f68d",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 8952270,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "metax_demo_R1.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "result:60201f9118f542f8bf14651c2eabb557:435d0dc59353fe983d3fa7055dc64d661226e6b1be7917e7ce325aec0b9323c3",
+      "id": "435d0dc59353fe983d3fa7055dc64d661226e6b1be7917e7ce325aec0b9323c3",
+      "source_path": "uploads/examples/metax_classification_abundance_analysis-c52b88e94bdf44b49e071109dc17bb1a/metax_demo_R1.fastq.gz",
+      "sample_name": "metax_classification_abundance_analysis"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:33a1181ba7d53642af52ede66678f68d",
+      "importable": false,
+      "sample_name": "metax_classification_abundance_analysis",
+      "data_type": "meta",
+      "sample_id": "33a1181ba7d53642af52ede66678f68d"
+    },
+    {
+      "size": 8952270,
+      "kind": "source_file",
+      "sample_id": "33a1181ba7d53642af52ede66678f68d",
+      "name": "metax_demo_R1.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "source:meta:33a1181ba7d53642af52ede66678f68d:R1",
+      "slot": "R1",
+      "id": "2a21494df835325f8051baf34a515ea9",
+      "sample_name": "metax_classification_abundance_analysis"
+    },
+    {
+      "size": 10923663,
+      "kind": "source_file",
+      "sample_id": "33a1181ba7d53642af52ede66678f68d",
+      "name": "metax_demo_R2.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "source:meta:33a1181ba7d53642af52ede66678f68d:R2",
+      "slot": "R2",
+      "id": "94303a16ef7d3a9c95a1f7147574d507",
+      "sample_name": "metax_classification_abundance_analysis"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 538.74,
+  "test_finished": true
+}

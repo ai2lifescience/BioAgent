@@ -1,0 +1,236 @@
+{
+  "pipeline": "phi_annotator_metagenome",
+  "engine": "wdl",
+  "manifest_sha256": "939ce9e220276d26921e78735c158d0c866f2365394ab3bc38f039f04eb972e1",
+  "selected_for_execution": false,
+  "execution_status": "not_executed",
+  "scope_note": "Contract and inert-transfer verification only; biological workflow/example outside the live execution safety scope.",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/phi_annotator_metagenome/data/input/phi_demo_R1.fastq.gz",
+      "bytes": 8952270,
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/phi_annotator_metagenome/data/input/phi_demo_R2.fastq.gz",
+      "bytes": 10923663,
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "read1",
+      "read2"
+    ],
+    "outputs": [
+      "hits",
+      "read_hits",
+      "summary",
+      "qc",
+      "status",
+      "manifest",
+      "report"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/5404894b8a664a2799ad7a0fe28b6909_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "phi_annotator_metagenome_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "decb179af3354155bf7092afd8e8d33f",
+      "response": {
+        "transfer_id": "decb179af3354155bf7092afd8e8d33f",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "5404894b8a664a2799ad7a0fe28b6909_contract-check.json",
+              "id": "d417685f2e96aae0cecd4aaa8f6a3640f7a8d65f98397d81dcff783deff4cda7",
+              "source_path": "uploads/5404894b8a664a2799ad7a0fe28b6909_contract-check.json",
+              "size": 179,
+              "sha256": "5cac9e8ce749db616e59a9c157469748a2111e30cb5167418e726bd78ea54cf0",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "decb179af3354155bf7092afd8e8d33f",
+          "target": {
+            "sample_id": "a828b4500a293be0b99ef670e1b1a403",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "phi_annotator_metagenome_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "a828b4500a293be0b99ef670e1b1a403"
+      },
+      "transfer_id": "fd3088eb1a1344f7bef8c6213707436a",
+      "response": {
+        "transfer_id": "fd3088eb1a1344f7bef8c6213707436a",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "5cac9e8ce749db616e59a9c157469748a2111e30cb5167418e726bd78ea54cf0",
+              "kind": "analysis_output",
+              "sample_id": "a828b4500a293be0b99ef670e1b1a403",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 179,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "5404894b8a664a2799ad7a0fe28b6909_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:decb179af3354155bf7092afd8e8d33f:d417685f2e96aae0cecd4aaa8f6a3640f7a8d65f98397d81dcff783deff4cda7",
+              "id": "d417685f2e96aae0cecd4aaa8f6a3640f7a8d65f98397d81dcff783deff4cda7",
+              "source_path": "uploads/5404894b8a664a2799ad7a0fe28b6909_contract-check.json",
+              "sample_name": "phi_annotator_metagenome_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:a828b4500a293be0b99ef670e1b1a403",
+              "importable": false,
+              "sample_name": "phi_annotator_metagenome_contract_only",
+              "data_type": "meta",
+              "sample_id": "a828b4500a293be0b99ef670e1b1a403"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:decb179af3354155bf7092afd8e8d33f:d417685f2e96aae0cecd4aaa8f6a3640f7a8d65f98397d81dcff783deff4cda7"
+      },
+      "transfer_id": "a0767c25c27c494c9fd617ef915f952c",
+      "response": {
+        "transfer_id": "a0767c25c27c494c9fd617ef915f952c",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "535ec9c6-9218-47b6-98c6-71bbc86da5ea",
+            "path": "uploads/34442a3c4a3548cc9c3bd82e894d1a56_5404894b8a664a2799ad7a0fe28b6909_contract-check.json",
+            "workspace_path": "uploads/34442a3c4a3548cc9c3bd82e894d1a56_5404894b8a664a2799ad7a0fe28b6909_contract-check.json",
+            "name": "5404894b8a664a2799ad7a0fe28b6909_contract-check.json",
+            "size": 179,
+            "sha256": "5cac9e8ce749db616e59a9c157469748a2111e30cb5167418e726bd78ea54cf0",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "535ec9c6-9218-47b6-98c6-71bbc86da5ea",
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "a828b4500a293be0b99ef670e1b1a403",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "phi_annotator_metagenome_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "5404894b8a664a2799ad7a0fe28b6909_contract-check.json",
+      "resource_id": "result:decb179af3354155bf7092afd8e8d33f:d417685f2e96aae0cecd4aaa8f6a3640f7a8d65f98397d81dcff783deff4cda7",
+      "state": "succeeded",
+      "bytes": 179,
+      "sha256": "5cac9e8ce749db616e59a9c157469748a2111e30cb5167418e726bd78ea54cf0",
+      "expected_sha256": "5cac9e8ce749db616e59a9c157469748a2111e30cb5167418e726bd78ea54cf0",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "5cac9e8ce749db616e59a9c157469748a2111e30cb5167418e726bd78ea54cf0",
+      "kind": "analysis_output",
+      "sample_id": "a828b4500a293be0b99ef670e1b1a403",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 179,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "5404894b8a664a2799ad7a0fe28b6909_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:decb179af3354155bf7092afd8e8d33f:d417685f2e96aae0cecd4aaa8f6a3640f7a8d65f98397d81dcff783deff4cda7",
+      "id": "d417685f2e96aae0cecd4aaa8f6a3640f7a8d65f98397d81dcff783deff4cda7",
+      "source_path": "uploads/5404894b8a664a2799ad7a0fe28b6909_contract-check.json",
+      "sample_name": "phi_annotator_metagenome_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:a828b4500a293be0b99ef670e1b1a403",
+      "importable": false,
+      "sample_name": "phi_annotator_metagenome_contract_only",
+      "data_type": "meta",
+      "sample_id": "a828b4500a293be0b99ef670e1b1a403"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 15.31,
+  "test_finished": true
+}

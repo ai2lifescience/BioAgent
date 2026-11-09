@@ -63,6 +63,14 @@ sample types are not silently repaired or reported as native success. Native
 views still require a registered, validated result contract; an LLM does not
 invent values or write database records.
 
+The registry includes `MashIdentify` and `StrobeTaxaDetection`, using MSCAN's
+existing result parsers through import-only service entry points. Repeated WDL
+output roles are preserved as arrays; scalar roles required by a native parser
+must remain unambiguous. Header-only growth CSVs report `empty` and preserve
+existing native results. A transactional postcondition also rolls back growth
+imports when the native parser produces no valid records. Templates and unknown formats remain downloadable
+attachments with an explicit `unsupported` native state.
+
 `ImportFailure` reports stable error codes without exposing raw SQL, proxy
 credentials or storage secrets. For `storage_proxy_configuration`, normalize
 HTTP(S) proxy URLs (for example `http://127.0.0.1:10801`, without `/`), restart the
@@ -124,12 +132,16 @@ mvn clean package -DskipTests
 ```
 
 Use an actual IP instead of `YOUR_SERVER_IP`. The installer copies the canonical
-adapter sources in this directory and changes three existing source files:
+adapter sources in this directory and changes three existing frontend files:
 `src/App.vue` mounts the assistant; `src/views/sampleProgramResults/index.vue`
 connects selected sample context, result refreshes and the download menu.
 `src/views/sampleProgramResults/components/ProgramResultPanel.vue` changes one
 condition so synthetic samples use the assembly-results component that matches
 their native records.
+Four backend files receive two import-only entry points: `IGenomeTracingService`
+and its implementation expose `importDetectionResult`; `IMetadataProcessService`
+and its implementation expose `importKmerDetectionResult`. These call the
+existing result parsers without running a poller or submitting a workflow.
 Installation preserves host line endings and does not reformat whole files.
 Since `resource/` is ignored, these tracked sources and the installer are the portable
 integration deliverable. No MSCAN database migration is required.
@@ -148,7 +160,9 @@ Compared against the original `resource/mscan.zip` and `resource/mscan-app.zip`:
 | Frontend `src/App.vue` | Import and mount the embedded assistant |
 | Frontend `src/views/sampleProgramResults/index.vue` | Sample context, result refresh and download menu |
 | Frontend `src/views/sampleProgramResults/components/ProgramResultPanel.vue` | One condition selects assembly results for synthetic samples |
-| Existing backend Java, database, workflow and security files | None |
+| Backend `IGenomeTracingService` and implementation | One import-only entry point delegates to the existing genomic identification parser |
+| Backend `IMetadataProcessService` and implementation | One import-only entry point delegates to the existing k-mer identification parser |
+| Database schema, workflow and existing security files | None |
 | Existing frontend user store and QC panel | None |
 
 The remaining integration files are additions owned by this adapter: five

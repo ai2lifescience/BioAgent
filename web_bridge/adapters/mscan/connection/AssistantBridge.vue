@@ -209,6 +209,30 @@ async function start() {
           if (section_id !== manual.section_id) throw new Error("Unknown guide section.");
           return manual;
         },
+        highlight: ({ element_id }: { element_id: string }) => {
+          // Only registered resources and fixed host selectors; never evaluate
+          // a model-supplied selector or insert its message as HTML.
+          const selectors: Record<string, string> = {
+            qc_summary: ".qc-result__metrics",
+            qc_chart: ".qc-result__metrics",
+            current_results: ".el-table"
+          };
+          if (!snapshot().resources.some(resource => resource.id === element_id) || !Object.hasOwn(selectors, element_id))
+            throw new Error("This element is not registered on the selected page.");
+          const element = Array.from(document.querySelectorAll<HTMLElement>(selectors[element_id])).find(
+            el => el.getClientRects().length > 0
+          );
+          if (!element) throw new Error("This resource is not visible. Open its result tab first.");
+          element.scrollIntoView({ block: "center", behavior: "auto" });
+          element.animate(
+            [
+              { outline: "3px solid #15776e", outlineOffset: "6px" },
+              { outline: "3px solid transparent", outlineOffset: "6px" }
+            ],
+            { duration: 1800 }
+          );
+          return { element_id, revision: revision(), message: "Highlighted the visible " + element_id + " resource." };
+        },
         navigate: async ({ route_id }: any) => {
           const path = route_id === "home" ? "/" : route_id === "samples" ? "/sample/metagenomic" : null;
           if (!path) throw new Error("Unknown route.");

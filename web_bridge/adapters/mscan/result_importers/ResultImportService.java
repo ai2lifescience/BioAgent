@@ -88,11 +88,11 @@ public class ResultImportService {
         report.put("generic_import",Map.of("state","imported","artifact_count",files.size(),
             "access","Search or pull the attached sample files; native records are a separate outcome."));
         var provenance=(Map<String,Object>)files.get(0).get("pipeline_result");report.put("pipeline",provenance.getOrDefault("pipeline_name",""));
-        Set<String> formats=new HashSet<>();Map<String,Map<String,Object>> outputs=new LinkedHashMap<>();
+        Set<String> formats=new HashSet<>();Map<String,List<Map<String,Object>>> outputs=new LinkedHashMap<>();
         for(var file:files) {
             var origin=(Map<String,Object>)file.get("pipeline_result");String key=String.valueOf(origin.getOrDefault("output_key",""));
             int dot=key.lastIndexOf('.');if(dot<1)continue;formats.add(key.substring(0,dot));
-            if(outputs.put(key.substring(dot+1),file)!=null)return status(report,"unsupported","Duplicate output roles; select one complete job.");
+            outputs.computeIfAbsent(key.substring(dot+1),ignored->new ArrayList<>()).add(file);
         }
         if(formats.size()!=1)return status(report,"unsupported","No unambiguous native result format; files remain available.");
         String format=formats.iterator().next();report.put("format",format);
@@ -105,6 +105,18 @@ public class ResultImportService {
             var missing=new TreeSet<>(rule.required());missing.removeAll(outputs.keySet());report.put("missing_outputs",missing);
             return status(report,"incomplete","Select the complete pipeline bundle to import native results.");
         }
+        // WDL arrays legitimately repeat an output role. Keep them as arrays;
+        // only the scalar inputs required by a native parser must be unique.
+        for(String required:rule.required())if(outputs.get(required).size()!=1)
+            return status(report,"incomplete","Native scalar output is ambiguous: "+required+". Files remain available.");
+        if(format.equals("StrainCoPTR")) {
+            var csv=outputs.get("log2ptr_csv").get(0);
+            String fileId=String.valueOf(csv.get("id"));
+            if(!fileId.matches("[a-f0-9]{64}"))return status(report,"failed","Invalid received file identity.");
+            try {
+                if(!hasDataRow(dir.resolve(fileId)))return status(report,"empty","Growth output has no data rows. Files were delivered; existing native results were preserved.");
+            } catch(java.io.IOException error) {report.putAll(ImportFailure.describe(error));report.put("state","failed");return report;}
+        }
         String id=UUID.nameUUIDFromBytes((owner+":"+sample+":"+delivery+":"+job).getBytes(StandardCharsets.UTF_8)).toString().replace("-","");
         try {
             var previous=tasks.getById(id);
@@ -115,11 +127,15 @@ public class ResultImportService {
             final Date resultTime=completed;
             Map<String,Path> objects=new LinkedHashMap<>();JsonObject values=new JsonObject();
             for(var entry:outputs.entrySet()) {
-                String fileId=String.valueOf(entry.getValue().get("id"));
-                if(!fileId.matches("[a-f0-9]{64}"))throw new IllegalArgumentException("Invalid received file identity.");
-                String name=Path.of(String.valueOf(entry.getValue().get("name"))).getFileName().toString();
-                String key="files/agent-analysis/"+id+"/"+fileId+"/"+name;
-                objects.put(key,dir.resolve(fileId));values.addProperty(format+"."+entry.getKey(),"s3://"+bucket+"/"+key);
+                var paths=new com.google.gson.JsonArray();
+                for(var file:entry.getValue()) {
+                    String fileId=String.valueOf(file.get("id"));
+                    if(!fileId.matches("[a-f0-9]{64}"))throw new IllegalArgumentException("Invalid received file identity.");
+                    String name=Path.of(String.valueOf(file.get("name"))).getFileName().toString();
+                    String key="files/agent-analysis/"+id+"/"+fileId+"/"+name;
+                    objects.put(key,dir.resolve(fileId));paths.add("s3://"+bucket+"/"+key);
+                }
+                values.add(format+"."+entry.getKey(),paths.size()==1?paths.get(0):paths);
             }
             storage.putFiles(bucket,objects);
             JsonObject metadata=new JsonObject();metadata.add("outputs",values);
@@ -134,9 +150,12 @@ public class ResultImportService {
                 task.setTaskStatus("Succeeded");task.setCreateBy(owner);task.setUpdateBy(owner);task.setCreateTime(resultTime);task.setUpdateTime(new Date());task.setDelFlag("0");
                 tasks.saveOrUpdate(task);
                 NativeImportContext.run(task.getTaskId(),metadata,()->rule.importer().accept(task));
+                if(!rule.hasResults().test(task))throw new EmptyResult();
                 task.setTaskStatus("Succeeded");tasks.updateById(task);
             });
             return status(report,"imported","Native result imported.");
+        } catch(EmptyResult error) {
+            return status(report,"empty","Native parser produced no valid rows. Files were delivered; existing native results were preserved.");
         } catch(NewerResult error) {
             return status(report,"superseded","A newer native result was preserved; these files remain available.");
         } catch(Exception error) {
@@ -145,6 +164,13 @@ public class ResultImportService {
         }
     }
     private static class NewerResult extends RuntimeException {}
+    private static class EmptyResult extends RuntimeException {}
+    /** Header-only/blank CSVs are empty, without loading the whole result into memory. */
+    static boolean hasDataRow(Path file) throws java.io.IOException {
+        try(var lines=java.nio.file.Files.lines(file,StandardCharsets.UTF_8)) {
+            return lines.map(String::strip).filter(line->!line.isEmpty()&&!line.startsWith("#")).skip(1).findFirst().isPresent();
+        }
+    }
     private static Map<String,Object> status(Map<String,Object> report,String state,String message) {
         report.put("state",state);report.put("message",message);return report;
     }
