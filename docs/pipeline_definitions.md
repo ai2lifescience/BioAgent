@@ -31,47 +31,46 @@ bundle. The catalog discovers only directories containing runner.yaml.
 ## Metadata belongs at the top
 
 Put the identity and selection metadata immediately after name. Put execution
-configuration and detailed input/output contracts after it.
+configuration and detailed input/output contracts after it. This is an
+illustrative manifest, not a bundled pipeline:
 
 ~~~yaml
-name: bacterial_genome_annotation
-display_name: Bacterial genome annotation
-description: Annotate assembled bacterial contigs and produce normalized
-  sequence, feature, report, and metrics artifacts.
+name: example_table_report
+display_name: Table summary report
+description: Summarize a sample table and produce a report of row counts
+  and missing values.
 visibility: public
 use_when:
-- the user has assembled bacterial contigs and wants gene annotation
+- the user wants a summary of a sample table
 avoid_when:
-- the input is raw reads
-- the user needs comparative variant analysis
-input_summary: One assembled bacterial FASTA file.
-output_summary: GFF, GenBank, protein, feature-table, report, and metrics files.
-limitations: Results depend on the selected annotator and database versions.
+- the input is not a table
+- the user needs scientific interpretation
+input_summary: One sample table in TSV format.
+output_summary: A table summary report.
+limitations: Counts and missing values do not establish scientific validity.
 examples:
-- Annotate the genes in my assembled bacterial genome.
+- Summarize the rows and missing values in my sample table.
 
 engine: shell
 config: config.yaml
 entrypoint: run.sh
 timeout: 3600
 inputs:
-  genome:
-    label: Assembled bacterial genome
-    config_key: genome_path
+  table:
+    label: Sample table
+    config_key: table_path
     required: true
     accepts:
-    - .fasta
-    - .fa
-    - .fna
-    description: Assembled bacterial contigs in FASTA format.
+    - .tsv
+    description: Sample table with a header row.
 outputs:
   report:
-    label: Annotation report
+    label: Table summary report
     config_key: report_path
     default: output/report.md
     kind: report
     required: true
-    description: Annotation report produced by this workflow.
+    description: Table summary produced by this workflow.
 execution:
   boundary: container
   dependency_scope: pipeline
@@ -117,7 +116,7 @@ avoid_when:
 Weak:
 
 ~~~yaml
-description: Run viral_genome_mutation_analysis/run.sh.
+description: Run example_table_report/run.sh.
 ~~~
 
 The weak version describes an implementation detail and gives the agent no

@@ -1,20 +1,12 @@
 import type { AppConfig, Capability, Pipeline } from '../../types';
 
 export const fallbackPipelines: Pipeline[] = [
-  ['antimicrobial_resistance_detection', 'Antimicrobial resistance detection'],
-  ['bacterial_functional_annotation', 'Bacterial functional annotation'],
-  ['bacterial_genome_annotation', 'Bacterial genome annotation'],
-  ['bacterial_genome_mutation_analysis', 'Bacterial genome mutation analysis'],
-  ['bacterial_read_variant_analysis', 'Bacterial read variant analysis'],
-  ['bacterial_virulence_factor_detection', 'Bacterial virulence-factor detection'],
   ['metagenomic_de_novo_assembly', 'Metagenomic de novo assembly'],
   ['metagenomic_pathogen_identification', 'Metagenomic pathogen identification'],
   ['metagenomic_read_quality_control', 'Metagenomic read quality control'],
-  ['rna_secondary_structure_prediction', 'RNA secondary-structure prediction'],
   ['template_bio', 'DNA analysis template'], ['template_nextflow', 'Nextflow pipeline template'],
   ['template_shell', 'Shell metadata assignment template'], ['template_snakemake', 'Snakemake pipeline template'],
-  ['template_wdl', 'WDL pipeline template'], ['viral_genome_mutation_analysis', 'Viral genome mutation analysis'],
-  ['viral_molecular_typing', 'Viral molecular typing'],
+  ['template_wdl', 'WDL pipeline template'],
 ].map(([name, display_name]) => ({ name, display_name }));
 
 const quickStarts = [
