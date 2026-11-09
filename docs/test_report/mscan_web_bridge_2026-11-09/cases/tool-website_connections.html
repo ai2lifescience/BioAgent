@@ -1,0 +1,223 @@
+<html><meta charset="utf-8"><style>body{font:16px system-ui;margin:32px;color:#162b3e;background:#f3f6fa}pre{font:13px monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:white;padding:22px;border:1px solid #cbd5e1}h1{font-size:24px}.note{color:#475569}</style><p class="note">Recorded live test evidence · 2026-11-09 · This is an evidence viewer, not the application UI.</p><h1>website_connections</h1><p>Outcome: <b>PASS</b></p><pre>{
+  &quot;id&quot;: &quot;tool-website_connections&quot;,
+  &quot;title&quot;: &quot;website_connections&quot;,
+  &quot;outcome&quot;: &quot;PASS&quot;,
+  &quot;inputs&quot;: {},
+  &quot;result&quot;: {
+    &quot;status&quot;: &quot;ok&quot;,
+    &quot;data&quot;: {
+      &quot;value&quot;: {
+        &quot;connections&quot;: [
+          {
+            &quot;site_id&quot;: &quot;mscan&quot;,
+            &quot;external_subject&quot;: &quot;344674d1-2931-44a0-9de3-bd3e8403914d&quot;,
+            &quot;capabilities&quot;: {
+              &quot;create_missing&quot;: true,
+              &quot;existing_sources&quot;: &quot;preserved&quot;,
+              &quot;native_result_importers&quot;: [
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;shortReads&quot;,
+                    &quot;meta&quot;
+                  ],
+                  &quot;format&quot;: &quot;AssemblyId&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;contig_report_tsv&quot;,
+                    &quot;final_contigs_renamed&quot;,
+                    &quot;species_report_tsv&quot;
+                  ],
+                  &quot;program&quot;: &quot;assembly&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;shortReads&quot;,
+                    &quot;meta&quot;
+                  ],
+                  &quot;format&quot;: &quot;metax&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;profile&quot;
+                  ],
+                  &quot;program&quot;: &quot;metax&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;shortReads&quot;,
+                    &quot;meta&quot;
+                  ],
+                  &quot;format&quot;: &quot;FuncReads&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;gene_annotations_tsv&quot;
+                  ],
+                  &quot;program&quot;: &quot;funcflow&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;synthetic&quot;,
+                    &quot;genomic&quot;
+                  ],
+                  &quot;format&quot;: &quot;FuncAssembly&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;gene_annotations_tsv&quot;
+                  ],
+                  &quot;program&quot;: &quot;funcflow&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;shortReads&quot;,
+                    &quot;meta&quot;
+                  ],
+                  &quot;format&quot;: &quot;StrainMeta&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;profile&quot;
+                  ],
+                  &quot;program&quot;: &quot;strain_meta&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;shortReads&quot;,
+                    &quot;meta&quot;
+                  ],
+                  &quot;format&quot;: &quot;StrainCoPTR&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;log2ptr_csv&quot;
+                  ],
+                  &quot;program&quot;: &quot;growth&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;meta&quot;,
+                    &quot;synthetic&quot;,
+                    &quot;genomic&quot;,
+                    &quot;shortReads&quot;
+                  ],
+                  &quot;format&quot;: &quot;BacDef&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;defense_systems&quot;,
+                    &quot;defense_genes&quot;,
+                    &quot;defense_hmmer_hits&quot;
+                  ],
+                  &quot;program&quot;: &quot;bacdef&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;meta&quot;,
+                    &quot;synthetic&quot;,
+                    &quot;genomic&quot;,
+                    &quot;shortReads&quot;
+                  ],
+                  &quot;format&quot;: &quot;BacSec&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;secretion_genes&quot;,
+                    &quot;secretion_systems&quot;
+                  ],
+                  &quot;program&quot;: &quot;bacsec&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;meta&quot;,
+                    &quot;synthetic&quot;,
+                    &quot;genomic&quot;,
+                    &quot;shortReads&quot;
+                  ],
+                  &quot;format&quot;: &quot;BacBGC&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;bgc_genes&quot;,
+                    &quot;bgc_clusters&quot;,
+                    &quot;bgc_features&quot;
+                  ],
+                  &quot;program&quot;: &quot;bacbgc&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;synthetic&quot;,
+                    &quot;genomic&quot;
+                  ],
+                  &quot;format&quot;: &quot;PhiAnnotatorGenome&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;hits&quot;,
+                    &quot;summary&quot;
+                  ],
+                  &quot;program&quot;: &quot;phi&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;shortReads&quot;,
+                    &quot;meta&quot;
+                  ],
+                  &quot;format&quot;: &quot;PhiAnnotatorMetagenome&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;hits&quot;,
+                    &quot;summary&quot;
+                  ],
+                  &quot;program&quot;: &quot;phi&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;synthetic&quot;,
+                    &quot;genomic&quot;
+                  ],
+                  &quot;format&quot;: &quot;TcdbAnnotatorGenome&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;hits&quot;,
+                    &quot;summary&quot;
+                  ],
+                  &quot;program&quot;: &quot;tcdb&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;shortReads&quot;,
+                    &quot;meta&quot;
+                  ],
+                  &quot;format&quot;: &quot;TcdbAnnotatorMetagenome&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;hits&quot;,
+                    &quot;summary&quot;
+                  ],
+                  &quot;program&quot;: &quot;tcdb&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;meta&quot;,
+                    &quot;shortReads&quot;
+                  ],
+                  &quot;format&quot;: &quot;MetagenomicQc&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;qc_counts&quot;
+                  ],
+                  &quot;program&quot;: &quot;qc&quot;
+                },
+                {
+                  &quot;sample_types&quot;: [
+                    &quot;meta&quot;,
+                    &quot;shortReads&quot;
+                  ],
+                  &quot;format&quot;: &quot;ReadQc&quot;,
+                  &quot;required_outputs&quot;: [
+                    &quot;qc_summary&quot;
+                  ],
+                  &quot;program&quot;: &quot;qc&quot;
+                }
+              ],
+              &quot;operations&quot;: [
+                &quot;search&quot;,
+                &quot;pull&quot;,
+                &quot;push&quot;
+              ],
+              &quot;destination_fields&quot;: {
+                &quot;data_type&quot;: &quot;meta, shortReads, genomic or synthetic&quot;,
+                &quot;project&quot;: &quot;Exact owned project ID or name&quot;,
+                &quot;sample&quot;: &quot;Exact sample ID or name in the project&quot;,
+                &quot;source_slots&quot;: &quot;Optional map of R1/R2 or genome to selected workspace paths&quot;
+              }
+            },
+            &quot;backend_last_seen&quot;: 1794192967.013177
+          }
+        ]
+      }
+    },
+    &quot;files&quot;: [],
+    &quot;evidence&quot;: [],
+    &quot;error&quot;: null
+  },
+  &quot;session_id&quot;: &quot;dfa81dda-c259-466c-ba73-f912d5113bd5&quot;
+}</pre></html>

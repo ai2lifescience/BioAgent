@@ -29,8 +29,8 @@ def main():
                         shutil.copyfileobj(source, target)
         classpath = ':'.join([str(p) for p in root.glob('*/target/classes')] + [str(dependencies / '*')])
         tests = repo / 'web_bridge/adapters/mscan/tests'
-        subprocess.run(['javac', '-cp', classpath, '-d', str(classes), *[str(tests / (name + '.java')) for name in ('NativeFilesBoundaryCheck', 'QcImportFormatCheck', 'ResultImportCheck', 'DownloadSecurityCheck', 'TransferConcurrencyCheck')]], check=True)
-        for name in ('NativeFilesBoundaryCheck', 'com.mscan.web.controller.common.QcImportFormatCheck', 'com.mscan.web.controller.common.ResultImportCheck', 'DownloadSecurityCheck', 'com.mscan.web.controller.common.TransferConcurrencyCheck'):
+        subprocess.run(['javac', '-cp', classpath, '-d', str(classes), *[str(tests / (name + '.java')) for name in ('NativeFilesBoundaryCheck', 'QcImportFormatCheck', 'ResultImportCheck', 'ResultArtifactCheck', 'DownloadSecurityCheck', 'TransferConcurrencyCheck')]], check=True)
+        for name in ('NativeFilesBoundaryCheck', 'com.mscan.web.controller.common.QcImportFormatCheck', 'com.mscan.web.controller.common.ResultImportCheck', 'com.mscan.web.controller.common.ResultArtifactCheck', 'DownloadSecurityCheck', 'com.mscan.web.controller.common.TransferConcurrencyCheck'):
             subprocess.run(['java', '-cp', str(classes) + ':' + classpath, name], check=True)
 
 

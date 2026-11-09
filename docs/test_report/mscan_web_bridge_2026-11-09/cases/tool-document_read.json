@@ -1,0 +1,92 @@
+{
+  "id": "tool-document_read",
+  "title": "document_read",
+  "outcome": "PASS",
+  "inputs": {
+    "path": "uploads/595b9e07e3984469848249689c1b4c4f_toy.pdf",
+    "page_start": 1,
+    "page_end": null,
+    "char_offset": 0,
+    "max_chars": 40000
+  },
+  "result": {
+    "status": "ok",
+    "data": {
+      "state": "ok",
+      "source_path": "uploads/595b9e07e3984469848249689c1b4c4f_toy.pdf",
+      "path": "uploads/595b9e07e3984469848249689c1b4c4f_toy.pdf",
+      "page_count": 1,
+      "page_start": 1,
+      "page_end": 1,
+      "pages_read": 1,
+      "characters": 99,
+      "text": "[Page 1]\nBridge test document\nThis harmless PDF checks text extraction. Expected numeric result: 4.",
+      "truncated": false,
+      "next_page_start": null,
+      "next_char_offset": null
+    },
+    "files": [],
+    "evidence": [],
+    "error": null
+  },
+  "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+  "attempts": [
+    {
+      "tool": "document_read",
+      "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+      "inputs": {
+        "path": "outputs/report_write/206b32cc026e46f1bbbeafb7b1690d4d/Bridge_tool_validation.md",
+        "page_start": 1,
+        "page_end": null,
+        "char_offset": 0,
+        "max_chars": 40000
+      },
+      "result": {
+        "status": "error",
+        "data": {},
+        "files": [],
+        "evidence": [],
+        "error": {
+          "code": "ValueError",
+          "message": "ValueError: No matching PDF is available in the active workspace."
+        }
+      },
+      "status": "error",
+      "elapsed_seconds": 5.24
+    },
+    {
+      "tool": "document_read",
+      "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+      "inputs": {
+        "path": "uploads/595b9e07e3984469848249689c1b4c4f_toy.pdf",
+        "page_start": 1,
+        "page_end": null,
+        "char_offset": 0,
+        "max_chars": 40000
+      },
+      "reason": "Correct test harness context/input and wait for terminal indexing status",
+      "status": "ok",
+      "result": {
+        "status": "ok",
+        "data": {
+          "state": "ok",
+          "source_path": "uploads/595b9e07e3984469848249689c1b4c4f_toy.pdf",
+          "path": "uploads/595b9e07e3984469848249689c1b4c4f_toy.pdf",
+          "page_count": 1,
+          "page_start": 1,
+          "page_end": 1,
+          "pages_read": 1,
+          "characters": 99,
+          "text": "[Page 1]\nBridge test document\nThis harmless PDF checks text extraction. Expected numeric result: 4.",
+          "truncated": false,
+          "next_page_start": null,
+          "next_char_offset": null
+        },
+        "files": [],
+        "evidence": [],
+        "error": null
+      },
+      "elapsed_seconds": 5.19
+    }
+  ]
+}

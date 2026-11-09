@@ -1,0 +1,116 @@
+{
+  "id": "pipeline-metagenomic_read_quality_control",
+  "title": "metagenomic_read_quality_control",
+  "outcome": "succeeded",
+  "inputs": {
+    "bundled_examples": [
+      {
+        "path": "tools/runtime_tools/pipelines/metagenomic_read_quality_control/data/input/qc_demo.fq.gz",
+        "bytes": 240118,
+        "sha256": "9101bef1192734f4c50d2908a91b18762432f7f1d789a007e13644b2bccde82c"
+      }
+    ],
+    "assigned_inputs": {
+      "read1": "uploads/examples/metagenomic_read_quality_control-b10f3ce2913e4d209ad7f5ca5f92127f/qc_demo.fq.gz"
+    },
+    "parameters": "Unchanged pipeline defaults"
+  },
+  "result": {
+    "job_id": "a99fcba5414748dea226f92d842726b0",
+    "plan_id": "a99fcba5414748dea226f92d842726b0",
+    "status": "succeeded",
+    "created_at": "2026-11-09T02:38:29.722890+00:00",
+    "started_at": "2026-11-09T02:38:29.831895+00:00",
+    "finished_at": "2026-11-09T02:39:25.559143+00:00",
+    "updated_at": "2026-11-09T02:39:25.560151+00:00",
+    "error": null,
+    "remote_id": "164f785d-4c96-4cdf-8304-677852046afc",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_read_quality_control",
+    "files": [
+      {
+        "name": "clean.R1.fq",
+        "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/0/clean.R1.fq",
+        "workspace_path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/0/clean.R1.fq",
+        "size": 761681,
+        "remote": true,
+        "artifact_id": "a99fcba5414748dea226f92d842726b0:0",
+        "pipeline_result": {
+          "job_id": "a99fcba5414748dea226f92d842726b0",
+          "pipeline_name": "metagenomic_read_quality_control",
+          "output_key": "MetagenomicQc.clean_r1",
+          "output_name": "clean_r1",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-09T02:39:25.559143+00:00"
+        }
+      },
+      {
+        "name": "qc_counts.tsv",
+        "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/1/qc_counts.tsv",
+        "workspace_path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/1/qc_counts.tsv",
+        "size": 84,
+        "remote": true,
+        "artifact_id": "a99fcba5414748dea226f92d842726b0:1",
+        "pipeline_result": {
+          "job_id": "a99fcba5414748dea226f92d842726b0",
+          "pipeline_name": "metagenomic_read_quality_control",
+          "output_key": "MetagenomicQc.qc_counts",
+          "output_name": "qc_counts",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T02:39:25.559143+00:00"
+        }
+      },
+      {
+        "name": "phase1_read_overview.tsv",
+        "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/2/phase1_read_overview.tsv",
+        "workspace_path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/2/phase1_read_overview.tsv",
+        "size": 75,
+        "remote": true,
+        "artifact_id": "a99fcba5414748dea226f92d842726b0:2",
+        "pipeline_result": {
+          "job_id": "a99fcba5414748dea226f92d842726b0",
+          "pipeline_name": "metagenomic_read_quality_control",
+          "output_key": "MetagenomicQc.phase1_metrics",
+          "output_name": "phase1_metrics",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T02:39:25.559143+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/1/qc_counts.tsv",
+        "text": "MetricName\tMetricValue\nInputReads\t4168\nReadsAfterQC\t4168\nReadsAfterHostRemoval\t4149\n"
+      },
+      {
+        "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/2/phase1_read_overview.tsv",
+        "text": "SampleId\tInputReads\tReadsAfterQC\tReadsAfterHostRemoval\n0722\t4168\t4168\t4149\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/a99fcba5414748dea226f92d842726b0/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "session_id": "1f96468e-0bfb-4189-8150-8da22dc592ca",
+  "job_id": "a99fcba5414748dea226f92d842726b0",
+  "static_checks": {
+    "pipeline": "metagenomic_read_quality_control",
+    "manifest_name_matches": true,
+    "declared_files": {
+      "workflow": {
+        "file": "stage0_qc.wdl",
+        "exists": true
+      },
+      "inputs_json": {
+        "file": "inputs.json",
+        "exists": true,
+        "json_valid": true
+      },
+      "options_json": {
+        "file": "options.json",
+        "exists": true,
+        "json_valid": true
+      }
+    },
+    "errors": []
+  }
+}

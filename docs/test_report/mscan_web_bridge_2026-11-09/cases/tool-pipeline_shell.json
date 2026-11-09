@@ -1,0 +1,2960 @@
+{
+  "id": "tool-pipeline_shell",
+  "title": "pipeline_shell",
+  "outcome": "PASS",
+  "inputs": {
+    "command": "agent-pipeline results --job-id a99fcba5414748dea226f92d842726b0"
+  },
+  "result": {
+    "job_id": "a99fcba5414748dea226f92d842726b0",
+    "plan_id": "a99fcba5414748dea226f92d842726b0",
+    "status": "succeeded",
+    "created_at": "2026-11-09T02:38:29.722890+00:00",
+    "started_at": "2026-11-09T02:38:29.831895+00:00",
+    "finished_at": "2026-11-09T02:39:25.559143+00:00",
+    "updated_at": "2026-11-09T02:39:25.560151+00:00",
+    "error": null,
+    "remote_id": "164f785d-4c96-4cdf-8304-677852046afc",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_read_quality_control",
+    "files": [
+      {
+        "name": "clean.R1.fq",
+        "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/0/clean.R1.fq",
+        "workspace_path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/0/clean.R1.fq",
+        "size": 761681,
+        "remote": true,
+        "artifact_id": "a99fcba5414748dea226f92d842726b0:0",
+        "pipeline_result": {
+          "job_id": "a99fcba5414748dea226f92d842726b0",
+          "pipeline_name": "metagenomic_read_quality_control",
+          "output_key": "MetagenomicQc.clean_r1",
+          "output_name": "clean_r1",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-09T02:39:25.559143+00:00"
+        }
+      },
+      {
+        "name": "qc_counts.tsv",
+        "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/1/qc_counts.tsv",
+        "workspace_path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/1/qc_counts.tsv",
+        "size": 84,
+        "remote": true,
+        "artifact_id": "a99fcba5414748dea226f92d842726b0:1",
+        "pipeline_result": {
+          "job_id": "a99fcba5414748dea226f92d842726b0",
+          "pipeline_name": "metagenomic_read_quality_control",
+          "output_key": "MetagenomicQc.qc_counts",
+          "output_name": "qc_counts",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T02:39:25.559143+00:00"
+        }
+      },
+      {
+        "name": "phase1_read_overview.tsv",
+        "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/2/phase1_read_overview.tsv",
+        "workspace_path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/2/phase1_read_overview.tsv",
+        "size": 75,
+        "remote": true,
+        "artifact_id": "a99fcba5414748dea226f92d842726b0:2",
+        "pipeline_result": {
+          "job_id": "a99fcba5414748dea226f92d842726b0",
+          "pipeline_name": "metagenomic_read_quality_control",
+          "output_key": "MetagenomicQc.phase1_metrics",
+          "output_name": "phase1_metrics",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T02:39:25.559143+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/1/qc_counts.tsv",
+        "text": "MetricName\tMetricValue\nInputReads\t4168\nReadsAfterQC\t4168\nReadsAfterHostRemoval\t4149\n"
+      },
+      {
+        "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/2/phase1_read_overview.tsv",
+        "text": "SampleId\tInputReads\tReadsAfterQC\tReadsAfterHostRemoval\n0722\t4168\t4168\t4149\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/a99fcba5414748dea226f92d842726b0/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "session_id": "1f96468e-0bfb-4189-8150-8da22dc592ca",
+  "attempts": [
+    {
+      "tool": "pipeline_shell",
+      "session_id": "1f96468e-0bfb-4189-8150-8da22dc592ca",
+      "inputs": {
+        "command": "agent-pipeline catalog"
+      },
+      "status": "ok",
+      "result": {
+        "pipelines": [
+          {
+            "name": "bacterial_biosynthetic_gene_clusters",
+            "display_name": "Bacterial biosynthetic gene clusters",
+            "visibility": "public",
+            "description": "Detect bacterial biosynthetic gene clusters from an assembled genome FASTA or raw reads using antiSMASH or GECCO.",
+            "use_when": [
+              "the user wants bacterial secondary-metabolite or biosynthetic gene cluster detection",
+              "the user has an assembled genome FASTA or single-end/paired-end sequencing reads"
+            ],
+            "avoid_when": [
+              "the user only needs read quality control or taxonomic identification",
+              "the user wants defense-system or secretion-system annotation"
+            ],
+            "input_summary": "One required genome FASTA or read 1 FASTQ as the main input, an optional read 2 FASTQ for metagenome mode, and the BacBGC task image.",
+            "output_summary": "BGC cluster, gene, and feature tables.",
+            "limitations": "Set input_type to genome for an assembled FASTA or metagenome for read 1 with optional read 2. Metagenome mode runs fastp and MEGAHIT before antiSMASH/GECCO. Results depend on image, resources, contig length, and backend/database behavior.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "sequence_file1": {
+                "label": "Main sequence file",
+                "required": true,
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fas",
+                  ".fasta.gz",
+                  ".fa.gz",
+                  ".fna.gz",
+                  ".fas.gz",
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Assembled genome FASTA in genome mode, or read 1 FASTQ in metagenome mode."
+              },
+              "sequence_file2": {
+                "label": "Read 2 FASTQ (optional)",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional paired-end read 2 used only in metagenome mode"
+              }
+            },
+            "outputs": [
+              "bgc_clusters",
+              "bgc_features",
+              "bgc_genes"
+            ],
+            "parameters": {
+              "input_type": {
+                "required": true,
+                "choices": [
+                  "genome",
+                  "metagenome"
+                ]
+              },
+              "sample_id": {
+                "default": "GCF_000006765.1_ASM676v1_genomic"
+              },
+              "docker_image": {
+                "default": "cncb/bacbgc:v2"
+              },
+              "threads": {
+                "default": 32
+              },
+              "min_contig_length": {
+                "default": 1000
+              },
+              "genome_context": {
+                "default": "auto",
+                "choices": [
+                  "auto",
+                  "complete",
+                  "metagenome"
+                ]
+              },
+              "bgc_backend": {
+                "default": "gecco",
+                "choices": [
+                  "auto",
+                  "gecco",
+                  "antismash"
+                ]
+              },
+              "gecco_threshold": {
+                "default": 0.8
+              },
+              "gecco_min_cds": {
+                "default": 3
+              },
+              "memory_gb": {
+                "default": 64
+              },
+              "disk_gb": {
+                "default": 200
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "bacterial_defense_system_annotation",
+            "display_name": "Bacterial defense system annotation",
+            "visibility": "public",
+            "description": "Identify bacterial defense systems and associated genes from an assembled genome FASTA or raw reads with DefenseFinder.",
+            "use_when": [
+              "the user wants bacterial defense-system annotation or DefenseFinder results",
+              "the user has an assembled genome FASTA or single-end/paired-end sequencing reads"
+            ],
+            "avoid_when": [
+              "the user only needs read quality control, taxonomic identification, or biosynthetic gene cluster detection",
+              "the user wants TCDB, phage, or general functional annotation"
+            ],
+            "input_summary": "One required genome FASTA or read 1 FASTQ as the main input, an optional read 2 FASTQ for metagenome mode, and a mounted DefenseFinder models directory.",
+            "output_summary": "Defense-system calls, defense-associated genes, and raw HMMER hit tables.",
+            "limitations": "Set input_type to genome for an assembled FASTA or metagenome for read 1 with optional read 2. Metagenome mode runs fastp and MEGAHIT before DefenseFinder. The DefenseFinder models directory and the BacDef image must be available to the Cromwell task container.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "sequence_file1": {
+                "label": "Main sequence file",
+                "required": true,
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fas",
+                  ".fasta.gz",
+                  ".fa.gz",
+                  ".fna.gz",
+                  ".fas.gz",
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Assembled genome FASTA in genome mode, or read 1 FASTQ in metagenome mode."
+              },
+              "sequence_file2": {
+                "label": "Read 2 FASTQ (optional)",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional paired-end read 2 used only in metagenome mode."
+              }
+            },
+            "outputs": [
+              "defense_genes",
+              "defense_hmmer_hits",
+              "defense_systems"
+            ],
+            "parameters": {
+              "input_type": {
+                "required": true,
+                "choices": [
+                  "genome",
+                  "metagenome"
+                ]
+              },
+              "sample_id": {
+                "default": "GCF_000006765.1_ASM676v1_genomic"
+              },
+              "defensefinder_models_dir": {
+                "default": "[internal path]"
+              },
+              "docker_image": {
+                "default": "cncb/bacdef:v2"
+              },
+              "threads": {
+                "default": 8
+              },
+              "min_contig_length": {
+                "default": 1000
+              },
+              "genome_context": {
+                "default": "auto",
+                "choices": [
+                  "auto",
+                  "complete",
+                  "metagenome"
+                ]
+              },
+              "memory_gb": {
+                "default": 48
+              },
+              "disk_gb": {
+                "default": 150
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "bacterial_functional_annotation",
+            "display_name": "Bacterial functional annotation",
+            "visibility": "public",
+            "description": "Annotate bacterial genes and assign functional terms from contigs or reads using the bundled functional-annotation workflow.",
+            "use_when": [
+              "the user wants gene function or orthology annotations from bacterial sequence data"
+            ],
+            "avoid_when": [
+              "the user needs a complete taxonomic classification or abundance estimate"
+            ],
+            "input_summary": "Bacterial contigs, reads, or a supported batch directory, with configured functional reference resources.",
+            "output_summary": "Gene annotations, functional term assignments, QC metrics, and run status.",
+            "limitations": "Provides functional annotation evidence and does not infer abundance, taxonomy, or biological conclusions.",
+            "execution": {
+              "boundary": "container",
+              "engine": "shell"
+            },
+            "engine": "shell",
+            "inputs": {
+              "input_data": {
+                "label": "Input file or directory",
+                "required": true,
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fastq",
+                  ".fq"
+                ],
+                "description": "Sequence input accepted by this workflow."
+              }
+            },
+            "outputs": [
+              "annotation_terms",
+              "gene_annotations",
+              "qc",
+              "status"
+            ],
+            "parameters": {
+              "input_type": {
+                "default": "auto"
+              },
+              "analysis_mode": {
+                "default": "auto"
+              },
+              "threads": {
+                "default": 8
+              },
+              "sample_id": {
+                "default": ""
+              }
+            },
+            "timeout_seconds": 28800
+          },
+          {
+            "name": "bacterial_genome_annotation",
+            "display_name": "Bacterial genome annotation",
+            "visibility": "public",
+            "description": "Annotate assembled bacterial contigs with Prokka or Bakta and normalize the results into sequence, feature, report, metrics, and archive artifacts.",
+            "use_when": [
+              "the user has assembled bacterial contigs and wants gene or feature annotation"
+            ],
+            "avoid_when": [
+              "the input is raw reads",
+              "the user requests comparative variant analysis"
+            ],
+            "input_summary": "One assembled bacterial contigs FASTA file and an annotator selection with optional organism metadata.",
+            "output_summary": "GFF, GenBank, protein, nucleotide, feature-table, report, metrics, log, and raw-output archive files.",
+            "limitations": "Annotation quality depends on the selected tool and database versions.",
+            "execution": {
+              "boundary": "container",
+              "engine": "shell"
+            },
+            "engine": "shell",
+            "inputs": {
+              "genome": {
+                "label": "Assembled bacterial genome",
+                "required": true,
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna"
+                ],
+                "description": "Assembled bacterial contigs in FASTA format."
+              }
+            },
+            "outputs": [
+              "bakta_json",
+              "bundle",
+              "contigs",
+              "features",
+              "genbank",
+              "genes",
+              "gff",
+              "hypotheticals",
+              "inference",
+              "log",
+              "metrics",
+              "plot_png",
+              "plot_svg",
+              "proteins",
+              "report",
+              "summary"
+            ],
+            "parameters": {
+              "annotator": "prokka",
+              "prefix": "annotation",
+              "genus": "",
+              "species": "",
+              "strain": "",
+              "cpus": 1,
+              "translation_table": 11,
+              "locus_tag": "",
+              "compliant": false,
+              "bakta_db_path": "",
+              "gram": "?",
+              "meta": false,
+              "complete": false,
+              "keep_contig_headers": false,
+              "rfam": false
+            },
+            "timeout_seconds": 3600
+          },
+          {
+            "name": "bacterial_secretion_system_annotation",
+            "display_name": "Bacterial secretion system annotation",
+            "visibility": "public",
+            "description": "Identify bacterial secretion systems and associated genes from an assembled genome FASTA or raw reads with MacSyFinder TXSScan.",
+            "use_when": [
+              "the user wants bacterial secretion-system annotation or TXSScan results",
+              "the user has an assembled genome FASTA or single-end/paired-end sequencing reads"
+            ],
+            "avoid_when": [
+              "the user only needs read quality control, taxonomic identification, or biosynthetic gene cluster detection",
+              "the user wants defense-system or general functional annotation"
+            ],
+            "input_summary": "One required genome FASTA or read 1 FASTQ as the main input, an optional read 2 FASTQ for metagenome mode, and a mounted TXSScan models directory.",
+            "output_summary": "Secretion-system calls and secretion-associated gene tables.",
+            "limitations": "Set input_type to genome for an assembled FASTA or metagenome for read 1 with optional read 2. Metagenome mode runs fastp and MEGAHIT before MacSyFinder. The TXSScan models directory and the BacSec image must be available to the Cromwell task container.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "sequence_file1": {
+                "label": "Main sequence file",
+                "required": true,
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fas",
+                  ".fasta.gz",
+                  ".fa.gz",
+                  ".fna.gz",
+                  ".fas.gz",
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Assembled genome FASTA in genome mode, or read 1 FASTQ in metagenome mode."
+              },
+              "sequence_file2": {
+                "label": "Read 2 FASTQ (optional)",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional paired-end read 2 used only in metagenome mode."
+              }
+            },
+            "outputs": [
+              "secretion_genes",
+              "secretion_systems"
+            ],
+            "parameters": {
+              "input_type": {
+                "required": true,
+                "choices": [
+                  "genome",
+                  "metagenome"
+                ]
+              },
+              "sample_id": {
+                "default": "GCF_000006765.1_ASM676v1_genomic"
+              },
+              "txsscan_models_dir": {
+                "default": "[internal path]"
+              },
+              "docker_image": {
+                "default": "cncb/bacsec:v2"
+              },
+              "threads": {
+                "default": 8
+              },
+              "min_contig_length": {
+                "default": 1000
+              },
+              "genome_context": {
+                "default": "auto",
+                "choices": [
+                  "auto",
+                  "complete",
+                  "metagenome"
+                ]
+              },
+              "memory_gb": {
+                "default": 48
+              },
+              "disk_gb": {
+                "default": 150
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "bacterial_viral_variant_analysis",
+            "display_name": "Bacterial and viral variant analysis",
+            "visibility": "public",
+            "description": "Call mutations from one bacterial or viral FASTQ sample or assembled genome FASTA.",
+            "use_when": [
+              "the user wants bacterial or viral SNP and variant results from one sample",
+              "the user has single-end or paired-end FASTQ reads, or one assembled genome FASTA"
+            ],
+            "avoid_when": [
+              "the user wants a multi-sample phylogenetic tree",
+              "the user wants molecular typing or clinical risk interpretation"
+            ],
+            "input_summary": "One FASTQ read file or assembled FASTA, optional read 2 for metagenome mode, and an optional reference FASTA.",
+            "output_summary": "SNP matrix or alignment, variants TSV, and variants summary.",
+            "limitations": "The matrix output is TSV or FASTA according to the selected mode. Reference databases must be visible to the Cromwell task container. This WDL skips tree building.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "sequence_file1": {
+                "label": "Read 1 FASTQ or assembled genome FASTA",
+                "required": true,
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz",
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fas",
+                  ".fasta.gz",
+                  ".fa.gz",
+                  ".fna.gz"
+                ],
+                "description": "FASTQ in metagenome mode or one assembly FASTA in genome mode."
+              },
+              "sequence_file2": {
+                "label": "Optional read 2 FASTQ",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Paired-end read 2; use only with metagenome input_type."
+              },
+              "reference_fasta": {
+                "label": "Optional reference FASTA",
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fas"
+                ],
+                "description": "Local reference sequence when not resolving one from a configured database."
+              }
+            },
+            "outputs": [
+              "snp_matrix",
+              "variants_summary",
+              "variants_tsv"
+            ],
+            "parameters": {
+              "input_type": {
+                "required": true,
+                "choices": [
+                  "metagenome",
+                  "genome"
+                ]
+              },
+              "organism": {
+                "required": true,
+                "choices": [
+                  "bacteria",
+                  "virus"
+                ]
+              },
+              "species": {},
+              "taxonid": {},
+              "reference_accession": {},
+              "threads": {
+                "default": 8
+              },
+              "min_coverage": {
+                "default": 0.9
+              },
+              "window_size": {
+                "default": 50
+              },
+              "step_size": {
+                "default": 10
+              },
+              "sd_threshold": {
+                "default": 3.0
+              },
+              "aligner": {
+                "default": "auto"
+              },
+              "docker_image": {
+                "default": "cncb/snp-mutation:v1.0"
+              }
+            },
+            "timeout_seconds": 28800
+          },
+          {
+            "name": "genomic_pathogen_identification",
+            "display_name": "Genomic pathogen identification",
+            "visibility": "public",
+            "description": "Identify likely bacterial, fungal, parasitic, and viral pathogens from an assembled or consensus FASTA using Mash sketches and configured annotation tables.",
+            "use_when": [
+              "the user has an assembled or consensus FASTA and wants Mash-based pathogen identification",
+              "the Mash databases and annotation tables are available at paths visible to the Cromwell task container"
+            ],
+            "avoid_when": [
+              "the user has raw FASTQ reads that still need quality control or assembly",
+              "the user wants a strain-level analysis, variant risk assessment, or unrestricted clinical diagnosis"
+            ],
+            "input_summary": "One assembled or consensus FASTA; Mash databases and annotation files are deployment-managed resources.",
+            "output_summary": "Summary identification TSV, per-contig calls TSV, annotated hits TSV, and four Mash distance tables.",
+            "limitations": "Results depend on the configured Mash databases, annotation releases, query FASTA quality, Docker image, resource allocation, and Cromwell execution. All reference files must already be visible inside the task container.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "query_fasta": {
+                "label": "Query FASTA",
+                "required": true,
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fas"
+                ],
+                "description": "Assembled or consensus nucleotide FASTA to identify."
+              }
+            },
+            "outputs": [
+              "annotated_hits_tsv",
+              "mash_dist_tsv",
+              "per_contig_call_tsv",
+              "summary_tsv"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "SAMPLE"
+              },
+              "mash_db_bacteria": {
+                "default": "[internal path]"
+              },
+              "mash_db_fungi": {
+                "default": "[internal path]"
+              },
+              "mash_db_parasite": {
+                "default": "[internal path]"
+              },
+              "mash_db_virus": {
+                "default": "[internal path]"
+              },
+              "virus_annotation": {
+                "default": "[internal path]"
+              },
+              "pathogen_annotation": {
+                "default": "[internal path]"
+              },
+              "threads": {
+                "default": 16
+              },
+              "sketch_k16": {
+                "default": 16
+              },
+              "sketch_s_k16": {
+                "default": 5000
+              },
+              "sketch_k21": {
+                "default": 21
+              },
+              "sketch_s_k21_5k": {
+                "default": 5000
+              },
+              "sketch_s_k21_10k": {
+                "default": 10000
+              },
+              "threshold_max_dist": {
+                "default": 0.05
+              },
+              "threshold_max_pvalue": {
+                "default": "1e-10"
+              },
+              "threshold_min_shared": {
+                "default": 200
+              },
+              "threshold_near_best_delta": {
+                "default": 0.005
+              },
+              "threshold_near_best_ratio": {
+                "default": 1.1
+              },
+              "docker_image": {
+                "default": "cncb/mash-identify:v1.0"
+              },
+              "cpu": {
+                "default": 16
+              },
+              "memory_gb": {
+                "default": 32
+              },
+              "disk_gb": {
+                "default": 100
+              }
+            },
+            "timeout_seconds": 14400
+          },
+          {
+            "name": "metagenomic_de_novo_assembly",
+            "display_name": "Metagenomic de novo assembly",
+            "visibility": "public",
+            "description": "Assemble metagenomic reads, identify assembled contigs against configured reference databases, and produce contig- and species-level reports.",
+            "use_when": [
+              "the user wants assembly and downstream identification from metagenomic reads"
+            ],
+            "avoid_when": [
+              "the user only needs read QC or host filtering"
+            ],
+            "input_summary": "Single-end or paired-end FASTQ reads plus configured minimap2 indexes, annotations, and optional reference FASTA files.",
+            "output_summary": "Renamed assembled contigs, contig report, species report, and workflow-generated alignment artifacts.",
+            "limitations": "Results depend on configured databases, Docker images, and Cromwell resources.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "read1": {
+                "label": "Read 1 FASTQ",
+                "required": true,
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Read 1 FASTQ input."
+              },
+              "read2": {
+                "label": "Read 2 FASTQ",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional read 2 FASTQ input for paired-end processing."
+              }
+            },
+            "outputs": [
+              "contig_report",
+              "contigs",
+              "species_report"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "assembly_sample"
+              },
+              "do_evaluate": {
+                "default": true
+              },
+              "megahit_min_contig_len": {
+                "default": 100
+              },
+              "megahit_k_list": {
+                "default": "15,21,29,39"
+              },
+              "megahit_extra_params": {
+                "default": "--min-count 1"
+              },
+              "minimap2_params": {
+                "default": "-x asm20 -N 5"
+              },
+              "minimap2_read_params": {
+                "default": "-ax sr --secondary=no"
+              },
+              "max_unique_references": {
+                "default": 100
+              },
+              "metaquast_params": {
+                "default": "--no-plots --no-html --no-icarus --fast"
+              },
+              "threads": {
+                "default": 32
+              },
+              "docker_image": {
+                "default": "cncb/assembly-id:v1.0"
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "metagenomic_growth_rate_Calculation",
+            "display_name": "Metagenomic growth rate calculation",
+            "visibility": "public",
+            "description": "Estimate genome-by-sample replication rates as log2(PTR) from metagenomic reads with the configured CoPTR reference and index resources.",
+            "use_when": [
+              "the user has single-end or paired-end metagenomic FASTQ reads and wants CoPTR replication-rate estimates",
+              "the CoPTR reference genomes and index are available at paths visible to the Cromwell task container"
+            ],
+            "avoid_when": [
+              "the user still needs read quality control, adapter trimming, or host removal",
+              "the user wants taxonomic profiling, assembly, or clinical risk interpretation"
+            ],
+            "input_summary": "Required read 1, optional read 2,  and sample parameters.",
+            "output_summary": "One CSV containing genome-by-sample log2(PTR) estimates.",
+            "limitations": "Results depend on read quality, reference genomes, CoPTR index, minimum-read threshold, Docker image, and Cromwell execution. The reference and index directories must already be visible inside the task container.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "read1": {
+                "label": "Read 1 FASTQ",
+                "required": true,
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Required single-end read or paired-end read 1."
+              },
+              "read2": {
+                "label": "Read 2 FASTQ",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional paired-end read 2."
+              }
+            },
+            "outputs": [
+              "log2ptr_csv"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "SAMPLE"
+              },
+              "min_reads": {
+                "default": 2500
+              },
+              "threads": {
+                "default": 16
+              },
+              "docker_image": {
+                "default": "cncb/strain-coptr:v1.0"
+              },
+              "cpu": {
+                "default": 16
+              },
+              "memory_gb": {
+                "default": 64
+              },
+              "disk_gb": {
+                "default": 500
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "metagenomic_pathogen_identification",
+            "display_name": "Metagenomic pathogen identification based alignment",
+            "visibility": "public",
+            "description": "Identify bacterial, viral, fungal, and parasite signals from host-filtered reads using alignment, cross-database arbitration, and confidence filtering.",
+            "use_when": [
+              "the user wants pathogen detection from cleaned metagenomic reads"
+            ],
+            "avoid_when": [
+              "the input has not completed the required quality and host-filtering preparation"
+            ],
+            "input_summary": "Required read 1, optional read 2, configured minimap2 indexes, annotation tables, and filtering parameters.",
+            "output_summary": "Confidence-filtered panel, priority panel, sample overview, and cross-database read-accounting tables.",
+            "limitations": "Detection depends on configured indexes, annotations, thresholds, and Cromwell container execution.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "sequence_file1": {
+                "label": "Host-filtered read 1 FASTQ",
+                "required": true,
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Required host-filtered read 1 input."
+              },
+              "sequence_file2": {
+                "label": "Host-filtered read 2 FASTQ",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional host-filtered read 2 input."
+              }
+            },
+            "outputs": [
+              "crossdb_signature",
+              "final_report",
+              "priority_panel",
+              "read_accounting",
+              "sample_overview"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "detection_sample"
+              },
+              "maprate_bacteria": {
+                "default": 0.8
+              },
+              "maprate_virus": {
+                "default": 0.7
+              },
+              "maprate_fungi": {
+                "default": 0.8
+              },
+              "maprate_parasite": {
+                "default": 0.8
+              },
+              "misrate": {
+                "default": 0.1
+              },
+              "min_as_score": {
+                "default": 30
+              },
+              "min_mapq": {
+                "default": 20
+              },
+              "highpos_cutoff": {
+                "default": 0.05
+              },
+              "shannon_cut": {
+                "default": 3.0
+              },
+              "stage6_lib_type": {
+                "default": "DNA"
+              },
+              "stage6_product_type": {
+                "default": "DNA"
+              },
+              "stage6_nonvir_topn": {
+                "default": 1000
+              },
+              "stage6_fil_mrn": {
+                "default": 10
+              },
+              "stage6_fil_shannon": {
+                "default": 0.75
+              },
+              "stage6_fil_breadth": {
+                "default": 0.5
+              },
+              "stage6_species_keep_limit": {
+                "default": 400
+              },
+              "keep_intermediate": {
+                "default": false
+              },
+              "lean_io_mode": {
+                "default": true
+              },
+              "docker_image": {
+                "default": "mscan-detection:v1.0"
+              },
+              "cpu_map": {
+                "default": 8
+              },
+              "cpu_stage": {
+                "default": 4
+              },
+              "mem_map_gb": {
+                "default": 64
+              },
+              "mem_stage_gb": {
+                "default": 16
+              },
+              "disk_gb": {
+                "default": 500
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "metagenomic_pathogen_identification_kmer",
+            "display_name": "Metagenomic pathogen identification based kmer",
+            "visibility": "public",
+            "description": "Classify cleaned metagenomic reads with StrobeTaxa k-mer and strobemer signatures.",
+            "use_when": [
+              "the user has cleaned FASTQ reads and wants k-mer or strobemer based taxonomic detection",
+              "the StrobeTaxa database is available at a path visible to the Cromwell task container"
+            ],
+            "avoid_when": [
+              "the user still needs read quality control or adapter trimming",
+              "the user needs assembly, pathogen strain identification, or clinical interpretation"
+            ],
+            "input_summary": "One required cleaned R1 FASTQ, an optional cleaned R2 FASTQ, and a deployment-managed StrobeTaxa database directory.",
+            "output_summary": "Classified reads TSV, classification report TSV, and signature coverage CSV.",
+            "limitations": "Results depend on the StrobeTaxa database, clean-read quality, Docker image, resource allocation, and Cromwell execution. The database directory must already be mounted into the task container.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "clean_r1": {
+                "label": "Clean reads R1",
+                "required": true,
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Required cleaned single-end or paired-end R1 reads."
+              },
+              "clean_r2": {
+                "label": "Clean reads R2",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional cleaned paired-end R2 reads."
+              }
+            },
+            "outputs": [
+              "classified_tsv",
+              "report_tsv",
+              "signature_coverage_csv"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "SAMPLE"
+              },
+              "db_dir": {
+                "default": "[internal path]"
+              },
+              "feat3_threshold": {
+                "default": 0.5
+              },
+              "bp_per_block": {
+                "default": 1000000
+              },
+              "memmap": {
+                "default": true
+              },
+              "docker_image": {
+                "default": "cncb/strobe-taxa:v1.0"
+              },
+              "cpu": {
+                "default": 32
+              },
+              "memory_gb": {
+                "default": 64
+              },
+              "disk_gb": {
+                "default": 200
+              }
+            },
+            "timeout_seconds": 14400
+          },
+          {
+            "name": "metagenomic_pathogen_identification_marker",
+            "display_name": "Metagenomic pathogen identification based marker",
+            "visibility": "public",
+            "description": "Profile metagenomic reads with MetaPhlAn and generate sample marker and alignment outputs for downstream strain analysis.",
+            "use_when": [
+              "the user has single-end or paired-end metagenomic FASTQ reads and wants MetaPhlAn-based community or strain profiling",
+              "the configured MetaPhlAn database is available at a path visible to the Cromwell task container"
+            ],
+            "avoid_when": [
+              "the user still needs read quality control, adapter trimming, or host removal",
+              "the user wants de novo assembly, broad pathogen screening, or clinical risk interpretation"
+            ],
+            "input_summary": "Required read 1, optional read 2, MetaPhlAn database settings, and sample metadata.",
+            "output_summary": "MetaPhlAn profile, compressed SAM alignment, and consensus marker file.",
+            "limitations": "Results depend on read quality, MetaPhlAn database release, database visibility, Docker image, and Cromwell execution. This workflow does not perform upstream read QC.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "read1": {
+                "label": "Read 1 FASTQ",
+                "required": true,
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Required single-end read or paired-end read 1."
+              },
+              "read2": {
+                "label": "Read 2 FASTQ",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional paired-end read 2."
+              }
+            },
+            "outputs": [
+              "consensus_marker",
+              "profile",
+              "sam_bz2"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "SAMPLE"
+              },
+              "data_type": {
+                "default": "metagenome"
+              },
+              "metaphlan_db_dir": {
+                "default": "[internal path]"
+              },
+              "metaphlan_db_index": {
+                "default": "mpa_vJan25_CHOCOPhlAnSGB_202503"
+              },
+              "threads": {
+                "default": 16
+              },
+              "docker_image": {
+                "default": "cncb/strain-meta:v1.0"
+              },
+              "cpu": {
+                "default": 16
+              },
+              "memory_gb": {
+                "default": 64
+              },
+              "disk_gb": {
+                "default": 500
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "metagenomic_qc_UniVec_Host",
+            "display_name": "Metagenomic qc UniVec Host",
+            "visibility": "public",
+            "description": "Trim adapters, remove configured host sequences and UniVec contaminants, and summarize read QC results for one metagenomic sample.",
+            "use_when": [
+              "the user wants adapter trimming, host removal, or UniVec filtering for metagenomic FASTQ reads",
+              "the user has single-end or paired-end reads and the required host/UniVec resources are mounted"
+            ],
+            "avoid_when": [
+              "the user already has cleaned reads and only needs pathogen identification",
+              "the user wants genome assembly, taxonomic profiling, or variant interpretation"
+            ],
+            "input_summary": "Required read 1, optional read 2, optional custom host FASTA, and deployment-managed host and UniVec resources.",
+            "output_summary": "Cleaned read files, one QC summary row, and a MultiQC HTML report.",
+            "limitations": "Results depend on adapter sequences, host selection or custom host index, UniVec resources, Docker image, resource allocation, and Cromwell execution. Mounted indexes must be visible inside the task container.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "read1": {
+                "label": "Read 1 FASTQ",
+                "required": true,
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Required single-end read or paired-end read 1."
+              },
+              "read2": {
+                "label": "Read 2 FASTQ",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional paired-end read 2; its presence selects paired-end processing."
+              },
+              "host_fasta": {
+                "label": "Optional custom host FASTA",
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fas"
+                ],
+                "description": "Optional host FASTA used to build a temporary Bowtie2 index when host_name is cleared."
+              }
+            },
+            "outputs": [
+              "clean_r1",
+              "clean_r2",
+              "multiqc_html",
+              "qc_summary"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "SRR12883954"
+              },
+              "remove_adapters": {
+                "default": true
+              },
+              "adapter_r1": {
+                "default": "CTGTCTCTTATACACATCT"
+              },
+              "adapter_r2": {
+                "default": "CTGTCTCTTATACACATCT"
+              },
+              "remove_host": {
+                "default": true
+              },
+              "host_name": {
+                "default": "Rattus_norvegicus"
+              },
+              "host_index_root": {
+                "default": "[internal path]"
+              },
+              "trimmomatic_slidingwindow": {
+                "default": 260
+              },
+              "trimmomatic_leading": {
+                "default": 3
+              },
+              "trimmomatic_trailing": {
+                "default": 3
+              },
+              "trimmomatic_minlen": {
+                "default": 36
+              },
+              "host_bowtie2_preset": {
+                "default": "--very-sensitive-local"
+              },
+              "remove_univec": {
+                "default": true
+              },
+              "univec_index_prefix": {
+                "default": "[internal path]"
+              },
+              "univec_bowtie2_preset": {
+                "default": "--very-sensitive-local"
+              },
+              "docker_image": {
+                "default": "cncb/qc-pipeline:v1.0"
+              },
+              "threads": {
+                "default": 8
+              },
+              "memory_gb": {
+                "default": 32
+              },
+              "disk_gb": {
+                "default": 200
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "metagenomic_read_quality_control",
+            "display_name": "Metagenomic read quality control",
+            "visibility": "public",
+            "description": "Filter metagenomic reads and remove host or vector sequences with fastp, Kraken2, and Bowtie2 before downstream analysis.",
+            "use_when": [
+              "the user wants quality filtering and host removal from metagenomic reads"
+            ],
+            "avoid_when": [
+              "the user wants final pathogen identification or variant interpretation"
+            ],
+            "input_summary": "Required read 1, optional read 2, mounted Kraken2 and Bowtie2 resources, and sample settings.",
+            "output_summary": "Cleaned reads, QC read counts, and phase-one read-overview tables.",
+            "limitations": "Reference databases, Docker images, and Cromwell service configuration must be available.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "read1": {
+                "label": "Read 1 FASTQ",
+                "required": true,
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Read 1 FASTQ input."
+              },
+              "read2": {
+                "label": "Read 2 FASTQ",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional read 2 FASTQ input for paired-end processing."
+              }
+            },
+            "outputs": [
+              "clean_r1",
+              "clean_r2",
+              "phase1_metrics",
+              "qc_counts"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "qc_sample"
+              },
+              "lean_io_mode": {
+                "default": true
+              },
+              "docker_image": {
+                "default": "mscan-detection-qc:v1.0"
+              },
+              "cpu": {
+                "default": 8
+              },
+              "memory_gb": {
+                "default": 64
+              },
+              "disk_gb": {
+                "default": 500
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "metax_classification_abundance_analysis",
+            "display_name": "MetaX classification abundance analysis",
+            "visibility": "public",
+            "description": "Profile a single microbial sample with MetaX and return its taxonomic profile from short reads or an input sequence file.",
+            "use_when": [
+              "the user wants MetaX taxonomic profiling for a single sample",
+              "the user has single-end or paired-end reads and the MetaX database is mounted"
+            ],
+            "avoid_when": [
+              "the user needs read quality control, host removal, or de novo assembly",
+              "the user wants clinical interpretation or variant calling"
+            ],
+            "input_summary": "Required input sequence file, optional paired read 2, and mounted MetaX database and taxonomy resources.",
+            "output_summary": "One MetaX profile text table.",
+            "limitations": "The MetaX database JSON and optional NCBI taxdump must be visible inside the Cromwell task container. This workflow runs MetaX directly and does not perform upstream read QC or assembly.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "reads": {
+                "label": "Input sequence or read 1",
+                "required": true,
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz",
+                  ".fasta",
+                  ".fa",
+                  ".fasta.gz",
+                  ".fa.gz"
+                ],
+                "description": "Required input sequence file. Use this for single-end reads, paired-end read 1, or an input FASTA accepted by MetaX."
+              },
+              "reads2": {
+                "label": "Read 2 FASTQ",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional paired-end read 2. When provided, MetaX is run in paired mode."
+              }
+            },
+            "outputs": [
+              "profile"
+            ],
+            "parameters": {
+              "db": {
+                "default": "[internal path]"
+              },
+              "dmp_dir": {
+                "default": "[internal path]"
+              },
+              "sequencer": {
+                "default": "Illumina"
+              },
+              "mode": {
+                "default": "default"
+              },
+              "strain": {
+                "default": false
+              },
+              "lowbiomass": {
+                "default": false
+              },
+              "genus_fallback": {
+                "default": false
+              },
+              "strict": {
+                "default": false
+              },
+              "keep_raw": {
+                "default": false
+              },
+              "compress_sam": {
+                "default": false
+              },
+              "by_aligned": {
+                "default": false
+              },
+              "resume": {
+                "default": false
+              },
+              "reuse_sam": {
+                "default": null
+              },
+              "pathogen_host": {
+                "default": null
+              },
+              "host": {
+                "default": null
+              },
+              "identity": {
+                "default": null
+              },
+              "mapped_len": {
+                "default": null
+              },
+              "fraction": {
+                "default": null
+              },
+              "min_breadth": {
+                "default": null
+              },
+              "min_cbreadth": {
+                "default": null
+              },
+              "min_reads": {
+                "default": null
+              },
+              "min_oebr": {
+                "default": null
+              },
+              "min_coebr": {
+                "default": null
+              },
+              "threads": {
+                "default": 20
+              },
+              "memory_gb": {
+                "default": 64
+              },
+              "disk_gb": {
+                "default": 100
+              },
+              "docker": {
+                "default": "metax:0.9.23-beta"
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "pathogen_variant_risk_assessment_consensus",
+            "display_name": "Pathogen consensus variant risk assessment",
+            "visibility": "public",
+            "description": "Analyze an existing pathogen consensus FASTA, annotate variants, and produce a pathogen-specific risk report.",
+            "use_when": [
+              "the user already has a consensus FASTA and wants configured H1N1, H3N2, or SARS-CoV-2 variant risk analysis",
+              "the user does not need raw-read alignment or consensus generation"
+            ],
+            "avoid_when": [
+              "the user has raw FASTQ reads that still need variant calling",
+              "the user requests unsupported pathogens or unrestricted clinical diagnosis"
+            ],
+            "input_summary": "One consensus FASTA and one supported pathogen; reference, snpEff, segment, and risk annotation resources are deployment-managed.",
+            "output_summary": "Final variant risk report and complete workflow output archive.",
+            "limitations": "Results depend on the selected pathogen resources, consensus quality, Docker image, snpEff data, and Cromwell execution. This workflow consumes a consensus FASTA and does not generate one from reads.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "consensus_fasta": {
+                "label": "Consensus FASTA",
+                "required": true,
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fas"
+                ],
+                "description": "Consensus or assembled pathogen sequence in FASTA format."
+              }
+            },
+            "outputs": [
+              "final_report",
+              "output_archive"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "SAMPLE"
+              },
+              "pathogen": {
+                "required": true,
+                "choices": [
+                  "H1N1",
+                  "H3N2",
+                  "SARS_CoV_2"
+                ]
+              },
+              "log_tag": {
+                "default": "SAMPLE"
+              },
+              "threads": {
+                "default": 16
+              },
+              "snpeff_java_mem_gb": {
+                "default": 32
+              },
+              "docker_image": {
+                "default": "cncb/risk-wdl:v1.0"
+              }
+            },
+            "timeout_seconds": 7200
+          },
+          {
+            "name": "phi_annotator_genome",
+            "display_name": "PHI-base genome annotation",
+            "visibility": "public",
+            "description": "Annotate an assembled genome or protein FASTA against PHI-base and produce pathogen-host interaction hits and a summary report.",
+            "use_when": [
+              "the user has an assembled genome FASTA or a predicted protein FASTA and wants PHI-base annotation",
+              "the PHI-base DIAMOND database and metadata table are available to the Cromwell task container"
+            ],
+            "avoid_when": [
+              "the user has raw metagenomic reads and wants read-level PHI-base screening",
+              "the user wants read quality control, assembly, or clinical risk interpretation"
+            ],
+            "input_summary": "Exactly one genome FASTA or protein FASTA, plus the mounted PHI-base DIAMOND database and metadata table.",
+            "output_summary": "PHI-base hit and summary tables, annotation QC/status files, a manifest, and a Markdown report.",
+            "limitations": "The workflow does not assemble reads or perform read QC. Database paths and the pipeline directory must be visible inside the task container. Genome input runs Prodigal before DIAMOND; protein input skips gene prediction.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "genome_fasta": {
+                "label": "Genome FASTA",
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fas",
+                  ".fasta.gz",
+                  ".fa.gz",
+                  ".fna.gz",
+                  ".fas.gz"
+                ],
+                "description": "Assembled nucleotide FASTA. Provide this or protein_fasta, but not both."
+              },
+              "protein_fasta": {
+                "label": "Protein FASTA",
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".faa",
+                  ".fas",
+                  ".fasta.gz",
+                  ".fa.gz",
+                  ".faa.gz",
+                  ".fas.gz"
+                ],
+                "description": "Predicted protein FASTA. Provide this or genome_fasta, but not both."
+              }
+            },
+            "outputs": [
+              "hits",
+              "manifest",
+              "qc",
+              "report",
+              "status",
+              "summary"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "GCF_000006765.1_ASM676v1_genomic"
+              },
+              "diamond_db": {
+                "default": "[internal path]"
+              },
+              "metadata": {
+                "default": "[internal path]"
+              },
+              "db_version": {
+                "default": "PHI-base 5.6"
+              },
+              "threads": {
+                "default": 8
+              },
+              "genome_context": {
+                "default": "complete",
+                "choices": [
+                  "complete",
+                  "metagenome"
+                ]
+              },
+              "min_contig_length": {
+                "default": 0
+              },
+              "min_identity": {
+                "default": 30.0
+              },
+              "min_query_coverage": {
+                "default": 50.0
+              },
+              "min_subject_coverage": {
+                "default": 0.0
+              },
+              "max_evalue": {
+                "default": 1e-05
+              },
+              "max_target_seqs": {
+                "default": 25
+              },
+              "min_alignment_length": {
+                "default": 0
+              },
+              "docker_image": {
+                "default": "cncb/phi-annotator:v1.0"
+              },
+              "memory_gb": {
+                "default": 32
+              },
+              "disk_gb": {
+                "default": 100
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "phi_annotator_metagenome",
+            "display_name": "PHI-base metagenome read annotation",
+            "visibility": "public",
+            "description": "Screen metagenomic FASTQ reads against PHI-base with DIAMOND blastx and produce read-level pathogen-host interaction annotations.",
+            "use_when": [
+              "the user has single-end or paired-end metagenomic FASTQ reads and wants PHI-base read-level annotation",
+              "the PHI-base DIAMOND database and metadata table are available to the Cromwell task container"
+            ],
+            "avoid_when": [
+              "the user has an assembled genome and wants genome-level PHI-base annotation",
+              "the user wants read quality control, assembly, or clinical risk interpretation"
+            ],
+            "input_summary": "Required read 1, optional read 2, and the mounted PHI-base DIAMOND database and metadata table.",
+            "output_summary": "PHI-base hit, read-hit, and summary tables, annotation QC/status files, a manifest, and a Markdown report.",
+            "limitations": "This workflow runs DIAMOND blastx directly on reads and does not assemble or perform upstream read QC. The optional R2 is scanned as an additional FASTQ and is not paired during annotation. Database paths and the pipeline directory must be visible inside the task container.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "read1": {
+                "label": "Read 1 FASTQ",
+                "required": true,
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Required single-end read or paired-end read 1."
+              },
+              "read2": {
+                "label": "Read 2 FASTQ",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional second FASTQ. It is scanned together with read 1 without PE pairing."
+              }
+            },
+            "outputs": [
+              "hits",
+              "manifest",
+              "qc",
+              "read_hits",
+              "report",
+              "status",
+              "summary"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "SRR3405414"
+              },
+              "diamond_db": {
+                "default": "[internal path]"
+              },
+              "metadata": {
+                "default": "[internal path]"
+              },
+              "db_version": {
+                "default": "PHI-base 5.6"
+              },
+              "threads": {
+                "default": 8
+              },
+              "min_read_length": {
+                "default": 0
+              },
+              "min_identity": {
+                "default": 80.0
+              },
+              "min_query_coverage": {
+                "default": 0.0
+              },
+              "min_subject_coverage": {
+                "default": 0.0
+              },
+              "max_evalue": {
+                "default": 1e-05
+              },
+              "max_target_seqs": {
+                "default": 25
+              },
+              "min_alignment_length": {
+                "default": 30
+              },
+              "docker_image": {
+                "default": "cncb/phi-annotator:v1.0"
+              },
+              "memory_gb": {
+                "default": 32
+              },
+              "disk_gb": {
+                "default": 200
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "risk_screen",
+            "display_name": "ScreenMec biosafety sequence screening",
+            "visibility": "public",
+            "description": "Screen an assembled or consensus FASTA for biorisk, toxin-related, pathogen, and low-concern sequence signals using the configured ScreenMec databases.",
+            "use_when": [
+              "the user has an assembled or consensus FASTA and wants biosafety or pathogen sequence screening",
+              "the ScreenMec databases, annotation files, and taxon data are available at paths visible to the Cromwell task container"
+            ],
+            "avoid_when": [
+              "the user has raw FASTQ reads that still need quality control or assembly",
+              "the user wants ordinary taxonomic profiling, strain typing, or unrestricted clinical interpretation"
+            ],
+            "input_summary": "One assembled or consensus FASTA; ScreenMec databases, annotations, and taxon data are deployment-managed resources.",
+            "output_summary": "One ScreenMec TSV containing the cascaded biorisk, functional, pathogen, and low-concern screening results.",
+            "limitations": "Results depend on the configured databases and annotations, query FASTA quality, Docker image, resource allocation, and Cromwell execution. All reference resources must already be visible inside the task container.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "query_fasta": {
+                "label": "Query FASTA",
+                "required": true,
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fas"
+                ],
+                "description": "Assembled or consensus nucleotide FASTA to screen."
+              }
+            },
+            "outputs": [
+              "result_tsv"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "SAMPLE"
+              },
+              "threads": {
+                "default": 40
+              },
+              "biorisk_index": {
+                "default": "[internal path]"
+              },
+              "uniref_db": {
+                "default": "[internal path]"
+              },
+              "funsocs_tsv": {
+                "default": "[internal path]"
+              },
+              "funsocs_pck": {
+                "default": "[internal path]"
+              },
+              "nt_db": {
+                "default": "[internal path]"
+              },
+              "regulated_taxids": {
+                "default": "[internal path]"
+              },
+              "taxonkit_data_dir": {
+                "default": "[internal path]"
+              },
+              "benign_fasta_db": {
+                "default": "[internal path]"
+              },
+              "blastx_evalue": {
+                "default": "1e-10"
+              },
+              "blastx_max_target_seqs": {
+                "default": 500
+              },
+              "blastn_evalue": {
+                "default": 10
+              },
+              "blastn_max_target_seqs": {
+                "default": 50
+              },
+              "blastn_culling_limit": {
+                "default": 5
+              },
+              "low_concern_min_coverage": {
+                "default": 0.8
+              },
+              "low_concern_max_evalue": {
+                "default": "1e-05"
+              },
+              "low_concern_min_identity": {
+                "default": 90.0
+              },
+              "docker_image": {
+                "default": "cncb/screenmec:v1.0"
+              },
+              "cpu": {
+                "default": 40
+              },
+              "memory_gb": {
+                "default": 64
+              },
+              "disk_gb": {
+                "default": 300
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "rna_secondary_structure_prediction",
+            "display_name": "RNA secondary-structure prediction",
+            "visibility": "public",
+            "description": "Convert nucleotide FASTA records to RNA, predict minimum-free-energy secondary structures with RNAfold, and return structured reports.",
+            "use_when": [
+              "the user wants secondary-structure predictions for RNA or DNA-letter nucleotide sequences"
+            ],
+            "avoid_when": [
+              "the user needs tertiary-structure modeling, pseudoknot prediction, or experimental interpretation"
+            ],
+            "input_summary": "A nucleotide FASTA file within the configured record and length limits.",
+            "output_summary": "Structure table, dot-bracket file, metrics, report, and RNAfold log.",
+            "limitations": "The workflow predicts equilibrium minimum-free-energy structures and does not model cellular conditions or pseudoknots.",
+            "execution": {
+              "boundary": "container",
+              "engine": "shell"
+            },
+            "engine": "shell",
+            "inputs": {
+              "rna": {
+                "label": "RNA sequences",
+                "required": true,
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna"
+                ],
+                "description": "One or more RNA or DNA-letter nucleotide sequences in FASTA format."
+              }
+            },
+            "outputs": [
+              "dot_bracket",
+              "log",
+              "metrics",
+              "report",
+              "structures"
+            ],
+            "parameters": {
+              "temperature_c": 37.0,
+              "max_sequence_length": 10000
+            },
+            "timeout_seconds": 3600
+          },
+          {
+            "name": "tcdb_annotator_genome",
+            "display_name": "TCDB genome annotation",
+            "visibility": "public",
+            "description": "Annotate an assembled genome or protein FASTA against TCDB and produce transporter, transmembrane, and summary reports.",
+            "use_when": [
+              "the user has an assembled genome FASTA or a predicted protein FASTA and wants TCDB annotation",
+              "the TCDB BLAST or DIAMOND databases and metadata table are available to the Cromwell task container"
+            ],
+            "avoid_when": [
+              "the user has raw metagenomic reads and wants read-level TCDB screening",
+              "the user wants read quality control, assembly, or clinical risk interpretation"
+            ],
+            "input_summary": "Exactly one genome FASTA or protein FASTA, plus mounted TCDB BLAST/DIAMOND databases and metadata.",
+            "output_summary": "TCDB hit and summary tables, optional transmembrane predictions, annotation QC/status files, a manifest, and a Markdown report.",
+            "limitations": "The workflow does not assemble reads or perform read QC. Database paths, TMbed model resources when enabled, and the pipeline directory must be visible inside the task container. Genome input runs Prodigal before protein alignment; protein input skips gene prediction.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "genome_fasta": {
+                "label": "Genome FASTA",
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fas",
+                  ".fasta.gz",
+                  ".fa.gz",
+                  ".fna.gz",
+                  ".fas.gz"
+                ],
+                "description": "Assembled nucleotide FASTA. Provide this or protein_fasta, but not both."
+              },
+              "protein_fasta": {
+                "label": "Protein FASTA",
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".faa",
+                  ".fas",
+                  ".fasta.gz",
+                  ".fa.gz",
+                  ".faa.gz",
+                  ".fas.gz"
+                ],
+                "description": "Predicted protein FASTA. Provide this or genome_fasta, but not both."
+              }
+            },
+            "outputs": [
+              "hits",
+              "manifest",
+              "qc",
+              "report",
+              "status",
+              "summary",
+              "tm_predictions"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "GCF_000006765.1_ASM676v1_genomic"
+              },
+              "blast_db": {
+                "default": "[internal path]"
+              },
+              "diamond_db": {
+                "default": "[internal path]"
+              },
+              "metadata": {
+                "default": "[internal path]"
+              },
+              "db_version": {
+                "default": "TCDB 2026-08-23"
+              },
+              "backend": {
+                "default": "blast",
+                "choices": [
+                  "blast",
+                  "diamond"
+                ]
+              },
+              "threads": {
+                "default": 8
+              },
+              "genome_context": {
+                "default": "complete",
+                "choices": [
+                  "complete",
+                  "metagenome"
+                ]
+              },
+              "min_contig_length": {
+                "default": 0
+              },
+              "tm_prediction": {
+                "default": false
+              },
+              "tmbed_model_dir": {
+                "default": ""
+              },
+              "tmbed_module": {
+                "default": "tmbed"
+              },
+              "tmbed_use_gpu": {
+                "default": false
+              },
+              "tmbed_batch_size": {
+                "default": 1000
+              },
+              "min_identity": {
+                "default": 30.0
+              },
+              "min_query_coverage": {
+                "default": 50.0
+              },
+              "min_subject_coverage": {
+                "default": 0.0
+              },
+              "max_evalue": {
+                "default": 1e-05
+              },
+              "max_target_seqs": {
+                "default": 25
+              },
+              "min_alignment_length": {
+                "default": 0
+              },
+              "docker_image": {
+                "default": "cncb/tcdb-annotator:v1.0"
+              },
+              "memory_gb": {
+                "default": 32
+              },
+              "disk_gb": {
+                "default": 100
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "tcdb_annotator_metagenome",
+            "display_name": "TCDB metagenome read annotation",
+            "visibility": "public",
+            "description": "Screen metagenomic FASTQ reads against TCDB with DIAMOND blastx and produce read-level transporter annotations.",
+            "use_when": [
+              "the user has single-end or paired-end metagenomic FASTQ reads and wants read-level TCDB annotation",
+              "the TCDB DIAMOND database and metadata table are available to the Cromwell task container"
+            ],
+            "avoid_when": [
+              "the user has an assembled genome and wants genome-level TCDB annotation",
+              "the user wants read quality control, assembly, or clinical risk interpretation"
+            ],
+            "input_summary": "Required read 1, optional read 2, and the mounted TCDB DIAMOND database and metadata table.",
+            "output_summary": "TCDB hit, read-hit, and summary tables, annotation QC/status files, a manifest, and a Markdown report.",
+            "limitations": "This workflow runs DIAMOND blastx directly on reads and does not assemble or perform upstream read QC. The optional R2 is scanned as an additional FASTQ and is not paired during annotation. TMbed is disabled in this mode. Database paths and the pipeline directory must be visible inside the task container.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "read1": {
+                "label": "Read 1 FASTQ",
+                "required": true,
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Required single-end read or paired-end read 1."
+              },
+              "read2": {
+                "label": "Read 2 FASTQ",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional second FASTQ. It is scanned together with read 1 without PE pairing."
+              }
+            },
+            "outputs": [
+              "hits",
+              "manifest",
+              "qc",
+              "read_hits",
+              "report",
+              "status",
+              "summary"
+            ],
+            "parameters": {
+              "sample_id": {
+                "default": "SRR3405414"
+              },
+              "diamond_db": {
+                "default": "[internal path]"
+              },
+              "metadata": {
+                "default": "[internal path]"
+              },
+              "db_version": {
+                "default": "TCDB 2026-08-23"
+              },
+              "threads": {
+                "default": 8
+              },
+              "min_read_length": {
+                "default": 0
+              },
+              "min_identity": {
+                "default": 80.0
+              },
+              "min_query_coverage": {
+                "default": 0.0
+              },
+              "min_subject_coverage": {
+                "default": 0.0
+              },
+              "max_evalue": {
+                "default": 1e-05
+              },
+              "max_target_seqs": {
+                "default": 25
+              },
+              "min_alignment_length": {
+                "default": 30
+              },
+              "docker_image": {
+                "default": "cncb/tcdb-annotator:v1.0"
+              },
+              "memory_gb": {
+                "default": 32
+              },
+              "disk_gb": {
+                "default": 200
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "template_bio",
+            "display_name": "DNA analysis template",
+            "visibility": "internal",
+            "description": "Educational shell template that demonstrates a complete DNA read-analysis artifact set without external bioinformatics tools.",
+            "use_when": [
+              "the user requests a local demonstration of the pipeline runtime",
+              "the user wants to inspect example DNA analysis artifacts"
+            ],
+            "avoid_when": [
+              "the user needs validated alignment, variant calling, or research-grade interpretation"
+            ],
+            "input_summary": "Single-end reads, one reference FASTA, and sample metadata.",
+            "output_summary": "QC metrics, demonstration alignments, consensus, variant-like records, tables, figures, and reports.",
+            "limitations": "This is an educational positional-comparison workflow and is not a validated aligner or variant caller.",
+            "execution": {
+              "boundary": "container",
+              "engine": "shell"
+            },
+            "engine": "shell",
+            "inputs": {
+              "reads": {
+                "label": "Sequencing reads",
+                "required": true,
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Single-end DNA reads with Phred+33 quality scores."
+              },
+              "reference": {
+                "label": "Reference genome",
+                "required": true,
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fasta.gz",
+                  ".fa.gz",
+                  ".fna.gz"
+                ],
+                "description": "One reference sequence used by the positional comparison demo."
+              },
+              "metadata": {
+                "label": "Sample metadata",
+                "required": true,
+                "accepts": [
+                  ".tsv",
+                  ".csv"
+                ],
+                "description": "Sample sheet containing a sample_id column."
+              }
+            },
+            "outputs": [
+              "alignments",
+              "consensus",
+              "coverage",
+              "coverage_figure",
+              "filtered_reads",
+              "html_report",
+              "metrics",
+              "phylogenetic_tree",
+              "phylogenetic_tree_figure",
+              "qc_figure",
+              "read_qc",
+              "report",
+              "sample_summary",
+              "variant_figure",
+              "variant_table",
+              "variants"
+            ],
+            "parameters": {
+              "profile": {
+                "default": "standard",
+                "choices": [
+                  "standard",
+                  "quick",
+                  "stringent"
+                ]
+              },
+              "sample_id": {
+                "default": "sample_demo"
+              },
+              "min_length": {
+                "default": 12
+              },
+              "min_mean_quality": {
+                "default": 20.0
+              },
+              "min_base_quality": {
+                "default": 20
+              },
+              "min_alt_fraction": {
+                "default": 0.6
+              },
+              "min_alt_depth": {
+                "default": 2
+              },
+              "plot_dpi": {
+                "default": 140
+              },
+              "emit_phylogenetic_tree": {
+                "default": true
+              }
+            },
+            "timeout_seconds": 120
+          },
+          {
+            "name": "template_nextflow",
+            "display_name": "Nextflow pipeline template",
+            "visibility": "internal",
+            "description": "Nextflow template that normalizes a FASTA sequence and reports basic sequence and metadata metrics.",
+            "use_when": [
+              "the user requests a Nextflow runtime demonstration"
+            ],
+            "avoid_when": [
+              "the user needs a validated production sequence-analysis workflow"
+            ],
+            "input_summary": "FASTA sequence and TSV/CSV metadata.",
+            "output_summary": "Normalized FASTA, metrics JSON, and Markdown report.",
+            "limitations": "This is an educational workflow for testing the Nextflow engine.",
+            "execution": {
+              "boundary": "container",
+              "engine": "nextflow"
+            },
+            "engine": "nextflow",
+            "inputs": {
+              "sequence": {
+                "label": "Sequence FASTA",
+                "required": true,
+                "accepts": [
+                  ".fa",
+                  ".fasta",
+                  ".fna"
+                ],
+                "description": "Sequence FASTA input."
+              },
+              "metadata": {
+                "label": "Metadata table",
+                "required": true,
+                "accepts": [
+                  ".tsv",
+                  ".csv"
+                ],
+                "description": "TSV or CSV metadata associated with the sequence input."
+              }
+            },
+            "outputs": [
+              "metrics",
+              "normalized_sequence",
+              "report"
+            ],
+            "parameters": {
+              "profile": {
+                "default": "standard",
+                "choices": [
+                  "standard",
+                  "strict"
+                ]
+              },
+              "subtype": {
+                "default": "subtype1"
+              },
+              "segment": {
+                "default": "segment1"
+              },
+              "time": {
+                "default": "all-time"
+              },
+              "analysis_mode": {
+                "default": "example"
+              },
+              "min_length": {
+                "default": 0
+              }
+            },
+            "timeout_seconds": 300
+          },
+          {
+            "name": "template_shell",
+            "display_name": "Shell metadata assignment template",
+            "visibility": "internal",
+            "description": "Small shell template that joins sequence IDs to metadata and writes normalized text, assignments, metrics, and a report.",
+            "use_when": [
+              "the user wants sequence IDs matched to metadata categories"
+            ],
+            "avoid_when": [
+              "the user needs biological classification or sequence similarity analysis"
+            ],
+            "input_summary": "Sequence text, FASTA, or FASTQ plus TSV/CSV metadata with matching identifier and category columns.",
+            "output_summary": "Normalized sequence text, assignment table, metrics, and report.",
+            "limitations": "The workflow performs deterministic metadata joining and does not infer biological subtypes.",
+            "execution": {
+              "boundary": "container",
+              "engine": "shell"
+            },
+            "engine": "shell",
+            "inputs": {
+              "reads": {
+                "label": "Sequence data",
+                "required": true,
+                "accepts": [
+                  ".txt",
+                  ".fastq",
+                  ".fq",
+                  ".fasta",
+                  ".fa"
+                ],
+                "description": "Sequence reads supplied to the workflow."
+              },
+              "metadata": {
+                "label": "Subtype metadata",
+                "required": true,
+                "accepts": [
+                  ".tsv",
+                  ".csv"
+                ],
+                "description": "TSV or CSV metadata associated with the sequence input."
+              }
+            },
+            "outputs": [
+              "metrics",
+              "normalized_text",
+              "report",
+              "subtype_assignments"
+            ],
+            "parameters": {
+              "profile": {
+                "default": "standard",
+                "choices": [
+                  "standard",
+                  "strict"
+                ]
+              },
+              "normalize_mode": {
+                "default": "whitespace"
+              },
+              "uppercase": {
+                "default": false
+              },
+              "sequence_id_column": {
+                "default": "sequence_id"
+              },
+              "subtype_column": {
+                "default": "subtype"
+              },
+              "missing_subtype": {
+                "default": "unassigned"
+              }
+            },
+            "timeout_seconds": 120
+          },
+          {
+            "name": "template_snakemake",
+            "display_name": "Snakemake pipeline template",
+            "visibility": "internal",
+            "description": "Snakemake template that normalizes a FASTA sequence and reports basic sequence and metadata metrics.",
+            "use_when": [
+              "the user requests a Snakemake runtime demonstration"
+            ],
+            "avoid_when": [
+              "the user needs a validated production sequence-analysis workflow"
+            ],
+            "input_summary": "FASTA sequence and TSV/CSV metadata.",
+            "output_summary": "Normalized FASTA, metrics JSON, and Markdown report.",
+            "limitations": "This is an educational workflow for testing the Snakemake engine.",
+            "execution": {
+              "boundary": "container",
+              "engine": "snakemake"
+            },
+            "engine": "snakemake",
+            "inputs": {
+              "sequence": {
+                "label": "Sequence FASTA",
+                "required": true,
+                "accepts": [
+                  ".fa",
+                  ".fasta",
+                  ".fna"
+                ],
+                "description": "Sequence FASTA input."
+              },
+              "metadata": {
+                "label": "Metadata table",
+                "required": true,
+                "accepts": [
+                  ".tsv",
+                  ".csv"
+                ],
+                "description": "TSV or CSV metadata associated with the sequence input."
+              }
+            },
+            "outputs": [
+              "metrics",
+              "normalized_sequence",
+              "report"
+            ],
+            "parameters": {
+              "profile": {
+                "default": "standard",
+                "choices": [
+                  "standard",
+                  "strict"
+                ]
+              },
+              "subtype": {
+                "default": "subtype1"
+              },
+              "segment": {
+                "default": "segment1"
+              },
+              "time": {
+                "default": "all-time"
+              },
+              "analysis_mode": {
+                "default": "example"
+              },
+              "min_length": {
+                "default": 0
+              }
+            },
+            "timeout_seconds": 300
+          },
+          {
+            "name": "template_wdl",
+            "display_name": "WDL pipeline template",
+            "visibility": "internal",
+            "description": "WDL template that normalizes a FASTA sequence and produces sequence metrics and a report.",
+            "use_when": [
+              "the user requests a WDL runtime demonstration"
+            ],
+            "avoid_when": [
+              "the user needs a validated production sequence-analysis workflow"
+            ],
+            "input_summary": "One FASTA sequence and optional WDL parameters.",
+            "output_summary": "Normalized FASTA, metrics JSON, and Markdown report.",
+            "limitations": "This is an educational workflow for testing WDL execution.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "sequence": {
+                "label": "Sequence FASTA",
+                "required": true,
+                "accepts": [
+                  ".fa",
+                  ".fasta",
+                  ".fna"
+                ],
+                "description": "Sequence FASTA input."
+              }
+            },
+            "outputs": [
+              "metrics",
+              "normalized_sequence",
+              "report"
+            ],
+            "parameters": {
+              "profile": {
+                "default": "standard",
+                "choices": [
+                  "standard",
+                  "strict"
+                ]
+              },
+              "label": {
+                "default": "template_wdl"
+              },
+              "min_length": {
+                "default": 0
+              },
+              "uppercase": {
+                "default": true
+              }
+            },
+            "timeout_seconds": 300
+          },
+          {
+            "name": "traceback_covid19",
+            "display_name": "COVID-19 Traceback",
+            "visibility": "public",
+            "description": "Compare a query sequence with a configured reference, calculate genotype distance with Valkyrie resources, derive an SNP sequence, and build a FastTree tree.",
+            "use_when": [
+              "the user has a query FASTA and wants reference-based genotype distance, SNP sequence, and phylogenetic tree results",
+              "the configured Valkyrie and indel resources are available at paths visible to the Cromwell task container"
+            ],
+            "avoid_when": [
+              "the user has raw FASTQ reads that still need quality control or assembly",
+              "the user wants unrestricted clinical interpretation or a general pathogen screen"
+            ],
+            "input_summary": "One query FASTA; the reference FASTA, Valkyrie files, and indel information are deployment-managed resources.",
+            "output_summary": "Combined FASTA, multiple-sequence alignment, mutation list, genotype distance results, SNP sequence, and FastTree Newick tree.",
+            "limitations": "Results depend on the configured reference and Valkyrie resources, method selection, Docker image, sequence quality, and Cromwell execution. The reference and supporting files must already be visible inside the task container.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "query_fasta": {
+                "label": "Query FASTA",
+                "required": true,
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fas"
+                ],
+                "description": "Query consensus or assembled nucleotide FASTA."
+              }
+            },
+            "outputs": [
+              "combined_fa",
+              "mafft_result",
+              "mutation_file",
+              "result_mutlist",
+              "result_tsv",
+              "snp_fa",
+              "tree_file"
+            ],
+            "parameters": {
+              "reference_fasta": {
+                "default": "[internal path]"
+              },
+              "d_method": {
+                "default": "WM",
+                "choices": [
+                  "WM",
+                  "WM+LD",
+                  "UM",
+                  "WM+CL",
+                  "WM+CL+LD"
+                ]
+              },
+              "valkyrie_files": {
+                "default": [
+                  "[internal path]",
+                  "[internal path]",
+                  "[internal path]",
+                  "[internal path]"
+                ]
+              },
+              "valkyrie_relative_path_inside_tar": {
+                "default": "Valkyrie"
+              },
+              "indel_info": {
+                "default": "[internal path]"
+              },
+              "output_name_prefix": {
+                "default": "SAMPLE"
+              },
+              "mafft_threads": {
+                "default": 16
+              },
+              "docker_image": {
+                "default": "cncb/genome_tracing:v1.0"
+              }
+            },
+            "timeout_seconds": 86400
+          },
+          {
+            "name": "viral_genome_molecular_typing",
+            "display_name": "Viral genome molecular typing",
+            "visibility": "public",
+            "description": "Process an assembled or consensus viral FASTA and run configured Nextclade molecular typing.",
+            "use_when": [
+              "the user already has a viral genome or consensus FASTA and wants influenza or SARS-CoV-2 molecular typing",
+              "the user does not need raw-read quality control or read alignment from FASTQ files"
+            ],
+            "avoid_when": [
+              "the user has raw FASTQ reads that still need read processing",
+              "the user requests an unsupported pathogen or an unrestricted clinical diagnosis"
+            ],
+            "input_summary": "One assembled or consensus FASTA and one supported pathogen; reference and Nextclade resources are deployment-managed.",
+            "output_summary": "Typing CSV, Nextclade TSV and JSON, and the normalized/typed FASTA sequence.",
+            "limitations": "Results depend on the selected pathogen resources, sequence completeness, the Docker image, Nextclade data release, and Cromwell execution.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "genome_fasta": {
+                "label": "Genome or consensus FASTA",
+                "required": true,
+                "accepts": [
+                  ".fasta",
+                  ".fa",
+                  ".fna",
+                  ".fas"
+                ],
+                "description": "Assembled or consensus viral sequence in FASTA format."
+              }
+            },
+            "outputs": [
+              "nextclade_json",
+              "nextclade_tsv",
+              "result_csv",
+              "typed_fasta"
+            ],
+            "parameters": {
+              "sample": {
+                "default": "SAMPLE"
+              },
+              "pathogen": {
+                "required": true,
+                "choices": [
+                  "H1N1",
+                  "H3N2",
+                  "SARS_CoV_2"
+                ]
+              },
+              "threads": {
+                "default": "16"
+              },
+              "task_cpu": {
+                "default": 16
+              },
+              "docker_image": {
+                "default": "cncb/molecular-wdl:v1.0"
+              }
+            },
+            "timeout_seconds": 7200
+          },
+          {
+            "name": "viral_read_molecular_typing",
+            "display_name": "Viral read molecular typing",
+            "visibility": "public",
+            "description": "Process viral FASTQ reads, generate a consensus sequence, and run configured Nextclade molecular typing.",
+            "use_when": [
+              "the user has raw viral FASTQ or FASTQ.GZ reads and wants influenza or SARS-CoV-2 molecular typing",
+              "the user wants paired-end or single-end read processing followed by consensus and Nextclade results"
+            ],
+            "avoid_when": [
+              "the user already has an assembled or consensus FASTA and does not need read processing",
+              "the user requests an unsupported pathogen or an unrestricted clinical diagnosis"
+            ],
+            "input_summary": "Read 1, optional read 2, and one supported pathogen; reference and Nextclade resources are deployment-managed.",
+            "output_summary": "Typing CSV, Nextclade TSV and JSON, consensus FASTA, and final BAM alignment.",
+            "limitations": "Results depend on the selected pathogen resources, coverage, the Docker image, Nextclade data release, and Cromwell execution.",
+            "execution": {
+              "boundary": "container",
+              "engine": "wdl"
+            },
+            "engine": "wdl",
+            "inputs": {
+              "read1": {
+                "label": "Read 1 FASTQ",
+                "required": true,
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Required single-end read file or paired-end read 1."
+              },
+              "read2": {
+                "label": "Read 2 FASTQ",
+                "accepts": [
+                  ".fastq",
+                  ".fq",
+                  ".fastq.gz",
+                  ".fq.gz"
+                ],
+                "description": "Optional paired-end read 2. Leave empty for single-end data."
+              }
+            },
+            "outputs": [
+              "consensus_fasta",
+              "final_bam",
+              "nextclade_json",
+              "nextclade_tsv",
+              "result_csv"
+            ],
+            "parameters": {
+              "sample": {
+                "default": "SAMPLE"
+              },
+              "pathogen": {
+                "required": true,
+                "choices": [
+                  "H1N1",
+                  "H3N2",
+                  "SARS_CoV_2"
+                ]
+              },
+              "min_length": {
+                "default": "35"
+              },
+              "min_qual": {
+                "default": "20"
+              },
+              "threads": {
+                "default": "16"
+              },
+              "task_cpu": {
+                "default": 16
+              },
+              "docker_image": {
+                "default": "cncb/molecular-wdl:v1.0"
+              }
+            },
+            "timeout_seconds": 7200
+          }
+        ],
+        "status": "ok"
+      }
+    },
+    {
+      "tool": "pipeline_shell",
+      "session_id": "1f96468e-0bfb-4189-8150-8da22dc592ca",
+      "inputs": {
+        "command": "agent-pipeline files"
+      },
+      "status": "ok",
+      "result": {
+        "files": [
+          {
+            "workspace_path": "uploads/0ca8982fd7844ca2a6b7473495f6bfe2_qc_demo.fq.gz",
+            "name": "0ca8982fd7844ca2a6b7473495f6bfe2_qc_demo.fq.gz",
+            "size": 240118
+          },
+          {
+            "workspace_path": "uploads/1e975c247cbd4f30a3c828dd5ff5fd76_clean.R1.fq",
+            "name": "1e975c247cbd4f30a3c828dd5ff5fd76_clean.R1.fq",
+            "size": 761681
+          },
+          {
+            "workspace_path": "uploads/8848468cd7d945e6ac03733e95861293_qc-d3195a75f5834f0ab400cbfebb9df8e1.json",
+            "name": "8848468cd7d945e6ac03733e95861293_qc-d3195a75f5834f0ab400cbfebb9df8e1.json",
+            "size": 799
+          },
+          {
+            "workspace_path": "uploads/9b0d60de3dc04fd3b3c41d3ac1290dc8_qc_demo.fq.gz",
+            "name": "9b0d60de3dc04fd3b3c41d3ac1290dc8_qc_demo.fq.gz",
+            "size": 240118
+          },
+          {
+            "workspace_path": "uploads/9d9d4bd6165b407b88ec7327323dc4d5_qc_counts.tsv",
+            "name": "9d9d4bd6165b407b88ec7327323dc4d5_qc_counts.tsv",
+            "size": 84
+          },
+          {
+            "workspace_path": "uploads/ca9dbbbde68f44f5b3bdfe27cc8f5b82_results.zip",
+            "name": "ca9dbbbde68f44f5b3bdfe27cc8f5b82_results.zip",
+            "size": 221995
+          },
+          {
+            "workspace_path": "uploads/d4cb2cf4cd08490db500cba5b0e3da4d_phase1_read_overview.tsv",
+            "name": "d4cb2cf4cd08490db500cba5b0e3da4d_phase1_read_overview.tsv",
+            "size": 75
+          },
+          {
+            "workspace_path": "uploads/de5067d7d1eb4425a7eb845d4cf0efac_qc-d3195a75f5834f0ab400cbfebb9df8e1.json",
+            "name": "de5067d7d1eb4425a7eb845d4cf0efac_qc-d3195a75f5834f0ab400cbfebb9df8e1.json",
+            "size": 799
+          },
+          {
+            "workspace_path": "uploads/examples/metagenomic_read_quality_control-b10f3ce2913e4d209ad7f5ca5f92127f/qc_demo.fq.gz",
+            "name": "qc_demo.fq.gz",
+            "size": 240118
+          }
+        ],
+        "status": "ok"
+      }
+    },
+    {
+      "tool": "pipeline_shell",
+      "session_id": "1f96468e-0bfb-4189-8150-8da22dc592ca",
+      "inputs": {
+        "command": "agent-pipeline status --job-id a99fcba5414748dea226f92d842726b0"
+      },
+      "status": "ok",
+      "result": {
+        "job_id": "a99fcba5414748dea226f92d842726b0",
+        "plan_id": "a99fcba5414748dea226f92d842726b0",
+        "status": "succeeded",
+        "created_at": "2026-11-09T02:38:29.722890+00:00",
+        "started_at": "2026-11-09T02:38:29.831895+00:00",
+        "finished_at": "2026-11-09T02:39:25.559143+00:00",
+        "updated_at": "2026-11-09T02:39:25.560151+00:00",
+        "error": null,
+        "remote_id": "164f785d-4c96-4cdf-8304-677852046afc",
+        "artifact_status": "available",
+        "pipeline_name": "metagenomic_read_quality_control"
+      }
+    },
+    {
+      "tool": "pipeline_shell",
+      "session_id": "1f96468e-0bfb-4189-8150-8da22dc592ca",
+      "inputs": {
+        "command": "agent-pipeline results --job-id a99fcba5414748dea226f92d842726b0"
+      },
+      "status": "ok",
+      "result": {
+        "job_id": "a99fcba5414748dea226f92d842726b0",
+        "plan_id": "a99fcba5414748dea226f92d842726b0",
+        "status": "succeeded",
+        "created_at": "2026-11-09T02:38:29.722890+00:00",
+        "started_at": "2026-11-09T02:38:29.831895+00:00",
+        "finished_at": "2026-11-09T02:39:25.559143+00:00",
+        "updated_at": "2026-11-09T02:39:25.560151+00:00",
+        "error": null,
+        "remote_id": "164f785d-4c96-4cdf-8304-677852046afc",
+        "artifact_status": "available",
+        "pipeline_name": "metagenomic_read_quality_control",
+        "files": [
+          {
+            "name": "clean.R1.fq",
+            "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/0/clean.R1.fq",
+            "workspace_path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/0/clean.R1.fq",
+            "size": 761681,
+            "remote": true,
+            "artifact_id": "a99fcba5414748dea226f92d842726b0:0",
+            "pipeline_result": {
+              "job_id": "a99fcba5414748dea226f92d842726b0",
+              "pipeline_name": "metagenomic_read_quality_control",
+              "output_key": "MetagenomicQc.clean_r1",
+              "output_name": "clean_r1",
+              "output_kind": "sequence",
+              "completed_at": "2026-11-09T02:39:25.559143+00:00"
+            }
+          },
+          {
+            "name": "qc_counts.tsv",
+            "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/1/qc_counts.tsv",
+            "workspace_path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/1/qc_counts.tsv",
+            "size": 84,
+            "remote": true,
+            "artifact_id": "a99fcba5414748dea226f92d842726b0:1",
+            "pipeline_result": {
+              "job_id": "a99fcba5414748dea226f92d842726b0",
+              "pipeline_name": "metagenomic_read_quality_control",
+              "output_key": "MetagenomicQc.qc_counts",
+              "output_name": "qc_counts",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T02:39:25.559143+00:00"
+            }
+          },
+          {
+            "name": "phase1_read_overview.tsv",
+            "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/2/phase1_read_overview.tsv",
+            "workspace_path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/2/phase1_read_overview.tsv",
+            "size": 75,
+            "remote": true,
+            "artifact_id": "a99fcba5414748dea226f92d842726b0:2",
+            "pipeline_result": {
+              "job_id": "a99fcba5414748dea226f92d842726b0",
+              "pipeline_name": "metagenomic_read_quality_control",
+              "output_key": "MetagenomicQc.phase1_metrics",
+              "output_name": "phase1_metrics",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T02:39:25.559143+00:00"
+            }
+          }
+        ],
+        "previews": [
+          {
+            "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/1/qc_counts.tsv",
+            "text": "MetricName\tMetricValue\nInputReads\t4168\nReadsAfterQC\t4168\nReadsAfterHostRemoval\t4149\n"
+          },
+          {
+            "path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/2/phase1_read_overview.tsv",
+            "text": "SampleId\tInputReads\tReadsAfterQC\tReadsAfterHostRemoval\n0722\t4168\t4168\t4149\n"
+          }
+        ],
+        "bundle_path": "pipeline-bundles/a99fcba5414748dea226f92d842726b0/results.zip",
+        "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+      }
+    }
+  ]
+}

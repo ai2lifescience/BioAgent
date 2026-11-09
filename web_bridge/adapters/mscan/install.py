@@ -8,6 +8,11 @@ parser.add_argument('root', nargs='?', default='resource/mscan', help='Directory
 args = parser.parse_args()
 root = Path(args.root).resolve()
 source = Path(__file__).resolve().parent
+panel_path = root / 'mscan/src/views/sampleProgramResults/components/ProgramResultPanel.vue'
+old_panel_condition = "programKey === 'funcflow' && dataType === 'genomic'"
+new_panel_condition = "programKey === 'funcflow' && (dataType === 'genomic' || dataType === 'synthetic')"
+if not any(condition in panel_path.read_text() for condition in (old_panel_condition, new_panel_condition)):
+    raise ValueError('Unsupported MSCAN functional-result component selection; review ProgramResultPanel.vue.')
 # Fail before copying files if the host page contract has changed.
 for relative, anchors in {
     'mscan/src/App.vue': ('<script setup lang="ts">', '<router-view></router-view>'),
@@ -81,6 +86,9 @@ def page(text):
 
 edit(root / 'mscan/src/App.vue', app)
 edit(root / 'mscan/src/views/sampleProgramResults/index.vue', page)
+# Synthetic samples use the same native record family as genomic samples.
+# The original page otherwise requests reads records and shows an empty result.
+edit(panel_path, lambda text: text.replace(old_panel_condition, new_panel_condition))
 
 def refresh_hook(text):
     if 'agentResultVersion' in text: return text
@@ -128,4 +136,4 @@ def status_refresh(text):
         'const agentResultVersion = useReceivedResults(() => currentSampleId.value);\nwatch(agentResultVersion, () => {\n  void loadSampleTree();\n  void refreshProgramStatuses();\n});')
 edit(root / 'mscan/src/views/sampleProgramResults/index.vue', status_refresh)
 
-print("Installed MSCAN adapter. Existing source hooks: App.vue and sampleProgramResults/index.vue only.")
+print("Installed MSCAN adapter. Existing source hooks: App.vue, sampleProgramResults/index.vue and one ProgramResultPanel.vue sample-type condition.")

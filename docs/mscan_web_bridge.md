@@ -25,7 +25,7 @@ installation, complete the setup below first.
 
 ## First-time setup
 
-The installer adds adapter-owned files and changes two existing frontend files.
+The installer adds adapter-owned files and changes three existing frontend files.
 It does not modify existing backend sources or require a database migration.
 The [technical reference](#technical-reference) lists the exact changes and checks.
 
@@ -165,6 +165,13 @@ export BIOAGENT_URL=http://127.0.0.1:8000
 export BIOAGENT_PUBLIC_URL=http://192.168.75.56:8000
 export BIOAGENT_ORIGINS=http://localhost:8848,http://127.0.0.1:8848,http://192.168.75.56:8848
 export BIOAGENT_RESULTS_ROOT="$PWD/runtime/website-integration/mscan-results"
+
+# DuckDB's storage reader requires proxy URLs without a trailing slash.
+# Keep your existing proxy and NO_PROXY settings; normalize only the ending slash.
+export http_proxy="${http_proxy%/}"
+export https_proxy="${https_proxy%/}"
+export HTTP_PROXY="${HTTP_PROXY%/}"
+export HTTPS_PROXY="${HTTPS_PROXY%/}"
 
 export BIOAGENT_SECRET="$(python -c 'import json; print(json.load(open("runtime/website-integration/clients.json"))["mscan"]["secret"])')"
 
@@ -396,6 +403,7 @@ Paths in this table are relative to the MSCAN frontend, `resource/mscan/mscan/`.
 | --- | --- | --- |
 | `src/App.vue` | `AssistantBridge` import and component | Mount the embedded assistant across page navigation |
 | `src/views/sampleProgramResults/index.vue` | Context registration, result-refresh listener, component refresh key and `SampleFileMenu` | Share the selected sample and tab, refresh received results and provide downloads |
+| `src/views/sampleProgramResults/components/ProgramResultPanel.vue` | One sample-type condition | Display synthetic-sample functional records through the assembly component, matching their native storage |
 
 MSCAN's existing backend Java files, database services, pipeline definitions,
 `SecurityConfig.java`, `CasClientConfig.java`, frontend user store and QC panel
@@ -406,7 +414,7 @@ remain unchanged on a clean installation.
 | Destination | Added files |
 | --- | --- |
 | Frontend `src/integrations/bioagent/` | `AssistantBridge.vue`, `context.ts`, `logout.ts`, `SampleFileMenu.vue`, `sampleFiles.ts` |
-| Backend `mscan-admin/src/main/java/com/mscan/web/controller/common/` | `AssistantController.java`, `AssistantTransferService.java`, `AssistantDeliveryService.java`, `TransferLocks.java`, `ResultImporterRegistry.java`, `ResultImportService.java`, `QcResultImporter.java`, `NativeImportContext.java`, `NativeResultResources.java`, `WebsiteLogoutEvent.java`, `WebsiteLogoutHook.java`, `WebsiteDownloadSecurity.java` |
+| Backend `mscan-admin/src/main/java/com/mscan/web/controller/common/` | `AssistantController.java`, `AssistantTransferService.java`, `AssistantDeliveryService.java`, `TransferLocks.java`, `ResultImporterRegistry.java`, `ResultImportService.java`, `QcResultImporter.java`, `ResultArtifactInspector.java`, `ImportFailure.java`, `NativeImportContext.java`, `NativeResultResources.java`, `WebsiteLogoutEvent.java`, `WebsiteLogoutHook.java`, `WebsiteDownloadSecurity.java` |
 
 Logout uses a frontend Pinia action subscription and a backend Spring aspect
 that observes the verified session before invalidation. Download security uses

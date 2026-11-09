@@ -1,0 +1,116 @@
+{
+  "id": "tool-genome_render_map",
+  "title": "genome_render_map",
+  "outcome": "PASS",
+  "inputs": {
+    "features_path": "outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json",
+    "sequence_id": "mock_contig_1",
+    "label": "Bundled synthetic test contig"
+  },
+  "result": {
+    "status": "ok",
+    "data": {
+      "source_path": "outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json",
+      "genome_map_path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/genome_map.json",
+      "reference_path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/reference.fasta",
+      "sequence_id": "mock_contig_1",
+      "genome_length": 264,
+      "total": 4,
+      "rendered": 4,
+      "truncated": false
+    },
+    "files": [
+      {
+        "path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/genome_map.json",
+        "workspace_path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/genome_map.json",
+        "name": "genome_map.json",
+        "kind": "genome_map",
+        "content_type": "application/json; charset=utf-8",
+        "size": 871,
+        "modified_at": 1794192262579519752
+      },
+      {
+        "path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/reference.fasta",
+        "workspace_path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/reference.fasta",
+        "name": "reference.fasta",
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8",
+        "size": 280,
+        "modified_at": 1794192262579519752
+      }
+    ],
+    "evidence": [],
+    "error": null
+  },
+  "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+  "attempts": [
+    {
+      "tool": "genome_render_map",
+      "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+      "inputs": {
+        "features_path": "outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json",
+        "label": "Bundled synthetic contig example",
+        "sequence_id": null
+      },
+      "result": {
+        "status": "error",
+        "data": {},
+        "files": [],
+        "evidence": [],
+        "error": {
+          "code": "ValueError",
+          "message": "ValueError: Provide sequence_id when input contains multiple sequences."
+        }
+      },
+      "status": "error",
+      "elapsed_seconds": 4.96
+    },
+    {
+      "tool": "genome_render_map",
+      "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+      "inputs": {
+        "features_path": "outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json",
+        "sequence_id": "mock_contig_1",
+        "label": "Bundled synthetic test contig"
+      },
+      "reason": "Correct test harness context/input and wait for terminal indexing status",
+      "status": "ok",
+      "result": {
+        "status": "ok",
+        "data": {
+          "source_path": "outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json",
+          "genome_map_path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/genome_map.json",
+          "reference_path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/reference.fasta",
+          "sequence_id": "mock_contig_1",
+          "genome_length": 264,
+          "total": 4,
+          "rendered": 4,
+          "truncated": false
+        },
+        "files": [
+          {
+            "path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/genome_map.json",
+            "workspace_path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/genome_map.json",
+            "name": "genome_map.json",
+            "kind": "genome_map",
+            "content_type": "application/json; charset=utf-8",
+            "size": 871,
+            "modified_at": 1794192262579519752
+          },
+          {
+            "path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/reference.fasta",
+            "workspace_path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/reference.fasta",
+            "name": "reference.fasta",
+            "kind": "sequence",
+            "content_type": "text/plain; charset=utf-8",
+            "size": 280,
+            "modified_at": 1794192262579519752
+          }
+        ],
+        "evidence": [],
+        "error": null
+      },
+      "elapsed_seconds": 4.81
+    }
+  ]
+}

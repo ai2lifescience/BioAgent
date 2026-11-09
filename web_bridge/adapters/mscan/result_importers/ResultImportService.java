@@ -85,6 +85,8 @@ public class ResultImportService {
     }
     private Map<String,Object> importJob(String owner,String sample,String type,String delivery,Path dir,String job,List<Map<String,Object>> files) {
         Map<String,Object> report=new LinkedHashMap<>();report.put("job_id",job);report.put("files_delivered",true);
+        report.put("generic_import",Map.of("state","imported","artifact_count",files.size(),
+            "access","Search or pull the attached sample files; native records are a separate outcome."));
         var provenance=(Map<String,Object>)files.get(0).get("pipeline_result");report.put("pipeline",provenance.getOrDefault("pipeline_name",""));
         Set<String> formats=new HashSet<>();Map<String,Map<String,Object>> outputs=new LinkedHashMap<>();
         for(var file:files) {
@@ -138,7 +140,8 @@ public class ResultImportService {
         } catch(NewerResult error) {
             return status(report,"superseded","A newer native result was preserved; these files remain available.");
         } catch(Exception error) {
-            return status(report,"failed",error.getClass().getSimpleName()+": "+error.getMessage());
+            report.putAll(ImportFailure.describe(error));
+            report.put("state","failed");return report;
         }
     }
     private static class NewerResult extends RuntimeException {}

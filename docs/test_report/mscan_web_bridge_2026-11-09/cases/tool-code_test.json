@@ -1,0 +1,66 @@
+{
+  "id": "tool-code_test",
+  "title": "code_test",
+  "outcome": "PASS",
+  "inputs": {
+    "command": "python -m unittest"
+  },
+  "result": {
+    "status": "ok",
+    "data": {
+      "command": "python -m unittest",
+      "returncode": 0,
+      "test_result": "passed",
+      "logs": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK",
+      "summary": "python -m unittest passed with exit code 0."
+    },
+    "files": [],
+    "evidence": [],
+    "error": null
+  },
+  "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+  "attempts": [
+    {
+      "tool": "code_test",
+      "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+      "inputs": {
+        "command": "python -m unittest test_bridge_math"
+      },
+      "result": {
+        "status": "error",
+        "data": {},
+        "files": [],
+        "evidence": [],
+        "error": {
+          "code": "ModelBehaviorError",
+          "message": "Invalid JSON input for tool code_test"
+        }
+      },
+      "status": "error",
+      "elapsed_seconds": 0.01
+    },
+    {
+      "tool": "code_test",
+      "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+      "inputs": {
+        "command": "python -m unittest"
+      },
+      "reason": "Correct test harness context/input and wait for terminal indexing status",
+      "status": "ok",
+      "result": {
+        "status": "ok",
+        "data": {
+          "command": "python -m unittest",
+          "returncode": 0,
+          "test_result": "passed",
+          "logs": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK",
+          "summary": "python -m unittest passed with exit code 0."
+        },
+        "files": [],
+        "evidence": [],
+        "error": null
+      },
+      "elapsed_seconds": 5.09
+    }
+  ]
+}

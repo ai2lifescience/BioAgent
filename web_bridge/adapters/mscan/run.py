@@ -8,6 +8,22 @@ import shutil
 import sys
 
 
+def normalize_proxy_environment(env):
+    """DuckDB httpfs rejects a root slash after the proxy port (curl accepts it)."""
+    from urllib.parse import urlsplit
+    result = env.copy()
+    for key in ('http_proxy', 'https_proxy', 'HTTP_PROXY', 'HTTPS_PROXY'):
+        value = result.get(key, '')
+        try:
+            parsed = urlsplit(value)
+            if (parsed.scheme in ('http', 'https') and parsed.hostname
+                    and parsed.path == '/' and not parsed.query and not parsed.fragment):
+                result[key] = value[:-1]
+        except ValueError:
+            pass  # Preserve invalid settings for the caller's normal diagnostics.
+    return result
+
+
 def main():
     root = Path(__file__).resolve().parents[3]
     parser = argparse.ArgumentParser(description=__doc__)
@@ -54,6 +70,7 @@ def main():
         command = [sys.executable, '-B', '-m', 'interfaces.web', '--host', args.host, '--port', str(args.port)]
         directory = root
     elif args.component == 'backend':
+        env = normalize_proxy_environment(env)
         env.setdefault('BIOAGENT_RESULTS_ROOT', str(root / 'runtime/website-integration/mscan-results'))
         env.update(BIOAGENT_ENABLED='true', BIOAGENT_URL=args.agent_url, BIOAGENT_SECRET=client['secret'],
                    BIOAGENT_ORIGINS=','.join(client['origins']), BIOAGENT_PUBLIC_URL=args.public_url)

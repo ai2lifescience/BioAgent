@@ -26,6 +26,8 @@ mscan/
 │   ├── ResultImporterRegistry.java
 │   ├── ResultImportService.java
 │   ├── QcResultImporter.java
+│   ├── ResultArtifactInspector.java
+│   ├── ImportFailure.java
 │   └── NativeImportContext.java
 ├── resources/                  # Discover, read and download native results
 │   ├── NativeResultResources.java
@@ -46,6 +48,28 @@ parses QC summaries and writes native QC records. Other formats reuse MSCAN's
 existing parsers through [`NativeImportContext`](result_importers/NativeImportContext.java).
 Add a supported native format in the registry; ordinary file exchange does not
 require a native importer.
+
+`ResultArtifactInspector` adds bounded TSV/CSV/JSON/text previews to delivered
+file metadata, independently of pipeline names. Search returns this metadata;
+pull returns the complete, unchanged file. Binary and unfamiliar formats remain
+downloadable. The preview reads at most 64 KiB and shows at most three table rows;
+these are preview limits, not upload or result-size limits. Previews are untrusted
+file content and must not be treated as instructions.
+
+Each per-job receipt separates `generic_import` (files attached to the sample)
+from its native `state` (MSCAN records). An unknown format can have a successful
+generic import and an `unsupported` native state. Missing roles and incompatible
+sample types are not silently repaired or reported as native success. Native
+views still require a registered, validated result contract; an LLM does not
+invent values or write database records.
+
+`ImportFailure` reports stable error codes without exposing raw SQL, proxy
+credentials or storage secrets. For `storage_proxy_configuration`, normalize
+HTTP(S) proxy URLs (for example `http://127.0.0.1:10801`, without `/`), restart the
+MSCAN backend and retry the failed transfer. `run.py backend` performs this
+normalization automatically; the everyday startup exports in the installation
+guide do the same for direct `java -jar` startup. Existing delivered files are
+retained and native import retry does not repeat committed QC.
 
 [`AssistantDeliveryService`](data_transfer/AssistantDeliveryService.java) downloads
 and verifies files, delegates native import, and persists receipts.
@@ -100,9 +124,12 @@ mvn clean package -DskipTests
 ```
 
 Use an actual IP instead of `YOUR_SERVER_IP`. The installer copies the canonical
-adapter sources in this directory and changes only two existing source files:
+adapter sources in this directory and changes three existing source files:
 `src/App.vue` mounts the assistant; `src/views/sampleProgramResults/index.vue`
 connects selected sample context, result refreshes and the download menu.
+`src/views/sampleProgramResults/components/ProgramResultPanel.vue` changes one
+condition so synthetic samples use the assembly-results component that matches
+their native records.
 Installation preserves host line endings and does not reformat whole files.
 Since `resource/` is ignored, these tracked sources and the installer are the portable
 integration deliverable. No MSCAN database migration is required.
@@ -120,6 +147,7 @@ Compared against the original `resource/mscan.zip` and `resource/mscan-app.zip`:
 | --- | --- |
 | Frontend `src/App.vue` | Import and mount the embedded assistant |
 | Frontend `src/views/sampleProgramResults/index.vue` | Sample context, result refresh and download menu |
+| Frontend `src/views/sampleProgramResults/components/ProgramResultPanel.vue` | One condition selects assembly results for synthetic samples |
 | Existing backend Java, database, workflow and security files | None |
 | Existing frontend user store and QC panel | None |
 

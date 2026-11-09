@@ -1,0 +1,1619 @@
+[
+  {
+    "pipeline": "metagenomic_de_novo_assembly",
+    "job_id": "5e425e2dbe9d4cc3b15a8794dd9792da",
+    "session_id": "51909ad0-d712-441b-82fd-0f8a52262b2f",
+    "inputs": {
+      "paths": [
+        "pipeline-bundles/5e425e2dbe9d4cc3b15a8794dd9792da/results.zip",
+        "uploads/examples/metagenomic_de_novo_assembly-e1909331e86b428f8c52f11bc941b1d1/assembly_demo.fastq.gz"
+      ],
+      "destination": {
+        "project": "Bridge_pipeline_matrix_20261109",
+        "sample": "metagenomic_de_novo_assembly",
+        "data_type": "meta",
+        "source_slots": {
+          "R1": "uploads/examples/metagenomic_de_novo_assembly-e1909331e86b428f8c52f11bc941b1d1/assembly_demo.fastq.gz"
+        }
+      },
+      "create_missing": true
+    },
+    "result": {
+      "transfer_id": "6b628c4851c8428da7d78e88235bad13",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R1": "fbf5d8a1ab6936f99b7915988a6d5949"
+          },
+          "status": "registered"
+        },
+        "target": {
+          "sample_id": "ccb2dcfd4a453980980fe8fbd6c6d01e",
+          "data_type": "meta",
+          "project_name": "Bridge_pipeline_matrix_20261109",
+          "sample_name": "metagenomic_de_novo_assembly",
+          "project_id": "a924199794553f94b029789481f26a2d"
+        },
+        "receipt_id": "6b628c4851c8428da7d78e88235bad13",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "5e425e2dbe9d4cc3b15a8794dd9792da",
+            "files_delivered": true,
+            "pipeline": "metagenomic_de_novo_assembly",
+            "format": "AssemblyId",
+            "program": "assembly",
+            "state": "imported",
+            "message": "Native result imported."
+          }
+        ],
+        "files": [
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/5e425e2dbe9d4cc3b15a8794dd9792da/results.zip",
+            "id": "0401f4334be89b2e15e3438307ae5c1d0d7ccbbf583e51af6d537ffc1006f63b",
+            "sha256": "e044f9757b6193f4d2ce60064fafdfb278f8087df893398ca212278e67090f79",
+            "size": 4881
+          },
+          {
+            "name": "final.contigs.renamed.fa",
+            "source_path": "pipeline-artifacts/5e425e2dbe9d4cc3b15a8794dd9792da/0/final.contigs.renamed.fa",
+            "id": "c9c1d9383057b3ed4f1b996e31902960b22b939854f1baf2a2139de2e775d1d6",
+            "sha256": "017744d7e14e4ee9778b9f386ff10a35cd35dd095ed54ce82b67080ba19cb73d",
+            "size": 14465,
+            "pipeline_result": {
+              "job_id": "5e425e2dbe9d4cc3b15a8794dd9792da",
+              "pipeline_name": "metagenomic_de_novo_assembly",
+              "output_key": "AssemblyId.final_contigs_renamed",
+              "output_name": "contigs",
+              "output_kind": "sequence",
+              "completed_at": "2026-11-09T02:55:50.778601+00:00"
+            }
+          },
+          {
+            "name": "contig_report.tsv",
+            "source_path": "pipeline-artifacts/5e425e2dbe9d4cc3b15a8794dd9792da/1/contig_report.tsv",
+            "id": "ee52291bfeb51eef1d4631dbd745fd08196ed3b6f895f2518e6956becadbdb26",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "pipeline_result": {
+              "job_id": "5e425e2dbe9d4cc3b15a8794dd9792da",
+              "pipeline_name": "metagenomic_de_novo_assembly",
+              "output_key": "AssemblyId.contig_report_tsv",
+              "output_name": "contig_report",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T02:55:50.778601+00:00"
+            }
+          },
+          {
+            "name": "species_report.tsv",
+            "source_path": "pipeline-artifacts/5e425e2dbe9d4cc3b15a8794dd9792da/2/species_report.tsv",
+            "id": "69d7a97467f0b86cf17a7d63854d3c69f2f986d585547885a2dfc0ff5c6a31c4",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "size": 0,
+            "pipeline_result": {
+              "job_id": "5e425e2dbe9d4cc3b15a8794dd9792da",
+              "pipeline_name": "metagenomic_de_novo_assembly",
+              "output_key": "AssemblyId.species_report_tsv",
+              "output_name": "species_report",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T02:55:50.778601+00:00"
+            }
+          },
+          {
+            "name": "assembly_demo.fastq.gz",
+            "source_path": "uploads/examples/metagenomic_de_novo_assembly-e1909331e86b428f8c52f11bc941b1d1/assembly_demo.fastq.gz",
+            "id": "193252eb24a402b195131da5ea9419c170ad67d4879b8adfd85e42ac01db3a22",
+            "sha256": "4d3438f07a5ffc48b96e0a45e3c674cdf5ef6a72740450e9cc73f3bb9244405d",
+            "size": 9480292
+          }
+        ],
+        "native_qc_applied": false
+      }
+    }
+  },
+  {
+    "pipeline": "metagenomic_pathogen_identification",
+    "job_id": "294c192682c34be0882ce98a7eb5bf81",
+    "session_id": "c8b58df5-591b-4fac-aba1-a0ee0a814847",
+    "inputs": {
+      "paths": [
+        "pipeline-bundles/294c192682c34be0882ce98a7eb5bf81/results.zip",
+        "uploads/examples/metagenomic_pathogen_identification-7b08a994770242a0802a6bc0a675dff2/detection_demo.fq.gz"
+      ],
+      "destination": {
+        "project": "Bridge_pipeline_matrix_20261109",
+        "sample": "metagenomic_pathogen_identification",
+        "data_type": "meta",
+        "source_slots": {
+          "R1": "uploads/examples/metagenomic_pathogen_identification-7b08a994770242a0802a6bc0a675dff2/detection_demo.fq.gz"
+        }
+      },
+      "create_missing": true
+    },
+    "result": {
+      "transfer_id": "c339ea7e29d0453db6c7dcb00401f6a0",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R1": "933cf7335e5e3fd3a52babf1c605cf31"
+          },
+          "status": "registered"
+        },
+        "target": {
+          "sample_id": "c9606bc9535d3dbd8342bc9694feddfe",
+          "data_type": "meta",
+          "project_name": "Bridge_pipeline_matrix_20261109",
+          "sample_name": "metagenomic_pathogen_identification",
+          "project_id": "a924199794553f94b029789481f26a2d"
+        },
+        "receipt_id": "c339ea7e29d0453db6c7dcb00401f6a0",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "294c192682c34be0882ce98a7eb5bf81",
+            "files_delivered": true,
+            "pipeline": "metagenomic_pathogen_identification",
+            "format": "MetagenomicDetection",
+            "state": "unsupported",
+            "message": "MSCAN has no registered importer for this result format; files remain available."
+          }
+        ],
+        "files": [
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/294c192682c34be0882ce98a7eb5bf81/results.zip",
+            "id": "98aed10fd63dae098aaf50b3938cbde6f59887cce32caa8eb6274b61ff88ec5b",
+            "sha256": "7505bee04fb3d12ae6aaa214e06a50c379a677d5bc2994ace4a6c357b9867ccc",
+            "size": 13473
+          },
+          {
+            "name": "priority_with_confidence.tsv",
+            "source_path": "pipeline-artifacts/294c192682c34be0882ce98a7eb5bf81/0/priority_with_confidence.tsv",
+            "id": "60ab9e5216eaed974502eb805e7c4585e4c3ec722978556a4bad0ad81e6d2aed",
+            "sha256": "af65ddcb710086faab5621263e481160ea4be6ff89f198ebbbb75a6ae5d221b6",
+            "size": 25145,
+            "pipeline_result": {
+              "job_id": "294c192682c34be0882ce98a7eb5bf81",
+              "pipeline_name": "metagenomic_pathogen_identification",
+              "output_key": "MetagenomicDetection.final_report_with_confidence",
+              "output_name": "final_report",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T03:10:09.549842+00:00"
+            }
+          },
+          {
+            "name": "priority_microbe_panel.tsv",
+            "source_path": "pipeline-artifacts/294c192682c34be0882ce98a7eb5bf81/1/priority_microbe_panel.tsv",
+            "id": "bae16dd8c29999c99b78ba79fe7818fd35e39975c05458d968bd4b9df196d89c",
+            "sha256": "b9cd4d34d0650c33f17bdfd0acc7d3e4d761c50d05aaa8ec880f69df7c71b234",
+            "size": 24894,
+            "pipeline_result": {
+              "job_id": "294c192682c34be0882ce98a7eb5bf81",
+              "pipeline_name": "metagenomic_pathogen_identification",
+              "output_key": "MetagenomicDetection.stage5_priority_panel",
+              "output_name": "priority_panel",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T03:10:09.549842+00:00"
+            }
+          },
+          {
+            "name": "sample_overview.tsv",
+            "source_path": "pipeline-artifacts/294c192682c34be0882ce98a7eb5bf81/2/sample_overview.tsv",
+            "id": "81223fdcbe9bb47fe5faff164a1b71b22eaaca430cc85ec02e5c98f4b7c608da",
+            "sha256": "edd8694c5025392bca14397a28c0a4663acf6a33a471c80badb8f95f966ff81f",
+            "size": 137,
+            "pipeline_result": {
+              "job_id": "294c192682c34be0882ce98a7eb5bf81",
+              "pipeline_name": "metagenomic_pathogen_identification",
+              "output_key": "MetagenomicDetection.sample_overview",
+              "output_name": "sample_overview",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T03:10:09.549842+00:00"
+            }
+          },
+          {
+            "name": "stage2_read_accounting.tsv",
+            "source_path": "pipeline-artifacts/294c192682c34be0882ce98a7eb5bf81/3/stage2_read_accounting.tsv",
+            "id": "e13bb01c25fdf5c41d66b2a3d8b3488011c2cb6369ddc1806b82518b495161e7",
+            "sha256": "3760bc4a0d600194b32476c1c0ac44c8c09f7440ea4b5be245fb0d956db9e54c",
+            "size": 256,
+            "pipeline_result": {
+              "job_id": "294c192682c34be0882ce98a7eb5bf81",
+              "pipeline_name": "metagenomic_pathogen_identification",
+              "output_key": "MetagenomicDetection.stage2_read_accounting",
+              "output_name": "read_accounting",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T03:10:09.549842+00:00"
+            }
+          },
+          {
+            "name": "stage2_crossdb_signature.tsv",
+            "source_path": "pipeline-artifacts/294c192682c34be0882ce98a7eb5bf81/4/stage2_crossdb_signature.tsv",
+            "id": "1f45223fd2fc4bd24d0d1d7f460ff861445f7e4026c78380ced3b3f2e9ada153",
+            "sha256": "98388c26898b45e85e8287305386120c3a4b24be9f9a4f9fdfff9e8af86a4362",
+            "size": 11,
+            "pipeline_result": {
+              "job_id": "294c192682c34be0882ce98a7eb5bf81",
+              "pipeline_name": "metagenomic_pathogen_identification",
+              "output_key": "MetagenomicDetection.stage2_crossdb_signature",
+              "output_name": "crossdb_signature",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T03:10:09.549842+00:00"
+            }
+          },
+          {
+            "name": "detection_demo.fq.gz",
+            "source_path": "uploads/examples/metagenomic_pathogen_identification-7b08a994770242a0802a6bc0a675dff2/detection_demo.fq.gz",
+            "id": "0d3599c335f23415d1a2177306e3bdc07a9a66514622a7cac38ec9de461b049f",
+            "sha256": "9101bef1192734f4c50d2908a91b18762432f7f1d789a007e13644b2bccde82c",
+            "size": 240118
+          }
+        ],
+        "native_qc_applied": false
+      }
+    }
+  },
+  {
+    "pipeline": "metagenomic_pathogen_identification_kmer",
+    "job_id": "b0bae2ba84e343c588318cd809ac18cc",
+    "session_id": "16af54ab-9553-4dbe-ad81-d8a8303aebcf",
+    "inputs": {
+      "paths": [
+        "pipeline-bundles/b0bae2ba84e343c588318cd809ac18cc/results.zip",
+        "uploads/examples/metagenomic_pathogen_identification_kmer-ce553b824f534c2093eba194e8e3edc1/kmer_demo_R1.fastq.gz",
+        "uploads/examples/metagenomic_pathogen_identification_kmer-ce553b824f534c2093eba194e8e3edc1/kmer_demo_R2.fastq.gz"
+      ],
+      "destination": {
+        "project": "Bridge_pipeline_matrix_20261109",
+        "sample": "metagenomic_pathogen_identification_kmer",
+        "data_type": "meta",
+        "source_slots": {
+          "R1": "uploads/examples/metagenomic_pathogen_identification_kmer-ce553b824f534c2093eba194e8e3edc1/kmer_demo_R1.fastq.gz",
+          "R2": "uploads/examples/metagenomic_pathogen_identification_kmer-ce553b824f534c2093eba194e8e3edc1/kmer_demo_R2.fastq.gz"
+        }
+      },
+      "create_missing": true
+    },
+    "result": {
+      "transfer_id": "f8006fca3d4849c38756e5dff6adffe5",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R2": "f0877e4ac6173582970d5fadb8f498b3",
+            "R1": "34b4aee030353441afa2779f9a8378f4"
+          },
+          "status": "registered"
+        },
+        "target": {
+          "sample_id": "3409e1406b7a3bb0891b2206439b0bf1",
+          "data_type": "meta",
+          "project_name": "Bridge_pipeline_matrix_20261109",
+          "sample_name": "metagenomic_pathogen_identification_kmer",
+          "project_id": "a924199794553f94b029789481f26a2d"
+        },
+        "receipt_id": "f8006fca3d4849c38756e5dff6adffe5",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "b0bae2ba84e343c588318cd809ac18cc",
+            "files_delivered": true,
+            "pipeline": "metagenomic_pathogen_identification_kmer",
+            "format": "StrobeTaxaDetection",
+            "state": "unsupported",
+            "message": "MSCAN has no registered importer for this result format; files remain available."
+          }
+        ],
+        "files": [
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/b0bae2ba84e343c588318cd809ac18cc/results.zip",
+            "id": "f588a44924b290116b4d2d3f613267f2a769bf7d45b18285275f0b588dbe4664",
+            "sha256": "65544dc01906c331a05985a530cc37d99941cd2bc5f356fa43ec782cecb49b12",
+            "size": 4919093
+          },
+          {
+            "name": "classified.tsv",
+            "source_path": "pipeline-artifacts/b0bae2ba84e343c588318cd809ac18cc/0/classified.tsv",
+            "id": "bbbf163c845aeff3be7a01c20f026e41c26700430374e4f01306d469aec59bd1",
+            "sha256": "70d409c29ba84c3408640424da04c11dbd36b84f908a300b198913655a2e9729",
+            "size": 15911058,
+            "pipeline_result": {
+              "job_id": "b0bae2ba84e343c588318cd809ac18cc",
+              "pipeline_name": "metagenomic_pathogen_identification_kmer",
+              "output_key": "StrobeTaxaDetection.classified_tsv",
+              "output_name": "classified_tsv",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T03:13:19.603540+00:00"
+            }
+          },
+          {
+            "name": "report.tsv",
+            "source_path": "pipeline-artifacts/b0bae2ba84e343c588318cd809ac18cc/1/report.tsv",
+            "id": "8500cb7638cfbb75c729a21081b58805e4611c4d330f20e1749466dad1f6ce78",
+            "sha256": "101d4140954fcc482561e1bbcccfdd76d4e0d8e2aced9477668b63f210650726",
+            "size": 255290,
+            "pipeline_result": {
+              "job_id": "b0bae2ba84e343c588318cd809ac18cc",
+              "pipeline_name": "metagenomic_pathogen_identification_kmer",
+              "output_key": "StrobeTaxaDetection.report_tsv",
+              "output_name": "report_tsv",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T03:13:19.603540+00:00"
+            }
+          },
+          {
+            "name": "signature_coverage.csv",
+            "source_path": "pipeline-artifacts/b0bae2ba84e343c588318cd809ac18cc/2/signature_coverage.csv",
+            "id": "8f8f78caea2203809b9df6c1bc2ad223d569fe3f51cf199bf5e6efa306d809ef",
+            "sha256": "683fb11bd3fe1b1ff835cacd33065e02e4ec27d728e00f169f867a26089378a8",
+            "size": 16710,
+            "pipeline_result": {
+              "job_id": "b0bae2ba84e343c588318cd809ac18cc",
+              "pipeline_name": "metagenomic_pathogen_identification_kmer",
+              "output_key": "StrobeTaxaDetection.signature_coverage_csv",
+              "output_name": "signature_coverage_csv",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T03:13:19.603540+00:00"
+            }
+          },
+          {
+            "name": "kmer_demo_R1.fastq.gz",
+            "source_path": "uploads/examples/metagenomic_pathogen_identification_kmer-ce553b824f534c2093eba194e8e3edc1/kmer_demo_R1.fastq.gz",
+            "id": "1362b1174d5a2cd5e8717fcbafc4ed5f384f87b8d6673327ab1a887e3e7d987a",
+            "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+            "size": 8952270
+          },
+          {
+            "name": "kmer_demo_R2.fastq.gz",
+            "source_path": "uploads/examples/metagenomic_pathogen_identification_kmer-ce553b824f534c2093eba194e8e3edc1/kmer_demo_R2.fastq.gz",
+            "id": "efbc3fbad121b30e78f3c21d707b2c76ef7690de012395e05a49aeab14e6592b",
+            "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+            "size": 10923663
+          }
+        ],
+        "native_qc_applied": false
+      }
+    }
+  },
+  {
+    "pipeline": "metagenomic_qc_UniVec_Host",
+    "job_id": "32680dc17f9f49e28f27c21ec36caa58",
+    "session_id": "2c175eb4-e4e4-41c4-927f-b4818fc52197",
+    "inputs": {
+      "paths": [
+        "pipeline-bundles/32680dc17f9f49e28f27c21ec36caa58/results.zip",
+        "uploads/examples/metagenomic_qc_UniVec_Host-7442e8e0604e425aa28541373622d171/qc_demo_R1.fastq.gz",
+        "uploads/examples/metagenomic_qc_UniVec_Host-7442e8e0604e425aa28541373622d171/qc_demo_R2.fastq.gz"
+      ],
+      "destination": {
+        "project": "Bridge_pipeline_matrix_20261109",
+        "sample": "metagenomic_qc_UniVec_Host",
+        "data_type": "meta",
+        "source_slots": {
+          "R1": "uploads/examples/metagenomic_qc_UniVec_Host-7442e8e0604e425aa28541373622d171/qc_demo_R1.fastq.gz",
+          "R2": "uploads/examples/metagenomic_qc_UniVec_Host-7442e8e0604e425aa28541373622d171/qc_demo_R2.fastq.gz"
+        }
+      },
+      "create_missing": true
+    },
+    "result": {
+      "transfer_id": "e30ee88f84524d029cc4fac5f89d2f63",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R2": "e7e6a1b6d8f33f419047e72ce8c77967",
+            "R1": "07fbf45200163057b33af528cf8eafb1"
+          },
+          "status": "registered"
+        },
+        "target": {
+          "sample_id": "09df43cdeb7938559e9a4bb3f77719a2",
+          "data_type": "meta",
+          "project_name": "Bridge_pipeline_matrix_20261109",
+          "sample_name": "metagenomic_qc_UniVec_Host",
+          "project_id": "a924199794553f94b029789481f26a2d"
+        },
+        "receipt_id": "e30ee88f84524d029cc4fac5f89d2f63",
+        "qc": {
+          "ReadsAfterHostRemoval": 90617,
+          "QualityDroppedReads": 9283,
+          "HostReads": 46,
+          "InputReads": 100000,
+          "UnivecCoreHitReads": 54,
+          "ReadsAfterQC": 90663
+        },
+        "native_imports": [
+          {
+            "job_id": "32680dc17f9f49e28f27c21ec36caa58",
+            "files_delivered": true,
+            "pipeline": "metagenomic_qc_UniVec_Host",
+            "format": "ReadQc",
+            "state": "imported",
+            "message": "Native QC imported.",
+            "program": "qc"
+          }
+        ],
+        "files": [
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/32680dc17f9f49e28f27c21ec36caa58/results.zip",
+            "id": "580e68fc07a941aa494bfe4249c67cf52e4d2e64c3d8a6c09e371428f9aa4c84",
+            "sha256": "902d2ca849af3b5114d36cf1f22f35532a7296845ab4946455b5eb285171828e",
+            "size": 15787235
+          },
+          {
+            "name": "clean.R1.fastq.gz",
+            "source_path": "pipeline-artifacts/32680dc17f9f49e28f27c21ec36caa58/0/clean.R1.fastq.gz",
+            "id": "e90ee4035b437796b295c63cdf079cd000656cf1f9a54796384393887397bc42",
+            "sha256": "5ffa942841a1970986f08b84917f0b1d340eedbb02164eae17f3f032fc0619b0",
+            "size": 7145823,
+            "pipeline_result": {
+              "job_id": "32680dc17f9f49e28f27c21ec36caa58",
+              "pipeline_name": "metagenomic_qc_UniVec_Host",
+              "output_key": "ReadQc.clean_r1",
+              "output_name": "clean_r1",
+              "output_kind": "sequence",
+              "completed_at": "2026-11-09T02:40:39.986457+00:00"
+            }
+          },
+          {
+            "name": "clean.R2.fastq.gz",
+            "source_path": "pipeline-artifacts/32680dc17f9f49e28f27c21ec36caa58/1/clean.R2.fastq.gz",
+            "id": "e080ce42c4786ff47e08e21d11847948bf4ce34a31219ac48d9b8e57da72b764",
+            "sha256": "b819855ffbf636487fd61c053c8a993d370e4c482cf53d48a57783dfa3025c76",
+            "size": 7170645,
+            "pipeline_result": {
+              "job_id": "32680dc17f9f49e28f27c21ec36caa58",
+              "pipeline_name": "metagenomic_qc_UniVec_Host",
+              "output_key": "ReadQc.clean_r2",
+              "output_name": "clean_r2",
+              "output_kind": "sequence",
+              "completed_at": "2026-11-09T02:40:39.986457+00:00"
+            }
+          },
+          {
+            "name": "qc_summary.tsv",
+            "source_path": "pipeline-artifacts/32680dc17f9f49e28f27c21ec36caa58/2/qc_summary.tsv",
+            "id": "46099a6329ab58d2c95c53f81b161a78ec5c77ad990f493f88ae409573609fb5",
+            "sha256": "8e100b1291a209da7dec7965ef42cc1e12dfac62c01d37e5e633914a8e465991",
+            "size": 160,
+            "pipeline_result": {
+              "job_id": "32680dc17f9f49e28f27c21ec36caa58",
+              "pipeline_name": "metagenomic_qc_UniVec_Host",
+              "output_key": "ReadQc.qc_summary",
+              "output_name": "qc_summary",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T02:40:39.986457+00:00"
+            }
+          },
+          {
+            "name": "multiqc_report.html",
+            "source_path": "pipeline-artifacts/32680dc17f9f49e28f27c21ec36caa58/3/multiqc_report.html",
+            "id": "87c073443b6aa83ad1dd4cccfbbe63a50fe13398308dfb45465d46ff16f32de5",
+            "sha256": "460f59339f1511ffa6ea024b0d8f5c912c1032f02e524d8e333cd6622d7c5c11",
+            "size": 4775781,
+            "pipeline_result": {
+              "job_id": "32680dc17f9f49e28f27c21ec36caa58",
+              "pipeline_name": "metagenomic_qc_UniVec_Host",
+              "output_key": "ReadQc.multiqc_html",
+              "output_name": "multiqc_html",
+              "output_kind": "file",
+              "completed_at": "2026-11-09T02:40:39.986457+00:00"
+            }
+          },
+          {
+            "name": "qc_demo_R1.fastq.gz",
+            "source_path": "uploads/examples/metagenomic_qc_UniVec_Host-7442e8e0604e425aa28541373622d171/qc_demo_R1.fastq.gz",
+            "id": "4546acbafa5d0acac0528d6a6e02d0bbd271a84dc7a9535d912822c8d108c681",
+            "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+            "size": 8952270
+          },
+          {
+            "name": "qc_demo_R2.fastq.gz",
+            "source_path": "uploads/examples/metagenomic_qc_UniVec_Host-7442e8e0604e425aa28541373622d171/qc_demo_R2.fastq.gz",
+            "id": "cf8929a49a08985f76a958190258347ff4796ec7572e315fa1ffe445c2ee7066",
+            "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+            "size": 10923663
+          }
+        ],
+        "native_qc_applied": true
+      }
+    }
+  },
+  {
+    "pipeline": "metagenomic_read_quality_control",
+    "job_id": "a99fcba5414748dea226f92d842726b0",
+    "session_id": "1f96468e-0bfb-4189-8150-8da22dc592ca",
+    "inputs": {
+      "paths": [
+        "pipeline-bundles/a99fcba5414748dea226f92d842726b0/results.zip",
+        "uploads/examples/metagenomic_read_quality_control-b10f3ce2913e4d209ad7f5ca5f92127f/qc_demo.fq.gz"
+      ],
+      "destination": {
+        "project": "Bridge_pipeline_matrix_20261109",
+        "sample": "metagenomic_read_quality_control",
+        "data_type": "meta",
+        "source_slots": {
+          "R1": "uploads/examples/metagenomic_read_quality_control-b10f3ce2913e4d209ad7f5ca5f92127f/qc_demo.fq.gz"
+        }
+      },
+      "create_missing": true
+    },
+    "result": {
+      "transfer_id": "29827e94772f41e286f3832167d02a8b",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R1": "746766718235349dbca2f3b6b9a87b06"
+          },
+          "status": "registered"
+        },
+        "target": {
+          "sample_id": "56ee0719801a3ed2bd16b9f15d6d0a82",
+          "data_type": "meta",
+          "project_name": "Bridge_pipeline_matrix_20261109",
+          "sample_name": "metagenomic_read_quality_control",
+          "project_id": "a924199794553f94b029789481f26a2d"
+        },
+        "receipt_id": "29827e94772f41e286f3832167d02a8b",
+        "qc": {
+          "InputReads": 4168,
+          "ReadsAfterHostRemoval": 4149,
+          "ReadsAfterQC": 4168
+        },
+        "native_imports": [
+          {
+            "job_id": "a99fcba5414748dea226f92d842726b0",
+            "files_delivered": true,
+            "pipeline": "metagenomic_read_quality_control",
+            "format": "MetagenomicQc",
+            "state": "imported",
+            "message": "Native QC imported.",
+            "program": "qc"
+          }
+        ],
+        "files": [
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/a99fcba5414748dea226f92d842726b0/results.zip",
+            "id": "5611a6920faaaf8f486a48c6f9559e8ec7552dd7c910bd00806472e347ac696f",
+            "sha256": "d98bcad52689766a0c9b8a4254054d7d3cb2639f792206f6fe7d46efe23912a3",
+            "size": 221995
+          },
+          {
+            "name": "clean.R1.fq",
+            "source_path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/0/clean.R1.fq",
+            "id": "bc25af856738812a3544b39476b7528f2fe64f57d5cf8800229f20cb30e7e0c0",
+            "sha256": "44d9cfe6ddb8bfd7f1d112e820eb83fef38628c4e02a13b6c3d9096a1bb1ca5e",
+            "size": 761681,
+            "pipeline_result": {
+              "job_id": "a99fcba5414748dea226f92d842726b0",
+              "pipeline_name": "metagenomic_read_quality_control",
+              "output_key": "MetagenomicQc.clean_r1",
+              "output_name": "clean_r1",
+              "output_kind": "sequence",
+              "completed_at": "2026-11-09T02:39:25.559143+00:00"
+            }
+          },
+          {
+            "name": "qc_counts.tsv",
+            "source_path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/1/qc_counts.tsv",
+            "id": "81230c9e13ac7b13b4782d06502a62fcb31080954301e73f689f722b93517534",
+            "sha256": "116d21bb6e7ff3e3681963bdd3a47f14e9315f0cabba0cc05a8f60c87730ddde",
+            "size": 84,
+            "pipeline_result": {
+              "job_id": "a99fcba5414748dea226f92d842726b0",
+              "pipeline_name": "metagenomic_read_quality_control",
+              "output_key": "MetagenomicQc.qc_counts",
+              "output_name": "qc_counts",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T02:39:25.559143+00:00"
+            }
+          },
+          {
+            "name": "phase1_read_overview.tsv",
+            "source_path": "pipeline-artifacts/a99fcba5414748dea226f92d842726b0/2/phase1_read_overview.tsv",
+            "id": "135a97304d34bd2d37e5af46d950d4cd2020f933aee66561536974bac42dc2b2",
+            "sha256": "034796ac26de919b59928b734a80ff91c0892ded313897e771f6140803c7e886",
+            "size": 75,
+            "pipeline_result": {
+              "job_id": "a99fcba5414748dea226f92d842726b0",
+              "pipeline_name": "metagenomic_read_quality_control",
+              "output_key": "MetagenomicQc.phase1_metrics",
+              "output_name": "phase1_metrics",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T02:39:25.559143+00:00"
+            }
+          },
+          {
+            "name": "qc_demo.fq.gz",
+            "source_path": "uploads/examples/metagenomic_read_quality_control-b10f3ce2913e4d209ad7f5ca5f92127f/qc_demo.fq.gz",
+            "id": "0b0df48e354f65182d341639023e02b4801b95efd1b9b14fa0110fb44e14f4bd",
+            "sha256": "9101bef1192734f4c50d2908a91b18762432f7f1d789a007e13644b2bccde82c",
+            "size": 240118
+          }
+        ],
+        "native_qc_applied": true
+      }
+    }
+  },
+  {
+    "pipeline": "template_bio",
+    "job_id": "6582f033b9944dbfa26e13dca2450d82",
+    "session_id": "6384fe2f-d846-4bd1-a046-6c169ec1c02b",
+    "inputs": {
+      "paths": [
+        "pipeline-bundles/6582f033b9944dbfa26e13dca2450d82/results.zip",
+        "uploads/examples/template_bio-66cfc722b11c4e9c914992116825a29b/example_reads.fastq"
+      ],
+      "destination": {
+        "project": "Bridge_pipeline_matrix_20261109",
+        "sample": "template_bio",
+        "data_type": "meta",
+        "source_slots": {
+          "R1": "uploads/examples/template_bio-66cfc722b11c4e9c914992116825a29b/example_reads.fastq"
+        }
+      },
+      "create_missing": true
+    },
+    "result": {
+      "transfer_id": "778a19d5bd4141ba843b4c6944ba022a",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R1": "5ffe1a6e8215346ba6753b80d45cba46"
+          },
+          "status": "registered"
+        },
+        "target": {
+          "sample_id": "c16b1d310a533f819649857a63ec40ed",
+          "data_type": "meta",
+          "project_name": "Bridge_pipeline_matrix_20261109",
+          "sample_name": "template_bio",
+          "project_id": "a924199794553f94b029789481f26a2d"
+        },
+        "receipt_id": "778a19d5bd4141ba843b4c6944ba022a",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "6582f033b9944dbfa26e13dca2450d82",
+            "files_delivered": true,
+            "pipeline": "template_bio",
+            "state": "unsupported",
+            "message": "No unambiguous native result format; files remain available."
+          }
+        ],
+        "files": [
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/6582f033b9944dbfa26e13dca2450d82/results.zip",
+            "id": "4320a2bf9d8e43e74a29ec4d63502897f952a20533e0b41d09404cdc78d2955a",
+            "sha256": "c5bdb81a04c4d7b3c6af166a2a189989d4afff68593ac1fdf0d2fb235d850744",
+            "size": 305872
+          },
+          {
+            "name": "report.md",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/report.md",
+            "id": "d660bd0a6bfe14dcabb868d1a0ff53cd30f6f7d907953db0132a8fdb2844cbb5",
+            "sha256": "14e05d679c89ff67743d9d274c43b96201e96c1e46d142123bd07e0cbf311131",
+            "size": 2442,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "report",
+              "output_name": "report",
+              "output_kind": "report",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "metrics.json",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/metrics.json",
+            "id": "be9e61cbc1e01f3e601d6057597074ab08aa29e6bc3e653fdb2684f0f34bf0b8",
+            "sha256": "8d325baafc5e32e9efbe02a92ace5aaed42541d0d8aba3395f3f7337262bc1bd",
+            "size": 1240,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "metrics",
+              "output_name": "metrics",
+              "output_kind": "metrics",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "report.html",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/report.html",
+            "id": "a344dadefabe456a7a9018c2050c17275d1807f79c1d7069ba51c6812ffa3fb2",
+            "sha256": "25f094bc1ac0432bf81db437b1dfd9735909ddf50dee97c3f4ce34a572f39cbc",
+            "size": 240684,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "html_report",
+              "output_name": "html_report",
+              "output_kind": "report",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "filtered_reads.fastq",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/filtered_reads.fastq",
+            "id": "c0a209dd7e58166310fe207cc498933db42aa71771191efcdd3faecbd8b3cd75",
+            "sha256": "07c3e1d2623c1df14a10e5b4672a7518dc23f48dfa05317f59f064ab1f961d54",
+            "size": 253,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "filtered_reads",
+              "output_name": "filtered_reads",
+              "output_kind": "sequence",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "read_qc.tsv",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/read_qc.tsv",
+            "id": "cf93768039425174dc320cda6a110439d5b49b12c43892f949c936c715951a1a",
+            "sha256": "2a35486b26655a75cf649c494b0d88d9009933e488ab235bd64aa24ac10c322b",
+            "size": 238,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "read_qc",
+              "output_name": "read_qc",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "sample_summary.tsv",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/sample_summary.tsv",
+            "id": "e0b87e85396b6acfa93d8fd9d2d70ab4e1bfe587291e825689fd9579ea733c11",
+            "sha256": "1f9e8c0708537fe213d2da845f0d1278f6ffb2a72f6c7b4282a88449b8393ac8",
+            "size": 364,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "sample_summary",
+              "output_name": "sample_summary",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "coverage.tsv",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/coverage.tsv",
+            "id": "837cdbc207c41580a7fbb972b3b9a9dd6652c7192d45695c49dac7d824efc051",
+            "sha256": "4c0e47b4faac72a220407e4f22fa11a0f38a522753a68631d21743b7048191bb",
+            "size": 889,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "coverage",
+              "output_name": "coverage",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "alignments.sam",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/alignments.sam",
+            "id": "4129ae56e856834cfda7670f9d617d85b635159a4d67580afb69ab9416659463",
+            "sha256": "298bce179fe675293de783a7e5d983632c88bcef9eea88491bd2644297ded53a",
+            "size": 438,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "alignments",
+              "output_name": "alignments",
+              "output_kind": "alignment",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "consensus.fasta",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/consensus.fasta",
+            "id": "0a831bcb26dacd21dd3b3a17feae6923423be36917ad324c5d73185035ca17d3",
+            "sha256": "4abdef905000d380f63a84da444729a253af59655f1223a0bdf43df96bd8292d",
+            "size": 48,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "consensus",
+              "output_name": "consensus",
+              "output_kind": "sequence",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "variants.vcf",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/variants.vcf",
+            "id": "abbfcfa45de4eee7499a8c031dc387be0364e08bd64698aa1fa866513acb85fe",
+            "sha256": "062e8abb162232d2fcc1b039ee9a2ea51a09fcc3a90cda62b044e0866b54fdd5",
+            "size": 578,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "variants",
+              "output_name": "variants",
+              "output_kind": "variants",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "variant_summary.tsv",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/variant_summary.tsv",
+            "id": "ecb1aadda02af9f8268f8f5088236f77c014003dbd0c0337e28efd182034900c",
+            "sha256": "cf2fda9b1d77ff559bdf39679792a7d9f3db8418e940c6f0810192f01b72a95d",
+            "size": 133,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "variant_table",
+              "output_name": "variant_table",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "qc_overview.png",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/qc_overview.png",
+            "id": "996e29d385b9a095b46cc00264596cc97fea2b786050fe4635f013e06c0087e0",
+            "sha256": "8fbb68db592ee65cdd2c16d4bbef378ac006c43c97472e40666a243f02e4e22a",
+            "size": 79528,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "qc_figure",
+              "output_name": "qc_figure",
+              "output_kind": "image",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "coverage.png",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/coverage.png",
+            "id": "762ff6430a6f1f524b15795ea17019692db30e92bbf0110cd2742bf4d948bfb5",
+            "sha256": "ad9b29f6427999634547ea0a74749c91fe00f6cf539c77ebf36e9ac7be2cea7c",
+            "size": 35889,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "coverage_figure",
+              "output_name": "coverage_figure",
+              "output_kind": "image",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "variant_allele_fraction.png",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/variant_allele_fraction.png",
+            "id": "ec7cfb5dc786e13196e3d53ed6558c780905272746cf5eabf689c59b08728eb6",
+            "sha256": "0113be9f3870d6819612d47d18ac8d1e81a6dc00a1b0405ae802d870512ed3bd",
+            "size": 28447,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "variant_figure",
+              "output_name": "variant_figure",
+              "output_kind": "image",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "phylogenetic_tree.nwk",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/phylogenetic_tree.nwk",
+            "id": "252fc5ba32e2cdd0799b8cac77802e1842c6a5f8a8093fa989df455c12d44de8",
+            "sha256": "079bce3c8066706a599d2e43834b64c48d66285985866df895c6ac9d27129ebf",
+            "size": 58,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "phylogenetic_tree",
+              "output_name": "phylogenetic_tree",
+              "output_kind": "phylogenetic_tree",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "phylogenetic_tree.png",
+            "source_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/phylogenetic_tree.png",
+            "id": "806ee87b8dddfef85b8b5b1fd0e207f1a31bfadaf5e8f8f506b6fc98d6e895d0",
+            "sha256": "4accf066bee5fe78569eada9122f0a02a2b0d3761e09dd7142f6ac434c53306e",
+            "size": 32702,
+            "pipeline_result": {
+              "job_id": "6582f033b9944dbfa26e13dca2450d82",
+              "pipeline_name": "template_bio",
+              "output_key": "phylogenetic_tree_figure",
+              "output_name": "phylogenetic_tree_figure",
+              "output_kind": "image",
+              "completed_at": "2026-11-09T02:37:45.980218+00:00"
+            }
+          },
+          {
+            "name": "example_reads.fastq",
+            "source_path": "uploads/examples/template_bio-66cfc722b11c4e9c914992116825a29b/example_reads.fastq",
+            "id": "1bcb114e19988468fe768e9f235878f028803a364957c2aac742e3147a5d603a",
+            "sha256": "5e95fa95821c31e5446e051cdf4ccd4b82144ac71b809e065e1101c12386b60d",
+            "size": 385
+          }
+        ],
+        "native_qc_applied": false
+      }
+    }
+  },
+  {
+    "pipeline": "template_nextflow",
+    "job_id": "7ad50753e8a2478eb3af52d8385f94cd",
+    "session_id": "af1eeba9-23b3-403b-b8fb-3fc56ed21af0",
+    "inputs": {
+      "paths": [
+        "pipeline-bundles/7ad50753e8a2478eb3af52d8385f94cd/results.zip"
+      ],
+      "destination": {
+        "project": "Bridge_pipeline_matrix_20261109",
+        "sample": "template_nextflow",
+        "data_type": "meta"
+      },
+      "create_missing": true
+    },
+    "result": {
+      "transfer_id": "15a52450059846c0a619685ee7e3e760",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "file_delivery": "delivered",
+        "source_registration": {
+          "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs.",
+          "status": "results_only"
+        },
+        "target": {
+          "sample_id": "5c59a42442d03c08b09ca38c88749771",
+          "data_type": "meta",
+          "project_name": "Bridge_pipeline_matrix_20261109",
+          "sample_name": "template_nextflow",
+          "project_id": "a924199794553f94b029789481f26a2d"
+        },
+        "receipt_id": "15a52450059846c0a619685ee7e3e760",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "7ad50753e8a2478eb3af52d8385f94cd",
+            "files_delivered": true,
+            "pipeline": "template_nextflow",
+            "state": "unsupported",
+            "message": "No unambiguous native result format; files remain available."
+          }
+        ],
+        "files": [
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/7ad50753e8a2478eb3af52d8385f94cd/results.zip",
+            "id": "fa69fd4275f9feb1f740397351ae6f245bf82c6f6e4ecafed497043c68aa9daf",
+            "sha256": "2c1e32e5b44a897d850268262f5b98632f04d022dfad045c9ebdcd8a17fe2d4a",
+            "size": 825
+          },
+          {
+            "name": "report.md",
+            "source_path": "outputs/pipelines/7ad50753e8a2478eb3af52d8385f94cd/outputs/report.md",
+            "id": "4ca07d8af42eda544f5628339d2a0f643673362518bb22082594e1326370265d",
+            "sha256": "f6c739425893601bf10bb35651f4705b26880d0f61a1841391c6388ba1d4d20f",
+            "size": 320,
+            "pipeline_result": {
+              "job_id": "7ad50753e8a2478eb3af52d8385f94cd",
+              "pipeline_name": "template_nextflow",
+              "output_key": "report",
+              "output_name": "report",
+              "output_kind": "report",
+              "completed_at": "2026-11-09T02:37:38.649893+00:00"
+            }
+          },
+          {
+            "name": "metrics.json",
+            "source_path": "outputs/pipelines/7ad50753e8a2478eb3af52d8385f94cd/outputs/metrics.json",
+            "id": "c4fc6a952a22db3cebf3e5b14af325e2626278cb6cb0e012121f85a06f42ec4f",
+            "sha256": "ec7e2559fe83b1054fe46a690e42aaa411a5b3017dde856a4fd7afacf7825470",
+            "size": 308,
+            "pipeline_result": {
+              "job_id": "7ad50753e8a2478eb3af52d8385f94cd",
+              "pipeline_name": "template_nextflow",
+              "output_key": "metrics",
+              "output_name": "metrics",
+              "output_kind": "metrics",
+              "completed_at": "2026-11-09T02:37:38.649893+00:00"
+            }
+          },
+          {
+            "name": "normalized.fasta",
+            "source_path": "outputs/pipelines/7ad50753e8a2478eb3af52d8385f94cd/outputs/normalized.fasta",
+            "id": "be12e0e23c5666d54285198c27a3c496f338b01c898cf88fda829374ba8d85c5",
+            "sha256": "b6a2c671c2f755e70fe79d9e2b59a40cc03e9a16e45df3212ad1aece2f65545e",
+            "size": 53,
+            "pipeline_result": {
+              "job_id": "7ad50753e8a2478eb3af52d8385f94cd",
+              "pipeline_name": "template_nextflow",
+              "output_key": "normalized_sequence",
+              "output_name": "normalized_sequence",
+              "output_kind": "sequence",
+              "completed_at": "2026-11-09T02:37:38.649893+00:00"
+            }
+          }
+        ],
+        "native_qc_applied": false
+      }
+    }
+  },
+  {
+    "pipeline": "template_shell",
+    "job_id": "8f46f950513544c49fc78e97c792895f",
+    "session_id": "0f1fe3f8-e44d-458b-a7e2-2d761671d5d5",
+    "inputs": {
+      "paths": [
+        "pipeline-bundles/8f46f950513544c49fc78e97c792895f/results.zip"
+      ],
+      "destination": {
+        "project": "Bridge_pipeline_matrix_20261109",
+        "sample": "template_shell",
+        "data_type": "meta"
+      },
+      "create_missing": true
+    },
+    "result": {
+      "transfer_id": "11c35acd741d4f16abcf56e553b8ff7d",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "file_delivery": "delivered",
+        "source_registration": {
+          "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs.",
+          "status": "results_only"
+        },
+        "target": {
+          "sample_id": "08136125f9213be9909988d46eab0436",
+          "data_type": "meta",
+          "project_name": "Bridge_pipeline_matrix_20261109",
+          "sample_name": "template_shell",
+          "project_id": "a924199794553f94b029789481f26a2d"
+        },
+        "receipt_id": "11c35acd741d4f16abcf56e553b8ff7d",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "8f46f950513544c49fc78e97c792895f",
+            "files_delivered": true,
+            "pipeline": "template_shell",
+            "state": "unsupported",
+            "message": "No unambiguous native result format; files remain available."
+          }
+        ],
+        "files": [
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/8f46f950513544c49fc78e97c792895f/results.zip",
+            "id": "2e5b08633800e8387376b198f24296befa4319842175e939e0bbe1e5fa0158db",
+            "sha256": "1d1339298395189dd81ca41df3cf148f1697586f113cace0527de0070180929d",
+            "size": 1111
+          },
+          {
+            "name": "report.md",
+            "source_path": "outputs/pipelines/8f46f950513544c49fc78e97c792895f/outputs/report.md",
+            "id": "885478f543e7fb81cdcb31d277d97f56025c6e5a8d8f4cd5102189ee7919fc24",
+            "sha256": "c4415b9909298e73863f3a14a0b350cdd9028982c40b4c6fe990bb6500da90c6",
+            "size": 763,
+            "pipeline_result": {
+              "job_id": "8f46f950513544c49fc78e97c792895f",
+              "pipeline_name": "template_shell",
+              "output_key": "report",
+              "output_name": "report",
+              "output_kind": "report",
+              "completed_at": "2026-11-09T02:37:00.902419+00:00"
+            }
+          },
+          {
+            "name": "metrics.json",
+            "source_path": "outputs/pipelines/8f46f950513544c49fc78e97c792895f/outputs/metrics.json",
+            "id": "09ae303221b25b245c39d7b695757078ac8f43d84e8aac7e11712bddb832b856",
+            "sha256": "a8d973d244259b7922cbf1281bdae12c53952333caada4c89e096d9a2b19b521",
+            "size": 276,
+            "pipeline_result": {
+              "job_id": "8f46f950513544c49fc78e97c792895f",
+              "pipeline_name": "template_shell",
+              "output_key": "metrics",
+              "output_name": "metrics",
+              "output_kind": "metrics",
+              "completed_at": "2026-11-09T02:37:00.902419+00:00"
+            }
+          },
+          {
+            "name": "normalized.txt",
+            "source_path": "outputs/pipelines/8f46f950513544c49fc78e97c792895f/outputs/normalized.txt",
+            "id": "cda61cd12469545ebbeeb9e0440bc1265f0161e77c8e302984e9545d2c1d1f7b",
+            "sha256": "bf213903a66a22a93d0e2f518bd86ce08d762447ea0ec52641c95f652d04290c",
+            "size": 161,
+            "pipeline_result": {
+              "job_id": "8f46f950513544c49fc78e97c792895f",
+              "pipeline_name": "template_shell",
+              "output_key": "normalized_text",
+              "output_name": "normalized_text",
+              "output_kind": "text",
+              "completed_at": "2026-11-09T02:37:00.902419+00:00"
+            }
+          },
+          {
+            "name": "subtypes.tsv",
+            "source_path": "outputs/pipelines/8f46f950513544c49fc78e97c792895f/outputs/subtypes.tsv",
+            "id": "564a46999f97a3686a111f65f142959721eb86738e46aaf4573e44483a8af161",
+            "sha256": "fd4cf6bb4f6a6a28fda1fa23763bcb73c30e9447391b4d77c935a2933a9ddc97",
+            "size": 64,
+            "pipeline_result": {
+              "job_id": "8f46f950513544c49fc78e97c792895f",
+              "pipeline_name": "template_shell",
+              "output_key": "subtype_assignments",
+              "output_name": "subtype_assignments",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T02:37:00.902419+00:00"
+            }
+          }
+        ],
+        "native_qc_applied": false
+      }
+    }
+  },
+  {
+    "pipeline": "template_snakemake",
+    "job_id": "5f06f983347f40a3b7c0a7a2a58e9fae",
+    "session_id": "8710309a-e89c-4475-a176-6fafb78f376b",
+    "inputs": {
+      "paths": [
+        "pipeline-bundles/5f06f983347f40a3b7c0a7a2a58e9fae/results.zip"
+      ],
+      "destination": {
+        "project": "Bridge_pipeline_matrix_20261109",
+        "sample": "template_snakemake",
+        "data_type": "meta"
+      },
+      "create_missing": true
+    },
+    "result": {
+      "transfer_id": "381951e239a34633aeddb78eaaea3acc",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "file_delivery": "delivered",
+        "source_registration": {
+          "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs.",
+          "status": "results_only"
+        },
+        "target": {
+          "sample_id": "1f106cd008ce31709bfa25b25c862f9b",
+          "data_type": "meta",
+          "project_name": "Bridge_pipeline_matrix_20261109",
+          "sample_name": "template_snakemake",
+          "project_id": "a924199794553f94b029789481f26a2d"
+        },
+        "receipt_id": "381951e239a34633aeddb78eaaea3acc",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "5f06f983347f40a3b7c0a7a2a58e9fae",
+            "files_delivered": true,
+            "pipeline": "template_snakemake",
+            "state": "unsupported",
+            "message": "No unambiguous native result format; files remain available."
+          }
+        ],
+        "files": [
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/5f06f983347f40a3b7c0a7a2a58e9fae/results.zip",
+            "id": "f136f9d8103ed253a21364d8609a7117dac95c9fa59ee78f251ab9efe360bdaa",
+            "sha256": "9ac2058444a2cf28e087542de7cc1da6ebb2d09a0e1292b74bd83a1f180d8c2f",
+            "size": 936
+          },
+          {
+            "name": "report.md",
+            "source_path": "outputs/pipelines/5f06f983347f40a3b7c0a7a2a58e9fae/outputs/report.md",
+            "id": "40d45e01393c8041aae7882cc90e8c11c0f96850c58d312985b75b78cd0963b5",
+            "sha256": "161ec3b867db76413f69f0f42cf3dac76cebbbb9608e479c1183ff02f952d815",
+            "size": 590,
+            "pipeline_result": {
+              "job_id": "5f06f983347f40a3b7c0a7a2a58e9fae",
+              "pipeline_name": "template_snakemake",
+              "output_key": "report",
+              "output_name": "report",
+              "output_kind": "report",
+              "completed_at": "2026-11-09T02:37:16.509314+00:00"
+            }
+          },
+          {
+            "name": "metrics.json",
+            "source_path": "outputs/pipelines/5f06f983347f40a3b7c0a7a2a58e9fae/outputs/metrics.json",
+            "id": "570900a86655612311caf9c3c26a4a2de404be6658e138afe53258ac6692cd8d",
+            "sha256": "d2dc867dac1f5ea9ced421fab21d99bf6cd756ab60881dd1739ecae90f85d2d8",
+            "size": 310,
+            "pipeline_result": {
+              "job_id": "5f06f983347f40a3b7c0a7a2a58e9fae",
+              "pipeline_name": "template_snakemake",
+              "output_key": "metrics",
+              "output_name": "metrics",
+              "output_kind": "metrics",
+              "completed_at": "2026-11-09T02:37:16.509314+00:00"
+            }
+          },
+          {
+            "name": "normalized.fasta",
+            "source_path": "outputs/pipelines/5f06f983347f40a3b7c0a7a2a58e9fae/outputs/normalized.fasta",
+            "id": "8ff71873b6f4fc7a4c68a8b8281b0fd8e879a89c45f53fd8fce26e506b3ba00b",
+            "sha256": "fcb277eef628aaff82f508f283154e1665db0bfa33d51c17e73405d6a0678eb4",
+            "size": 139,
+            "pipeline_result": {
+              "job_id": "5f06f983347f40a3b7c0a7a2a58e9fae",
+              "pipeline_name": "template_snakemake",
+              "output_key": "normalized_sequence",
+              "output_name": "normalized_sequence",
+              "output_kind": "sequence",
+              "completed_at": "2026-11-09T02:37:16.509314+00:00"
+            }
+          }
+        ],
+        "native_qc_applied": false
+      }
+    }
+  },
+  {
+    "pipeline": "template_wdl",
+    "job_id": "bb68144777e24b99b99dc9ec6061f83c",
+    "session_id": "fae40080-e819-48f1-9c88-9b40f0ca3ebc",
+    "inputs": {
+      "paths": [
+        "pipeline-bundles/bb68144777e24b99b99dc9ec6061f83c/results.zip"
+      ],
+      "destination": {
+        "project": "Bridge_pipeline_matrix_20261109",
+        "sample": "template_wdl",
+        "data_type": "meta"
+      },
+      "create_missing": true
+    },
+    "result": {
+      "transfer_id": "46ac96316a2642819cca43cb812aa8b1",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "file_delivery": "delivered",
+        "source_registration": {
+          "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs.",
+          "status": "results_only"
+        },
+        "target": {
+          "sample_id": "709f1e676e9b328dab742c45f60b98ac",
+          "data_type": "meta",
+          "project_name": "Bridge_pipeline_matrix_20261109",
+          "sample_name": "template_wdl",
+          "project_id": "a924199794553f94b029789481f26a2d"
+        },
+        "receipt_id": "46ac96316a2642819cca43cb812aa8b1",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "bb68144777e24b99b99dc9ec6061f83c",
+            "files_delivered": true,
+            "pipeline": "template_wdl",
+            "format": "TemplateWdl",
+            "state": "unsupported",
+            "message": "MSCAN has no registered importer for this result format; files remain available."
+          }
+        ],
+        "files": [
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/bb68144777e24b99b99dc9ec6061f83c/results.zip",
+            "id": "65fb42ddaaeb90d71fc24f4669b2eef9fd4e3b3cc08b07ab49d452ea1a53d26c",
+            "sha256": "7331df88c59dc3c7b02a84b4dbc81b2c9094344337e60c1afc1dca8bb698d438",
+            "size": 829
+          },
+          {
+            "name": "report.md",
+            "source_path": "pipeline-artifacts/bb68144777e24b99b99dc9ec6061f83c/0/report.md",
+            "id": "5ca5d564cc688869d541c5d4ed621f9b82cf4747bd761c0e3de8c46445f9907f",
+            "sha256": "de810bbea8b2e4fcf06f117867e1690a14e760bee75e3c9e3f766fecc98f4138",
+            "size": 321,
+            "pipeline_result": {
+              "job_id": "bb68144777e24b99b99dc9ec6061f83c",
+              "pipeline_name": "template_wdl",
+              "output_key": "TemplateWdl.report",
+              "output_name": "report",
+              "output_kind": "report",
+              "completed_at": "2026-11-09T02:38:08.922149+00:00"
+            }
+          },
+          {
+            "name": "metrics.json",
+            "source_path": "pipeline-artifacts/bb68144777e24b99b99dc9ec6061f83c/1/metrics.json",
+            "id": "dbc44fd70577c20d65dd64262094c1fac1f8505ee4aa9b75cc62df4d49ab86e4",
+            "sha256": "e48d4025b5381faa99e085e41f2e07f212e4e59024cd1e352c258e5b61badbbe",
+            "size": 198,
+            "pipeline_result": {
+              "job_id": "bb68144777e24b99b99dc9ec6061f83c",
+              "pipeline_name": "template_wdl",
+              "output_key": "TemplateWdl.metrics",
+              "output_name": "metrics",
+              "output_kind": "metrics",
+              "completed_at": "2026-11-09T02:38:08.922149+00:00"
+            }
+          },
+          {
+            "name": "normalized.fasta",
+            "source_path": "pipeline-artifacts/bb68144777e24b99b99dc9ec6061f83c/2/normalized.fasta",
+            "id": "ff7c7fd779ede89a483e1dd45d628a040d370bb90127aa46decebad909dcdd01",
+            "sha256": "a53af77ef91fea56e294bdaa7f240d0ff34817f7e30243e5f481ba1b541fa1af",
+            "size": 85,
+            "pipeline_result": {
+              "job_id": "bb68144777e24b99b99dc9ec6061f83c",
+              "pipeline_name": "template_wdl",
+              "output_key": "TemplateWdl.normalized_fasta",
+              "output_name": "normalized_sequence",
+              "output_kind": "sequence",
+              "completed_at": "2026-11-09T02:38:08.922149+00:00"
+            }
+          }
+        ],
+        "native_qc_applied": false
+      }
+    }
+  },
+  {
+    "pipeline": "metagenomic_pathogen_identification_marker",
+    "job_id": "47d17e116a0548fa83a2fc843abd0fb4",
+    "session_id": "66fb6f99-81aa-4ee4-abb3-480d2eedc751",
+    "inputs": {
+      "paths": [
+        "pipeline-bundles/47d17e116a0548fa83a2fc843abd0fb4/results.zip",
+        "uploads/examples/metagenomic_pathogen_identification_marker-4d01c4cf7bdc4d428f3a90f1388f188c/strainmeta_demo_R1.fastq.gz",
+        "uploads/examples/metagenomic_pathogen_identification_marker-4d01c4cf7bdc4d428f3a90f1388f188c/strainmeta_demo_R2.fastq.gz"
+      ],
+      "destination": {
+        "project": "Bridge_pipeline_matrix_20261109",
+        "sample": "metagenomic_pathogen_identification_marker",
+        "data_type": "meta",
+        "source_slots": {
+          "R1": "uploads/examples/metagenomic_pathogen_identification_marker-4d01c4cf7bdc4d428f3a90f1388f188c/strainmeta_demo_R1.fastq.gz",
+          "R2": "uploads/examples/metagenomic_pathogen_identification_marker-4d01c4cf7bdc4d428f3a90f1388f188c/strainmeta_demo_R2.fastq.gz"
+        }
+      },
+      "create_missing": true
+    },
+    "result": {
+      "transfer_id": "6c53dae4614c4c7db2cc0ad318bdb287",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R2": "ab57a1d0349638879d1f15b9c0acc76e",
+            "R1": "6df1bd31b30b3a0aad241bf716b96e8d"
+          },
+          "status": "registered"
+        },
+        "target": {
+          "sample_id": "d0ee03dc0b503fe1b2f888f2d8672c32",
+          "data_type": "meta",
+          "project_name": "Bridge_pipeline_matrix_20261109",
+          "sample_name": "metagenomic_pathogen_identification_marker",
+          "project_id": "a924199794553f94b029789481f26a2d"
+        },
+        "receipt_id": "6c53dae4614c4c7db2cc0ad318bdb287",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "47d17e116a0548fa83a2fc843abd0fb4",
+            "files_delivered": true,
+            "pipeline": "metagenomic_pathogen_identification_marker",
+            "format": "StrainMeta",
+            "program": "strain_meta",
+            "state": "imported",
+            "message": "Native result imported."
+          }
+        ],
+        "files": [
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/47d17e116a0548fa83a2fc843abd0fb4/results.zip",
+            "id": "cb676f0ad2c62842134303c79c47e2e2b91fdbcd67e02a82488f91654ed95bfd",
+            "sha256": "27e49eaaad0086f00f2d618519a152b43f86ce2accfb06778aaf6b7d167739e2",
+            "size": 63802717
+          },
+          {
+            "name": "profile.txt",
+            "source_path": "pipeline-artifacts/47d17e116a0548fa83a2fc843abd0fb4/0/profile.txt",
+            "id": "d64b24d09960ec78475cbde6b4aadeb0f4ed3fe366c3fb1459f2b838c2610a81",
+            "sha256": "48c41a094dd22143d80b9cc69adf426464de24b3959beb5c0133e899f2219ae2",
+            "size": 882,
+            "pipeline_result": {
+              "job_id": "47d17e116a0548fa83a2fc843abd0fb4",
+              "pipeline_name": "metagenomic_pathogen_identification_marker",
+              "output_key": "StrainMeta.profile",
+              "output_name": "profile",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T03:22:18.899787+00:00"
+            }
+          },
+          {
+            "name": "sam.bz2",
+            "source_path": "pipeline-artifacts/47d17e116a0548fa83a2fc843abd0fb4/1/sam.bz2",
+            "id": "67e0f15fade18bba6b13fbd5c280c9a09e3139bfa49eafb254e17bf104587136",
+            "sha256": "eae364e35829c13fc863b71dbbde6414a65cd0cd51b745516e1e99bd3e6e7bac",
+            "size": 63962708,
+            "pipeline_result": {
+              "job_id": "47d17e116a0548fa83a2fc843abd0fb4",
+              "pipeline_name": "metagenomic_pathogen_identification_marker",
+              "output_key": "StrainMeta.sam_bz2",
+              "output_name": "sam_bz2",
+              "output_kind": "file",
+              "completed_at": "2026-11-09T03:22:18.899787+00:00"
+            }
+          },
+          {
+            "name": "consensus_marker.json.bz2",
+            "source_path": "pipeline-artifacts/47d17e116a0548fa83a2fc843abd0fb4/2/consensus_marker.json.bz2",
+            "id": "e517be7005c19d6b6ee391e3cb51d20bb61dee6852693208f38440f39bc3e39a",
+            "sha256": "fe8b90a630423e814827aa69ac492114798ba7a04ee257a64605b5454d94730e",
+            "size": 122,
+            "pipeline_result": {
+              "job_id": "47d17e116a0548fa83a2fc843abd0fb4",
+              "pipeline_name": "metagenomic_pathogen_identification_marker",
+              "output_key": "StrainMeta.consensus_marker",
+              "output_name": "consensus_marker",
+              "output_kind": "file",
+              "completed_at": "2026-11-09T03:22:18.899787+00:00"
+            }
+          },
+          {
+            "name": "strainmeta_demo_R1.fastq.gz",
+            "source_path": "uploads/examples/metagenomic_pathogen_identification_marker-4d01c4cf7bdc4d428f3a90f1388f188c/strainmeta_demo_R1.fastq.gz",
+            "id": "1553f84f08ee9ecc1ef45e8c4f24ab0c283aaeb1271a414c7d1bd8cc99ceb250",
+            "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+            "size": 8952270
+          },
+          {
+            "name": "strainmeta_demo_R2.fastq.gz",
+            "source_path": "uploads/examples/metagenomic_pathogen_identification_marker-4d01c4cf7bdc4d428f3a90f1388f188c/strainmeta_demo_R2.fastq.gz",
+            "id": "603da55ff57995847f6fc3908c4add3d4e2e914dca0d978bed4c9e9a457a27f7",
+            "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+            "size": 10923663
+          }
+        ],
+        "native_qc_applied": false
+      }
+    }
+  },
+  {
+    "pipeline": "metax_classification_abundance_analysis",
+    "job_id": "3c99c66d3a274633bc3fc2b50bbdecaf",
+    "session_id": "e28349e3-dc5a-44ef-b042-cc039efd45cb",
+    "inputs": {
+      "paths": [
+        "pipeline-bundles/3c99c66d3a274633bc3fc2b50bbdecaf/results.zip",
+        "uploads/examples/metax_classification_abundance_analysis-7b3b1a8c1c684ad0bdbc3c518224ff59/metax_demo_R1.fastq.gz",
+        "uploads/examples/metax_classification_abundance_analysis-7b3b1a8c1c684ad0bdbc3c518224ff59/metax_demo_R2.fastq.gz"
+      ],
+      "destination": {
+        "project": "Bridge_pipeline_matrix_20261109",
+        "sample": "metax_classification_abundance_analysis",
+        "data_type": "meta",
+        "source_slots": {
+          "R1": "uploads/examples/metax_classification_abundance_analysis-7b3b1a8c1c684ad0bdbc3c518224ff59/metax_demo_R1.fastq.gz",
+          "R2": "uploads/examples/metax_classification_abundance_analysis-7b3b1a8c1c684ad0bdbc3c518224ff59/metax_demo_R2.fastq.gz"
+        }
+      },
+      "create_missing": true
+    },
+    "result": {
+      "transfer_id": "da1059b72e8347efa12b34717aa03d85",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R2": "cc6badea09fa395582a10bd3db2e60d2",
+            "R1": "59f9e2ec509835eb9ffb3d3c9db3feda"
+          },
+          "status": "registered"
+        },
+        "target": {
+          "sample_id": "6eeac3da99253a0a93f48484a88fa3a0",
+          "data_type": "meta",
+          "project_name": "Bridge_pipeline_matrix_20261109",
+          "sample_name": "metax_classification_abundance_analysis",
+          "project_id": "a924199794553f94b029789481f26a2d"
+        },
+        "receipt_id": "da1059b72e8347efa12b34717aa03d85",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "3c99c66d3a274633bc3fc2b50bbdecaf",
+            "files_delivered": true,
+            "pipeline": "metax_classification_abundance_analysis",
+            "format": "metax",
+            "program": "metax",
+            "state": "imported",
+            "message": "Native result imported."
+          }
+        ],
+        "files": [
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/3c99c66d3a274633bc3fc2b50bbdecaf/results.zip",
+            "id": "66f36d80947297c8b951de3f0122d120c58e3700f7dc2bd2570b26e58d2cac70",
+            "sha256": "906867d62442cd4527e1870d34bf54a7166e9202cb8d76cf5b8cf4a7b62f97a7",
+            "size": 443
+          },
+          {
+            "name": "profile.txt",
+            "source_path": "pipeline-artifacts/3c99c66d3a274633bc3fc2b50bbdecaf/0/profile.txt",
+            "id": "26f17b7c9256b0025558f600217cd901fe5f2a91903d4bb479035b3a76f106d2",
+            "sha256": "9b5255ffc30dd546553ce596e888bd9c5f3f53a4b199f812c01d0e4107f27b04",
+            "size": 712,
+            "pipeline_result": {
+              "job_id": "3c99c66d3a274633bc3fc2b50bbdecaf",
+              "pipeline_name": "metax_classification_abundance_analysis",
+              "output_key": "metax.profile",
+              "output_name": "profile",
+              "output_kind": "table",
+              "completed_at": "2026-11-09T03:29:59.139865+00:00"
+            }
+          },
+          {
+            "name": "metax_demo_R1.fastq.gz",
+            "source_path": "uploads/examples/metax_classification_abundance_analysis-7b3b1a8c1c684ad0bdbc3c518224ff59/metax_demo_R1.fastq.gz",
+            "id": "f55147680ea8b09744f71c3a911ba13b47f422faf502f8594ce7120a034112e5",
+            "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+            "size": 8952270
+          },
+          {
+            "name": "metax_demo_R2.fastq.gz",
+            "source_path": "uploads/examples/metax_classification_abundance_analysis-7b3b1a8c1c684ad0bdbc3c518224ff59/metax_demo_R2.fastq.gz",
+            "id": "6cc4a800b46a4204d1559aa374f7a1e7df3dba9ad12425edc76ef78e9c9d2616",
+            "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+            "size": 10923663
+          }
+        ],
+        "native_qc_applied": false
+      }
+    }
+  }
+]
