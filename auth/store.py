@@ -42,7 +42,11 @@ class AuthStore:
         self.path = path or Path(os.getenv("AGENT_AUTH_DB", "runtime/auth.sqlite3")).expanduser().resolve()
         with database(self.path) as db:
             db.execute("CREATE TABLE IF NOT EXISTS users (user_id TEXT PRIMARY KEY, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, disabled INTEGER NOT NULL DEFAULT 0)")
-            db.execute("CREATE TABLE IF NOT EXISTS logins (token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL, expires_at REAL NOT NULL)")
+            if "email" not in {row["name"] for row in db.execute("PRAGMA table_info(users)")}:
+                db.execute("ALTER TABLE users ADD COLUMN email TEXT NOT NULL DEFAULT ''")
+            db.execute("CREATE TABLE IF NOT EXISTS logins (token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL, expires_at REAL NOT NULL, sid TEXT)")
+            if "sid" not in {row["name"] for row in db.execute("PRAGMA table_info(logins)")}:
+                db.execute("ALTER TABLE logins ADD COLUMN sid TEXT")
             db.execute("CREATE TABLE IF NOT EXISTS login_attempts (bucket TEXT PRIMARY KEY, count INTEGER NOT NULL, expires_at REAL NOT NULL)")
 
     def add_user(self, username: str, password: str) -> str:
@@ -78,7 +82,8 @@ class AuthStore:
         with database(self.path) as db:
             db.execute("DELETE FROM logins WHERE expires_at < ?", (time.time(),))
             db.execute("DELETE FROM login_attempts WHERE bucket=?", ("user:" + username,))
-            db.execute("INSERT INTO logins VALUES (?,?,?)", (token_hash, user["user_id"], time.time() + 8 * 3600))
+            db.execute("INSERT INTO logins(token_hash,user_id,expires_at) VALUES (?,?,?)",
+                       (token_hash, user["user_id"], time.time() + 8 * 3600))
         return token, Principal(user["user_id"], username, token_hash)
 
     def register(self, username: str, password: str, client: str) -> tuple[str, Principal]:
@@ -100,10 +105,10 @@ class AuthStore:
 
     def validate_login(self, token_hash: str) -> Principal:
         with database(self.path) as db:
-            row = db.execute("SELECT u.user_id,u.username FROM logins l JOIN users u ON u.user_id=l.user_id WHERE l.token_hash=? AND l.expires_at>? AND u.disabled=0", (token_hash, time.time())).fetchone()
+            row = db.execute("SELECT u.user_id,u.username,l.sid FROM logins l JOIN users u ON u.user_id=l.user_id WHERE l.token_hash=? AND l.expires_at>? AND u.disabled=0", (token_hash, time.time())).fetchone()
         if not row:
             raise AuthError("Your session has expired. Sign in again.")
-        return Principal(row["user_id"], row["username"], token_hash)
+        return Principal(row["user_id"], row["username"], token_hash, row["sid"])
 
     def authenticate(self, token: str) -> Principal:
         if not token or len(token) > 256:
@@ -113,6 +118,13 @@ class AuthStore:
     def logout(self, principal: Principal) -> None:
         with database(self.path) as db:
             db.execute("DELETE FROM logins WHERE token_hash=?", (principal.login_id,))
+
+    def revoke_sid(self, sid: str) -> int:
+        if not sid:
+            return 0
+        with database(self.path) as db:
+            cursor = db.execute("DELETE FROM logins WHERE sid=?", (sid,))
+        return cursor.rowcount
 
     def user(self, username: str) -> Principal:
         with database(self.path) as db:

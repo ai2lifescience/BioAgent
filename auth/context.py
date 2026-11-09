@@ -35,6 +35,7 @@ class Principal:
     user_id: str
     username: str = ""
     login_id: str | None = None
+    sid: str | None = None
 
 
 _principal: ContextVar[Principal | None] = ContextVar("bioagent_principal", default=None)
@@ -46,8 +47,8 @@ def registration_enabled() -> bool:
 
 def auth_mode() -> str:
     mode = os.getenv("AGENT_AUTH_MODE", "local")
-    if mode not in {"local", "multiuser", "cas"}:
-        raise ValueError("AGENT_AUTH_MODE must be local, multiuser, or cas")
+    if mode not in {"local", "multiuser", "cas", "oauth"}:
+        raise ValueError("AGENT_AUTH_MODE must be local, multiuser, cas, or oauth")
     return mode
 
 

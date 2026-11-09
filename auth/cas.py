@@ -1,4 +1,4 @@
-"""CAS authentication using the same stable user ID as MSCAN."""
+"""BioAgent's independent CNCB CAS authentication flow."""
 from __future__ import annotations
 
 import hashlib
@@ -7,8 +7,9 @@ import re
 import secrets
 import time
 from urllib.parse import parse_qs, urlencode, urlparse
-from urllib.request import Request, urlopen
 import xml.etree.ElementTree as ET
+
+import requests
 
 from .context import AuthError, Principal
 from .store import AuthStore, database, password_hash
@@ -85,9 +86,28 @@ def _validate_ticket(ticket: str, callback: str) -> tuple[str, str]:
         raise AuthError("Invalid CAS service ticket.")
     validate = _required_url("AGENT_CAS_VALIDATE_URL", https=True)
     url = validate + ("&" if "?" in validate else "?") + urlencode({"ticket": ticket, "service": callback})
+    proxy = os.getenv("AGENT_PROXY", "").strip()
+    proxies = {"http": proxy, "https": proxy} if proxy else None
     try:
-        with urlopen(Request(url, headers={"Accept": "application/xml"}), timeout=10) as response:
-            data = response.read(1024 * 1024 + 1)
+        with requests.get(
+            url,
+            headers={"Accept": "application/xml"},
+            timeout=10,
+            proxies=proxies,
+            allow_redirects=False,
+            stream=True,
+        ) as response:
+            response.raise_for_status()
+            if response.status_code != 200:
+                raise requests.RequestException("CAS validation returned an unexpected HTTP status.")
+            chunks = bytearray()
+            for chunk in response.iter_content(chunk_size=4096):
+                if not chunk:
+                    continue
+                chunks.extend(chunk)
+                if len(chunks) > 1024 * 1024:
+                    break
+            data = bytes(chunks)
     except Exception as exc:
         raise AuthError("CAS ticket validation is unavailable.") from exc
     if len(data) > 1024 * 1024:
@@ -136,7 +156,8 @@ def _create_login(user_id: str, username: str, ticket: str) -> tuple[str, Princi
                 (user_id, username, password_hash(secrets.token_urlsafe(48))),
             )
         db.execute("DELETE FROM logins WHERE expires_at<?", (time.time(),))
-        db.execute("INSERT INTO logins VALUES (?,?,?)", (token_hash, user_id, time.time() + 8 * 3600))
+        db.execute("INSERT INTO logins(token_hash,user_id,expires_at) VALUES (?,?,?)",
+                   (token_hash, user_id, time.time() + 8 * 3600))
         db.execute(
             "INSERT INTO cas_logins(ticket_hash,token_hash,user_id) VALUES (?,?,?) "
             "ON CONFLICT(ticket_hash) DO UPDATE SET "

@@ -147,7 +147,24 @@ workspace under `/media/data/fuhaoyi/codes/`, with `BioAgent`, `mscan` and
 placeholders for your deployment. Stop an existing instance before starting
 another on the same port.
 
-### Terminal 1 — agent
+### Terminal 0 — CNCB OAuth service
+
+```bash
+cd /media/data/fuhaoyi/codes/mscan_projects/oauth-service
+cp .env.example .env
+cp clients.example.json clients.json
+# Replace both client secrets in clients.json with independent random values.
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python -m oauth_service.server
+```
+
+Register `https://auth.example.org/cas/callback` with CNCB CAS and set that
+public HTTPS address as `OAUTH_PUBLIC_ORIGIN`. The BioAgent and MSCAN callback
+URLs in `clients.json` must exactly match the deployed backend callback URLs.
+
+### Terminal 1 — BioAgent
 
 ```bash
 conda activate openaisdk
@@ -170,17 +187,12 @@ export AGENT_PROXY=socks5h://127.0.0.1:10801
 
 unset AGENT_WEBSITE_CLIENTS
 export AGENT_WEBSITE_CLIENTS_FILE="$PWD/runtime/website-integration/clients.json"
-export AGENT_AUTH_MODE=cas
+export AGENT_AUTH_MODE=oauth
 export AGENT_PUBLIC_ORIGIN=http://YOUR_SERVER_IP:8000
-export AGENT_CAS_LOGIN_URL=https://sso.cncb.ac.cn/login
-export AGENT_CAS_VALIDATE_URL=https://sso.cncb.ac.cn/p3/serviceValidate
-export AGENT_CAS_LOGOUT_URL=https://sso.cncb.ac.cn/logout
-export AGENT_CAS_SERVICE_URL=http://YOUR_SERVER_IP:8000/auth/cas/callback
-# Local standalone login delegates to MSCAN's verified session. The one-use
-# MSCAN grant is not a CAS Service Ticket and does not revalidate the consumed ST.
-export AGENT_MSCAN_LOGIN_URL=http://localhost:8848/agent-sso
-export AGENT_MSCAN_ORIGIN=http://localhost:8848
-export AGENT_MSCAN_SITE_ID=mscan
+export AGENT_OAUTH_SERVER_URL=https://auth.example.org
+export AGENT_OAUTH_CLIENT_ID=bioagent
+export AGENT_OAUTH_CLIENT_SECRET=REPLACE_WITH_THE_BIOAGENT_CLIENT_SECRET
+export AGENT_OAUTH_REDIRECT_URI=http://YOUR_SERVER_IP:8000/auth/oauth/callback
 
 python -B -m interfaces.web --host 0.0.0.0 --port 8000
 ```
@@ -190,6 +202,9 @@ python -B -m interfaces.web --host 0.0.0.0 --port 8000
 ```bash
 conda activate openaisdk
 cd /media/data/fuhaoyi/codes/mscan-app
+export OAUTH_SERVER_URL=https://auth.example.org
+export OAUTH_MSCAN_CLIENT_SECRET=REPLACE_WITH_THE_MSCAN_CLIENT_SECRET
+export OAUTH_MSCAN_REDIRECT_URI=https://mscan.example.org/cncb/oauth/callback
 
 mvn clean package -DskipTests &&
 java -jar mscan-admin/target/mscan-admin.jar \
@@ -207,8 +222,9 @@ pnpm dev
 ```
 
 Open `http://YOUR_SERVER_IP:8000` for the standalone agent or
-`http://YOUR_SERVER_IP:8848` for MSCAN. Sign in using your configured MSCAN login,
-select a sample and open **Ask assistant**. Local MSCAN access can use
+`http://YOUR_SERVER_IP:8848` for MSCAN. Both sign-in pages use the separate CNCB
+OAuth service, which creates an app-specific session after CNCB verifies the
+identity. Sign in to MSCAN, select a sample and open **Ask assistant**. Local MSCAN access can use
 `http://localhost:8848`. Its browser origin must be allowed in both
 MSCAN's `bioagent.origins` and the agent's private client configuration.
 

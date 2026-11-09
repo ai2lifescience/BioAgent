@@ -46,9 +46,12 @@ def validate_server(host: str) -> None:
     elif auth_mode() != "local" and not loopback(host) and os.getenv("AGENT_DIRECT_HTTP") != "true":
         raise ValueError("Configure the direct HTTP listener before network access.")
     if auth_mode() == "cas":
-        from auth.cas import logout_url, service_url
+        from auth.cas import service_url
         service_url()
-        logout_url()
+        _external_logout_url()
+    elif auth_mode() == "oauth":
+        from auth.oauth import validate_config
+        validate_config()
 
 
 def _check_origin(handler) -> None:
@@ -116,10 +119,16 @@ def _redirect(handler, location: str, status: int = 302) -> None:
 
 
 def _external_login_url() -> str | None:
-    if auth_mode() != "cas":
-        return None
-    from auth.mscan import enabled
-    return "/auth/mscan/login" if enabled() else "/auth/cas/login"
+    if auth_mode() == "cas":
+        return "/auth/cas/login"
+    if auth_mode() == "oauth":
+        return "/auth/oauth/login"
+    return None
+
+
+def _external_logout_url() -> str:
+    from auth.cas import logout_url as cas_logout_url
+    return cas_logout_url()
 
 
 def _auth_endpoint(handler, path: str) -> bool:
@@ -138,22 +147,34 @@ def _auth_endpoint(handler, path: str) -> bool:
             "user": {"id": principal.user_id, "name": principal.username} if principal else None,
         })
         return True
-    if path == "/auth/mscan/login" and handler.command == "GET":
+    if path == "/auth/cas/login" and handler.command == "GET":
         if auth_mode() != "cas":
-            raise AuthError("MSCAN single sign-on is not enabled.")
-        from auth.mscan import STATE_COOKIE, begin_login
+            raise AuthError("CAS login is not enabled.")
+        from auth.cas import STATE_COOKIE, begin_login
         query = parse_qs(urlparse(handler.path).query)
         location, state = begin_login((query.get("return_to") or ["/"])[0])
         handler._auth_cookie = (
-            f"{STATE_COOKIE}={state}; Path=/auth/mscan; HttpOnly; SameSite=Lax; Max-Age=300"
+            f"{STATE_COOKIE}={state}; Path=/auth/cas; HttpOnly; SameSite=Lax; Max-Age=300"
             + ("; Secure" if secure_cookie() else "")
         )
         _redirect(handler, location)
         return True
-    if path == "/auth/mscan/callback" and handler.command == "GET":
-        if auth_mode() != "cas":
-            raise AuthError("MSCAN single sign-on is not enabled.")
-        from auth.mscan import STATE_COOKIE, complete_login
+    if path == "/auth/oauth/login" and handler.command == "GET":
+        if auth_mode() != "oauth":
+            raise AuthError("OAuth login is not enabled.")
+        from auth.oauth import STATE_COOKIE, begin_login
+        query = parse_qs(urlparse(handler.path).query)
+        location, state = begin_login((query.get("return_to") or ["/"])[0])
+        handler._auth_cookie = (
+            f"{STATE_COOKIE}={state}; Path=/auth/oauth/callback; HttpOnly; SameSite=Lax; Max-Age=600"
+            + ("; Secure" if secure_cookie() else "")
+        )
+        _redirect(handler, location)
+        return True
+    if path == "/auth/oauth/callback" and handler.command == "GET":
+        if auth_mode() != "oauth":
+            raise AuthError("OAuth login is not enabled.")
+        from auth.oauth import STATE_COOKIE, complete_login
         query = parse_qs(urlparse(handler.path).query)
         token, _, return_to = complete_login(
             (query.get("code") or [""])[0],
@@ -166,17 +187,18 @@ def _auth_endpoint(handler, path: str) -> bool:
         )
         _redirect(handler, return_to)
         return True
-    if path == "/auth/cas/login" and handler.command == "GET":
-        if auth_mode() != "cas":
-            raise AuthError("CAS login is not enabled.")
-        from auth.cas import STATE_COOKIE, begin_login
-        query = parse_qs(urlparse(handler.path).query)
-        location, state = begin_login((query.get("return_to") or ["/"])[0])
-        handler._auth_cookie = (
-            f"{STATE_COOKIE}={state}; Path=/auth/cas; HttpOnly; SameSite=Lax; Max-Age=300"
-            + ("; Secure" if secure_cookie() else "")
+    if path == "/auth/oauth/backchannel-logout" and handler.command == "POST":
+        if auth_mode() != "oauth":
+            raise AuthError("OAuth login is not enabled.")
+        length = int(handler.headers.get("Content-Length", "0"))
+        if length <= 0 or length > 16384:
+            raise AuthError("Invalid OAuth backchannel logout.")
+        from auth.oauth import consume_backchannel_logout
+        revoked = consume_backchannel_logout(
+            handler.rfile.read(length),
+            handler.headers.get("X-OAuth-Logout-Signature", ""),
         )
-        _redirect(handler, location)
+        handler._send_json({"revoked": revoked})
         return True
     if path == "/auth/cas/callback" and handler.command == "GET":
         if auth_mode() != "cas":
@@ -210,14 +232,13 @@ def _auth_endpoint(handler, path: str) -> bool:
             raise AuthError("CAS login is not enabled.")
         principal = AuthStore().authenticate(_credential(handler))
         AuthStore().logout(principal)
-        from auth.cas import logout_url
         from web_bridge import revoke_user
         revoke_user(principal.user_id)
         handler._auth_cookie = (
             f"{COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0"
             + ("; Secure" if secure_cookie() else "")
         )
-        handler._send_json({"signed_out": True, "logout_url": logout_url()})
+        handler._send_json({"signed_out": True, "logout_url": _external_logout_url()})
         return True
     if path in {"/auth/login", "/auth/register"} and handler.command == "POST":
         if auth_mode() != "multiuser":
@@ -234,13 +255,17 @@ def _auth_endpoint(handler, path: str) -> bool:
     if path == "/auth/logout" and handler.command == "POST":
         if auth_mode() == "cas":
             raise AuthError("Use CAS single logout.")
-        if auth_mode() == "multiuser":
+        if auth_mode() in {"multiuser", "oauth"}:
             principal = AuthStore().authenticate(_credential(handler))
             AuthStore().logout(principal)
             from web_bridge import revoke_user
             revoke_user(principal.user_id)
         handler._auth_cookie = f"{COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0" + ("; Secure" if secure_cookie() else "")
-        handler._send_json({"signed_out": True})
+        payload = {"signed_out": True}
+        if auth_mode() == "oauth":
+            from auth.oauth import begin_logout
+            payload["logout_url"] = begin_logout()
+        handler._send_json(payload)
         return True
     return False
 

@@ -36,7 +36,8 @@ class Accounts:
         self.db.execute('UPDATE users SET username=? WHERE user_id=?', (username, user_id))
 
     def create_login(self, digest, user_id, expires):
-        self.db.execute('INSERT INTO logins VALUES (?,?,?)', (digest, user_id, expires))
+        self.db.execute('INSERT INTO logins(token_hash,user_id,expires_at) VALUES (?,?,?)',
+                        (digest, user_id, expires))
 
     def revoke_login(self, digest):
         self.db.execute('DELETE FROM logins WHERE token_hash=?', (digest,))

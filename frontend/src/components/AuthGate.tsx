@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'rea
 import './auth.css';
 
 type Status = {
-  mode: 'local' | 'multiuser' | 'cas';
+  mode: 'local' | 'multiuser' | 'cas' | 'oauth';
   registration_enabled?: boolean;
   login_url?: string | null;
   user: { id: string; name: string } | null;
@@ -32,6 +32,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const generation = useRef(0);
+  const oauthStarted = useRef(false);
   useEffect(() => {
     let alive = true;
     const refresh = async () => {
@@ -62,12 +63,18 @@ export function AuthGate({ children }: { children: ReactNode }) {
       window.removeEventListener('bioagent-auth-expired', expired);
     };
   }, []);
-  useEffect(() => {
-    if (status?.mode !== 'cas' || status.user) return;
-    const target = status.login_url || '/auth/cas/login';
+  const startOAuthLogin = () => {
+    const target = status?.login_url || '/auth/oauth/login';
     const url = new URL(target, window.location.origin);
     url.searchParams.set('return_to', window.location.pathname + window.location.search + window.location.hash);
-    window.location.replace(url.toString());
+    window.location.assign(url.toString());
+  };
+  useEffect(() => {
+    const loggedOut = new URLSearchParams(window.location.search).get('logged_out') === '1';
+    if (status?.mode === 'oauth' && !status.user && !loggedOut && !oauthStarted.current) {
+      oauthStarted.current = true;
+      startOAuthLogin();
+    }
   }, [status]);
   const announce = () => {
     ++generation.current;
@@ -87,16 +94,21 @@ export function AuthGate({ children }: { children: ReactNode }) {
     finally { setBusy(false); }
   };
   const logout = async () => {
-    if (status?.mode === 'cas') {
+    if (status?.mode === 'cas' || status?.mode === 'oauth') {
       setBusy(true);
       try {
-        const response = await fetch('/auth/cas/logout', {
+        const logoutEndpoint = status.mode === 'oauth' ? endpoint('logout') : '/auth/cas/logout';
+        const response = await fetch(logoutEndpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: '{}'
         });
         const payload = await response.json();
         if (!response.ok) throw new Error(payload.error || 'Sign-out failed.');
+        if (typeof payload.logout_url !== 'string' || !payload.logout_url) {
+          throw new Error('Identity service did not return a logout URL.');
+        }
+        announce();
         window.location.assign(payload.logout_url);
       } catch (e) {
         setError((e as Error).message);
@@ -109,14 +121,17 @@ export function AuthGate({ children }: { children: ReactNode }) {
     try {
       const response = await fetch(endpoint('logout'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
       if (!response.ok && response.status !== 401) throw new Error('Sign-out failed. Please try again.');
-      setStatus(previous => ({ ...previous, mode: 'multiuser', user: null })); setPassword(''); setConfirmPassword(''); setRegistering(false); announce();
+      setStatus(previous => previous ? { ...previous, user: null } : previous);
+      setPassword(''); setConfirmPassword(''); setRegistering(false); announce();
     } catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   };
   if (!status) return <main className="auth-screen"><p role="status">{error || 'Connecting…'}</p>{error && <button onClick={() => window.location.reload()}>Retry</button>}</main>;
-  if (status.mode === 'cas' && !status.user) {
-    return <main className="auth-screen"><p role="status">Redirecting to CNCB single sign-on…</p></main>;
-  }
+  if ((status.mode === 'cas' || status.mode === 'oauth') && !status.user) return <main className="auth-screen"><section className="auth-card">
+    <h1>Sign in to BioAgent</h1><p>Use your CNCB account to continue.</p>
+    {error && <p role="alert">{error}</p>}
+    <button disabled={busy} onClick={startOAuthLogin}>Continue with CNCB SSO</button>
+  </section></main>;
   if (!status.user) return <main className="auth-screen"><form className="auth-card" onSubmit={login}>
     <h1>{registering ? 'Create your account' : 'Sign in to BioAgent'}</h1><p>Your conversations and files stay with your account.</p>
     <label>Username<input autoComplete="username" required maxLength={100} pattern={registering ? '[A-Za-z0-9_.@\\-]+' : undefined} value={username} onChange={event => setUsername(event.target.value)} /></label>
