@@ -1,0 +1,236 @@
+{
+  "pipeline": "tcdb_annotator_metagenome",
+  "engine": "wdl",
+  "manifest_sha256": "227d760e471c88baf5b34a34e592dad1dca0018449a103cb115343aa1792c442",
+  "selected_for_execution": false,
+  "execution_status": "not_executed",
+  "scope_note": "Contract and inert-transfer verification only; biological workflow/example outside the live execution safety scope.",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/tcdb_annotator_metagenome/data/input/tcdb_demo_R1.fastq.gz",
+      "bytes": 8952270,
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/tcdb_annotator_metagenome/data/input/tcdb_demo_R2.fastq.gz",
+      "bytes": 10923663,
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "read1",
+      "read2"
+    ],
+    "outputs": [
+      "hits",
+      "read_hits",
+      "summary",
+      "qc",
+      "status",
+      "manifest",
+      "report"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/7b0999d397cf426da6676baa9ae47856_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "tcdb_annotator_metagenome_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "94d1ea8d63554976aba0f24a72210e4f",
+      "response": {
+        "transfer_id": "94d1ea8d63554976aba0f24a72210e4f",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "7b0999d397cf426da6676baa9ae47856_contract-check.json",
+              "id": "ac1d13fee8a92c2de7dd7c9dc06653df4bc951c99e8a401ae4743db0062e946b",
+              "source_path": "uploads/7b0999d397cf426da6676baa9ae47856_contract-check.json",
+              "size": 180,
+              "sha256": "7142d0851c69cb889a689afc28f7260e51fc7255222b39f01baff10fb64f6691",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "94d1ea8d63554976aba0f24a72210e4f",
+          "target": {
+            "sample_id": "246ebbb7f233373e81a6fbcb2f3211c4",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "tcdb_annotator_metagenome_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "246ebbb7f233373e81a6fbcb2f3211c4"
+      },
+      "transfer_id": "419fcb8d9c80420aa20120068932e499",
+      "response": {
+        "transfer_id": "419fcb8d9c80420aa20120068932e499",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "7142d0851c69cb889a689afc28f7260e51fc7255222b39f01baff10fb64f6691",
+              "kind": "analysis_output",
+              "sample_id": "246ebbb7f233373e81a6fbcb2f3211c4",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 180,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "7b0999d397cf426da6676baa9ae47856_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:94d1ea8d63554976aba0f24a72210e4f:ac1d13fee8a92c2de7dd7c9dc06653df4bc951c99e8a401ae4743db0062e946b",
+              "id": "ac1d13fee8a92c2de7dd7c9dc06653df4bc951c99e8a401ae4743db0062e946b",
+              "source_path": "uploads/7b0999d397cf426da6676baa9ae47856_contract-check.json",
+              "sample_name": "tcdb_annotator_metagenome_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:246ebbb7f233373e81a6fbcb2f3211c4",
+              "importable": false,
+              "sample_name": "tcdb_annotator_metagenome_contract_only",
+              "data_type": "meta",
+              "sample_id": "246ebbb7f233373e81a6fbcb2f3211c4"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:94d1ea8d63554976aba0f24a72210e4f:ac1d13fee8a92c2de7dd7c9dc06653df4bc951c99e8a401ae4743db0062e946b"
+      },
+      "transfer_id": "595be1c7833c4c32804ffbf5a2bdaf08",
+      "response": {
+        "transfer_id": "595be1c7833c4c32804ffbf5a2bdaf08",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "56f1aa5a-7f6b-4f8b-aa8d-4aa4f7413db5",
+            "path": "uploads/cfd19634ad764872883348edd2b145ee_7b0999d397cf426da6676baa9ae47856_contract-check.json",
+            "workspace_path": "uploads/cfd19634ad764872883348edd2b145ee_7b0999d397cf426da6676baa9ae47856_contract-check.json",
+            "name": "7b0999d397cf426da6676baa9ae47856_contract-check.json",
+            "size": 180,
+            "sha256": "7142d0851c69cb889a689afc28f7260e51fc7255222b39f01baff10fb64f6691",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "56f1aa5a-7f6b-4f8b-aa8d-4aa4f7413db5",
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "246ebbb7f233373e81a6fbcb2f3211c4",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "tcdb_annotator_metagenome_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "7b0999d397cf426da6676baa9ae47856_contract-check.json",
+      "resource_id": "result:94d1ea8d63554976aba0f24a72210e4f:ac1d13fee8a92c2de7dd7c9dc06653df4bc951c99e8a401ae4743db0062e946b",
+      "state": "succeeded",
+      "bytes": 180,
+      "sha256": "7142d0851c69cb889a689afc28f7260e51fc7255222b39f01baff10fb64f6691",
+      "expected_sha256": "7142d0851c69cb889a689afc28f7260e51fc7255222b39f01baff10fb64f6691",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "7142d0851c69cb889a689afc28f7260e51fc7255222b39f01baff10fb64f6691",
+      "kind": "analysis_output",
+      "sample_id": "246ebbb7f233373e81a6fbcb2f3211c4",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 180,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "7b0999d397cf426da6676baa9ae47856_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:94d1ea8d63554976aba0f24a72210e4f:ac1d13fee8a92c2de7dd7c9dc06653df4bc951c99e8a401ae4743db0062e946b",
+      "id": "ac1d13fee8a92c2de7dd7c9dc06653df4bc951c99e8a401ae4743db0062e946b",
+      "source_path": "uploads/7b0999d397cf426da6676baa9ae47856_contract-check.json",
+      "sample_name": "tcdb_annotator_metagenome_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:246ebbb7f233373e81a6fbcb2f3211c4",
+      "importable": false,
+      "sample_name": "tcdb_annotator_metagenome_contract_only",
+      "data_type": "meta",
+      "sample_id": "246ebbb7f233373e81a6fbcb2f3211c4"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 17.29,
+  "test_finished": true
+}

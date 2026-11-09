@@ -3,7 +3,7 @@ import { getAccessToken } from "@/utils/authToken";
 
 /** Files attached to a native sample result; no separate assistant results UI. */
 export function useSampleFiles(sample: () => string) {
-  const files = ref<{ id: string; name: string; resource_id: string }[]>([]);
+  const files = ref<{ id: string; name: string; label: string; resource_id: string }[]>([]);
   const error = ref("");
   let generation = 0;
   const prefix = ((import.meta.env.VITE_API_URL as string) || "") + "/cncb";
@@ -32,7 +32,13 @@ export function useSampleFiles(sample: () => string) {
       if (epoch !== generation) return;
       const seen = new Set<string>();
       files.value = receipts
-        .flatMap((r: any) => r.files.map((f: any) => ({ ...f, resource_id: "result:" + r.id + ":" + f.id })))
+        .flatMap((r: any) =>
+          r.files.map((f: any) => ({
+            ...f,
+            label: `${f.name} — Attachment · ${String(r.id).slice(0, 8)}`,
+            resource_id: "result:" + r.id + ":" + f.id
+          }))
+        )
         .filter((f: any) => {
           const key = f.resource_id;
           if (seen.has(key)) return false;
@@ -45,7 +51,10 @@ export function useSampleFiles(sample: () => string) {
         if (epoch !== generation) return;
         for (const file of page.resources) {
           if ((file.kind === "native_analysis_output" || file.kind === "native_analysis_record") && !seen.has(file.resource_id)) {
-            files.value.push(file);
+            files.value.push({
+              ...file,
+              label: `${file.name} — Native ${file.kind === "native_analysis_record" ? "record" : "output"} · ${file.resource_id.split(":")[2] || "result"} · ${file.resource_id.split(":")[3]?.slice(0, 8) || ""}`
+            });
             seen.add(file.resource_id);
           }
         }

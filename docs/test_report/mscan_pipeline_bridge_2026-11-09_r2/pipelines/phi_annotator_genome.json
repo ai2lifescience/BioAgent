@@ -1,0 +1,230 @@
+{
+  "pipeline": "phi_annotator_genome",
+  "engine": "wdl",
+  "manifest_sha256": "d74cc3f5a1d28893f8e0e6f978141f9b6693a3454d85aa26737ef7598fd8ed7d",
+  "selected_for_execution": false,
+  "execution_status": "not_executed",
+  "scope_note": "Contract and inert-transfer verification only; biological workflow/example outside the live execution safety scope.",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/phi_annotator_genome/data/input/phi_genome_demo.fasta",
+      "bytes": 30429,
+      "sha256": "0891c00cc2d503f58e0c600ce5ee64e9c64b939525c70d5486bc46cbc7cb073e"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "genome_fasta",
+      "protein_fasta"
+    ],
+    "outputs": [
+      "hits",
+      "summary",
+      "qc",
+      "status",
+      "manifest",
+      "report"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/79947462d91d49baa0b8719ef65a8224_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "phi_annotator_genome_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "c54e377c555d431abd582d191d716500",
+      "response": {
+        "transfer_id": "c54e377c555d431abd582d191d716500",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "79947462d91d49baa0b8719ef65a8224_contract-check.json",
+              "id": "14311e69060343273444b2f45c9e1912bced29795e6a05b275d3dfcf70ed73b8",
+              "source_path": "uploads/79947462d91d49baa0b8719ef65a8224_contract-check.json",
+              "size": 175,
+              "sha256": "adb16a3d86c61a6d4c0146a013eac667ecf971bbb05ecf9d8e914fd14c983ad0",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "c54e377c555d431abd582d191d716500",
+          "target": {
+            "sample_id": "274bef3d02a930a48ab0b6adbfacc8a1",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "phi_annotator_genome_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "274bef3d02a930a48ab0b6adbfacc8a1"
+      },
+      "transfer_id": "67fccf9d147f4832884647e6c68bf5f6",
+      "response": {
+        "transfer_id": "67fccf9d147f4832884647e6c68bf5f6",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "adb16a3d86c61a6d4c0146a013eac667ecf971bbb05ecf9d8e914fd14c983ad0",
+              "kind": "analysis_output",
+              "sample_id": "274bef3d02a930a48ab0b6adbfacc8a1",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 175,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "79947462d91d49baa0b8719ef65a8224_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:c54e377c555d431abd582d191d716500:14311e69060343273444b2f45c9e1912bced29795e6a05b275d3dfcf70ed73b8",
+              "id": "14311e69060343273444b2f45c9e1912bced29795e6a05b275d3dfcf70ed73b8",
+              "source_path": "uploads/79947462d91d49baa0b8719ef65a8224_contract-check.json",
+              "sample_name": "phi_annotator_genome_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:274bef3d02a930a48ab0b6adbfacc8a1",
+              "importable": false,
+              "sample_name": "phi_annotator_genome_contract_only",
+              "data_type": "meta",
+              "sample_id": "274bef3d02a930a48ab0b6adbfacc8a1"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:c54e377c555d431abd582d191d716500:14311e69060343273444b2f45c9e1912bced29795e6a05b275d3dfcf70ed73b8"
+      },
+      "transfer_id": "473ad39188f947218edce83d7c052460",
+      "response": {
+        "transfer_id": "473ad39188f947218edce83d7c052460",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "37198e22-edd8-40b2-8c25-9f260c313f7c",
+            "path": "uploads/6fdae107dc164ec7973ed2e4bc904b2d_79947462d91d49baa0b8719ef65a8224_contract-check.json",
+            "workspace_path": "uploads/6fdae107dc164ec7973ed2e4bc904b2d_79947462d91d49baa0b8719ef65a8224_contract-check.json",
+            "name": "79947462d91d49baa0b8719ef65a8224_contract-check.json",
+            "size": 175,
+            "sha256": "adb16a3d86c61a6d4c0146a013eac667ecf971bbb05ecf9d8e914fd14c983ad0",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "37198e22-edd8-40b2-8c25-9f260c313f7c",
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "274bef3d02a930a48ab0b6adbfacc8a1",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "phi_annotator_genome_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "79947462d91d49baa0b8719ef65a8224_contract-check.json",
+      "resource_id": "result:c54e377c555d431abd582d191d716500:14311e69060343273444b2f45c9e1912bced29795e6a05b275d3dfcf70ed73b8",
+      "state": "succeeded",
+      "bytes": 175,
+      "sha256": "adb16a3d86c61a6d4c0146a013eac667ecf971bbb05ecf9d8e914fd14c983ad0",
+      "expected_sha256": "adb16a3d86c61a6d4c0146a013eac667ecf971bbb05ecf9d8e914fd14c983ad0",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "adb16a3d86c61a6d4c0146a013eac667ecf971bbb05ecf9d8e914fd14c983ad0",
+      "kind": "analysis_output",
+      "sample_id": "274bef3d02a930a48ab0b6adbfacc8a1",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 175,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "79947462d91d49baa0b8719ef65a8224_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:c54e377c555d431abd582d191d716500:14311e69060343273444b2f45c9e1912bced29795e6a05b275d3dfcf70ed73b8",
+      "id": "14311e69060343273444b2f45c9e1912bced29795e6a05b275d3dfcf70ed73b8",
+      "source_path": "uploads/79947462d91d49baa0b8719ef65a8224_contract-check.json",
+      "sample_name": "phi_annotator_genome_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:274bef3d02a930a48ab0b6adbfacc8a1",
+      "importable": false,
+      "sample_name": "phi_annotator_genome_contract_only",
+      "data_type": "meta",
+      "sample_id": "274bef3d02a930a48ab0b6adbfacc8a1"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 17.34,
+  "test_finished": true
+}

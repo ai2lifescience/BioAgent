@@ -26,7 +26,10 @@ installation, complete the setup below first.
 ## First-time setup
 
 The installer adds adapter-owned files and changes three existing frontend files.
-It does not modify existing backend sources or require a database migration.
+It also adds two narrow native-import entry points in four backend files (two
+service interfaces and their implementations), reusing MSCAN's existing genomic
+and k-mer result parsers. It does not change pipeline definitions or require a
+database migration.
 The [technical reference](#technical-reference) lists the exact changes and checks.
 
 ### 1. Prepare the applications
@@ -202,6 +205,9 @@ The agent reads `runtime/website-integration/clients.json`; the backend export
 loads the matching service credential from that same file before changing
 directories. If reading it fails, stop and complete connection configuration
 before starting Java. These exports enable the bridge without a startup helper.
+
+Stop the running MSCAN backend before rebuilding its JAR; replacing a JAR while
+Java is reading it can break requests that load additional classes.
 
 You do **not** need Maven or `pnpm install` for every restart. Rebuild the backend
 after code changes; install dependencies after their declarations or lockfiles

@@ -98,13 +98,19 @@ async def website_import_data(ctx: RunContextWrapper[AgentRunContext], resource_
     if not isinstance(content, str) or len(content.encode()) > 512 * 1024:
         raise ValueError("website export must be UTF-8 text under 512 KiB")
     from web_bridge.conversations import WebsiteAccounts
-    file = get_host().publish_text(ctx.context.session_id, filename, content.encode('utf-8'), ctx.context.execution_access)
+    file = await asyncio.to_thread(get_host().publish_text, ctx.context.session_id, filename, content.encode('utf-8'), ctx.context.execution_access)
     relative = file['path']
+    # Publishing returns an upload receipt (session/checksum), not the public
+    # artifact contract. Resolve the actual owned file, including modified_at.
+    workspace_files = await asyncio.to_thread(get_host().list_files, ctx.context.session_id)
+    saved = next((f for f in workspace_files if (f.get('workspace_path') or f.get('path')) == relative), None)
+    if saved is None:
+        raise ValueError("Exported file is not available in this session.")
     binding = get_bridge().get_binding(**{key: _binding(ctx)[key] for key in ('binding_id', 'token')})
     with WebsiteAccounts().bridge.db(True) as db:
         db.execute('INSERT INTO website_imports VALUES (?,?,?,?,?,?)',
                    (uuid4().hex, ctx.context.session_id, binding['site_id'], resource_id, binding['context'].get('revision', ''), json.dumps(file)))
-    return FunctionResult[ImportResult](status="ok", data=ImportResult(path=relative, filename=filename, bytes=file["size"], partial=bool(value.get("partial"))), files=[file])
+    return FunctionResult[ImportResult](status="ok", data=ImportResult(path=relative, filename=filename, bytes=saved["size"], partial=bool(value.get("partial"))), files=[saved])
 
 class ResourcesResult(FunctionContract):
     resources: list[dict[str, Any]] = []

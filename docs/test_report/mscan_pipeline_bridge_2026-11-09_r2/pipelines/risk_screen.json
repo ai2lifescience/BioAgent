@@ -1,0 +1,224 @@
+{
+  "pipeline": "risk_screen",
+  "engine": "wdl",
+  "manifest_sha256": "1ea520120b29b17792183f354eb72a30d539910af5119d54b57ec15a3d52fcfd",
+  "selected_for_execution": false,
+  "execution_status": "not_executed",
+  "scope_note": "Contract and inert-transfer verification only; biological workflow/example outside the live execution safety scope.",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/risk_screen/data/input/screenmec_demo.fasta",
+      "bytes": 35949,
+      "sha256": "0530a208a5c21fe0bfeaf620c5e0b5740acd7c69f9e4d8f62fcda72f47c2f834"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "query_fasta"
+    ],
+    "outputs": [
+      "result_tsv"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/c6305ed71274421795303f9cda00b49b_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "risk_screen_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "9d3b88f6933d4cdc800c869c456accf8",
+      "response": {
+        "transfer_id": "9d3b88f6933d4cdc800c869c456accf8",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "c6305ed71274421795303f9cda00b49b_contract-check.json",
+              "id": "c08bf72b931173ae4d25cd0f806277cfdbfa3c7958a8020c41d4c3fef3a59fc5",
+              "source_path": "uploads/c6305ed71274421795303f9cda00b49b_contract-check.json",
+              "size": 166,
+              "sha256": "2722ea3e50a1c8fe23dc3fe56157e3d5325b2c3dc69d261bce50312d705370f9",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "9d3b88f6933d4cdc800c869c456accf8",
+          "target": {
+            "sample_id": "f0325da73b0433c8a39a5f0b4a145790",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "risk_screen_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "f0325da73b0433c8a39a5f0b4a145790"
+      },
+      "transfer_id": "d3b1ac100d1b40069eb09db1bc404d86",
+      "response": {
+        "transfer_id": "d3b1ac100d1b40069eb09db1bc404d86",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "2722ea3e50a1c8fe23dc3fe56157e3d5325b2c3dc69d261bce50312d705370f9",
+              "kind": "analysis_output",
+              "sample_id": "f0325da73b0433c8a39a5f0b4a145790",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 166,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "c6305ed71274421795303f9cda00b49b_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:9d3b88f6933d4cdc800c869c456accf8:c08bf72b931173ae4d25cd0f806277cfdbfa3c7958a8020c41d4c3fef3a59fc5",
+              "id": "c08bf72b931173ae4d25cd0f806277cfdbfa3c7958a8020c41d4c3fef3a59fc5",
+              "source_path": "uploads/c6305ed71274421795303f9cda00b49b_contract-check.json",
+              "sample_name": "risk_screen_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:f0325da73b0433c8a39a5f0b4a145790",
+              "importable": false,
+              "sample_name": "risk_screen_contract_only",
+              "data_type": "meta",
+              "sample_id": "f0325da73b0433c8a39a5f0b4a145790"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:9d3b88f6933d4cdc800c869c456accf8:c08bf72b931173ae4d25cd0f806277cfdbfa3c7958a8020c41d4c3fef3a59fc5"
+      },
+      "transfer_id": "5eaacfaee6d54051a6987d521857d0ee",
+      "response": {
+        "transfer_id": "5eaacfaee6d54051a6987d521857d0ee",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "b47ceef4-374a-4c54-affa-8c7230a1927a",
+            "path": "uploads/aaa37ab3a23e475ab6f147c6d8e7d419_c6305ed71274421795303f9cda00b49b_contract-check.json",
+            "workspace_path": "uploads/aaa37ab3a23e475ab6f147c6d8e7d419_c6305ed71274421795303f9cda00b49b_contract-check.json",
+            "name": "c6305ed71274421795303f9cda00b49b_contract-check.json",
+            "size": 166,
+            "sha256": "2722ea3e50a1c8fe23dc3fe56157e3d5325b2c3dc69d261bce50312d705370f9",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "b47ceef4-374a-4c54-affa-8c7230a1927a",
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "f0325da73b0433c8a39a5f0b4a145790",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "risk_screen_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "c6305ed71274421795303f9cda00b49b_contract-check.json",
+      "resource_id": "result:9d3b88f6933d4cdc800c869c456accf8:c08bf72b931173ae4d25cd0f806277cfdbfa3c7958a8020c41d4c3fef3a59fc5",
+      "state": "succeeded",
+      "bytes": 166,
+      "sha256": "2722ea3e50a1c8fe23dc3fe56157e3d5325b2c3dc69d261bce50312d705370f9",
+      "expected_sha256": "2722ea3e50a1c8fe23dc3fe56157e3d5325b2c3dc69d261bce50312d705370f9",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "2722ea3e50a1c8fe23dc3fe56157e3d5325b2c3dc69d261bce50312d705370f9",
+      "kind": "analysis_output",
+      "sample_id": "f0325da73b0433c8a39a5f0b4a145790",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 166,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "c6305ed71274421795303f9cda00b49b_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:9d3b88f6933d4cdc800c869c456accf8:c08bf72b931173ae4d25cd0f806277cfdbfa3c7958a8020c41d4c3fef3a59fc5",
+      "id": "c08bf72b931173ae4d25cd0f806277cfdbfa3c7958a8020c41d4c3fef3a59fc5",
+      "source_path": "uploads/c6305ed71274421795303f9cda00b49b_contract-check.json",
+      "sample_name": "risk_screen_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:f0325da73b0433c8a39a5f0b4a145790",
+      "importable": false,
+      "sample_name": "risk_screen_contract_only",
+      "data_type": "meta",
+      "sample_id": "f0325da73b0433c8a39a5f0b4a145790"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 16.27,
+  "test_finished": true
+}

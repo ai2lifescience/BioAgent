@@ -1,0 +1,3692 @@
+{
+  "pipeline": "template_bio",
+  "engine": "shell",
+  "manifest_sha256": "98d2ba78eb023f5f4c01cf8ee97aa1303dd69ba7767615d9c7b6f4fa89a0a4d4",
+  "selected_for_execution": true,
+  "execution_status": "succeeded",
+  "scope_note": "",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/template_bio/data/input/example_reads.fastq",
+      "bytes": 385,
+      "sha256": "5e95fa95821c31e5446e051cdf4ccd4b82144ac71b809e065e1101c12386b60d"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/template_bio/data/input/example_reference.fasta",
+      "bytes": 61,
+      "sha256": "73f4c86513507e373bc902232aded85b398678e313f059b42b26e1ae38c4fd09"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/template_bio/data/input/example_samples.tsv",
+      "bytes": 149,
+      "sha256": "ab843cad4c085902847f8145aec07c0f932ef591663efdc9cd13bac0c6acb79e"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "reads",
+      "reference",
+      "metadata"
+    ],
+    "outputs": [
+      "report",
+      "metrics",
+      "html_report",
+      "filtered_reads",
+      "read_qc",
+      "sample_summary",
+      "coverage",
+      "alignments",
+      "consensus",
+      "variants",
+      "variant_table",
+      "qc_figure",
+      "coverage_figure",
+      "variant_figure",
+      "phylogenetic_tree",
+      "phylogenetic_tree_figure"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "pipeline-bundles/e5bf11f30dbb4edea909325d8b1c258a/results.zip",
+          "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_reads.fastq",
+          "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_reference.fasta",
+          "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_samples.tsv"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "template_bio",
+          "data_type": "meta",
+          "source_slots": {
+            "R1": "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_reads.fastq"
+          }
+        },
+        "create_missing": true
+      },
+      "transfer_id": "654d2ce011e74f4b90376a0509af60a8",
+      "response": {
+        "transfer_id": "654d2ce011e74f4b90376a0509af60a8",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "registered",
+            "slots": {
+              "R1": "5d0017cba5163fcd9cb66ef6b0331080"
+            }
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "results.zip",
+              "id": "64c48def32d11ffcdb3b0a30bf6df4f501fab0143dd4dd3acc8588a321ec5a50",
+              "source_path": "pipeline-bundles/e5bf11f30dbb4edea909325d8b1c258a/results.zip",
+              "size": 305870,
+              "sha256": "a53f470eb906cfa8c58e9869a1c8e124a9eaffa3dece328ca9d0df9c5a23c9a3",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "size": 2442,
+              "sha256": "d90385160aab51ca6e9393dd3378e9d6af493f8f5ac8cbdafd131ce16e784453",
+              "name": "report.md",
+              "id": "3792cd84575c28de6c0c9988165b2afde20983f9bd1af4e18ee30fe1b4d28569",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/report.md",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "report",
+                "output_name": "report",
+                "output_kind": "report",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "# Template Bioinformatics Pipeline Report\n\n- Run label: template_bio\n- Sample: sample_demo\n- Reference: demo_reference (24 bp)\n- Reads: 3 / 5 passed filters\n- Q30 bases: 76.92%\n- Reference coverage: 100.0%\n- Mean retained depth: 3.0×\n- Passing variants: 1\n\n## Workflow\n\n```text\nFASTQ + reference FASTA + metadata\n  -> validation and read QC\n  -> read filtering and demonstration alignment\n  -> coverage, consensus, and variant calling\n  -> tables, figures, metrics, and reports\n```\n\n## Inputs\n\n- FASTQ reads: `/tmp/tmpwn3iv8pk/runtime/agent_runs/e5bf11f30dbb4edea909325d8b1c258a/inputs/reads/0_example_reads.fastq`\n- Reference FASTA: `/tmp/tmpwn3iv8pk/runtime/agent_runs/e5bf11f30dbb4edea909325d8b1c258a/inputs/reference/0_example_reference.fasta`\n- Metadata table: `/tmp/tmpwn3iv8pk/runtime/agent_runs/e5bf11f30dbb4edea909325d8b1c258a/inputs/metadata/0_example_samples.tsv`\n\n## Sample metadata\n\n| Field | Value |\n| --- | --- |\n| sample_id | sample_demo |\n| organism | synthetic construct |\n| condition | demo |\n| replicate …"
+              }
+            },
+            {
+              "size": 1240,
+              "sha256": "8d325baafc5e32e9efbe02a92ace5aaed42541d0d8aba3395f3f7337262bc1bd",
+              "name": "metrics.json",
+              "id": "39bd6b2b860f2dad5240a96150d7683435a581930a046fa23c2538291371167e",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/metrics.json",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "metrics",
+                "output_name": "metrics",
+                "output_kind": "metrics",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "aligned_read_count",
+                  "base_retention_percent",
+                  "bases_at_3x_percent",
+                  "covered_reference_bases",
+                  "failed_read_count",
+                  "filter_outcomes",
+                  "input_base_count",
+                  "input_read_count",
+                  "maximum_retained_depth",
+                  "mean_input_gc_percent",
+                  "mean_input_quality",
+                  "mean_input_read_length",
+                  "mean_retained_depth",
+                  "mean_retained_read_length",
+                  "metadata_field_count",
+                  "mode",
+                  "parameters",
+                  "passed_read_count",
+                  "phylogenetic_tree_emitted",
+                  "pipeline",
+                  "q20_base_percent",
+                  "q30_base_percent",
+                  "read_retention_percent",
+                  "reference_coverage_percent",
+                  "reference_id",
+                  "reference_length",
+                  "retained_base_count",
+                  "sample_id",
+                  "status",
+                  "transition_count",
+                  "transversion_count",
+                  "variant_count"
+                ]
+              }
+            },
+            {
+              "size": 240684,
+              "sha256": "518587c3545d7916ed6bf764b6054435cca4acc232307958878c6be7a29e24f3",
+              "name": "report.html",
+              "id": "d9b8544b229419a1184582530f4b4aeb02a059605edd2e69125c22e446019fbb",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/report.html",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "html_report",
+                "output_name": "html_report",
+                "output_kind": "report",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Template Bioinformatics Report — sample_demo</title>\n<style>\nbody { color:#1f2933; background:#f5f7fa; font:15px/1.5 system-ui,sans-serif; margin:0; }\nmain { max-width:1100px; margin:auto; padding:32px; }\nh1,h2 { color:#102a43; } .muted { color:#627d98; }\n.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; }\n.card,section { background:white; border:1px solid #d9e2ec; border-radius:10px; padding:18px; margin:16px 0; }\n.card span,.card strong { display:block; } .card strong { color:#0b7285; font-size:1.5rem; }\ntable { border-collapse:collapse; width:100%; } th,td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; }\nimg { max-width:100%; height:auto; } figure { margin:20px 0; } figcaption { color:#627d98; text-align:center; }\ncode { overflow-wrap:anywhere; } .warning { border-left:5px solid #d9480f; }\n</style>\n</head>\n<body…"
+              }
+            },
+            {
+              "size": 253,
+              "sha256": "07c3e1d2623c1df14a10e5b4672a7518dc23f48dfa05317f59f064ab1f961d54",
+              "name": "filtered_reads.fastq",
+              "id": "50a813a8c51c559edeb94d4c20384093f3283fe7c9e9c4870e8c546bfbabe5ee",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/filtered_reads.fastq",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "filtered_reads",
+                "output_name": "filtered_reads",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "@read001 sample_demo identical\nACGTACGTACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read002 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read003 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n"
+              }
+            },
+            {
+              "size": 238,
+              "sha256": "2a35486b26655a75cf649c494b0d88d9009933e488ab235bd64aa24ac10c322b",
+              "name": "read_qc.tsv",
+              "id": "beb9e1beb905e0b59a79bbcb682a7abf22577912d3fd645dd6809c716a0bc3a7",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/read_qc.tsv",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "read_qc",
+                "output_name": "read_qc",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "read_id",
+                  "length",
+                  "gc_percent",
+                  "mean_quality",
+                  "q20_bases",
+                  "q30_bases",
+                  "status"
+                ],
+                "preview_rows": [
+                  [
+                    "read001",
+                    "24",
+                    "50.00",
+                    "40.00",
+                    "24",
+                    "24",
+                    "pass"
+                  ],
+                  [
+                    "read002",
+                    "24",
+                    "50.00",
+                    "40.00",
+                    "24",
+                    "24",
+                    "pass"
+                  ],
+                  [
+                    "read003",
+                    "24",
+                    "50.00",
+                    "40.00",
+                    "24",
+                    "24",
+                    "pass"
+                  ]
+                ]
+              }
+            },
+            {
+              "size": 364,
+              "sha256": "1f9e8c0708537fe213d2da845f0d1278f6ffb2a72f6c7b4282a88449b8393ac8",
+              "name": "sample_summary.tsv",
+              "id": "4afbde4e9e2f8ce6096637f4e4f5ba606ea1858bccbfe5b749e0ae63dfeb7a25",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/sample_summary.tsv",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "sample_summary",
+                "output_name": "sample_summary",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "sample_id",
+                  "organism",
+                  "condition",
+                  "replicate",
+                  "library_layout",
+                  "platform",
+                  "collection_date",
+                  "input_read_count",
+                  "passed_read_count",
+                  "read_retention_percent",
+                  "mean_input_read_length",
+                  "mean_input_quality",
+                  "q30_base_percent",
+                  "mean_retained_depth",
+                  "reference_coverage_percent",
+                  "variant_count"
+                ],
+                "preview_rows": [
+                  [
+                    "sample_demo",
+                    "synthetic construct",
+                    "demo",
+                    "1",
+                    "single-end",
+                    "Illumina",
+                    "2026-01-15",
+                    "5",
+                    "3",
+                    "60.0",
+                    "20.8",
+                    "32.0",
+                    "76.92",
+                    "3.0",
+                    "100.0",
+                    "1"
+                  ]
+                ]
+              }
+            },
+            {
+              "size": 889,
+              "sha256": "4c0e47b4faac72a220407e4f22fa11a0f38a522753a68631d21743b7048191bb",
+              "name": "coverage.tsv",
+              "id": "44c87c4bab704db7e13b18fb5e60258cbe31bd4298cb19cb863f96ee1626741b",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/coverage.tsv",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "coverage",
+                "output_name": "coverage",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "chrom",
+                  "position",
+                  "reference",
+                  "depth",
+                  "A",
+                  "C",
+                  "G",
+                  "T",
+                  "consensus",
+                  "variant"
+                ],
+                "preview_rows": [
+                  [
+                    "demo_reference",
+                    "1",
+                    "A",
+                    "3",
+                    "3",
+                    "0",
+                    "0",
+                    "0",
+                    "A",
+                    "no"
+                  ],
+                  [
+                    "demo_reference",
+                    "2",
+                    "C",
+                    "3",
+                    "0",
+                    "3",
+                    "0",
+                    "0",
+                    "C",
+                    "no"
+                  ],
+                  [
+                    "demo_reference",
+                    "3",
+                    "G",
+                    "3",
+                    "0",
+                    "0",
+                    "3",
+                    "0",
+                    "G",
+                    "no"
+                  ]
+                ]
+              }
+            },
+            {
+              "size": 438,
+              "sha256": "298bce179fe675293de783a7e5d983632c88bcef9eea88491bd2644297ded53a",
+              "name": "alignments.sam",
+              "id": "46210f48c9b2b17c2bae4d2ccb399b91db62caddb65b23a092b5576ebf944567",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/alignments.sam",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "alignments",
+                "output_name": "alignments",
+                "output_kind": "alignment",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "@HD\tVN:1.6\tSO:unknown\n@SQ\tSN:demo_reference\tLN:24\n@RG\tID:sample_demo\tSM:sample_demo\tPL:Illumina\nread001\t0\tdemo_reference\t1\t60\t24M\t*\t0\t0\tACGTACGTACGTACGTACGTACGT\tIIIIIIIIIIIIIIIIIIIIIIII\tRG:Z:sample_demo\tNM:i:0\nread002\t0\tdemo_reference\t1\t60\t24M\t*\t0\t0\tACGTACGAACGTACGTACGTACGT\tIIIIIIIIIIIIIIIIIIIIIIII\tRG:Z:sample_demo\tNM:i:1\nread003\t0\tdemo_reference\t1\t60\t24M\t*\t0\t0\tACGTACGAACGTACGTACGTACGT\tIIIIIIIIIIIIIIIIIIIIIIII\tRG:Z:sample_demo\tNM:i:1\n"
+              }
+            },
+            {
+              "size": 48,
+              "sha256": "4abdef905000d380f63a84da444729a253af59655f1223a0bdf43df96bd8292d",
+              "name": "consensus.fasta",
+              "id": "45e58cad256c37163fef679c7076917129706e771cf78bed89bb67c5cff0a970",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/consensus.fasta",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "consensus",
+                "output_name": "consensus",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">sample_demo|consensus\nACGTACGAACGTACGTACGTACGT\n"
+              }
+            },
+            {
+              "size": 578,
+              "sha256": "062e8abb162232d2fcc1b039ee9a2ea51a09fcc3a90cda62b044e0866b54fdd5",
+              "name": "variants.vcf",
+              "id": "bf33e599ac0e926c9aa6b3566825c799eb72244f5c7a8cce21f6dc66abeb04ac",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variants.vcf",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "variants",
+                "output_name": "variants",
+                "output_kind": "variants",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "##fileformat=VCFv4.2\n##source=template_bio_positional_comparison\n##contig=<ID=demo_reference,length=24>\n##INFO=<ID=DP,Number=1,Type=Integer,Description=\"Read depth\">\n##INFO=<ID=AF,Number=A,Type=Float,Description=\"Alternate allele fraction\">\n##INFO=<ID=TYPE,Number=1,Type=String,Description=\"SNV change type\">\n##FORMAT=<ID=GT,Number=1,Type=String,Description=\"Haploid genotype\">\n##FORMAT=<ID=AD,Number=R,Type=Integer,Description=\"Allele depths\">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tsample_demo\ndemo_reference\t8\t.\tT\tA\t.\tPASS\tDP=3;AF=0.6667;TYPE=transversion\tGT:AD\t1:1,2\n"
+              }
+            },
+            {
+              "size": 133,
+              "sha256": "cf2fda9b1d77ff559bdf39679792a7d9f3db8418e940c6f0810192f01b72a95d",
+              "name": "variant_summary.tsv",
+              "id": "d6e57b866744c143b395576f47aec21d02cd25cbab85e86c0bee0c08a7ec527d",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variant_summary.tsv",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "variant_table",
+                "output_name": "variant_table",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "chrom",
+                  "position",
+                  "ref",
+                  "alt",
+                  "depth",
+                  "ref_depth",
+                  "alt_depth",
+                  "alt_fraction",
+                  "change_type",
+                  "filter"
+                ],
+                "preview_rows": [
+                  [
+                    "demo_reference",
+                    "8",
+                    "T",
+                    "A",
+                    "3",
+                    "1",
+                    "2",
+                    "0.6667",
+                    "transversion",
+                    "PASS"
+                  ]
+                ]
+              }
+            },
+            {
+              "size": 79528,
+              "sha256": "8fbb68db592ee65cdd2c16d4bbef378ac006c43c97472e40666a243f02e4e22a",
+              "name": "qc_overview.png",
+              "id": "6b2d83e337210c6ffd3614dbe8de4ce0fa71e1915167fe87b2a487c6404eb80f",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/qc_overview.png",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "qc_figure",
+                "output_name": "qc_figure",
+                "output_kind": "image",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "size": 35889,
+              "sha256": "ad9b29f6427999634547ea0a74749c91fe00f6cf539c77ebf36e9ac7be2cea7c",
+              "name": "coverage.png",
+              "id": "481dcec1c4d6373a27b4816f18eb4cd57cdbc59e47103ab78fa2f9fc49fdfa81",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/coverage.png",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "coverage_figure",
+                "output_name": "coverage_figure",
+                "output_kind": "image",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "size": 28447,
+              "sha256": "0113be9f3870d6819612d47d18ac8d1e81a6dc00a1b0405ae802d870512ed3bd",
+              "name": "variant_allele_fraction.png",
+              "id": "f9e06b1d99ee9f5f2920ccee236ccdbad923c8a2bc97c6ae7f671b724cc27a6b",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variant_allele_fraction.png",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "variant_figure",
+                "output_name": "variant_figure",
+                "output_kind": "image",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "size": 58,
+              "sha256": "079bce3c8066706a599d2e43834b64c48d66285985866df895c6ac9d27129ebf",
+              "name": "phylogenetic_tree.nwk",
+              "id": "5db5bbb7a2e46012932903fed4fcf77720efd19d66dc70823aa30a4f6c6d5068",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/phylogenetic_tree.nwk",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "phylogenetic_tree",
+                "output_name": "phylogenetic_tree",
+                "output_kind": "phylogenetic_tree",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "(demo_reference:0.020833,sample_demo_consensus:0.020833);\n"
+              }
+            },
+            {
+              "size": 32702,
+              "sha256": "4accf066bee5fe78569eada9122f0a02a2b0d3761e09dd7142f6ac434c53306e",
+              "name": "phylogenetic_tree.png",
+              "id": "458f4434339220882bd2d0afd4eb4cf15dbc148583c3c07ce67615d69669c896",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/phylogenetic_tree.png",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "phylogenetic_tree_figure",
+                "output_name": "phylogenetic_tree_figure",
+                "output_kind": "image",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "name": "example_reads.fastq",
+              "id": "a0231d7ca5c54d603befb5d14a0a49eeed7e5b336b1cce7acbc4524843717edc",
+              "source_path": "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_reads.fastq",
+              "size": 385,
+              "sha256": "5e95fa95821c31e5446e051cdf4ccd4b82144ac71b809e065e1101c12386b60d",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "@read001 sample_demo identical\nACGTACGTACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read002 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read003 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read004 sample_demo low_quality\nACGTACGTACGTACGTACGTACGT\n+\n!!!!!!!!!!!!!!!!!!!!!!!!\n@read005 sample_demo short\nACGTACGT\n+\nIIIIIIII\n"
+              }
+            },
+            {
+              "name": "example_reference.fasta",
+              "id": "35f87442b1113ecf2ec9bb822813b8a8d198d8982a3b02cd921fc4e69d00bd29",
+              "source_path": "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_reference.fasta",
+              "size": 61,
+              "sha256": "73f4c86513507e373bc902232aded85b398678e313f059b42b26e1ae38c4fd09",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">demo_reference synthetic_reference\nACGTACGTACGTACGTACGTACGT\n"
+              }
+            },
+            {
+              "name": "example_samples.tsv",
+              "id": "66fcbf6fbfa158c87c72cf055d611734b487a204824b4d03f3d049306a31ba17",
+              "source_path": "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_samples.tsv",
+              "size": 149,
+              "sha256": "ab843cad4c085902847f8145aec07c0f932ef591663efdc9cd13bac0c6acb79e",
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "sample_id",
+                  "organism",
+                  "condition",
+                  "replicate",
+                  "library_layout",
+                  "platform",
+                  "collection_date"
+                ],
+                "preview_rows": [
+                  [
+                    "sample_demo",
+                    "synthetic construct",
+                    "demo",
+                    "1",
+                    "single-end",
+                    "Illumina",
+                    "2026-01-15"
+                  ]
+                ]
+              }
+            }
+          ],
+          "native_imports": [
+            {
+              "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+              "files_delivered": true,
+              "generic_import": {
+                "artifact_count": 16,
+                "access": "Search or pull the attached sample files; native records are a separate outcome.",
+                "state": "imported"
+              },
+              "pipeline": "template_bio",
+              "state": "unsupported",
+              "message": "No unambiguous native result format; files remain available."
+            }
+          ],
+          "qc": {},
+          "receipt_id": "654d2ce011e74f4b90376a0509af60a8",
+          "target": {
+            "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "template_bio",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "654ad25d6f4c300794b8ffea8bce2085"
+      },
+      "transfer_id": "2af3a6059d284501be7df541573e610b",
+      "response": {
+        "transfer_id": "2af3a6059d284501be7df541573e610b",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "73f4c86513507e373bc902232aded85b398678e313f059b42b26e1ae38c4fd09",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">demo_reference synthetic_reference\nACGTACGTACGTACGTACGTACGT\n"
+              },
+              "size": 61,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "example_reference.fasta",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:35f87442b1113ecf2ec9bb822813b8a8d198d8982a3b02cd921fc4e69d00bd29",
+              "id": "35f87442b1113ecf2ec9bb822813b8a8d198d8982a3b02cd921fc4e69d00bd29",
+              "source_path": "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_reference.fasta",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "d90385160aab51ca6e9393dd3378e9d6af493f8f5ac8cbdafd131ce16e784453",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "report",
+                "output_name": "report",
+                "output_kind": "report",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "# Template Bioinformatics Pipeline Report\n\n- Run label: template_bio\n- Sample: sample_demo\n- Reference: demo_reference (24 bp)\n- Reads: 3 / 5 passed filters\n- Q30 bases: 76.92%\n- Reference coverage: 100.0%\n- Mean retained depth: 3.0×\n- Passing variants: 1\n\n## Workflow\n\n```text\nFASTQ + reference FASTA + metadata\n  -> validation and read QC\n  -> read filtering and demonstration alignment\n  -> coverage, consensus, and variant calling\n  -> tables, figures, metrics, and reports\n```\n\n## Inputs\n\n- FASTQ reads: `/tmp/tmpwn3iv8pk/runtime/agent_runs/e5bf11f30dbb4edea909325d8b1c258a/inputs/reads/0_example_reads.fastq`\n- Reference FASTA: `/tmp/tmpwn3iv8pk/runtime/agent_runs/e5bf11f30dbb4edea909325d8b1c258a/inputs/reference/0_example_reference.fasta`\n- Metadata table: `/tmp/tmpwn3iv8pk/runtime/agent_runs/e5bf11f30dbb4edea909325d8b1c258a/inputs/metadata/0_example_samples.tsv`\n\n## Sample metadata\n\n| Field | Value |\n| --- | --- |\n| sample_id | sample_demo |\n| organism | synthetic construct |\n| condition | demo |\n| replicate …"
+              },
+              "size": 2442,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "report.md",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:3792cd84575c28de6c0c9988165b2afde20983f9bd1af4e18ee30fe1b4d28569",
+              "id": "3792cd84575c28de6c0c9988165b2afde20983f9bd1af4e18ee30fe1b4d28569",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/report.md",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "8d325baafc5e32e9efbe02a92ace5aaed42541d0d8aba3395f3f7337262bc1bd",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "metrics",
+                "output_name": "metrics",
+                "output_kind": "metrics",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "aligned_read_count",
+                  "base_retention_percent",
+                  "bases_at_3x_percent",
+                  "covered_reference_bases",
+                  "failed_read_count",
+                  "filter_outcomes",
+                  "input_base_count",
+                  "input_read_count",
+                  "maximum_retained_depth",
+                  "mean_input_gc_percent",
+                  "mean_input_quality",
+                  "mean_input_read_length",
+                  "mean_retained_depth",
+                  "mean_retained_read_length",
+                  "metadata_field_count",
+                  "mode",
+                  "parameters",
+                  "passed_read_count",
+                  "phylogenetic_tree_emitted",
+                  "pipeline",
+                  "q20_base_percent",
+                  "q30_base_percent",
+                  "read_retention_percent",
+                  "reference_coverage_percent",
+                  "reference_id",
+                  "reference_length",
+                  "retained_base_count",
+                  "sample_id",
+                  "status",
+                  "transition_count",
+                  "transversion_count",
+                  "variant_count"
+                ]
+              },
+              "size": 1240,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "metrics.json",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:39bd6b2b860f2dad5240a96150d7683435a581930a046fa23c2538291371167e",
+              "id": "39bd6b2b860f2dad5240a96150d7683435a581930a046fa23c2538291371167e",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/metrics.json",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "4c0e47b4faac72a220407e4f22fa11a0f38a522753a68631d21743b7048191bb",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "coverage",
+                "output_name": "coverage",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "chrom",
+                  "position",
+                  "reference",
+                  "depth",
+                  "A",
+                  "C",
+                  "G",
+                  "T",
+                  "consensus",
+                  "variant"
+                ],
+                "preview_rows": [
+                  [
+                    "demo_reference",
+                    "1",
+                    "A",
+                    "3",
+                    "3",
+                    "0",
+                    "0",
+                    "0",
+                    "A",
+                    "no"
+                  ],
+                  [
+                    "demo_reference",
+                    "2",
+                    "C",
+                    "3",
+                    "0",
+                    "3",
+                    "0",
+                    "0",
+                    "C",
+                    "no"
+                  ],
+                  [
+                    "demo_reference",
+                    "3",
+                    "G",
+                    "3",
+                    "0",
+                    "0",
+                    "3",
+                    "0",
+                    "G",
+                    "no"
+                  ]
+                ]
+              },
+              "size": 889,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "coverage.tsv",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:44c87c4bab704db7e13b18fb5e60258cbe31bd4298cb19cb863f96ee1626741b",
+              "id": "44c87c4bab704db7e13b18fb5e60258cbe31bd4298cb19cb863f96ee1626741b",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/coverage.tsv",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "4accf066bee5fe78569eada9122f0a02a2b0d3761e09dd7142f6ac434c53306e",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "phylogenetic_tree_figure",
+                "output_name": "phylogenetic_tree_figure",
+                "output_kind": "image",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 32702,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "phylogenetic_tree.png",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:458f4434339220882bd2d0afd4eb4cf15dbc148583c3c07ce67615d69669c896",
+              "id": "458f4434339220882bd2d0afd4eb4cf15dbc148583c3c07ce67615d69669c896",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/phylogenetic_tree.png",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "4abdef905000d380f63a84da444729a253af59655f1223a0bdf43df96bd8292d",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "consensus",
+                "output_name": "consensus",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">sample_demo|consensus\nACGTACGAACGTACGTACGTACGT\n"
+              },
+              "size": 48,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "consensus.fasta",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:45e58cad256c37163fef679c7076917129706e771cf78bed89bb67c5cff0a970",
+              "id": "45e58cad256c37163fef679c7076917129706e771cf78bed89bb67c5cff0a970",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/consensus.fasta",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "298bce179fe675293de783a7e5d983632c88bcef9eea88491bd2644297ded53a",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "alignments",
+                "output_name": "alignments",
+                "output_kind": "alignment",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "@HD\tVN:1.6\tSO:unknown\n@SQ\tSN:demo_reference\tLN:24\n@RG\tID:sample_demo\tSM:sample_demo\tPL:Illumina\nread001\t0\tdemo_reference\t1\t60\t24M\t*\t0\t0\tACGTACGTACGTACGTACGTACGT\tIIIIIIIIIIIIIIIIIIIIIIII\tRG:Z:sample_demo\tNM:i:0\nread002\t0\tdemo_reference\t1\t60\t24M\t*\t0\t0\tACGTACGAACGTACGTACGTACGT\tIIIIIIIIIIIIIIIIIIIIIIII\tRG:Z:sample_demo\tNM:i:1\nread003\t0\tdemo_reference\t1\t60\t24M\t*\t0\t0\tACGTACGAACGTACGTACGTACGT\tIIIIIIIIIIIIIIIIIIIIIIII\tRG:Z:sample_demo\tNM:i:1\n"
+              },
+              "size": 438,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "alignments.sam",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:46210f48c9b2b17c2bae4d2ccb399b91db62caddb65b23a092b5576ebf944567",
+              "id": "46210f48c9b2b17c2bae4d2ccb399b91db62caddb65b23a092b5576ebf944567",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/alignments.sam",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "ad9b29f6427999634547ea0a74749c91fe00f6cf539c77ebf36e9ac7be2cea7c",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "coverage_figure",
+                "output_name": "coverage_figure",
+                "output_kind": "image",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 35889,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "coverage.png",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:481dcec1c4d6373a27b4816f18eb4cd57cdbc59e47103ab78fa2f9fc49fdfa81",
+              "id": "481dcec1c4d6373a27b4816f18eb4cd57cdbc59e47103ab78fa2f9fc49fdfa81",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/coverage.png",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "1f9e8c0708537fe213d2da845f0d1278f6ffb2a72f6c7b4282a88449b8393ac8",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "sample_summary",
+                "output_name": "sample_summary",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "sample_id",
+                  "organism",
+                  "condition",
+                  "replicate",
+                  "library_layout",
+                  "platform",
+                  "collection_date",
+                  "input_read_count",
+                  "passed_read_count",
+                  "read_retention_percent",
+                  "mean_input_read_length",
+                  "mean_input_quality",
+                  "q30_base_percent",
+                  "mean_retained_depth",
+                  "reference_coverage_percent",
+                  "variant_count"
+                ],
+                "preview_rows": [
+                  [
+                    "sample_demo",
+                    "synthetic construct",
+                    "demo",
+                    "1",
+                    "single-end",
+                    "Illumina",
+                    "2026-01-15",
+                    "5",
+                    "3",
+                    "60.0",
+                    "20.8",
+                    "32.0",
+                    "76.92",
+                    "3.0",
+                    "100.0",
+                    "1"
+                  ]
+                ]
+              },
+              "size": 364,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "sample_summary.tsv",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:4afbde4e9e2f8ce6096637f4e4f5ba606ea1858bccbfe5b749e0ae63dfeb7a25",
+              "id": "4afbde4e9e2f8ce6096637f4e4f5ba606ea1858bccbfe5b749e0ae63dfeb7a25",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/sample_summary.tsv",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "07c3e1d2623c1df14a10e5b4672a7518dc23f48dfa05317f59f064ab1f961d54",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "filtered_reads",
+                "output_name": "filtered_reads",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "@read001 sample_demo identical\nACGTACGTACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read002 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read003 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n"
+              },
+              "size": 253,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "filtered_reads.fastq",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:50a813a8c51c559edeb94d4c20384093f3283fe7c9e9c4870e8c546bfbabe5ee",
+              "id": "50a813a8c51c559edeb94d4c20384093f3283fe7c9e9c4870e8c546bfbabe5ee",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/filtered_reads.fastq",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "079bce3c8066706a599d2e43834b64c48d66285985866df895c6ac9d27129ebf",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "phylogenetic_tree",
+                "output_name": "phylogenetic_tree",
+                "output_kind": "phylogenetic_tree",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "(demo_reference:0.020833,sample_demo_consensus:0.020833);\n"
+              },
+              "size": 58,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "phylogenetic_tree.nwk",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:5db5bbb7a2e46012932903fed4fcf77720efd19d66dc70823aa30a4f6c6d5068",
+              "id": "5db5bbb7a2e46012932903fed4fcf77720efd19d66dc70823aa30a4f6c6d5068",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/phylogenetic_tree.nwk",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "a53f470eb906cfa8c58e9869a1c8e124a9eaffa3dece328ca9d0df9c5a23c9a3",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 305870,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "results.zip",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:64c48def32d11ffcdb3b0a30bf6df4f501fab0143dd4dd3acc8588a321ec5a50",
+              "id": "64c48def32d11ffcdb3b0a30bf6df4f501fab0143dd4dd3acc8588a321ec5a50",
+              "source_path": "pipeline-bundles/e5bf11f30dbb4edea909325d8b1c258a/results.zip",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "ab843cad4c085902847f8145aec07c0f932ef591663efdc9cd13bac0c6acb79e",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "sample_id",
+                  "organism",
+                  "condition",
+                  "replicate",
+                  "library_layout",
+                  "platform",
+                  "collection_date"
+                ],
+                "preview_rows": [
+                  [
+                    "sample_demo",
+                    "synthetic construct",
+                    "demo",
+                    "1",
+                    "single-end",
+                    "Illumina",
+                    "2026-01-15"
+                  ]
+                ]
+              },
+              "size": 149,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "example_samples.tsv",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:66fcbf6fbfa158c87c72cf055d611734b487a204824b4d03f3d049306a31ba17",
+              "id": "66fcbf6fbfa158c87c72cf055d611734b487a204824b4d03f3d049306a31ba17",
+              "source_path": "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_samples.tsv",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "8fbb68db592ee65cdd2c16d4bbef378ac006c43c97472e40666a243f02e4e22a",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "qc_figure",
+                "output_name": "qc_figure",
+                "output_kind": "image",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 79528,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "qc_overview.png",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:6b2d83e337210c6ffd3614dbe8de4ce0fa71e1915167fe87b2a487c6404eb80f",
+              "id": "6b2d83e337210c6ffd3614dbe8de4ce0fa71e1915167fe87b2a487c6404eb80f",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/qc_overview.png",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "5e95fa95821c31e5446e051cdf4ccd4b82144ac71b809e065e1101c12386b60d",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "@read001 sample_demo identical\nACGTACGTACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read002 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read003 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read004 sample_demo low_quality\nACGTACGTACGTACGTACGTACGT\n+\n!!!!!!!!!!!!!!!!!!!!!!!!\n@read005 sample_demo short\nACGTACGT\n+\nIIIIIIII\n"
+              },
+              "size": 385,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "example_reads.fastq",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:a0231d7ca5c54d603befb5d14a0a49eeed7e5b336b1cce7acbc4524843717edc",
+              "id": "a0231d7ca5c54d603befb5d14a0a49eeed7e5b336b1cce7acbc4524843717edc",
+              "source_path": "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_reads.fastq",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "2a35486b26655a75cf649c494b0d88d9009933e488ab235bd64aa24ac10c322b",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "read_qc",
+                "output_name": "read_qc",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "read_id",
+                  "length",
+                  "gc_percent",
+                  "mean_quality",
+                  "q20_bases",
+                  "q30_bases",
+                  "status"
+                ],
+                "preview_rows": [
+                  [
+                    "read001",
+                    "24",
+                    "50.00",
+                    "40.00",
+                    "24",
+                    "24",
+                    "pass"
+                  ],
+                  [
+                    "read002",
+                    "24",
+                    "50.00",
+                    "40.00",
+                    "24",
+                    "24",
+                    "pass"
+                  ],
+                  [
+                    "read003",
+                    "24",
+                    "50.00",
+                    "40.00",
+                    "24",
+                    "24",
+                    "pass"
+                  ]
+                ]
+              },
+              "size": 238,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "read_qc.tsv",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:beb9e1beb905e0b59a79bbcb682a7abf22577912d3fd645dd6809c716a0bc3a7",
+              "id": "beb9e1beb905e0b59a79bbcb682a7abf22577912d3fd645dd6809c716a0bc3a7",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/read_qc.tsv",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "062e8abb162232d2fcc1b039ee9a2ea51a09fcc3a90cda62b044e0866b54fdd5",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "variants",
+                "output_name": "variants",
+                "output_kind": "variants",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "##fileformat=VCFv4.2\n##source=template_bio_positional_comparison\n##contig=<ID=demo_reference,length=24>\n##INFO=<ID=DP,Number=1,Type=Integer,Description=\"Read depth\">\n##INFO=<ID=AF,Number=A,Type=Float,Description=\"Alternate allele fraction\">\n##INFO=<ID=TYPE,Number=1,Type=String,Description=\"SNV change type\">\n##FORMAT=<ID=GT,Number=1,Type=String,Description=\"Haploid genotype\">\n##FORMAT=<ID=AD,Number=R,Type=Integer,Description=\"Allele depths\">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tsample_demo\ndemo_reference\t8\t.\tT\tA\t.\tPASS\tDP=3;AF=0.6667;TYPE=transversion\tGT:AD\t1:1,2\n"
+              },
+              "size": 578,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "variants.vcf",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:bf33e599ac0e926c9aa6b3566825c799eb72244f5c7a8cce21f6dc66abeb04ac",
+              "id": "bf33e599ac0e926c9aa6b3566825c799eb72244f5c7a8cce21f6dc66abeb04ac",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variants.vcf",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "cf2fda9b1d77ff559bdf39679792a7d9f3db8418e940c6f0810192f01b72a95d",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "variant_table",
+                "output_name": "variant_table",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "chrom",
+                  "position",
+                  "ref",
+                  "alt",
+                  "depth",
+                  "ref_depth",
+                  "alt_depth",
+                  "alt_fraction",
+                  "change_type",
+                  "filter"
+                ],
+                "preview_rows": [
+                  [
+                    "demo_reference",
+                    "8",
+                    "T",
+                    "A",
+                    "3",
+                    "1",
+                    "2",
+                    "0.6667",
+                    "transversion",
+                    "PASS"
+                  ]
+                ]
+              },
+              "size": 133,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "variant_summary.tsv",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:d6e57b866744c143b395576f47aec21d02cd25cbab85e86c0bee0c08a7ec527d",
+              "id": "d6e57b866744c143b395576f47aec21d02cd25cbab85e86c0bee0c08a7ec527d",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variant_summary.tsv",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "518587c3545d7916ed6bf764b6054435cca4acc232307958878c6be7a29e24f3",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "html_report",
+                "output_name": "html_report",
+                "output_kind": "report",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Template Bioinformatics Report — sample_demo</title>\n<style>\nbody { color:#1f2933; background:#f5f7fa; font:15px/1.5 system-ui,sans-serif; margin:0; }\nmain { max-width:1100px; margin:auto; padding:32px; }\nh1,h2 { color:#102a43; } .muted { color:#627d98; }\n.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; }\n.card,section { background:white; border:1px solid #d9e2ec; border-radius:10px; padding:18px; margin:16px 0; }\n.card span,.card strong { display:block; } .card strong { color:#0b7285; font-size:1.5rem; }\ntable { border-collapse:collapse; width:100%; } th,td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; }\nimg { max-width:100%; height:auto; } figure { margin:20px 0; } figcaption { color:#627d98; text-align:center; }\ncode { overflow-wrap:anywhere; } .warning { border-left:5px solid #d9480f; }\n</style>\n</head>\n<body…"
+              },
+              "size": 240684,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "report.html",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:d9b8544b229419a1184582530f4b4aeb02a059605edd2e69125c22e446019fbb",
+              "id": "d9b8544b229419a1184582530f4b4aeb02a059605edd2e69125c22e446019fbb",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/report.html",
+              "sample_name": "template_bio"
+            },
+            {
+              "sha256": "0113be9f3870d6819612d47d18ac8d1e81a6dc00a1b0405ae802d870512ed3bd",
+              "kind": "analysis_output",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "pipeline_result": {
+                "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+                "pipeline_name": "template_bio",
+                "output_key": "variant_figure",
+                "output_name": "variant_figure",
+                "output_kind": "image",
+                "completed_at": "2026-11-09T06:43:59.728189+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 28447,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "variant_allele_fraction.png",
+              "data_type": "meta",
+              "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:f9e06b1d99ee9f5f2920ccee236ccdbad923c8a2bc97c6ae7f671b724cc27a6b",
+              "id": "f9e06b1d99ee9f5f2920ccee236ccdbad923c8a2bc97c6ae7f671b724cc27a6b",
+              "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variant_allele_fraction.png",
+              "sample_name": "template_bio"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:654ad25d6f4c300794b8ffea8bce2085",
+              "importable": false,
+              "sample_name": "template_bio",
+              "data_type": "meta",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085"
+            },
+            {
+              "size": 385,
+              "kind": "source_file",
+              "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+              "name": "example_reads.fastq",
+              "data_type": "meta",
+              "resource_id": "source:meta:654ad25d6f4c300794b8ffea8bce2085:R1",
+              "slot": "R1",
+              "id": "5d0017cba5163fcd9cb66ef6b0331080",
+              "sample_name": "template_bio"
+            }
+          ],
+          "total": 22,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:35f87442b1113ecf2ec9bb822813b8a8d198d8982a3b02cd921fc4e69d00bd29"
+      },
+      "transfer_id": "101f72000aba4848b0901e47f171520d",
+      "response": {
+        "transfer_id": "101f72000aba4848b0901e47f171520d",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/1a0178b1e1bd467e9bf2fdf31141750d_example_reference.fasta",
+            "workspace_path": "uploads/1a0178b1e1bd467e9bf2fdf31141750d_example_reference.fasta",
+            "name": "example_reference.fasta",
+            "size": 61,
+            "sha256": "73f4c86513507e373bc902232aded85b398678e313f059b42b26e1ae38c4fd09",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:3792cd84575c28de6c0c9988165b2afde20983f9bd1af4e18ee30fe1b4d28569"
+      },
+      "transfer_id": "ee4047b941464761bc350913f1f3cf21",
+      "response": {
+        "transfer_id": "ee4047b941464761bc350913f1f3cf21",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/c76199af13c44aa5aca6f7a880ebe486_report.md",
+            "workspace_path": "uploads/c76199af13c44aa5aca6f7a880ebe486_report.md",
+            "name": "report.md",
+            "size": 2442,
+            "sha256": "d90385160aab51ca6e9393dd3378e9d6af493f8f5ac8cbdafd131ce16e784453",
+            "kind": "upload",
+            "content_type": "text/markdown; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:39bd6b2b860f2dad5240a96150d7683435a581930a046fa23c2538291371167e"
+      },
+      "transfer_id": "4a6bcdf98aa44adc85ef578c1e07ae51",
+      "response": {
+        "transfer_id": "4a6bcdf98aa44adc85ef578c1e07ae51",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/23214fde61064894a1cddb443802df81_metrics.json",
+            "workspace_path": "uploads/23214fde61064894a1cddb443802df81_metrics.json",
+            "name": "metrics.json",
+            "size": 1240,
+            "sha256": "8d325baafc5e32e9efbe02a92ace5aaed42541d0d8aba3395f3f7337262bc1bd",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:44c87c4bab704db7e13b18fb5e60258cbe31bd4298cb19cb863f96ee1626741b"
+      },
+      "transfer_id": "d01802a092b741efa41ed1b8765464e0",
+      "response": {
+        "transfer_id": "d01802a092b741efa41ed1b8765464e0",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/d7a1c337c6cc41c1a8e5aa94a2042d17_coverage.tsv",
+            "workspace_path": "uploads/d7a1c337c6cc41c1a8e5aa94a2042d17_coverage.tsv",
+            "name": "coverage.tsv",
+            "size": 889,
+            "sha256": "4c0e47b4faac72a220407e4f22fa11a0f38a522753a68631d21743b7048191bb",
+            "kind": "upload",
+            "content_type": "text/tab-separated-values; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:458f4434339220882bd2d0afd4eb4cf15dbc148583c3c07ce67615d69669c896"
+      },
+      "transfer_id": "569cfd1640794c02b96066323181fe83",
+      "response": {
+        "transfer_id": "569cfd1640794c02b96066323181fe83",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/b9043ec330ed45b482fcc592199d61d3_phylogenetic_tree.png",
+            "workspace_path": "uploads/b9043ec330ed45b482fcc592199d61d3_phylogenetic_tree.png",
+            "name": "phylogenetic_tree.png",
+            "size": 32702,
+            "sha256": "4accf066bee5fe78569eada9122f0a02a2b0d3761e09dd7142f6ac434c53306e",
+            "kind": "upload",
+            "content_type": "image/png"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:45e58cad256c37163fef679c7076917129706e771cf78bed89bb67c5cff0a970"
+      },
+      "transfer_id": "aa1f3226cf4e4ad7b4e9b6e3a2257078",
+      "response": {
+        "transfer_id": "aa1f3226cf4e4ad7b4e9b6e3a2257078",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/199aec353e0243e39cf3f43566835532_consensus.fasta",
+            "workspace_path": "uploads/199aec353e0243e39cf3f43566835532_consensus.fasta",
+            "name": "consensus.fasta",
+            "size": 48,
+            "sha256": "4abdef905000d380f63a84da444729a253af59655f1223a0bdf43df96bd8292d",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:46210f48c9b2b17c2bae4d2ccb399b91db62caddb65b23a092b5576ebf944567"
+      },
+      "transfer_id": "936ae632a3bb44be897c0b8815344b4e",
+      "response": {
+        "transfer_id": "936ae632a3bb44be897c0b8815344b4e",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/4832147ea8a34c329f6035fd9256ccab_alignments.sam",
+            "workspace_path": "uploads/4832147ea8a34c329f6035fd9256ccab_alignments.sam",
+            "name": "alignments.sam",
+            "size": 438,
+            "sha256": "298bce179fe675293de783a7e5d983632c88bcef9eea88491bd2644297ded53a",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:481dcec1c4d6373a27b4816f18eb4cd57cdbc59e47103ab78fa2f9fc49fdfa81"
+      },
+      "transfer_id": "a73163e59e78480c9c2f9976f88de86d",
+      "response": {
+        "transfer_id": "a73163e59e78480c9c2f9976f88de86d",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/d174da165f494bbd91bc9b038e7700f1_coverage.png",
+            "workspace_path": "uploads/d174da165f494bbd91bc9b038e7700f1_coverage.png",
+            "name": "coverage.png",
+            "size": 35889,
+            "sha256": "ad9b29f6427999634547ea0a74749c91fe00f6cf539c77ebf36e9ac7be2cea7c",
+            "kind": "upload",
+            "content_type": "image/png"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:4afbde4e9e2f8ce6096637f4e4f5ba606ea1858bccbfe5b749e0ae63dfeb7a25"
+      },
+      "transfer_id": "086df94e35c94ad797bc0929f49d8778",
+      "response": {
+        "transfer_id": "086df94e35c94ad797bc0929f49d8778",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/6fd01a367b48475bb6447a7f052c07dc_sample_summary.tsv",
+            "workspace_path": "uploads/6fd01a367b48475bb6447a7f052c07dc_sample_summary.tsv",
+            "name": "sample_summary.tsv",
+            "size": 364,
+            "sha256": "1f9e8c0708537fe213d2da845f0d1278f6ffb2a72f6c7b4282a88449b8393ac8",
+            "kind": "upload",
+            "content_type": "text/tab-separated-values; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:50a813a8c51c559edeb94d4c20384093f3283fe7c9e9c4870e8c546bfbabe5ee"
+      },
+      "transfer_id": "7f5525ae6bd04191a06fa21446deb4e6",
+      "response": {
+        "transfer_id": "7f5525ae6bd04191a06fa21446deb4e6",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/14a4296cb05645569f781f4cd221c6ec_filtered_reads.fastq",
+            "workspace_path": "uploads/14a4296cb05645569f781f4cd221c6ec_filtered_reads.fastq",
+            "name": "filtered_reads.fastq",
+            "size": 253,
+            "sha256": "07c3e1d2623c1df14a10e5b4672a7518dc23f48dfa05317f59f064ab1f961d54",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:5db5bbb7a2e46012932903fed4fcf77720efd19d66dc70823aa30a4f6c6d5068"
+      },
+      "transfer_id": "f3cd27e936f7471c9c0cf4071586ce16",
+      "response": {
+        "transfer_id": "f3cd27e936f7471c9c0cf4071586ce16",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/bd7b33cfd5aa43f49e58acc6d8a5eb50_phylogenetic_tree.nwk",
+            "workspace_path": "uploads/bd7b33cfd5aa43f49e58acc6d8a5eb50_phylogenetic_tree.nwk",
+            "name": "phylogenetic_tree.nwk",
+            "size": 58,
+            "sha256": "079bce3c8066706a599d2e43834b64c48d66285985866df895c6ac9d27129ebf",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:64c48def32d11ffcdb3b0a30bf6df4f501fab0143dd4dd3acc8588a321ec5a50"
+      },
+      "transfer_id": "3a29af1f8fba4d4a8d27a4bf81fec1cd",
+      "response": {
+        "transfer_id": "3a29af1f8fba4d4a8d27a4bf81fec1cd",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/4df735c475bc442b95064361f186a31d_results.zip",
+            "workspace_path": "uploads/4df735c475bc442b95064361f186a31d_results.zip",
+            "name": "results.zip",
+            "size": 305870,
+            "sha256": "a53f470eb906cfa8c58e9869a1c8e124a9eaffa3dece328ca9d0df9c5a23c9a3",
+            "kind": "upload",
+            "content_type": "application/zip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:66fcbf6fbfa158c87c72cf055d611734b487a204824b4d03f3d049306a31ba17"
+      },
+      "transfer_id": "7d7b4b6efe924d11acb60bb8a8c27aa6",
+      "response": {
+        "transfer_id": "7d7b4b6efe924d11acb60bb8a8c27aa6",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/5655de8943894238935d9f72e78fc8e5_example_samples.tsv",
+            "workspace_path": "uploads/5655de8943894238935d9f72e78fc8e5_example_samples.tsv",
+            "name": "example_samples.tsv",
+            "size": 149,
+            "sha256": "ab843cad4c085902847f8145aec07c0f932ef591663efdc9cd13bac0c6acb79e",
+            "kind": "upload",
+            "content_type": "text/tab-separated-values; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:6b2d83e337210c6ffd3614dbe8de4ce0fa71e1915167fe87b2a487c6404eb80f"
+      },
+      "transfer_id": "7492896e76844b41a1480ed65415a0fa",
+      "response": {
+        "transfer_id": "7492896e76844b41a1480ed65415a0fa",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/b295e209875742acb013f70a0aeedbaf_qc_overview.png",
+            "workspace_path": "uploads/b295e209875742acb013f70a0aeedbaf_qc_overview.png",
+            "name": "qc_overview.png",
+            "size": 79528,
+            "sha256": "8fbb68db592ee65cdd2c16d4bbef378ac006c43c97472e40666a243f02e4e22a",
+            "kind": "upload",
+            "content_type": "image/png"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:a0231d7ca5c54d603befb5d14a0a49eeed7e5b336b1cce7acbc4524843717edc"
+      },
+      "transfer_id": "48499eabb2024858bc5175a97f5a7424",
+      "response": {
+        "transfer_id": "48499eabb2024858bc5175a97f5a7424",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/5d4a1d5defc744de9ab2680cd38bc015_example_reads.fastq",
+            "workspace_path": "uploads/5d4a1d5defc744de9ab2680cd38bc015_example_reads.fastq",
+            "name": "example_reads.fastq",
+            "size": 385,
+            "sha256": "5e95fa95821c31e5446e051cdf4ccd4b82144ac71b809e065e1101c12386b60d",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:beb9e1beb905e0b59a79bbcb682a7abf22577912d3fd645dd6809c716a0bc3a7"
+      },
+      "transfer_id": "c81746f44d3e49879ee075f3c03eb1e5",
+      "response": {
+        "transfer_id": "c81746f44d3e49879ee075f3c03eb1e5",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/47aa4213cfa04fed9cad434683864614_read_qc.tsv",
+            "workspace_path": "uploads/47aa4213cfa04fed9cad434683864614_read_qc.tsv",
+            "name": "read_qc.tsv",
+            "size": 238,
+            "sha256": "2a35486b26655a75cf649c494b0d88d9009933e488ab235bd64aa24ac10c322b",
+            "kind": "upload",
+            "content_type": "text/tab-separated-values; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:bf33e599ac0e926c9aa6b3566825c799eb72244f5c7a8cce21f6dc66abeb04ac"
+      },
+      "transfer_id": "3c4812c235304dd1a9c35283d9b03d7b",
+      "response": {
+        "transfer_id": "3c4812c235304dd1a9c35283d9b03d7b",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/96cf88e6c3714567a023fce1d18fb8f8_variants.vcf",
+            "workspace_path": "uploads/96cf88e6c3714567a023fce1d18fb8f8_variants.vcf",
+            "name": "variants.vcf",
+            "size": 578,
+            "sha256": "062e8abb162232d2fcc1b039ee9a2ea51a09fcc3a90cda62b044e0866b54fdd5",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:d6e57b866744c143b395576f47aec21d02cd25cbab85e86c0bee0c08a7ec527d"
+      },
+      "transfer_id": "d2ee429221a34cfda8c3c86d13219b7a",
+      "response": {
+        "transfer_id": "d2ee429221a34cfda8c3c86d13219b7a",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/eeee061e24ce4335a86f96be8957e742_variant_summary.tsv",
+            "workspace_path": "uploads/eeee061e24ce4335a86f96be8957e742_variant_summary.tsv",
+            "name": "variant_summary.tsv",
+            "size": 133,
+            "sha256": "cf2fda9b1d77ff559bdf39679792a7d9f3db8418e940c6f0810192f01b72a95d",
+            "kind": "upload",
+            "content_type": "text/tab-separated-values; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:d9b8544b229419a1184582530f4b4aeb02a059605edd2e69125c22e446019fbb"
+      },
+      "transfer_id": "e6e500df25084d19870fc4997035b138",
+      "response": {
+        "transfer_id": "e6e500df25084d19870fc4997035b138",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/b3c92cba44f44f99b589bc5f2fc85a10_report.html",
+            "workspace_path": "uploads/b3c92cba44f44f99b589bc5f2fc85a10_report.html",
+            "name": "report.html",
+            "size": 240684,
+            "sha256": "518587c3545d7916ed6bf764b6054435cca4acc232307958878c6be7a29e24f3",
+            "kind": "upload",
+            "content_type": "text/html; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:f9e06b1d99ee9f5f2920ccee236ccdbad923c8a2bc97c6ae7f671b724cc27a6b"
+      },
+      "transfer_id": "376606c257c942a2a41097b7ec380bc2",
+      "response": {
+        "transfer_id": "376606c257c942a2a41097b7ec380bc2",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+            "path": "uploads/4ef4ef47e9bc462c8cfeb8a83095c318_variant_allele_fraction.png",
+            "workspace_path": "uploads/4ef4ef47e9bc462c8cfeb8a83095c318_variant_allele_fraction.png",
+            "name": "variant_allele_fraction.png",
+            "size": 28447,
+            "sha256": "0113be9f3870d6819612d47d18ac8d1e81a6dc00a1b0405ae802d870512ed3bd",
+            "kind": "upload",
+            "content_type": "image/png"
+          }
+        }
+      }
+    }
+  ],
+  "attempt_history": [
+    {
+      "pipeline": "template_bio",
+      "engine": "shell",
+      "manifest_sha256": "98d2ba78eb023f5f4c01cf8ee97aa1303dd69ba7767615d9c7b6f4fa89a0a4d4",
+      "selected_for_execution": true,
+      "execution_status": "setup_failed",
+      "scope_note": "",
+      "examples": [
+        {
+          "path": "tools/runtime_tools/pipelines/template_bio/data/input/example_reads.fastq",
+          "bytes": 385,
+          "sha256": "5e95fa95821c31e5446e051cdf4ccd4b82144ac71b809e065e1101c12386b60d"
+        },
+        {
+          "path": "tools/runtime_tools/pipelines/template_bio/data/input/example_reference.fasta",
+          "bytes": 61,
+          "sha256": "73f4c86513507e373bc902232aded85b398678e313f059b42b26e1ae38c4fd09"
+        },
+        {
+          "path": "tools/runtime_tools/pipelines/template_bio/data/input/example_samples.tsv",
+          "bytes": 149,
+          "sha256": "ab843cad4c085902847f8145aec07c0f932ef591663efdc9cd13bac0c6acb79e"
+        }
+      ],
+      "contract": {
+        "valid": true,
+        "inputs": [
+          "reads",
+          "reference",
+          "metadata"
+        ],
+        "outputs": [
+          "report",
+          "metrics",
+          "html_report",
+          "filtered_reads",
+          "read_qc",
+          "sample_summary",
+          "coverage",
+          "alignments",
+          "consensus",
+          "variants",
+          "variant_table",
+          "qc_figure",
+          "coverage_figure",
+          "variant_figure",
+          "phylogenetic_tree",
+          "phylogenetic_tree_figure"
+        ]
+      },
+      "transfers": [],
+      "session_id": "0876feda-cafa-4777-920c-c5e611189d1a",
+      "assigned_inputs": {
+        "reads": "uploads/examples/template_bio-f2c66d94f4bc4fb486837e9cfe0e452e/example_reads.fastq",
+        "reference": "uploads/examples/template_bio-f2c66d94f4bc4fb486837e9cfe0e452e/example_reference.fasta",
+        "metadata": "uploads/examples/template_bio-f2c66d94f4bc4fb486837e9cfe0e452e/example_samples.tsv"
+      },
+      "parameter_overrides": {},
+      "plan_id": "ebdb08267a884c5899e24e7c799c67e5",
+      "harness_error": "ValueError: Pipeline job limit reached (2 per account, 16 server-wide).",
+      "elapsed_seconds": 0.79,
+      "test_finished": true
+    }
+  ],
+  "session_id": "6f7442f2-efb7-4462-bb87-a14c568952c0",
+  "assigned_inputs": {
+    "reads": "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_reads.fastq",
+    "reference": "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_reference.fasta",
+    "metadata": "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_samples.tsv"
+  },
+  "parameter_overrides": {},
+  "plan_id": "e5bf11f30dbb4edea909325d8b1c258a",
+  "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+  "last_state": {
+    "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+    "plan_id": "e5bf11f30dbb4edea909325d8b1c258a",
+    "status": "succeeded",
+    "created_at": "2026-11-09T06:43:52.973905+00:00",
+    "started_at": "2026-11-09T06:43:53.275856+00:00",
+    "finished_at": "2026-11-09T06:43:59.728189+00:00",
+    "updated_at": "2026-11-09T06:43:59.729056+00:00",
+    "pipeline_name": "template_bio"
+  },
+  "results": {
+    "status": "succeeded",
+    "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+    "pipeline_name": "template_bio",
+    "files": [
+      {
+        "name": "report",
+        "label": "Analysis report",
+        "config_key": "report_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/report.md",
+        "raw_path": "report.md",
+        "kind": "report",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/report.md",
+        "sha256": "d90385160aab51ca6e9393dd3378e9d6af493f8f5ac8cbdafd131ce16e784453",
+        "size": 2442,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "report",
+          "output_name": "report",
+          "output_kind": "report",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "metrics",
+        "label": "QC and analysis metrics",
+        "config_key": "metrics_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/metrics.json",
+        "raw_path": "metrics.json",
+        "kind": "metrics",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/metrics.json",
+        "sha256": "8d325baafc5e32e9efbe02a92ace5aaed42541d0d8aba3395f3f7337262bc1bd",
+        "size": 1240,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "metrics",
+          "output_name": "metrics",
+          "output_kind": "metrics",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "html_report",
+        "label": "Interactive-style HTML report",
+        "config_key": "html_report_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/report.html",
+        "raw_path": "report.html",
+        "kind": "report",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/report.html",
+        "sha256": "518587c3545d7916ed6bf764b6054435cca4acc232307958878c6be7a29e24f3",
+        "size": 240684,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "html_report",
+          "output_name": "html_report",
+          "output_kind": "report",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "filtered_reads",
+        "label": "Quality-filtered FASTQ",
+        "config_key": "filtered_fastq_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/filtered_reads.fastq",
+        "raw_path": "filtered_reads.fastq",
+        "kind": "sequence",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/filtered_reads.fastq",
+        "sha256": "07c3e1d2623c1df14a10e5b4672a7518dc23f48dfa05317f59f064ab1f961d54",
+        "size": 253,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "filtered_reads",
+          "output_name": "filtered_reads",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "read_qc",
+        "label": "Per-read QC table",
+        "config_key": "read_qc_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/read_qc.tsv",
+        "raw_path": "read_qc.tsv",
+        "kind": "table",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/read_qc.tsv",
+        "sha256": "2a35486b26655a75cf649c494b0d88d9009933e488ab235bd64aa24ac10c322b",
+        "size": 238,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "read_qc",
+          "output_name": "read_qc",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "sample_summary",
+        "label": "Sample summary table",
+        "config_key": "sample_summary_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/sample_summary.tsv",
+        "raw_path": "sample_summary.tsv",
+        "kind": "table",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/sample_summary.tsv",
+        "sha256": "1f9e8c0708537fe213d2da845f0d1278f6ffb2a72f6c7b4282a88449b8393ac8",
+        "size": 364,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "sample_summary",
+          "output_name": "sample_summary",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "coverage",
+        "label": "Per-position coverage table",
+        "config_key": "coverage_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/coverage.tsv",
+        "raw_path": "coverage.tsv",
+        "kind": "table",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/coverage.tsv",
+        "sha256": "4c0e47b4faac72a220407e4f22fa11a0f38a522753a68631d21743b7048191bb",
+        "size": 889,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "coverage",
+          "output_name": "coverage",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "alignments",
+        "label": "Demonstration alignments",
+        "config_key": "alignment_sam_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/alignments.sam",
+        "raw_path": "alignments.sam",
+        "kind": "alignment",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/alignments.sam",
+        "sha256": "298bce179fe675293de783a7e5d983632c88bcef9eea88491bd2644297ded53a",
+        "size": 438,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "alignments",
+          "output_name": "alignments",
+          "output_kind": "alignment",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "consensus",
+        "label": "Consensus sequence",
+        "config_key": "consensus_fasta_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/consensus.fasta",
+        "raw_path": "consensus.fasta",
+        "kind": "sequence",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/consensus.fasta",
+        "sha256": "4abdef905000d380f63a84da444729a253af59655f1223a0bdf43df96bd8292d",
+        "size": 48,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "consensus",
+          "output_name": "consensus",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "variants",
+        "label": "Demonstration variants",
+        "config_key": "variants_vcf_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variants.vcf",
+        "raw_path": "variants.vcf",
+        "kind": "variants",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variants.vcf",
+        "sha256": "062e8abb162232d2fcc1b039ee9a2ea51a09fcc3a90cda62b044e0866b54fdd5",
+        "size": 578,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "variants",
+          "output_name": "variants",
+          "output_kind": "variants",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "variant_table",
+        "label": "Variant summary table",
+        "config_key": "variant_table_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variant_summary.tsv",
+        "raw_path": "variant_summary.tsv",
+        "kind": "table",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variant_summary.tsv",
+        "sha256": "cf2fda9b1d77ff559bdf39679792a7d9f3db8418e940c6f0810192f01b72a95d",
+        "size": 133,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "variant_table",
+          "output_name": "variant_table",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "qc_figure",
+        "label": "Read QC overview figure",
+        "config_key": "qc_figure_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/qc_overview.png",
+        "raw_path": "qc_overview.png",
+        "kind": "image",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/qc_overview.png",
+        "sha256": "8fbb68db592ee65cdd2c16d4bbef378ac006c43c97472e40666a243f02e4e22a",
+        "size": 79528,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "qc_figure",
+          "output_name": "qc_figure",
+          "output_kind": "image",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "coverage_figure",
+        "label": "Coverage profile figure",
+        "config_key": "coverage_figure_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/coverage.png",
+        "raw_path": "coverage.png",
+        "kind": "image",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/coverage.png",
+        "sha256": "ad9b29f6427999634547ea0a74749c91fe00f6cf539c77ebf36e9ac7be2cea7c",
+        "size": 35889,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "coverage_figure",
+          "output_name": "coverage_figure",
+          "output_kind": "image",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "variant_figure",
+        "label": "Variant allele fraction figure",
+        "config_key": "variant_figure_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variant_allele_fraction.png",
+        "raw_path": "variant_allele_fraction.png",
+        "kind": "image",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variant_allele_fraction.png",
+        "sha256": "0113be9f3870d6819612d47d18ac8d1e81a6dc00a1b0405ae802d870512ed3bd",
+        "size": 28447,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "variant_figure",
+          "output_name": "variant_figure",
+          "output_kind": "image",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "phylogenetic_tree",
+        "label": "Optional phylogenetic tree",
+        "config_key": "phylogenetic_tree_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/phylogenetic_tree.nwk",
+        "raw_path": "phylogenetic_tree.nwk",
+        "kind": "phylogenetic_tree",
+        "required": false,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/phylogenetic_tree.nwk",
+        "sha256": "079bce3c8066706a599d2e43834b64c48d66285985866df895c6ac9d27129ebf",
+        "size": 58,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "phylogenetic_tree",
+          "output_name": "phylogenetic_tree",
+          "output_kind": "phylogenetic_tree",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      },
+      {
+        "name": "phylogenetic_tree_figure",
+        "label": "Optional phylogenetic tree figure",
+        "config_key": "phylogenetic_tree_figure_path",
+        "path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/phylogenetic_tree.png",
+        "raw_path": "phylogenetic_tree.png",
+        "kind": "image",
+        "required": false,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/phylogenetic_tree.png",
+        "sha256": "4accf066bee5fe78569eada9122f0a02a2b0d3761e09dd7142f6ac434c53306e",
+        "size": 32702,
+        "pipeline_result": {
+          "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+          "pipeline_name": "template_bio",
+          "output_key": "phylogenetic_tree_figure",
+          "output_name": "phylogenetic_tree_figure",
+          "output_kind": "image",
+          "completed_at": "2026-11-09T06:43:59.728189+00:00"
+        }
+      }
+    ],
+    "metrics": {
+      "aligned_read_count": 3,
+      "base_retention_percent": 69.23,
+      "bases_at_3x_percent": 100.0,
+      "covered_reference_bases": 24,
+      "failed_read_count": 2,
+      "filter_outcomes": {
+        "low_quality": 1,
+        "pass": 3,
+        "short": 1
+      },
+      "input_base_count": 104,
+      "input_read_count": 5,
+      "maximum_retained_depth": 3,
+      "mean_input_gc_percent": 50.0,
+      "mean_input_quality": 32.0,
+      "mean_input_read_length": 20.8,
+      "mean_retained_depth": 3.0,
+      "mean_retained_read_length": 24.0,
+      "metadata_field_count": 7,
+      "mode": "educational_positional_comparison",
+      "parameters": {
+        "emit_phylogenetic_tree": true,
+        "min_alt_depth": 2,
+        "min_alt_fraction": 0.6,
+        "min_base_quality": 20,
+        "min_length": 12,
+        "min_mean_quality": 20.0,
+        "plot_dpi": 140,
+        "sample_id": "sample_demo"
+      },
+      "passed_read_count": 3,
+      "phylogenetic_tree_emitted": true,
+      "pipeline": "template_bio",
+      "q20_base_percent": 76.92,
+      "q30_base_percent": 76.92,
+      "read_retention_percent": 60.0,
+      "reference_coverage_percent": 100.0,
+      "reference_id": "demo_reference",
+      "reference_length": 24,
+      "retained_base_count": 72,
+      "sample_id": "sample_demo",
+      "status": "ok",
+      "transition_count": 0,
+      "transversion_count": 1,
+      "variant_count": 1
+    },
+    "tables": [
+      {
+        "name": "read_qc.tsv",
+        "columns": [
+          "read_id",
+          "length",
+          "gc_percent",
+          "mean_quality",
+          "q20_bases",
+          "q30_bases",
+          "status"
+        ],
+        "rows": [
+          {
+            "read_id": "read001",
+            "length": "24",
+            "gc_percent": "50.00",
+            "mean_quality": "40.00",
+            "q20_bases": "24",
+            "q30_bases": "24",
+            "status": "pass"
+          },
+          {
+            "read_id": "read002",
+            "length": "24",
+            "gc_percent": "50.00",
+            "mean_quality": "40.00",
+            "q20_bases": "24",
+            "q30_bases": "24",
+            "status": "pass"
+          },
+          {
+            "read_id": "read003",
+            "length": "24",
+            "gc_percent": "50.00",
+            "mean_quality": "40.00",
+            "q20_bases": "24",
+            "q30_bases": "24",
+            "status": "pass"
+          },
+          {
+            "read_id": "read004",
+            "length": "24",
+            "gc_percent": "50.00",
+            "mean_quality": "0.00",
+            "q20_bases": "0",
+            "q30_bases": "0",
+            "status": "low_quality"
+          },
+          {
+            "read_id": "read005",
+            "length": "8",
+            "gc_percent": "50.00",
+            "mean_quality": "40.00",
+            "q20_bases": "8",
+            "q30_bases": "8",
+            "status": "short"
+          }
+        ],
+        "truncated": false
+      },
+      {
+        "name": "sample_summary.tsv",
+        "columns": [
+          "sample_id",
+          "organism",
+          "condition",
+          "replicate",
+          "library_layout",
+          "platform",
+          "collection_date",
+          "input_read_count",
+          "passed_read_count",
+          "read_retention_percent",
+          "mean_input_read_length",
+          "mean_input_quality",
+          "q30_base_percent",
+          "mean_retained_depth",
+          "reference_coverage_percent",
+          "variant_count"
+        ],
+        "rows": [
+          {
+            "sample_id": "sample_demo",
+            "organism": "synthetic construct",
+            "condition": "demo",
+            "replicate": "1",
+            "library_layout": "single-end",
+            "platform": "Illumina",
+            "collection_date": "2026-01-15",
+            "input_read_count": "5",
+            "passed_read_count": "3",
+            "read_retention_percent": "60.0",
+            "mean_input_read_length": "20.8",
+            "mean_input_quality": "32.0",
+            "q30_base_percent": "76.92",
+            "mean_retained_depth": "3.0",
+            "reference_coverage_percent": "100.0",
+            "variant_count": "1"
+          }
+        ],
+        "truncated": false
+      },
+      {
+        "name": "coverage.tsv",
+        "columns": [
+          "chrom",
+          "position",
+          "reference",
+          "depth",
+          "A",
+          "C",
+          "G",
+          "T",
+          "consensus",
+          "variant"
+        ],
+        "rows": [
+          {
+            "chrom": "demo_reference",
+            "position": "1",
+            "reference": "A",
+            "depth": "3",
+            "A": "3",
+            "C": "0",
+            "G": "0",
+            "T": "0",
+            "consensus": "A",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "2",
+            "reference": "C",
+            "depth": "3",
+            "A": "0",
+            "C": "3",
+            "G": "0",
+            "T": "0",
+            "consensus": "C",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "3",
+            "reference": "G",
+            "depth": "3",
+            "A": "0",
+            "C": "0",
+            "G": "3",
+            "T": "0",
+            "consensus": "G",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "4",
+            "reference": "T",
+            "depth": "3",
+            "A": "0",
+            "C": "0",
+            "G": "0",
+            "T": "3",
+            "consensus": "T",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "5",
+            "reference": "A",
+            "depth": "3",
+            "A": "3",
+            "C": "0",
+            "G": "0",
+            "T": "0",
+            "consensus": "A",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "6",
+            "reference": "C",
+            "depth": "3",
+            "A": "0",
+            "C": "3",
+            "G": "0",
+            "T": "0",
+            "consensus": "C",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "7",
+            "reference": "G",
+            "depth": "3",
+            "A": "0",
+            "C": "0",
+            "G": "3",
+            "T": "0",
+            "consensus": "G",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "8",
+            "reference": "T",
+            "depth": "3",
+            "A": "2",
+            "C": "0",
+            "G": "0",
+            "T": "1",
+            "consensus": "A",
+            "variant": "yes"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "9",
+            "reference": "A",
+            "depth": "3",
+            "A": "3",
+            "C": "0",
+            "G": "0",
+            "T": "0",
+            "consensus": "A",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "10",
+            "reference": "C",
+            "depth": "3",
+            "A": "0",
+            "C": "3",
+            "G": "0",
+            "T": "0",
+            "consensus": "C",
+            "variant": "no"
+          }
+        ],
+        "truncated": true
+      },
+      {
+        "name": "variant_summary.tsv",
+        "columns": [
+          "chrom",
+          "position",
+          "ref",
+          "alt",
+          "depth",
+          "ref_depth",
+          "alt_depth",
+          "alt_fraction",
+          "change_type",
+          "filter"
+        ],
+        "rows": [
+          {
+            "chrom": "demo_reference",
+            "position": "8",
+            "ref": "T",
+            "alt": "A",
+            "depth": "3",
+            "ref_depth": "1",
+            "alt_depth": "2",
+            "alt_fraction": "0.6667",
+            "change_type": "transversion",
+            "filter": "PASS"
+          }
+        ],
+        "truncated": false
+      }
+    ],
+    "bundle_path": "pipeline-bundles/e5bf11f30dbb4edea909325d8b1c258a/results.zip"
+  },
+  "transfer_scope": "actual bundled inputs and execution outputs",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "template_bio",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [
+    {
+      "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+      "files_delivered": true,
+      "generic_import": {
+        "artifact_count": 16,
+        "access": "Search or pull the attached sample files; native records are a separate outcome.",
+        "state": "imported"
+      },
+      "pipeline": "template_bio",
+      "state": "unsupported",
+      "message": "No unambiguous native result format; files remain available."
+    }
+  ],
+  "roundtrip_files": [
+    {
+      "name": "example_reference.fasta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:35f87442b1113ecf2ec9bb822813b8a8d198d8982a3b02cd921fc4e69d00bd29",
+      "state": "succeeded",
+      "bytes": 61,
+      "sha256": "73f4c86513507e373bc902232aded85b398678e313f059b42b26e1ae38c4fd09",
+      "expected_sha256": "73f4c86513507e373bc902232aded85b398678e313f059b42b26e1ae38c4fd09",
+      "matches": true
+    },
+    {
+      "name": "report.md",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:3792cd84575c28de6c0c9988165b2afde20983f9bd1af4e18ee30fe1b4d28569",
+      "state": "succeeded",
+      "bytes": 2442,
+      "sha256": "d90385160aab51ca6e9393dd3378e9d6af493f8f5ac8cbdafd131ce16e784453",
+      "expected_sha256": "d90385160aab51ca6e9393dd3378e9d6af493f8f5ac8cbdafd131ce16e784453",
+      "matches": true
+    },
+    {
+      "name": "metrics.json",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:39bd6b2b860f2dad5240a96150d7683435a581930a046fa23c2538291371167e",
+      "state": "succeeded",
+      "bytes": 1240,
+      "sha256": "8d325baafc5e32e9efbe02a92ace5aaed42541d0d8aba3395f3f7337262bc1bd",
+      "expected_sha256": "8d325baafc5e32e9efbe02a92ace5aaed42541d0d8aba3395f3f7337262bc1bd",
+      "matches": true
+    },
+    {
+      "name": "coverage.tsv",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:44c87c4bab704db7e13b18fb5e60258cbe31bd4298cb19cb863f96ee1626741b",
+      "state": "succeeded",
+      "bytes": 889,
+      "sha256": "4c0e47b4faac72a220407e4f22fa11a0f38a522753a68631d21743b7048191bb",
+      "expected_sha256": "4c0e47b4faac72a220407e4f22fa11a0f38a522753a68631d21743b7048191bb",
+      "matches": true
+    },
+    {
+      "name": "phylogenetic_tree.png",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:458f4434339220882bd2d0afd4eb4cf15dbc148583c3c07ce67615d69669c896",
+      "state": "succeeded",
+      "bytes": 32702,
+      "sha256": "4accf066bee5fe78569eada9122f0a02a2b0d3761e09dd7142f6ac434c53306e",
+      "expected_sha256": "4accf066bee5fe78569eada9122f0a02a2b0d3761e09dd7142f6ac434c53306e",
+      "matches": true
+    },
+    {
+      "name": "consensus.fasta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:45e58cad256c37163fef679c7076917129706e771cf78bed89bb67c5cff0a970",
+      "state": "succeeded",
+      "bytes": 48,
+      "sha256": "4abdef905000d380f63a84da444729a253af59655f1223a0bdf43df96bd8292d",
+      "expected_sha256": "4abdef905000d380f63a84da444729a253af59655f1223a0bdf43df96bd8292d",
+      "matches": true
+    },
+    {
+      "name": "alignments.sam",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:46210f48c9b2b17c2bae4d2ccb399b91db62caddb65b23a092b5576ebf944567",
+      "state": "succeeded",
+      "bytes": 438,
+      "sha256": "298bce179fe675293de783a7e5d983632c88bcef9eea88491bd2644297ded53a",
+      "expected_sha256": "298bce179fe675293de783a7e5d983632c88bcef9eea88491bd2644297ded53a",
+      "matches": true
+    },
+    {
+      "name": "coverage.png",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:481dcec1c4d6373a27b4816f18eb4cd57cdbc59e47103ab78fa2f9fc49fdfa81",
+      "state": "succeeded",
+      "bytes": 35889,
+      "sha256": "ad9b29f6427999634547ea0a74749c91fe00f6cf539c77ebf36e9ac7be2cea7c",
+      "expected_sha256": "ad9b29f6427999634547ea0a74749c91fe00f6cf539c77ebf36e9ac7be2cea7c",
+      "matches": true
+    },
+    {
+      "name": "sample_summary.tsv",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:4afbde4e9e2f8ce6096637f4e4f5ba606ea1858bccbfe5b749e0ae63dfeb7a25",
+      "state": "succeeded",
+      "bytes": 364,
+      "sha256": "1f9e8c0708537fe213d2da845f0d1278f6ffb2a72f6c7b4282a88449b8393ac8",
+      "expected_sha256": "1f9e8c0708537fe213d2da845f0d1278f6ffb2a72f6c7b4282a88449b8393ac8",
+      "matches": true
+    },
+    {
+      "name": "filtered_reads.fastq",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:50a813a8c51c559edeb94d4c20384093f3283fe7c9e9c4870e8c546bfbabe5ee",
+      "state": "succeeded",
+      "bytes": 253,
+      "sha256": "07c3e1d2623c1df14a10e5b4672a7518dc23f48dfa05317f59f064ab1f961d54",
+      "expected_sha256": "07c3e1d2623c1df14a10e5b4672a7518dc23f48dfa05317f59f064ab1f961d54",
+      "matches": true
+    },
+    {
+      "name": "phylogenetic_tree.nwk",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:5db5bbb7a2e46012932903fed4fcf77720efd19d66dc70823aa30a4f6c6d5068",
+      "state": "succeeded",
+      "bytes": 58,
+      "sha256": "079bce3c8066706a599d2e43834b64c48d66285985866df895c6ac9d27129ebf",
+      "expected_sha256": "079bce3c8066706a599d2e43834b64c48d66285985866df895c6ac9d27129ebf",
+      "matches": true
+    },
+    {
+      "name": "results.zip",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:64c48def32d11ffcdb3b0a30bf6df4f501fab0143dd4dd3acc8588a321ec5a50",
+      "state": "succeeded",
+      "bytes": 305870,
+      "sha256": "a53f470eb906cfa8c58e9869a1c8e124a9eaffa3dece328ca9d0df9c5a23c9a3",
+      "expected_sha256": "a53f470eb906cfa8c58e9869a1c8e124a9eaffa3dece328ca9d0df9c5a23c9a3",
+      "matches": true
+    },
+    {
+      "name": "example_samples.tsv",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:66fcbf6fbfa158c87c72cf055d611734b487a204824b4d03f3d049306a31ba17",
+      "state": "succeeded",
+      "bytes": 149,
+      "sha256": "ab843cad4c085902847f8145aec07c0f932ef591663efdc9cd13bac0c6acb79e",
+      "expected_sha256": "ab843cad4c085902847f8145aec07c0f932ef591663efdc9cd13bac0c6acb79e",
+      "matches": true
+    },
+    {
+      "name": "qc_overview.png",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:6b2d83e337210c6ffd3614dbe8de4ce0fa71e1915167fe87b2a487c6404eb80f",
+      "state": "succeeded",
+      "bytes": 79528,
+      "sha256": "8fbb68db592ee65cdd2c16d4bbef378ac006c43c97472e40666a243f02e4e22a",
+      "expected_sha256": "8fbb68db592ee65cdd2c16d4bbef378ac006c43c97472e40666a243f02e4e22a",
+      "matches": true
+    },
+    {
+      "name": "example_reads.fastq",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:a0231d7ca5c54d603befb5d14a0a49eeed7e5b336b1cce7acbc4524843717edc",
+      "state": "succeeded",
+      "bytes": 385,
+      "sha256": "5e95fa95821c31e5446e051cdf4ccd4b82144ac71b809e065e1101c12386b60d",
+      "expected_sha256": "5e95fa95821c31e5446e051cdf4ccd4b82144ac71b809e065e1101c12386b60d",
+      "matches": true
+    },
+    {
+      "name": "read_qc.tsv",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:beb9e1beb905e0b59a79bbcb682a7abf22577912d3fd645dd6809c716a0bc3a7",
+      "state": "succeeded",
+      "bytes": 238,
+      "sha256": "2a35486b26655a75cf649c494b0d88d9009933e488ab235bd64aa24ac10c322b",
+      "expected_sha256": "2a35486b26655a75cf649c494b0d88d9009933e488ab235bd64aa24ac10c322b",
+      "matches": true
+    },
+    {
+      "name": "variants.vcf",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:bf33e599ac0e926c9aa6b3566825c799eb72244f5c7a8cce21f6dc66abeb04ac",
+      "state": "succeeded",
+      "bytes": 578,
+      "sha256": "062e8abb162232d2fcc1b039ee9a2ea51a09fcc3a90cda62b044e0866b54fdd5",
+      "expected_sha256": "062e8abb162232d2fcc1b039ee9a2ea51a09fcc3a90cda62b044e0866b54fdd5",
+      "matches": true
+    },
+    {
+      "name": "variant_summary.tsv",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:d6e57b866744c143b395576f47aec21d02cd25cbab85e86c0bee0c08a7ec527d",
+      "state": "succeeded",
+      "bytes": 133,
+      "sha256": "cf2fda9b1d77ff559bdf39679792a7d9f3db8418e940c6f0810192f01b72a95d",
+      "expected_sha256": "cf2fda9b1d77ff559bdf39679792a7d9f3db8418e940c6f0810192f01b72a95d",
+      "matches": true
+    },
+    {
+      "name": "report.html",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:d9b8544b229419a1184582530f4b4aeb02a059605edd2e69125c22e446019fbb",
+      "state": "succeeded",
+      "bytes": 240684,
+      "sha256": "518587c3545d7916ed6bf764b6054435cca4acc232307958878c6be7a29e24f3",
+      "expected_sha256": "518587c3545d7916ed6bf764b6054435cca4acc232307958878c6be7a29e24f3",
+      "matches": true
+    },
+    {
+      "name": "variant_allele_fraction.png",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:f9e06b1d99ee9f5f2920ccee236ccdbad923c8a2bc97c6ae7f671b724cc27a6b",
+      "state": "succeeded",
+      "bytes": 28447,
+      "sha256": "0113be9f3870d6819612d47d18ac8d1e81a6dc00a1b0405ae802d870512ed3bd",
+      "expected_sha256": "0113be9f3870d6819612d47d18ac8d1e81a6dc00a1b0405ae802d870512ed3bd",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "73f4c86513507e373bc902232aded85b398678e313f059b42b26e1ae38c4fd09",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": ">demo_reference synthetic_reference\nACGTACGTACGTACGTACGTACGT\n"
+      },
+      "size": 61,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "example_reference.fasta",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:35f87442b1113ecf2ec9bb822813b8a8d198d8982a3b02cd921fc4e69d00bd29",
+      "id": "35f87442b1113ecf2ec9bb822813b8a8d198d8982a3b02cd921fc4e69d00bd29",
+      "source_path": "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_reference.fasta",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "d90385160aab51ca6e9393dd3378e9d6af493f8f5ac8cbdafd131ce16e784453",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "report",
+        "output_name": "report",
+        "output_kind": "report",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "# Template Bioinformatics Pipeline Report\n\n- Run label: template_bio\n- Sample: sample_demo\n- Reference: demo_reference (24 bp)\n- Reads: 3 / 5 passed filters\n- Q30 bases: 76.92%\n- Reference coverage: 100.0%\n- Mean retained depth: 3.0×\n- Passing variants: 1\n\n## Workflow\n\n```text\nFASTQ + reference FASTA + metadata\n  -> validation and read QC\n  -> read filtering and demonstration alignment\n  -> coverage, consensus, and variant calling\n  -> tables, figures, metrics, and reports\n```\n\n## Inputs\n\n- FASTQ reads: `/tmp/tmpwn3iv8pk/runtime/agent_runs/e5bf11f30dbb4edea909325d8b1c258a/inputs/reads/0_example_reads.fastq`\n- Reference FASTA: `/tmp/tmpwn3iv8pk/runtime/agent_runs/e5bf11f30dbb4edea909325d8b1c258a/inputs/reference/0_example_reference.fasta`\n- Metadata table: `/tmp/tmpwn3iv8pk/runtime/agent_runs/e5bf11f30dbb4edea909325d8b1c258a/inputs/metadata/0_example_samples.tsv`\n\n## Sample metadata\n\n| Field | Value |\n| --- | --- |\n| sample_id | sample_demo |\n| organism | synthetic construct |\n| condition | demo |\n| replicate …"
+      },
+      "size": 2442,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "report.md",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:3792cd84575c28de6c0c9988165b2afde20983f9bd1af4e18ee30fe1b4d28569",
+      "id": "3792cd84575c28de6c0c9988165b2afde20983f9bd1af4e18ee30fe1b4d28569",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/report.md",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "8d325baafc5e32e9efbe02a92ace5aaed42541d0d8aba3395f3f7337262bc1bd",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "metrics",
+        "output_name": "metrics",
+        "output_kind": "metrics",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "aligned_read_count",
+          "base_retention_percent",
+          "bases_at_3x_percent",
+          "covered_reference_bases",
+          "failed_read_count",
+          "filter_outcomes",
+          "input_base_count",
+          "input_read_count",
+          "maximum_retained_depth",
+          "mean_input_gc_percent",
+          "mean_input_quality",
+          "mean_input_read_length",
+          "mean_retained_depth",
+          "mean_retained_read_length",
+          "metadata_field_count",
+          "mode",
+          "parameters",
+          "passed_read_count",
+          "phylogenetic_tree_emitted",
+          "pipeline",
+          "q20_base_percent",
+          "q30_base_percent",
+          "read_retention_percent",
+          "reference_coverage_percent",
+          "reference_id",
+          "reference_length",
+          "retained_base_count",
+          "sample_id",
+          "status",
+          "transition_count",
+          "transversion_count",
+          "variant_count"
+        ]
+      },
+      "size": 1240,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "metrics.json",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:39bd6b2b860f2dad5240a96150d7683435a581930a046fa23c2538291371167e",
+      "id": "39bd6b2b860f2dad5240a96150d7683435a581930a046fa23c2538291371167e",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/metrics.json",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "4c0e47b4faac72a220407e4f22fa11a0f38a522753a68631d21743b7048191bb",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "coverage",
+        "output_name": "coverage",
+        "output_kind": "table",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "table",
+        "preview_available": true,
+        "preview_only": true,
+        "delimiter": "tab",
+        "columns": [
+          "chrom",
+          "position",
+          "reference",
+          "depth",
+          "A",
+          "C",
+          "G",
+          "T",
+          "consensus",
+          "variant"
+        ],
+        "preview_rows": [
+          [
+            "demo_reference",
+            "1",
+            "A",
+            "3",
+            "3",
+            "0",
+            "0",
+            "0",
+            "A",
+            "no"
+          ],
+          [
+            "demo_reference",
+            "2",
+            "C",
+            "3",
+            "0",
+            "3",
+            "0",
+            "0",
+            "C",
+            "no"
+          ],
+          [
+            "demo_reference",
+            "3",
+            "G",
+            "3",
+            "0",
+            "0",
+            "3",
+            "0",
+            "G",
+            "no"
+          ]
+        ]
+      },
+      "size": 889,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "coverage.tsv",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:44c87c4bab704db7e13b18fb5e60258cbe31bd4298cb19cb863f96ee1626741b",
+      "id": "44c87c4bab704db7e13b18fb5e60258cbe31bd4298cb19cb863f96ee1626741b",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/coverage.tsv",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "4accf066bee5fe78569eada9122f0a02a2b0d3761e09dd7142f6ac434c53306e",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "phylogenetic_tree_figure",
+        "output_name": "phylogenetic_tree_figure",
+        "output_kind": "image",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 32702,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "phylogenetic_tree.png",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:458f4434339220882bd2d0afd4eb4cf15dbc148583c3c07ce67615d69669c896",
+      "id": "458f4434339220882bd2d0afd4eb4cf15dbc148583c3c07ce67615d69669c896",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/phylogenetic_tree.png",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "4abdef905000d380f63a84da444729a253af59655f1223a0bdf43df96bd8292d",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "consensus",
+        "output_name": "consensus",
+        "output_kind": "sequence",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": ">sample_demo|consensus\nACGTACGAACGTACGTACGTACGT\n"
+      },
+      "size": 48,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "consensus.fasta",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:45e58cad256c37163fef679c7076917129706e771cf78bed89bb67c5cff0a970",
+      "id": "45e58cad256c37163fef679c7076917129706e771cf78bed89bb67c5cff0a970",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/consensus.fasta",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "298bce179fe675293de783a7e5d983632c88bcef9eea88491bd2644297ded53a",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "alignments",
+        "output_name": "alignments",
+        "output_kind": "alignment",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "@HD\tVN:1.6\tSO:unknown\n@SQ\tSN:demo_reference\tLN:24\n@RG\tID:sample_demo\tSM:sample_demo\tPL:Illumina\nread001\t0\tdemo_reference\t1\t60\t24M\t*\t0\t0\tACGTACGTACGTACGTACGTACGT\tIIIIIIIIIIIIIIIIIIIIIIII\tRG:Z:sample_demo\tNM:i:0\nread002\t0\tdemo_reference\t1\t60\t24M\t*\t0\t0\tACGTACGAACGTACGTACGTACGT\tIIIIIIIIIIIIIIIIIIIIIIII\tRG:Z:sample_demo\tNM:i:1\nread003\t0\tdemo_reference\t1\t60\t24M\t*\t0\t0\tACGTACGAACGTACGTACGTACGT\tIIIIIIIIIIIIIIIIIIIIIIII\tRG:Z:sample_demo\tNM:i:1\n"
+      },
+      "size": 438,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "alignments.sam",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:46210f48c9b2b17c2bae4d2ccb399b91db62caddb65b23a092b5576ebf944567",
+      "id": "46210f48c9b2b17c2bae4d2ccb399b91db62caddb65b23a092b5576ebf944567",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/alignments.sam",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "ad9b29f6427999634547ea0a74749c91fe00f6cf539c77ebf36e9ac7be2cea7c",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "coverage_figure",
+        "output_name": "coverage_figure",
+        "output_kind": "image",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 35889,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "coverage.png",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:481dcec1c4d6373a27b4816f18eb4cd57cdbc59e47103ab78fa2f9fc49fdfa81",
+      "id": "481dcec1c4d6373a27b4816f18eb4cd57cdbc59e47103ab78fa2f9fc49fdfa81",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/coverage.png",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "1f9e8c0708537fe213d2da845f0d1278f6ffb2a72f6c7b4282a88449b8393ac8",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "sample_summary",
+        "output_name": "sample_summary",
+        "output_kind": "table",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "table",
+        "preview_available": true,
+        "preview_only": true,
+        "delimiter": "tab",
+        "columns": [
+          "sample_id",
+          "organism",
+          "condition",
+          "replicate",
+          "library_layout",
+          "platform",
+          "collection_date",
+          "input_read_count",
+          "passed_read_count",
+          "read_retention_percent",
+          "mean_input_read_length",
+          "mean_input_quality",
+          "q30_base_percent",
+          "mean_retained_depth",
+          "reference_coverage_percent",
+          "variant_count"
+        ],
+        "preview_rows": [
+          [
+            "sample_demo",
+            "synthetic construct",
+            "demo",
+            "1",
+            "single-end",
+            "Illumina",
+            "2026-01-15",
+            "5",
+            "3",
+            "60.0",
+            "20.8",
+            "32.0",
+            "76.92",
+            "3.0",
+            "100.0",
+            "1"
+          ]
+        ]
+      },
+      "size": 364,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "sample_summary.tsv",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:4afbde4e9e2f8ce6096637f4e4f5ba606ea1858bccbfe5b749e0ae63dfeb7a25",
+      "id": "4afbde4e9e2f8ce6096637f4e4f5ba606ea1858bccbfe5b749e0ae63dfeb7a25",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/sample_summary.tsv",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "07c3e1d2623c1df14a10e5b4672a7518dc23f48dfa05317f59f064ab1f961d54",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "filtered_reads",
+        "output_name": "filtered_reads",
+        "output_kind": "sequence",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "@read001 sample_demo identical\nACGTACGTACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read002 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read003 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n"
+      },
+      "size": 253,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "filtered_reads.fastq",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:50a813a8c51c559edeb94d4c20384093f3283fe7c9e9c4870e8c546bfbabe5ee",
+      "id": "50a813a8c51c559edeb94d4c20384093f3283fe7c9e9c4870e8c546bfbabe5ee",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/filtered_reads.fastq",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "079bce3c8066706a599d2e43834b64c48d66285985866df895c6ac9d27129ebf",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "phylogenetic_tree",
+        "output_name": "phylogenetic_tree",
+        "output_kind": "phylogenetic_tree",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "(demo_reference:0.020833,sample_demo_consensus:0.020833);\n"
+      },
+      "size": 58,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "phylogenetic_tree.nwk",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:5db5bbb7a2e46012932903fed4fcf77720efd19d66dc70823aa30a4f6c6d5068",
+      "id": "5db5bbb7a2e46012932903fed4fcf77720efd19d66dc70823aa30a4f6c6d5068",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/phylogenetic_tree.nwk",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "a53f470eb906cfa8c58e9869a1c8e124a9eaffa3dece328ca9d0df9c5a23c9a3",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 305870,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "results.zip",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:64c48def32d11ffcdb3b0a30bf6df4f501fab0143dd4dd3acc8588a321ec5a50",
+      "id": "64c48def32d11ffcdb3b0a30bf6df4f501fab0143dd4dd3acc8588a321ec5a50",
+      "source_path": "pipeline-bundles/e5bf11f30dbb4edea909325d8b1c258a/results.zip",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "ab843cad4c085902847f8145aec07c0f932ef591663efdc9cd13bac0c6acb79e",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "table",
+        "preview_available": true,
+        "preview_only": true,
+        "delimiter": "tab",
+        "columns": [
+          "sample_id",
+          "organism",
+          "condition",
+          "replicate",
+          "library_layout",
+          "platform",
+          "collection_date"
+        ],
+        "preview_rows": [
+          [
+            "sample_demo",
+            "synthetic construct",
+            "demo",
+            "1",
+            "single-end",
+            "Illumina",
+            "2026-01-15"
+          ]
+        ]
+      },
+      "size": 149,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "example_samples.tsv",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:66fcbf6fbfa158c87c72cf055d611734b487a204824b4d03f3d049306a31ba17",
+      "id": "66fcbf6fbfa158c87c72cf055d611734b487a204824b4d03f3d049306a31ba17",
+      "source_path": "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_samples.tsv",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "8fbb68db592ee65cdd2c16d4bbef378ac006c43c97472e40666a243f02e4e22a",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "qc_figure",
+        "output_name": "qc_figure",
+        "output_kind": "image",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 79528,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "qc_overview.png",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:6b2d83e337210c6ffd3614dbe8de4ce0fa71e1915167fe87b2a487c6404eb80f",
+      "id": "6b2d83e337210c6ffd3614dbe8de4ce0fa71e1915167fe87b2a487c6404eb80f",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/qc_overview.png",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "5e95fa95821c31e5446e051cdf4ccd4b82144ac71b809e065e1101c12386b60d",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "@read001 sample_demo identical\nACGTACGTACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read002 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read003 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read004 sample_demo low_quality\nACGTACGTACGTACGTACGTACGT\n+\n!!!!!!!!!!!!!!!!!!!!!!!!\n@read005 sample_demo short\nACGTACGT\n+\nIIIIIIII\n"
+      },
+      "size": 385,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "example_reads.fastq",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:a0231d7ca5c54d603befb5d14a0a49eeed7e5b336b1cce7acbc4524843717edc",
+      "id": "a0231d7ca5c54d603befb5d14a0a49eeed7e5b336b1cce7acbc4524843717edc",
+      "source_path": "uploads/examples/template_bio-970ae7264f3d404caf6e3ac311e906d8/example_reads.fastq",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "2a35486b26655a75cf649c494b0d88d9009933e488ab235bd64aa24ac10c322b",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "read_qc",
+        "output_name": "read_qc",
+        "output_kind": "table",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "table",
+        "preview_available": true,
+        "preview_only": true,
+        "delimiter": "tab",
+        "columns": [
+          "read_id",
+          "length",
+          "gc_percent",
+          "mean_quality",
+          "q20_bases",
+          "q30_bases",
+          "status"
+        ],
+        "preview_rows": [
+          [
+            "read001",
+            "24",
+            "50.00",
+            "40.00",
+            "24",
+            "24",
+            "pass"
+          ],
+          [
+            "read002",
+            "24",
+            "50.00",
+            "40.00",
+            "24",
+            "24",
+            "pass"
+          ],
+          [
+            "read003",
+            "24",
+            "50.00",
+            "40.00",
+            "24",
+            "24",
+            "pass"
+          ]
+        ]
+      },
+      "size": 238,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "read_qc.tsv",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:beb9e1beb905e0b59a79bbcb682a7abf22577912d3fd645dd6809c716a0bc3a7",
+      "id": "beb9e1beb905e0b59a79bbcb682a7abf22577912d3fd645dd6809c716a0bc3a7",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/read_qc.tsv",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "062e8abb162232d2fcc1b039ee9a2ea51a09fcc3a90cda62b044e0866b54fdd5",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "variants",
+        "output_name": "variants",
+        "output_kind": "variants",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "##fileformat=VCFv4.2\n##source=template_bio_positional_comparison\n##contig=<ID=demo_reference,length=24>\n##INFO=<ID=DP,Number=1,Type=Integer,Description=\"Read depth\">\n##INFO=<ID=AF,Number=A,Type=Float,Description=\"Alternate allele fraction\">\n##INFO=<ID=TYPE,Number=1,Type=String,Description=\"SNV change type\">\n##FORMAT=<ID=GT,Number=1,Type=String,Description=\"Haploid genotype\">\n##FORMAT=<ID=AD,Number=R,Type=Integer,Description=\"Allele depths\">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tsample_demo\ndemo_reference\t8\t.\tT\tA\t.\tPASS\tDP=3;AF=0.6667;TYPE=transversion\tGT:AD\t1:1,2\n"
+      },
+      "size": 578,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "variants.vcf",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:bf33e599ac0e926c9aa6b3566825c799eb72244f5c7a8cce21f6dc66abeb04ac",
+      "id": "bf33e599ac0e926c9aa6b3566825c799eb72244f5c7a8cce21f6dc66abeb04ac",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variants.vcf",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "cf2fda9b1d77ff559bdf39679792a7d9f3db8418e940c6f0810192f01b72a95d",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "variant_table",
+        "output_name": "variant_table",
+        "output_kind": "table",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "table",
+        "preview_available": true,
+        "preview_only": true,
+        "delimiter": "tab",
+        "columns": [
+          "chrom",
+          "position",
+          "ref",
+          "alt",
+          "depth",
+          "ref_depth",
+          "alt_depth",
+          "alt_fraction",
+          "change_type",
+          "filter"
+        ],
+        "preview_rows": [
+          [
+            "demo_reference",
+            "8",
+            "T",
+            "A",
+            "3",
+            "1",
+            "2",
+            "0.6667",
+            "transversion",
+            "PASS"
+          ]
+        ]
+      },
+      "size": 133,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "variant_summary.tsv",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:d6e57b866744c143b395576f47aec21d02cd25cbab85e86c0bee0c08a7ec527d",
+      "id": "d6e57b866744c143b395576f47aec21d02cd25cbab85e86c0bee0c08a7ec527d",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variant_summary.tsv",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "518587c3545d7916ed6bf764b6054435cca4acc232307958878c6be7a29e24f3",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "html_report",
+        "output_name": "html_report",
+        "output_kind": "report",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Template Bioinformatics Report — sample_demo</title>\n<style>\nbody { color:#1f2933; background:#f5f7fa; font:15px/1.5 system-ui,sans-serif; margin:0; }\nmain { max-width:1100px; margin:auto; padding:32px; }\nh1,h2 { color:#102a43; } .muted { color:#627d98; }\n.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; }\n.card,section { background:white; border:1px solid #d9e2ec; border-radius:10px; padding:18px; margin:16px 0; }\n.card span,.card strong { display:block; } .card strong { color:#0b7285; font-size:1.5rem; }\ntable { border-collapse:collapse; width:100%; } th,td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; }\nimg { max-width:100%; height:auto; } figure { margin:20px 0; } figcaption { color:#627d98; text-align:center; }\ncode { overflow-wrap:anywhere; } .warning { border-left:5px solid #d9480f; }\n</style>\n</head>\n<body…"
+      },
+      "size": 240684,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "report.html",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:d9b8544b229419a1184582530f4b4aeb02a059605edd2e69125c22e446019fbb",
+      "id": "d9b8544b229419a1184582530f4b4aeb02a059605edd2e69125c22e446019fbb",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/report.html",
+      "sample_name": "template_bio"
+    },
+    {
+      "sha256": "0113be9f3870d6819612d47d18ac8d1e81a6dc00a1b0405ae802d870512ed3bd",
+      "kind": "analysis_output",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "pipeline_result": {
+        "job_id": "e5bf11f30dbb4edea909325d8b1c258a",
+        "pipeline_name": "template_bio",
+        "output_key": "variant_figure",
+        "output_name": "variant_figure",
+        "output_kind": "image",
+        "completed_at": "2026-11-09T06:43:59.728189+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 28447,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "variant_allele_fraction.png",
+      "data_type": "meta",
+      "resource_id": "result:654d2ce011e74f4b90376a0509af60a8:f9e06b1d99ee9f5f2920ccee236ccdbad923c8a2bc97c6ae7f671b724cc27a6b",
+      "id": "f9e06b1d99ee9f5f2920ccee236ccdbad923c8a2bc97c6ae7f671b724cc27a6b",
+      "source_path": "outputs/pipelines/e5bf11f30dbb4edea909325d8b1c258a/outputs/variant_allele_fraction.png",
+      "sample_name": "template_bio"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:654ad25d6f4c300794b8ffea8bce2085",
+      "importable": false,
+      "sample_name": "template_bio",
+      "data_type": "meta",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085"
+    },
+    {
+      "size": 385,
+      "kind": "source_file",
+      "sample_id": "654ad25d6f4c300794b8ffea8bce2085",
+      "name": "example_reads.fastq",
+      "data_type": "meta",
+      "resource_id": "source:meta:654ad25d6f4c300794b8ffea8bce2085:R1",
+      "slot": "R1",
+      "id": "5d0017cba5163fcd9cb66ef6b0331080",
+      "sample_name": "template_bio"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 115.79,
+  "test_finished": true
+}

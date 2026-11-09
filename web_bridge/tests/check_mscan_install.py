@@ -38,6 +38,9 @@ def main():
         changed = {str(path) for path, content in baseline.items() if (root / path).read_bytes() != content}
         expected = {'mscan/src/App.vue', 'mscan/src/views/sampleProgramResults/index.vue',
                     'mscan/src/views/sampleProgramResults/components/ProgramResultPanel.vue'}
+        base='mscan-app/mscan-database/src/main/java/com/mscan/database/service/'
+        for name in ('IGenomeTracingService','IMetadataProcessService'):
+            expected.update({base+name+'.java',base+'impl/'+name+'Impl.java'})
         assert changed == expected, f'Unexpected original-file changes: {changed}'
         installed = {p.relative_to(root): p.read_bytes() for p in root.rglob('*') if p.is_file()}
         source = repo / 'web_bridge/adapters/mscan'
@@ -46,7 +49,7 @@ def main():
                 assert (root / 'mscan-app/mscan-admin/src/main/java/com/mscan/web/controller/common' / java.name).read_bytes() == java.read_bytes()
         subprocess.run(command, check=True)
         assert installed == {p.relative_to(root): p.read_bytes() for p in root.rglob('*') if p.is_file()}, 'Reinstallation changed files'
-        print('PASS clean ZIP installation: exactly three original files modified, original line endings preserved, repeat installation identical')
+        print('PASS clean ZIP installation: three frontend hooks and four native service entry points, original line endings preserved, repeat installation identical')
         if args.destination:
             print('Clean installed checkout:', root)
     finally:

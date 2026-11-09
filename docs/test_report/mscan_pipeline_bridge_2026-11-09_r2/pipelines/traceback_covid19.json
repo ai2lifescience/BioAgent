@@ -1,0 +1,245 @@
+{
+  "pipeline": "traceback_covid19",
+  "engine": "wdl",
+  "manifest_sha256": "974a0ccb1fe8b6a5331e41850bdbba895f46fb618ee01227ae5ebba67b91da94",
+  "selected_for_execution": false,
+  "execution_status": "not_executed",
+  "scope_note": "Contract and inert-transfer verification only; biological workflow/example outside the live execution safety scope.",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/traceback_covid19/data/input/QB159795.1.fasta",
+      "bytes": 30358,
+      "sha256": "9c4ca2ee874486065d65622036c12018b468e044e1eafc0f2f1cd0bbbb46df7c"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/traceback_covid19/data/input/SARS-CoV-2.fa",
+      "bytes": 30429,
+      "sha256": "0891c00cc2d503f58e0c600ce5ee64e9c64b939525c70d5486bc46cbc7cb073e"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/traceback_covid19/data/input/query.fasta",
+      "bytes": 151374,
+      "sha256": "28174c9c7fec164c25dd874d0047b712f8f2937c5ca575ac9ffa6dc65a961f6a"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/traceback_covid19/data/input/sars-cov-2_1.fasta",
+      "bytes": 30658,
+      "sha256": "5956d665d2774ddba1d640c53d99dfe97f41afc4f963fbbcf7e7b46313ba89c2"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "query_fasta"
+    ],
+    "outputs": [
+      "combined_fa",
+      "mafft_result",
+      "mutation_file",
+      "result_tsv",
+      "result_mutlist",
+      "snp_fa",
+      "tree_file"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/7ded1406c0724dd5a5873ffe3443c365_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "traceback_covid19_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "8f1bdb0b37ce4e519d4ca252ea8efaca",
+      "response": {
+        "transfer_id": "8f1bdb0b37ce4e519d4ca252ea8efaca",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "7ded1406c0724dd5a5873ffe3443c365_contract-check.json",
+              "id": "32dd09e30456c782aed1887099e46c91f6e2f0da75074f8fbaeb67c4d3137ced",
+              "source_path": "uploads/7ded1406c0724dd5a5873ffe3443c365_contract-check.json",
+              "size": 172,
+              "sha256": "233142a03a32235bb56cb99fa4c23ae51f4cb15e4e009e35c564b652c416ed8b",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "8f1bdb0b37ce4e519d4ca252ea8efaca",
+          "target": {
+            "sample_id": "df6ed1cbc66d301bb86aaf0e2f0c8b9f",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "traceback_covid19_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "df6ed1cbc66d301bb86aaf0e2f0c8b9f"
+      },
+      "transfer_id": "8e683378d6b34cc78a1c6da3bb4077ca",
+      "response": {
+        "transfer_id": "8e683378d6b34cc78a1c6da3bb4077ca",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "233142a03a32235bb56cb99fa4c23ae51f4cb15e4e009e35c564b652c416ed8b",
+              "kind": "analysis_output",
+              "sample_id": "df6ed1cbc66d301bb86aaf0e2f0c8b9f",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 172,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "7ded1406c0724dd5a5873ffe3443c365_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:8f1bdb0b37ce4e519d4ca252ea8efaca:32dd09e30456c782aed1887099e46c91f6e2f0da75074f8fbaeb67c4d3137ced",
+              "id": "32dd09e30456c782aed1887099e46c91f6e2f0da75074f8fbaeb67c4d3137ced",
+              "source_path": "uploads/7ded1406c0724dd5a5873ffe3443c365_contract-check.json",
+              "sample_name": "traceback_covid19_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:df6ed1cbc66d301bb86aaf0e2f0c8b9f",
+              "importable": false,
+              "sample_name": "traceback_covid19_contract_only",
+              "data_type": "meta",
+              "sample_id": "df6ed1cbc66d301bb86aaf0e2f0c8b9f"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:8f1bdb0b37ce4e519d4ca252ea8efaca:32dd09e30456c782aed1887099e46c91f6e2f0da75074f8fbaeb67c4d3137ced"
+      },
+      "transfer_id": "2e465c99ded6434c9291e358f164eeb2",
+      "response": {
+        "transfer_id": "2e465c99ded6434c9291e358f164eeb2",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "02774bc2-9f4e-4ea0-8b9e-3bd4f4f60490",
+            "path": "uploads/fc542464f8db48268ee1098751908ede_7ded1406c0724dd5a5873ffe3443c365_contract-check.json",
+            "workspace_path": "uploads/fc542464f8db48268ee1098751908ede_7ded1406c0724dd5a5873ffe3443c365_contract-check.json",
+            "name": "7ded1406c0724dd5a5873ffe3443c365_contract-check.json",
+            "size": 172,
+            "sha256": "233142a03a32235bb56cb99fa4c23ae51f4cb15e4e009e35c564b652c416ed8b",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "02774bc2-9f4e-4ea0-8b9e-3bd4f4f60490",
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "df6ed1cbc66d301bb86aaf0e2f0c8b9f",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "traceback_covid19_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "7ded1406c0724dd5a5873ffe3443c365_contract-check.json",
+      "resource_id": "result:8f1bdb0b37ce4e519d4ca252ea8efaca:32dd09e30456c782aed1887099e46c91f6e2f0da75074f8fbaeb67c4d3137ced",
+      "state": "succeeded",
+      "bytes": 172,
+      "sha256": "233142a03a32235bb56cb99fa4c23ae51f4cb15e4e009e35c564b652c416ed8b",
+      "expected_sha256": "233142a03a32235bb56cb99fa4c23ae51f4cb15e4e009e35c564b652c416ed8b",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "233142a03a32235bb56cb99fa4c23ae51f4cb15e4e009e35c564b652c416ed8b",
+      "kind": "analysis_output",
+      "sample_id": "df6ed1cbc66d301bb86aaf0e2f0c8b9f",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 172,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "7ded1406c0724dd5a5873ffe3443c365_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:8f1bdb0b37ce4e519d4ca252ea8efaca:32dd09e30456c782aed1887099e46c91f6e2f0da75074f8fbaeb67c4d3137ced",
+      "id": "32dd09e30456c782aed1887099e46c91f6e2f0da75074f8fbaeb67c4d3137ced",
+      "source_path": "uploads/7ded1406c0724dd5a5873ffe3443c365_contract-check.json",
+      "sample_name": "traceback_covid19_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:df6ed1cbc66d301bb86aaf0e2f0c8b9f",
+      "importable": false,
+      "sample_name": "traceback_covid19_contract_only",
+      "data_type": "meta",
+      "sample_id": "df6ed1cbc66d301bb86aaf0e2f0c8b9f"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 16.29,
+  "test_finished": true
+}

@@ -1,0 +1,487 @@
+{
+  "scope": "Synthetic parser fixture only; no biological workflow executed",
+  "session_id": "a1124a24-61a0-4435-83e8-601c5839101d",
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "pipeline-bundles/6c76ef600d8141bbbb30d98b5b127711/results.zip"
+        ],
+        "destination": {
+          "project": "Bridge_fixes_20261109",
+          "sample": "empty_preserves_existing_software_fixture",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "response": {
+        "transfer_id": "206191cae63f4740aa8af647fe3d2cf8",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "target": {
+            "data_type": "meta",
+            "project_name": "Bridge_fixes_20261109",
+            "sample_name": "empty_preserves_existing_software_fixture",
+            "project_id": "5b6bedd43f543db5b816602dab7101da",
+            "sample_id": "4097869c78523703a7b15e4029e50311"
+          },
+          "receipt_id": "206191cae63f4740aa8af647fe3d2cf8",
+          "qc": {},
+          "native_imports": [
+            {
+              "job_id": "6c76ef600d8141bbbb30d98b5b127711",
+              "files_delivered": true,
+              "generic_import": {
+                "access": "Search or pull the attached sample files; native records are a separate outcome.",
+                "artifact_count": 1,
+                "state": "imported"
+              },
+              "pipeline": "bridge_software_fixture_growth",
+              "format": "StrainCoPTR",
+              "program": "growth",
+              "state": "imported",
+              "message": "Native result imported."
+            }
+          ],
+          "files": [
+            {
+              "name": "results.zip",
+              "source_path": "pipeline-bundles/6c76ef600d8141bbbb30d98b5b127711/results.zip",
+              "id": "b80c99a04bbbde69e9bd4d4d18237ef952bdd0554760fc04fbbca04e3e316c9e",
+              "size": 201,
+              "sha256": "6a1644eddd4693842f58dc14301e73dbaa2fde47577de21a26af2284f28296bb",
+              "content": {
+                "kind": "file",
+                "preview_available": false
+              }
+            },
+            {
+              "size": 68,
+              "sha256": "3cf61bbda5d93ea64405cb7a5be70589add8cfab649bcbaab2f0544f6de1e464",
+              "name": "log2ptr_csv.csv",
+              "source_path": "outputs/pipelines/6c76ef600d8141bbbb30d98b5b127711/log2ptr_csv.csv",
+              "id": "5aee3cde3a117e69d25ceea327a46c4228998bcf5028cf046b88e385199e6b11",
+              "pipeline_result": {
+                "job_id": "6c76ef600d8141bbbb30d98b5b127711",
+                "pipeline_name": "bridge_software_fixture_growth",
+                "output_key": "StrainCoPTR.log2ptr_csv",
+                "output_name": "log2ptr_csv",
+                "output_kind": "file",
+                "completed_at": "2026-11-09T07:41:28.008803+00:00"
+              },
+              "content": {
+                "preview_rows": [
+                  [
+                    "software_fixture",
+                    "0.5"
+                  ]
+                ],
+                "columns": [
+                  "log2(PTR):genome_id/sample_id",
+                  "software_fixture"
+                ],
+                "delimiter": "comma",
+                "preview_only": true,
+                "preview_available": true,
+                "kind": "table"
+              }
+            }
+          ],
+          "native_qc_applied": false,
+          "file_delivery": "delivered",
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "4097869c78523703a7b15e4029e50311"
+      },
+      "response": {
+        "transfer_id": "43f431b877ae4df6a8705ddd98cb1a4a",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "offset": 0,
+          "total": 4,
+          "resources": [
+            {
+              "size": 402,
+              "project_id": "5b6bedd43f543db5b816602dab7101da",
+              "kind": "native_analysis_record",
+              "sample_id": "4097869c78523703a7b15e4029e50311",
+              "name": "growth-061b385a3391cfbda0b87eadc872778b.json",
+              "data_type": "meta",
+              "resource_id": "native:4097869c78523703a7b15e4029e50311:growth:061b385a3391cfbda0b87eadc872778b:record",
+              "program": "growth",
+              "importable": true,
+              "sample_name": "empty_preserves_existing_software_fixture"
+            },
+            {
+              "sha256": "3cf61bbda5d93ea64405cb7a5be70589add8cfab649bcbaab2f0544f6de1e464",
+              "kind": "analysis_output",
+              "sample_id": "4097869c78523703a7b15e4029e50311",
+              "pipeline_result": {
+                "job_id": "6c76ef600d8141bbbb30d98b5b127711",
+                "pipeline_name": "bridge_software_fixture_growth",
+                "output_key": "StrainCoPTR.log2ptr_csv",
+                "output_name": "log2ptr_csv",
+                "output_kind": "file",
+                "completed_at": "2026-11-09T07:41:28.008803+00:00"
+              },
+              "project_name": "Bridge_fixes_20261109",
+              "content": {
+                "preview_rows": [
+                  [
+                    "software_fixture",
+                    "0.5"
+                  ]
+                ],
+                "columns": [
+                  "log2(PTR):genome_id/sample_id",
+                  "software_fixture"
+                ],
+                "delimiter": "comma",
+                "preview_only": true,
+                "preview_available": true,
+                "kind": "table"
+              },
+              "size": 68,
+              "project_id": "5b6bedd43f543db5b816602dab7101da",
+              "name": "log2ptr_csv.csv",
+              "data_type": "meta",
+              "resource_id": "result:206191cae63f4740aa8af647fe3d2cf8:5aee3cde3a117e69d25ceea327a46c4228998bcf5028cf046b88e385199e6b11",
+              "source_path": "outputs/pipelines/6c76ef600d8141bbbb30d98b5b127711/log2ptr_csv.csv",
+              "id": "5aee3cde3a117e69d25ceea327a46c4228998bcf5028cf046b88e385199e6b11",
+              "sample_name": "empty_preserves_existing_software_fixture"
+            },
+            {
+              "sha256": "6a1644eddd4693842f58dc14301e73dbaa2fde47577de21a26af2284f28296bb",
+              "kind": "analysis_output",
+              "sample_id": "4097869c78523703a7b15e4029e50311",
+              "project_name": "Bridge_fixes_20261109",
+              "content": {
+                "kind": "file",
+                "preview_available": false
+              },
+              "size": 201,
+              "project_id": "5b6bedd43f543db5b816602dab7101da",
+              "name": "results.zip",
+              "data_type": "meta",
+              "resource_id": "result:206191cae63f4740aa8af647fe3d2cf8:b80c99a04bbbde69e9bd4d4d18237ef952bdd0554760fc04fbbca04e3e316c9e",
+              "source_path": "pipeline-bundles/6c76ef600d8141bbbb30d98b5b127711/results.zip",
+              "id": "b80c99a04bbbde69e9bd4d4d18237ef952bdd0554760fc04fbbca04e3e316c9e",
+              "sample_name": "empty_preserves_existing_software_fixture"
+            },
+            {
+              "sample_id": "4097869c78523703a7b15e4029e50311",
+              "data_type": "meta",
+              "sample_name": "empty_preserves_existing_software_fixture",
+              "importable": false,
+              "resource_id": "sample:meta:4097869c78523703a7b15e4029e50311",
+              "kind": "sample",
+              "project_id": "5b6bedd43f543db5b816602dab7101da"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "native:4097869c78523703a7b15e4029e50311:growth:061b385a3391cfbda0b87eadc872778b:record"
+      },
+      "response": {
+        "transfer_id": "8aa70137675b45d7af615b0621f98d5d",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "a1124a24-61a0-4435-83e8-601c5839101d",
+            "path": "uploads/c513a3b92b2247cbafe88c82f6b88353_growth-061b385a3391cfbda0b87eadc872778b.json",
+            "workspace_path": "uploads/c513a3b92b2247cbafe88c82f6b88353_growth-061b385a3391cfbda0b87eadc872778b.json",
+            "name": "growth-061b385a3391cfbda0b87eadc872778b.json",
+            "size": 402,
+            "sha256": "c0dba80da6ef1ebccdfe09b8295b2b20b4f0baa9f01d5967fa7490f58dc871f0",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "pipeline-bundles/ebe7b3672f5a49b1be039073160ff6c3/results.zip"
+        ],
+        "destination": {
+          "project": "5b6bedd43f543db5b816602dab7101da",
+          "sample": "4097869c78523703a7b15e4029e50311",
+          "data_type": "meta"
+        },
+        "create_missing": false
+      },
+      "response": {
+        "transfer_id": "90361486eea740889d190a114f6e3dde",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "target": {
+            "data_type": "meta",
+            "project_name": "Bridge_fixes_20261109",
+            "sample_name": "4097869c78523703a7b15e4029e50311",
+            "project_id": "5b6bedd43f543db5b816602dab7101da",
+            "sample_id": "4097869c78523703a7b15e4029e50311"
+          },
+          "receipt_id": "90361486eea740889d190a114f6e3dde",
+          "qc": {},
+          "native_imports": [
+            {
+              "job_id": "ebe7b3672f5a49b1be039073160ff6c3",
+              "files_delivered": true,
+              "generic_import": {
+                "access": "Search or pull the attached sample files; native records are a separate outcome.",
+                "artifact_count": 1,
+                "state": "imported"
+              },
+              "pipeline": "metagenomic_growth_rate_Calculation",
+              "format": "StrainCoPTR",
+              "program": "growth",
+              "state": "empty",
+              "message": "Growth output has no data rows. Files were delivered; existing native results were preserved."
+            }
+          ],
+          "files": [
+            {
+              "name": "results.zip",
+              "source_path": "pipeline-bundles/ebe7b3672f5a49b1be039073160ff6c3/results.zip",
+              "id": "b2d6659c9717a76d28734749baf94abbefdc23d9a481e2711b1911c5de006206",
+              "size": 195,
+              "sha256": "344674096962fe33fe42d542cbbc9e04597bfa30dd4f4396d165d3e1f47b5587",
+              "content": {
+                "kind": "file",
+                "preview_available": false
+              }
+            },
+            {
+              "size": 36,
+              "sha256": "5f1605e60253be90d9ba876cd76b92caddbd7c34a6006cee60873f202369d152",
+              "name": "coptr_log2ptr.csv",
+              "source_path": "pipeline-artifacts/ebe7b3672f5a49b1be039073160ff6c3/0/coptr_log2ptr.csv",
+              "id": "5d04f944be56f865486ceb1632dd542ce34cea4b17eed6115495576e55779b8e",
+              "pipeline_result": {
+                "job_id": "ebe7b3672f5a49b1be039073160ff6c3",
+                "pipeline_name": "metagenomic_growth_rate_Calculation",
+                "output_key": "StrainCoPTR.log2ptr_csv",
+                "output_name": "log2ptr_csv",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:43:29.265159+00:00"
+              },
+              "content": {
+                "preview": "log2(PTR):genome_id/sample_id,reads\n",
+                "preview_available": true,
+                "preview_only": true,
+                "kind": "text"
+              }
+            }
+          ],
+          "native_qc_applied": false,
+          "file_delivery": "delivered",
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "4097869c78523703a7b15e4029e50311"
+      },
+      "response": {
+        "transfer_id": "abe6d0fb07eb4cecb6c9e56835c31457",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "offset": 0,
+          "total": 6,
+          "resources": [
+            {
+              "size": 402,
+              "project_id": "5b6bedd43f543db5b816602dab7101da",
+              "kind": "native_analysis_record",
+              "sample_id": "4097869c78523703a7b15e4029e50311",
+              "name": "growth-061b385a3391cfbda0b87eadc872778b.json",
+              "data_type": "meta",
+              "resource_id": "native:4097869c78523703a7b15e4029e50311:growth:061b385a3391cfbda0b87eadc872778b:record",
+              "program": "growth",
+              "importable": true,
+              "sample_name": "empty_preserves_existing_software_fixture"
+            },
+            {
+              "sha256": "3cf61bbda5d93ea64405cb7a5be70589add8cfab649bcbaab2f0544f6de1e464",
+              "kind": "analysis_output",
+              "sample_id": "4097869c78523703a7b15e4029e50311",
+              "pipeline_result": {
+                "job_id": "6c76ef600d8141bbbb30d98b5b127711",
+                "pipeline_name": "bridge_software_fixture_growth",
+                "output_key": "StrainCoPTR.log2ptr_csv",
+                "output_name": "log2ptr_csv",
+                "output_kind": "file",
+                "completed_at": "2026-11-09T07:41:28.008803+00:00"
+              },
+              "project_name": "Bridge_fixes_20261109",
+              "content": {
+                "preview_rows": [
+                  [
+                    "software_fixture",
+                    "0.5"
+                  ]
+                ],
+                "columns": [
+                  "log2(PTR):genome_id/sample_id",
+                  "software_fixture"
+                ],
+                "delimiter": "comma",
+                "preview_only": true,
+                "preview_available": true,
+                "kind": "table"
+              },
+              "size": 68,
+              "project_id": "5b6bedd43f543db5b816602dab7101da",
+              "name": "log2ptr_csv.csv",
+              "data_type": "meta",
+              "resource_id": "result:206191cae63f4740aa8af647fe3d2cf8:5aee3cde3a117e69d25ceea327a46c4228998bcf5028cf046b88e385199e6b11",
+              "source_path": "outputs/pipelines/6c76ef600d8141bbbb30d98b5b127711/log2ptr_csv.csv",
+              "id": "5aee3cde3a117e69d25ceea327a46c4228998bcf5028cf046b88e385199e6b11",
+              "sample_name": "empty_preserves_existing_software_fixture"
+            },
+            {
+              "sha256": "6a1644eddd4693842f58dc14301e73dbaa2fde47577de21a26af2284f28296bb",
+              "kind": "analysis_output",
+              "sample_id": "4097869c78523703a7b15e4029e50311",
+              "project_name": "Bridge_fixes_20261109",
+              "content": {
+                "kind": "file",
+                "preview_available": false
+              },
+              "size": 201,
+              "project_id": "5b6bedd43f543db5b816602dab7101da",
+              "name": "results.zip",
+              "data_type": "meta",
+              "resource_id": "result:206191cae63f4740aa8af647fe3d2cf8:b80c99a04bbbde69e9bd4d4d18237ef952bdd0554760fc04fbbca04e3e316c9e",
+              "source_path": "pipeline-bundles/6c76ef600d8141bbbb30d98b5b127711/results.zip",
+              "id": "b80c99a04bbbde69e9bd4d4d18237ef952bdd0554760fc04fbbca04e3e316c9e",
+              "sample_name": "empty_preserves_existing_software_fixture"
+            },
+            {
+              "sha256": "5f1605e60253be90d9ba876cd76b92caddbd7c34a6006cee60873f202369d152",
+              "kind": "analysis_output",
+              "sample_id": "4097869c78523703a7b15e4029e50311",
+              "pipeline_result": {
+                "job_id": "ebe7b3672f5a49b1be039073160ff6c3",
+                "pipeline_name": "metagenomic_growth_rate_Calculation",
+                "output_key": "StrainCoPTR.log2ptr_csv",
+                "output_name": "log2ptr_csv",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:43:29.265159+00:00"
+              },
+              "project_name": "Bridge_fixes_20261109",
+              "content": {
+                "preview": "log2(PTR):genome_id/sample_id,reads\n",
+                "preview_available": true,
+                "preview_only": true,
+                "kind": "text"
+              },
+              "size": 36,
+              "project_id": "5b6bedd43f543db5b816602dab7101da",
+              "name": "coptr_log2ptr.csv",
+              "data_type": "meta",
+              "resource_id": "result:90361486eea740889d190a114f6e3dde:5d04f944be56f865486ceb1632dd542ce34cea4b17eed6115495576e55779b8e",
+              "source_path": "pipeline-artifacts/ebe7b3672f5a49b1be039073160ff6c3/0/coptr_log2ptr.csv",
+              "id": "5d04f944be56f865486ceb1632dd542ce34cea4b17eed6115495576e55779b8e",
+              "sample_name": "4097869c78523703a7b15e4029e50311"
+            },
+            {
+              "sha256": "344674096962fe33fe42d542cbbc9e04597bfa30dd4f4396d165d3e1f47b5587",
+              "kind": "analysis_output",
+              "sample_id": "4097869c78523703a7b15e4029e50311",
+              "project_name": "Bridge_fixes_20261109",
+              "content": {
+                "kind": "file",
+                "preview_available": false
+              },
+              "size": 195,
+              "project_id": "5b6bedd43f543db5b816602dab7101da",
+              "name": "results.zip",
+              "data_type": "meta",
+              "resource_id": "result:90361486eea740889d190a114f6e3dde:b2d6659c9717a76d28734749baf94abbefdc23d9a481e2711b1911c5de006206",
+              "source_path": "pipeline-bundles/ebe7b3672f5a49b1be039073160ff6c3/results.zip",
+              "id": "b2d6659c9717a76d28734749baf94abbefdc23d9a481e2711b1911c5de006206",
+              "sample_name": "4097869c78523703a7b15e4029e50311"
+            },
+            {
+              "sample_id": "4097869c78523703a7b15e4029e50311",
+              "data_type": "meta",
+              "sample_name": "empty_preserves_existing_software_fixture",
+              "importable": false,
+              "resource_id": "sample:meta:4097869c78523703a7b15e4029e50311",
+              "kind": "sample",
+              "project_id": "5b6bedd43f543db5b816602dab7101da"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "native:4097869c78523703a7b15e4029e50311:growth:061b385a3391cfbda0b87eadc872778b:record"
+      },
+      "response": {
+        "transfer_id": "4f0ed7a6bdb346c581c94db506727608",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "a1124a24-61a0-4435-83e8-601c5839101d",
+            "path": "uploads/dd7340b1da4e4b3385920ade983c1d2d_growth-061b385a3391cfbda0b87eadc872778b.json",
+            "workspace_path": "uploads/dd7340b1da4e4b3385920ade983c1d2d_growth-061b385a3391cfbda0b87eadc872778b.json",
+            "name": "growth-061b385a3391cfbda0b87eadc872778b.json",
+            "size": 402,
+            "sha256": "c0dba80da6ef1ebccdfe09b8295b2b20b4f0baa9f01d5967fa7490f58dc871f0",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "before": [
+    {
+      "resource_id": "native:4097869c78523703a7b15e4029e50311:growth:061b385a3391cfbda0b87eadc872778b:record",
+      "sha256": "c0dba80da6ef1ebccdfe09b8295b2b20b4f0baa9f01d5967fa7490f58dc871f0"
+    }
+  ],
+  "after": [
+    {
+      "resource_id": "native:4097869c78523703a7b15e4029e50311:growth:061b385a3391cfbda0b87eadc872778b:record",
+      "sha256": "c0dba80da6ef1ebccdfe09b8295b2b20b4f0baa9f01d5967fa7490f58dc871f0"
+    }
+  ],
+  "status": "passed"
+}

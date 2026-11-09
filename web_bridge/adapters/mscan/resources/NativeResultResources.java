@@ -23,10 +23,12 @@ public class NativeResultResources {
     public NativeResultResources(IMetadataMapper metadata,IFastSampleMapper fasta,IQcResultRecordService qc,
             IAssemblyResultService assembly,IFuncReadsResultService reads,IFuncAssemblyResultService genomes,
             IMetaxResultService metax,IAnnotatorResultService annotations,IBacResultService bac,ISnpResultService snp,
-            IStrainCoptrResultService growth,IStrainProfileService profiles,com.fasterxml.jackson.databind.ObjectMapper json) {
+            IStrainCoptrResultService growth,IStrainProfileService profiles,IMashSummaryService mash,
+            IDetectionResultKmerService kmer,com.fasterxml.jackson.databind.ObjectMapper json) {
         this.metadata=metadata;this.fasta=fasta;this.json=json;
-        this.providers=Map.of("qc",qc,"assembly",assembly,"func_reads",reads,"func_assembly",genomes,
-            "metax",metax,"annotation",annotations,"bac",bac,"snp",snp,"growth",growth,"strain_profile",profiles);
+        this.providers=Map.ofEntries(Map.entry("qc",qc),Map.entry("assembly",assembly),Map.entry("func_reads",reads),Map.entry("func_assembly",genomes),
+            Map.entry("metax",metax),Map.entry("annotation",annotations),Map.entry("bac",bac),Map.entry("snp",snp),
+            Map.entry("growth",growth),Map.entry("strain_profile",profiles),Map.entry("mash",mash),Map.entry("kmer",kmer));
     }
     private void owned(String owner,String sample) {
         var reads=metadata.selectById(sample);var genome=fasta.selectById(sample);

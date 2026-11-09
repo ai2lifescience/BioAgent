@@ -1,0 +1,73 @@
+[
+  {
+    "case": "website_import_data",
+    "status": "passed",
+    "result": {
+      "status": "ok",
+      "data": {
+        "partial": false,
+        "path": "uploads/3ef0601537034fc5a185f6126f1256bf_mscan_qc_summary.csv",
+        "filename": "mscan_qc_summary.csv",
+        "bytes": 90
+      },
+      "files": [
+        {
+          "path": "uploads/3ef0601537034fc5a185f6126f1256bf_mscan_qc_summary.csv",
+          "workspace_path": "uploads/3ef0601537034fc5a185f6126f1256bf_mscan_qc_summary.csv",
+          "name": "3ef0601537034fc5a185f6126f1256bf_mscan_qc_summary.csv",
+          "kind": "upload",
+          "content_type": "text/csv; charset=utf-8",
+          "size": 90,
+          "modified_at": 1794209845560563417
+        }
+      ],
+      "evidence": [],
+      "error": null
+    }
+  },
+  {
+    "case": "website_highlight",
+    "status": "passed",
+    "result": {
+      "status": "ok",
+      "data": {
+        "message": "Highlighted the visible qc_summary resource.",
+        "revision": "mscan-1747805",
+        "element_id": "qc_summary"
+      },
+      "files": [],
+      "evidence": [],
+      "error": null
+    }
+  },
+  {
+    "case": "website_highlight-unregistered",
+    "status": "passed",
+    "result": {
+      "status": "error",
+      "data": {},
+      "files": [],
+      "evidence": [],
+      "error": {
+        "code": "ValueError",
+        "message": "This element is not registered on the selected page."
+      }
+    }
+  },
+  {
+    "case": "embedded_csv_download_after_reload",
+    "status": "passed",
+    "bytes": 90,
+    "content": "\"metric\",\"reads\"\n\"inputReads\",\"4168\"\n\"readsAfterQC\",\"4168\"\n\"readsAfterHostRemoval\",\"4149\"\n"
+  },
+  {
+    "case": "distinct_download_labels",
+    "status": "passed",
+    "labels": [
+      "qc_counts.tsv \u2014 Attachment \u00b7 74e289ab",
+      "qc_counts.tsv \u2014 Native output \u00b7 qc \u00b7 74e289ab"
+    ],
+    "note": "Use hover: MSCAN dropdown is hover-triggered. The initial click-based test closed the menu.",
+    "downloaded_attachment_bytes": 84
+  }
+]

@@ -1,0 +1,229 @@
+{
+  "pipeline": "viral_read_molecular_typing",
+  "engine": "wdl",
+  "manifest_sha256": "9041c29a8a3a6e2e0b47655514a8528b15c399384edf1ab897989672aea3d795",
+  "selected_for_execution": false,
+  "execution_status": "not_executed",
+  "scope_note": "Contract and inert-transfer verification only; biological workflow/example outside the live execution safety scope.",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/viral_read_molecular_typing/data/input/molecular_demo_h1n1.fastq.gz",
+      "bytes": 8803144,
+      "sha256": "edf1d6cd93913afc3a9947805c714f9ce17bf167026ca7946524708c2c1c52f4"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "read1",
+      "read2"
+    ],
+    "outputs": [
+      "result_csv",
+      "nextclade_tsv",
+      "nextclade_json",
+      "consensus_fasta",
+      "final_bam"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/3a739c6d9b7c49718af70c6a3b0240a5_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "viral_read_molecular_typing_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "1566358106db42e1997e43a9904d609f",
+      "response": {
+        "transfer_id": "1566358106db42e1997e43a9904d609f",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "3a739c6d9b7c49718af70c6a3b0240a5_contract-check.json",
+              "id": "37627931264cf88f93646b32377c471c71dc96a151bbcec7dcca0f7a2911bc8c",
+              "source_path": "uploads/3a739c6d9b7c49718af70c6a3b0240a5_contract-check.json",
+              "size": 182,
+              "sha256": "b7979a0d2130f13ee8c307acd375145940e54535b937145c2f354663c27fe625",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "1566358106db42e1997e43a9904d609f",
+          "target": {
+            "sample_id": "b1094e2b066435589b7526b8a60deffd",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "viral_read_molecular_typing_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "b1094e2b066435589b7526b8a60deffd"
+      },
+      "transfer_id": "5c62dbaff041458bb92ec2f8b43df186",
+      "response": {
+        "transfer_id": "5c62dbaff041458bb92ec2f8b43df186",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "b7979a0d2130f13ee8c307acd375145940e54535b937145c2f354663c27fe625",
+              "kind": "analysis_output",
+              "sample_id": "b1094e2b066435589b7526b8a60deffd",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 182,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "3a739c6d9b7c49718af70c6a3b0240a5_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:1566358106db42e1997e43a9904d609f:37627931264cf88f93646b32377c471c71dc96a151bbcec7dcca0f7a2911bc8c",
+              "id": "37627931264cf88f93646b32377c471c71dc96a151bbcec7dcca0f7a2911bc8c",
+              "source_path": "uploads/3a739c6d9b7c49718af70c6a3b0240a5_contract-check.json",
+              "sample_name": "viral_read_molecular_typing_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:b1094e2b066435589b7526b8a60deffd",
+              "importable": false,
+              "sample_name": "viral_read_molecular_typing_contract_only",
+              "data_type": "meta",
+              "sample_id": "b1094e2b066435589b7526b8a60deffd"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:1566358106db42e1997e43a9904d609f:37627931264cf88f93646b32377c471c71dc96a151bbcec7dcca0f7a2911bc8c"
+      },
+      "transfer_id": "dc260437e4514e8ba29ec0b38f03d68c",
+      "response": {
+        "transfer_id": "dc260437e4514e8ba29ec0b38f03d68c",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "eb536423-4b71-4c4e-ab14-4c875f27c432",
+            "path": "uploads/185cc801a2ca49c9b50298a53cd512cb_3a739c6d9b7c49718af70c6a3b0240a5_contract-check.json",
+            "workspace_path": "uploads/185cc801a2ca49c9b50298a53cd512cb_3a739c6d9b7c49718af70c6a3b0240a5_contract-check.json",
+            "name": "3a739c6d9b7c49718af70c6a3b0240a5_contract-check.json",
+            "size": 182,
+            "sha256": "b7979a0d2130f13ee8c307acd375145940e54535b937145c2f354663c27fe625",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "eb536423-4b71-4c4e-ab14-4c875f27c432",
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "b1094e2b066435589b7526b8a60deffd",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "viral_read_molecular_typing_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "3a739c6d9b7c49718af70c6a3b0240a5_contract-check.json",
+      "resource_id": "result:1566358106db42e1997e43a9904d609f:37627931264cf88f93646b32377c471c71dc96a151bbcec7dcca0f7a2911bc8c",
+      "state": "succeeded",
+      "bytes": 182,
+      "sha256": "b7979a0d2130f13ee8c307acd375145940e54535b937145c2f354663c27fe625",
+      "expected_sha256": "b7979a0d2130f13ee8c307acd375145940e54535b937145c2f354663c27fe625",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "b7979a0d2130f13ee8c307acd375145940e54535b937145c2f354663c27fe625",
+      "kind": "analysis_output",
+      "sample_id": "b1094e2b066435589b7526b8a60deffd",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 182,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "3a739c6d9b7c49718af70c6a3b0240a5_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:1566358106db42e1997e43a9904d609f:37627931264cf88f93646b32377c471c71dc96a151bbcec7dcca0f7a2911bc8c",
+      "id": "37627931264cf88f93646b32377c471c71dc96a151bbcec7dcca0f7a2911bc8c",
+      "source_path": "uploads/3a739c6d9b7c49718af70c6a3b0240a5_contract-check.json",
+      "sample_name": "viral_read_molecular_typing_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:b1094e2b066435589b7526b8a60deffd",
+      "importable": false,
+      "sample_name": "viral_read_molecular_typing_contract_only",
+      "data_type": "meta",
+      "sample_id": "b1094e2b066435589b7526b8a60deffd"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 16.25,
+  "test_finished": true
+}

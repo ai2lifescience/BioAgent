@@ -30,7 +30,7 @@ public class NativeFilesBoundaryCheck {
         var service=new NativeResultResources(rows,empty(IFastSampleMapper.class),empty(IQcResultRecordService.class),assembly,
             empty(IFuncReadsResultService.class),empty(IFuncAssemblyResultService.class),empty(IMetaxResultService.class),
             empty(IAnnotatorResultService.class),empty(IBacResultService.class),empty(ISnpResultService.class),
-            empty(IStrainCoptrResultService.class),empty(IStrainProfileService.class),new ObjectMapper());
+            empty(IStrainCoptrResultService.class),empty(IStrainProfileService.class),empty(IMashSummaryService.class),empty(IDetectionResultKmerService.class),new ObjectMapper());
         String file="native:sample-a:assembly:row-a:finalContigsRenamed";
         var allowed=service.resolve("alice",file);
         if(!allowed.bucket().equals("test-results")||!allowed.key().equals("fixture.fa"))throw new AssertionError("Wrong object");

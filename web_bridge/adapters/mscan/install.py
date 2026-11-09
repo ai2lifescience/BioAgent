@@ -8,6 +8,18 @@ parser.add_argument('root', nargs='?', default='resource/mscan', help='Directory
 args = parser.parse_args()
 root = Path(args.root).resolve()
 source = Path(__file__).resolve().parent
+# Two native result parsers exist in MSCAN but are private polling callbacks.
+# Expose narrowly scoped import entry points; do not copy their parsing logic or
+# call the poller (which could start unrelated follow-up workflows).
+native_hooks = (
+    ('IGenomeTracingService', 'importDetectionResult', 'handleDetectionSucceeded'),
+    ('IMetadataProcessService', 'importKmerDetectionResult', 'handleKmerDetectionSucceeded'),
+)
+services = root / 'mscan-app/mscan-database/src/main/java/com/mscan/database/service'
+for service, public, handler in native_hooks:
+    implementation = services / 'impl' / (service + 'Impl.java')
+    if f'void {handler}(SampleTaskInfo task)' not in implementation.read_text():
+        raise ValueError(f'Unsupported MSCAN native parser: {handler}; review before installing.')
 panel_path = root / 'mscan/src/views/sampleProgramResults/components/ProgramResultPanel.vue'
 old_panel_condition = "programKey === 'funcflow' && dataType === 'genomic'"
 new_panel_condition = "programKey === 'funcflow' && (dataType === 'genomic' || dataType === 'synthetic')"
@@ -66,6 +78,19 @@ def edit(path, change):
     result = updated.replace('\n', newline).encode()
     if result != data:
         path.write_bytes(result)
+
+def expose_native(text, public, handler=None):
+    if f'void {public}(SampleTaskInfo task)' in text:
+        return text
+    position = text.rfind('}')
+    if position < 0:
+        raise ValueError('Unsupported native service declaration.')
+    method = f'    void {public}(SampleTaskInfo task);' if handler is None else f'    @Override\n    public void {public}(SampleTaskInfo task) {{ {handler}(task); }}'
+    return text[:position] + '\n    /** Import existing result files without submitting or polling workflows. */\n' + method + '\n' + text[position:]
+
+for service, public, handler in native_hooks:
+    edit(services / (service + '.java'), lambda text, public=public: expose_native(text, public))
+    edit(services / 'impl' / (service + 'Impl.java'), lambda text, public=public, handler=handler: expose_native(text, public, handler))
 
 def app(text):
     if 'AssistantBridge' in text: return text
@@ -136,4 +161,4 @@ def status_refresh(text):
         'const agentResultVersion = useReceivedResults(() => currentSampleId.value);\nwatch(agentResultVersion, () => {\n  void loadSampleTree();\n  void refreshProgramStatuses();\n});')
 edit(root / 'mscan/src/views/sampleProgramResults/index.vue', status_refresh)
 
-print("Installed MSCAN adapter. Existing source hooks: App.vue, sampleProgramResults/index.vue and one ProgramResultPanel.vue sample-type condition.")
+print("Installed MSCAN adapter: three frontend hooks and two import-only parser entry points in four backend files.")

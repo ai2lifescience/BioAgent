@@ -1,0 +1,227 @@
+{
+  "pipeline": "bacterial_biosynthetic_gene_clusters",
+  "engine": "wdl",
+  "manifest_sha256": "32310bf4487daa052c08447b10f2907aace6c1185015d395bba3849f424afb83",
+  "selected_for_execution": false,
+  "execution_status": "not_executed",
+  "scope_note": "Contract and inert-transfer verification only; biological workflow/example outside the live execution safety scope.",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/bacterial_biosynthetic_gene_clusters/data/input/bgc_demo_pao1.fasta",
+      "bytes": 6342768,
+      "sha256": "3e9335fb76772d324537b0c4c8cc7935e8b467b2acb0fae0c6e6dbeb2f227117"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "sequence_file1",
+      "sequence_file2"
+    ],
+    "outputs": [
+      "bgc_clusters",
+      "bgc_genes",
+      "bgc_features"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/07a877acf06e49f69a6df145db6e01e7_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "bacterial_biosynthetic_gene_clusters_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "828228d7aad3482a9b88cd618b4c3b8d",
+      "response": {
+        "transfer_id": "828228d7aad3482a9b88cd618b4c3b8d",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "07a877acf06e49f69a6df145db6e01e7_contract-check.json",
+              "id": "2ddd3842e2e56f98242242a785be7584a6f9abcb96289c9ac000b68781ebb8d4",
+              "source_path": "uploads/07a877acf06e49f69a6df145db6e01e7_contract-check.json",
+              "size": 191,
+              "sha256": "926d32840e4971baf63c90370795c6ad7808755919720ca200a2152e7595e93a",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "828228d7aad3482a9b88cd618b4c3b8d",
+          "target": {
+            "sample_id": "b77b5992bae136eaada279c1d0e8fbd6",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "bacterial_biosynthetic_gene_clusters_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "b77b5992bae136eaada279c1d0e8fbd6"
+      },
+      "transfer_id": "546fa075ba424d97a41ce9ba76411845",
+      "response": {
+        "transfer_id": "546fa075ba424d97a41ce9ba76411845",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "926d32840e4971baf63c90370795c6ad7808755919720ca200a2152e7595e93a",
+              "kind": "analysis_output",
+              "sample_id": "b77b5992bae136eaada279c1d0e8fbd6",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 191,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "07a877acf06e49f69a6df145db6e01e7_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:828228d7aad3482a9b88cd618b4c3b8d:2ddd3842e2e56f98242242a785be7584a6f9abcb96289c9ac000b68781ebb8d4",
+              "id": "2ddd3842e2e56f98242242a785be7584a6f9abcb96289c9ac000b68781ebb8d4",
+              "source_path": "uploads/07a877acf06e49f69a6df145db6e01e7_contract-check.json",
+              "sample_name": "bacterial_biosynthetic_gene_clusters_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:b77b5992bae136eaada279c1d0e8fbd6",
+              "importable": false,
+              "sample_name": "bacterial_biosynthetic_gene_clusters_contract_only",
+              "data_type": "meta",
+              "sample_id": "b77b5992bae136eaada279c1d0e8fbd6"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:828228d7aad3482a9b88cd618b4c3b8d:2ddd3842e2e56f98242242a785be7584a6f9abcb96289c9ac000b68781ebb8d4"
+      },
+      "transfer_id": "bed6356d3e0441048866218d8e16ba78",
+      "response": {
+        "transfer_id": "bed6356d3e0441048866218d8e16ba78",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "a8e1d411-3fe6-4475-a423-f66cb08b0fa1",
+            "path": "uploads/a4b6b277ffb24e5e998481e4a226c25c_07a877acf06e49f69a6df145db6e01e7_contract-check.json",
+            "workspace_path": "uploads/a4b6b277ffb24e5e998481e4a226c25c_07a877acf06e49f69a6df145db6e01e7_contract-check.json",
+            "name": "07a877acf06e49f69a6df145db6e01e7_contract-check.json",
+            "size": 191,
+            "sha256": "926d32840e4971baf63c90370795c6ad7808755919720ca200a2152e7595e93a",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "a8e1d411-3fe6-4475-a423-f66cb08b0fa1",
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "b77b5992bae136eaada279c1d0e8fbd6",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "bacterial_biosynthetic_gene_clusters_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "07a877acf06e49f69a6df145db6e01e7_contract-check.json",
+      "resource_id": "result:828228d7aad3482a9b88cd618b4c3b8d:2ddd3842e2e56f98242242a785be7584a6f9abcb96289c9ac000b68781ebb8d4",
+      "state": "succeeded",
+      "bytes": 191,
+      "sha256": "926d32840e4971baf63c90370795c6ad7808755919720ca200a2152e7595e93a",
+      "expected_sha256": "926d32840e4971baf63c90370795c6ad7808755919720ca200a2152e7595e93a",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "926d32840e4971baf63c90370795c6ad7808755919720ca200a2152e7595e93a",
+      "kind": "analysis_output",
+      "sample_id": "b77b5992bae136eaada279c1d0e8fbd6",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 191,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "07a877acf06e49f69a6df145db6e01e7_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:828228d7aad3482a9b88cd618b4c3b8d:2ddd3842e2e56f98242242a785be7584a6f9abcb96289c9ac000b68781ebb8d4",
+      "id": "2ddd3842e2e56f98242242a785be7584a6f9abcb96289c9ac000b68781ebb8d4",
+      "source_path": "uploads/07a877acf06e49f69a6df145db6e01e7_contract-check.json",
+      "sample_name": "bacterial_biosynthetic_gene_clusters_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:b77b5992bae136eaada279c1d0e8fbd6",
+      "importable": false,
+      "sample_name": "bacterial_biosynthetic_gene_clusters_contract_only",
+      "data_type": "meta",
+      "sample_id": "b77b5992bae136eaada279c1d0e8fbd6"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 16.3,
+  "test_finished": true
+}

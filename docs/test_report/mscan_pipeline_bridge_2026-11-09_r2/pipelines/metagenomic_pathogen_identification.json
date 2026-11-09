@@ -1,0 +1,255 @@
+{
+  "pipeline": "metagenomic_pathogen_identification",
+  "engine": "wdl",
+  "manifest_sha256": "bfd3459fb744b868d119945d0b14efc54854c22fe356cb564a3473610ab73f33",
+  "selected_for_execution": true,
+  "execution_status": "observation_timeout",
+  "scope_note": "",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/metagenomic_pathogen_identification/data/input/detection_demo.fq.gz",
+      "bytes": 240118,
+      "sha256": "9101bef1192734f4c50d2908a91b18762432f7f1d789a007e13644b2bccde82c"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "sequence_file1",
+      "sequence_file2"
+    ],
+    "outputs": [
+      "final_report",
+      "priority_panel",
+      "sample_overview",
+      "read_accounting",
+      "crossdb_signature"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/ddadf597457e497297cc069e0ca67f17_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "metagenomic_pathogen_identification_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "6e5519d84da04f46ad5c36e2822345e3",
+      "response": {
+        "transfer_id": "6e5519d84da04f46ad5c36e2822345e3",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "ddadf597457e497297cc069e0ca67f17_contract-check.json",
+              "id": "e9d83bec7643ed951557e37b1f8e81800cf391617c30b7a9bf2feb9755c57f35",
+              "source_path": "uploads/ddadf597457e497297cc069e0ca67f17_contract-check.json",
+              "size": 190,
+              "sha256": "a8aea9c63d3e079587c5dfad14a57aba0f38ebb1d873ba15e1594606031aa868",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "6e5519d84da04f46ad5c36e2822345e3",
+          "target": {
+            "sample_id": "b255f675c410337abce78004d92d56ff",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "metagenomic_pathogen_identification_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "b255f675c410337abce78004d92d56ff"
+      },
+      "transfer_id": "0926814dda3d4000b1843c8334c79299",
+      "response": {
+        "transfer_id": "0926814dda3d4000b1843c8334c79299",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "a8aea9c63d3e079587c5dfad14a57aba0f38ebb1d873ba15e1594606031aa868",
+              "kind": "analysis_output",
+              "sample_id": "b255f675c410337abce78004d92d56ff",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 190,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "ddadf597457e497297cc069e0ca67f17_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:6e5519d84da04f46ad5c36e2822345e3:e9d83bec7643ed951557e37b1f8e81800cf391617c30b7a9bf2feb9755c57f35",
+              "id": "e9d83bec7643ed951557e37b1f8e81800cf391617c30b7a9bf2feb9755c57f35",
+              "source_path": "uploads/ddadf597457e497297cc069e0ca67f17_contract-check.json",
+              "sample_name": "metagenomic_pathogen_identification_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:b255f675c410337abce78004d92d56ff",
+              "importable": false,
+              "sample_name": "metagenomic_pathogen_identification_contract_only",
+              "data_type": "meta",
+              "sample_id": "b255f675c410337abce78004d92d56ff"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:6e5519d84da04f46ad5c36e2822345e3:e9d83bec7643ed951557e37b1f8e81800cf391617c30b7a9bf2feb9755c57f35"
+      },
+      "transfer_id": "3727124eda2847eb8961cb2ce38e104b",
+      "response": {
+        "transfer_id": "3727124eda2847eb8961cb2ce38e104b",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "c4454b15-4576-4139-951c-fd9826460674",
+            "path": "uploads/598cceb1f03e49fc944d92cebd6f4e76_ddadf597457e497297cc069e0ca67f17_contract-check.json",
+            "workspace_path": "uploads/598cceb1f03e49fc944d92cebd6f4e76_ddadf597457e497297cc069e0ca67f17_contract-check.json",
+            "name": "ddadf597457e497297cc069e0ca67f17_contract-check.json",
+            "size": 190,
+            "sha256": "a8aea9c63d3e079587c5dfad14a57aba0f38ebb1d873ba15e1594606031aa868",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "c4454b15-4576-4139-951c-fd9826460674",
+  "assigned_inputs": {
+    "sequence_file1": "uploads/examples/metagenomic_pathogen_identification-c0744d94a59845ce9cc0360de20170cb/detection_demo.fq.gz"
+  },
+  "parameter_overrides": {},
+  "plan_id": "c751567beb9e463598a1bb2f99349f7f",
+  "job_id": "c751567beb9e463598a1bb2f99349f7f",
+  "last_state": {
+    "job_id": "c751567beb9e463598a1bb2f99349f7f",
+    "plan_id": "c751567beb9e463598a1bb2f99349f7f",
+    "status": "running",
+    "created_at": "2026-11-09T06:24:39.900938+00:00",
+    "started_at": "2026-11-09T06:24:40.374778+00:00",
+    "updated_at": "2026-11-09T06:39:41.512120+00:00",
+    "remote_id": "090feb07-a177-490d-b64d-501abb90c897",
+    "pipeline_name": "metagenomic_pathogen_identification"
+  },
+  "cancellation": {
+    "job_id": "c751567beb9e463598a1bb2f99349f7f",
+    "plan_id": "c751567beb9e463598a1bb2f99349f7f",
+    "status": "cancelling",
+    "created_at": "2026-11-09T06:24:39.900938+00:00",
+    "started_at": "2026-11-09T06:24:40.374778+00:00",
+    "updated_at": "2026-11-09T06:39:44.570335+00:00",
+    "remote_id": "090feb07-a177-490d-b64d-501abb90c897",
+    "pipeline_name": "metagenomic_pathogen_identification"
+  },
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "b255f675c410337abce78004d92d56ff",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "metagenomic_pathogen_identification_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "ddadf597457e497297cc069e0ca67f17_contract-check.json",
+      "resource_id": "result:6e5519d84da04f46ad5c36e2822345e3:e9d83bec7643ed951557e37b1f8e81800cf391617c30b7a9bf2feb9755c57f35",
+      "state": "succeeded",
+      "bytes": 190,
+      "sha256": "a8aea9c63d3e079587c5dfad14a57aba0f38ebb1d873ba15e1594606031aa868",
+      "expected_sha256": "a8aea9c63d3e079587c5dfad14a57aba0f38ebb1d873ba15e1594606031aa868",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "a8aea9c63d3e079587c5dfad14a57aba0f38ebb1d873ba15e1594606031aa868",
+      "kind": "analysis_output",
+      "sample_id": "b255f675c410337abce78004d92d56ff",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 190,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "ddadf597457e497297cc069e0ca67f17_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:6e5519d84da04f46ad5c36e2822345e3:e9d83bec7643ed951557e37b1f8e81800cf391617c30b7a9bf2feb9755c57f35",
+      "id": "e9d83bec7643ed951557e37b1f8e81800cf391617c30b7a9bf2feb9755c57f35",
+      "source_path": "uploads/ddadf597457e497297cc069e0ca67f17_contract-check.json",
+      "sample_name": "metagenomic_pathogen_identification_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:b255f675c410337abce78004d92d56ff",
+      "importable": false,
+      "sample_name": "metagenomic_pathogen_identification_contract_only",
+      "data_type": "meta",
+      "sample_id": "b255f675c410337abce78004d92d56ff"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 922.09,
+  "test_finished": true
+}
