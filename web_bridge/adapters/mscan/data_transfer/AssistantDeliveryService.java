@@ -116,6 +116,7 @@ public class AssistantDeliveryService {
             String name=source.substring(source.lastIndexOf('/')+1);
             var savedFile=new HashMap<String,Object>(Map.of("id",key,"name",name,"size",size,"sha256",sha,"source_path",source));
             if(f.get("pipeline_result") instanceof Map<?,?>)savedFile.put("pipeline_result",f.get("pipeline_result"));
+            savedFile.put("content",ResultArtifactInspector.inspect(destination));
             saved.add(savedFile);
         }
         Map<String,Object> receipt=new HashMap<>(item);receipt.remove("lease");receipt.put("files",saved);

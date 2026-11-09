@@ -56,6 +56,8 @@ public class ResultImportCheck {
             var unknown=new HashMap<String,Object>(Map.of("files",List.of(file("unknown",NEW,2,"Custom.report"))));
             imports.importReceipt("owner","sample","meta","delivery",dir,unknown,List.of());
             if(!state(unknown,NEW).equals("unsupported")||!Boolean.FALSE.equals(unknown.get("native_import_failed")))throw new AssertionError("File-only fallback lost");
+            var outcome=((List<Map<String,Object>>)unknown.get("native_imports")).get(0);
+            if(!"imported".equals(((Map<?,?>)outcome.get("generic_import")).get("state")))throw new AssertionError("Generic delivery outcome missing");
             System.out.println("PASS importer registry, job scoping, retry, newer-result preservation, sample types and file-only fallback");
         } finally {
             Files.deleteIfExists(dir.resolve("old"));Files.deleteIfExists(dir.resolve("new"));Files.deleteIfExists(dir);

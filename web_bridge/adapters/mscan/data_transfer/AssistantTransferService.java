@@ -78,7 +78,9 @@ public class AssistantTransferService {
             "operations",List.of("search","pull","push"),"destination_fields",Map.of(
                 "project","Exact owned project ID or name", "sample","Exact sample ID or name in the project",
                 "data_type","meta, shortReads, genomic or synthetic", "source_slots","Optional map of R1/R2 or genome to selected workspace paths"),
-            "create_missing",true,"existing_sources","preserved","native_result_importers",importerRegistry.capabilities())));
+            "create_missing",true,"existing_sources","preserved",
+            "generic_results",Map.of("file_formats","any","discovery_metadata",List.of("table","json","text","file"),
+                "native_mapping","registered_formats_only"),"native_result_importers",importerRegistry.capabilities())));
         var commands=(List<Map<String,Object>>)pending.getOrDefault("commands",List.of());
         return commands.isEmpty()?null:commands.get(0);
     }

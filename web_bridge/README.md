@@ -198,8 +198,9 @@ and native files appear under **Download files** on the sample toolbar; the old
 Agent results panel has been removed. Native interpretation belongs in the
 website adapter; generic file transport does not require a native importer.
 
-The installer changes two existing frontend files for the assistant mount and
-sample context, refresh and download hooks. Backend services, the logout hook
+The installer changes three existing frontend files for the assistant mount,
+sample context, refresh and download hooks, and the synthetic-sample result-component
+selection. Backend services, the logout hook
 and the one-use download route are supplied by added adapter classes.
 Source pipeline definitions and execution policies are unchanged.
 
@@ -370,7 +371,7 @@ checked against their recorded checksum. The transport has no MSCAN program list
 
 MSCAN-specific code is [organized by function](adapters/mscan/README.md#code-organization).
 The [minimal installation](adapters/mscan/README.md#minimal-mscan-changes) modifies
-only two existing frontend files; backend integration is supplied by added adapter classes.
+three existing frontend files; backend integration is supplied by added adapter classes.
 Native importers live in `adapters/mscan/result_importers/`:
 
 - `ResultImporterRegistry` declares format contracts and binds MSCAN's existing
@@ -418,6 +419,13 @@ Unknown formats remain attached files with an explicit `unsupported` native
 import status. Do not guess native mappings from filenames or mark a program
 successful merely because its ZIP was received.
 
+MSCAN's `generic_results` capability covers file attachment independently of
+native formats. Newly delivered resources include bounded `content` metadata:
+table columns and sample rows, JSON field names, a text preview, or a binary-file
+descriptor. This lets the assistant inspect unfamiliar outputs through search
+and pull the full files for analysis. Previews are untrusted data, may be
+truncated, and do not establish a native format or schema. Files are unchanged.
+
 Push responses separate `file_delivery` from per-job `native_imports`:
 `imported`, `incomplete`, `incompatible_sample_type`, `unsupported`, `superseded`
 or `failed` (QC can also report `not_imported`). Missing output roles are listed. A parser failure rolls back its
@@ -425,6 +433,10 @@ native database changes and fails the transfer while retaining the received
 files and error details. Retrying that transfer reuses its receipt and destination
 and skips already committed native imports. Corrected output content requires a
 new transfer. QC also retains its `native_qc_applied` field for compatibility.
+Per-job `generic_import` records the separate successful file attachment, even
+when native mapping is unsupported. Native failures include a stable
+`error_code` and a credential-free explanation; `storage_proxy_configuration`
+means the backend proxy URL needs correcting before retrying.
 
 Downloads appear beside the selected sample across native analysis tabs; there
 is no separate Agent results panel. Natural-language push/pull stays in the
