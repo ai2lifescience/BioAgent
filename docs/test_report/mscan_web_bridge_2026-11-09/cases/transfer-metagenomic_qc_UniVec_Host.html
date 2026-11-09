@@ -1,0 +1,151 @@
+<html><meta charset="utf-8"><style>body{font:16px system-ui;margin:32px;color:#162b3e;background:#f3f6fa}pre{font:13px monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:white;padding:22px;border:1px solid #cbd5e1}h1{font-size:24px}.note{color:#475569}</style><p class="note">Recorded live test evidence · 2026-11-09 · This is an evidence viewer, not the application UI.</p><h1>metagenomic_qc_UniVec_Host result delivery</h1><p>Outcome: <b>succeeded</b></p><pre>{
+  &quot;id&quot;: &quot;transfer-metagenomic_qc_UniVec_Host&quot;,
+  &quot;title&quot;: &quot;metagenomic_qc_UniVec_Host result delivery&quot;,
+  &quot;outcome&quot;: &quot;succeeded&quot;,
+  &quot;inputs&quot;: {
+    &quot;paths&quot;: [
+      &quot;pipeline-bundles/32680dc17f9f49e28f27c21ec36caa58/results.zip&quot;,
+      &quot;uploads/examples/metagenomic_qc_UniVec_Host-7442e8e0604e425aa28541373622d171/qc_demo_R1.fastq.gz&quot;,
+      &quot;uploads/examples/metagenomic_qc_UniVec_Host-7442e8e0604e425aa28541373622d171/qc_demo_R2.fastq.gz&quot;
+    ],
+    &quot;destination&quot;: {
+      &quot;project&quot;: &quot;Bridge_pipeline_matrix_20261109&quot;,
+      &quot;sample&quot;: &quot;metagenomic_qc_UniVec_Host&quot;,
+      &quot;data_type&quot;: &quot;meta&quot;,
+      &quot;source_slots&quot;: {
+        &quot;R1&quot;: &quot;uploads/examples/metagenomic_qc_UniVec_Host-7442e8e0604e425aa28541373622d171/qc_demo_R1.fastq.gz&quot;,
+        &quot;R2&quot;: &quot;uploads/examples/metagenomic_qc_UniVec_Host-7442e8e0604e425aa28541373622d171/qc_demo_R2.fastq.gz&quot;
+      }
+    },
+    &quot;create_missing&quot;: true
+  },
+  &quot;result&quot;: {
+    &quot;transfer_id&quot;: &quot;e30ee88f84524d029cc4fac5f89d2f63&quot;,
+    &quot;site_id&quot;: &quot;mscan&quot;,
+    &quot;operation&quot;: &quot;push&quot;,
+    &quot;state&quot;: &quot;succeeded&quot;,
+    &quot;result&quot;: {
+      &quot;file_delivery&quot;: &quot;delivered&quot;,
+      &quot;source_registration&quot;: {
+        &quot;slots&quot;: {
+          &quot;R2&quot;: &quot;e7e6a1b6d8f33f419047e72ce8c77967&quot;,
+          &quot;R1&quot;: &quot;07fbf45200163057b33af528cf8eafb1&quot;
+        },
+        &quot;status&quot;: &quot;registered&quot;
+      },
+      &quot;target&quot;: {
+        &quot;sample_id&quot;: &quot;09df43cdeb7938559e9a4bb3f77719a2&quot;,
+        &quot;data_type&quot;: &quot;meta&quot;,
+        &quot;project_name&quot;: &quot;Bridge_pipeline_matrix_20261109&quot;,
+        &quot;sample_name&quot;: &quot;metagenomic_qc_UniVec_Host&quot;,
+        &quot;project_id&quot;: &quot;a924199794553f94b029789481f26a2d&quot;
+      },
+      &quot;receipt_id&quot;: &quot;e30ee88f84524d029cc4fac5f89d2f63&quot;,
+      &quot;qc&quot;: {
+        &quot;ReadsAfterHostRemoval&quot;: 90617,
+        &quot;QualityDroppedReads&quot;: 9283,
+        &quot;HostReads&quot;: 46,
+        &quot;InputReads&quot;: 100000,
+        &quot;UnivecCoreHitReads&quot;: 54,
+        &quot;ReadsAfterQC&quot;: 90663
+      },
+      &quot;native_imports&quot;: [
+        {
+          &quot;job_id&quot;: &quot;32680dc17f9f49e28f27c21ec36caa58&quot;,
+          &quot;files_delivered&quot;: true,
+          &quot;pipeline&quot;: &quot;metagenomic_qc_UniVec_Host&quot;,
+          &quot;format&quot;: &quot;ReadQc&quot;,
+          &quot;state&quot;: &quot;imported&quot;,
+          &quot;message&quot;: &quot;Native QC imported.&quot;,
+          &quot;program&quot;: &quot;qc&quot;
+        }
+      ],
+      &quot;files&quot;: [
+        {
+          &quot;name&quot;: &quot;results.zip&quot;,
+          &quot;source_path&quot;: &quot;pipeline-bundles/32680dc17f9f49e28f27c21ec36caa58/results.zip&quot;,
+          &quot;id&quot;: &quot;580e68fc07a941aa494bfe4249c67cf52e4d2e64c3d8a6c09e371428f9aa4c84&quot;,
+          &quot;sha256&quot;: &quot;902d2ca849af3b5114d36cf1f22f35532a7296845ab4946455b5eb285171828e&quot;,
+          &quot;size&quot;: 15787235
+        },
+        {
+          &quot;name&quot;: &quot;clean.R1.fastq.gz&quot;,
+          &quot;source_path&quot;: &quot;pipeline-artifacts/32680dc17f9f49e28f27c21ec36caa58/0/clean.R1.fastq.gz&quot;,
+          &quot;id&quot;: &quot;e90ee4035b437796b295c63cdf079cd000656cf1f9a54796384393887397bc42&quot;,
+          &quot;sha256&quot;: &quot;5ffa942841a1970986f08b84917f0b1d340eedbb02164eae17f3f032fc0619b0&quot;,
+          &quot;size&quot;: 7145823,
+          &quot;pipeline_result&quot;: {
+            &quot;job_id&quot;: &quot;32680dc17f9f49e28f27c21ec36caa58&quot;,
+            &quot;pipeline_name&quot;: &quot;metagenomic_qc_UniVec_Host&quot;,
+            &quot;output_key&quot;: &quot;ReadQc.clean_r1&quot;,
+            &quot;output_name&quot;: &quot;clean_r1&quot;,
+            &quot;output_kind&quot;: &quot;sequence&quot;,
+            &quot;completed_at&quot;: &quot;2026-11-09T02:40:39.986457+00:00&quot;
+          }
+        },
+        {
+          &quot;name&quot;: &quot;clean.R2.fastq.gz&quot;,
+          &quot;source_path&quot;: &quot;pipeline-artifacts/32680dc17f9f49e28f27c21ec36caa58/1/clean.R2.fastq.gz&quot;,
+          &quot;id&quot;: &quot;e080ce42c4786ff47e08e21d11847948bf4ce34a31219ac48d9b8e57da72b764&quot;,
+          &quot;sha256&quot;: &quot;b819855ffbf636487fd61c053c8a993d370e4c482cf53d48a57783dfa3025c76&quot;,
+          &quot;size&quot;: 7170645,
+          &quot;pipeline_result&quot;: {
+            &quot;job_id&quot;: &quot;32680dc17f9f49e28f27c21ec36caa58&quot;,
+            &quot;pipeline_name&quot;: &quot;metagenomic_qc_UniVec_Host&quot;,
+            &quot;output_key&quot;: &quot;ReadQc.clean_r2&quot;,
+            &quot;output_name&quot;: &quot;clean_r2&quot;,
+            &quot;output_kind&quot;: &quot;sequence&quot;,
+            &quot;completed_at&quot;: &quot;2026-11-09T02:40:39.986457+00:00&quot;
+          }
+        },
+        {
+          &quot;name&quot;: &quot;qc_summary.tsv&quot;,
+          &quot;source_path&quot;: &quot;pipeline-artifacts/32680dc17f9f49e28f27c21ec36caa58/2/qc_summary.tsv&quot;,
+          &quot;id&quot;: &quot;46099a6329ab58d2c95c53f81b161a78ec5c77ad990f493f88ae409573609fb5&quot;,
+          &quot;sha256&quot;: &quot;8e100b1291a209da7dec7965ef42cc1e12dfac62c01d37e5e633914a8e465991&quot;,
+          &quot;size&quot;: 160,
+          &quot;pipeline_result&quot;: {
+            &quot;job_id&quot;: &quot;32680dc17f9f49e28f27c21ec36caa58&quot;,
+            &quot;pipeline_name&quot;: &quot;metagenomic_qc_UniVec_Host&quot;,
+            &quot;output_key&quot;: &quot;ReadQc.qc_summary&quot;,
+            &quot;output_name&quot;: &quot;qc_summary&quot;,
+            &quot;output_kind&quot;: &quot;table&quot;,
+            &quot;completed_at&quot;: &quot;2026-11-09T02:40:39.986457+00:00&quot;
+          }
+        },
+        {
+          &quot;name&quot;: &quot;multiqc_report.html&quot;,
+          &quot;source_path&quot;: &quot;pipeline-artifacts/32680dc17f9f49e28f27c21ec36caa58/3/multiqc_report.html&quot;,
+          &quot;id&quot;: &quot;87c073443b6aa83ad1dd4cccfbbe63a50fe13398308dfb45465d46ff16f32de5&quot;,
+          &quot;sha256&quot;: &quot;460f59339f1511ffa6ea024b0d8f5c912c1032f02e524d8e333cd6622d7c5c11&quot;,
+          &quot;size&quot;: 4775781,
+          &quot;pipeline_result&quot;: {
+            &quot;job_id&quot;: &quot;32680dc17f9f49e28f27c21ec36caa58&quot;,
+            &quot;pipeline_name&quot;: &quot;metagenomic_qc_UniVec_Host&quot;,
+            &quot;output_key&quot;: &quot;ReadQc.multiqc_html&quot;,
+            &quot;output_name&quot;: &quot;multiqc_html&quot;,
+            &quot;output_kind&quot;: &quot;file&quot;,
+            &quot;completed_at&quot;: &quot;2026-11-09T02:40:39.986457+00:00&quot;
+          }
+        },
+        {
+          &quot;name&quot;: &quot;qc_demo_R1.fastq.gz&quot;,
+          &quot;source_path&quot;: &quot;uploads/examples/metagenomic_qc_UniVec_Host-7442e8e0604e425aa28541373622d171/qc_demo_R1.fastq.gz&quot;,
+          &quot;id&quot;: &quot;4546acbafa5d0acac0528d6a6e02d0bbd271a84dc7a9535d912822c8d108c681&quot;,
+          &quot;sha256&quot;: &quot;8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265&quot;,
+          &quot;size&quot;: 8952270
+        },
+        {
+          &quot;name&quot;: &quot;qc_demo_R2.fastq.gz&quot;,
+          &quot;source_path&quot;: &quot;uploads/examples/metagenomic_qc_UniVec_Host-7442e8e0604e425aa28541373622d171/qc_demo_R2.fastq.gz&quot;,
+          &quot;id&quot;: &quot;cf8929a49a08985f76a958190258347ff4796ec7572e315fa1ffe445c2ee7066&quot;,
+          &quot;sha256&quot;: &quot;56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0&quot;,
+          &quot;size&quot;: 10923663
+        }
+      ],
+      &quot;native_qc_applied&quot;: true
+    }
+  },
+  &quot;session_id&quot;: &quot;2c175eb4-e4e4-41c4-927f-b4818fc52197&quot;,
+  &quot;job_id&quot;: &quot;32680dc17f9f49e28f27c21ec36caa58&quot;
+}</pre></html>

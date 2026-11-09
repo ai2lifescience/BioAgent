@@ -1,0 +1,1209 @@
+{
+  "prompt": "Software visualization test using existing files only. Call structure_inspect on outputs/structures/1A3N.cif; call genome_render_map on outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json with sequence_id mock_contig_1; call table_plot on uploads/60f0e20de4ee475cb0132782110113b0_example_samples.tsv, column replicate. Return the actual artifact paths so the interactive structure and genome viewers render. No downloads, pipelines, or MSCAN changes.",
+  "run_id": "97abc39ff1f347e8a1aaa821000abab9",
+  "run_status": "succeeded",
+  "result": {
+    "result_contract_version": 1,
+    "answer": "- Structure viewer: `outputs/structures/1A3N.cif`\n- Genome viewer: `outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/genome_map.json`\n- Reference: `outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/reference.fasta`\n- Replicate plot: `outputs/table_plot/e82023de277642de9d98fdc9ef096f58/distribution.png`",
+    "status": "ok",
+    "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+    "approval_required": false,
+    "approvals": [],
+    "evidence": {
+      "retrieval_date": "2026-11-09",
+      "tools": [
+        "structure_inspect",
+        "genome_render_map",
+        "table_plot"
+      ],
+      "databases": [],
+      "query_terms": [],
+      "record_ids": [],
+      "citations": [],
+      "urls": [],
+      "files": [
+        "outputs/structures/1A3N.cif",
+        "outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json",
+        "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/genome_map.json",
+        "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/reference.fasta",
+        "uploads/60f0e20de4ee475cb0132782110113b0_example_samples.tsv",
+        "outputs/table_plot/e82023de277642de9d98fdc9ef096f58/distribution.png"
+      ],
+      "outputs": [
+        {
+          "tool": "structure_inspect",
+          "atom_count": 4997,
+          "chain_count": 4,
+          "residue_count": 1027,
+          "ligand_count": 1,
+          "model_count": 1,
+          "file_format": "cif",
+          "structure_path": "outputs/structures/1A3N.cif",
+          "status": "ok"
+        },
+        {
+          "tool": "genome_render_map",
+          "genome_length": 264,
+          "source_path": "outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json",
+          "genome_map_path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/genome_map.json",
+          "reference_path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/reference.fasta",
+          "status": "ok"
+        },
+        {
+          "tool": "table_plot",
+          "source_path": "uploads/60f0e20de4ee475cb0132782110113b0_example_samples.tsv",
+          "plot_path": "outputs/table_plot/e82023de277642de9d98fdc9ef096f58/distribution.png",
+          "status": "ok"
+        }
+      ],
+      "tool_outputs": [],
+      "tool_errors": []
+    },
+    "trace": [
+      {
+        "timestamp": "2026-11-09T03:21:19.608649+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "run_started",
+        "data": {
+          "request": "Software visualization test using existing files only. Call structure_inspect on outputs/structures/1A3N.cif; call genome_render_map on outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json with sequence_id mock_contig_1; call table_plot on uploads/60f0e20de4ee475cb0132782110113b0_example_samples.tsv, column replicate. Return the actual artifact paths so the interactive structure and genome viewers render. No downloads, pipelines, or MSCAN changes.",
+          "model_key": "gpt-5.6-sol"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:19.805779+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_trace_started",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:19.814656+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_39998d5957b34048b97ef73f",
+          "parent_id": "span_a361da4149c64872aad28343",
+          "span_type": "guardrail",
+          "name": "bio_safety_input",
+          "model": null,
+          "started_at": "2026-11-09T03:21:19.813538+00:00",
+          "ended_at": "2026-11-09T03:21:19.813708+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:19.817412+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_01d3e55daa6b4be084c43b7a",
+          "parent_id": "span_fc5891f42d8246b798f2176b",
+          "span_type": "custom",
+          "name": "sandbox.running",
+          "model": null,
+          "started_at": "2026-11-09T03:21:19.816265+00:00",
+          "ended_at": "2026-11-09T03:21:19.816437+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:19.818748+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_ffb86129957b420c86d6c45b",
+          "parent_id": "span_fc5891f42d8246b798f2176b",
+          "span_type": "custom",
+          "name": "sandbox.running",
+          "model": null,
+          "started_at": "2026-11-09T03:21:19.817640+00:00",
+          "ended_at": "2026-11-09T03:21:19.817782+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:19.824975+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_2255296af5af4d678a03ef26",
+          "parent_id": "span_fc5891f42d8246b798f2176b",
+          "span_type": "custom",
+          "name": "sandbox.exec",
+          "model": null,
+          "started_at": "2026-11-09T03:21:19.819376+00:00",
+          "ended_at": "2026-11-09T03:21:19.823982+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:19.830002+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_a944e1eba6264e518391486f",
+          "parent_id": "span_fc5891f42d8246b798f2176b",
+          "span_type": "custom",
+          "name": "sandbox.exec",
+          "model": null,
+          "started_at": "2026-11-09T03:21:19.825108+00:00",
+          "ended_at": "2026-11-09T03:21:19.829015+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:19.831708+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_fc5891f42d8246b798f2176b",
+          "parent_id": "span_a361da4149c64872aad28343",
+          "span_type": "custom",
+          "name": "sandbox.prepare_agent",
+          "model": null,
+          "started_at": "2026-11-09T03:21:19.814839+00:00",
+          "ended_at": "2026-11-09T03:21:19.830756+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:19.833915+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "agent_started",
+        "data": {
+          "agent": "Pipeline2Agent",
+          "message": "Agent started: Pipeline2Agent."
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:19.896429+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "model_requested",
+        "data": {
+          "agent": "Pipeline2Agent"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:23.975140+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_a4517fbdd0fc4c20a6763eb2",
+          "parent_id": "span_5924259529734fcd88cda112",
+          "span_type": "generation",
+          "name": null,
+          "model": "openai/gpt-5.6-sol",
+          "started_at": "2026-11-09T03:21:19.904872+00:00",
+          "ended_at": "2026-11-09T03:21:23.974023+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:24.018272+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "model_responded",
+        "data": {
+          "agent": "Pipeline2Agent",
+          "input_tokens": 12099,
+          "output_tokens": 179
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:24.023583+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_tool_started",
+        "data": {
+          "tool": "structure_inspect"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:24.024029+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_tool_started",
+        "data": {
+          "tool": "genome_render_map"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:24.024459+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_tool_started",
+        "data": {
+          "tool": "table_plot"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:24.026339+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "tool_started",
+        "data": {
+          "tool": "structure_inspect"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:24.035695+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "tool_started",
+        "data": {
+          "tool": "genome_render_map"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:24.043505+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "tool_started",
+        "data": {
+          "tool": "table_plot"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:29.157693+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "tool_finished",
+        "data": {
+          "tool": "structure_inspect",
+          "status": "ok"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:29.252071+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_tool_finished",
+        "data": {
+          "tool": "structure_inspect"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:29.253412+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_84af37d8a44a49c09ac07275",
+          "parent_id": "span_5924259529734fcd88cda112",
+          "span_type": "function",
+          "name": "structure_inspect",
+          "model": null,
+          "started_at": "2026-11-09T03:21:24.021122+00:00",
+          "ended_at": "2026-11-09T03:21:29.252471+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:33.940762+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "artifact_created",
+        "data": {
+          "tool": "genome_render_map",
+          "path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/genome_map.json",
+          "workspace_path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/genome_map.json",
+          "name": "genome_map.json",
+          "kind": "genome_map",
+          "content_type": "application/json; charset=utf-8",
+          "size": 860,
+          "modified_at": 1794194492864190838
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:33.941613+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "artifact_created",
+        "data": {
+          "tool": "genome_render_map",
+          "path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/reference.fasta",
+          "workspace_path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/reference.fasta",
+          "name": "reference.fasta",
+          "kind": "sequence",
+          "content_type": "text/plain; charset=utf-8",
+          "size": 280,
+          "modified_at": 1794194492864190838
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:33.942001+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "tool_finished",
+        "data": {
+          "tool": "genome_render_map",
+          "status": "ok"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:33.949831+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_tool_finished",
+        "data": {
+          "tool": "genome_render_map"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:33.950826+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_5149d2ced9d44ebdb2c76bf4",
+          "parent_id": "span_5924259529734fcd88cda112",
+          "span_type": "function",
+          "name": "genome_render_map",
+          "model": null,
+          "started_at": "2026-11-09T03:21:24.021961+00:00",
+          "ended_at": "2026-11-09T03:21:33.949982+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:39.866394+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "artifact_created",
+        "data": {
+          "tool": "table_plot",
+          "path": "outputs/table_plot/e82023de277642de9d98fdc9ef096f58/distribution.png",
+          "workspace_path": "outputs/table_plot/e82023de277642de9d98fdc9ef096f58/distribution.png",
+          "name": "distribution.png",
+          "kind": "image",
+          "content_type": "image/png",
+          "size": 20178,
+          "modified_at": 1794194498731248160
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:39.866804+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "tool_finished",
+        "data": {
+          "tool": "table_plot",
+          "status": "ok"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:39.880950+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_tool_finished",
+        "data": {
+          "tool": "table_plot"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:39.881990+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_5c8260bbfa814193acc28274",
+          "parent_id": "span_5924259529734fcd88cda112",
+          "span_type": "function",
+          "name": "table_plot",
+          "model": null,
+          "started_at": "2026-11-09T03:21:24.022579+00:00",
+          "ended_at": "2026-11-09T03:21:39.881090+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:39.883870+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_5924259529734fcd88cda112",
+          "parent_id": "span_975fc5bf3e2b42ebb8772e40",
+          "span_type": "turn",
+          "name": null,
+          "model": null,
+          "started_at": "2026-11-09T03:21:19.833328+00:00",
+          "ended_at": "2026-11-09T03:21:39.882934+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:39.939557+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_7a975ff5a1384051840b0c33",
+          "parent_id": "span_ed954f6ee0de40a4b50e1958",
+          "span_type": "custom",
+          "name": "sandbox.running",
+          "model": null,
+          "started_at": "2026-11-09T03:21:39.938362+00:00",
+          "ended_at": "2026-11-09T03:21:39.938578+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:39.945843+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_2e2b1622815344308e634fe3",
+          "parent_id": "span_ed954f6ee0de40a4b50e1958",
+          "span_type": "custom",
+          "name": "sandbox.exec",
+          "model": null,
+          "started_at": "2026-11-09T03:21:39.940388+00:00",
+          "ended_at": "2026-11-09T03:21:39.944850+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:39.950769+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_4d5c99ca9e6d4b7dabdfa376",
+          "parent_id": "span_ed954f6ee0de40a4b50e1958",
+          "span_type": "custom",
+          "name": "sandbox.exec",
+          "model": null,
+          "started_at": "2026-11-09T03:21:39.945966+00:00",
+          "ended_at": "2026-11-09T03:21:39.949771+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:39.951831+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_ed954f6ee0de40a4b50e1958",
+          "parent_id": "span_975fc5bf3e2b42ebb8772e40",
+          "span_type": "custom",
+          "name": "sandbox.prepare_agent",
+          "model": null,
+          "started_at": "2026-11-09T03:21:39.937096+00:00",
+          "ended_at": "2026-11-09T03:21:39.950913+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:39.955671+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "model_requested",
+        "data": {
+          "agent": "Pipeline2Agent"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:43.304154+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_33bba915e0bb4fa6b9f67fc1",
+          "parent_id": "span_a86ab68589fe48c1bf77e13c",
+          "span_type": "generation",
+          "name": null,
+          "model": "openai/gpt-5.6-sol",
+          "started_at": "2026-11-09T03:21:39.956506+00:00",
+          "ended_at": "2026-11-09T03:21:43.302762+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:43.317909+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "model_responded",
+        "data": {
+          "agent": "Pipeline2Agent",
+          "input_tokens": 12977,
+          "output_tokens": 116
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:43.322033+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "agent_finished",
+        "data": {
+          "agent": "Pipeline2Agent",
+          "message": "Agent finished: Pipeline2Agent."
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:43.329898+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_a86ab68589fe48c1bf77e13c",
+          "parent_id": "span_975fc5bf3e2b42ebb8772e40",
+          "span_type": "turn",
+          "name": null,
+          "model": null,
+          "started_at": "2026-11-09T03:21:39.953186+00:00",
+          "ended_at": "2026-11-09T03:21:43.328902+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:43.340495+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "guardrail_completed",
+        "data": {
+          "guardrail": "output",
+          "warnings": []
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:43.341431+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_d127d6f036f143c4bd356970",
+          "parent_id": "span_975fc5bf3e2b42ebb8772e40",
+          "span_type": "guardrail",
+          "name": "bio_evidence_output",
+          "model": null,
+          "started_at": "2026-11-09T03:21:43.340057+00:00",
+          "ended_at": "2026-11-09T03:21:43.340534+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:43.359158+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_975fc5bf3e2b42ebb8772e40",
+          "parent_id": "span_a361da4149c64872aad28343",
+          "span_type": "agent",
+          "name": "Pipeline2Agent",
+          "model": null,
+          "started_at": "2026-11-09T03:21:19.833157+00:00",
+          "ended_at": "2026-11-09T03:21:43.358147+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:43.360213+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_span_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a",
+          "span_id": "span_a361da4149c64872aad28343",
+          "parent_id": null,
+          "span_type": "task",
+          "name": "Pipeline2Agent",
+          "model": null,
+          "started_at": "2026-11-09T03:21:19.805871+00:00",
+          "ended_at": "2026-11-09T03:21:43.359330+00:00",
+          "has_error": false
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:43.360563+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "sdk_trace_finished",
+        "data": {
+          "trace_id": "trace_b4088dccca344706842549fadc75824a"
+        }
+      },
+      {
+        "timestamp": "2026-11-09T03:21:43.414618+00:00",
+        "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+        "event": "run_finished",
+        "data": {
+          "status": "ok",
+          "tool_count": 3
+        }
+      }
+    ],
+    "workspace_files": [
+      {
+        "path": "uploads/1c15241f972e415cb5564fa89e104e50_example_contigs.fasta",
+        "workspace_path": "uploads/1c15241f972e415cb5564fa89e104e50_example_contigs.fasta",
+        "name": "1c15241f972e415cb5564fa89e104e50_example_contigs.fasta",
+        "size": 660,
+        "modified_at": 1794191974650602027,
+        "kind": "upload",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "uploads/60f0e20de4ee475cb0132782110113b0_example_samples.tsv",
+        "workspace_path": "uploads/60f0e20de4ee475cb0132782110113b0_example_samples.tsv",
+        "name": "60f0e20de4ee475cb0132782110113b0_example_samples.tsv",
+        "size": 149,
+        "modified_at": 1794191974712602443,
+        "kind": "upload",
+        "content_type": "text/tab-separated-values; charset=utf-8"
+      },
+      {
+        "path": "outputs/sequence_reverse_complement/608521f3f8c6427298d1c3f5d910f251/reverse_complement.fna",
+        "workspace_path": "outputs/sequence_reverse_complement/608521f3f8c6427298d1c3f5d910f251/reverse_complement.fna",
+        "name": "reverse_complement.fna",
+        "size": 596,
+        "modified_at": 1794191985086672079,
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/sequence_translate/ee47d8c3367743049b2da481576a9055/translation.faa",
+        "workspace_path": "outputs/sequence_translate/ee47d8c3367743049b2da481576a9055/translation.faa",
+        "name": "translation.faa",
+        "size": 220,
+        "modified_at": 1794191990046705356,
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json",
+        "workspace_path": "outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json",
+        "name": "features.json",
+        "size": 1688,
+        "modified_at": 1794191994911737986,
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/sequence_find_orfs/cc6ca3b9061f4c25b02f750c4e04c951/reference.fasta",
+        "workspace_path": "outputs/sequence_find_orfs/cc6ca3b9061f4c25b02f750c4e04c951/reference.fasta",
+        "name": "reference.fasta",
+        "size": 654,
+        "modified_at": 1794191994911737986,
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "uploads/1c791eb058dc435e88b2f36800cdfcf9_toy.gff",
+        "workspace_path": "uploads/1c791eb058dc435e88b2f36800cdfcf9_toy.gff",
+        "name": "1c791eb058dc435e88b2f36800cdfcf9_toy.gff",
+        "size": 108,
+        "modified_at": 1794192000081772650,
+        "kind": "upload",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/table_group/402765b998454fd8954377156a6b82ae/groups.csv",
+        "workspace_path": "outputs/table_group/402765b998454fd8954377156a6b82ae/groups.csv",
+        "name": "groups.csv",
+        "size": 23,
+        "modified_at": 1794192021014912886,
+        "kind": "metadata",
+        "content_type": "text/csv; charset=utf-8"
+      },
+      {
+        "path": "outputs/table_plot/38c33173e7c346f7823c210b4129abbc/distribution.png",
+        "workspace_path": "outputs/table_plot/38c33173e7c346f7823c210b4129abbc/distribution.png",
+        "name": "distribution.png",
+        "size": 20178,
+        "modified_at": 1794192027588956889,
+        "kind": "image",
+        "content_type": "image/png"
+      },
+      {
+        "path": "outputs/report_write/206b32cc026e46f1bbbeafb7b1690d4d/Bridge_tool_validation.md",
+        "workspace_path": "outputs/report_write/206b32cc026e46f1bbbeafb7b1690d4d/Bridge_tool_validation.md",
+        "name": "Bridge_tool_validation.md",
+        "size": 77,
+        "modified_at": 1794192033119993897,
+        "kind": "text",
+        "content_type": "text/markdown; charset=utf-8"
+      },
+      {
+        "path": "test_bridge_math.py",
+        "workspace_path": "test_bridge_math.py",
+        "name": "test_bridge_math.py",
+        "size": 98,
+        "modified_at": 1794192048676097917,
+        "kind": "text",
+        "content_type": "text/x-python; charset=utf-8"
+      },
+      {
+        "path": "outputs/python_exec/0b8a760db3f8495a80badca3626c259b/check.txt",
+        "workspace_path": "outputs/python_exec/0b8a760db3f8495a80badca3626c259b/check.txt",
+        "name": "check.txt",
+        "size": 1,
+        "modified_at": 1794192059328169090,
+        "kind": "text",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/python_exec/0b8a760db3f8495a80badca3626c259b/script.py",
+        "workspace_path": "outputs/python_exec/0b8a760db3f8495a80badca3626c259b/script.py",
+        "name": "script.py",
+        "size": 74,
+        "modified_at": 1794192059328169090,
+        "kind": "text",
+        "content_type": "text/x-python; charset=utf-8"
+      },
+      {
+        "path": "outputs/structures/1A3N.cif",
+        "workspace_path": "outputs/structures/1A3N.cif",
+        "name": "1A3N.cif",
+        "size": 560920,
+        "modified_at": 1794192073270262180,
+        "kind": "structure",
+        "content_type": "chemical/x-mmcif; charset=utf-8"
+      },
+      {
+        "path": "outputs/alphafold/AF-P69905-F1.cif",
+        "workspace_path": "outputs/alphafold/AF-P69905-F1.cif",
+        "name": "AF-P69905-F1.cif",
+        "size": 137559,
+        "modified_at": 1794192090993380411,
+        "kind": "structure",
+        "content_type": "chemical/x-mmcif; charset=utf-8"
+      },
+      {
+        "path": "outputs/downloads/ncbi/nuccore_nm_000558.5-accession_accessions.fasta",
+        "workspace_path": "outputs/downloads/ncbi/nuccore_nm_000558.5-accession_accessions.fasta",
+        "name": "nuccore_nm_000558.5-accession_accessions.fasta",
+        "size": 600,
+        "modified_at": 1794192110882512958,
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/downloads/ncbi/nuccore_nm_000558.5-accession_accessions.metadata.csv",
+        "workspace_path": "outputs/downloads/ncbi/nuccore_nm_000558.5-accession_accessions.metadata.csv",
+        "name": "nuccore_nm_000558.5-accession_accessions.metadata.csv",
+        "size": 754,
+        "modified_at": 1794192110883512964,
+        "kind": "metadata",
+        "content_type": "text/csv; charset=utf-8"
+      },
+      {
+        "path": "outputs/pubmed_search/cedfd79520e843e8ab32a1c229e04c62/evidence.json",
+        "workspace_path": "outputs/pubmed_search/cedfd79520e843e8ab32a1c229e04c62/evidence.json",
+        "name": "evidence.json",
+        "size": 1475,
+        "modified_at": 1794192129184634807,
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/web_fetch/b2cc2a957b734aa29a977eec2a2857db/evidence.json",
+        "workspace_path": "outputs/web_fetch/b2cc2a957b734aa29a977eec2a2857db/evidence.json",
+        "name": "evidence.json",
+        "size": 3311,
+        "modified_at": 1794192146604750679,
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/evidence_index/14c047f73d1c488982c4a8fe2ce3e9b1/evidence.sqlite",
+        "workspace_path": "outputs/evidence_index/14c047f73d1c488982c4a8fe2ce3e9b1/evidence.sqlite",
+        "name": "evidence.sqlite",
+        "size": 147456,
+        "modified_at": 1794192155672810957,
+        "kind": "file",
+        "content_type": "application/vnd.sqlite3"
+      },
+      {
+        "path": "outputs/evidence_retrieve/88a15cb37b0e42a7abfc20f06b47be98/evidence.json",
+        "workspace_path": "outputs/evidence_retrieve/88a15cb37b0e42a7abfc20f06b47be98/evidence.json",
+        "name": "evidence.json",
+        "size": 2307,
+        "modified_at": 1794192160797845014,
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/genome_map.json",
+        "workspace_path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/genome_map.json",
+        "name": "genome_map.json",
+        "size": 871,
+        "modified_at": 1794192263519525970,
+        "kind": "genome_map",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/reference.fasta",
+        "workspace_path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/reference.fasta",
+        "name": "reference.fasta",
+        "size": 280,
+        "modified_at": 1794192263519525970,
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/genome_read_features/0b7306f5083848579d2a7bafbf31ec6d/features.json",
+        "workspace_path": "outputs/genome_read_features/0b7306f5083848579d2a7bafbf31ec6d/features.json",
+        "name": "features.json",
+        "size": 344,
+        "modified_at": 1794192268639559836,
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "uploads/595b9e07e3984469848249689c1b4c4f_toy.pdf",
+        "workspace_path": "uploads/595b9e07e3984469848249689c1b4c4f_toy.pdf",
+        "name": "595b9e07e3984469848249689c1b4c4f_toy.pdf",
+        "size": 34936,
+        "modified_at": 1794192273555592345,
+        "kind": "upload",
+        "content_type": "application/pdf"
+      },
+      {
+        "path": "outputs/knowledge_retrieve/d251873e61344bb087dc8c4afddd722c/knowledge_evidence.json",
+        "workspace_path": "outputs/knowledge_retrieve/d251873e61344bb087dc8c4afddd722c/knowledge_evidence.json",
+        "name": "knowledge_evidence.json",
+        "size": 3047,
+        "modified_at": 1794193608452308206,
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/genome_map.json",
+        "workspace_path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/genome_map.json",
+        "name": "genome_map.json",
+        "size": 860,
+        "modified_at": 1794194493875200726,
+        "kind": "genome_map",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/reference.fasta",
+        "workspace_path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/reference.fasta",
+        "name": "reference.fasta",
+        "size": 280,
+        "modified_at": 1794194493875200726,
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/table_plot/e82023de277642de9d98fdc9ef096f58/distribution.png",
+        "workspace_path": "outputs/table_plot/e82023de277642de9d98fdc9ef096f58/distribution.png",
+        "name": "distribution.png",
+        "size": 20178,
+        "modified_at": 1794194499808258669,
+        "kind": "image",
+        "content_type": "image/png"
+      }
+    ],
+    "artifacts": [
+      {
+        "path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/genome_map.json",
+        "workspace_path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/genome_map.json",
+        "name": "genome_map.json",
+        "size": 860,
+        "modified_at": 1794194493875200726,
+        "kind": "genome_map",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/reference.fasta",
+        "workspace_path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/reference.fasta",
+        "name": "reference.fasta",
+        "size": 280,
+        "modified_at": 1794194493875200726,
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/table_plot/e82023de277642de9d98fdc9ef096f58/distribution.png",
+        "workspace_path": "outputs/table_plot/e82023de277642de9d98fdc9ef096f58/distribution.png",
+        "name": "distribution.png",
+        "size": 20178,
+        "modified_at": 1794194499808258669,
+        "kind": "image",
+        "content_type": "image/png"
+      }
+    ],
+    "files": [
+      {
+        "path": "uploads/1c15241f972e415cb5564fa89e104e50_example_contigs.fasta",
+        "workspace_path": "uploads/1c15241f972e415cb5564fa89e104e50_example_contigs.fasta",
+        "name": "1c15241f972e415cb5564fa89e104e50_example_contigs.fasta",
+        "size": 660,
+        "modified_at": 1794191974650602027,
+        "kind": "upload",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "uploads/60f0e20de4ee475cb0132782110113b0_example_samples.tsv",
+        "workspace_path": "uploads/60f0e20de4ee475cb0132782110113b0_example_samples.tsv",
+        "name": "60f0e20de4ee475cb0132782110113b0_example_samples.tsv",
+        "size": 149,
+        "modified_at": 1794191974712602443,
+        "kind": "upload",
+        "content_type": "text/tab-separated-values; charset=utf-8"
+      },
+      {
+        "path": "outputs/sequence_reverse_complement/608521f3f8c6427298d1c3f5d910f251/reverse_complement.fna",
+        "workspace_path": "outputs/sequence_reverse_complement/608521f3f8c6427298d1c3f5d910f251/reverse_complement.fna",
+        "name": "reverse_complement.fna",
+        "size": 596,
+        "modified_at": 1794191985086672079,
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/sequence_translate/ee47d8c3367743049b2da481576a9055/translation.faa",
+        "workspace_path": "outputs/sequence_translate/ee47d8c3367743049b2da481576a9055/translation.faa",
+        "name": "translation.faa",
+        "size": 220,
+        "modified_at": 1794191990046705356,
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json",
+        "workspace_path": "outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json",
+        "name": "features.json",
+        "size": 1688,
+        "modified_at": 1794191994911737986,
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/sequence_find_orfs/cc6ca3b9061f4c25b02f750c4e04c951/reference.fasta",
+        "workspace_path": "outputs/sequence_find_orfs/cc6ca3b9061f4c25b02f750c4e04c951/reference.fasta",
+        "name": "reference.fasta",
+        "size": 654,
+        "modified_at": 1794191994911737986,
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "uploads/1c791eb058dc435e88b2f36800cdfcf9_toy.gff",
+        "workspace_path": "uploads/1c791eb058dc435e88b2f36800cdfcf9_toy.gff",
+        "name": "1c791eb058dc435e88b2f36800cdfcf9_toy.gff",
+        "size": 108,
+        "modified_at": 1794192000081772650,
+        "kind": "upload",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/table_group/402765b998454fd8954377156a6b82ae/groups.csv",
+        "workspace_path": "outputs/table_group/402765b998454fd8954377156a6b82ae/groups.csv",
+        "name": "groups.csv",
+        "size": 23,
+        "modified_at": 1794192021014912886,
+        "kind": "metadata",
+        "content_type": "text/csv; charset=utf-8"
+      },
+      {
+        "path": "outputs/table_plot/38c33173e7c346f7823c210b4129abbc/distribution.png",
+        "workspace_path": "outputs/table_plot/38c33173e7c346f7823c210b4129abbc/distribution.png",
+        "name": "distribution.png",
+        "size": 20178,
+        "modified_at": 1794192027588956889,
+        "kind": "image",
+        "content_type": "image/png"
+      },
+      {
+        "path": "outputs/report_write/206b32cc026e46f1bbbeafb7b1690d4d/Bridge_tool_validation.md",
+        "workspace_path": "outputs/report_write/206b32cc026e46f1bbbeafb7b1690d4d/Bridge_tool_validation.md",
+        "name": "Bridge_tool_validation.md",
+        "size": 77,
+        "modified_at": 1794192033119993897,
+        "kind": "text",
+        "content_type": "text/markdown; charset=utf-8"
+      },
+      {
+        "path": "test_bridge_math.py",
+        "workspace_path": "test_bridge_math.py",
+        "name": "test_bridge_math.py",
+        "size": 98,
+        "modified_at": 1794192048676097917,
+        "kind": "text",
+        "content_type": "text/x-python; charset=utf-8"
+      },
+      {
+        "path": "outputs/python_exec/0b8a760db3f8495a80badca3626c259b/check.txt",
+        "workspace_path": "outputs/python_exec/0b8a760db3f8495a80badca3626c259b/check.txt",
+        "name": "check.txt",
+        "size": 1,
+        "modified_at": 1794192059328169090,
+        "kind": "text",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/python_exec/0b8a760db3f8495a80badca3626c259b/script.py",
+        "workspace_path": "outputs/python_exec/0b8a760db3f8495a80badca3626c259b/script.py",
+        "name": "script.py",
+        "size": 74,
+        "modified_at": 1794192059328169090,
+        "kind": "text",
+        "content_type": "text/x-python; charset=utf-8"
+      },
+      {
+        "path": "outputs/structures/1A3N.cif",
+        "workspace_path": "outputs/structures/1A3N.cif",
+        "name": "1A3N.cif",
+        "size": 560920,
+        "modified_at": 1794192073270262180,
+        "kind": "structure",
+        "content_type": "chemical/x-mmcif; charset=utf-8"
+      },
+      {
+        "path": "outputs/alphafold/AF-P69905-F1.cif",
+        "workspace_path": "outputs/alphafold/AF-P69905-F1.cif",
+        "name": "AF-P69905-F1.cif",
+        "size": 137559,
+        "modified_at": 1794192090993380411,
+        "kind": "structure",
+        "content_type": "chemical/x-mmcif; charset=utf-8"
+      },
+      {
+        "path": "outputs/downloads/ncbi/nuccore_nm_000558.5-accession_accessions.fasta",
+        "workspace_path": "outputs/downloads/ncbi/nuccore_nm_000558.5-accession_accessions.fasta",
+        "name": "nuccore_nm_000558.5-accession_accessions.fasta",
+        "size": 600,
+        "modified_at": 1794192110882512958,
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/downloads/ncbi/nuccore_nm_000558.5-accession_accessions.metadata.csv",
+        "workspace_path": "outputs/downloads/ncbi/nuccore_nm_000558.5-accession_accessions.metadata.csv",
+        "name": "nuccore_nm_000558.5-accession_accessions.metadata.csv",
+        "size": 754,
+        "modified_at": 1794192110883512964,
+        "kind": "metadata",
+        "content_type": "text/csv; charset=utf-8"
+      },
+      {
+        "path": "outputs/pubmed_search/cedfd79520e843e8ab32a1c229e04c62/evidence.json",
+        "workspace_path": "outputs/pubmed_search/cedfd79520e843e8ab32a1c229e04c62/evidence.json",
+        "name": "evidence.json",
+        "size": 1475,
+        "modified_at": 1794192129184634807,
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/web_fetch/b2cc2a957b734aa29a977eec2a2857db/evidence.json",
+        "workspace_path": "outputs/web_fetch/b2cc2a957b734aa29a977eec2a2857db/evidence.json",
+        "name": "evidence.json",
+        "size": 3311,
+        "modified_at": 1794192146604750679,
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/evidence_index/14c047f73d1c488982c4a8fe2ce3e9b1/evidence.sqlite",
+        "workspace_path": "outputs/evidence_index/14c047f73d1c488982c4a8fe2ce3e9b1/evidence.sqlite",
+        "name": "evidence.sqlite",
+        "size": 147456,
+        "modified_at": 1794192155672810957,
+        "kind": "file",
+        "content_type": "application/vnd.sqlite3"
+      },
+      {
+        "path": "outputs/evidence_retrieve/88a15cb37b0e42a7abfc20f06b47be98/evidence.json",
+        "workspace_path": "outputs/evidence_retrieve/88a15cb37b0e42a7abfc20f06b47be98/evidence.json",
+        "name": "evidence.json",
+        "size": 2307,
+        "modified_at": 1794192160797845014,
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/genome_map.json",
+        "workspace_path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/genome_map.json",
+        "name": "genome_map.json",
+        "size": 871,
+        "modified_at": 1794192263519525970,
+        "kind": "genome_map",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/reference.fasta",
+        "workspace_path": "outputs/genome_render_map/9551eaeed8274ce793a1334346c0c33c/reference.fasta",
+        "name": "reference.fasta",
+        "size": 280,
+        "modified_at": 1794192263519525970,
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/genome_read_features/0b7306f5083848579d2a7bafbf31ec6d/features.json",
+        "workspace_path": "outputs/genome_read_features/0b7306f5083848579d2a7bafbf31ec6d/features.json",
+        "name": "features.json",
+        "size": 344,
+        "modified_at": 1794192268639559836,
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "uploads/595b9e07e3984469848249689c1b4c4f_toy.pdf",
+        "workspace_path": "uploads/595b9e07e3984469848249689c1b4c4f_toy.pdf",
+        "name": "595b9e07e3984469848249689c1b4c4f_toy.pdf",
+        "size": 34936,
+        "modified_at": 1794192273555592345,
+        "kind": "upload",
+        "content_type": "application/pdf"
+      },
+      {
+        "path": "outputs/knowledge_retrieve/d251873e61344bb087dc8c4afddd722c/knowledge_evidence.json",
+        "workspace_path": "outputs/knowledge_retrieve/d251873e61344bb087dc8c4afddd722c/knowledge_evidence.json",
+        "name": "knowledge_evidence.json",
+        "size": 3047,
+        "modified_at": 1794193608452308206,
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/genome_map.json",
+        "workspace_path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/genome_map.json",
+        "name": "genome_map.json",
+        "size": 860,
+        "modified_at": 1794194493875200726,
+        "kind": "genome_map",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/reference.fasta",
+        "workspace_path": "outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/reference.fasta",
+        "name": "reference.fasta",
+        "size": 280,
+        "modified_at": 1794194493875200726,
+        "kind": "sequence",
+        "content_type": "text/plain; charset=utf-8"
+      },
+      {
+        "path": "outputs/table_plot/e82023de277642de9d98fdc9ef096f58/distribution.png",
+        "workspace_path": "outputs/table_plot/e82023de277642de9d98fdc9ef096f58/distribution.png",
+        "name": "distribution.png",
+        "size": 20178,
+        "modified_at": 1794194499808258669,
+        "kind": "image",
+        "content_type": "image/png"
+      }
+    ],
+    "max_turns": 8,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Software visualization test using existing files only. Call structure_inspect on outputs/structures/1A3N.cif; call genome_render_map on outputs/sequence_find_orfs/4f5e417598ae4d19b22b7443b59f57cd/features.json with sequence_id mock_contig_1; call table_plot on uploads/60f0e20de4ee475cb0132782110113b0_example_samples.tsv, column replicate. Return the actual artifact paths so the interactive structure and genome viewers render. No downloads, pipelines, or MSCAN changes."
+      },
+      {
+        "role": "assistant",
+        "content": "- Structure viewer: `outputs/structures/1A3N.cif`\n- Genome viewer: `outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/genome_map.json`\n- Reference: `outputs/genome_render_map/b0cee27faa6c4e779cd61f9c192ffcf2/reference.fasta`\n- Replicate plot: `outputs/table_plot/e82023de277642de9d98fdc9ef096f58/distribution.png`"
+      }
+    ],
+    "run": {
+      "run_id": "60b7e532-b176-4e7e-84a3-53af8a14f933",
+      "session_dir": ".",
+      "runtime_dir": "runs/60b7e532-b176-4e7e-84a3-53af8a14f933",
+      "workspace_dir": "outputs"
+    },
+    "approval_decision": null,
+    "runtime": "agents_sdk",
+    "model_key": "gpt-5.6-sol"
+  },
+  "genome_status": [
+    ""
+  ],
+  "structure_errors": [],
+  "canvases": 13,
+  "structure_cards": 1,
+  "structure_representation_switch": true,
+  "image_loads": []
+}

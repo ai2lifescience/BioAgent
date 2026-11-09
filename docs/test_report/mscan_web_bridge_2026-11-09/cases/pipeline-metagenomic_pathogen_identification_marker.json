@@ -1,0 +1,118 @@
+{
+  "id": "pipeline-metagenomic_pathogen_identification_marker",
+  "title": "metagenomic_pathogen_identification_marker",
+  "outcome": "succeeded",
+  "inputs": {
+    "bundled_examples": [
+      {
+        "path": "tools/runtime_tools/pipelines/metagenomic_pathogen_identification_marker/data/input/strainmeta_demo_R1.fastq.gz",
+        "bytes": 8952270,
+        "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265"
+      },
+      {
+        "path": "tools/runtime_tools/pipelines/metagenomic_pathogen_identification_marker/data/input/strainmeta_demo_R2.fastq.gz",
+        "bytes": 10923663,
+        "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0"
+      }
+    ],
+    "assigned_inputs": {
+      "read1": "uploads/examples/metagenomic_pathogen_identification_marker-4d01c4cf7bdc4d428f3a90f1388f188c/strainmeta_demo_R1.fastq.gz",
+      "read2": "uploads/examples/metagenomic_pathogen_identification_marker-4d01c4cf7bdc4d428f3a90f1388f188c/strainmeta_demo_R2.fastq.gz"
+    },
+    "parameters": "Unchanged pipeline defaults"
+  },
+  "result": {
+    "job_id": "47d17e116a0548fa83a2fc843abd0fb4",
+    "plan_id": "47d17e116a0548fa83a2fc843abd0fb4",
+    "status": "succeeded",
+    "created_at": "2026-11-09T03:13:20.458181+00:00",
+    "started_at": "2026-11-09T03:13:20.639880+00:00",
+    "finished_at": "2026-11-09T03:22:18.899787+00:00",
+    "updated_at": "2026-11-09T03:22:18.900860+00:00",
+    "error": null,
+    "remote_id": "7bbe25ee-a0db-4c3e-9c13-ee45ef457f21",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_pathogen_identification_marker",
+    "files": [
+      {
+        "name": "profile.txt",
+        "path": "pipeline-artifacts/47d17e116a0548fa83a2fc843abd0fb4/0/profile.txt",
+        "workspace_path": "pipeline-artifacts/47d17e116a0548fa83a2fc843abd0fb4/0/profile.txt",
+        "size": 882,
+        "remote": true,
+        "artifact_id": "47d17e116a0548fa83a2fc843abd0fb4:0",
+        "pipeline_result": {
+          "job_id": "47d17e116a0548fa83a2fc843abd0fb4",
+          "pipeline_name": "metagenomic_pathogen_identification_marker",
+          "output_key": "StrainMeta.profile",
+          "output_name": "profile",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T03:22:18.899787+00:00"
+        }
+      },
+      {
+        "name": "sam.bz2",
+        "path": "pipeline-artifacts/47d17e116a0548fa83a2fc843abd0fb4/1/sam.bz2",
+        "workspace_path": "pipeline-artifacts/47d17e116a0548fa83a2fc843abd0fb4/1/sam.bz2",
+        "size": 63962708,
+        "remote": true,
+        "artifact_id": "47d17e116a0548fa83a2fc843abd0fb4:1",
+        "pipeline_result": {
+          "job_id": "47d17e116a0548fa83a2fc843abd0fb4",
+          "pipeline_name": "metagenomic_pathogen_identification_marker",
+          "output_key": "StrainMeta.sam_bz2",
+          "output_name": "sam_bz2",
+          "output_kind": "file",
+          "completed_at": "2026-11-09T03:22:18.899787+00:00"
+        }
+      },
+      {
+        "name": "consensus_marker.json.bz2",
+        "path": "pipeline-artifacts/47d17e116a0548fa83a2fc843abd0fb4/2/consensus_marker.json.bz2",
+        "workspace_path": "pipeline-artifacts/47d17e116a0548fa83a2fc843abd0fb4/2/consensus_marker.json.bz2",
+        "size": 122,
+        "remote": true,
+        "artifact_id": "47d17e116a0548fa83a2fc843abd0fb4:2",
+        "pipeline_result": {
+          "job_id": "47d17e116a0548fa83a2fc843abd0fb4",
+          "pipeline_name": "metagenomic_pathogen_identification_marker",
+          "output_key": "StrainMeta.consensus_marker",
+          "output_name": "consensus_marker",
+          "output_kind": "file",
+          "completed_at": "2026-11-09T03:22:18.899787+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/47d17e116a0548fa83a2fc843abd0fb4/0/profile.txt",
+        "text": "# data_type=metagenome; signal=DNA-level strain signal\n#mpa_vJan25_CHOCOPhlAnSGB_202503\n#/opt/conda/envs/strain-meta/bin/metaphlan /cromwell-executions/StrainMeta/7bbe25ee-a0db-4c3e-9c13-ee45ef457f21/call-MetaPhlAnSample/inputs/-1328166744/8af4a0636892c823-strainmeta_demo_R1.fastq.gz,/cromwell-executions/StrainMeta/7bbe25ee-a0db-4c3e-9c13-ee45ef457f21/call-MetaPhlAnSample/inputs/-1328166744/56b1a9aa57e0edb8-strainmeta_demo_R2.fastq.gz --input_type fastq --db_dir /data/zhaomh/program/database/strain_database/metaphlan -x mpa_vJan25_CHOCOPhlAnSGB_202503 --nproc 16 --samout strain_meta_SAMPLE/sams/SAMPLE.sam.bz2 --mapout strain_meta_SAMPLE/bowtie2/SAMPLE.bowtie2.bz2 --bowtie2_exe bowtie2 -o strain_meta_SAMPLE/profiles/SAMPLE_profile.txt\n#171513 reads processed\n#SampleID\tMetaphlan_Analysis\n#clade_name\tNCBI_tax_id\trelative_abundance\tadditional_species\nUNCLASSIFIED\t-1\t100.0\t\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/47d17e116a0548fa83a2fc843abd0fb4/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "session_id": "66fb6f99-81aa-4ee4-abb3-480d2eedc751",
+  "job_id": "47d17e116a0548fa83a2fc843abd0fb4",
+  "static_checks": {
+    "pipeline": "metagenomic_pathogen_identification_marker",
+    "manifest_name_matches": false,
+    "declared_files": {
+      "workflow": {
+        "file": "workflow.wdl",
+        "exists": true
+      },
+      "inputs_json": {
+        "file": "inputs.json",
+        "exists": true,
+        "json_valid": true
+      },
+      "options_json": {
+        "file": "options.json",
+        "exists": true,
+        "json_valid": true
+      }
+    },
+    "errors": []
+  }
+}

@@ -1,0 +1,200 @@
+PASS cookie-free website sign-in
+PASS remote workflow finishes with the MSCAN page closed and restores results
+Traceback (most recent call last):
+  File "/media/data/fuhaoyi/codes/BioAgent/web_bridge/tests/check_mscan.py", line 169, in <module>
+    if __name__ == '__main__': main()
+                               ^^^^^^
+  File "/media/data/fuhaoyi/codes/BioAgent/web_bridge/tests/check_mscan.py", line 147, in main
+    expect(frame.locator('a[href*="workspace/file"]').filter(has_text='metrics.json').first).to_be_visible(timeout=30000)
+  File "/home/fu/miniforge3/lib/python3.12/site-packages/playwright/sync_api/_generated.py", line 23501, in to_be_visible
+    self._sync(
+  File "/home/fu/miniforge3/lib/python3.12/site-packages/playwright/_impl/_sync_base.py", line 115, in _sync
+    return task.result()
+           ^^^^^^^^^^^^^
+  File "/home/fu/miniforge3/lib/python3.12/site-packages/playwright/_impl/_assertions.py", line 852, in to_be_visible
+    await self._expect_impl(
+  File "/home/fu/miniforge3/lib/python3.12/site-packages/playwright/_impl/_assertions.py", line 128, in _expect_impl
+    _record_soft_or_raise(
+  File "/home/fu/miniforge3/lib/python3.12/site-packages/playwright/_impl/_assertions.py", line 60, in _record_soft_or_raise
+    raise error
+AssertionError: Locator expected to be visible
+Actual value: None
+Error: element(s) not found
+Call log:
+  - Expect "to_be_visible" locator("iframe").content_frame.locator("a[href*=\"workspace/file\"]").filter(has_text="metrics.json").first with timeout 30000ms
+  - waiting for locator("iframe").content_frame.locator("a[href*=\"workspace/file\"]").filter(has_text="metrics.json").first
+
+Aria snapshot:
+- img "logo"
+- menubar:
+  - menuitem "Home":
+    - img
+    - text: Home
+  - menuitem "Analysis programs":
+    - img
+    - text: Analysis programs
+  - menuitem "Upload":
+    - img
+    - text: Upload
+    - img
+  - menuitem "Workspace":
+    - img
+    - text: Workspace
+  - menuitem "Analysis Results":
+    - img
+    - text: Analysis Results
+  - menuitem "Pathogen Knowledge Base":
+    - img
+    - text: Pathogen Knowledge Base
+- button "xiaomimi"
+- main:
+  - heading "Mscan —— A One-Stop Platform for Microbiome Scanning" [level=1]
+  - navigation "Breadcrumb":
+    - link "Home":
+      - img
+      - text: Home
+    - img
+    - link "Analysis Results":
+      - img
+      - text: Analysis Results
+    - img
+    - link "Metagenomic"
+  - complementary:
+    - text: Samples 42
+    - button:
+      - img
+    - img
+    - textbox "Find sample"
+    - button "Locate selected sample":
+      - img
+    - tree:
+      - treeitem "test1":
+        - img
+        - img
+        - text: test1
+      - treeitem "fuhaoyi":
+        - img
+        - text: fuhaoyi
+      - treeitem "Bridge validation 20261104-121455":
+        - img
+        - img
+        - text: Bridge validation 20261104-121455
+      - treeitem "Chat connector validation 121555":
+        - img
+        - img
+        - text: Chat connector validation 121555
+      - treeitem "agent_run":
+        - img
+        - img
+        - text: agent_run
+      - treeitem "agent_run2":
+        - img
+        - img
+        - text: agent_run2
+      - treeitem "agent_run3":
+        - img
+        - img
+        - text: agent_run3
+      - treeitem "Bridge analysis integration validation":
+        - img
+        - img
+        - text: Bridge analysis integration validation
+      - treeitem "agent_run5":
+        - img
+        - img
+        - text: agent_run5
+      - treeitem "agent_run6":
+        - img
+        - img
+        - text: agent_run6
+      - treeitem "Bridge importer fixture validation":
+        - img
+        - text: Bridge importer fixture validation
+      - treeitem "Bridge test 20261109 importer matrix":
+        - img
+        - img
+        - text: Bridge test 20261109 importer matrix
+      - treeitem "Bridge_live_20261109_QC":
+        - img
+        - img
+        - text: Bridge_live_20261109_QC
+      - treeitem "Bridge_live_20261109_NL":
+        - img
+        - img
+        - text: Bridge_live_20261109_NL
+      - treeitem "Bridge_pipeline_matrix_20261109" [expanded]:
+        - img
+        - img
+        - text: Bridge_pipeline_matrix_20261109
+        - group:
+          - treeitem "template_shell":
+            - img
+            - text: template_shell
+          - treeitem "metagenomic_qc_UniVec_Host":
+            - img
+            - text: metagenomic_qc_UniVec_Host
+          - treeitem "template_snakemake":
+            - img
+            - text: template_snakemake
+          - treeitem "metagenomic_pathogen_identification_kmer":
+            - img
+            - text: metagenomic_pathogen_identification_kmer
+          - treeitem "metagenomic_read_quality_control":
+            - img
+            - text: metagenomic_read_quality_control
+          - treeitem "template_nextflow":
+            - img
+            - text: template_nextflow
+          - treeitem "metax_classification_abundance_analysis":
+            - img
+            - text: metax_classification_abundance_analysis
+          - treeitem "template_wdl":
+            - img
+            - text: template_wdl
+          - treeitem "template_bio":
+            - img
+            - text: template_bio
+          - treeitem "metagenomic_pathogen_identification":
+            - img
+            - text: metagenomic_pathogen_identification
+          - treeitem "metagenomic_de_novo_assembly":
+            - img
+            - text: metagenomic_de_novo_assembly
+          - treeitem "metagenomic_pathogen_identification_marker":
+            - img
+            - text: metagenomic_pathogen_identification_marker
+  - main:
+    - heading "Analysis Results" [level=1]
+    - radiogroup "radio-group":
+      - radio "Metagenomic" [checked]
+      - text: Metagenomic
+      - radio "Isolate"
+      - text: Isolate
+      - radio "Genomic"
+      - text: Genomic
+      - radio "Synthetic"
+      - text: Synthetic
+    - combobox
+    - text: All programs
+    - img
+    - paragraph:
+      - text: "Selected sample:"
+      - strong: template_wdl
+    - button "Download files"
+    - button "Edit Sample":
+      - img
+      - text: Edit Sample
+    - button "Delete Sample":
+      - img
+      - text: Delete Sample
+    - button "Run Programs" [disabled]:
+      - img
+      - text: Run Programs
+    - img
+    - paragraph: No Program Records
+- button "Ask assistant" [expanded]
+- complementary "MSCAN assistant":
+  - text: MSCAN assistant
+  - button "Close assistant": ×
+  - iframe
+- img

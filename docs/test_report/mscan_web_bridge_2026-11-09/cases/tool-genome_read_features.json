@@ -1,0 +1,142 @@
+{
+  "id": "tool-genome_read_features",
+  "title": "genome_read_features",
+  "outcome": "PASS",
+  "inputs": {
+    "path": "uploads/1c791eb058dc435e88b2f36800cdfcf9_toy.gff",
+    "fasta_path": "uploads/1c15241f972e415cb5564fa89e104e50_example_contigs.fasta",
+    "sequence_id": "mock_contig_1"
+  },
+  "result": {
+    "status": "ok",
+    "data": {
+      "source_path": "uploads/1c791eb058dc435e88b2f36800cdfcf9_toy.gff",
+      "features_path": "outputs/genome_read_features/0b7306f5083848579d2a7bafbf31ec6d/features.json",
+      "returned": 1,
+      "total": 1,
+      "truncated": false,
+      "records": [
+        {
+          "sequence_id": "mock_contig_1",
+          "length": 264,
+          "features": [
+            {
+              "start": 1,
+              "end": 63,
+              "strand": 1,
+              "type": "gene",
+              "label": "toy",
+              "parts": [],
+              "qualifiers": {
+                "ID": [
+                  "toy"
+                ],
+                "Name": [
+                  "toy"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "records_truncated": false
+    },
+    "files": [
+      {
+        "path": "outputs/genome_read_features/0b7306f5083848579d2a7bafbf31ec6d/features.json",
+        "workspace_path": "outputs/genome_read_features/0b7306f5083848579d2a7bafbf31ec6d/features.json",
+        "name": "features.json",
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8",
+        "size": 344,
+        "modified_at": 1794192267479552164
+      }
+    ],
+    "evidence": [],
+    "error": null
+  },
+  "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+  "attempts": [
+    {
+      "tool": "genome_read_features",
+      "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+      "inputs": {
+        "path": "uploads/1c791eb058dc435e88b2f36800cdfcf9_toy.gff",
+        "fasta_path": "uploads/1c15241f972e415cb5564fa89e104e50_example_contigs.fasta",
+        "sequence_id": null
+      },
+      "result": {
+        "status": "error",
+        "data": {},
+        "files": [],
+        "evidence": [],
+        "error": {
+          "code": "ValueError",
+          "message": "ValueError: Provide sequence_id when input contains multiple sequences."
+        }
+      },
+      "status": "error",
+      "elapsed_seconds": 5.2
+    },
+    {
+      "tool": "genome_read_features",
+      "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+      "inputs": {
+        "path": "uploads/1c791eb058dc435e88b2f36800cdfcf9_toy.gff",
+        "fasta_path": "uploads/1c15241f972e415cb5564fa89e104e50_example_contigs.fasta",
+        "sequence_id": "mock_contig_1"
+      },
+      "reason": "Correct test harness context/input and wait for terminal indexing status",
+      "status": "ok",
+      "result": {
+        "status": "ok",
+        "data": {
+          "source_path": "uploads/1c791eb058dc435e88b2f36800cdfcf9_toy.gff",
+          "features_path": "outputs/genome_read_features/0b7306f5083848579d2a7bafbf31ec6d/features.json",
+          "returned": 1,
+          "total": 1,
+          "truncated": false,
+          "records": [
+            {
+              "sequence_id": "mock_contig_1",
+              "length": 264,
+              "features": [
+                {
+                  "start": 1,
+                  "end": 63,
+                  "strand": 1,
+                  "type": "gene",
+                  "label": "toy",
+                  "parts": [],
+                  "qualifiers": {
+                    "ID": [
+                      "toy"
+                    ],
+                    "Name": [
+                      "toy"
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "records_truncated": false
+        },
+        "files": [
+          {
+            "path": "outputs/genome_read_features/0b7306f5083848579d2a7bafbf31ec6d/features.json",
+            "workspace_path": "outputs/genome_read_features/0b7306f5083848579d2a7bafbf31ec6d/features.json",
+            "name": "features.json",
+            "kind": "config",
+            "content_type": "application/json; charset=utf-8",
+            "size": 344,
+            "modified_at": 1794192267479552164
+          }
+        ],
+        "evidence": [],
+        "error": null
+      },
+      "elapsed_seconds": 5.08
+    }
+  ]
+}

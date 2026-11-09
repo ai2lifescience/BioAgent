@@ -1,0 +1,738 @@
+{
+  "id": "pipeline-template_bio",
+  "title": "template_bio",
+  "outcome": "succeeded",
+  "inputs": {
+    "bundled_examples": [
+      {
+        "path": "tools/runtime_tools/pipelines/template_bio/data/input/example_reads.fastq",
+        "bytes": 385,
+        "sha256": "5e95fa95821c31e5446e051cdf4ccd4b82144ac71b809e065e1101c12386b60d"
+      },
+      {
+        "path": "tools/runtime_tools/pipelines/template_bio/data/input/example_reference.fasta",
+        "bytes": 61,
+        "sha256": "73f4c86513507e373bc902232aded85b398678e313f059b42b26e1ae38c4fd09"
+      },
+      {
+        "path": "tools/runtime_tools/pipelines/template_bio/data/input/example_samples.tsv",
+        "bytes": 149,
+        "sha256": "ab843cad4c085902847f8145aec07c0f932ef591663efdc9cd13bac0c6acb79e"
+      }
+    ],
+    "assigned_inputs": {
+      "reads": "uploads/examples/template_bio-66cfc722b11c4e9c914992116825a29b/example_reads.fastq",
+      "reference": "uploads/examples/template_bio-66cfc722b11c4e9c914992116825a29b/example_reference.fasta",
+      "metadata": "uploads/examples/template_bio-66cfc722b11c4e9c914992116825a29b/example_samples.tsv"
+    },
+    "parameters": "Unchanged pipeline defaults"
+  },
+  "result": {
+    "status": "succeeded",
+    "job_id": "6582f033b9944dbfa26e13dca2450d82",
+    "pipeline_name": "template_bio",
+    "files": [
+      {
+        "name": "report",
+        "label": "Analysis report",
+        "config_key": "report_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/report.md",
+        "raw_path": "report.md",
+        "kind": "report",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/report.md",
+        "sha256": "14e05d679c89ff67743d9d274c43b96201e96c1e46d142123bd07e0cbf311131",
+        "size": 2442,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "report",
+          "output_name": "report",
+          "output_kind": "report",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "metrics",
+        "label": "QC and analysis metrics",
+        "config_key": "metrics_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/metrics.json",
+        "raw_path": "metrics.json",
+        "kind": "metrics",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/metrics.json",
+        "sha256": "8d325baafc5e32e9efbe02a92ace5aaed42541d0d8aba3395f3f7337262bc1bd",
+        "size": 1240,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "metrics",
+          "output_name": "metrics",
+          "output_kind": "metrics",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "html_report",
+        "label": "Interactive-style HTML report",
+        "config_key": "html_report_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/report.html",
+        "raw_path": "report.html",
+        "kind": "report",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/report.html",
+        "sha256": "25f094bc1ac0432bf81db437b1dfd9735909ddf50dee97c3f4ce34a572f39cbc",
+        "size": 240684,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "html_report",
+          "output_name": "html_report",
+          "output_kind": "report",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "filtered_reads",
+        "label": "Quality-filtered FASTQ",
+        "config_key": "filtered_fastq_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/filtered_reads.fastq",
+        "raw_path": "filtered_reads.fastq",
+        "kind": "sequence",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/filtered_reads.fastq",
+        "sha256": "07c3e1d2623c1df14a10e5b4672a7518dc23f48dfa05317f59f064ab1f961d54",
+        "size": 253,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "filtered_reads",
+          "output_name": "filtered_reads",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "read_qc",
+        "label": "Per-read QC table",
+        "config_key": "read_qc_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/read_qc.tsv",
+        "raw_path": "read_qc.tsv",
+        "kind": "table",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/read_qc.tsv",
+        "sha256": "2a35486b26655a75cf649c494b0d88d9009933e488ab235bd64aa24ac10c322b",
+        "size": 238,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "read_qc",
+          "output_name": "read_qc",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "sample_summary",
+        "label": "Sample summary table",
+        "config_key": "sample_summary_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/sample_summary.tsv",
+        "raw_path": "sample_summary.tsv",
+        "kind": "table",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/sample_summary.tsv",
+        "sha256": "1f9e8c0708537fe213d2da845f0d1278f6ffb2a72f6c7b4282a88449b8393ac8",
+        "size": 364,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "sample_summary",
+          "output_name": "sample_summary",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "coverage",
+        "label": "Per-position coverage table",
+        "config_key": "coverage_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/coverage.tsv",
+        "raw_path": "coverage.tsv",
+        "kind": "table",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/coverage.tsv",
+        "sha256": "4c0e47b4faac72a220407e4f22fa11a0f38a522753a68631d21743b7048191bb",
+        "size": 889,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "coverage",
+          "output_name": "coverage",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "alignments",
+        "label": "Demonstration alignments",
+        "config_key": "alignment_sam_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/alignments.sam",
+        "raw_path": "alignments.sam",
+        "kind": "alignment",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/alignments.sam",
+        "sha256": "298bce179fe675293de783a7e5d983632c88bcef9eea88491bd2644297ded53a",
+        "size": 438,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "alignments",
+          "output_name": "alignments",
+          "output_kind": "alignment",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "consensus",
+        "label": "Consensus sequence",
+        "config_key": "consensus_fasta_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/consensus.fasta",
+        "raw_path": "consensus.fasta",
+        "kind": "sequence",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/consensus.fasta",
+        "sha256": "4abdef905000d380f63a84da444729a253af59655f1223a0bdf43df96bd8292d",
+        "size": 48,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "consensus",
+          "output_name": "consensus",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "variants",
+        "label": "Demonstration variants",
+        "config_key": "variants_vcf_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/variants.vcf",
+        "raw_path": "variants.vcf",
+        "kind": "variants",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/variants.vcf",
+        "sha256": "062e8abb162232d2fcc1b039ee9a2ea51a09fcc3a90cda62b044e0866b54fdd5",
+        "size": 578,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "variants",
+          "output_name": "variants",
+          "output_kind": "variants",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "variant_table",
+        "label": "Variant summary table",
+        "config_key": "variant_table_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/variant_summary.tsv",
+        "raw_path": "variant_summary.tsv",
+        "kind": "table",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/variant_summary.tsv",
+        "sha256": "cf2fda9b1d77ff559bdf39679792a7d9f3db8418e940c6f0810192f01b72a95d",
+        "size": 133,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "variant_table",
+          "output_name": "variant_table",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "qc_figure",
+        "label": "Read QC overview figure",
+        "config_key": "qc_figure_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/qc_overview.png",
+        "raw_path": "qc_overview.png",
+        "kind": "image",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/qc_overview.png",
+        "sha256": "8fbb68db592ee65cdd2c16d4bbef378ac006c43c97472e40666a243f02e4e22a",
+        "size": 79528,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "qc_figure",
+          "output_name": "qc_figure",
+          "output_kind": "image",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "coverage_figure",
+        "label": "Coverage profile figure",
+        "config_key": "coverage_figure_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/coverage.png",
+        "raw_path": "coverage.png",
+        "kind": "image",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/coverage.png",
+        "sha256": "ad9b29f6427999634547ea0a74749c91fe00f6cf539c77ebf36e9ac7be2cea7c",
+        "size": 35889,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "coverage_figure",
+          "output_name": "coverage_figure",
+          "output_kind": "image",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "variant_figure",
+        "label": "Variant allele fraction figure",
+        "config_key": "variant_figure_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/variant_allele_fraction.png",
+        "raw_path": "variant_allele_fraction.png",
+        "kind": "image",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/variant_allele_fraction.png",
+        "sha256": "0113be9f3870d6819612d47d18ac8d1e81a6dc00a1b0405ae802d870512ed3bd",
+        "size": 28447,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "variant_figure",
+          "output_name": "variant_figure",
+          "output_kind": "image",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "phylogenetic_tree",
+        "label": "Optional phylogenetic tree",
+        "config_key": "phylogenetic_tree_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/phylogenetic_tree.nwk",
+        "raw_path": "phylogenetic_tree.nwk",
+        "kind": "phylogenetic_tree",
+        "required": false,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/phylogenetic_tree.nwk",
+        "sha256": "079bce3c8066706a599d2e43834b64c48d66285985866df895c6ac9d27129ebf",
+        "size": 58,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "phylogenetic_tree",
+          "output_name": "phylogenetic_tree",
+          "output_kind": "phylogenetic_tree",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      },
+      {
+        "name": "phylogenetic_tree_figure",
+        "label": "Optional phylogenetic tree figure",
+        "config_key": "phylogenetic_tree_figure_path",
+        "path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/phylogenetic_tree.png",
+        "raw_path": "phylogenetic_tree.png",
+        "kind": "image",
+        "required": false,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/6582f033b9944dbfa26e13dca2450d82/outputs/phylogenetic_tree.png",
+        "sha256": "4accf066bee5fe78569eada9122f0a02a2b0d3761e09dd7142f6ac434c53306e",
+        "size": 32702,
+        "pipeline_result": {
+          "job_id": "6582f033b9944dbfa26e13dca2450d82",
+          "pipeline_name": "template_bio",
+          "output_key": "phylogenetic_tree_figure",
+          "output_name": "phylogenetic_tree_figure",
+          "output_kind": "image",
+          "completed_at": "2026-11-09T02:37:45.980218+00:00"
+        }
+      }
+    ],
+    "metrics": {
+      "aligned_read_count": 3,
+      "base_retention_percent": 69.23,
+      "bases_at_3x_percent": 100.0,
+      "covered_reference_bases": 24,
+      "failed_read_count": 2,
+      "filter_outcomes": {
+        "low_quality": 1,
+        "pass": 3,
+        "short": 1
+      },
+      "input_base_count": 104,
+      "input_read_count": 5,
+      "maximum_retained_depth": 3,
+      "mean_input_gc_percent": 50.0,
+      "mean_input_quality": 32.0,
+      "mean_input_read_length": 20.8,
+      "mean_retained_depth": 3.0,
+      "mean_retained_read_length": 24.0,
+      "metadata_field_count": 7,
+      "mode": "educational_positional_comparison",
+      "parameters": {
+        "emit_phylogenetic_tree": true,
+        "min_alt_depth": 2,
+        "min_alt_fraction": 0.6,
+        "min_base_quality": 20,
+        "min_length": 12,
+        "min_mean_quality": 20.0,
+        "plot_dpi": 140,
+        "sample_id": "sample_demo"
+      },
+      "passed_read_count": 3,
+      "phylogenetic_tree_emitted": true,
+      "pipeline": "template_bio",
+      "q20_base_percent": 76.92,
+      "q30_base_percent": 76.92,
+      "read_retention_percent": 60.0,
+      "reference_coverage_percent": 100.0,
+      "reference_id": "demo_reference",
+      "reference_length": 24,
+      "retained_base_count": 72,
+      "sample_id": "sample_demo",
+      "status": "ok",
+      "transition_count": 0,
+      "transversion_count": 1,
+      "variant_count": 1
+    },
+    "tables": [
+      {
+        "name": "read_qc.tsv",
+        "columns": [
+          "read_id",
+          "length",
+          "gc_percent",
+          "mean_quality",
+          "q20_bases",
+          "q30_bases",
+          "status"
+        ],
+        "rows": [
+          {
+            "read_id": "read001",
+            "length": "24",
+            "gc_percent": "50.00",
+            "mean_quality": "40.00",
+            "q20_bases": "24",
+            "q30_bases": "24",
+            "status": "pass"
+          },
+          {
+            "read_id": "read002",
+            "length": "24",
+            "gc_percent": "50.00",
+            "mean_quality": "40.00",
+            "q20_bases": "24",
+            "q30_bases": "24",
+            "status": "pass"
+          },
+          {
+            "read_id": "read003",
+            "length": "24",
+            "gc_percent": "50.00",
+            "mean_quality": "40.00",
+            "q20_bases": "24",
+            "q30_bases": "24",
+            "status": "pass"
+          },
+          {
+            "read_id": "read004",
+            "length": "24",
+            "gc_percent": "50.00",
+            "mean_quality": "0.00",
+            "q20_bases": "0",
+            "q30_bases": "0",
+            "status": "low_quality"
+          },
+          {
+            "read_id": "read005",
+            "length": "8",
+            "gc_percent": "50.00",
+            "mean_quality": "40.00",
+            "q20_bases": "8",
+            "q30_bases": "8",
+            "status": "short"
+          }
+        ],
+        "truncated": false
+      },
+      {
+        "name": "sample_summary.tsv",
+        "columns": [
+          "sample_id",
+          "organism",
+          "condition",
+          "replicate",
+          "library_layout",
+          "platform",
+          "collection_date",
+          "input_read_count",
+          "passed_read_count",
+          "read_retention_percent",
+          "mean_input_read_length",
+          "mean_input_quality",
+          "q30_base_percent",
+          "mean_retained_depth",
+          "reference_coverage_percent",
+          "variant_count"
+        ],
+        "rows": [
+          {
+            "sample_id": "sample_demo",
+            "organism": "synthetic construct",
+            "condition": "demo",
+            "replicate": "1",
+            "library_layout": "single-end",
+            "platform": "Illumina",
+            "collection_date": "2026-01-15",
+            "input_read_count": "5",
+            "passed_read_count": "3",
+            "read_retention_percent": "60.0",
+            "mean_input_read_length": "20.8",
+            "mean_input_quality": "32.0",
+            "q30_base_percent": "76.92",
+            "mean_retained_depth": "3.0",
+            "reference_coverage_percent": "100.0",
+            "variant_count": "1"
+          }
+        ],
+        "truncated": false
+      },
+      {
+        "name": "coverage.tsv",
+        "columns": [
+          "chrom",
+          "position",
+          "reference",
+          "depth",
+          "A",
+          "C",
+          "G",
+          "T",
+          "consensus",
+          "variant"
+        ],
+        "rows": [
+          {
+            "chrom": "demo_reference",
+            "position": "1",
+            "reference": "A",
+            "depth": "3",
+            "A": "3",
+            "C": "0",
+            "G": "0",
+            "T": "0",
+            "consensus": "A",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "2",
+            "reference": "C",
+            "depth": "3",
+            "A": "0",
+            "C": "3",
+            "G": "0",
+            "T": "0",
+            "consensus": "C",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "3",
+            "reference": "G",
+            "depth": "3",
+            "A": "0",
+            "C": "0",
+            "G": "3",
+            "T": "0",
+            "consensus": "G",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "4",
+            "reference": "T",
+            "depth": "3",
+            "A": "0",
+            "C": "0",
+            "G": "0",
+            "T": "3",
+            "consensus": "T",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "5",
+            "reference": "A",
+            "depth": "3",
+            "A": "3",
+            "C": "0",
+            "G": "0",
+            "T": "0",
+            "consensus": "A",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "6",
+            "reference": "C",
+            "depth": "3",
+            "A": "0",
+            "C": "3",
+            "G": "0",
+            "T": "0",
+            "consensus": "C",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "7",
+            "reference": "G",
+            "depth": "3",
+            "A": "0",
+            "C": "0",
+            "G": "3",
+            "T": "0",
+            "consensus": "G",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "8",
+            "reference": "T",
+            "depth": "3",
+            "A": "2",
+            "C": "0",
+            "G": "0",
+            "T": "1",
+            "consensus": "A",
+            "variant": "yes"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "9",
+            "reference": "A",
+            "depth": "3",
+            "A": "3",
+            "C": "0",
+            "G": "0",
+            "T": "0",
+            "consensus": "A",
+            "variant": "no"
+          },
+          {
+            "chrom": "demo_reference",
+            "position": "10",
+            "reference": "C",
+            "depth": "3",
+            "A": "0",
+            "C": "3",
+            "G": "0",
+            "T": "0",
+            "consensus": "C",
+            "variant": "no"
+          }
+        ],
+        "truncated": true
+      },
+      {
+        "name": "variant_summary.tsv",
+        "columns": [
+          "chrom",
+          "position",
+          "ref",
+          "alt",
+          "depth",
+          "ref_depth",
+          "alt_depth",
+          "alt_fraction",
+          "change_type",
+          "filter"
+        ],
+        "rows": [
+          {
+            "chrom": "demo_reference",
+            "position": "8",
+            "ref": "T",
+            "alt": "A",
+            "depth": "3",
+            "ref_depth": "1",
+            "alt_depth": "2",
+            "alt_fraction": "0.6667",
+            "change_type": "transversion",
+            "filter": "PASS"
+          }
+        ],
+        "truncated": false
+      }
+    ],
+    "bundle_path": "pipeline-bundles/6582f033b9944dbfa26e13dca2450d82/results.zip"
+  },
+  "session_id": "6384fe2f-d846-4bd1-a046-6c169ec1c02b",
+  "job_id": "6582f033b9944dbfa26e13dca2450d82",
+  "static_checks": {
+    "pipeline": "template_bio",
+    "manifest_name_matches": true,
+    "declared_files": {
+      "entrypoint": {
+        "file": "run.sh",
+        "exists": true
+      }
+    },
+    "errors": []
+  }
+}

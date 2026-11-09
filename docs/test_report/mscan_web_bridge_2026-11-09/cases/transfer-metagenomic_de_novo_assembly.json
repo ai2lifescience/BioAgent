@@ -1,0 +1,119 @@
+{
+  "id": "transfer-metagenomic_de_novo_assembly",
+  "title": "metagenomic_de_novo_assembly result delivery",
+  "outcome": "succeeded",
+  "inputs": {
+    "paths": [
+      "pipeline-bundles/5e425e2dbe9d4cc3b15a8794dd9792da/results.zip",
+      "uploads/examples/metagenomic_de_novo_assembly-e1909331e86b428f8c52f11bc941b1d1/assembly_demo.fastq.gz"
+    ],
+    "destination": {
+      "project": "Bridge_pipeline_matrix_20261109",
+      "sample": "metagenomic_de_novo_assembly",
+      "data_type": "meta",
+      "source_slots": {
+        "R1": "uploads/examples/metagenomic_de_novo_assembly-e1909331e86b428f8c52f11bc941b1d1/assembly_demo.fastq.gz"
+      }
+    },
+    "create_missing": true
+  },
+  "result": {
+    "transfer_id": "6b628c4851c8428da7d78e88235bad13",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "succeeded",
+    "result": {
+      "file_delivery": "delivered",
+      "source_registration": {
+        "slots": {
+          "R1": "fbf5d8a1ab6936f99b7915988a6d5949"
+        },
+        "status": "registered"
+      },
+      "target": {
+        "sample_id": "ccb2dcfd4a453980980fe8fbd6c6d01e",
+        "data_type": "meta",
+        "project_name": "Bridge_pipeline_matrix_20261109",
+        "sample_name": "metagenomic_de_novo_assembly",
+        "project_id": "a924199794553f94b029789481f26a2d"
+      },
+      "receipt_id": "6b628c4851c8428da7d78e88235bad13",
+      "qc": {},
+      "native_imports": [
+        {
+          "job_id": "5e425e2dbe9d4cc3b15a8794dd9792da",
+          "files_delivered": true,
+          "pipeline": "metagenomic_de_novo_assembly",
+          "format": "AssemblyId",
+          "program": "assembly",
+          "state": "imported",
+          "message": "Native result imported."
+        }
+      ],
+      "files": [
+        {
+          "name": "results.zip",
+          "source_path": "pipeline-bundles/5e425e2dbe9d4cc3b15a8794dd9792da/results.zip",
+          "id": "0401f4334be89b2e15e3438307ae5c1d0d7ccbbf583e51af6d537ffc1006f63b",
+          "sha256": "e044f9757b6193f4d2ce60064fafdfb278f8087df893398ca212278e67090f79",
+          "size": 4881
+        },
+        {
+          "name": "final.contigs.renamed.fa",
+          "source_path": "pipeline-artifacts/5e425e2dbe9d4cc3b15a8794dd9792da/0/final.contigs.renamed.fa",
+          "id": "c9c1d9383057b3ed4f1b996e31902960b22b939854f1baf2a2139de2e775d1d6",
+          "sha256": "017744d7e14e4ee9778b9f386ff10a35cd35dd095ed54ce82b67080ba19cb73d",
+          "size": 14465,
+          "pipeline_result": {
+            "job_id": "5e425e2dbe9d4cc3b15a8794dd9792da",
+            "pipeline_name": "metagenomic_de_novo_assembly",
+            "output_key": "AssemblyId.final_contigs_renamed",
+            "output_name": "contigs",
+            "output_kind": "sequence",
+            "completed_at": "2026-11-09T02:55:50.778601+00:00"
+          }
+        },
+        {
+          "name": "contig_report.tsv",
+          "source_path": "pipeline-artifacts/5e425e2dbe9d4cc3b15a8794dd9792da/1/contig_report.tsv",
+          "id": "ee52291bfeb51eef1d4631dbd745fd08196ed3b6f895f2518e6956becadbdb26",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "pipeline_result": {
+            "job_id": "5e425e2dbe9d4cc3b15a8794dd9792da",
+            "pipeline_name": "metagenomic_de_novo_assembly",
+            "output_key": "AssemblyId.contig_report_tsv",
+            "output_name": "contig_report",
+            "output_kind": "table",
+            "completed_at": "2026-11-09T02:55:50.778601+00:00"
+          }
+        },
+        {
+          "name": "species_report.tsv",
+          "source_path": "pipeline-artifacts/5e425e2dbe9d4cc3b15a8794dd9792da/2/species_report.tsv",
+          "id": "69d7a97467f0b86cf17a7d63854d3c69f2f986d585547885a2dfc0ff5c6a31c4",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0,
+          "pipeline_result": {
+            "job_id": "5e425e2dbe9d4cc3b15a8794dd9792da",
+            "pipeline_name": "metagenomic_de_novo_assembly",
+            "output_key": "AssemblyId.species_report_tsv",
+            "output_name": "species_report",
+            "output_kind": "table",
+            "completed_at": "2026-11-09T02:55:50.778601+00:00"
+          }
+        },
+        {
+          "name": "assembly_demo.fastq.gz",
+          "source_path": "uploads/examples/metagenomic_de_novo_assembly-e1909331e86b428f8c52f11bc941b1d1/assembly_demo.fastq.gz",
+          "id": "193252eb24a402b195131da5ea9419c170ad67d4879b8adfd85e42ac01db3a22",
+          "sha256": "4d3438f07a5ffc48b96e0a45e3c674cdf5ef6a72740450e9cc73f3bb9244405d",
+          "size": 9480292
+        }
+      ],
+      "native_qc_applied": false
+    }
+  },
+  "session_id": "51909ad0-d712-441b-82fd-0f8a52262b2f",
+  "job_id": "5e425e2dbe9d4cc3b15a8794dd9792da"
+}

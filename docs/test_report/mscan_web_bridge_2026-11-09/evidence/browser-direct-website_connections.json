@@ -1,0 +1,221 @@
+{
+  "tool": "website_connections",
+  "session_id": "dfa81dda-c259-466c-ba73-f912d5113bd5",
+  "inputs": {},
+  "result": {
+    "status": "ok",
+    "data": {
+      "value": {
+        "connections": [
+          {
+            "site_id": "mscan",
+            "external_subject": "344674d1-2931-44a0-9de3-bd3e8403914d",
+            "capabilities": {
+              "create_missing": true,
+              "existing_sources": "preserved",
+              "native_result_importers": [
+                {
+                  "sample_types": [
+                    "shortReads",
+                    "meta"
+                  ],
+                  "format": "AssemblyId",
+                  "required_outputs": [
+                    "contig_report_tsv",
+                    "final_contigs_renamed",
+                    "species_report_tsv"
+                  ],
+                  "program": "assembly"
+                },
+                {
+                  "sample_types": [
+                    "shortReads",
+                    "meta"
+                  ],
+                  "format": "metax",
+                  "required_outputs": [
+                    "profile"
+                  ],
+                  "program": "metax"
+                },
+                {
+                  "sample_types": [
+                    "shortReads",
+                    "meta"
+                  ],
+                  "format": "FuncReads",
+                  "required_outputs": [
+                    "gene_annotations_tsv"
+                  ],
+                  "program": "funcflow"
+                },
+                {
+                  "sample_types": [
+                    "synthetic",
+                    "genomic"
+                  ],
+                  "format": "FuncAssembly",
+                  "required_outputs": [
+                    "gene_annotations_tsv"
+                  ],
+                  "program": "funcflow"
+                },
+                {
+                  "sample_types": [
+                    "shortReads",
+                    "meta"
+                  ],
+                  "format": "StrainMeta",
+                  "required_outputs": [
+                    "profile"
+                  ],
+                  "program": "strain_meta"
+                },
+                {
+                  "sample_types": [
+                    "shortReads",
+                    "meta"
+                  ],
+                  "format": "StrainCoPTR",
+                  "required_outputs": [
+                    "log2ptr_csv"
+                  ],
+                  "program": "growth"
+                },
+                {
+                  "sample_types": [
+                    "meta",
+                    "synthetic",
+                    "genomic",
+                    "shortReads"
+                  ],
+                  "format": "BacDef",
+                  "required_outputs": [
+                    "defense_systems",
+                    "defense_genes",
+                    "defense_hmmer_hits"
+                  ],
+                  "program": "bacdef"
+                },
+                {
+                  "sample_types": [
+                    "meta",
+                    "synthetic",
+                    "genomic",
+                    "shortReads"
+                  ],
+                  "format": "BacSec",
+                  "required_outputs": [
+                    "secretion_genes",
+                    "secretion_systems"
+                  ],
+                  "program": "bacsec"
+                },
+                {
+                  "sample_types": [
+                    "meta",
+                    "synthetic",
+                    "genomic",
+                    "shortReads"
+                  ],
+                  "format": "BacBGC",
+                  "required_outputs": [
+                    "bgc_genes",
+                    "bgc_clusters",
+                    "bgc_features"
+                  ],
+                  "program": "bacbgc"
+                },
+                {
+                  "sample_types": [
+                    "synthetic",
+                    "genomic"
+                  ],
+                  "format": "PhiAnnotatorGenome",
+                  "required_outputs": [
+                    "hits",
+                    "summary"
+                  ],
+                  "program": "phi"
+                },
+                {
+                  "sample_types": [
+                    "shortReads",
+                    "meta"
+                  ],
+                  "format": "PhiAnnotatorMetagenome",
+                  "required_outputs": [
+                    "hits",
+                    "summary"
+                  ],
+                  "program": "phi"
+                },
+                {
+                  "sample_types": [
+                    "synthetic",
+                    "genomic"
+                  ],
+                  "format": "TcdbAnnotatorGenome",
+                  "required_outputs": [
+                    "hits",
+                    "summary"
+                  ],
+                  "program": "tcdb"
+                },
+                {
+                  "sample_types": [
+                    "shortReads",
+                    "meta"
+                  ],
+                  "format": "TcdbAnnotatorMetagenome",
+                  "required_outputs": [
+                    "hits",
+                    "summary"
+                  ],
+                  "program": "tcdb"
+                },
+                {
+                  "sample_types": [
+                    "meta",
+                    "shortReads"
+                  ],
+                  "format": "MetagenomicQc",
+                  "required_outputs": [
+                    "qc_counts"
+                  ],
+                  "program": "qc"
+                },
+                {
+                  "sample_types": [
+                    "meta",
+                    "shortReads"
+                  ],
+                  "format": "ReadQc",
+                  "required_outputs": [
+                    "qc_summary"
+                  ],
+                  "program": "qc"
+                }
+              ],
+              "operations": [
+                "search",
+                "pull",
+                "push"
+              ],
+              "destination_fields": {
+                "data_type": "meta, shortReads, genomic or synthetic",
+                "project": "Exact owned project ID or name",
+                "sample": "Exact sample ID or name in the project",
+                "source_slots": "Optional map of R1/R2 or genome to selected workspace paths"
+              }
+            },
+            "backend_last_seen": 1794192967.013177
+          }
+        ]
+      }
+    },
+    "files": [],
+    "evidence": [],
+    "error": null
+  }
+}
