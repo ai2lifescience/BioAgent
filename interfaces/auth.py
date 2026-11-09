@@ -6,7 +6,7 @@ from http.cookies import SimpleCookie
 import ipaddress
 import os
 import socket
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 from auth import AuthError, AuthStore, COOKIE_NAME, auth_mode, current_principal, principal_scope, registration_enabled
 
@@ -29,7 +29,7 @@ def configure_server(host: str) -> None:
     """Network listeners default to accounts; explicit local mode stays local."""
     if not loopback(host):
         os.environ.setdefault("AGENT_AUTH_MODE", "multiuser")
-    if auth_mode() == "multiuser" and not os.getenv("AGENT_PUBLIC_ORIGIN"):
+    if auth_mode() != "local" and not os.getenv("AGENT_PUBLIC_ORIGIN"):
         os.environ["AGENT_DIRECT_HTTP"] = "true"
     validate_server(host)
 
@@ -37,14 +37,18 @@ def configure_server(host: str) -> None:
 def validate_server(host: str) -> None:
     if auth_mode() == "local" and not loopback(host):
         raise ValueError("Local mode must bind to localhost. Use AGENT_AUTH_MODE=multiuser for network access.")
-    if auth_mode() == "multiuser" and os.getenv("AGENT_PUBLIC_ORIGIN"):
+    if auth_mode() != "local" and os.getenv("AGENT_PUBLIC_ORIGIN"):
         origin = urlparse(os.getenv("AGENT_PUBLIC_ORIGIN", ""))
         if origin.scheme not in {"http", "https"} or not origin.netloc or origin.path not in {"", "/"} or origin.query or origin.fragment or origin.username:
             raise ValueError("AGENT_PUBLIC_ORIGIN must be an HTTP(S) origin without a path.")
         if origin.scheme == "https" and not secure_cookie():
             raise ValueError("HTTPS requires secure cookies.")
-    elif auth_mode() == "multiuser" and not loopback(host) and os.getenv("AGENT_DIRECT_HTTP") != "true":
+    elif auth_mode() != "local" and not loopback(host) and os.getenv("AGENT_DIRECT_HTTP") != "true":
         raise ValueError("Configure the direct HTTP listener before network access.")
+    if auth_mode() == "cas":
+        from auth.cas import logout_url, service_url
+        service_url()
+        logout_url()
 
 
 def _check_origin(handler) -> None:
@@ -93,6 +97,31 @@ def _credential(handler) -> str:
     return value.value if value else ""
 
 
+def _cookie(handler, name: str) -> str:
+    cookies = SimpleCookie()
+    try:
+        cookies.load(handler.headers.get("Cookie", ""))
+    except Exception:
+        raise AuthError("Invalid session cookie.") from None
+    value = cookies.get(name)
+    return value.value if value else ""
+
+
+def _redirect(handler, location: str, status: int = 302) -> None:
+    handler.send_response(status)
+    handler.send_header("Location", location)
+    handler.send_header("Cache-Control", "no-store")
+    handler.send_header("Content-Length", "0")
+    handler.end_headers()
+
+
+def _external_login_url() -> str | None:
+    if auth_mode() != "cas":
+        return None
+    from auth.mscan import enabled
+    return "/auth/mscan/login" if enabled() else "/auth/cas/login"
+
+
 def _auth_endpoint(handler, path: str) -> bool:
     if path == "/auth/status" and handler.command == "GET":
         if auth_mode() == "local":
@@ -102,7 +131,93 @@ def _auth_endpoint(handler, path: str) -> bool:
                 principal = AuthStore().authenticate(_credential(handler))
             except AuthError:
                 principal = None
-        handler._send_json({"mode": auth_mode(), "registration_enabled": registration_enabled(), "user": {"id": principal.user_id, "name": principal.username} if principal else None})
+        handler._send_json({
+            "mode": auth_mode(),
+            "registration_enabled": registration_enabled(),
+            "login_url": _external_login_url(),
+            "user": {"id": principal.user_id, "name": principal.username} if principal else None,
+        })
+        return True
+    if path == "/auth/mscan/login" and handler.command == "GET":
+        if auth_mode() != "cas":
+            raise AuthError("MSCAN single sign-on is not enabled.")
+        from auth.mscan import STATE_COOKIE, begin_login
+        query = parse_qs(urlparse(handler.path).query)
+        location, state = begin_login((query.get("return_to") or ["/"])[0])
+        handler._auth_cookie = (
+            f"{STATE_COOKIE}={state}; Path=/auth/mscan; HttpOnly; SameSite=Lax; Max-Age=300"
+            + ("; Secure" if secure_cookie() else "")
+        )
+        _redirect(handler, location)
+        return True
+    if path == "/auth/mscan/callback" and handler.command == "GET":
+        if auth_mode() != "cas":
+            raise AuthError("MSCAN single sign-on is not enabled.")
+        from auth.mscan import STATE_COOKIE, complete_login
+        query = parse_qs(urlparse(handler.path).query)
+        token, _, return_to = complete_login(
+            (query.get("code") or [""])[0],
+            (query.get("state") or [""])[0],
+            _cookie(handler, STATE_COOKIE),
+        )
+        handler._auth_cookie = (
+            f"{COOKIE_NAME}={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=28800"
+            + ("; Secure" if secure_cookie() else "")
+        )
+        _redirect(handler, return_to)
+        return True
+    if path == "/auth/cas/login" and handler.command == "GET":
+        if auth_mode() != "cas":
+            raise AuthError("CAS login is not enabled.")
+        from auth.cas import STATE_COOKIE, begin_login
+        query = parse_qs(urlparse(handler.path).query)
+        location, state = begin_login((query.get("return_to") or ["/"])[0])
+        handler._auth_cookie = (
+            f"{STATE_COOKIE}={state}; Path=/auth/cas; HttpOnly; SameSite=Lax; Max-Age=300"
+            + ("; Secure" if secure_cookie() else "")
+        )
+        _redirect(handler, location)
+        return True
+    if path == "/auth/cas/callback" and handler.command == "GET":
+        if auth_mode() != "cas":
+            raise AuthError("CAS login is not enabled.")
+        from auth.cas import STATE_COOKIE, complete_login
+        query = parse_qs(urlparse(handler.path).query)
+        token, _, return_to = complete_login(
+            (query.get("ticket") or [""])[0],
+            (query.get("state") or [""])[0],
+            _cookie(handler, STATE_COOKIE),
+        )
+        handler._auth_cookie = (
+            f"{COOKIE_NAME}={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=28800"
+            + ("; Secure" if secure_cookie() else "")
+        )
+        _redirect(handler, return_to)
+        return True
+    if path == "/auth/cas/callback" and handler.command == "POST":
+        if auth_mode() != "cas":
+            raise AuthError("CAS login is not enabled.")
+        from auth.cas import consume_single_logout
+        length = int(handler.headers.get("Content-Length", "0"))
+        user_id = consume_single_logout(handler.rfile.read(length), handler.headers.get("Content-Type", ""))
+        if user_id:
+            from web_bridge import revoke_user
+            revoke_user(user_id)
+        handler._send_json({"signed_out": True})
+        return True
+    if path == "/auth/cas/logout" and handler.command == "POST":
+        if auth_mode() != "cas":
+            raise AuthError("CAS login is not enabled.")
+        principal = AuthStore().authenticate(_credential(handler))
+        AuthStore().logout(principal)
+        from auth.cas import logout_url
+        from web_bridge import revoke_user
+        revoke_user(principal.user_id)
+        handler._auth_cookie = (
+            f"{COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0"
+            + ("; Secure" if secure_cookie() else "")
+        )
+        handler._send_json({"signed_out": True, "logout_url": logout_url()})
         return True
     if path in {"/auth/login", "/auth/register"} and handler.command == "POST":
         if auth_mode() != "multiuser":
@@ -117,6 +232,8 @@ def _auth_endpoint(handler, path: str) -> bool:
         handler._send_json({"user": {"id": principal.user_id, "name": principal.username}}, status=201 if path == "/auth/register" else 200)
         return True
     if path == "/auth/logout" and handler.command == "POST":
+        if auth_mode() == "cas":
+            raise AuthError("Use CAS single logout.")
         if auth_mode() == "multiuser":
             principal = AuthStore().authenticate(_credential(handler))
             AuthStore().logout(principal)
@@ -143,7 +260,7 @@ def authenticated_request(method):
             if _auth_endpoint(handler, path):
                 return
             public = handler.command == "GET" and (
-                path in {"/", "/index.html", "/assistant", "/assistant/", "/assistant.html", "/assistant-demo", "/assistant-demo/", "/assistant-demo.html", "/favicon.svg", "/health"}
+                path in {"/", "/index.html", "/assistant", "/assistant/", "/assistant.html", "/assistant-demo", "/assistant-demo/", "/assistant-demo.html", "/favicon.ico", "/favicon.svg", "/health"}
                 or path.startswith("/static/")
             )
             if public:

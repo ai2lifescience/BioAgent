@@ -11,7 +11,6 @@ BioAgent retains only configuration and reusable validation support here:
 
 ```text
 mscan/
-├── tests/                      # Java ownership, QC and logout checks
 ├── README.md                   # Setup, contracts and validation
 └── run.py                      # Development configuration and launch helper
 ```
@@ -56,8 +55,9 @@ See the [installation guide and exact MSCAN file changes](../../../docs/mscan_we
 for prerequisites, setup, builds, startup and verification.
 
 The development workspace keeps `BioAgent`, `mscan` and `mscan-app` as sibling
-repositories. Adapter files and host hooks are tracked directly in the two MSCAN
-repositories. BioAgent does not provide an installer that writes into them.
+repositories. Host implementation and regression checks are tracked directly
+in the two MSCAN repositories. BioAgent does not provide an installer that
+writes into them.
 
 ```bash
 python web_bridge/adapters/mscan/run.py init \
@@ -91,10 +91,11 @@ after changing either side.
 | Frontend `src/App.vue` | Import and mount the embedded assistant |
 | Frontend `src/views/sampleProgramResults/index.vue` | Sample context, result refresh and download menu |
 | Backend `application-druid.yml` | Direct `bioagent.*` connector configuration |
-| Existing backend Java, database, workflow and security classes | None |
-| Existing frontend user store and QC panel | None |
+| Frontend `ProgramResultPanel.vue` | Use assembly results for synthetic functional-analysis samples |
+| Backend CAS/security/session classes | Unified CAS login and front/back-channel logout |
+| Backend DuckDB startup | Normalize inherited HTTP(S) proxy root slashes |
 
-The remaining integration files are additions owned by this adapter: five
+The remaining integration files are additions owned by MSCAN: five
 frontend files under `src/integrations/bioagent/` and Java files under the admin
 module's `com.mscan.web.controller.common` package. `WebsiteDownloadSecurity`
 adds a higher-priority chain scoped only to GET `/assistant/received-download/*`;
@@ -102,9 +103,8 @@ the controller still validates the one-use ticket and resource ownership. Other
 routes continue through MSCAN's original security chain. Adapter backend beans
 are conditional on `bioagent.enabled=true`.
 
-Legacy bridge patches in the user store, CAS configuration and security
-configuration are not required. Preserve unrelated host customizations when
-removing known legacy insertions. The local `pnpm-workspace.yaml` setting
+Preserve unrelated host customizations when removing known legacy bridge
+insertions. The local `pnpm-workspace.yaml` setting
 `packages: ['.']` is separate from the bridge.
 
 ## Run
@@ -120,8 +120,8 @@ Use three terminals and start each sibling repository directly:
 # BioAgent, port 8000
 cd /path/to/mscan_projects/BioAgent && python -B -m interfaces.web --host 0.0.0.0 --port 8000
 
-# MSCAN backend, configured application port (8080 here)
-cd /path/to/mscan_projects/mscan-app && java -jar mscan-admin/target/mscan-admin.jar --spring.profiles.active=druid
+# MSCAN backend; start.sh also normalizes DuckDB-incompatible proxy URLs
+cd /path/to/mscan_projects/mscan-app && ./start.sh start
 
 # MSCAN frontend (8848 in this checkout)
 cd /path/to/mscan_projects/mscan && pnpm dev

@@ -107,6 +107,7 @@ Docker daemon is unavailable. It never silently falls back to host execution.
 | `--host 127.0.0.1`, no explicit mode | Local owner, no login | Existing local executor |
 | `--host 0.0.0.0`, no explicit mode | Multi-user login and registration | Isolated Docker workers |
 | `AGENT_AUTH_MODE=multiuser`, loopback listener | Multi-user login and registration | Isolated Docker workers |
+| `AGENT_AUTH_MODE=cas` | CNCB CAS users; passwords and registration disabled | Isolated Docker workers |
 | Explicit `AGENT_AUTH_MODE=local`, network listener | Rejected | None |
 
 Explicit settings are honored. If you previously exported `AGENT_AUTH_MODE=local`,
@@ -164,7 +165,8 @@ the workflow safety policy and session ownership.
 ## Registration and authentication
 
 `GET /auth/status` returns the mode, `registration_enabled`, and the current user
-or null. `POST /auth/register` accepts only the identity fields it needs:
+or null. In `multiuser` mode, `POST /auth/register` accepts only the identity
+fields it needs:
 
 ```json
 {"username": "alice", "password": "a-long-unique-password"}
@@ -202,6 +204,32 @@ Cookies expire after eight hours, use SameSite=Lax, and are stored as hashes in
 HTTPS public origins require Secure cookies. Browser-origin checks protect state
 changes, including registration and login. UI account changes clear old chat
 state across tabs.
+
+### CNCB CAS single sign-on
+
+Use CAS mode when BioAgent and MSCAN must share the same authenticated person and
+global logout state:
+
+```bash
+export AGENT_AUTH_MODE=cas
+export AGENT_PUBLIC_ORIGIN=https://agent.example.com
+export AGENT_CAS_LOGIN_URL=https://sso.cncb.ac.cn/login
+export AGENT_CAS_VALIDATE_URL=https://sso.cncb.ac.cn/p3/serviceValidate
+export AGENT_CAS_LOGOUT_URL=https://sso.cncb.ac.cn/logout
+export AGENT_CAS_SERVICE_URL=https://agent.example.com/auth/cas/callback
+export AGENT_CAS_LOGOUT_RETURN_URL=https://agent.example.com
+```
+
+Register the exact `AGENT_CAS_SERVICE_URL` in CAS. BioAgent validates each
+single-use service ticket itself and requires the same `userId` attribute MSCAN
+uses; this stable ID owns conversations, files and runs. The display username is
+synchronized from CAS, but authorization never relies on it. Password login and
+public registration are disabled in this mode.
+
+The callback uses a five-minute HttpOnly state cookie to prevent login CSRF. CAS
+service tickets are linked to hashed BioAgent login tokens so a back-channel CAS
+`logoutRequest` immediately revokes the matching session. Application logout
+first revokes BioAgent state, then enters CAS global logout.
 
 ## What is isolated
 

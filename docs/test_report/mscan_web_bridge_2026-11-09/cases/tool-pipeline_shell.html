@@ -1,0 +1,84 @@
+<html><meta charset="utf-8"><style>body{font:16px system-ui;margin:32px;color:#162b3e;background:#f3f6fa}pre{font:13px monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:white;padding:22px;border:1px solid #cbd5e1}h1{font-size:24px}.note{color:#475569}</style><p class="note">Recorded live test evidence · 2026-11-09 · This is an evidence viewer, not the application UI.</p><h1>pipeline_shell</h1><p>Outcome: <b>PASS</b></p><pre>{
+  &quot;id&quot;: &quot;tool-pipeline_shell&quot;,
+  &quot;title&quot;: &quot;pipeline_shell&quot;,
+  &quot;outcome&quot;: &quot;PASS&quot;,
+  &quot;inputs&quot;: {
+    &quot;command&quot;: &quot;agent-pipeline results --job-id a99fcba5414748dea226f92d842726b0&quot;
+  },
+  &quot;result&quot;: {
+    &quot;job_id&quot;: &quot;a99fcba5414748dea226f92d842726b0&quot;,
+    &quot;plan_id&quot;: &quot;a99fcba5414748dea226f92d842726b0&quot;,
+    &quot;status&quot;: &quot;succeeded&quot;,
+    &quot;created_at&quot;: &quot;2026-11-09T02:38:29.722890+00:00&quot;,
+    &quot;started_at&quot;: &quot;2026-11-09T02:38:29.831895+00:00&quot;,
+    &quot;finished_at&quot;: &quot;2026-11-09T02:39:25.559143+00:00&quot;,
+    &quot;updated_at&quot;: &quot;2026-11-09T02:39:25.560151+00:00&quot;,
+    &quot;error&quot;: null,
+    &quot;remote_id&quot;: &quot;164f785d-4c96-4cdf-8304-677852046afc&quot;,
+    &quot;artifact_status&quot;: &quot;available&quot;,
+    &quot;pipeline_name&quot;: &quot;metagenomic_read_quality_control&quot;,
+    &quot;files&quot;: [
+      {
+        &quot;name&quot;: &quot;clean.R1.fq&quot;,
+        &quot;path&quot;: &quot;pipeline-artifacts/a99fcba5414748dea226f92d842726b0/0/clean.R1.fq&quot;,
+        &quot;workspace_path&quot;: &quot;pipeline-artifacts/a99fcba5414748dea226f92d842726b0/0/clean.R1.fq&quot;,
+        &quot;size&quot;: 761681,
+        &quot;remote&quot;: true,
+        &quot;artifact_id&quot;: &quot;a99fcba5414748dea226f92d842726b0:0&quot;,
+        &quot;pipeline_result&quot;: {
+          &quot;job_id&quot;: &quot;a99fcba5414748dea226f92d842726b0&quot;,
+          &quot;pipeline_name&quot;: &quot;metagenomic_read_quality_control&quot;,
+          &quot;output_key&quot;: &quot;MetagenomicQc.clean_r1&quot;,
+          &quot;output_name&quot;: &quot;clean_r1&quot;,
+          &quot;output_kind&quot;: &quot;sequence&quot;,
+          &quot;completed_at&quot;: &quot;2026-11-09T02:39:25.559143+00:00&quot;
+        }
+      },
+      {
+        &quot;name&quot;: &quot;qc_counts.tsv&quot;,
+        &quot;path&quot;: &quot;pipeline-artifacts/a99fcba5414748dea226f92d842726b0/1/qc_counts.tsv&quot;,
+        &quot;workspace_path&quot;: &quot;pipeline-artifacts/a99fcba5414748dea226f92d842726b0/1/qc_counts.tsv&quot;,
+        &quot;size&quot;: 84,
+        &quot;remote&quot;: true,
+        &quot;artifact_id&quot;: &quot;a99fcba5414748dea226f92d842726b0:1&quot;,
+        &quot;pipeline_result&quot;: {
+          &quot;job_id&quot;: &quot;a99fcba5414748dea226f92d842726b0&quot;,
+          &quot;pipeline_name&quot;: &quot;metagenomic_read_quality_control&quot;,
+          &quot;output_key&quot;: &quot;MetagenomicQc.qc_counts&quot;,
+          &quot;output_name&quot;: &quot;qc_counts&quot;,
+          &quot;output_kind&quot;: &quot;table&quot;,
+          &quot;completed_at&quot;: &quot;2026-11-09T02:39:25.559143+00:00&quot;
+        }
+      },
+      {
+        &quot;name&quot;: &quot;phase1_read_overview.tsv&quot;,
+        &quot;path&quot;: &quot;pipeline-artifacts/a99fcba5414748dea226f92d842726b0/2/phase1_read_overview.tsv&quot;,
+        &quot;workspace_path&quot;: &quot;pipeline-artifacts/a99fcba5414748dea226f92d842726b0/2/phase1_read_overview.tsv&quot;,
+        &quot;size&quot;: 75,
+        &quot;remote&quot;: true,
+        &quot;artifact_id&quot;: &quot;a99fcba5414748dea226f92d842726b0:2&quot;,
+        &quot;pipeline_result&quot;: {
+          &quot;job_id&quot;: &quot;a99fcba5414748dea226f92d842726b0&quot;,
+          &quot;pipeline_name&quot;: &quot;metagenomic_read_quality_control&quot;,
+          &quot;output_key&quot;: &quot;MetagenomicQc.phase1_metrics&quot;,
+          &quot;output_name&quot;: &quot;phase1_metrics&quot;,
+          &quot;output_kind&quot;: &quot;table&quot;,
+          &quot;completed_at&quot;: &quot;2026-11-09T02:39:25.559143+00:00&quot;
+        }
+      }
+    ],
+    &quot;previews&quot;: [
+      {
+        &quot;path&quot;: &quot;pipeline-artifacts/a99fcba5414748dea226f92d842726b0/1/qc_counts.tsv&quot;,
+        &quot;text&quot;: &quot;MetricName\tMetricValue\nInputReads\t4168\nReadsAfterQC\t4168\nReadsAfterHostRemoval\t4149\n&quot;
+      },
+      {
+        &quot;path&quot;: &quot;pipeline-artifacts/a99fcba5414748dea226f92d842726b0/2/phase1_read_overview.tsv&quot;,
+        &quot;text&quot;: &quot;SampleId\tInputReads\tReadsAfterQC\tReadsAfterHostRemoval\n0722\t4168\t4168\t4149\n&quot;
+      }
+    ],
+    &quot;bundle_path&quot;: &quot;pipeline-bundles/a99fcba5414748dea226f92d842726b0/results.zip&quot;,
+    &quot;message&quot;: &quot;Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools.&quot;
+  },
+  &quot;session_id&quot;: &quot;1f96468e-0bfb-4189-8150-8da22dc592ca&quot;
+}</pre></html>

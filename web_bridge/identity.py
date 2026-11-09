@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import os
 import secrets
 import time
 from uuid import uuid4
@@ -28,10 +29,16 @@ class Federation:
         with get_host().identity_transaction() as db:
             mapping = db.execute('SELECT user_id FROM external_identities WHERE site_id=? AND subject=?', (site_id, subject)).fetchone()
             row = db.user(mapping['user_id']) if mapping else None
+            if shared_user_id and not mapping and identity is None:
+                raise ValueError('Shared website identities require a verified user_id and username.')
             if row:
                 if row['disabled']:
                     raise get_host().auth_error('This account is disabled.')
-                return get_host().principal(row['user_id'], row['username'])
+                if username and row['username'] != username:
+                    sync = getattr(db, 'sync_username', None)
+                    if sync:
+                        sync(row['user_id'], username)
+                return get_host().principal(row['user_id'], username or row['username'])
             identifier = subject if shared_user_id else uuid4().hex
             row = db.user(identifier)
             if row:
@@ -80,9 +87,13 @@ class Federation:
             if not row or row['expires'] < time.time() or row['site_id'] != site_id or row['origin'] != origin or not user or user['disabled']:
                 raise get_host().auth_error('Invalid, expired, or consumed website login grant.')
             db.execute('DELETE FROM website_grants WHERE digest=?', (digest,))
-            db.create_login(hashlib.sha256(token.encode()).hexdigest(), row['user_id'], time.time() + 8 * 3600)
+            ttl = max(30, min(int(os.getenv('AGENT_WEBSITE_LOGIN_TTL_SECONDS', '120')), 300))
+            db.create_login(hashlib.sha256(token.encode()).hexdigest(), row['user_id'], time.time() + ttl)
             db.execute('INSERT INTO website_logins VALUES (?,?,?)', (hashlib.sha256(token.encode()).hexdigest(), site_id, row['user_id']))
-            return token, {'user': {'id': row['user_id'], 'name': user['username']}, 'session_id': row['session_id'], 'site_id': site_id}
+            return token, {
+                'user': {'id': row['user_id'], 'name': user['username']},
+                'session_id': row['session_id'], 'site_id': site_id, 'expires_in': ttl,
+            }
 
     def revoke(self, site_id, principal):
         with get_host().identity_transaction() as db:

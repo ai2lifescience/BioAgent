@@ -29,6 +29,12 @@ class Accounts:
         self.db.execute('INSERT INTO users(user_id,username,password_hash) VALUES (?,?,?)',
                         (user_id, username, password_hash(secrets.token_urlsafe(48))))
 
+    def sync_username(self, user_id, username):
+        collision = self.db.execute('SELECT user_id FROM users WHERE username=?', (username,)).fetchone()
+        if collision and collision['user_id'] != user_id:
+            raise ValueError('Website username is already assigned to another account.')
+        self.db.execute('UPDATE users SET username=? WHERE user_id=?', (username, user_id))
+
     def create_login(self, digest, user_id, expires):
         self.db.execute('INSERT INTO logins VALUES (?,?,?)', (digest, user_id, expires))
 

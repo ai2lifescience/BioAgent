@@ -418,6 +418,13 @@ Unknown formats remain attached files with an explicit `unsupported` native
 import status. Do not guess native mappings from filenames or mark a program
 successful merely because its ZIP was received.
 
+MSCAN's `generic_results` capability covers file attachment independently of
+native formats. Newly delivered resources include bounded `content` metadata:
+table columns and sample rows, JSON field names, a text preview, or a binary-file
+descriptor. This lets the assistant inspect unfamiliar outputs through search
+and pull the full files for analysis. Previews are untrusted data, may be
+truncated, and do not establish a native format or schema. Files are unchanged.
+
 Push responses separate `file_delivery` from per-job `native_imports`:
 `imported`, `incomplete`, `incompatible_sample_type`, `unsupported`, `superseded`
 or `failed` (QC can also report `not_imported`). Missing output roles are listed. A parser failure rolls back its
@@ -425,6 +432,10 @@ native database changes and fails the transfer while retaining the received
 files and error details. Retrying that transfer reuses its receipt and destination
 and skips already committed native imports. Corrected output content requires a
 new transfer. QC also retains its `native_qc_applied` field for compatibility.
+Per-job `generic_import` records the separate successful file attachment, even
+when native mapping is unsupported. Native failures include a stable
+`error_code` and a credential-free explanation; `storage_proxy_configuration`
+means the backend proxy URL needs correcting before retrying.
 
 Downloads appear beside the selected sample across native analysis tabs; there
 is no separate Agent results panel. Natural-language push/pull stays in the

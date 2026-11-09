@@ -170,6 +170,17 @@ export AGENT_PROXY=socks5h://127.0.0.1:10801
 
 unset AGENT_WEBSITE_CLIENTS
 export AGENT_WEBSITE_CLIENTS_FILE="$PWD/runtime/website-integration/clients.json"
+export AGENT_AUTH_MODE=cas
+export AGENT_PUBLIC_ORIGIN=http://YOUR_SERVER_IP:8000
+export AGENT_CAS_LOGIN_URL=https://sso.cncb.ac.cn/login
+export AGENT_CAS_VALIDATE_URL=https://sso.cncb.ac.cn/p3/serviceValidate
+export AGENT_CAS_LOGOUT_URL=https://sso.cncb.ac.cn/logout
+export AGENT_CAS_SERVICE_URL=http://YOUR_SERVER_IP:8000/auth/cas/callback
+# Local standalone login delegates to MSCAN's verified session. The one-use
+# MSCAN grant is not a CAS Service Ticket and does not revalidate the consumed ST.
+export AGENT_MSCAN_LOGIN_URL=http://localhost:8848/agent-sso
+export AGENT_MSCAN_ORIGIN=http://localhost:8848
+export AGENT_MSCAN_SITE_ID=mscan
 
 python -B -m interfaces.web --host 0.0.0.0 --port 8000
 ```
@@ -217,6 +228,19 @@ change. Keep real API and storage keys in your private environment, outside Git.
 The service credential identifies **MSCAN's backend** to the agent. MSCAN's
 user login identifies **the person**. `run.py init` generates the service and
 signing secrets; it does not know or store a user's login password.
+
+BioAgent's standalone page and MSCAN both use the CNCB CAS portal. Register
+BioAgent's exact `/auth/cas/callback` service URL in CAS. Both applications
+require the assertion's stable `userId`; that value is also MSCAN's verified
+bridge subject, so standalone and embedded conversations resolve to one Agent
+account. The CAS username is display metadata and is synchronized on login.
+
+MSCAN logout first revokes its Redis session and the embedded Agent grants, then
+enters CAS global logout. CAS back-channel logout maps each service ticket to the
+corresponding MSCAN Redis login and BioAgent login, so either application's
+logout invalidates both server-side sessions. The browser may briefly retain a
+stale local MSCAN token, but it no longer authorizes requests and is cleared by
+the next session check.
 
 For the MSCAN adapter, `run.py init` enables shared SSO user IDs. The authenticated
 Java backend sends the verified MSCAN user ID and username together with the
@@ -381,16 +405,16 @@ Paths below are relative to the workspace containing the three repositories.
 | `mscan/src/views/sampleProgramResults/index.vue` | Context registration, result-refresh listener, component refresh key and `SampleFileMenu` | Share the selected sample and tab, refresh received results and provide downloads |
 | `mscan-app/mscan-admin/src/main/resources/application-druid.yml` | Direct `bioagent.*` settings | Configure the connector without cross-project file references |
 
-MSCAN's existing framework/security Java sources, database services, pipeline definitions,
-`SecurityConfig.java`, `CasClientConfig.java`, frontend user store and QC panel
-remain unchanged.
+MSCAN's CAS/security and token services contain the shared-login and logout
+integration. DuckDB proxy normalization lives in `mscan-app/start.sh`; the
+synthetic functional-result selection lives in `ProgramResultPanel.vue`.
 
 ### Adapter files maintained in MSCAN
 
 | Destination | Added files |
 | --- | --- |
 | Frontend `src/integrations/bioagent/` | `AssistantBridge.vue`, `context.ts`, `logout.ts`, `SampleFileMenu.vue`, `sampleFiles.ts` |
-| Backend `mscan-admin/src/main/java/com/mscan/web/controller/common/` | `AssistantController.java`, `AssistantTransferService.java`, `AssistantDeliveryService.java`, `TransferLocks.java`, `ResultImporterRegistry.java`, `ResultImportService.java`, `QcResultImporter.java`, `NativeImportContext.java`, `NativeResultResources.java`, `WebsiteLogoutEvent.java`, `WebsiteLogoutHook.java`, `WebsiteDownloadSecurity.java` |
+| Backend `mscan-admin/src/main/java/com/mscan/web/controller/common/` | `AssistantController.java`, `AssistantTransferService.java`, `AssistantDeliveryService.java`, `TransferLocks.java`, `ResultImporterRegistry.java`, `ResultImportService.java`, `QcResultImporter.java`, `ResultArtifactInspector.java`, `ImportFailure.java`, `NativeImportContext.java`, `NativeResultResources.java`, `WebsiteLogoutEvent.java`, `WebsiteLogoutHook.java`, `WebsiteDownloadSecurity.java` |
 
 Logout uses a frontend Pinia action subscription and a backend Spring aspect
 that observes the verified session before invalidation. Download security uses
@@ -411,7 +435,7 @@ pnpm --dir ../mscan type:check
 mvn -f ../mscan-app/pom.xml clean package -DskipTests
 python -B -m web_bridge.tests.check_mscan_java --root ../mscan-app
 python -B -m web_bridge.tests.check_mscan_logout \
-  --jar ../mscan-app/mscan-admin/target/mscan-admin.jar
+  --mscan-root ../mscan-app
 ```
 
 These cover frontend typing, backend compilation, native resource ownership,

@@ -46,8 +46,8 @@ def registration_enabled() -> bool:
 
 def auth_mode() -> str:
     mode = os.getenv("AGENT_AUTH_MODE", "local")
-    if mode not in {"local", "multiuser"}:
-        raise ValueError("AGENT_AUTH_MODE must be local or multiuser")
+    if mode not in {"local", "multiuser", "cas"}:
+        raise ValueError("AGENT_AUTH_MODE must be local, multiuser, or cas")
     return mode
 
 

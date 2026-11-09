@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import './auth.css';
 
-type Status = { mode: 'local' | 'multiuser'; registration_enabled?: boolean; user: { id: string; name: string } | null };
+type Status = {
+  mode: 'local' | 'multiuser' | 'cas';
+  registration_enabled?: boolean;
+  login_url?: string | null;
+  user: { id: string; name: string } | null;
+};
 const CHANGE_KEY = 'bioagent.auth.changed';
 const endpoint = (path: string) => new URL(`/auth/${path}`, window.location.href).toString();
 
@@ -57,6 +62,13 @@ export function AuthGate({ children }: { children: ReactNode }) {
       window.removeEventListener('bioagent-auth-expired', expired);
     };
   }, []);
+  useEffect(() => {
+    if (status?.mode !== 'cas' || status.user) return;
+    const target = status.login_url || '/auth/cas/login';
+    const url = new URL(target, window.location.origin);
+    url.searchParams.set('return_to', window.location.pathname + window.location.search + window.location.hash);
+    window.location.replace(url.toString());
+  }, [status]);
   const announce = () => {
     ++generation.current;
     localStorage.removeItem('agent.web.active_session_id.v1');
@@ -75,6 +87,23 @@ export function AuthGate({ children }: { children: ReactNode }) {
     finally { setBusy(false); }
   };
   const logout = async () => {
+    if (status?.mode === 'cas') {
+      setBusy(true);
+      try {
+        const response = await fetch('/auth/cas/logout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: '{}'
+        });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || 'Sign-out failed.');
+        window.location.assign(payload.logout_url);
+      } catch (e) {
+        setError((e as Error).message);
+        setBusy(false);
+      }
+      return;
+    }
     ++generation.current;
     setBusy(true);
     try {
@@ -85,6 +114,9 @@ export function AuthGate({ children }: { children: ReactNode }) {
     finally { setBusy(false); }
   };
   if (!status) return <main className="auth-screen"><p role="status">{error || 'Connecting…'}</p>{error && <button onClick={() => window.location.reload()}>Retry</button>}</main>;
+  if (status.mode === 'cas' && !status.user) {
+    return <main className="auth-screen"><p role="status">Redirecting to CNCB single sign-on…</p></main>;
+  }
   if (!status.user) return <main className="auth-screen"><form className="auth-card" onSubmit={login}>
     <h1>{registering ? 'Create your account' : 'Sign in to BioAgent'}</h1><p>Your conversations and files stay with your account.</p>
     <label>Username<input autoComplete="username" required maxLength={100} pattern={registering ? '[A-Za-z0-9_.@\\-]+' : undefined} value={username} onChange={event => setUsername(event.target.value)} /></label>
@@ -94,7 +126,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
     {status.registration_enabled && <button className="auth-switch" type="button" disabled={busy} onClick={() => { setRegistering(!registering); setError(''); setPassword(''); setConfirmPassword(''); }}>{registering ? 'Already registered? Sign in' : 'Create account'}</button>}
   </form></main>;
   return <div className="auth-shell" key={status.user.id}>
-    {status.mode === 'multiuser' && <div className="auth-bar"><span>{status.user.name}</span>{error && <span role="alert">{error}</span>}<button disabled={busy} onClick={logout}>Sign out</button></div>}
+    {status.mode !== 'local' && <div className="auth-bar"><span>{status.user.name}</span>{error && <span role="alert">{error}</span>}<button disabled={busy} onClick={logout}>Sign out</button></div>}
     <div className="auth-content">{children}</div>
   </div>;
 }

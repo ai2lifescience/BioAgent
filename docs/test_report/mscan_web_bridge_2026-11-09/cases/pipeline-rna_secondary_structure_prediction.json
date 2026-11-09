@@ -1,0 +1,47 @@
+{
+  "id": "pipeline-rna_secondary_structure_prediction",
+  "title": "rna_secondary_structure_prediction",
+  "outcome": "failed",
+  "inputs": {
+    "bundled_examples": [
+      {
+        "path": "tools/runtime_tools/pipelines/rna_secondary_structure_prediction/data/input/example_rna.fasta",
+        "bytes": 80,
+        "sha256": "020ed5bba85d54fec155adada7b208918708a39a1517552795c5f963ec2376d4"
+      }
+    ],
+    "assigned_inputs": {
+      "rna": "uploads/examples/rna_secondary_structure_prediction-21d30c95b4f8441d8afd5ffa8f44b67e/example_rna.fasta"
+    },
+    "parameters": "Unchanged pipeline defaults"
+  },
+  "result": {
+    "job_id": "fec4ffc2f9764bbb94c609d48a6fae1a",
+    "plan_id": "fec4ffc2f9764bbb94c609d48a6fae1a",
+    "status": "failed",
+    "created_at": "2026-11-09T02:38:09.721532+00:00",
+    "started_at": "2026-11-09T02:38:09.967990+00:00",
+    "finished_at": "2026-11-09T02:38:13.761304+00:00",
+    "updated_at": "2026-11-09T02:38:13.762317+00:00",
+    "error": "RuntimeError: shell pipeline failed with exit code 1: rna_secondary_structure_prediction failed: RNAfold is not installed or is not available on PATH. Install ViennaRNA before running the rna_secondary_structure_prediction pipeline.\n",
+    "pipeline_name": "rna_secondary_structure_prediction"
+  },
+  "session_id": "ca242454-3f27-4e60-aa5a-418eb2deaf96",
+  "job_id": "fec4ffc2f9764bbb94c609d48a6fae1a",
+  "static_checks": {
+    "pipeline": "rna_secondary_structure_prediction",
+    "manifest_name_matches": true,
+    "declared_files": {
+      "entrypoint": {
+        "file": "run.sh",
+        "exists": true
+      },
+      "config": {
+        "file": "config.yaml",
+        "exists": true,
+        "yaml_valid": true
+      }
+    },
+    "errors": []
+  }
+}

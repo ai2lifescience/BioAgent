@@ -12,6 +12,7 @@ export function WebsiteProvider({ children }: { children: ReactNode }) {
   const site = query.get('website_site') || '';
   useEffect(() => {
     let alive = true, exchanging = false;
+    let refreshTimer: number | undefined;
     const originalFetch = window.fetch.bind(window);
     window.fetch = async (input, init) => {
       const url = new URL(input instanceof Request ? input.url : String(input), window.location.href);
@@ -28,14 +29,27 @@ export function WebsiteProvider({ children }: { children: ReactNode }) {
     const request = () => window.parent.postMessage({ type: 'agent-auth-required', site_id: site }, origin);
     const receive = async (event: MessageEvent) => {
       if (event.source !== window.parent || event.origin !== origin) return;
-      if (event.data?.type === 'agent-auth-error') { setError(String(event.data.message || 'Website sign-in failed.')); return; }
+      if (event.data?.type === 'agent-auth-error') {
+        credential.current = '';
+        setSession(null);
+        setError(String(event.data.message || 'Website sign-in failed.'));
+        window.clearTimeout(refreshTimer);
+        return;
+      }
       if (event.data?.type !== 'agent-authenticate' || exchanging) return;
       exchanging = true;
       try {
         const response = await fetch('/auth/website/exchange', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: event.data.code, site_id: site, origin, credential_mode: 'bearer' }) });
         const body = await response.json();
         if (!response.ok) throw new Error(body.error || 'Website sign-in failed.');
-        if (alive) { credential.current = body.access_token; setSession(body.session_id); setError(''); }
+        if (alive) {
+          credential.current = body.access_token;
+          setSession(body.session_id);
+          setError('');
+          window.clearTimeout(refreshTimer);
+          const refreshAfter = Math.max(10, Math.min(30, Number(body.expires_in || 120) * 0.5));
+          refreshTimer = window.setTimeout(request, refreshAfter * 1000);
+        }
       } catch (caught) { if (alive) setError((caught as Error).message); }
       finally { exchanging = false; }
     };
@@ -56,7 +70,7 @@ export function WebsiteProvider({ children }: { children: ReactNode }) {
     window.addEventListener('message', receive); window.addEventListener('bioagent-auth-expired', expired);
     document.addEventListener('click', download, true);
     request();
-    return () => { alive = false; credential.current = ''; window.fetch = originalFetch; document.removeEventListener('click', download, true); window.removeEventListener('message', receive); window.removeEventListener('bioagent-auth-expired', expired); };
+    return () => { alive = false; window.clearTimeout(refreshTimer); credential.current = ''; window.fetch = originalFetch; document.removeEventListener('click', download, true); window.removeEventListener('message', receive); window.removeEventListener('bioagent-auth-expired', expired); };
   }, [origin, site]);
   if (!session) return <main className="auth-screen"><p role="status">{error || 'Connecting your website account…'}</p>{error && <button onClick={() => window.location.reload()}>Retry</button>}</main>;
   return <WebsiteSession.Provider value={session}>{error && <p role="alert">{error}</p>}{children}</WebsiteSession.Provider>;

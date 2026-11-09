@@ -1,0 +1,128 @@
+<html><meta charset="utf-8"><style>body{font:16px system-ui;margin:32px;color:#162b3e;background:#f3f6fa}pre{font:13px monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:white;padding:22px;border:1px solid #cbd5e1}h1{font-size:24px}.note{color:#475569}</style><p class="note">Recorded live test evidence · 2026-11-09 · This is an evidence viewer, not the application UI.</p><h1>metagenomic_pathogen_identification_kmer result delivery</h1><p>Outcome: <b>succeeded</b></p><pre>{
+  &quot;id&quot;: &quot;transfer-metagenomic_pathogen_identification_kmer&quot;,
+  &quot;title&quot;: &quot;metagenomic_pathogen_identification_kmer result delivery&quot;,
+  &quot;outcome&quot;: &quot;succeeded&quot;,
+  &quot;inputs&quot;: {
+    &quot;paths&quot;: [
+      &quot;pipeline-bundles/b0bae2ba84e343c588318cd809ac18cc/results.zip&quot;,
+      &quot;uploads/examples/metagenomic_pathogen_identification_kmer-ce553b824f534c2093eba194e8e3edc1/kmer_demo_R1.fastq.gz&quot;,
+      &quot;uploads/examples/metagenomic_pathogen_identification_kmer-ce553b824f534c2093eba194e8e3edc1/kmer_demo_R2.fastq.gz&quot;
+    ],
+    &quot;destination&quot;: {
+      &quot;project&quot;: &quot;Bridge_pipeline_matrix_20261109&quot;,
+      &quot;sample&quot;: &quot;metagenomic_pathogen_identification_kmer&quot;,
+      &quot;data_type&quot;: &quot;meta&quot;,
+      &quot;source_slots&quot;: {
+        &quot;R1&quot;: &quot;uploads/examples/metagenomic_pathogen_identification_kmer-ce553b824f534c2093eba194e8e3edc1/kmer_demo_R1.fastq.gz&quot;,
+        &quot;R2&quot;: &quot;uploads/examples/metagenomic_pathogen_identification_kmer-ce553b824f534c2093eba194e8e3edc1/kmer_demo_R2.fastq.gz&quot;
+      }
+    },
+    &quot;create_missing&quot;: true
+  },
+  &quot;result&quot;: {
+    &quot;transfer_id&quot;: &quot;f8006fca3d4849c38756e5dff6adffe5&quot;,
+    &quot;site_id&quot;: &quot;mscan&quot;,
+    &quot;operation&quot;: &quot;push&quot;,
+    &quot;state&quot;: &quot;succeeded&quot;,
+    &quot;result&quot;: {
+      &quot;file_delivery&quot;: &quot;delivered&quot;,
+      &quot;source_registration&quot;: {
+        &quot;slots&quot;: {
+          &quot;R2&quot;: &quot;f0877e4ac6173582970d5fadb8f498b3&quot;,
+          &quot;R1&quot;: &quot;34b4aee030353441afa2779f9a8378f4&quot;
+        },
+        &quot;status&quot;: &quot;registered&quot;
+      },
+      &quot;target&quot;: {
+        &quot;sample_id&quot;: &quot;3409e1406b7a3bb0891b2206439b0bf1&quot;,
+        &quot;data_type&quot;: &quot;meta&quot;,
+        &quot;project_name&quot;: &quot;Bridge_pipeline_matrix_20261109&quot;,
+        &quot;sample_name&quot;: &quot;metagenomic_pathogen_identification_kmer&quot;,
+        &quot;project_id&quot;: &quot;a924199794553f94b029789481f26a2d&quot;
+      },
+      &quot;receipt_id&quot;: &quot;f8006fca3d4849c38756e5dff6adffe5&quot;,
+      &quot;qc&quot;: {},
+      &quot;native_imports&quot;: [
+        {
+          &quot;job_id&quot;: &quot;b0bae2ba84e343c588318cd809ac18cc&quot;,
+          &quot;files_delivered&quot;: true,
+          &quot;pipeline&quot;: &quot;metagenomic_pathogen_identification_kmer&quot;,
+          &quot;format&quot;: &quot;StrobeTaxaDetection&quot;,
+          &quot;state&quot;: &quot;unsupported&quot;,
+          &quot;message&quot;: &quot;MSCAN has no registered importer for this result format; files remain available.&quot;
+        }
+      ],
+      &quot;files&quot;: [
+        {
+          &quot;name&quot;: &quot;results.zip&quot;,
+          &quot;source_path&quot;: &quot;pipeline-bundles/b0bae2ba84e343c588318cd809ac18cc/results.zip&quot;,
+          &quot;id&quot;: &quot;f588a44924b290116b4d2d3f613267f2a769bf7d45b18285275f0b588dbe4664&quot;,
+          &quot;sha256&quot;: &quot;65544dc01906c331a05985a530cc37d99941cd2bc5f356fa43ec782cecb49b12&quot;,
+          &quot;size&quot;: 4919093
+        },
+        {
+          &quot;name&quot;: &quot;classified.tsv&quot;,
+          &quot;source_path&quot;: &quot;pipeline-artifacts/b0bae2ba84e343c588318cd809ac18cc/0/classified.tsv&quot;,
+          &quot;id&quot;: &quot;bbbf163c845aeff3be7a01c20f026e41c26700430374e4f01306d469aec59bd1&quot;,
+          &quot;sha256&quot;: &quot;70d409c29ba84c3408640424da04c11dbd36b84f908a300b198913655a2e9729&quot;,
+          &quot;size&quot;: 15911058,
+          &quot;pipeline_result&quot;: {
+            &quot;job_id&quot;: &quot;b0bae2ba84e343c588318cd809ac18cc&quot;,
+            &quot;pipeline_name&quot;: &quot;metagenomic_pathogen_identification_kmer&quot;,
+            &quot;output_key&quot;: &quot;StrobeTaxaDetection.classified_tsv&quot;,
+            &quot;output_name&quot;: &quot;classified_tsv&quot;,
+            &quot;output_kind&quot;: &quot;table&quot;,
+            &quot;completed_at&quot;: &quot;2026-11-09T03:13:19.603540+00:00&quot;
+          }
+        },
+        {
+          &quot;name&quot;: &quot;report.tsv&quot;,
+          &quot;source_path&quot;: &quot;pipeline-artifacts/b0bae2ba84e343c588318cd809ac18cc/1/report.tsv&quot;,
+          &quot;id&quot;: &quot;8500cb7638cfbb75c729a21081b58805e4611c4d330f20e1749466dad1f6ce78&quot;,
+          &quot;sha256&quot;: &quot;101d4140954fcc482561e1bbcccfdd76d4e0d8e2aced9477668b63f210650726&quot;,
+          &quot;size&quot;: 255290,
+          &quot;pipeline_result&quot;: {
+            &quot;job_id&quot;: &quot;b0bae2ba84e343c588318cd809ac18cc&quot;,
+            &quot;pipeline_name&quot;: &quot;metagenomic_pathogen_identification_kmer&quot;,
+            &quot;output_key&quot;: &quot;StrobeTaxaDetection.report_tsv&quot;,
+            &quot;output_name&quot;: &quot;report_tsv&quot;,
+            &quot;output_kind&quot;: &quot;table&quot;,
+            &quot;completed_at&quot;: &quot;2026-11-09T03:13:19.603540+00:00&quot;
+          }
+        },
+        {
+          &quot;name&quot;: &quot;signature_coverage.csv&quot;,
+          &quot;source_path&quot;: &quot;pipeline-artifacts/b0bae2ba84e343c588318cd809ac18cc/2/signature_coverage.csv&quot;,
+          &quot;id&quot;: &quot;8f8f78caea2203809b9df6c1bc2ad223d569fe3f51cf199bf5e6efa306d809ef&quot;,
+          &quot;sha256&quot;: &quot;683fb11bd3fe1b1ff835cacd33065e02e4ec27d728e00f169f867a26089378a8&quot;,
+          &quot;size&quot;: 16710,
+          &quot;pipeline_result&quot;: {
+            &quot;job_id&quot;: &quot;b0bae2ba84e343c588318cd809ac18cc&quot;,
+            &quot;pipeline_name&quot;: &quot;metagenomic_pathogen_identification_kmer&quot;,
+            &quot;output_key&quot;: &quot;StrobeTaxaDetection.signature_coverage_csv&quot;,
+            &quot;output_name&quot;: &quot;signature_coverage_csv&quot;,
+            &quot;output_kind&quot;: &quot;table&quot;,
+            &quot;completed_at&quot;: &quot;2026-11-09T03:13:19.603540+00:00&quot;
+          }
+        },
+        {
+          &quot;name&quot;: &quot;kmer_demo_R1.fastq.gz&quot;,
+          &quot;source_path&quot;: &quot;uploads/examples/metagenomic_pathogen_identification_kmer-ce553b824f534c2093eba194e8e3edc1/kmer_demo_R1.fastq.gz&quot;,
+          &quot;id&quot;: &quot;1362b1174d5a2cd5e8717fcbafc4ed5f384f87b8d6673327ab1a887e3e7d987a&quot;,
+          &quot;sha256&quot;: &quot;8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265&quot;,
+          &quot;size&quot;: 8952270
+        },
+        {
+          &quot;name&quot;: &quot;kmer_demo_R2.fastq.gz&quot;,
+          &quot;source_path&quot;: &quot;uploads/examples/metagenomic_pathogen_identification_kmer-ce553b824f534c2093eba194e8e3edc1/kmer_demo_R2.fastq.gz&quot;,
+          &quot;id&quot;: &quot;efbc3fbad121b30e78f3c21d707b2c76ef7690de012395e05a49aeab14e6592b&quot;,
+          &quot;sha256&quot;: &quot;56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0&quot;,
+          &quot;size&quot;: 10923663
+        }
+      ],
+      &quot;native_qc_applied&quot;: false
+    }
+  },
+  &quot;session_id&quot;: &quot;16af54ab-9553-4dbe-ad81-d8a8303aebcf&quot;,
+  &quot;job_id&quot;: &quot;b0bae2ba84e343c588318cd809ac18cc&quot;
+}</pre></html>

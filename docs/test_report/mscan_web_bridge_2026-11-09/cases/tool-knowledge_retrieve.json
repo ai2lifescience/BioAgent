@@ -1,0 +1,189 @@
+{
+  "id": "tool-knowledge_retrieve",
+  "title": "knowledge_retrieve",
+  "outcome": "PASS",
+  "inputs": {
+    "collection_id": "kb_e45492b7890b43789a528504a68cd097",
+    "question": "What is Python?",
+    "top_k": 2
+  },
+  "result": {
+    "status": "ok",
+    "data": {
+      "collection_id": "kb_e45492b7890b43789a528504a68cd097",
+      "question": "What is Python?",
+      "sources": [
+        {
+          "id": "src_5b470e63ac7a2117ee822fd8_c0",
+          "title": "The Python Tutorial — Python 3.15.2 documentation",
+          "url": "https://docs.python.org/3/tutorial/",
+          "source": "knowledge",
+          "text": "The Python Tutorial — Python 3.15.2 documentation\nNavigation\nindex\nmodules\n|\nnext\n|\nprevious\n|\nPython\n»\n3.15.2 documentation\n»\nThe Python Tutorial\n|\nTheme\nAuto\nLight\nDark\n|\nThe Python Tutorial\n¶\nTip\nThis tutorial is designed for\nprogrammers\nthat are new to the Python language,\nnot\nbeginners\nwho are new to programming.\nPython is an easy to learn, powerful programming language. It has efficient\nhigh-level data structures and a simple but effective approach to\nobject-oriented programming. Python’s elegant syntax and dynamic typing,\ntogether with its interpreted nature, make it an ideal language for scripting\nand rapid application development in many areas on most platforms.\nThe Python interpreter and the extensive standard library are freely available\nin source or binary form for all major platforms from the Python website,\nhttps://www.python.org/\n, and may be freely distributed. The same site also\ncontains distributions of and pointers to many free third party Python modules,\nprograms and tools, and additional documentation.\nThe Python interpreter is easily extended with new functions and data types\nimplemented in C or C++ (or other languages callable from C). Python is also\nsuitable",
+          "pmid": null,
+          "year": null,
+          "retrieved_at": "2026-11-09T02:42:51.346583+00:00"
+        },
+        {
+          "id": "src_5b470e63ac7a2117ee822fd8_c1",
+          "title": "The Python Tutorial — Python 3.15.2 documentation",
+          "url": "https://docs.python.org/3/tutorial/",
+          "source": "knowledge",
+          "text": "nal documentation.\nThe Python interpreter is easily extended with new functions and data types\nimplemented in C or C++ (or other languages callable from C). Python is also\nsuitable as an extension language for customizable applications.\nThis tutorial introduces the reader informally to the basic concepts and\nfeatures of the Python language and system. Be aware that it expects you to\nhave a basic understanding of programming in general. It helps to have a Python\ninterpreter handy for hands-on experience, but all examples are self-contained,\nso the tutorial can be read off-line as well.\nFor a description of standard objects and modules, see\nPython built-ins reference\nand\nThe Python standard library\n.\nThe Python Language Reference\ngives a more formal definition of\nthe language.  To write extensions in C or C++, read\nExtending and Embedding the Python Interpreter\nand\nPython/C API reference manual\n. There are also several books covering Python in depth.\nThis tutorial does not attempt to be comprehensive and cover every single\nfeature, or even every commonly used feature. Instead, it introduces many of\nPython’s most noteworthy features, and will give you a good idea of the\nlanguage’s fla",
+          "pmid": null,
+          "year": null,
+          "retrieved_at": "2026-11-09T02:42:51.346583+00:00"
+        }
+      ],
+      "returned": 2,
+      "total": 7,
+      "evidence_path": "outputs/knowledge_retrieve/d251873e61344bb087dc8c4afddd722c/knowledge_evidence.json"
+    },
+    "files": [
+      {
+        "path": "outputs/knowledge_retrieve/d251873e61344bb087dc8c4afddd722c/knowledge_evidence.json",
+        "workspace_path": "outputs/knowledge_retrieve/d251873e61344bb087dc8c4afddd722c/knowledge_evidence.json",
+        "name": "knowledge_evidence.json",
+        "kind": "config",
+        "content_type": "application/json; charset=utf-8",
+        "size": 3047,
+        "modified_at": 1794193608331307420
+      }
+    ],
+    "evidence": [
+      {
+        "id": "src_5b470e63ac7a2117ee822fd8_c0",
+        "title": "The Python Tutorial — Python 3.15.2 documentation",
+        "source": "knowledge",
+        "pmid": null,
+        "url": "https://docs.python.org/3/tutorial/",
+        "year": null
+      },
+      {
+        "id": "src_5b470e63ac7a2117ee822fd8_c1",
+        "title": "The Python Tutorial — Python 3.15.2 documentation",
+        "source": "knowledge",
+        "pmid": null,
+        "url": "https://docs.python.org/3/tutorial/",
+        "year": null
+      }
+    ],
+    "error": null
+  },
+  "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+  "attempts": [
+    {
+      "tool": "knowledge_retrieve",
+      "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+      "inputs": {
+        "collection_id": "kb_e45492b7890b43789a528504a68cd097",
+        "question": "What is Python?",
+        "top_k": 2
+      },
+      "result": {
+        "status": "error",
+        "data": {},
+        "files": [],
+        "evidence": [],
+        "error": {
+          "code": "ValueError",
+          "message": "Knowledge collection has no indexed content. Wait for ingestion to finish."
+        }
+      },
+      "status": "error",
+      "elapsed_seconds": 0.03
+    },
+    {
+      "tool": "knowledge_retrieve",
+      "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+      "inputs": {
+        "collection_id": "kb_e45492b7890b43789a528504a68cd097",
+        "question": "What is Python?",
+        "top_k": 2
+      },
+      "reason": "Correct test harness context/input and wait for terminal indexing status",
+      "status": "error",
+      "result": {
+        "status": "error",
+        "data": {},
+        "files": [],
+        "evidence": [],
+        "error": {
+          "code": "APIConnectionError",
+          "message": "Connection error."
+        }
+      },
+      "elapsed_seconds": 1.81
+    },
+    {
+      "tool": "knowledge_retrieve",
+      "session_id": "fb88ad4b-0607-4515-8d5d-cd1518d5feb2",
+      "inputs": {
+        "collection_id": "kb_e45492b7890b43789a528504a68cd097",
+        "question": "What is Python?",
+        "top_k": 2
+      },
+      "result": {
+        "status": "ok",
+        "data": {
+          "collection_id": "kb_e45492b7890b43789a528504a68cd097",
+          "question": "What is Python?",
+          "sources": [
+            {
+              "id": "src_5b470e63ac7a2117ee822fd8_c0",
+              "title": "The Python Tutorial — Python 3.15.2 documentation",
+              "url": "https://docs.python.org/3/tutorial/",
+              "source": "knowledge",
+              "text": "The Python Tutorial — Python 3.15.2 documentation\nNavigation\nindex\nmodules\n|\nnext\n|\nprevious\n|\nPython\n»\n3.15.2 documentation\n»\nThe Python Tutorial\n|\nTheme\nAuto\nLight\nDark\n|\nThe Python Tutorial\n¶\nTip\nThis tutorial is designed for\nprogrammers\nthat are new to the Python language,\nnot\nbeginners\nwho are new to programming.\nPython is an easy to learn, powerful programming language. It has efficient\nhigh-level data structures and a simple but effective approach to\nobject-oriented programming. Python’s elegant syntax and dynamic typing,\ntogether with its interpreted nature, make it an ideal language for scripting\nand rapid application development in many areas on most platforms.\nThe Python interpreter and the extensive standard library are freely available\nin source or binary form for all major platforms from the Python website,\nhttps://www.python.org/\n, and may be freely distributed. The same site also\ncontains distributions of and pointers to many free third party Python modules,\nprograms and tools, and additional documentation.\nThe Python interpreter is easily extended with new functions and data types\nimplemented in C or C++ (or other languages callable from C). Python is also\nsuitable",
+              "pmid": null,
+              "year": null,
+              "retrieved_at": "2026-11-09T02:42:51.346583+00:00"
+            },
+            {
+              "id": "src_5b470e63ac7a2117ee822fd8_c1",
+              "title": "The Python Tutorial — Python 3.15.2 documentation",
+              "url": "https://docs.python.org/3/tutorial/",
+              "source": "knowledge",
+              "text": "nal documentation.\nThe Python interpreter is easily extended with new functions and data types\nimplemented in C or C++ (or other languages callable from C). Python is also\nsuitable as an extension language for customizable applications.\nThis tutorial introduces the reader informally to the basic concepts and\nfeatures of the Python language and system. Be aware that it expects you to\nhave a basic understanding of programming in general. It helps to have a Python\ninterpreter handy for hands-on experience, but all examples are self-contained,\nso the tutorial can be read off-line as well.\nFor a description of standard objects and modules, see\nPython built-ins reference\nand\nThe Python standard library\n.\nThe Python Language Reference\ngives a more formal definition of\nthe language.  To write extensions in C or C++, read\nExtending and Embedding the Python Interpreter\nand\nPython/C API reference manual\n. There are also several books covering Python in depth.\nThis tutorial does not attempt to be comprehensive and cover every single\nfeature, or even every commonly used feature. Instead, it introduces many of\nPython’s most noteworthy features, and will give you a good idea of the\nlanguage’s fla",
+              "pmid": null,
+              "year": null,
+              "retrieved_at": "2026-11-09T02:42:51.346583+00:00"
+            }
+          ],
+          "returned": 2,
+          "total": 7,
+          "evidence_path": "outputs/knowledge_retrieve/d251873e61344bb087dc8c4afddd722c/knowledge_evidence.json"
+        },
+        "files": [
+          {
+            "path": "outputs/knowledge_retrieve/d251873e61344bb087dc8c4afddd722c/knowledge_evidence.json",
+            "workspace_path": "outputs/knowledge_retrieve/d251873e61344bb087dc8c4afddd722c/knowledge_evidence.json",
+            "name": "knowledge_evidence.json",
+            "kind": "config",
+            "content_type": "application/json; charset=utf-8",
+            "size": 3047,
+            "modified_at": 1794193608331307420
+          }
+        ],
+        "evidence": [
+          {
+            "id": "src_5b470e63ac7a2117ee822fd8_c0",
+            "title": "The Python Tutorial — Python 3.15.2 documentation",
+            "source": "knowledge",
+            "pmid": null,
+            "url": "https://docs.python.org/3/tutorial/",
+            "year": null
+          },
+          {
+            "id": "src_5b470e63ac7a2117ee822fd8_c1",
+            "title": "The Python Tutorial — Python 3.15.2 documentation",
+            "source": "knowledge",
+            "pmid": null,
+            "url": "https://docs.python.org/3/tutorial/",
+            "year": null
+          }
+        ],
+        "error": null
+      }
+    }
+  ]
+}

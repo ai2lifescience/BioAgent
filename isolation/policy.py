@@ -51,7 +51,7 @@ ISOLATED_TOOLS = OFFLINE_TOOLS | NETWORK_TOOLS | EMBEDDING_TOOLS | SERVICE_TOOLS
 
 
 def isolated_execution() -> bool:
-    default = 'docker' if auth_mode() == 'multiuser' else 'local'
+    default = 'docker' if auth_mode() != 'local' else 'local'
     backend = os.getenv('AGENT_WORKER_BACKEND', default)
     if backend not in {'docker', 'local'}:
         raise ExecutionUnavailable('AGENT_WORKER_BACKEND must be docker or local.')
@@ -59,7 +59,7 @@ def isolated_execution() -> bool:
 
 
 def require_execution_policy() -> None:
-    if auth_mode() != "multiuser":
+    if auth_mode() == "local":
         return
     from .supervisor import ensure_available
     if isolated_execution():

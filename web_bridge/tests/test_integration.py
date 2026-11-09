@@ -88,6 +88,7 @@ class WebsiteIntegrationTests(unittest.TestCase):
             self.assertEqual(status, 200, raw)
             value, _ = self.exchange(json.loads(raw))
             self.assertEqual(value['user'], {'id': identity['user_id'], 'name': identity['username']})
+            self.assertLessEqual(value['expires_in'], 300)
 
             status, _, raw = self.service('bootstrap', {'origin': 'https://other.test', 'identity': identity},
                                           site='other', subject=identity['user_id'])
@@ -98,6 +99,8 @@ class WebsiteIntegrationTests(unittest.TestCase):
             mismatched = {'user_id': 'another-user', 'username': 'oos.alice'}
             self.assertEqual(self.service('bootstrap', {'origin': 'https://fixture.test', 'identity': mismatched},
                                           subject='oos-user-43')[0], 400)
+            self.assertEqual(self.service('bootstrap', {'origin': 'https://fixture.test'},
+                                          subject='new-shared-user')[0], 400)
 
     def test_streamed_import_download_ownership_and_persistent_results(self):
         self.configure(); value,cookie=self.exchange(self.bootstrap()); sid=value['session_id']

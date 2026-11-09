@@ -1,0 +1,148 @@
+{
+  "id": "transfer-metagenomic_pathogen_identification",
+  "title": "metagenomic_pathogen_identification result delivery",
+  "outcome": "succeeded",
+  "inputs": {
+    "paths": [
+      "pipeline-bundles/294c192682c34be0882ce98a7eb5bf81/results.zip",
+      "uploads/examples/metagenomic_pathogen_identification-7b08a994770242a0802a6bc0a675dff2/detection_demo.fq.gz"
+    ],
+    "destination": {
+      "project": "Bridge_pipeline_matrix_20261109",
+      "sample": "metagenomic_pathogen_identification",
+      "data_type": "meta",
+      "source_slots": {
+        "R1": "uploads/examples/metagenomic_pathogen_identification-7b08a994770242a0802a6bc0a675dff2/detection_demo.fq.gz"
+      }
+    },
+    "create_missing": true
+  },
+  "result": {
+    "transfer_id": "c339ea7e29d0453db6c7dcb00401f6a0",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "succeeded",
+    "result": {
+      "file_delivery": "delivered",
+      "source_registration": {
+        "slots": {
+          "R1": "933cf7335e5e3fd3a52babf1c605cf31"
+        },
+        "status": "registered"
+      },
+      "target": {
+        "sample_id": "c9606bc9535d3dbd8342bc9694feddfe",
+        "data_type": "meta",
+        "project_name": "Bridge_pipeline_matrix_20261109",
+        "sample_name": "metagenomic_pathogen_identification",
+        "project_id": "a924199794553f94b029789481f26a2d"
+      },
+      "receipt_id": "c339ea7e29d0453db6c7dcb00401f6a0",
+      "qc": {},
+      "native_imports": [
+        {
+          "job_id": "294c192682c34be0882ce98a7eb5bf81",
+          "files_delivered": true,
+          "pipeline": "metagenomic_pathogen_identification",
+          "format": "MetagenomicDetection",
+          "state": "unsupported",
+          "message": "MSCAN has no registered importer for this result format; files remain available."
+        }
+      ],
+      "files": [
+        {
+          "name": "results.zip",
+          "source_path": "pipeline-bundles/294c192682c34be0882ce98a7eb5bf81/results.zip",
+          "id": "98aed10fd63dae098aaf50b3938cbde6f59887cce32caa8eb6274b61ff88ec5b",
+          "sha256": "7505bee04fb3d12ae6aaa214e06a50c379a677d5bc2994ace4a6c357b9867ccc",
+          "size": 13473
+        },
+        {
+          "name": "priority_with_confidence.tsv",
+          "source_path": "pipeline-artifacts/294c192682c34be0882ce98a7eb5bf81/0/priority_with_confidence.tsv",
+          "id": "60ab9e5216eaed974502eb805e7c4585e4c3ec722978556a4bad0ad81e6d2aed",
+          "sha256": "af65ddcb710086faab5621263e481160ea4be6ff89f198ebbbb75a6ae5d221b6",
+          "size": 25145,
+          "pipeline_result": {
+            "job_id": "294c192682c34be0882ce98a7eb5bf81",
+            "pipeline_name": "metagenomic_pathogen_identification",
+            "output_key": "MetagenomicDetection.final_report_with_confidence",
+            "output_name": "final_report",
+            "output_kind": "table",
+            "completed_at": "2026-11-09T03:10:09.549842+00:00"
+          }
+        },
+        {
+          "name": "priority_microbe_panel.tsv",
+          "source_path": "pipeline-artifacts/294c192682c34be0882ce98a7eb5bf81/1/priority_microbe_panel.tsv",
+          "id": "bae16dd8c29999c99b78ba79fe7818fd35e39975c05458d968bd4b9df196d89c",
+          "sha256": "b9cd4d34d0650c33f17bdfd0acc7d3e4d761c50d05aaa8ec880f69df7c71b234",
+          "size": 24894,
+          "pipeline_result": {
+            "job_id": "294c192682c34be0882ce98a7eb5bf81",
+            "pipeline_name": "metagenomic_pathogen_identification",
+            "output_key": "MetagenomicDetection.stage5_priority_panel",
+            "output_name": "priority_panel",
+            "output_kind": "table",
+            "completed_at": "2026-11-09T03:10:09.549842+00:00"
+          }
+        },
+        {
+          "name": "sample_overview.tsv",
+          "source_path": "pipeline-artifacts/294c192682c34be0882ce98a7eb5bf81/2/sample_overview.tsv",
+          "id": "81223fdcbe9bb47fe5faff164a1b71b22eaaca430cc85ec02e5c98f4b7c608da",
+          "sha256": "edd8694c5025392bca14397a28c0a4663acf6a33a471c80badb8f95f966ff81f",
+          "size": 137,
+          "pipeline_result": {
+            "job_id": "294c192682c34be0882ce98a7eb5bf81",
+            "pipeline_name": "metagenomic_pathogen_identification",
+            "output_key": "MetagenomicDetection.sample_overview",
+            "output_name": "sample_overview",
+            "output_kind": "table",
+            "completed_at": "2026-11-09T03:10:09.549842+00:00"
+          }
+        },
+        {
+          "name": "stage2_read_accounting.tsv",
+          "source_path": "pipeline-artifacts/294c192682c34be0882ce98a7eb5bf81/3/stage2_read_accounting.tsv",
+          "id": "e13bb01c25fdf5c41d66b2a3d8b3488011c2cb6369ddc1806b82518b495161e7",
+          "sha256": "3760bc4a0d600194b32476c1c0ac44c8c09f7440ea4b5be245fb0d956db9e54c",
+          "size": 256,
+          "pipeline_result": {
+            "job_id": "294c192682c34be0882ce98a7eb5bf81",
+            "pipeline_name": "metagenomic_pathogen_identification",
+            "output_key": "MetagenomicDetection.stage2_read_accounting",
+            "output_name": "read_accounting",
+            "output_kind": "table",
+            "completed_at": "2026-11-09T03:10:09.549842+00:00"
+          }
+        },
+        {
+          "name": "stage2_crossdb_signature.tsv",
+          "source_path": "pipeline-artifacts/294c192682c34be0882ce98a7eb5bf81/4/stage2_crossdb_signature.tsv",
+          "id": "1f45223fd2fc4bd24d0d1d7f460ff861445f7e4026c78380ced3b3f2e9ada153",
+          "sha256": "98388c26898b45e85e8287305386120c3a4b24be9f9a4f9fdfff9e8af86a4362",
+          "size": 11,
+          "pipeline_result": {
+            "job_id": "294c192682c34be0882ce98a7eb5bf81",
+            "pipeline_name": "metagenomic_pathogen_identification",
+            "output_key": "MetagenomicDetection.stage2_crossdb_signature",
+            "output_name": "crossdb_signature",
+            "output_kind": "table",
+            "completed_at": "2026-11-09T03:10:09.549842+00:00"
+          }
+        },
+        {
+          "name": "detection_demo.fq.gz",
+          "source_path": "uploads/examples/metagenomic_pathogen_identification-7b08a994770242a0802a6bc0a675dff2/detection_demo.fq.gz",
+          "id": "0d3599c335f23415d1a2177306e3bdc07a9a66514622a7cac38ec9de461b049f",
+          "sha256": "9101bef1192734f4c50d2908a91b18762432f7f1d789a007e13644b2bccde82c",
+          "size": 240118
+        }
+      ],
+      "native_qc_applied": false
+    }
+  },
+  "session_id": "c8b58df5-591b-4fac-aba1-a0ee0a814847",
+  "job_id": "294c192682c34be0882ce98a7eb5bf81"
+}

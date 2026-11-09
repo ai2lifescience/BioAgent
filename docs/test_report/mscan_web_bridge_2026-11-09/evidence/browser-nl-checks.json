@@ -1,0 +1,1964 @@
+[
+  {
+    "case": "06-backend-search-pull",
+    "prompt": "Software test: use website_connections and website_search to find the MSCAN detection_demo source FASTQ. Use website_pull once, then website_transfer_status until terminal. Report actual status and session file path. No pipeline and no MSCAN modifications.",
+    "run_id": "b231ef4e43e140d1ba4a5899d99dca92",
+    "run_status": "succeeded",
+    "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+    "result": {
+      "result_contract_version": 1,
+      "answer": "- Status: `succeeded`\n- File: `uploads/1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz`\n- Size: 240,118 bytes\n- Pull performed once; no pipeline or MSCAN modifications.",
+      "status": "ok",
+      "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+      "approval_required": false,
+      "approvals": [],
+      "evidence": {
+        "retrieval_date": "2026-11-09",
+        "tools": [],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [],
+        "outputs": [],
+        "tool_outputs": [],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-11-09T03:06:41.225894+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "run_started",
+          "data": {
+            "request": "Software test: use website_connections and website_search to find the MSCAN detection_demo source FASTQ. Use website_pull once, then website_transfer_status until terminal. Report actual status and session file path. No pipeline and no MSCAN modifications.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:41.472602+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:41.483144+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_232bdbcaaa164b34b0006ab6",
+            "parent_id": "span_839f0bf5c6294bad93fff5ec",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-11-09T03:06:41.482012+00:00",
+            "ended_at": "2026-11-09T03:06:41.482146+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:41.486106+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_1ce6a758e0454efda702bf2f",
+            "parent_id": "span_585bb61c4ffc4a37aed1baf2",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-09T03:06:41.484911+00:00",
+            "ended_at": "2026-11-09T03:06:41.485104+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:41.487462+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_ab0bcb61cab549ddb0b98a20",
+            "parent_id": "span_585bb61c4ffc4a37aed1baf2",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-09T03:06:41.486323+00:00",
+            "ended_at": "2026-11-09T03:06:41.486473+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:41.493793+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_a119f09607e34af58700387c",
+            "parent_id": "span_585bb61c4ffc4a37aed1baf2",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:06:41.488129+00:00",
+            "ended_at": "2026-11-09T03:06:41.492767+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:41.498760+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_20bcdf3699f54b77ab952326",
+            "parent_id": "span_585bb61c4ffc4a37aed1baf2",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:06:41.493927+00:00",
+            "ended_at": "2026-11-09T03:06:41.497754+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:41.500586+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_585bb61c4ffc4a37aed1baf2",
+            "parent_id": "span_839f0bf5c6294bad93fff5ec",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-09T03:06:41.483338+00:00",
+            "ended_at": "2026-11-09T03:06:41.499605+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:41.502929+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:41.561866+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:44.782582+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_a41ce386dfa84c4680ed1573",
+            "parent_id": "span_34a7e2fa105b42cf9a33df2b",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-09T03:06:41.567593+00:00",
+            "ended_at": "2026-11-09T03:06:44.781345+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:44.801629+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12061,
+            "output_tokens": 40
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:44.805983+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_connections"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:44.814663+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_connections"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:44.815962+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_f13f004fff33432c957c30df",
+            "parent_id": "span_34a7e2fa105b42cf9a33df2b",
+            "span_type": "function",
+            "name": "website_connections",
+            "model": null,
+            "started_at": "2026-11-09T03:06:44.804619+00:00",
+            "ended_at": "2026-11-09T03:06:44.814861+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:44.817814+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_34a7e2fa105b42cf9a33df2b",
+            "parent_id": "span_545836403c704a77a80b1ac8",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-09T03:06:41.502324+00:00",
+            "ended_at": "2026-11-09T03:06:44.816732+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:44.844086+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_8e4ab3ae87804ac39749796f",
+            "parent_id": "span_5d4456736cc64c819a8ba8cc",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-09T03:06:44.842790+00:00",
+            "ended_at": "2026-11-09T03:06:44.842996+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:44.850285+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_367cdb6f6d4d44d593f39c77",
+            "parent_id": "span_5d4456736cc64c819a8ba8cc",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:06:44.844799+00:00",
+            "ended_at": "2026-11-09T03:06:44.849253+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:44.855484+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_c16e4e1388084848bebe5447",
+            "parent_id": "span_5d4456736cc64c819a8ba8cc",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:06:44.850402+00:00",
+            "ended_at": "2026-11-09T03:06:44.854482+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:44.856635+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_5d4456736cc64c819a8ba8cc",
+            "parent_id": "span_545836403c704a77a80b1ac8",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-09T03:06:44.841499+00:00",
+            "ended_at": "2026-11-09T03:06:44.855639+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:44.862138+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:48.192525+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_df9746a9b9a84a1c81b679c9",
+            "parent_id": "span_9c1a9e4f246c422da82d1ca8",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-09T03:06:44.862982+00:00",
+            "ended_at": "2026-11-09T03:06:48.191474+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:48.211397+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12749,
+            "output_tokens": 58
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:48.215336+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_search"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:53.259302+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_search"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:53.260386+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_4707345c474d4ab6b47db78e",
+            "parent_id": "span_9c1a9e4f246c422da82d1ca8",
+            "span_type": "function",
+            "name": "website_search",
+            "model": null,
+            "started_at": "2026-11-09T03:06:48.214092+00:00",
+            "ended_at": "2026-11-09T03:06:53.259459+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:53.262058+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_9c1a9e4f246c422da82d1ca8",
+            "parent_id": "span_545836403c704a77a80b1ac8",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-09T03:06:44.859619+00:00",
+            "ended_at": "2026-11-09T03:06:53.261126+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:53.290218+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_9667301fd96c450fb639fd96",
+            "parent_id": "span_ed124fd1f4de45b88f2eb578",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-09T03:06:53.289013+00:00",
+            "ended_at": "2026-11-09T03:06:53.289206+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:53.296560+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_f87ef669d95343b09c852e09",
+            "parent_id": "span_ed124fd1f4de45b88f2eb578",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:06:53.290886+00:00",
+            "ended_at": "2026-11-09T03:06:53.295532+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:53.301938+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_ffc4e3c9a39c4382b78a24de",
+            "parent_id": "span_ed124fd1f4de45b88f2eb578",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:06:53.296695+00:00",
+            "ended_at": "2026-11-09T03:06:53.300930+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:53.302917+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_ed124fd1f4de45b88f2eb578",
+            "parent_id": "span_545836403c704a77a80b1ac8",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-09T03:06:53.287828+00:00",
+            "ended_at": "2026-11-09T03:06:53.302002+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:53.306809+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:56.589590+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_2309dc0778b944e8b2f366cd",
+            "parent_id": "span_32e8080d9ba24910aaa569be",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-09T03:06:53.307632+00:00",
+            "ended_at": "2026-11-09T03:06:56.588511+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:56.609173+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12892,
+            "output_tokens": 51
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:06:56.613047+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_search"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:03.685548+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_search"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:03.686636+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_db459938bd3649be90146e3b",
+            "parent_id": "span_32e8080d9ba24910aaa569be",
+            "span_type": "function",
+            "name": "website_search",
+            "model": null,
+            "started_at": "2026-11-09T03:06:56.611908+00:00",
+            "ended_at": "2026-11-09T03:07:03.685720+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:03.688269+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_32e8080d9ba24910aaa569be",
+            "parent_id": "span_545836403c704a77a80b1ac8",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-09T03:06:53.304269+00:00",
+            "ended_at": "2026-11-09T03:07:03.687338+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:03.720329+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_6941a36a435a485fae17f9fd",
+            "parent_id": "span_89dc45a4359a491dafca343e",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-09T03:07:03.719131+00:00",
+            "ended_at": "2026-11-09T03:07:03.719324+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:03.726761+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_bb7da1144740494585d0f567",
+            "parent_id": "span_89dc45a4359a491dafca343e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:03.721094+00:00",
+            "ended_at": "2026-11-09T03:07:03.725736+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:03.732029+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_878456716f6147b8a492deb5",
+            "parent_id": "span_89dc45a4359a491dafca343e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:03.726882+00:00",
+            "ended_at": "2026-11-09T03:07:03.731020+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:03.733022+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_89dc45a4359a491dafca343e",
+            "parent_id": "span_545836403c704a77a80b1ac8",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-09T03:07:03.717915+00:00",
+            "ended_at": "2026-11-09T03:07:03.732105+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:03.737038+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:07.328639+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_6b7a10d7aea2468c815bc08f",
+            "parent_id": "span_7150507c1e92490e802d1ceb",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-09T03:07:03.737853+00:00",
+            "ended_at": "2026-11-09T03:07:07.327604+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:07.373048+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 15253,
+            "output_tokens": 69
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:07.377262+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_pull"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:09.407299+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_pull"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:09.408752+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_daf2be08ef8545ac831481ad",
+            "parent_id": "span_7150507c1e92490e802d1ceb",
+            "span_type": "function",
+            "name": "website_pull",
+            "model": null,
+            "started_at": "2026-11-09T03:07:07.376111+00:00",
+            "ended_at": "2026-11-09T03:07:09.407520+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:09.410403+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_7150507c1e92490e802d1ceb",
+            "parent_id": "span_545836403c704a77a80b1ac8",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-09T03:07:03.734380+00:00",
+            "ended_at": "2026-11-09T03:07:09.409525+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:09.463693+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_76d95c35d3694aeba5e12c0d",
+            "parent_id": "span_466a00eb12b84d92847d03d4",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-09T03:07:09.462427+00:00",
+            "ended_at": "2026-11-09T03:07:09.462645+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:09.470588+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_01b1f05e618049a288b04248",
+            "parent_id": "span_466a00eb12b84d92847d03d4",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:09.464359+00:00",
+            "ended_at": "2026-11-09T03:07:09.468848+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:09.476367+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_3f38694374b44a2a8ed57d4f",
+            "parent_id": "span_466a00eb12b84d92847d03d4",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:09.470790+00:00",
+            "ended_at": "2026-11-09T03:07:09.475354+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:09.477364+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_466a00eb12b84d92847d03d4",
+            "parent_id": "span_545836403c704a77a80b1ac8",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-09T03:07:09.461220+00:00",
+            "ended_at": "2026-11-09T03:07:09.476435+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:09.481451+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:15.530161+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_4d2169bad3ea4c9cbd248a77",
+            "parent_id": "span_caf8cbb759d246169658491e",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-09T03:07:09.482301+00:00",
+            "ended_at": "2026-11-09T03:07:15.529100+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:15.549377+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 15554,
+            "output_tokens": 60
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:15.553520+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_transfer_status"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:15.558373+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_transfer_status"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:15.559470+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_169305c6bd054b659af3b09e",
+            "parent_id": "span_caf8cbb759d246169658491e",
+            "span_type": "function",
+            "name": "website_transfer_status",
+            "model": null,
+            "started_at": "2026-11-09T03:07:15.552366+00:00",
+            "ended_at": "2026-11-09T03:07:15.558533+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:15.561142+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_caf8cbb759d246169658491e",
+            "parent_id": "span_545836403c704a77a80b1ac8",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-09T03:07:09.478770+00:00",
+            "ended_at": "2026-11-09T03:07:15.560216+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:15.596740+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_d1d51c2f5682437585144148",
+            "parent_id": "span_59043ddc1af341adb6ff91b2",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-09T03:07:15.595516+00:00",
+            "ended_at": "2026-11-09T03:07:15.595704+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:15.603156+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_477d070761204a9ca539bd2c",
+            "parent_id": "span_59043ddc1af341adb6ff91b2",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:15.597387+00:00",
+            "ended_at": "2026-11-09T03:07:15.602053+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:15.608318+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_f5e0e4d976d5440da8102e6a",
+            "parent_id": "span_59043ddc1af341adb6ff91b2",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:15.603283+00:00",
+            "ended_at": "2026-11-09T03:07:15.607314+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:15.609301+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_59043ddc1af341adb6ff91b2",
+            "parent_id": "span_545836403c704a77a80b1ac8",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-09T03:07:15.594346+00:00",
+            "ended_at": "2026-11-09T03:07:15.608381+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:15.613486+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:18.801608+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_6e6296f21f034e07af7227bc",
+            "parent_id": "span_c5d32e94bf27423da92eda05",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-09T03:07:15.614306+00:00",
+            "ended_at": "2026-11-09T03:07:18.800504+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:18.834368+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 15847,
+            "output_tokens": 65
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:18.838013+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:18.846292+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_c5d32e94bf27423da92eda05",
+            "parent_id": "span_545836403c704a77a80b1ac8",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-09T03:07:15.610850+00:00",
+            "ended_at": "2026-11-09T03:07:18.845308+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:18.857209+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:18.858157+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_965d37ac5764427d87e3f330",
+            "parent_id": "span_545836403c704a77a80b1ac8",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-11-09T03:07:18.856743+00:00",
+            "ended_at": "2026-11-09T03:07:18.857255+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:18.863359+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_545836403c704a77a80b1ac8",
+            "parent_id": "span_839f0bf5c6294bad93fff5ec",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-09T03:06:41.502140+00:00",
+            "ended_at": "2026-11-09T03:07:18.862154+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:18.864464+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3",
+            "span_id": "span_839f0bf5c6294bad93fff5ec",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-09T03:06:41.472795+00:00",
+            "ended_at": "2026-11-09T03:07:18.863563+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:18.864801+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_a69cc5a369804e5c91a7d7c35622f2f3"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:18.898716+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 0
+          }
+        }
+      ],
+      "workspace_files": [
+        {
+          "path": "uploads/1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "workspace_path": "uploads/1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "name": "1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "size": 240118,
+          "modified_at": 1794193629034441839,
+          "kind": "upload",
+          "content_type": "application/gzip"
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "uploads/1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "workspace_path": "uploads/1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "name": "1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "size": 240118,
+          "modified_at": 1794193629034441839,
+          "kind": "upload",
+          "content_type": "application/gzip"
+        }
+      ],
+      "files": [
+        {
+          "path": "uploads/1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "workspace_path": "uploads/1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "name": "1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "size": 240118,
+          "modified_at": 1794193629034441839,
+          "kind": "upload",
+          "content_type": "application/gzip"
+        }
+      ],
+      "max_turns": 20,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Software test: use website_connections and website_search to find the MSCAN detection_demo source FASTQ. Use website_pull once, then website_transfer_status until terminal. Report actual status and session file path. No pipeline and no MSCAN modifications."
+        },
+        {
+          "role": "assistant",
+          "content": "- Status: `succeeded`\n- File: `uploads/1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz`\n- Size: 240,118 bytes\n- Pull performed once; no pipeline or MSCAN modifications."
+        }
+      ],
+      "run": {
+        "run_id": "a73b03ad-4806-4517-a39e-8e46ac5a732d",
+        "session_dir": ".",
+        "runtime_dir": "runs/a73b03ad-4806-4517-a39e-8e46ac5a732d",
+        "workspace_dir": "outputs"
+      },
+      "approval_decision": null,
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    },
+    "error": null,
+    "elapsed_seconds": 42.6
+  },
+  {
+    "case": "07-write-push",
+    "prompt": "Write a short Markdown report named Bridge software validation saying that this is a harmless connector test. Then use website_push to push ONLY that report to a new project named Bridge_live_20261109_NL, sample named connector_report, data_type meta, create_missing true. Use website_transfer_status to confirm completion. Report actual IDs, delivery status and any importer status. Do not send any existing sample files or run pipelines.",
+    "run_id": "b3076dcce79a43ee94d73f4b030dfae9",
+    "run_status": "succeeded",
+    "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+    "result": {
+      "result_contract_version": 1,
+      "answer": "- Delivery: `succeeded` / `delivered`\n- Project ID: `3c70f6760685393e842081bc4c9ed952`\n- Sample ID: `dfef844306953316b35dd3fb5e1769f1`\n- Transfer/receipt ID: `8deb36e8755647de8f5918c82c9a20fa`\n- Importers: none; result-only attachment, no native QC\n- Report: `outputs/report_write/37f135a91a1f4e9cae8d9e2cb0f69d5f/Bridge_software_validation.md`",
+      "status": "ok",
+      "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+      "approval_required": false,
+      "approvals": [],
+      "evidence": {
+        "retrieval_date": "2026-11-09",
+        "tools": [
+          "report_write"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [
+          "outputs/report_write/37f135a91a1f4e9cae8d9e2cb0f69d5f/Bridge_software_validation.md"
+        ],
+        "outputs": [
+          {
+            "tool": "report_write",
+            "bytes": 64,
+            "report_path": "outputs/report_write/37f135a91a1f4e9cae8d9e2cb0f69d5f/Bridge_software_validation.md",
+            "status": "ok"
+          }
+        ],
+        "tool_outputs": [],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-11-09T03:07:23.348903+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "run_started",
+          "data": {
+            "request": "Write a short Markdown report named Bridge software validation saying that this is a harmless connector test. Then use website_push to push ONLY that report to a new project named Bridge_live_20261109_NL, sample named connector_report, data_type meta, create_missing true. Use website_transfer_status to confirm completion. Report actual IDs, delivery status and any importer status. Do not send any existing sample files or run pipelines.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:23.512157+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:23.537199+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_0e8a17f603274a4199061e28",
+            "parent_id": "span_23a83e28e5a44ead885d6b39",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-11-09T03:07:23.533701+00:00",
+            "ended_at": "2026-11-09T03:07:23.536202+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:23.540011+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_233543f4c87341889567205a",
+            "parent_id": "span_58cbfb235c5c480b9fd15463",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-09T03:07:23.538832+00:00",
+            "ended_at": "2026-11-09T03:07:23.539003+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:23.541327+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_0fefe4e280304769b4f343c7",
+            "parent_id": "span_58cbfb235c5c480b9fd15463",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-09T03:07:23.540218+00:00",
+            "ended_at": "2026-11-09T03:07:23.540359+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:23.547409+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_a5156dcd1f8c4c80bcd30493",
+            "parent_id": "span_58cbfb235c5c480b9fd15463",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:23.541955+00:00",
+            "ended_at": "2026-11-09T03:07:23.546386+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:23.552360+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_76d0eb7124334099a90df623",
+            "parent_id": "span_58cbfb235c5c480b9fd15463",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:23.547538+00:00",
+            "ended_at": "2026-11-09T03:07:23.551354+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:23.554084+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_58cbfb235c5c480b9fd15463",
+            "parent_id": "span_23a83e28e5a44ead885d6b39",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-09T03:07:23.537393+00:00",
+            "ended_at": "2026-11-09T03:07:23.553117+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:23.556372+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:23.636389+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:26.749097+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_f30db47e8a2e453f82f6ec89",
+            "parent_id": "span_7a12464551184ab5894d3dd7",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-09T03:07:23.680524+00:00",
+            "ended_at": "2026-11-09T03:07:26.747999+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:26.766310+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 16002,
+            "output_tokens": 59
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:26.771201+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "report_write"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:26.772249+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "tool_started",
+          "data": {
+            "tool": "report_write"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:31.250051+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "artifact_created",
+          "data": {
+            "tool": "report_write",
+            "path": "outputs/report_write/37f135a91a1f4e9cae8d9e2cb0f69d5f/Bridge_software_validation.md",
+            "workspace_path": "outputs/report_write/37f135a91a1f4e9cae8d9e2cb0f69d5f/Bridge_software_validation.md",
+            "name": "Bridge_software_validation.md",
+            "kind": "text",
+            "content_type": "text/markdown; charset=utf-8",
+            "size": 64,
+            "modified_at": 1794193650350580231
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:31.250437+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "tool_finished",
+          "data": {
+            "tool": "report_write",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:31.258509+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "report_write"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:31.259619+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_d8a00fb111fd4b3abe9f3748",
+            "parent_id": "span_7a12464551184ab5894d3dd7",
+            "span_type": "function",
+            "name": "report_write",
+            "model": null,
+            "started_at": "2026-11-09T03:07:26.769966+00:00",
+            "ended_at": "2026-11-09T03:07:31.258676+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:31.261395+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_7a12464551184ab5894d3dd7",
+            "parent_id": "span_9ab870b606784332a5c38f30",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-09T03:07:23.555508+00:00",
+            "ended_at": "2026-11-09T03:07:31.260406+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:31.284509+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_b1c3da5640f74565ab8a1888",
+            "parent_id": "span_61bb35c589544d00984bb12d",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-09T03:07:31.283324+00:00",
+            "ended_at": "2026-11-09T03:07:31.283514+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:31.290939+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_064377fefd1a493bb573dca0",
+            "parent_id": "span_61bb35c589544d00984bb12d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:31.285247+00:00",
+            "ended_at": "2026-11-09T03:07:31.289901+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:31.295944+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_c8d76110cf6d41dcb9eb445f",
+            "parent_id": "span_61bb35c589544d00984bb12d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:31.291060+00:00",
+            "ended_at": "2026-11-09T03:07:31.294931+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:31.297053+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_61bb35c589544d00984bb12d",
+            "parent_id": "span_9ab870b606784332a5c38f30",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-09T03:07:31.282196+00:00",
+            "ended_at": "2026-11-09T03:07:31.296096+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:31.302455+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:34.687885+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_41e882a69c6c446d9861f498",
+            "parent_id": "span_82b8a0a18cb444889c6ef8ba",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-09T03:07:31.303326+00:00",
+            "ended_at": "2026-11-09T03:07:34.686711+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:34.714844+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 16250,
+            "output_tokens": 114
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:34.719417+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_push"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:34.736287+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_818f2bab00c0455e9671ffbc",
+            "parent_id": "span_b9631166d4964a1ca1460888",
+            "span_type": "custom",
+            "name": "sandbox.start",
+            "model": null,
+            "started_at": "2026-11-09T03:07:34.733175+00:00",
+            "ended_at": "2026-11-09T03:07:34.735530+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:34.742807+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_2fb6768d0ce44038a5e074cb",
+            "parent_id": "span_b9631166d4964a1ca1460888",
+            "span_type": "custom",
+            "name": "sandbox.stop",
+            "model": null,
+            "started_at": "2026-11-09T03:07:34.741062+00:00",
+            "ended_at": "2026-11-09T03:07:34.742104+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:34.744537+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_412102e357884d8fb7ea5e48",
+            "parent_id": "span_b9631166d4964a1ca1460888",
+            "span_type": "custom",
+            "name": "sandbox.shutdown",
+            "model": null,
+            "started_at": "2026-11-09T03:07:34.742893+00:00",
+            "ended_at": "2026-11-09T03:07:34.743852+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:37.516496+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_push"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:37.517628+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_b9631166d4964a1ca1460888",
+            "parent_id": "span_82b8a0a18cb444889c6ef8ba",
+            "span_type": "function",
+            "name": "website_push",
+            "model": null,
+            "started_at": "2026-11-09T03:07:34.717725+00:00",
+            "ended_at": "2026-11-09T03:07:37.516682+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:37.519316+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_82b8a0a18cb444889c6ef8ba",
+            "parent_id": "span_9ab870b606784332a5c38f30",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-09T03:07:31.299168+00:00",
+            "ended_at": "2026-11-09T03:07:37.518370+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:37.541789+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_695cf469c1e14a93acfaf4b0",
+            "parent_id": "span_006f50e6552c410bb7a8efe2",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-09T03:07:37.540525+00:00",
+            "ended_at": "2026-11-09T03:07:37.540734+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:37.548181+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_e7b82e32e9ff4225b870f100",
+            "parent_id": "span_006f50e6552c410bb7a8efe2",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:37.542447+00:00",
+            "ended_at": "2026-11-09T03:07:37.547135+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:37.553444+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_56b883e8709d4904acf38171",
+            "parent_id": "span_006f50e6552c410bb7a8efe2",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:37.548303+00:00",
+            "ended_at": "2026-11-09T03:07:37.552304+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:37.554805+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_006f50e6552c410bb7a8efe2",
+            "parent_id": "span_9ab870b606784332a5c38f30",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-09T03:07:37.539366+00:00",
+            "ended_at": "2026-11-09T03:07:37.553538+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:37.559438+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:41.365035+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_2630531bf8694bad82073583",
+            "parent_id": "span_811d0e724ea94226aabb17bc",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-09T03:07:37.560272+00:00",
+            "ended_at": "2026-11-09T03:07:41.363983+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:41.382435+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 16710,
+            "output_tokens": 59
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:41.386139+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_transfer_status"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:41.390174+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_transfer_status"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:41.391241+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_2eece5f5dc0b4acda32bec79",
+            "parent_id": "span_811d0e724ea94226aabb17bc",
+            "span_type": "function",
+            "name": "website_transfer_status",
+            "model": null,
+            "started_at": "2026-11-09T03:07:41.385078+00:00",
+            "ended_at": "2026-11-09T03:07:41.390311+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:41.392796+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_811d0e724ea94226aabb17bc",
+            "parent_id": "span_9ab870b606784332a5c38f30",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-09T03:07:37.556219+00:00",
+            "ended_at": "2026-11-09T03:07:41.391849+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:41.416165+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_789a08a08bc840148bd21ec8",
+            "parent_id": "span_de9207f06c8c42c9afb16a32",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-09T03:07:41.414957+00:00",
+            "ended_at": "2026-11-09T03:07:41.415145+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:41.422423+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_79ea4b7d5a4749d8a6f20f1b",
+            "parent_id": "span_de9207f06c8c42c9afb16a32",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:41.416833+00:00",
+            "ended_at": "2026-11-09T03:07:41.421387+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:41.427665+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_f762e89c43254aa79a425c1b",
+            "parent_id": "span_de9207f06c8c42c9afb16a32",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-09T03:07:41.422546+00:00",
+            "ended_at": "2026-11-09T03:07:41.426648+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:41.428660+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_de9207f06c8c42c9afb16a32",
+            "parent_id": "span_9ab870b606784332a5c38f30",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-09T03:07:41.413804+00:00",
+            "ended_at": "2026-11-09T03:07:41.427729+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:41.433389+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:45.221530+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_726c169fea374ab0b9917945",
+            "parent_id": "span_d817f9a7543e4cd1a1186804",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-09T03:07:41.434208+00:00",
+            "ended_at": "2026-11-09T03:07:45.220442+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:45.232357+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 17116,
+            "output_tokens": 143
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:45.235783+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:45.243361+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_d817f9a7543e4cd1a1186804",
+            "parent_id": "span_9ab870b606784332a5c38f30",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-09T03:07:41.429996+00:00",
+            "ended_at": "2026-11-09T03:07:45.242367+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:45.253837+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:45.254825+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_fd3b02adc64141fca16ab43e",
+            "parent_id": "span_9ab870b606784332a5c38f30",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-11-09T03:07:45.253329+00:00",
+            "ended_at": "2026-11-09T03:07:45.253879+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:45.260740+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_9ab870b606784332a5c38f30",
+            "parent_id": "span_23a83e28e5a44ead885d6b39",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-09T03:07:23.555340+00:00",
+            "ended_at": "2026-11-09T03:07:45.259581+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:45.261851+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636",
+            "span_id": "span_23a83e28e5a44ead885d6b39",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-09T03:07:23.512247+00:00",
+            "ended_at": "2026-11-09T03:07:45.260950+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:45.262177+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_77f3ad9f5b224ad1847cfa36ee789636"
+          }
+        },
+        {
+          "timestamp": "2026-11-09T03:07:45.275016+00:00",
+          "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 1
+          }
+        }
+      ],
+      "workspace_files": [
+        {
+          "path": "uploads/1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "workspace_path": "uploads/1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "name": "1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "size": 240118,
+          "modified_at": 1794193629034441839,
+          "kind": "upload",
+          "content_type": "application/gzip"
+        },
+        {
+          "path": "outputs/report_write/37f135a91a1f4e9cae8d9e2cb0f69d5f/Bridge_software_validation.md",
+          "workspace_path": "outputs/report_write/37f135a91a1f4e9cae8d9e2cb0f69d5f/Bridge_software_validation.md",
+          "name": "Bridge_software_validation.md",
+          "size": 64,
+          "modified_at": 1794193651188585671,
+          "kind": "text",
+          "content_type": "text/markdown; charset=utf-8"
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "outputs/report_write/37f135a91a1f4e9cae8d9e2cb0f69d5f/Bridge_software_validation.md",
+          "workspace_path": "outputs/report_write/37f135a91a1f4e9cae8d9e2cb0f69d5f/Bridge_software_validation.md",
+          "name": "Bridge_software_validation.md",
+          "size": 64,
+          "modified_at": 1794193651188585671,
+          "kind": "text",
+          "content_type": "text/markdown; charset=utf-8"
+        }
+      ],
+      "files": [
+        {
+          "path": "uploads/1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "workspace_path": "uploads/1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "name": "1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz",
+          "size": 240118,
+          "modified_at": 1794193629034441839,
+          "kind": "upload",
+          "content_type": "application/gzip"
+        },
+        {
+          "path": "outputs/report_write/37f135a91a1f4e9cae8d9e2cb0f69d5f/Bridge_software_validation.md",
+          "workspace_path": "outputs/report_write/37f135a91a1f4e9cae8d9e2cb0f69d5f/Bridge_software_validation.md",
+          "name": "Bridge_software_validation.md",
+          "size": 64,
+          "modified_at": 1794193651188585671,
+          "kind": "text",
+          "content_type": "text/markdown; charset=utf-8"
+        }
+      ],
+      "max_turns": 20,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Write a short Markdown report named Bridge software validation saying that this is a harmless connector test. Then use website_push to push ONLY that report to a new project named Bridge_live_20261109_NL, sample named connector_report, data_type meta, create_missing true. Use website_transfer_status to confirm completion. Report actual IDs, delivery status and any importer status. Do not send any existing sample files or run pipelines."
+        },
+        {
+          "role": "assistant",
+          "content": "- Delivery: `succeeded` / `delivered`\n- Project ID: `3c70f6760685393e842081bc4c9ed952`\n- Sample ID: `dfef844306953316b35dd3fb5e1769f1`\n- Transfer/receipt ID: `8deb36e8755647de8f5918c82c9a20fa`\n- Importers: none; result-only attachment, no native QC\n- Report: `outputs/report_write/37f135a91a1f4e9cae8d9e2cb0f69d5f/Bridge_software_validation.md`"
+        }
+      ],
+      "run": {
+        "run_id": "a4c84b47-4e89-4a65-808a-89851e664ae2",
+        "session_dir": ".",
+        "runtime_dir": "runs/a4c84b47-4e89-4a65-808a-89851e664ae2",
+        "workspace_dir": "outputs"
+      },
+      "approval_decision": null,
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    },
+    "error": null,
+    "elapsed_seconds": 26.5
+  },
+  {
+    "case": "09-reload",
+    "session_id": "a0885632-3a96-44e4-8c4b-b94c7842c490",
+    "messages": "You\n\nSoftware test: use website_connections and website_search to find the MSCAN detection_demo source FASTQ. Use website_pull once, then website_transfer_status until terminal. Report actual status and session file path. No pipeline and no MSCAN modifications.\n\nView activity · 10 updates\nStatus: succeeded\nFile: uploads/1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz\nSize: 240,118 bytes\nPull performed once; no pipeline or MSCAN modifications.\n1cacad89f8404c92a3c1240aa6f4dd9f_detection_demo.fq.gz\nYou\n\nWrite a short Markdown report named Bridge software validation saying that this is a harmless connector test. Then use website_push to push ONLY that report to a new project named Bridge_live_20261109_NL, sample named connector_report, data_type meta, create_missing true. Use website_transfer_status to confirm completion. Report actual IDs, delivery status and any importer status. Do not send any existing sample files or run pipelines.\n\nView activity · 7 updates\nDelivery: succeeded / delivered\nProject ID: 3c70f6760685393e842081bc4c9ed952\nSample ID: dfef844306953316b35dd3fb5e1769f1\nTransfer/receipt ID: 8deb36e8755647de8f5918c82c9a20fa\nImporters: none; result-only attachment, no native QC\nReport: outputs/report_write/37f135a91a1f4e9cae8d9e2cb0f69d5f/Bridge_software_validation.md\nBridge_software_validation.md"
+  }
+]

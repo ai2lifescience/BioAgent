@@ -1,0 +1,997 @@
+[
+  {
+    "transfer_id": "7e1a07ccd31749c38cba81a2f9c680a1",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "succeeded",
+    "result": {
+      "file_delivery": "delivered",
+      "source_registration": {
+        "slots": {
+          "R2": "82eccdcb7926362d89a5310d17609c16",
+          "R1": "72a88ca40cd137bb93c1a127cab09814"
+        },
+        "status": "registered"
+      },
+      "target": {
+        "sample_id": "6cc46bca32a43c3c91cb53d9f88c247a",
+        "data_type": "shortReads",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "metax shortReads fixture",
+        "project_id": "027c918d0b6d38c0b9095b5851d1d9ea"
+      },
+      "receipt_id": "7e1a07ccd31749c38cba81a2f9c680a1",
+      "qc": {},
+      "native_imports": [
+        {
+          "job_id": "6d06d1e6f7d144d28cc7fe1abcb24a1f",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_metax",
+          "format": "metax",
+          "program": "metax",
+          "state": "imported",
+          "message": "Native result imported."
+        }
+      ],
+      "files": [
+        {
+          "name": "d36cf875f5e849a69b87fe362411105d_metaxshortReads.fq",
+          "source_path": "uploads/d36cf875f5e849a69b87fe362411105d_metaxshortReads.fq",
+          "id": "c217fc907063656dd061f2108f7e7582e292da3c30318cc346071a76084c9a1c",
+          "sha256": "8126fa3d5a5c130dda2ae7455776318bd8fe43fda5eccab2c7e50d5c951dc467",
+          "size": 21
+        },
+        {
+          "name": "results.zip",
+          "source_path": "pipeline-bundles/6d06d1e6f7d144d28cc7fe1abcb24a1f/results.zip",
+          "id": "642c6ada6c19235745fd8adf36fc9fcf0c2fb0c1de071f6a4bd6956f4a8f2251",
+          "sha256": "6fd97b595dd14a1bb03cef42a31122ffc0e1593c93807de3f88127e294f2d26b",
+          "size": 156
+        },
+        {
+          "name": "profile.tsv",
+          "source_path": "outputs/pipelines/6d06d1e6f7d144d28cc7fe1abcb24a1f/profile.tsv",
+          "id": "70ff256c2b09f29b5449dba523207c019eb82faaff0767e5550dc264e4b7e70c",
+          "sha256": "5e7f28a0bf663a77f5a1e739bfc656f733f0fd684448cdb5e068af8339e9f7d1",
+          "size": 16,
+          "pipeline_result": {
+            "job_id": "6d06d1e6f7d144d28cc7fe1abcb24a1f",
+            "pipeline_name": "bridge_import_fixture_metax",
+            "output_key": "metax.profile",
+            "output_name": "profile",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:40:00.525241+00:00"
+          }
+        },
+        {
+          "name": "17e95704ef5d49cea55c99c9adff31bc_metaxR2.fq",
+          "source_path": "uploads/17e95704ef5d49cea55c99c9adff31bc_metaxR2.fq",
+          "id": "7836716f995fb34cea0e5b0deef88a782c24ace87c8f6cac1158d77d2c59e6f3",
+          "sha256": "40539f7e3ad7252e2eb0b68b7653630520a02dd8c13b0993b59f33201d21c4e9",
+          "size": 21
+        }
+      ],
+      "native_qc_applied": false
+    }
+  },
+  {
+    "transfer_id": "849414151caa4cac931f1140080300a8",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "failed",
+    "result": {
+      "native_imports": [
+        {
+          "job_id": "3c88bf95965a4114ae08e83876ddc6a3",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_FuncAssembly",
+          "format": "FuncAssembly",
+          "program": "funcflow",
+          "state": "failed",
+          "message": "IllegalStateException: 表格文件转 Parquet 失败: s3://cncb-web-server-mic/files/agent-analysis/f19dbb9106ad38fa91c924b00f5257b1/85fd81a8a16221853a1a3c699fc395b9d711dc6f0eeac1919175f8f75c930293/gene_annotations_tsv.tsv: Invalid Input Error: Attempting to execute an unsuccessful or closed pending query result"
+        }
+      ],
+      "file_delivery": "delivered",
+      "error": "IOException: Files delivered; native import failed. Check the received receipt, then retry.",
+      "target": {
+        "sample_id": "30fd7f658d8036feaba5667f62b47c48",
+        "data_type": "genomic",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "FuncAssembly genomic fixture",
+        "project_id": "f7619b3534f534f097de4f1b5224f6f3"
+      }
+    }
+  },
+  {
+    "transfer_id": "359a8d83e0f6408ba14f064b04463b74",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "failed",
+    "result": {
+      "native_imports": [
+        {
+          "job_id": "b1d0845636454b69b70f37c8eb0a699d",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_FuncAssembly",
+          "format": "FuncAssembly",
+          "program": "funcflow",
+          "state": "failed",
+          "message": "IllegalStateException: 表格文件转 Parquet 失败: s3://cncb-web-server-mic/files/agent-analysis/e216605e09c338ca8f2757088b8c78af/4c55db92142027d097d24410a10fc73275dc792d7db45043c200cab44dcc3efb/gene_annotations_tsv.tsv: Invalid Input Error: Attempting to execute an unsuccessful or closed pending query result"
+        }
+      ],
+      "file_delivery": "delivered",
+      "error": "IOException: Files delivered; native import failed. Check the received receipt, then retry.",
+      "target": {
+        "sample_id": "f3b1e4f641b835cbb23156b40a2c40de",
+        "data_type": "synthetic",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "FuncAssembly synthetic fixture",
+        "project_id": "8347ee9f60a33c3b81b4dc35123b026c"
+      }
+    }
+  },
+  {
+    "transfer_id": "b8a60543a9294274b3136f48a38447fd",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "failed",
+    "result": {
+      "native_imports": [
+        {
+          "job_id": "30f42ce8d26c41269eb7006c21e84f77",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_FuncReads",
+          "format": "FuncReads",
+          "program": "funcflow",
+          "state": "failed",
+          "message": "IllegalStateException: 表格文件转 Parquet 失败: s3://cncb-web-server-mic/files/agent-analysis/ec5d080daf153bd2beb82372d7f71968/3ebaa0caa1a9d51f855eb91478c071540a42bf3ed0f480c283d0016b57ffccea/gene_annotations_tsv.tsv: Invalid Input Error: Attempting to execute an unsuccessful or closed pending query result"
+        }
+      ],
+      "file_delivery": "delivered",
+      "error": "IOException: Files delivered; native import failed. Check the received receipt, then retry.",
+      "target": {
+        "sample_id": "8c23b060201234cbb593c8c8423ef510",
+        "data_type": "meta",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "FuncReads meta fixture",
+        "project_id": "027c918d0b6d38c0b9095b5851d1d9ea"
+      }
+    }
+  },
+  {
+    "transfer_id": "045d08bc607340d7bd2be3f04945bf19",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "succeeded",
+    "result": {
+      "file_delivery": "delivered",
+      "source_registration": {
+        "slots": {
+          "R1": "62ab84c914653d44b4e2fefe18e9d52d"
+        },
+        "status": "registered"
+      },
+      "target": {
+        "sample_id": "9a292b6502a534da9014e6593d3eeb5b",
+        "data_type": "meta",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "AssemblyId meta fixture incomplete",
+        "project_id": "027c918d0b6d38c0b9095b5851d1d9ea"
+      },
+      "receipt_id": "045d08bc607340d7bd2be3f04945bf19",
+      "qc": {},
+      "native_imports": [
+        {
+          "job_id": "4687d77cc60142078d57342bb1f98204",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_AssemblyId",
+          "format": "AssemblyId",
+          "program": "assembly",
+          "missing_outputs": [
+            "contig_report_tsv",
+            "final_contigs_renamed"
+          ],
+          "state": "incomplete",
+          "message": "Select the complete pipeline bundle to import native results."
+        }
+      ],
+      "files": [
+        {
+          "name": "f69651816a66488abe27a91f59bc028a_AssemblyIdmeta.fq",
+          "source_path": "uploads/f69651816a66488abe27a91f59bc028a_AssemblyIdmeta.fq",
+          "id": "4382f41c33a2f4c492a0f1135b19bf12a3bb84dcefae52d8079ef22d5d57e349",
+          "sha256": "8126fa3d5a5c130dda2ae7455776318bd8fe43fda5eccab2c7e50d5c951dc467",
+          "size": 21
+        },
+        {
+          "name": "results.zip",
+          "source_path": "pipeline-bundles/4687d77cc60142078d57342bb1f98204/results.zip",
+          "id": "fd1906a40ae8ef7ec9e99032f703f17648c3b628e94df2fabf0db2e71a8dc333",
+          "sha256": "ad7ff7d9ac1dd6aa4dc30e1a818fa2aa993507d384ab712f4ed498f3d0aa91b5",
+          "size": 200
+        },
+        {
+          "name": "species_report_tsv.tsv",
+          "source_path": "outputs/pipelines/4687d77cc60142078d57342bb1f98204/species_report_tsv.tsv",
+          "id": "cd2f50f0234fdc06373342fc57b02c835864cdc15e21a73d3cede7d9a84dc97a",
+          "sha256": "5a8aaa775ad144da27c0a854c3202249c2e071e0f044689872b6abd2562a8417",
+          "size": 36,
+          "pipeline_result": {
+            "job_id": "4687d77cc60142078d57342bb1f98204",
+            "pipeline_name": "bridge_import_fixture_AssemblyId",
+            "output_key": "AssemblyId.species_report_tsv",
+            "output_name": "species_report_tsv",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:40:16.675671+00:00"
+          }
+        }
+      ],
+      "native_qc_applied": false
+    }
+  },
+  {
+    "transfer_id": "d0a9a98391234df48a6872dd11bd561e",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "succeeded",
+    "result": {
+      "file_delivery": "delivered",
+      "source_registration": {
+        "slots": {
+          "genome": "7279f957eb13317d9de5dd3aac9dcbd0"
+        },
+        "status": "registered"
+      },
+      "target": {
+        "sample_id": "0b3d38f20cda30d4b39fb38427aebfa8",
+        "data_type": "genomic",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "AssemblyId genomic fixture mismatch",
+        "project_id": "f7619b3534f534f097de4f1b5224f6f3"
+      },
+      "receipt_id": "d0a9a98391234df48a6872dd11bd561e",
+      "qc": {},
+      "native_imports": [
+        {
+          "job_id": "0f8829a9cd78442894b3f50b5815216c",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_AssemblyId",
+          "format": "AssemblyId",
+          "program": "assembly",
+          "state": "incompatible_sample_type",
+          "message": "This result format does not match the destination sample type."
+        }
+      ],
+      "files": [
+        {
+          "name": "2f3f6f15de6e423fada8b7f405a8f655_AssemblyIdgenomic.fa",
+          "source_path": "uploads/2f3f6f15de6e423fada8b7f405a8f655_AssemblyIdgenomic.fa",
+          "id": "b39535b2685a7c0cbc4df4ad0032acd6966690a78080acfbab147562ba097c33",
+          "sha256": "45f61d746eb88d938142f8d0daefab6942e18959c0c30b67feac763e9c6fd88d",
+          "size": 14
+        },
+        {
+          "name": "results.zip",
+          "source_path": "pipeline-bundles/0f8829a9cd78442894b3f50b5815216c/results.zip",
+          "id": "52b31c79a2f782c546028258b3360c39a8d36f63c4e3bf8f17aaa68b6608144b",
+          "sha256": "a41ad3e9d2da39c777390b90cb1761b6daa97f650e3be7f1a5a002dc5d999406",
+          "size": 512
+        },
+        {
+          "name": "species_report_tsv.tsv",
+          "source_path": "outputs/pipelines/0f8829a9cd78442894b3f50b5815216c/species_report_tsv.tsv",
+          "id": "35305cd9e5b268c123ccb441e7a9b0c04558046b66893af5529611f9ece646c6",
+          "sha256": "5a8aaa775ad144da27c0a854c3202249c2e071e0f044689872b6abd2562a8417",
+          "size": 36,
+          "pipeline_result": {
+            "job_id": "0f8829a9cd78442894b3f50b5815216c",
+            "pipeline_name": "bridge_import_fixture_AssemblyId",
+            "output_key": "AssemblyId.species_report_tsv",
+            "output_name": "species_report_tsv",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:40:23.954419+00:00"
+          }
+        },
+        {
+          "name": "contig_report_tsv.tsv",
+          "source_path": "outputs/pipelines/0f8829a9cd78442894b3f50b5815216c/contig_report_tsv.tsv",
+          "id": "022b583e393549331244f106e934967ad7fdeabc1a8516117425069b9ec82fa3",
+          "sha256": "6de9a5de9290f86fe4d2a45c272e84c82978706f0ca6bead7c4dd6bde272d15d",
+          "size": 10,
+          "pipeline_result": {
+            "job_id": "0f8829a9cd78442894b3f50b5815216c",
+            "pipeline_name": "bridge_import_fixture_AssemblyId",
+            "output_key": "AssemblyId.contig_report_tsv",
+            "output_name": "contig_report_tsv",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:40:23.954419+00:00"
+          }
+        },
+        {
+          "name": "final_contigs_renamed.tsv",
+          "source_path": "outputs/pipelines/0f8829a9cd78442894b3f50b5815216c/final_contigs_renamed.tsv",
+          "id": "b61143be5e2320b42c7432a15a5694b41399f97e0950eb5cae29897724cfa32d",
+          "sha256": "45f61d746eb88d938142f8d0daefab6942e18959c0c30b67feac763e9c6fd88d",
+          "size": 14,
+          "pipeline_result": {
+            "job_id": "0f8829a9cd78442894b3f50b5815216c",
+            "pipeline_name": "bridge_import_fixture_AssemblyId",
+            "output_key": "AssemblyId.final_contigs_renamed",
+            "output_name": "final_contigs_renamed",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:40:23.954419+00:00"
+          }
+        }
+      ],
+      "native_qc_applied": false
+    }
+  },
+  {
+    "transfer_id": "3a419f476c724960a892342924460903",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "succeeded",
+    "result": {
+      "file_delivery": "delivered",
+      "source_registration": {
+        "slots": {
+          "R1": "c1d6e13deb2f33cd9b33c6f303254760"
+        },
+        "status": "registered"
+      },
+      "target": {
+        "sample_id": "88663dda2aa13a31807f83a419c62296",
+        "data_type": "meta",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "UnknownExampleFormat meta fixture",
+        "project_id": "027c918d0b6d38c0b9095b5851d1d9ea"
+      },
+      "receipt_id": "3a419f476c724960a892342924460903",
+      "qc": {},
+      "native_imports": [
+        {
+          "job_id": "d7c2d352d57a40d4b4f2384bb053172d",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_UnknownExampleFormat",
+          "format": "UnknownExampleFormat",
+          "state": "unsupported",
+          "message": "MSCAN has no registered importer for this result format; files remain available."
+        }
+      ],
+      "files": [
+        {
+          "name": "e86fcef3fee343cfbc50ca2ba63b8d44_UnknownExampleFormatmeta.fq",
+          "source_path": "uploads/e86fcef3fee343cfbc50ca2ba63b8d44_UnknownExampleFormatmeta.fq",
+          "id": "dc9cb0e27d16204d961ab65e3d83fa621699d4ba608f01f4c237f4d3b28cc30c",
+          "sha256": "8126fa3d5a5c130dda2ae7455776318bd8fe43fda5eccab2c7e50d5c951dc467",
+          "size": 21
+        },
+        {
+          "name": "results.zip",
+          "source_path": "pipeline-bundles/d7c2d352d57a40d4b4f2384bb053172d/results.zip",
+          "id": "f2b50b23645314154d4e215ce17f42d13b280c4dc34687f3f1a09b4f193ba36d",
+          "sha256": "9d712d9c553450ec5a57e53a683fabd90514dcea31a0a07d231f2976324250ea",
+          "size": 163
+        },
+        {
+          "name": "report.tsv",
+          "source_path": "outputs/pipelines/d7c2d352d57a40d4b4f2384bb053172d/report.tsv",
+          "id": "7ad59c4cfc97efc84377e266e6b7c03e63e032b1b805556b4957112e499c97a2",
+          "sha256": "f00dde64b3198f06948cf5d86097cbd1044e0717c2e576325d52c7c18690bc72",
+          "size": 23,
+          "pipeline_result": {
+            "job_id": "d7c2d352d57a40d4b4f2384bb053172d",
+            "pipeline_name": "bridge_import_fixture_UnknownExampleFormat",
+            "output_key": "UnknownExampleFormat.report",
+            "output_name": "report",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:40:30.220086+00:00"
+          }
+        }
+      ],
+      "native_qc_applied": false
+    }
+  },
+  {
+    "transfer_id": "e574ff28103f4fa58fa0d875ab99ec92",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "failed",
+    "result": {
+      "native_imports": [
+        {
+          "job_id": "5580c8eac89043c8b0cddb57fe84c0a4",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_TcdbAnnotatorGenome",
+          "format": "TcdbAnnotatorGenome",
+          "program": "tcdb",
+          "state": "failed",
+          "message": "IllegalStateException: BAC TSV 转 Parquet 失败: s3://cncb-web-server-mic/files/agent-analysis/f7f6fa1d04f23dd4b6e193f0f7c18079/f62dc1edb8851956aea9467daeb82ed9ab4bfbd5db124698f6aee0fe0f21be4e/summary.tsv"
+        }
+      ],
+      "file_delivery": "delivered",
+      "error": "IOException: Files delivered; native import failed. Check the received receipt, then retry.",
+      "target": {
+        "sample_id": "8ec7e4d3869c3f4cbe695f5f0e0c3cde",
+        "data_type": "genomic",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "TcdbAnnotatorGenome genomic fixture",
+        "project_id": "f7619b3534f534f097de4f1b5224f6f3"
+      }
+    }
+  },
+  {
+    "transfer_id": "c7355162c3014c86a86a16ad2efd8105",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "failed",
+    "result": {
+      "native_imports": [
+        {
+          "job_id": "fb2b7193f28d462e93f27c3e712d6fb0",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_PhiAnnotatorGenome",
+          "format": "PhiAnnotatorGenome",
+          "program": "phi",
+          "state": "failed",
+          "message": "IllegalStateException: BAC TSV 转 Parquet 失败: s3://cncb-web-server-mic/files/agent-analysis/773b7bde9ab73a9889569fd4212725a8/5374521f91c7a1c518f38355b908292a08fa0a56511984ac6355919751843cdb/summary.tsv"
+        }
+      ],
+      "file_delivery": "delivered",
+      "error": "IOException: Files delivered; native import failed. Check the received receipt, then retry.",
+      "target": {
+        "sample_id": "9859a73a1aa93dbcb2089faae83513a1",
+        "data_type": "genomic",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "PhiAnnotatorGenome genomic fixture",
+        "project_id": "f7619b3534f534f097de4f1b5224f6f3"
+      }
+    }
+  },
+  {
+    "transfer_id": "fa6136de715846af917a0d9b48e9dbc2",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "failed",
+    "result": {
+      "native_imports": [
+        {
+          "job_id": "53cb835badcc4c69bde1ac71c627ca83",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_PhiAnnotatorMetagenome",
+          "format": "PhiAnnotatorMetagenome",
+          "program": "phi",
+          "state": "failed",
+          "message": "IllegalStateException: BAC TSV 转 Parquet 失败: s3://cncb-web-server-mic/files/agent-analysis/c1f6de9236963baba835d3243ffe3da4/659d30658dd09ccf15a07c9898d4e33846d1de1be32031aafca73ddc73e3ed34/summary.tsv"
+        }
+      ],
+      "file_delivery": "delivered",
+      "error": "IOException: Files delivered; native import failed. Check the received receipt, then retry.",
+      "target": {
+        "sample_id": "6cefac879a91378b9aa17bf715593777",
+        "data_type": "meta",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "PhiAnnotatorMetagenome meta fixture",
+        "project_id": "027c918d0b6d38c0b9095b5851d1d9ea"
+      }
+    }
+  },
+  {
+    "transfer_id": "402a2b760a2d4256b45189710cd8fb8e",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "succeeded",
+    "result": {
+      "file_delivery": "delivered",
+      "source_registration": {
+        "slots": {
+          "R1": "90683f839503394995c75d55105dfcc2"
+        },
+        "status": "registered"
+      },
+      "target": {
+        "sample_id": "b5c5c9db74973a66b2167d44c5c3e108",
+        "data_type": "meta",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "StrainMeta meta fixture",
+        "project_id": "027c918d0b6d38c0b9095b5851d1d9ea"
+      },
+      "receipt_id": "402a2b760a2d4256b45189710cd8fb8e",
+      "qc": {},
+      "native_imports": [
+        {
+          "job_id": "9f0700e116b44dafb18ba9e09f54e1ae",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_StrainMeta",
+          "format": "StrainMeta",
+          "program": "strain_meta",
+          "state": "imported",
+          "message": "Native result imported."
+        }
+      ],
+      "files": [
+        {
+          "name": "11ab0bb18abb4b40bc23cd826ea9a6bd_StrainMetameta.fq",
+          "source_path": "uploads/11ab0bb18abb4b40bc23cd826ea9a6bd_StrainMetameta.fq",
+          "id": "534f22a23f324e8810678fdfdbc3fc97e7dc4f6bd0bb8f16d53db83e6ff643fd",
+          "sha256": "8126fa3d5a5c130dda2ae7455776318bd8fe43fda5eccab2c7e50d5c951dc467",
+          "size": 21
+        },
+        {
+          "name": "results.zip",
+          "source_path": "pipeline-bundles/9f0700e116b44dafb18ba9e09f54e1ae/results.zip",
+          "id": "7f328f0caf3b31c6301fe18e597b3ff0eef7846bfbdb5c27b6ac46fd24ab1e03",
+          "sha256": "ae6ce9ccfa1a9c5ad935057f61019b6598ad3e14a493f732e4edef6b1986ae92",
+          "size": 204
+        },
+        {
+          "name": "profile.tsv",
+          "source_path": "outputs/pipelines/9f0700e116b44dafb18ba9e09f54e1ae/profile.tsv",
+          "id": "78be610b19f8d91b393bf9e4e3b9f0a1c700acac18d7cfd9f9e7ac8ed700b8ad",
+          "sha256": "0deaaa3cebbbc8368045599adec8f433d605eb0c8462be1b0e70fb3e27079431",
+          "size": 62,
+          "pipeline_result": {
+            "job_id": "9f0700e116b44dafb18ba9e09f54e1ae",
+            "pipeline_name": "bridge_import_fixture_StrainMeta",
+            "output_key": "StrainMeta.profile",
+            "output_name": "profile",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:42:19.774410+00:00"
+          }
+        }
+      ],
+      "native_qc_applied": false
+    }
+  },
+  {
+    "transfer_id": "955e697026cf4ba9bc0820a5fe252d0e",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "succeeded",
+    "result": {
+      "file_delivery": "delivered",
+      "source_registration": {
+        "slots": {
+          "R1": "bdaf5d36aec93477b8f0ae123e70736a"
+        },
+        "status": "registered"
+      },
+      "target": {
+        "sample_id": "9f7317a3c04d3a52a9f939e72c93b7f2",
+        "data_type": "meta",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "StrainCoPTR meta fixture",
+        "project_id": "027c918d0b6d38c0b9095b5851d1d9ea"
+      },
+      "receipt_id": "955e697026cf4ba9bc0820a5fe252d0e",
+      "qc": {},
+      "native_imports": [
+        {
+          "job_id": "635d42d3ec1349ab8052b3bed1dffc9b",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_StrainCoPTR",
+          "format": "StrainCoPTR",
+          "program": "growth",
+          "state": "imported",
+          "message": "Native result imported."
+        }
+      ],
+      "files": [
+        {
+          "name": "7aea102052e84408996555559f6ac221_StrainCoPTRmeta.fq",
+          "source_path": "uploads/7aea102052e84408996555559f6ac221_StrainCoPTRmeta.fq",
+          "id": "d8a96d875018099b274151101e4be0e32f6685d6b532196d20300528aea7def2",
+          "sha256": "8126fa3d5a5c130dda2ae7455776318bd8fe43fda5eccab2c7e50d5c951dc467",
+          "size": 21
+        },
+        {
+          "name": "results.zip",
+          "source_path": "pipeline-bundles/635d42d3ec1349ab8052b3bed1dffc9b/results.zip",
+          "id": "6801a611a0a6b5442c15ac740be34e37053455e51b4cc008d86ee0b83aff9cfe",
+          "sha256": "1349984d527d120ad88df40cf77c9b6af8538bec13281b573962bf6d3fe15335",
+          "size": 180
+        },
+        {
+          "name": "log2ptr_csv.tsv",
+          "source_path": "outputs/pipelines/635d42d3ec1349ab8052b3bed1dffc9b/log2ptr_csv.tsv",
+          "id": "cd1f7d21c5592d44caa790380dfd4e23f66aecbbed9f65b267e03c9bf2b1cf0f",
+          "sha256": "8e42e366b27f996c43c003e6aa0e516812723f9a5aef34af281dd6dc8e20ddae",
+          "size": 30,
+          "pipeline_result": {
+            "job_id": "635d42d3ec1349ab8052b3bed1dffc9b",
+            "pipeline_name": "bridge_import_fixture_StrainCoPTR",
+            "output_key": "StrainCoPTR.log2ptr_csv",
+            "output_name": "log2ptr_csv",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:42:29.804817+00:00"
+          }
+        }
+      ],
+      "native_qc_applied": false
+    }
+  },
+  {
+    "transfer_id": "91cae4da506a45dea2c9e26c24aeeadc",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "failed",
+    "result": {
+      "native_imports": [
+        {
+          "job_id": "c6010de99cc44f07bb124f4187eb3690",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_BacDef",
+          "format": "BacDef",
+          "program": "bacdef",
+          "state": "failed",
+          "message": "IllegalStateException: BAC TSV 转 Parquet 失败: s3://cncb-web-server-mic/files/agent-analysis/e2fb9ad7de2835bb864494e5b12737b1/35e45a42f449280417256217c2369745e9cb7063ae1183ca8e39ca618be4a997/defense_systems.tsv"
+        }
+      ],
+      "file_delivery": "delivered",
+      "error": "IOException: Files delivered; native import failed. Check the received receipt, then retry.",
+      "target": {
+        "sample_id": "669eaed52b983914933cc015af453f60",
+        "data_type": "genomic",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "BacDef genomic fixture",
+        "project_id": "f7619b3534f534f097de4f1b5224f6f3"
+      }
+    }
+  },
+  {
+    "transfer_id": "1d4dfe232f804e6b858998a2f4399b51",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "failed",
+    "result": {
+      "native_imports": [
+        {
+          "job_id": "f0fd0e80e06b411d983baf4cff0a8f6d",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_BacBGC",
+          "format": "BacBGC",
+          "program": "bacbgc",
+          "state": "failed",
+          "message": "IllegalStateException: BacBGC TSV 合并转 Parquet 失败: s3://cncb-web-server-mic/files/agent-analysis/145c474dff5b3efdbb9b42b8373be464/a47c79d4d806b7754504e85aa7a5ab88b04e7e6c1b459dfbae354ca604a5df47/bgc_features.tsv"
+        }
+      ],
+      "file_delivery": "delivered",
+      "error": "IOException: Files delivered; native import failed. Check the received receipt, then retry.",
+      "target": {
+        "sample_id": "1836152149393a54ba0b56a1b7f6448b",
+        "data_type": "genomic",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "BacBGC genomic fixture",
+        "project_id": "f7619b3534f534f097de4f1b5224f6f3"
+      }
+    }
+  },
+  {
+    "transfer_id": "bab45ef2999544cd93250e68bd346f14",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "succeeded",
+    "result": {
+      "file_delivery": "delivered",
+      "source_registration": {
+        "slots": {
+          "R1": "d1865172021c349fb1f0beb0b3d681c8"
+        },
+        "status": "registered"
+      },
+      "target": {
+        "sample_id": "c29d0d64866a33919e7a108a0e89cb13",
+        "data_type": "meta",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "ReadQc meta fixture",
+        "project_id": "027c918d0b6d38c0b9095b5851d1d9ea"
+      },
+      "receipt_id": "bab45ef2999544cd93250e68bd346f14",
+      "qc": {
+        "ReadsAfterHostRemoval": 8,
+        "QualityDroppedReads": 1,
+        "HostReads": 1,
+        "InputReads": 10,
+        "UnivecCoreHitReads": 0,
+        "ReadsAfterQC": 9
+      },
+      "native_imports": [
+        {
+          "job_id": "5c8b676077404bb3a287efefdc54bc6f",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_ReadQc",
+          "format": "ReadQc",
+          "state": "imported",
+          "message": "Native QC imported.",
+          "program": "qc"
+        }
+      ],
+      "files": [
+        {
+          "name": "25691be9f53a495e9413c054612d7adb_ReadQcmeta.fq",
+          "source_path": "uploads/25691be9f53a495e9413c054612d7adb_ReadQcmeta.fq",
+          "id": "b40522a0da456e0e2c4364f9eed7c96d31ee8da2a10ef98b488d2c71e147b368",
+          "sha256": "8126fa3d5a5c130dda2ae7455776318bd8fe43fda5eccab2c7e50d5c951dc467",
+          "size": 21
+        },
+        {
+          "name": "results.zip",
+          "source_path": "pipeline-bundles/5c8b676077404bb3a287efefdc54bc6f/results.zip",
+          "id": "432d4b3ebe5e95a9dd81402cdcd524d02ee37b59831e4b65f480525229cad854",
+          "sha256": "a0d04b8256ac6e3c787aedd3d913cb1ce75509580ae46360e16e8eff9a09936b",
+          "size": 389
+        },
+        {
+          "name": "qc_summary.tsv",
+          "source_path": "outputs/pipelines/5c8b676077404bb3a287efefdc54bc6f/qc_summary.tsv",
+          "id": "39f7eec984533a6cd2d0986991fec5d5ea96a8e8d30757eb095b35ef24ba4ff4",
+          "sha256": "dfb898d213e2dadc663ae355595679c1e1e18d3650c23bcae80c1f0ed691f68d",
+          "size": 139,
+          "pipeline_result": {
+            "job_id": "5c8b676077404bb3a287efefdc54bc6f",
+            "pipeline_name": "bridge_import_fixture_ReadQc",
+            "output_key": "ReadQc.qc_summary",
+            "output_name": "qc_summary",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:42:42.670625+00:00"
+          }
+        },
+        {
+          "name": "clean_r1.tsv",
+          "source_path": "outputs/pipelines/5c8b676077404bb3a287efefdc54bc6f/clean_r1.tsv",
+          "id": "38690ff7cb6a63732c28a8bedba6b8b42dd407a4495240111ae038634111bf87",
+          "sha256": "8126fa3d5a5c130dda2ae7455776318bd8fe43fda5eccab2c7e50d5c951dc467",
+          "size": 21,
+          "pipeline_result": {
+            "job_id": "5c8b676077404bb3a287efefdc54bc6f",
+            "pipeline_name": "bridge_import_fixture_ReadQc",
+            "output_key": "ReadQc.clean_r1",
+            "output_name": "clean_r1",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:42:42.670625+00:00"
+          }
+        }
+      ],
+      "native_qc_applied": true
+    }
+  },
+  {
+    "transfer_id": "c485c08b75e644fe9137bb89db61bb24",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "succeeded",
+    "result": {
+      "file_delivery": "delivered",
+      "source_registration": {
+        "slots": {
+          "R1": "b6d5f3be7c6735529e29abe29a0b2242"
+        },
+        "status": "registered"
+      },
+      "target": {
+        "sample_id": "b5942714866d34b6bc787928c5805c66",
+        "data_type": "meta",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "MetagenomicQc meta fixture",
+        "project_id": "027c918d0b6d38c0b9095b5851d1d9ea"
+      },
+      "receipt_id": "c485c08b75e644fe9137bb89db61bb24",
+      "qc": {
+        "InputReads": 10,
+        "ReadsAfterHostRemoval": 8,
+        "ReadsAfterQC": 9
+      },
+      "native_imports": [
+        {
+          "job_id": "5adc1806624242d6a59cd6af0c3bfd98",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_MetagenomicQc",
+          "format": "MetagenomicQc",
+          "state": "imported",
+          "message": "Native QC imported.",
+          "program": "qc"
+        }
+      ],
+      "files": [
+        {
+          "name": "5ffa498c104f4817b06279751ea44106_MetagenomicQcmeta.fq",
+          "source_path": "uploads/5ffa498c104f4817b06279751ea44106_MetagenomicQcmeta.fq",
+          "id": "d1912400666a36382ccd03df1eaa09592b330606c37f51671847287da312ff0e",
+          "sha256": "8126fa3d5a5c130dda2ae7455776318bd8fe43fda5eccab2c7e50d5c951dc467",
+          "size": 21
+        },
+        {
+          "name": "results.zip",
+          "source_path": "pipeline-bundles/5adc1806624242d6a59cd6af0c3bfd98/results.zip",
+          "id": "433f4b872e70071ece8972c8911811a4772f99af03b9e4a7c43bf81ad2a12759",
+          "sha256": "52cc13fea60b8f935baf8d25574d708dbbf8b19afe6146b5b569622ea081fa49",
+          "size": 326
+        },
+        {
+          "name": "qc_counts.tsv",
+          "source_path": "outputs/pipelines/5adc1806624242d6a59cd6af0c3bfd98/qc_counts.tsv",
+          "id": "3de13cd8d40bee781b787857b399b30ffcc074409bf72c6ffeb6253b9b42356b",
+          "sha256": "e0db19386930754a80a03d93b064fdec15d4b878fd103c9fb5601cc8d352e1a0",
+          "size": 53,
+          "pipeline_result": {
+            "job_id": "5adc1806624242d6a59cd6af0c3bfd98",
+            "pipeline_name": "bridge_import_fixture_MetagenomicQc",
+            "output_key": "MetagenomicQc.qc_counts",
+            "output_name": "qc_counts",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:42:52.067222+00:00"
+          }
+        },
+        {
+          "name": "clean_r1.tsv",
+          "source_path": "outputs/pipelines/5adc1806624242d6a59cd6af0c3bfd98/clean_r1.tsv",
+          "id": "bb5c5fe01f67e0e440239ee1330b3f06ec029dfdb4e138ebba748db99e78bc2f",
+          "sha256": "8126fa3d5a5c130dda2ae7455776318bd8fe43fda5eccab2c7e50d5c951dc467",
+          "size": 21,
+          "pipeline_result": {
+            "job_id": "5adc1806624242d6a59cd6af0c3bfd98",
+            "pipeline_name": "bridge_import_fixture_MetagenomicQc",
+            "output_key": "MetagenomicQc.clean_r1",
+            "output_name": "clean_r1",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:42:52.067222+00:00"
+          }
+        }
+      ],
+      "native_qc_applied": true
+    }
+  },
+  {
+    "transfer_id": "ff96b5a133ab44d1bb119d5a26020927",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "failed",
+    "result": {
+      "native_imports": [
+        {
+          "job_id": "3899b0e54031463580a8d7f6c90b76b0",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_TcdbAnnotatorMetagenome",
+          "format": "TcdbAnnotatorMetagenome",
+          "program": "tcdb",
+          "state": "failed",
+          "message": "IllegalStateException: BAC TSV 转 Parquet 失败: s3://cncb-web-server-mic/files/agent-analysis/49fa09286b4c3cb89fffa89aa296b091/43616eb922719bb515c78100263eb07052e1969fb44c5b856e7d6ec66b05a604/summary.tsv"
+        }
+      ],
+      "file_delivery": "delivered",
+      "error": "IOException: Files delivered; native import failed. Check the received receipt, then retry.",
+      "target": {
+        "sample_id": "0065b90836663b53ab3bb4ec5527e282",
+        "data_type": "shortReads",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "TcdbAnnotatorMetagenome shortReads fixture",
+        "project_id": "027c918d0b6d38c0b9095b5851d1d9ea"
+      }
+    }
+  },
+  {
+    "transfer_id": "c40d2e03bbcc4df794e44058f242fce6",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "failed",
+    "result": {
+      "native_imports": [
+        {
+          "job_id": "b60b2b93d2504008ba6f72bc25709253",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_BacSec",
+          "format": "BacSec",
+          "program": "bacsec",
+          "state": "failed",
+          "message": "IllegalStateException: BAC TSV 转 Parquet 失败: s3://cncb-web-server-mic/files/agent-analysis/73518980a546306b86dcfd7c11d14246/a12a67efd3c3cd7d7830475ea84a3caeeace519e81cd129ceb6d14cfdb3891d5/secretion_systems.tsv"
+        }
+      ],
+      "file_delivery": "delivered",
+      "error": "IOException: Files delivered; native import failed. Check the received receipt, then retry.",
+      "target": {
+        "sample_id": "6596489d3e1f3d8e8056556683d7292d",
+        "data_type": "genomic",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "BacSec genomic fixture",
+        "project_id": "f7619b3534f534f097de4f1b5224f6f3"
+      }
+    }
+  },
+  {
+    "transfer_id": "b3d6359dd1554be7ae056f264d4b87ef",
+    "site_id": "mscan",
+    "operation": "push",
+    "state": "succeeded",
+    "result": {
+      "file_delivery": "delivered",
+      "source_registration": {
+        "slots": {
+          "R1": "1cc16d447127377594b5f89c7a336af3"
+        },
+        "status": "registered"
+      },
+      "target": {
+        "sample_id": "e0bf4e776c5031e48c625c0cd7b520dc",
+        "data_type": "meta",
+        "project_name": "Bridge test 20261109 importer matrix",
+        "sample_name": "AssemblyId meta fixture complete",
+        "project_id": "027c918d0b6d38c0b9095b5851d1d9ea"
+      },
+      "receipt_id": "b3d6359dd1554be7ae056f264d4b87ef",
+      "qc": {},
+      "native_imports": [
+        {
+          "job_id": "7836abe9c34b4e21a7ee3ded66a95db6",
+          "files_delivered": true,
+          "pipeline": "bridge_import_fixture_AssemblyId",
+          "format": "AssemblyId",
+          "program": "assembly",
+          "state": "imported",
+          "message": "Native result imported."
+        }
+      ],
+      "files": [
+        {
+          "name": "c86a36465b9346f2bdfed0a301949141_AssemblyIdmeta.fq",
+          "source_path": "uploads/c86a36465b9346f2bdfed0a301949141_AssemblyIdmeta.fq",
+          "id": "28ad6cddd899a299ef98f39d9d2cba1635b0c79530a2b934890b540d9127d71a",
+          "sha256": "8126fa3d5a5c130dda2ae7455776318bd8fe43fda5eccab2c7e50d5c951dc467",
+          "size": 21
+        },
+        {
+          "name": "results.zip",
+          "source_path": "pipeline-bundles/7836abe9c34b4e21a7ee3ded66a95db6/results.zip",
+          "id": "20f7b243b2dd0c8d31a534a30af8e6d4a9016c8e8c7bda38ee2002575f87e5d4",
+          "sha256": "a41ad3e9d2da39c777390b90cb1761b6daa97f650e3be7f1a5a002dc5d999406",
+          "size": 512
+        },
+        {
+          "name": "species_report_tsv.tsv",
+          "source_path": "outputs/pipelines/7836abe9c34b4e21a7ee3ded66a95db6/species_report_tsv.tsv",
+          "id": "c8ed7fc45630df1699b1aee6046d02375b73b17e4f732ebcaa0e3fd0478c590d",
+          "sha256": "5a8aaa775ad144da27c0a854c3202249c2e071e0f044689872b6abd2562a8417",
+          "size": 36,
+          "pipeline_result": {
+            "job_id": "7836abe9c34b4e21a7ee3ded66a95db6",
+            "pipeline_name": "bridge_import_fixture_AssemblyId",
+            "output_key": "AssemblyId.species_report_tsv",
+            "output_name": "species_report_tsv",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:57:09.308947+00:00"
+          }
+        },
+        {
+          "name": "contig_report_tsv.tsv",
+          "source_path": "outputs/pipelines/7836abe9c34b4e21a7ee3ded66a95db6/contig_report_tsv.tsv",
+          "id": "3cbfe24856f57abf53a7f15f70e4b08665ae8c8886db2c0793af07de1ce65d9f",
+          "sha256": "6de9a5de9290f86fe4d2a45c272e84c82978706f0ca6bead7c4dd6bde272d15d",
+          "size": 10,
+          "pipeline_result": {
+            "job_id": "7836abe9c34b4e21a7ee3ded66a95db6",
+            "pipeline_name": "bridge_import_fixture_AssemblyId",
+            "output_key": "AssemblyId.contig_report_tsv",
+            "output_name": "contig_report_tsv",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:57:09.308947+00:00"
+          }
+        },
+        {
+          "name": "final_contigs_renamed.tsv",
+          "source_path": "outputs/pipelines/7836abe9c34b4e21a7ee3ded66a95db6/final_contigs_renamed.tsv",
+          "id": "ce6f952efced58529bdf2cdf3648f592b0ed8ffd3229e677185bff9d53fd7fb3",
+          "sha256": "45f61d746eb88d938142f8d0daefab6942e18959c0c30b67feac763e9c6fd88d",
+          "size": 14,
+          "pipeline_result": {
+            "job_id": "7836abe9c34b4e21a7ee3ded66a95db6",
+            "pipeline_name": "bridge_import_fixture_AssemblyId",
+            "output_key": "AssemblyId.final_contigs_renamed",
+            "output_name": "final_contigs_renamed",
+            "output_kind": "file",
+            "completed_at": "2026-11-09T02:57:09.308947+00:00"
+          }
+        }
+      ],
+      "native_qc_applied": false
+    }
+  }
+]
