@@ -291,7 +291,8 @@ factory. These tools do not create a second agent runtime.
 | website_connections | List linked sites and their advertised backend capabilities |
 | website_search | Search owned website projects, samples and resources |
 | website_pull | Stream a selected website resource into the current session |
-| website_push | Send selected session files or owned remote outputs to a website destination |
+| website_push | Send selected ordinary session files to a website destination |
+| website_result_sync | Synchronize one succeeded remote Cromwell result without files; accepts the owning session's BioAgent `job_id` and derives the Cromwell task ID/pipeline name |
 | website_transfer_status | Read a queued transfer's status, result or failure |
 | website_transfer_retry | Retry a failed transfer using its existing ID |
 | website_context | Read the current structured page snapshot |
@@ -411,7 +412,14 @@ When adding a runtime tool or pipeline:
 
 `website_observe` reads the actual host tab through the generic DOM observer.
 `website_connections`, `website_search`, `website_pull`, `website_push`,
-`website_transfer_status`, and `website_transfer_retry` are registered for both
+`website_result_sync`, `website_transfer_status`, and `website_transfer_retry` are registered for both
 standalone and embedded agents. They run through the authenticated backend
 connector, independent of an open browser. See
 [web bridge protocol](../web_bridge/README.md#independent-browser-and-transfer-modules).
+
+`website_result_sync(site_id, job_id, destination_json, create_missing=true)`
+requires a succeeded WDL/Cromwell job owned by the current session. `job_id` is
+the 32-character BioAgent pipeline job ID, not the Cromwell UUID. The tool loads
+the protected broker job, verifies success and sends its recorded `remote_id`
+and pipeline name to MSCAN. Use `website_push` only when files themselves are
+the intended payload.

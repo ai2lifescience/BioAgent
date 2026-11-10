@@ -4,17 +4,18 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 import unittest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
 from agents import Agent, RunContextWrapper, function_tool
 from agents.testing import ModelStep, ScriptedModel, assistant_message, function_call
 from harness import runtime, sandbox
 from harness.context import AgentRunContext
-from harness.runtime import _collect_started_pipelines
+from harness.runtime import _collect_started_pipelines, _collect_started_transfers
 from harness.sessions import SessionMetadataStore
 from interfaces.api import list_session_messages
 
 JOB = 'a' * 32
+TRANSFER = 'b' * 32
 
 
 def launched():
@@ -24,6 +25,16 @@ def launched():
 
 def state(status):
     return {'job_id': JOB, 'pipeline_name': 'template_wdl', 'status': status}
+
+
+def transfer_state(status):
+    return {'transfer_id': TRANSFER, 'site_id': 'mscan', 'operation': 'result_sync',
+            'state': status, 'result': {}}
+
+
+def launched_transfer():
+    return {'tool': 'website_result_sync', 'arguments': {'site_id': 'mscan'},
+            'result': {'value': transfer_state('running')}, 'status': 'ok'}
 
 
 class CompletionTests(unittest.IsolatedAsyncioTestCase):
@@ -97,6 +108,28 @@ class CompletionTests(unittest.IsolatedAsyncioTestCase):
             with patch('harness.runtime.pipeline_service.status') as status:
                 self.assertEqual(await _collect_started_pipelines(context), [])
                 status.assert_not_called()
+
+    async def test_running_transfer_is_collected_without_model_polling(self):
+        context = self.context()
+        context.tool_results = [launched_transfer()]
+        service = SimpleNamespace(status=Mock(side_effect=[
+            transfer_state('running'), transfer_state('succeeded'),
+        ]))
+        with patch('web_bridge.transfer.service.Transfers', return_value=service), \
+             patch('harness.runtime.asyncio.sleep', new=AsyncMock()):
+            completed = await _collect_started_transfers(context, poll_interval=0)
+        self.assertEqual(completed[0]['state'], 'succeeded')
+        self.assertEqual(service.status.call_count, 2)
+        self.assertEqual(await _collect_started_transfers(context, wait_seconds=0), [])
+
+    async def test_transfer_monitor_timeout_preserves_recoverable_handle(self):
+        context = self.context()
+        context.tool_results = [launched_transfer()]
+        service = SimpleNamespace(status=Mock(return_value=transfer_state('running')))
+        with patch('web_bridge.transfer.service.Transfers', return_value=service):
+            completed = await _collect_started_transfers(context, poll_interval=2, wait_seconds=0)
+        self.assertTrue(completed[0]['monitor_timed_out'])
+        self.assertEqual(completed[0]['transfer_id'], TRANSFER)
 
 
 class RuntimeCompletionTests(unittest.TestCase):
@@ -175,6 +208,31 @@ class RuntimeCompletionTests(unittest.TestCase):
         self.assertIn('succeeded', result['answer'])
         self.assertIn('outputs/results.zip', result['answer'])
         self.assertEqual(len(model.calls), 1)
+
+    def test_transfer_on_last_tool_turn_returns_terminal_receipt(self):
+        @function_tool
+        async def launch_transfer(ctx: RunContextWrapper[AgentRunContext]) -> str:
+            ctx.context.tool_results.append(launched_transfer())
+            return 'Transfer is running.'
+
+        model = ScriptedModel([
+            ModelStep(output=[function_call('launch_transfer', {}, call_id='transfer')]),
+        ])
+        service = SimpleNamespace(status=Mock(return_value=transfer_state('succeeded')))
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            with patch.object(runtime, 'STATE_STORE', SessionMetadataStore(root/'metadata')), \
+                 patch.object(runtime, 'SESSION_DB', root/'sessions.sqlite3'), \
+                 patch.object(sandbox, 'WORKSPACES_DIR', root/'workspaces'), \
+                 patch.object(runtime, 'create_agent', return_value=Agent(name='fixture', model=model, tools=[launch_transfer])), \
+                 patch('web_bridge.transfer.service.Transfers', return_value=service):
+                result = runtime.run_agent(
+                    'Synchronize the result.', session_id='transfer-completion',
+                    model=model, max_turns=1,
+                )
+        self.assertEqual(result['status'], 'ok', result['answer'])
+        self.assertIn(TRANSFER, result['answer'])
+        self.assertIn('succeeded', result['answer'])
 
     def test_analysis_turn_limit_preserves_verified_completion(self):
         result, model = self.check_runtime(max_turns=3, inspect_after_completion=True)

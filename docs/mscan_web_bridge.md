@@ -287,7 +287,8 @@ for the adapter's ownership rules and logout behavior.
 
 > “Pull the FASTQ files for sample B and run QC.”
 
-> “Push these results to sample B in MSCAN.”
+> “Call `website_result_sync`, not `website_push`, for pipeline job
+> `<job_id>` and synchronize it to project A, sample B.”
 
 > “Create project C, add this sample, and upload its data and results.”
 
@@ -295,6 +296,12 @@ Search, pull and push use natural language in the agent; no transfer buttons are
 needed on the agent page. Backend transfers require a linked identity and a
 running connector, but can continue with the browser closed. Page observation
 requires the connected MSCAN tab.
+
+For direct Cromwell synchronization, provide the BioAgent pipeline `job_id`
+rather than a Cromwell UUID. BioAgent resolves the protected session job and
+sends its recorded Cromwell ID and pipeline key to MSCAN. In MSCAN logs,
+`operation=result_sync` confirms this path; `operation=push` confirms that files
+were transferred instead. Direct sync does not return a file receipt.
 
 Received files appear in **Download files** on the sample toolbar. Supported
 result formats also populate native MSCAN analysis records. Check `file_delivery`
@@ -311,6 +318,9 @@ downloadable file. See the [supported importer contracts](../web_bridge/README.m
 | Connection or sign-in fails | Confirm both sides use the same site ID and service secret and that MSCAN has an authenticated user (or the development bypass). Java uses `bioagent.url`; browsers use `bioagent.public-url`. |
 | `clients.json` cannot be read | Run `run.py init` from the BioAgent root or correct `AGENT_WEBSITE_CLIENTS_FILE`, then restart BioAgent. MSCAN does not read this file. |
 | Transfer remains queued/running | Check `website_transfer_status` and the MSCAN backend logs. The backend connector must remain running. A queued response is not a completed transfer. |
+| Explicit result synchronization logs `operation=push` | Restart BioAgent after updating its Python tools. Request `website_result_sync` with the BioAgent pipeline `job_id`, and explicitly state not to call `website_push`. The operations do not auto-fallback. |
+| `No such job in this session` | Use the pipeline's 32-character BioAgent `job_id` in its owning session. Current code must load it through `pipeline_engine.broker.get_plan`; restart BioAgent after applying that fix. |
+| Need the final transfer details | Call `website_transfer_status(transfer_id)`. For server diagnostics, read `website_commands.result` in `AGENT_WEBSITE_DB` (default `runtime/website_bridge.sqlite3`). File-push `native_imports` are also in `${bioagent.results-root}/<transfer-id>/receipt.json`; `source_registration` is only in the BioAgent command result. |
 | Files arrived but native results are missing | Inspect `native_imports` for missing output roles, incompatible sample types, unsupported formats or parser errors. Resolve the reported cause before retrying a failed transfer. |
 | Native results exist but the page is stale | Reload the selected sample/view. Automatic refresh can miss status-only receipt updates; verify the import receipt before assuming a transfer failed. |
 

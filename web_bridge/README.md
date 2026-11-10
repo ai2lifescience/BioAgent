@@ -276,18 +276,24 @@ explicit administrator link or a trusted adapter's `shared_user_id` mode. Tools:
 - `website_connections`: list linked sites, destination fields and backend capabilities.
 - `website_search`: search owned projects, samples and downloadable resources.
 - `website_pull`: copy a resource into the current isolated session.
-- `website_push`: send selected session files to a website-defined destination.
+- `website_push`: send selected ordinary session files to a website-defined destination.
+- `website_result_sync`: explicitly request native parsing of one remote Cromwell result without copying result files.
 - `website_transfer_status`: obtain a final receipt or a specific failure.
 - `website_transfer_retry`: resume a failed command under its original ID.
 
-For MSCAN, `website_push.destination_json` contains a JSON object such as
+For MSCAN, `website_result_sync.destination_json` contains a JSON object such as
 `{"project":"My project","sample":"Sample A","data_type":"meta"}`.
-Optional `source_slots` maps `R1`/`R2` or `genome` to selected workspace paths.
-A single sequence file can be assigned automatically; multiple sequence outputs
-remain attached results unless source roles are supplied. Missing named projects
-and samples are created when `create_missing` is true. Ambiguous names require
-IDs. Existing source slots are preserved and reported as `results_only`.
-Registration does not launch a native MSCAN pipeline or invent sample metadata.
+It also requires the 32-character BioAgent pipeline `job_id`, not a caller-
+supplied Cromwell UUID. BioAgent loads the job through the session's protected
+pipeline broker store, verifies `status=succeeded`, and derives its recorded
+Cromwell `remote_id` and pipeline name. It sends only that metadata, the
+destination, protocol version 1 and importer contract version 1. MSCAN validates
+the owner and destination,
+then uses its own Cromwell client and native pipeline parser. Missing named projects
+and samples are created when `create_missing` is true. Ambiguous names require IDs.
+Ordinary file push still accepts optional `source_slots` for R1/R2 or genome files.
+The connector advertises its supported pipeline keys and contract versions;
+BioAgent rejects unsupported direct-sync commands before queueing them.
 
 Examples of user requests:
 
@@ -295,6 +301,10 @@ Examples of user requests:
 >
 > Push this report and these reads to MSCAN project “November study”, sample
 > “Sample A”. Create the project and sample if necessary.
+>
+> Call `website_result_sync`, not `website_push`, for pipeline job
+> `0123456789abcdef0123456789abcdef`; synchronize it to MSCAN project
+> “November study”, sample “Sample A”, data type `meta`.
 
 The generic queue treats destination fields as opaque; each website adapter
 implements its own entity creation and permissions. The site backend polls with
@@ -365,6 +375,37 @@ The generic transport carries files and optional `pipeline_result` provenance
 resolved from the owner's durable job manifest, never from model-supplied paths
 or credentials. Bundles include available individual outputs, skipping absent optional outputs; local output selections are
 checked against their recorded checksum. The transport has no MSCAN program list.
+
+Direct Cromwell synchronization is a separate metadata-only path. It uses
+`PipelineResultImporter` beans discovered by
+`PipelineResultImporterRegistry`, validates workflow status through
+`CromwellResultGateway`, and coordinates idempotency and task state in
+`CromwellResultSyncService`. Its workflow-derived task-row ID prevents one
+Cromwell execution from being associated with multiple owners, samples or
+pipelines. It reports `Importing`, `Succeeded` or `Failed`, and native scheduler
+pollers re-read the task row so they skip an in-progress direct import.
+
+The direct registry covers all 23 non-template BioAgent pipelines: both QC
+workflows, metagenomic/genomic detection, molecular typing, risk, traceback,
+assembly, MetaX, strain profile, growth, BAC defense/secretion/BGC, SNP, PHI and
+TCDB. Molecular/risk adapters derive the pathogen from Cromwell inputs and use
+the corresponding `metadata_pathogen_ref`. Adding a direct pipeline means
+registering one importer bean; it does not change file-artifact format rules.
+
+`operation=result_sync` in MSCAN logs identifies this path. `operation=push`
+identifies the file path below and can return `files`, `source_registration` and
+`native_imports`; direct sync instead returns the Cromwell task, pipeline,
+program and target. There is no automatic fallback between them.
+
+Direct-sync failures include a stable `error_code` and `retryable` flag.
+Contract failures include `unsupported_pipeline`, `unsupported_protocol_version`,
+`unsupported_contract_version`, `unsupported_execution_engine`,
+`incompatible_sample_type` and `invalid_cromwell_task_id`. Ownership/context
+failures include `cromwell_task_conflict`, `missing_pipeline_context` and
+`ambiguous_pathogen_reference`. Operational failures include
+`cromwell_unavailable`, `cromwell_not_succeeded`,
+`native_import_in_progress` and `native_import_failed`; only failures marked
+`retryable=true` should be submitted through `website_transfer_retry`.
 
 MSCAN-specific code is [organized by function](adapters/mscan/README.md#code-organization).
 The [minimal installation](adapters/mscan/README.md#minimal-mscan-changes) modifies

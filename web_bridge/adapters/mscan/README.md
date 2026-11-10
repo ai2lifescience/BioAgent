@@ -23,9 +23,13 @@ Runnable host code is owned only by the sibling repositories:
   contains identity endpoints, transfers, delivery, native importers, resource
   discovery, logout and download security.
 
-`ResultImporterRegistry` owns format contracts; `ResultImportService` handles
-native import orchestration; `AssistantDeliveryService` persists verified
-receipts; `AssistantTransferService` handles search/pull/push commands; and
+`ResultImporterRegistry` owns file-format contracts; `ResultImportService`
+handles file-based native import orchestration; `PipelineResultImporter` and
+`PipelineResultImporterRegistry` own direct Cromwell pipeline contracts;
+`CromwellResultGateway` validates remote workflow state; and
+`CromwellResultSyncService` coordinates direct import, ownership, idempotency
+and task status. `AssistantDeliveryService` persists verified file receipts;
+`AssistantTransferService` handles search/pull/push/result_sync commands; and
 `NativeResultResources` exposes owned results. Generic bridge identity and
 transfer code stays in BioAgent.
 
@@ -145,8 +149,9 @@ expose it through Vite/browser environment variables.
 
 ## Transfer concurrency
 
-`bioagent.transfer-workers` controls the maximum concurrent search, pull and push
-commands in one MSCAN backend process; the default is **3**, shared across users.
+`bioagent.transfer-workers` controls the maximum concurrent search, pull, push
+and result-sync commands in one MSCAN backend process; the default is **3**,
+shared across users.
 Set it directly in MSCAN's active Spring profile. This is separate from the
 agent's conversation/run limit.
 
@@ -165,17 +170,26 @@ pages appear once.
 ## Result contract
 
 MSCAN remains the owner of result persistence and native imports. The connector
-leases one push event and derives the owner from its authenticated OOS subject;
-browser-supplied user IDs are never accepted. A persisted receipt contains only
+leases commands and derives the owner from its authenticated OOS subject;
+browser-supplied user IDs are never accepted. A persisted file-push receipt contains only
 the schema version, event ID, verified subject, target sample, creation time,
 verified file identities and native-import outcome. Session IDs, leases, model
 answers and the original command payload are transport-only and are not retained.
 
 Each pipeline output carries a versioned `pipeline_result` reference. Remote WDL
 outputs include the real `cromwell_task_id`; local engines omit that field rather
-than inventing an ID. MSCAN uses the Cromwell ID (or the BioAgent job ID for a
-local engine), sample and output format as the idempotency identity. It rejects a
-Cromwell task already associated with another owner or sample.
+than inventing an ID. This provenance supports the file-import path.
+
+The separate `result_sync` command is metadata-only and supports remote Cromwell
+jobs. BioAgent accepts its own pipeline `job_id`, loads the protected broker job
+and sends the recorded Cromwell UUID, pipeline key and destination. MSCAN uses a
+workflow-derived task-row ID as the idempotency identity and rejects a Cromwell
+task already associated with another owner, sample or pipeline. It verifies
+remote `Succeeded` status before calling the registered parser. File push remains
+available for local-engine outputs and for callers that need artifacts copied.
+The current direct registry covers all 23 non-template BioAgent pipelines.
+Molecular and risk importers derive the pathogen from Cromwell inputs and resolve
+the required `metadata_pathogen_ref`.
 
 For Agent reads, prefer the two backend operations `website_search` and
 `website_pull`. Browser callbacks remain for current-page context, visible
@@ -292,8 +306,11 @@ must still be checked with real accounts when the development bypass is removed.
   records; unknown formats remain downloadable files with an explicit native
   import status. See the [format contracts](../../README.md#analysis-result-exchange).
   The former Agent results panel is removed.
-- To transfer standalone results, ask in chat: “Push these results to MSCAN
-  project X, sample Y.” The connector can create missing named destinations.
+- To synchronize a succeeded remote Cromwell result, ask for
+  `website_result_sync` with its BioAgent pipeline `job_id`; do not ask to push
+  its output files. To transfer standalone/local result files, ask in chat:
+  “Push these files to MSCAN project X, sample Y.” The connector can create
+  missing named destinations.
   `website_search` and `website_pull` bring owned sources/results back to the
   agent without a browser tab. There are no dedicated transfer buttons.
 

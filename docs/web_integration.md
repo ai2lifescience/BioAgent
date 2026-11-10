@@ -474,7 +474,8 @@ running backend connector; no browser tab or transfer buttons are required.
 | `website_connections` | List linked sites, advertised destination fields/import formats and last backend contact. |
 | `website_search` | Find owned projects, samples and resources; use returned IDs to resolve ambiguity. |
 | `website_pull` | Copy a selected resource into the current owned session. |
-| `website_push` | Send selected files or owned pipeline outputs to a destination. `create_missing` requests destination creation where the adapter supports it. |
+| `website_push` | Send selected ordinary workspace files to a destination. `create_missing` requests destination creation where the adapter supports it. |
+| `website_result_sync` | Explicitly request native import of one succeeded remote Cromwell job. The caller supplies the session-owned BioAgent `job_id`; BioAgent derives its Cromwell task ID and pipeline name, and the receiving website reads Cromwell itself. |
 | `website_transfer_status` | Obtain the completed file path, receipt or failure. A queued/running response is not completion. |
 | `website_transfer_retry` | Retry a failed transfer using its existing command ID. |
 
@@ -498,11 +499,65 @@ retried after its reported error is resolved. The adapter must remain running to
 process commands. See the [module protocol](../web_bridge/README.md#independent-browser-and-transfer-modules)
 for implementation details.
 
-Pushing an owned pipeline results ZIP also includes available individual outputs
-from its job manifest, with result provenance for the adapter's native importers.
-Remote outputs can be transferred without first materializing them in the local
-workspace. A stored archive alone is not proof that native analysis records were
-populated.
+For MSCAN, a user-requested remote pipeline-result synchronization uses
+`website_result_sync`, not file transfer. BioAgent verifies that the selected
+job succeeded on remote Cromwell by loading it through the protected pipeline
+broker store, then queues its Cromwell task ID, pipeline name, destination,
+`result_sync_protocol_version=1`, `pipeline_contract_version=1` and
+`execution_engine=cromwell`. MSCAN verifies the destination owner, retrieves
+the workflow metadata and outputs through its own Cromwell configuration, then
+runs its native parser. Jobs are never synchronized automatically. Ordinary
+file pushes remain available for source files and reports. The two operations
+do not silently fall back to each other: MSCAN logs `operation=result_sync` for
+metadata-only synchronization and `operation=push` for file transfer.
+
+MSCAN advertises `cromwell_result_sync.protocol_version` and its importer
+contracts while polling. BioAgent rejects an offline connector, unsupported
+pipeline or incompatible contract version before queueing the command. The
+current MSCAN registry covers all 23 non-template BioAgent pipelines. Direct
+sync uses the workflow-derived task-row ID as its idempotency boundary and
+returns stable `error_code` and `retryable` fields on failure.
+
+The queued command payload has this shape:
+
+```json
+{
+  "cromwell_task_id": "11111111-1111-1111-1111-111111111111",
+  "pipeline_name": "metagenomic_read_quality_control",
+  "result_sync_protocol_version": 1,
+  "pipeline_contract_version": 1,
+  "execution_engine": "cromwell",
+  "destination": {
+    "project": "agent",
+    "sample": "demo",
+    "data_type": "meta"
+  },
+  "create_missing": true
+}
+```
+
+This is an internal backend command. Agent callers supply `job_id`; they must
+not supply or invent the Cromwell ID or pipeline name directly.
+
+The MSCAN connector advertises compatibility in its command poll:
+
+```json
+{
+  "operations": ["search", "pull", "push", "result_sync"],
+  "cromwell_result_sync": {
+    "protocol_version": 1,
+    "engine": "cromwell",
+    "importers": [
+      {
+        "pipeline_key": "metagenomic_read_quality_control",
+        "program": "qc",
+        "contract_version": 1,
+        "sample_types": ["meta", "shortReads"]
+      }
+    ]
+  }
+}
+```
 
 MSCAN now has a separate [analysis import module](../web_bridge/README.md#analysis-result-exchange)
 that reuses its native result parsers. Push receipts distinguish `file_delivery`
