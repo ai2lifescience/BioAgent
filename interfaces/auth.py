@@ -43,6 +43,12 @@ def validate_server(host: str) -> None:
             raise ValueError("AGENT_PUBLIC_ORIGIN must be an HTTP(S) origin without a path.")
         if origin.scheme == "https" and not secure_cookie():
             raise ValueError("HTTPS requires secure cookies.")
+        public_base = os.getenv("AGENT_PUBLIC_BASE_URL", "").strip()
+        if public_base:
+            base = urlparse(public_base)
+            if (base.scheme != origin.scheme or base.netloc != origin.netloc
+                    or base.query or base.fragment or base.username):
+                raise ValueError("AGENT_PUBLIC_BASE_URL must use the AGENT_PUBLIC_ORIGIN scheme and host.")
     elif auth_mode() != "local" and not loopback(host) and os.getenv("AGENT_DIRECT_HTTP") != "true":
         raise ValueError("Configure the direct HTTP listener before network access.")
     if auth_mode() == "cas":
@@ -126,6 +132,11 @@ def _external_login_url() -> str | None:
     return None
 
 
+def _public_home_path() -> str:
+    base = urlparse(os.getenv("AGENT_PUBLIC_BASE_URL", "")).path.rstrip("/")
+    return (base + "/") if base else "/"
+
+
 def _external_logout_url() -> str:
     from auth.cas import logout_url as cas_logout_url
     return cas_logout_url()
@@ -176,11 +187,18 @@ def _auth_endpoint(handler, path: str) -> bool:
             raise AuthError("OAuth login is not enabled.")
         from auth.oauth import STATE_COOKIE, complete_login
         query = parse_qs(urlparse(handler.path).query)
-        token, _, return_to = complete_login(
-            (query.get("code") or [""])[0],
-            (query.get("state") or [""])[0],
-            _cookie(handler, STATE_COOKIE),
-        )
+        if (query.get("error") or [""])[0]:
+            _redirect(handler, _public_home_path())
+            return True
+        try:
+            token, _, return_to = complete_login(
+                (query.get("code") or [""])[0],
+                (query.get("state") or [""])[0],
+                _cookie(handler, STATE_COOKIE),
+            )
+        except AuthError:
+            _redirect(handler, _public_home_path())
+            return True
         handler._auth_cookie = (
             f"{COOKIE_NAME}={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=28800"
             + ("; Secure" if secure_cookie() else "")

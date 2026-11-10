@@ -8,7 +8,8 @@ type Status = {
   user: { id: string; name: string } | null;
 };
 const CHANGE_KEY = 'bioagent.auth.changed';
-const endpoint = (path: string) => new URL(`/auth/${path}`, window.location.href).toString();
+const applicationUrl = (path: string) => new URL(path.replace(/^\//, ''), new URL(import.meta.env.BASE_URL, window.location.origin)).toString();
+const endpoint = (path: string) => applicationUrl(`auth/${path}`);
 
 // Covers normal API requests, streaming handshakes, and iframe bridge calls.
 // Credentials stay in an HttpOnly cookie and never enter model context.
@@ -65,8 +66,10 @@ export function AuthGate({ children }: { children: ReactNode }) {
   }, []);
   const startOAuthLogin = () => {
     const target = status?.login_url || '/auth/oauth/login';
-    const url = new URL(target, window.location.origin);
-    url.searchParams.set('return_to', window.location.pathname + window.location.search + window.location.hash);
+    const url = new URL(applicationUrl(target));
+    const returnUrl = new URL(window.location.href);
+    returnUrl.searchParams.delete('logged_out');
+    url.searchParams.set('return_to', returnUrl.pathname + returnUrl.search + returnUrl.hash);
     window.location.assign(url.toString());
   };
   useEffect(() => {
@@ -97,7 +100,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
     if (status?.mode === 'cas' || status?.mode === 'oauth') {
       setBusy(true);
       try {
-        const logoutEndpoint = status.mode === 'oauth' ? endpoint('logout') : '/auth/cas/logout';
+        const logoutEndpoint = status.mode === 'oauth' ? endpoint('logout') : endpoint('cas/logout');
         const response = await fetch(logoutEndpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

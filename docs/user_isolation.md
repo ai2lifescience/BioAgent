@@ -248,6 +248,25 @@ export AGENT_OAUTH_POST_LOGOUT_REDIRECT_URI=https://agent.example.com/
 export AGENT_OAUTH_PROXY=
 ```
 
+### Development and production URLs
+
+Use a dedicated BioAgent environment file per deployment. The development
+profile uses the browser-visible IP address and port, for example
+`http://192.168.1.100:8008`. The production profile uses:
+
+```text
+AGENT_PUBLIC_ORIGIN=https://mscan.cncb.ac.cn
+AGENT_PUBLIC_BASE_URL=https://mscan.cncb.ac.cn/OneMicro/agent
+AGENT_OAUTH_REDIRECT_URI=https://mscan.cncb.ac.cn/OneMicro/agent/auth/oauth/callback
+AGENT_OAUTH_POST_LOGOUT_REDIRECT_URI=https://mscan.cncb.ac.cn/OneMicro/agent/
+```
+
+Run BioAgent with `AGENT_ENV_FILE=.env.development` or
+`AGENT_ENV_FILE=.env.production`. Keep the OAuth broker URL and client secret
+outside these tracked profile files. The reverse proxy must forward
+`/OneMicro/agent/` to BioAgent and remove that prefix before the request reaches
+the BioAgent listener.
+
 Add the exact BioAgent and MSCAN server callbacks to the broker's private client
 registry. The broker validates CNCB CAS tickets; each app exchanges an OAuth code
 server-to-server and creates its own application session. See

@@ -25,6 +25,16 @@ def _return_path(value: str | None) -> str:
     return value
 
 
+def _public_base_url() -> str:
+    value = (os.getenv("AGENT_PUBLIC_BASE_URL", "").strip()
+             or os.getenv("AGENT_PUBLIC_ORIGIN", "").strip()).rstrip("/")
+    parsed = urlparse(value)
+    if (not value or parsed.scheme not in {"http", "https"} or not parsed.netloc
+            or parsed.query or parsed.fragment or parsed.username):
+        raise ValueError("AGENT_PUBLIC_BASE_URL must be an HTTP(S) URL without query or fragment.")
+    return value
+
+
 def _settings() -> tuple[str, str, str, str]:
     base = os.getenv("AGENT_OAUTH_SERVER_URL", "").strip().rstrip("/")
     client_id = os.getenv("AGENT_OAUTH_CLIENT_ID", "bioagent").strip()
@@ -37,10 +47,7 @@ def _settings() -> tuple[str, str, str, str]:
     if not client_id or len(secret) < 32:
         raise ValueError("Configure AGENT_OAUTH_CLIENT_ID and a 32-character AGENT_OAUTH_CLIENT_SECRET.")
     if not redirect:
-        public = os.getenv("AGENT_PUBLIC_ORIGIN", "").strip().rstrip("/")
-        if not public:
-            raise ValueError("Configure AGENT_OAUTH_REDIRECT_URI or AGENT_PUBLIC_ORIGIN.")
-        redirect = public + "/auth/oauth/callback"
+        redirect = _public_base_url() + "/auth/oauth/callback"
     parsed = urlparse(redirect)
     if parsed.scheme not in {"http", "https"} or not parsed.netloc or parsed.fragment:
         raise ValueError("AGENT_OAUTH_REDIRECT_URI must be an HTTP(S) callback URL.")
@@ -50,8 +57,7 @@ def _settings() -> tuple[str, str, str, str]:
 def _post_logout_redirect_uri() -> str:
     value = os.getenv("AGENT_OAUTH_POST_LOGOUT_REDIRECT_URI", "").strip()
     if not value:
-        public = os.getenv("AGENT_PUBLIC_ORIGIN", "").strip().rstrip("/")
-        value = public + "/" if public else ""
+        value = _public_base_url() + "/"
     parsed = urlparse(value)
     if (not value or parsed.scheme not in {"http", "https"} or not parsed.netloc
             or parsed.fragment or parsed.username):
@@ -62,6 +68,21 @@ def _post_logout_redirect_uri() -> str:
 def _oauth_proxies():
     proxy = os.getenv("AGENT_OAUTH_PROXY", "").strip()
     return {"http": proxy, "https": proxy} if proxy else None
+
+
+def _oauth_http() -> requests.Session:
+    """Use only the explicitly configured proxy for broker calls.
+
+    A blank AGENT_OAUTH_PROXY must not inherit HTTP_PROXY/HTTPS_PROXY from the
+    agent process: internal OAuth IP addresses are commonly unreachable through
+    those machine-wide proxies.
+    """
+    http = requests.Session()
+    http.trust_env = False
+    proxy = _oauth_proxies()
+    if proxy:
+        http.proxies.update(proxy)
+    return http
 
 
 def validate_config() -> None:
@@ -90,28 +111,33 @@ def begin_login(return_to: str | None, db_path=None) -> tuple[str, str]:
 
 def _exchange(code: str, verifier: str) -> dict:
     base, client_id, secret, redirect = _settings()
-    proxies = _oauth_proxies()
     try:
-        response = requests.post(
+        http = _oauth_http()
+        response = http.post(
             base + "/oauth/token",
             data={"grant_type": "authorization_code", "client_id": client_id,
                   "client_secret": secret, "code": code, "redirect_uri": redirect,
                   "code_verifier": verifier},
-            timeout=15, proxies=proxies, allow_redirects=False,
+            timeout=15, allow_redirects=False,
         )
-        response.raise_for_status()
+        if response.status_code != 200:
+            raise AuthError(f"OAuth token exchange failed (HTTP {response.status_code}).")
         access_token = response.json().get("access_token", "")
         if not isinstance(access_token, str) or not access_token:
             raise AuthError("OAuth service returned an invalid access token.")
-        profile = requests.get(base + "/oauth/userinfo?client_id=" + client_id,
-                              headers={"Authorization": "Bearer " + access_token},
-                              timeout=15, proxies=proxies, allow_redirects=False)
-        profile.raise_for_status()
+        profile = http.get(base + "/oauth/userinfo?client_id=" + client_id,
+                           headers={"Authorization": "Bearer " + access_token},
+                           timeout=15, allow_redirects=False)
+        if profile.status_code != 200:
+            raise AuthError(f"OAuth userinfo request failed (HTTP {profile.status_code}).")
         identity = profile.json()
     except AuthError:
         raise
     except Exception as exc:
         raise AuthError("BioAgent could not verify the OAuth login with the identity service.") from exc
+    finally:
+        if "http" in locals():
+            http.close()
     user_id = identity.get("user_id") or identity.get("sub")
     username = identity.get("username")
     sid = identity.get("sid")
@@ -128,16 +154,20 @@ def _exchange(code: str, verifier: str) -> dict:
 def begin_logout() -> str:
     base, client_id, secret, _redirect = _settings()
     try:
-        response = requests.post(
+        http = _oauth_http()
+        response = http.post(
             base + "/oauth/logout-request",
             data={"client_id": client_id, "client_secret": secret,
                   "post_logout_redirect_uri": _post_logout_redirect_uri()},
-            timeout=15, proxies=_oauth_proxies(), allow_redirects=False,
+            timeout=15, allow_redirects=False,
         )
         response.raise_for_status()
         logout_url = response.json().get("logout_url", "")
     except Exception as exc:
         raise AuthError("BioAgent signed out locally, but the identity service logout is unavailable.") from exc
+    finally:
+        if "http" in locals():
+            http.close()
     if not isinstance(logout_url, str):
         raise AuthError("Identity service returned an invalid logout URL.")
     parsed_base = urlparse(base)
