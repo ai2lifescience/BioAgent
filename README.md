@@ -86,6 +86,7 @@ from the repository root before starting the server:
 conda activate openaisdk
 npm --prefix frontend ci
 npm --prefix frontend run build
+export AGENT_ENV_FILE=.env
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ```
 

@@ -6,7 +6,7 @@ from http.cookies import SimpleCookie
 import ipaddress
 import os
 import socket
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qsl, parse_qs, urlencode, urlparse
 
 from auth import AuthError, AuthStore, COOKIE_NAME, auth_mode, current_principal, principal_scope, registration_enabled
 
@@ -60,16 +60,29 @@ def validate_server(host: str) -> None:
         validate_config()
 
 
+def _request_origin(handler) -> str:
+    host = (handler.headers.get("Host") or "").strip()
+    if not host or any(char in host for char in "\r\n "):
+        return ""
+    proto = (handler.headers.get("X-Forwarded-Proto") or "http").split(",")[0].strip().lower()
+    if proto not in {"http", "https"}:
+        proto = "http"
+    return f"{proto}://{host}"
+
+
 def _check_origin(handler) -> None:
+    from auth.oauth import flexible_host, local_hostname
+
     host = handler.headers.get("Host", "")
     public = os.getenv("AGENT_PUBLIC_ORIGIN", "").rstrip("/")
     hostname = urlparse("http://" + host).hostname or ""
+    flexible_local = flexible_host() and local_hostname(hostname)
     if auth_mode() == "local":
         # Host validation also rejects DNS rebinding against the local service.
         if not loopback(hostname) or not loopback(handler.client_address[0]):
             raise AuthError("Local mode is available only through localhost.")
     elif public:
-        if host != urlparse(public).netloc:
+        if host != urlparse(public).netloc and not flexible_local:
             raise AuthError("Unexpected request host.")
     elif os.getenv("AGENT_DIRECT_HTTP") == "true":
         # Numeric server addresses work on a LAN without trusting arbitrary DNS
@@ -86,8 +99,9 @@ def _check_origin(handler) -> None:
         if handler.headers.get("Sec-Fetch-Site") == "cross-site":
             raise AuthError("Cross-site requests are not accepted.")
         if origin:
-            allowed = {public} if public else {"http://" + host, "https://" + host}
-            if origin not in allowed:
+            allowed = {public} if public and not flexible_local else {public, "http://" + host, "https://" + host}
+            allowed.discard("")
+            if origin.rstrip("/") not in {item.rstrip("/") for item in allowed}:
                 raise AuthError("Request origin does not match this application.")
 
 
@@ -122,6 +136,26 @@ def _redirect(handler, location: str, status: int = 302) -> None:
     handler.send_header("Cache-Control", "no-store")
     handler.send_header("Content-Length", "0")
     handler.end_headers()
+
+
+def redirect_unauthenticated_app(handler) -> bool:
+    """Open the identity login page instead of the unsigned-in application shell."""
+    mode = auth_mode()
+    if mode not in {"cas", "oauth"}:
+        return False
+    try:
+        if AuthStore().authenticate(_credential(handler)):
+            return False
+    except AuthError:
+        pass
+    parsed = urlparse(handler.path)
+    kept = [(key, value) for key, value in parse_qsl(parsed.query, keep_blank_values=True) if key != "logged_out"]
+    return_to = "/" if parsed.path in {"", "/", "/index.html"} else parsed.path
+    if kept:
+        return_to += "?" + urlencode(kept)
+    login = "/auth/oauth/login" if mode == "oauth" else "/auth/cas/login"
+    _redirect(handler, login + "?" + urlencode({"return_to": return_to}))
+    return True
 
 
 def _external_login_url() -> str | None:
@@ -175,7 +209,7 @@ def _auth_endpoint(handler, path: str) -> bool:
             raise AuthError("OAuth login is not enabled.")
         from auth.oauth import STATE_COOKIE, begin_login
         query = parse_qs(urlparse(handler.path).query)
-        location, state = begin_login((query.get("return_to") or ["/"])[0])
+        location, state = begin_login((query.get("return_to") or ["/"])[0], request_origin=_request_origin(handler))
         handler._auth_cookie = (
             f"{STATE_COOKIE}={state}; Path=/auth/oauth/callback; HttpOnly; SameSite=Lax; Max-Age=600"
             + ("; Secure" if secure_cookie() else "")
@@ -282,7 +316,7 @@ def _auth_endpoint(handler, path: str) -> bool:
         payload = {"signed_out": True}
         if auth_mode() == "oauth":
             from auth.oauth import begin_logout
-            payload["logout_url"] = begin_logout()
+            payload["logout_url"] = begin_logout(_request_origin(handler))
         handler._send_json(payload)
         return True
     return False

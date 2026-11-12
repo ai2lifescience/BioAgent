@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import './auth.css';
 
 type Status = {
@@ -72,13 +72,14 @@ export function AuthGate({ children }: { children: ReactNode }) {
     url.searchParams.set('return_to', returnUrl.pathname + returnUrl.search + returnUrl.hash);
     window.location.assign(url.toString());
   };
-  useEffect(() => {
-    const loggedOut = new URLSearchParams(window.location.search).get('logged_out') === '1';
-    if (status?.mode === 'oauth' && !status.user && !loggedOut && !oauthStarted.current) {
+  const loggedOut = new URLSearchParams(window.location.search).get('logged_out') === '1';
+  const externalLogin = (status?.mode === 'cas' || status?.mode === 'oauth') && !status.user && !loggedOut;
+  useLayoutEffect(() => {
+    if (externalLogin && !oauthStarted.current) {
       oauthStarted.current = true;
       startOAuthLogin();
     }
-  }, [status]);
+  }, [externalLogin, status]);
   const announce = () => {
     ++generation.current;
     localStorage.removeItem('agent.web.active_session_id.v1');
@@ -130,11 +131,14 @@ export function AuthGate({ children }: { children: ReactNode }) {
     finally { setBusy(false); }
   };
   if (!status) return <main className="auth-screen"><p role="status">{error || 'Connecting…'}</p>{error && <button onClick={() => window.location.reload()}>Retry</button>}</main>;
-  if ((status.mode === 'cas' || status.mode === 'oauth') && !status.user) return <main className="auth-screen"><section className="auth-card">
-    <h1>Sign in to BioAgent</h1><p>Use your CNCB account to continue.</p>
-    {error && <p role="alert">{error}</p>}
-    <button disabled={busy} onClick={startOAuthLogin}>Continue with CNCB SSO</button>
-  </section></main>;
+  if ((status.mode === 'cas' || status.mode === 'oauth') && !status.user) {
+    if (!loggedOut) return <main className="auth-screen"><p role="status">Redirecting to sign-in…</p></main>;
+    return <main className="auth-screen"><section className="auth-card">
+      <h1>Sign in to BioAgent</h1><p>Use your CNCB account to continue.</p>
+      {error && <p role="alert">{error}</p>}
+      <button disabled={busy} onClick={startOAuthLogin}>Continue with CNCB SSO</button>
+    </section></main>;
+  }
   if (!status.user) return <main className="auth-screen"><form className="auth-card" onSubmit={login}>
     <h1>{registering ? 'Create your account' : 'Sign in to BioAgent'}</h1><p>Your conversations and files stay with your account.</p>
     <label>Username<input autoComplete="username" required maxLength={100} pattern={registering ? '[A-Za-z0-9_.@\\-]+' : undefined} value={username} onChange={event => setUsername(event.target.value)} /></label>

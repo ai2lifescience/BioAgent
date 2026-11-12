@@ -42,7 +42,7 @@ from interfaces.api import (
     update_session_metadata,
 )
 from auth import AuthError, auth_mode, current_principal
-from interfaces.auth import authenticated_request, configure_server
+from interfaces.auth import authenticated_request, configure_server, redirect_unauthenticated_app
 from harness.sandbox import relative_file_path, execution_access
 from isolation.limits import limits, public_limits
 from isolation.files import open_regular
@@ -219,6 +219,8 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         path = urlparse(self.path).path
         if path in {"/", "/index.html"}:
+            if redirect_unauthenticated_app(self):
+                return
             self._send_frontend_page("index.html")
             return
         if path == "/assistant/":
@@ -965,7 +967,8 @@ def main() -> int:
     if env_file:
         _load_environment_file(Path(env_file).expanduser())
     parser = argparse.ArgumentParser(description="Run the Pipeline2Agent HTTP web UI.")
-    parser.add_argument("--host", default="127.0.0.1")
+    from auth.oauth import flexible_host
+    parser.add_argument("--host", default="0.0.0.0" if flexible_host() else "127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()
     run_server(host=args.host, port=args.port)
