@@ -10,6 +10,14 @@ LOCAL_USER_ID = "local"
 COOKIE_NAME = "bioagent_session"
 
 
+def login_return_path(value: str | None) -> str:
+    value = (value or "/").strip()
+    if (not value.startswith("/") or value.startswith("//") or "\\" in value
+            or any(ord(char) < 32 for char in value)):
+        return "/"
+    return value
+
+
 class AuthError(Exception):
     status = 401
 

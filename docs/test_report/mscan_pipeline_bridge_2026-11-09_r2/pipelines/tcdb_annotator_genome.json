@@ -1,0 +1,231 @@
+{
+  "pipeline": "tcdb_annotator_genome",
+  "engine": "wdl",
+  "manifest_sha256": "b18cee8d350eb2eab0b8e7ffc5533dba0ef528e45bb6dea9fdbbf5ef418763f5",
+  "selected_for_execution": false,
+  "execution_status": "not_executed",
+  "scope_note": "Contract and inert-transfer verification only; biological workflow/example outside the live execution safety scope.",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/tcdb_annotator_genome/data/input/tcdb_genome_demo.fasta",
+      "bytes": 30429,
+      "sha256": "0891c00cc2d503f58e0c600ce5ee64e9c64b939525c70d5486bc46cbc7cb073e"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "genome_fasta",
+      "protein_fasta"
+    ],
+    "outputs": [
+      "hits",
+      "summary",
+      "tm_predictions",
+      "qc",
+      "status",
+      "manifest",
+      "report"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/1711f2367f8846698eb2d7ed0931bf07_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "tcdb_annotator_genome_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "a01e0d65cbd0482cb8d894827243f4c7",
+      "response": {
+        "transfer_id": "a01e0d65cbd0482cb8d894827243f4c7",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "1711f2367f8846698eb2d7ed0931bf07_contract-check.json",
+              "id": "72a313d3f74f485f742454f64b61a0809e9c95f68052bc36315a970cb85a5671",
+              "source_path": "uploads/1711f2367f8846698eb2d7ed0931bf07_contract-check.json",
+              "size": 176,
+              "sha256": "61775883ffb3bad0af853bb60ed23bf4b996d77438d5f268ee9d8e4dc9b78870",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "a01e0d65cbd0482cb8d894827243f4c7",
+          "target": {
+            "sample_id": "92f8a4ad1fe03fc1b7b27e13e7f01475",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "tcdb_annotator_genome_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "92f8a4ad1fe03fc1b7b27e13e7f01475"
+      },
+      "transfer_id": "ca57eeeea36743e695c8ac34b4ef2a8c",
+      "response": {
+        "transfer_id": "ca57eeeea36743e695c8ac34b4ef2a8c",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "61775883ffb3bad0af853bb60ed23bf4b996d77438d5f268ee9d8e4dc9b78870",
+              "kind": "analysis_output",
+              "sample_id": "92f8a4ad1fe03fc1b7b27e13e7f01475",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 176,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "1711f2367f8846698eb2d7ed0931bf07_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:a01e0d65cbd0482cb8d894827243f4c7:72a313d3f74f485f742454f64b61a0809e9c95f68052bc36315a970cb85a5671",
+              "id": "72a313d3f74f485f742454f64b61a0809e9c95f68052bc36315a970cb85a5671",
+              "source_path": "uploads/1711f2367f8846698eb2d7ed0931bf07_contract-check.json",
+              "sample_name": "tcdb_annotator_genome_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:92f8a4ad1fe03fc1b7b27e13e7f01475",
+              "importable": false,
+              "sample_name": "tcdb_annotator_genome_contract_only",
+              "data_type": "meta",
+              "sample_id": "92f8a4ad1fe03fc1b7b27e13e7f01475"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:a01e0d65cbd0482cb8d894827243f4c7:72a313d3f74f485f742454f64b61a0809e9c95f68052bc36315a970cb85a5671"
+      },
+      "transfer_id": "dbd86374304c4c20b7849a7c506f6dd5",
+      "response": {
+        "transfer_id": "dbd86374304c4c20b7849a7c506f6dd5",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "52d38d26-172f-4a7d-9507-7cd43efbee50",
+            "path": "uploads/22c8f2289e5c470d850de436e582073c_1711f2367f8846698eb2d7ed0931bf07_contract-check.json",
+            "workspace_path": "uploads/22c8f2289e5c470d850de436e582073c_1711f2367f8846698eb2d7ed0931bf07_contract-check.json",
+            "name": "1711f2367f8846698eb2d7ed0931bf07_contract-check.json",
+            "size": 176,
+            "sha256": "61775883ffb3bad0af853bb60ed23bf4b996d77438d5f268ee9d8e4dc9b78870",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "52d38d26-172f-4a7d-9507-7cd43efbee50",
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "92f8a4ad1fe03fc1b7b27e13e7f01475",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "tcdb_annotator_genome_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "1711f2367f8846698eb2d7ed0931bf07_contract-check.json",
+      "resource_id": "result:a01e0d65cbd0482cb8d894827243f4c7:72a313d3f74f485f742454f64b61a0809e9c95f68052bc36315a970cb85a5671",
+      "state": "succeeded",
+      "bytes": 176,
+      "sha256": "61775883ffb3bad0af853bb60ed23bf4b996d77438d5f268ee9d8e4dc9b78870",
+      "expected_sha256": "61775883ffb3bad0af853bb60ed23bf4b996d77438d5f268ee9d8e4dc9b78870",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "61775883ffb3bad0af853bb60ed23bf4b996d77438d5f268ee9d8e4dc9b78870",
+      "kind": "analysis_output",
+      "sample_id": "92f8a4ad1fe03fc1b7b27e13e7f01475",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 176,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "1711f2367f8846698eb2d7ed0931bf07_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:a01e0d65cbd0482cb8d894827243f4c7:72a313d3f74f485f742454f64b61a0809e9c95f68052bc36315a970cb85a5671",
+      "id": "72a313d3f74f485f742454f64b61a0809e9c95f68052bc36315a970cb85a5671",
+      "source_path": "uploads/1711f2367f8846698eb2d7ed0931bf07_contract-check.json",
+      "sample_name": "tcdb_annotator_genome_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:92f8a4ad1fe03fc1b7b27e13e7f01475",
+      "importable": false,
+      "sample_name": "tcdb_annotator_genome_contract_only",
+      "data_type": "meta",
+      "sample_id": "92f8a4ad1fe03fc1b7b27e13e7f01475"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 20.26,
+  "test_finished": true
+}

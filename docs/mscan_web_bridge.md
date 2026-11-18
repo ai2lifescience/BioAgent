@@ -25,23 +25,31 @@ installation, complete the setup below first.
 
 ## First-time setup
 
-The integration code is maintained directly in the sibling `mscan` and
-`mscan-app` repositories. There is no adapter installation command and MSCAN
-does not import configuration files from the BioAgent checkout. The integration
-adds adapter-owned files, changes two frontend host files and adds a `bioagent`
-section to the backend's local `application-druid.yml` profile. It does not
-require a database migration.
+The integration code is maintained in the `mscan` and `mscan-app` repositories.
+Configure the backend's `bioagent` settings in its active Spring profile. The
+bridge does not require a database migration.
 The [technical reference](#technical-reference) lists the exact changes and checks.
 
 ### 1. Prepare the applications
 
-The development workspace uses three independent sibling repositories:
+Use the `mscan_agent_dev` branch in both MSCAN repositories for the embedded
+assistant and the Cromwell `result_sync` connector. The default Gitee `develop`
+branches do not yet include them. In this workspace the checkouts are under
+`resource/mscan/`:
 
 ```text
-mscan_projects/
-├── BioAgent/       # Agent server and generic web bridge
-├── mscan/          # MSCAN Vue frontend
-└── mscan-app/      # MSCAN Java backend
+BioAgent/
+└── resource/mscan/
+    ├── mscan/      # MSCAN Vue frontend
+    ├── mscan-app/  # MSCAN Java backend
+    └── oauth/      # CNCB OAuth broker, develop branch
+```
+
+In each MSCAN checkout, switch branches after saving any local changes:
+
+```bash
+git -C resource/mscan/mscan switch mscan_agent_dev
+git -C resource/mscan/mscan-app switch mscan_agent_dev
 ```
 
 Have the agent's Python dependencies, Java 17, Maven, Node.js and pnpm available.
@@ -117,9 +125,9 @@ From the BioAgent repository root:
 
 ```bash
 npm --prefix frontend ci
-pnpm --dir ../mscan install --frozen-lockfile
+pnpm --dir resource/mscan/mscan install --frozen-lockfile
 npm --prefix frontend run build
-mvn -f ../mscan-app/pom.xml clean package -DskipTests
+mvn -f resource/mscan/mscan-app/pom.xml clean package -DskipTests
 ```
 
 If the agent uses Docker workers, build its worker image as described in
@@ -133,42 +141,29 @@ For a production MSCAN frontend deployment, also build its static files and
 deploy the generated output through your existing hosting setup:
 
 ```bash
-pnpm --dir ../mscan run build:pro
+pnpm --dir resource/mscan/mscan run build:pro
 ```
 
 The development frontend uses Vite and does not require that production build.
 
 ## Everyday startup
 
-After [first-time setup](#install-the-web-bridge-in-mscan), use your normal Python,
-Java and pnpm commands in three separate terminals. The examples use this
-workspace under `/media/data/fuhaoyi/codes/`, with `BioAgent`, `mscan` and
-`mscan-app` as siblings. Replace the paths, browser address and credential
-placeholders for your deployment. Stop an existing instance before starting
-another on the same port.
+After [first-time setup](#install-the-web-bridge-in-mscan), run each application
+in a separate terminal. Paths are relative to the BioAgent repository root.
+Stop the MSCAN backend before rebuilding its JAR or starting another instance
+on the same port.
 
 ### Terminal 0 — CNCB OAuth service
 
-```bash
-cd /media/data/fuhaoyi/codes/mscan_projects/oauth-service
-cp .env.example .env
-cp clients.example.json clients.json
-# Replace both client secrets in clients.json with independent random values.
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python -m oauth_service.server
-```
-
-Register `https://auth.example.org/cas/callback` with CNCB CAS and set that
-public HTTPS address as `OAUTH_PUBLIC_ORIGIN`. The BioAgent and MSCAN callback
-URLs in `clients.json` must exactly match the deployed backend callback URLs.
+Follow the broker's setup in `resource/mscan/oauth/README.md`. Configure its
+public base URL in `OAUTH_PUBLIC_ORIGIN`, register that base plus `/cas/callback`
+with CNCB CAS, and register the exact BioAgent and MSCAN OAuth callbacks in the
+broker's private client configuration. Use a separate secret for each client.
 
 ### Terminal 1 — BioAgent
 
 ```bash
 conda activate openaisdk
-cd /media/data/fuhaoyi/codes/BioAgent
 
 export OPENROUTER_API_KEY="YOUR_OPENROUTER_API_KEY"
 
@@ -201,21 +196,22 @@ python -B -m interfaces.web --host 0.0.0.0 --port 8000
 
 ```bash
 conda activate openaisdk
-cd /media/data/fuhaoyi/codes/mscan-app
-export OAUTH_SERVER_URL=https://auth.example.org
-export OAUTH_MSCAN_CLIENT_SECRET=REPLACE_WITH_THE_MSCAN_CLIENT_SECRET
-export OAUTH_MSCAN_REDIRECT_URI=https://mscan.example.org/cncb/oauth/callback
+cd resource/mscan/mscan-app
 
 mvn clean package -DskipTests &&
 java -jar mscan-admin/target/mscan-admin.jar \
   --spring.profiles.active=druid
 ```
 
+Set `oauth.server-url`, `oauth.client-secret`, `oauth.redirect-uri` and
+`oauth.post-logout-redirect-uri` in the active backend configuration. Use the
+MSCAN client registration from the broker.
+
 ### Terminal 3 — MSCAN frontend
 
 ```bash
 conda activate openaisdk
-cd /media/data/fuhaoyi/codes/mscan
+cd resource/mscan/mscan
 
 pnpm install --frozen-lockfile &&
 pnpm dev
@@ -245,18 +241,13 @@ The service credential identifies **MSCAN's backend** to the agent. MSCAN's
 user login identifies **the person**. `run.py init` generates the service and
 signing secrets; it does not know or store a user's login password.
 
-BioAgent's standalone page and MSCAN both use the CNCB CAS portal. Register
-BioAgent's exact `/auth/cas/callback` service URL in CAS. Both applications
-require the assertion's stable `userId`; that value is also MSCAN's verified
-bridge subject, so standalone and embedded conversations resolve to one Agent
-account. The CAS username is display metadata and is synchronized on login.
-
-MSCAN logout first revokes its Redis session and the embedded Agent grants, then
-enters CAS global logout. CAS back-channel logout maps each service ticket to the
-corresponding MSCAN Redis login and BioAgent login, so either application's
-logout invalidates both server-side sessions. The browser may briefly retain a
-stale local MSCAN token, but it no longer authorizes requests and is cleared by
-the next session check.
+BioAgent supports three sign-in choices: `local` for password-free use on
+localhost, `multiuser` for BioAgent username/password accounts, and CNCB SSO
+through either `oauth` or `cas`. See [startup modes](user_isolation.md#startup-modes).
+The current MSCAN integration uses the shared OAuth broker. Configure BioAgent
+with `AGENT_AUTH_MODE=oauth` to sign in to both apps using that broker. Direct CAS
+is also available on BioAgent where an independent CAS client is registered.
+Both SSO providers must return the same stable CNCB user ID for a user.
 
 For the MSCAN adapter, `run.py init` enables shared SSO user IDs. The authenticated
 Java backend sends the verified MSCAN user ID and username together with the
@@ -269,7 +260,7 @@ not orphan prior conversations or artifacts.
 
 The development login bypass supplies a configured development user without a
 login screen. Restore real MSCAN login for distinct users; the adapter reads the
-verified user from MSCAN's backend authentication. Production CAS sign-in still
+verified user from MSCAN's backend authentication. Production SSO still
 needs acceptance testing with real accounts; development bypass checks do not
 establish production user separation.
 
@@ -423,7 +414,7 @@ TypeScript host sources.
 
 ### Existing MSCAN files changed
 
-Paths below are relative to the workspace containing the three repositories.
+Paths below are relative to `resource/mscan/`.
 
 | File | Direct change | Purpose |
 | --- | --- | --- |
@@ -431,7 +422,7 @@ Paths below are relative to the workspace containing the three repositories.
 | `mscan/src/views/sampleProgramResults/index.vue` | Context registration, result-refresh listener, component refresh key and `SampleFileMenu` | Share the selected sample and tab, refresh received results and provide downloads |
 | `mscan-app/mscan-admin/src/main/resources/application-druid.yml` | Direct `bioagent.*` settings | Configure the connector without cross-project file references |
 
-MSCAN's CAS/security and token services contain the shared-login and logout
+MSCAN's OAuth and token services contain the shared-login and logout
 integration. DuckDB proxy normalization lives in `mscan-app/start.sh`; the
 synthetic functional-result selection lives in `ProgramResultPanel.vue`.
 
@@ -440,7 +431,7 @@ synthetic functional-result selection lives in `ProgramResultPanel.vue`.
 | Destination | Added files |
 | --- | --- |
 | Frontend `src/integrations/bioagent/` | `AssistantBridge.vue`, `context.ts`, `logout.ts`, `SampleFileMenu.vue`, `sampleFiles.ts` |
-| Backend `mscan-admin/src/main/java/com/mscan/web/controller/common/` | `AssistantController.java`, `AssistantTransferService.java`, `AssistantDeliveryService.java`, `TransferLocks.java`, `ResultImporterRegistry.java`, `ResultImportService.java`, `QcResultImporter.java`, `ResultArtifactInspector.java`, `ImportFailure.java`, `NativeImportContext.java`, `NativeResultResources.java`, `WebsiteLogoutEvent.java`, `WebsiteLogoutHook.java`, `WebsiteDownloadSecurity.java` |
+| Backend `mscan-admin/src/main/java/com/mscan/web/controller/common/` | `AssistantController.java`, `AssistantTransferService.java`, `AssistantDeliveryService.java`, `CromwellResultSyncService.java`, `PipelineResultImporterConfiguration.java`, and the MSCAN-owned receipt, resource and download services |
 
 Logout uses a frontend Pinia action subscription and a backend Spring aspect
 that observes the verified session before invalidation. Download security uses
@@ -457,11 +448,11 @@ insertions and preserve unrelated host customizations.
 Build the directly integrated projects and run the adapter checks:
 
 ```bash
-pnpm --dir ../mscan type:check
-mvn -f ../mscan-app/pom.xml clean package -DskipTests
-python -B -m web_bridge.tests.check_mscan_java --root ../mscan-app
+pnpm --dir resource/mscan/mscan type:check
+mvn -f resource/mscan/mscan-app/pom.xml clean package -DskipTests
+python -B -m web_bridge.tests.check_mscan_java --root resource/mscan/mscan-app
 python -B -m web_bridge.tests.check_mscan_logout \
-  --mscan-root ../mscan-app
+  --mscan-root resource/mscan/mscan-app
 ```
 
 These cover frontend typing, backend compilation, native resource ownership,

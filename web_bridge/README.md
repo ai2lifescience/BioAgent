@@ -97,7 +97,7 @@ repositories.
 
 ```bash
 python -B -m interfaces.web --host 0.0.0.0 --port 8000
-# Start ../mscan-app and ../mscan directly in separate terminals.
+# Start resource/mscan/mscan-app and resource/mscan/mscan in separate terminals.
 
 # Explicit identity linking for sites that do not use shared_user_id:
 python -m web_bridge.identity SITE_ID EXTERNAL_USER_ID AGENT_USERNAME
@@ -196,10 +196,10 @@ and native files appear under **Download files** on the sample toolbar; the old
 Agent results panel has been removed. Native interpretation belongs in the
 website adapter; generic file transport does not require a native importer.
 
-The direct integration changes two existing frontend files for the assistant
-mount, sample context, refresh and download hooks, plus `application-druid.yml`
-for connector settings. Backend services, the logout hook and the one-use
-download route are supplied by added adapter classes.
+MSCAN owns the frontend mount, sample context, refresh and download hooks. Its
+backend implements the native importer services, logout hook and one-use
+download route. See the [MSCAN setup](../docs/mscan_web_bridge.md#first-time-setup)
+for the branches that supply these features.
 Source pipeline definitions and execution policies are unchanged.
 
 
@@ -408,10 +408,8 @@ failures include `cromwell_task_conflict`, `missing_pipeline_context` and
 `retryable=true` should be submitted through `website_transfer_retry`.
 
 MSCAN-specific code is [organized by function](adapters/mscan/README.md#code-organization).
-The [minimal installation](adapters/mscan/README.md#minimal-mscan-changes) modifies
-two existing frontend files and the local backend profile directly; backend Java
-integration is supplied by added adapter classes tracked in `mscan-app`.
-Native importers live in MSCAN's
+The [MSCAN integration](adapters/mscan/README.md#minimal-mscan-changes) ships with
+the MSCAN frontend and backend. Native importers live in MSCAN's
 `mscan-admin/src/main/java/com/mscan/web/controller/common/` package:
 
 - `ResultImporterRegistry` declares format contracts and binds MSCAN's existing

@@ -100,7 +100,7 @@ export function AssistantPage() {
         setConfig(loaded); setSelectedModel(loaded.default_model_key || loaded.models[0]?.key || ''); setReady(true); setConfigError(''); setStatus(websiteRef.current ? 'Connected to website' : 'Ready');
         if (history.active_run?.run_id) {
           setBusy(true); setActiveRunId(history.active_run.run_id); abortRef.current = controller;
-          try { appendCompletedRun(await api.watchRun(history.active_run.run_id, controller.signal, receiveProgress)); }
+          try { appendCompletedRun(await api.watchRun(history.active_run.run_id, controller.signal, receiveProgress)); await refreshWebsiteFiles().catch(error => appendLog(`File refresh failed: ${String(error)}`)); }
           finally { if (!cancelled) { setBusy(false); abortRef.current = null; } }
         }
       } catch (error) {
@@ -108,7 +108,7 @@ export function AssistantPage() {
       }
     })();
     return () => { cancelled = true; controller.abort(); abortRef.current?.abort(); };
-  }, [api, postParent, websiteSession, appendCompletedRun, receiveProgress]);
+  }, [api, postParent, websiteSession, appendCompletedRun, receiveProgress, refreshWebsiteFiles, appendLog]);
 
   const submit = useCallback(async (event?: FormEvent) => {
     event?.preventDefault();
@@ -129,6 +129,7 @@ export function AssistantPage() {
       const result = await api.run(text, runOptions);
       setSessionId(String(result.session_id || sessionRef.current));
       appendCompletedRun(result);
+      await refreshWebsiteFiles().catch(error => appendLog(`File refresh failed: ${String(error)}`));
       setStatus('Ready');
     } catch (error) {
       const stopped = (error as Error).name === 'AbortError';
@@ -137,7 +138,7 @@ export function AssistantPage() {
       setMessages(previous => [...previous, { role: 'assistant', text, progress: activity, created_at: new Date().toISOString() }]);
       setStatus(stopped ? text : 'Request failed. You can try again.');
     } finally { abortRef.current = null; setBusy(false); }
-  }, [api, appendCompletedRun, appendLog, busy, config, finishProgress, receiveProgress, prompt, ready, resetProgress, selectedModel, websiteRequired]);
+  }, [api, appendCompletedRun, appendLog, busy, config, finishProgress, receiveProgress, prompt, ready, resetProgress, selectedModel, websiteRequired, refreshWebsiteFiles]);
 
   const stop = async () => {
     if (!activeRunId || stopping) return;
@@ -186,7 +187,7 @@ export function AssistantPage() {
       {busy && <RunProgress entries={progressEntries} running />}
     </section>
     <div className="assistant-progress"><span id="status" role="status">{status}</span>{configError && <button id="retryConfig" type="button" className="assistant-text-button" onClick={() => window.location.reload()}>Retry connection</button>}{websiteError && <button id="retryWebsite" type="button" className="assistant-text-button" onClick={() => window.location.reload()}>Retry website connection</button>}<details id="progressDetails" hidden={!logs.length}><summary>Logs</summary><pre id="progressLog">{logs.join('\n')}</pre></details></div>
-    <form id="composer" className="assistant-composer" onSubmit={submit}><ul id="uploadList" className="assistant-file-list" hidden={!files.length}>{files.map(file => <li key={workspacePathOf(file)}>{fileLabel(file)}</li>)}</ul><label className="assistant-sr-only" htmlFor="prompt">Message assistant</label><textarea id="prompt" rows={2} value={prompt} onChange={event => setPrompt(event.target.value)} onKeyDown={onPromptKeyDown} disabled={busy || creatingChat} placeholder="Ask assistant…" /><div className="assistant-model-row"><label htmlFor="model">Model</label><select id="model" disabled={busy || creatingChat || !ready} value={selectedModel} onChange={event => setSelectedModel(event.target.value)}>{config.models.map(model => <option key={model.key} value={model.key}>{modelLabel(model)}</option>)}</select></div><div className="assistant-actions"><label className="assistant-attach"><input id="uploadInput" type="file" multiple hidden onChange={event => upload(event.target.files)} />Attach</label><button id="stop" type="button" className="assistant-stop" hidden={!busy} disabled={!activeRunId || stopping} onClick={stop}>{stopping ? 'Stopping…' : 'Stop'}</button><button id="send" type="submit" className="assistant-send" disabled={busy || creatingChat || !ready || (websiteRequired && !websiteRef.current)}>{busy ? 'Working…' : <>Send <span aria-hidden="true">↑</span></>}</button></div></form>
+    <form id="composer" className="assistant-composer" onSubmit={submit}><ul id="uploadList" className="assistant-file-list" hidden={!files.length}>{files.map(file => <li key={workspacePathOf(file)}><a href={`${apiUrl('workspace/file')}?path=${encodeURIComponent(workspacePathOf(file))}&session_id=${encodeURIComponent(sessionId)}`} download title={`Download ${fileLabel(file)}`}>{fileLabel(file)}</a></li>)}</ul><label className="assistant-sr-only" htmlFor="prompt">Message assistant</label><textarea id="prompt" rows={2} value={prompt} onChange={event => setPrompt(event.target.value)} onKeyDown={onPromptKeyDown} disabled={busy || creatingChat} placeholder="Ask assistant…" /><div className="assistant-model-row"><label htmlFor="model">Model</label><select id="model" disabled={busy || creatingChat || !ready} value={selectedModel} onChange={event => setSelectedModel(event.target.value)}>{config.models.map(model => <option key={model.key} value={model.key}>{modelLabel(model)}</option>)}</select></div><div className="assistant-actions"><label className="assistant-attach"><input id="uploadInput" type="file" multiple hidden onChange={event => upload(event.target.files)} />Attach</label><button id="stop" type="button" className="assistant-stop" hidden={!busy} disabled={!activeRunId || stopping} onClick={stop}>{stopping ? 'Stopping…' : 'Stop'}</button><button id="send" type="submit" className="assistant-send" disabled={busy || creatingChat || !ready || (websiteRequired && !websiteRef.current)}>{busy ? 'Working…' : <>Send <span aria-hidden="true">↑</span></>}</button></div></form>
   </main>;
 }
 

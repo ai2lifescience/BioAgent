@@ -36,7 +36,9 @@ class OAuthAuthTests(unittest.TestCase):
             "AGENT_AUTH_MODE": "oauth",
             "AGENT_AUTH_DB": str(Path(self.temp.name) / "auth.sqlite3"),
             "AGENT_PUBLIC_ORIGIN": "https://agent.test",
+            "AGENT_PUBLIC_BASE_URL": "",
             "AGENT_OAUTH_SERVER_URL": "https://identity.test",
+            "AGENT_OAUTH_PUBLIC_URL": "",
             "AGENT_OAUTH_CLIENT_ID": "bioagent",
             "AGENT_OAUTH_CLIENT_SECRET": "a" * 32,
             "AGENT_OAUTH_REDIRECT_URI": "https://agent.test/auth/oauth/callback",
@@ -54,8 +56,8 @@ class OAuthAuthTests(unittest.TestCase):
         self.assertEqual(query["redirect_uri"], ["https://agent.test/auth/oauth/callback"])
         self.assertEqual(query["code_challenge_method"], ["S256"])
 
-        with patch("auth.oauth.requests.post", return_value=_Response({"access_token": "access"})) as token_request, \
-                patch("auth.oauth.requests.get", return_value=_Response({
+        with patch("auth.oauth.requests.Session.post", autospec=True, return_value=_Response({"access_token": "access"})) as token_request, \
+                patch("auth.oauth.requests.Session.get", autospec=True, return_value=_Response({
                     "user_id": "42", "username": "alice", "sid": "shared-session"
                 })) as userinfo_request:
             token, principal, return_to = complete_login("oauth-code", state, state)
@@ -64,22 +66,23 @@ class OAuthAuthTests(unittest.TestCase):
         self.assertEqual(return_to, "/sessions?view=recent")
         self.assertEqual(AuthStore().authenticate(token).user_id, "42")
         self.assertEqual(AuthStore().authenticate(token).sid, "shared-session")
-        self.assertIsNone(token_request.call_args.kwargs["proxies"])
-        self.assertIsNone(userinfo_request.call_args.kwargs["proxies"])
+        for request in (token_request, userinfo_request):
+            self.assertFalse(request.call_args.args[0].trust_env)
+            self.assertEqual(request.call_args.args[0].proxies, {})
 
     def test_logout_request_is_created_by_server_side_client(self):
         response = _Response({
             "logout_url": "https://identity.test/logout?request=opaque"
         })
-        with patch("auth.oauth.requests.post", return_value=response) as request:
+        with patch("auth.oauth.requests.Session.post", autospec=True, return_value=response) as request:
             location = begin_logout()
         self.assertEqual(location, "https://identity.test/logout?request=opaque")
-        self.assertEqual(request.call_args.args[0], "https://identity.test/oauth/logout-request")
+        self.assertEqual(request.call_args.args[1], "https://identity.test/oauth/logout-request")
         self.assertEqual(
             request.call_args.kwargs["data"]["post_logout_redirect_uri"],
             "https://agent.test/",
         )
-        self.assertIsNone(request.call_args.kwargs["proxies"])
+        self.assertFalse(request.call_args.args[0].trust_env)
 
     def test_logout_url_keeps_whatever_address_the_identity_service_returns(self):
         class _Http:
@@ -108,8 +111,8 @@ class OAuthAuthTests(unittest.TestCase):
 
     def test_state_is_single_use(self):
         _, state = begin_login("/")
-        with patch("auth.oauth.requests.post", return_value=_Response({"access_token": "access"})), \
-                patch("auth.oauth.requests.get", return_value=_Response({
+        with patch("auth.oauth.requests.Session.post", return_value=_Response({"access_token": "access"})), \
+                patch("auth.oauth.requests.Session.get", return_value=_Response({
                     "user_id": "42", "username": "alice", "sid": "shared-session"
                 })):
             complete_login("oauth-code", state, state)
@@ -118,8 +121,8 @@ class OAuthAuthTests(unittest.TestCase):
 
     def test_signed_backchannel_logout_revokes_sid(self):
         _, state = begin_login("/")
-        with patch("auth.oauth.requests.post", return_value=_Response({"access_token": "access"})), \
-                patch("auth.oauth.requests.get", return_value=_Response({
+        with patch("auth.oauth.requests.Session.post", return_value=_Response({"access_token": "access"})), \
+                patch("auth.oauth.requests.Session.get", return_value=_Response({
                     "user_id": "42", "username": "alice", "sid": "shared-session"
                 })):
             token, _, _ = complete_login("oauth-code", state, state)
@@ -194,11 +197,11 @@ class OAuthAuthTests(unittest.TestCase):
         server = ThreadingHTTPServer(("127.0.0.1", 0), AgentRequestHandler)
         thread = threading.Thread(target=server.serve_forever, daemon=True)
         thread.start()
-        self.addCleanup(server.shutdown)
-        self.addCleanup(server.server_close)
         self.addCleanup(lambda: thread.join(timeout=2))
+        self.addCleanup(server.server_close)
+        self.addCleanup(server.shutdown)
 
-        def get(path: str, cookie: str = "") -> tuple[int, str]:
+        def get(path: str, cookie: str = "") -> tuple[int, str, str]:
             connection = http.client.HTTPConnection("127.0.0.1", server.server_port, timeout=5)
             headers = {"Host": "agent.test"}
             if cookie:
@@ -207,24 +210,52 @@ class OAuthAuthTests(unittest.TestCase):
             response = connection.getresponse()
             response.read()
             location = response.getheader("Location") or ""
+            set_cookie = response.getheader("Set-Cookie") or ""
             status = response.status
             connection.close()
-            return status, location
+            return status, location, set_cookie
 
-        status, location = get("/")
+        status, location, _ = get("/")
         self.assertEqual(status, 302)
         self.assertTrue(location.startswith("/auth/oauth/login?"), location)
         self.assertEqual(parse_qs(urlparse(location).query)["return_to"], ["/"])
 
-        status, location = get("/index.html?logged_out=1&tab=files")
+        status, location, _ = get("/index.html?logged_out=1&tab=files")
         self.assertEqual(status, 302)
         self.assertEqual(parse_qs(urlparse(location).query)["return_to"], ["/?tab=files"])
 
         AuthStore().add_user("alice", "alice-password-123")
         token, _ = AuthStore().login("alice", "alice-password-123", "127.0.0.1")
-        status, location = get("/", cookie="bioagent_session=" + token)
+        status, location, _ = get("/", cookie="bioagent_session=" + token)
         self.assertNotEqual(status, 302)
         self.assertNotIn("/auth/oauth/login", location)
+
+        prefix = "/OneMicro/agent"
+        with patch.dict(os.environ, {
+            "AGENT_PUBLIC_BASE_URL": "https://agent.test" + prefix,
+            "AGENT_OAUTH_REDIRECT_URI": "",
+            "AGENT_OAUTH_PUBLIC_URL": "https://identity.test/OneMicro/oauth",
+            "AGENT_OAUTH_SERVER_URL": "http://127.0.0.1:8090",
+        }):
+            status, login, _ = get("/?tab=files")
+            self.assertEqual(status, 302)
+            self.assertTrue(login.startswith(prefix + "/auth/oauth/login?"))
+            status, authorization, cookie = get(login.removeprefix(prefix))
+            self.assertEqual(status, 302)
+            self.assertTrue(authorization.startswith("https://identity.test/OneMicro/oauth/authorize?"))
+            self.assertIn(f"Path={prefix}/auth/oauth/callback", cookie)
+            state = parse_qs(urlparse(authorization).query)["state"][0]
+            with patch("auth.oauth.requests.Session.post", return_value=_Response({"access_token": "access"})) as exchange, \
+                    patch("auth.oauth.requests.Session.get", return_value=_Response({
+                        "user_id": "42", "username": "sso-user", "sid": "shared-session",
+                    })):
+                status, destination, session_cookie = get(
+                    f"/auth/oauth/callback?code=oauth-code&state={state}", cookie.split(";", 1)[0],
+                )
+            self.assertEqual(exchange.call_args.args[0], "http://127.0.0.1:8090/oauth/token")
+            self.assertEqual(status, 302)
+            self.assertEqual(destination, prefix + "/?tab=files")
+            self.assertTrue(session_cookie.startswith("bioagent_session="))
 
 
 if __name__ == "__main__":

@@ -22,7 +22,7 @@ class Federation:
         text_id(subject, 'external subject')
         shared_user_id = clients().get(site_id, {}).get('identity_mode') == 'shared_user_id'
         username = None
-        if identity is not None:
+        if shared_user_id and identity is not None:
             if not isinstance(identity, dict) or identity.get('user_id') != subject:
                 raise ValueError('Website identity does not match the authenticated subject.')
             username = text_id(identity.get('username'), 'external username')
@@ -34,16 +34,19 @@ class Federation:
             if row:
                 if row['disabled']:
                     raise get_host().auth_error('This account is disabled.')
-                if username and row['username'] != username:
-                    sync = getattr(db, 'sync_username', None)
-                    if sync:
-                        sync(row['user_id'], username)
-                return get_host().principal(row['user_id'], username or row['username'])
+                # Explicit mappings retain the linked account's own username.
+                if shared_user_id and row['user_id'] == subject and username and row['username'] != username:
+                    db.sync_username(subject, username)
+                    row['username'] = username
+                return get_host().principal(row['user_id'], row['username'])
             identifier = subject if shared_user_id else uuid4().hex
             row = db.user(identifier)
             if row:
                 if row['disabled']:
                     raise get_host().auth_error('This account is disabled.')
+                if username and row['username'] != username:
+                    db.sync_username(identifier, username)
+                    row['username'] = username
             else:
                 account_name = username if shared_user_id and username else 'website_' + identifier
                 db.create_user(identifier, account_name)

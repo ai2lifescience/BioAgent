@@ -1,0 +1,857 @@
+{
+  "pipeline": "metagenomic_growth_rate_Calculation",
+  "engine": "wdl",
+  "manifest_sha256": "6976e3c0f6dddd8c28a882428268d34facc96140c0015474d849060468a33d64",
+  "selected_for_execution": true,
+  "execution_status": "succeeded",
+  "scope_note": "",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/metagenomic_growth_rate_Calculation/data/input/coptr_demo_R1.fastq.gz",
+      "bytes": 8952270,
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/metagenomic_growth_rate_Calculation/data/input/coptr_demo_R2.fastq.gz",
+      "bytes": 10923663,
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "read1",
+      "read2"
+    ],
+    "outputs": [
+      "log2ptr_csv"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "pipeline-bundles/ebe7b3672f5a49b1be039073160ff6c3/results.zip",
+          "uploads/examples/metagenomic_growth_rate_Calculation-5b5f71a1f91f4f4f852b807d7d2c5584/coptr_demo_R1.fastq.gz",
+          "uploads/examples/metagenomic_growth_rate_Calculation-5b5f71a1f91f4f4f852b807d7d2c5584/coptr_demo_R2.fastq.gz"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "metagenomic_growth_rate_Calculation",
+          "data_type": "meta",
+          "source_slots": {
+            "R1": "uploads/examples/metagenomic_growth_rate_Calculation-5b5f71a1f91f4f4f852b807d7d2c5584/coptr_demo_R1.fastq.gz",
+            "R2": "uploads/examples/metagenomic_growth_rate_Calculation-5b5f71a1f91f4f4f852b807d7d2c5584/coptr_demo_R2.fastq.gz"
+          }
+        },
+        "create_missing": true
+      },
+      "transfer_id": "05c594bc52c64d598448ba4fe8a94d78",
+      "response": {
+        "transfer_id": "05c594bc52c64d598448ba4fe8a94d78",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "registered",
+            "slots": {
+              "R2": "61f483ecab293caf9bff69bfce209f91",
+              "R1": "e4f7838d9dbf304fb5660cfeeba011eb"
+            }
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "results.zip",
+              "id": "b2d6659c9717a76d28734749baf94abbefdc23d9a481e2711b1911c5de006206",
+              "source_path": "pipeline-bundles/ebe7b3672f5a49b1be039073160ff6c3/results.zip",
+              "size": 195,
+              "sha256": "344674096962fe33fe42d542cbbc9e04597bfa30dd4f4396d165d3e1f47b5587",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "size": 36,
+              "sha256": "5f1605e60253be90d9ba876cd76b92caddbd7c34a6006cee60873f202369d152",
+              "name": "coptr_log2ptr.csv",
+              "id": "5d04f944be56f865486ceb1632dd542ce34cea4b17eed6115495576e55779b8e",
+              "source_path": "pipeline-artifacts/ebe7b3672f5a49b1be039073160ff6c3/0/coptr_log2ptr.csv",
+              "pipeline_result": {
+                "job_id": "ebe7b3672f5a49b1be039073160ff6c3",
+                "pipeline_name": "metagenomic_growth_rate_Calculation",
+                "output_key": "StrainCoPTR.log2ptr_csv",
+                "output_name": "log2ptr_csv",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:43:29.265159+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "log2(PTR):genome_id/sample_id,reads\n"
+              }
+            },
+            {
+              "name": "coptr_demo_R1.fastq.gz",
+              "id": "394af40f6149e027c22d56c829bc907464cdcaafc425ade26dcf90ea0e22d794",
+              "source_path": "uploads/examples/metagenomic_growth_rate_Calculation-5b5f71a1f91f4f4f852b807d7d2c5584/coptr_demo_R1.fastq.gz",
+              "size": 8952270,
+              "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "name": "coptr_demo_R2.fastq.gz",
+              "id": "4284cc76f218098267ae007c4d0f057362bbc9fcea110894c7dd4fad2ff30c80",
+              "source_path": "uploads/examples/metagenomic_growth_rate_Calculation-5b5f71a1f91f4f4f852b807d7d2c5584/coptr_demo_R2.fastq.gz",
+              "size": 10923663,
+              "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            }
+          ],
+          "native_imports": [
+            {
+              "job_id": "ebe7b3672f5a49b1be039073160ff6c3",
+              "files_delivered": true,
+              "generic_import": {
+                "artifact_count": 1,
+                "access": "Search or pull the attached sample files; native records are a separate outcome.",
+                "state": "imported"
+              },
+              "pipeline": "metagenomic_growth_rate_Calculation",
+              "format": "StrainCoPTR",
+              "program": "growth",
+              "state": "imported",
+              "message": "Native result imported."
+            }
+          ],
+          "qc": {},
+          "receipt_id": "05c594bc52c64d598448ba4fe8a94d78",
+          "target": {
+            "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "metagenomic_growth_rate_Calculation",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "9d3d758f7d0a361dbe9d9c69818d5f77"
+      },
+      "transfer_id": "376e0e678fd7453aaf56bc9ec8c9c62e",
+      "response": {
+        "transfer_id": "376e0e678fd7453aaf56bc9ec8c9c62e",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+              "kind": "analysis_output",
+              "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 8952270,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "coptr_demo_R1.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:394af40f6149e027c22d56c829bc907464cdcaafc425ade26dcf90ea0e22d794",
+              "id": "394af40f6149e027c22d56c829bc907464cdcaafc425ade26dcf90ea0e22d794",
+              "source_path": "uploads/examples/metagenomic_growth_rate_Calculation-5b5f71a1f91f4f4f852b807d7d2c5584/coptr_demo_R1.fastq.gz",
+              "sample_name": "metagenomic_growth_rate_Calculation"
+            },
+            {
+              "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+              "kind": "analysis_output",
+              "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 10923663,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "coptr_demo_R2.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:4284cc76f218098267ae007c4d0f057362bbc9fcea110894c7dd4fad2ff30c80",
+              "id": "4284cc76f218098267ae007c4d0f057362bbc9fcea110894c7dd4fad2ff30c80",
+              "source_path": "uploads/examples/metagenomic_growth_rate_Calculation-5b5f71a1f91f4f4f852b807d7d2c5584/coptr_demo_R2.fastq.gz",
+              "sample_name": "metagenomic_growth_rate_Calculation"
+            },
+            {
+              "sha256": "5f1605e60253be90d9ba876cd76b92caddbd7c34a6006cee60873f202369d152",
+              "kind": "analysis_output",
+              "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+              "pipeline_result": {
+                "job_id": "ebe7b3672f5a49b1be039073160ff6c3",
+                "pipeline_name": "metagenomic_growth_rate_Calculation",
+                "output_key": "StrainCoPTR.log2ptr_csv",
+                "output_name": "log2ptr_csv",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:43:29.265159+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "log2(PTR):genome_id/sample_id,reads\n"
+              },
+              "size": 36,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "coptr_log2ptr.csv",
+              "data_type": "meta",
+              "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:5d04f944be56f865486ceb1632dd542ce34cea4b17eed6115495576e55779b8e",
+              "id": "5d04f944be56f865486ceb1632dd542ce34cea4b17eed6115495576e55779b8e",
+              "source_path": "pipeline-artifacts/ebe7b3672f5a49b1be039073160ff6c3/0/coptr_log2ptr.csv",
+              "sample_name": "metagenomic_growth_rate_Calculation"
+            },
+            {
+              "sha256": "344674096962fe33fe42d542cbbc9e04597bfa30dd4f4396d165d3e1f47b5587",
+              "kind": "analysis_output",
+              "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 195,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "results.zip",
+              "data_type": "meta",
+              "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:b2d6659c9717a76d28734749baf94abbefdc23d9a481e2711b1911c5de006206",
+              "id": "b2d6659c9717a76d28734749baf94abbefdc23d9a481e2711b1911c5de006206",
+              "source_path": "pipeline-bundles/ebe7b3672f5a49b1be039073160ff6c3/results.zip",
+              "sample_name": "metagenomic_growth_rate_Calculation"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:9d3d758f7d0a361dbe9d9c69818d5f77",
+              "importable": false,
+              "sample_name": "metagenomic_growth_rate_Calculation",
+              "data_type": "meta",
+              "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77"
+            },
+            {
+              "size": 8952270,
+              "kind": "source_file",
+              "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+              "name": "coptr_demo_R1.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "source:meta:9d3d758f7d0a361dbe9d9c69818d5f77:R1",
+              "slot": "R1",
+              "id": "e4f7838d9dbf304fb5660cfeeba011eb",
+              "sample_name": "metagenomic_growth_rate_Calculation"
+            },
+            {
+              "size": 10923663,
+              "kind": "source_file",
+              "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+              "name": "coptr_demo_R2.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "source:meta:9d3d758f7d0a361dbe9d9c69818d5f77:R2",
+              "slot": "R2",
+              "id": "61f483ecab293caf9bff69bfce209f91",
+              "sample_name": "metagenomic_growth_rate_Calculation"
+            }
+          ],
+          "total": 7,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:394af40f6149e027c22d56c829bc907464cdcaafc425ade26dcf90ea0e22d794"
+      },
+      "transfer_id": "23c730e97d2a407ea628d96c3c2ee51a",
+      "response": {
+        "transfer_id": "23c730e97d2a407ea628d96c3c2ee51a",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "f4e65fbb-04b1-4136-a3b1-27bdeadd6e8c",
+            "path": "uploads/358a6465c7214567a50cc2bcd8776426_coptr_demo_R1.fastq.gz",
+            "workspace_path": "uploads/358a6465c7214567a50cc2bcd8776426_coptr_demo_R1.fastq.gz",
+            "name": "coptr_demo_R1.fastq.gz",
+            "size": 8952270,
+            "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+            "kind": "upload",
+            "content_type": "application/gzip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:4284cc76f218098267ae007c4d0f057362bbc9fcea110894c7dd4fad2ff30c80"
+      },
+      "transfer_id": "7ad63706a21f473e88e876fec830b36e",
+      "response": {
+        "transfer_id": "7ad63706a21f473e88e876fec830b36e",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "f4e65fbb-04b1-4136-a3b1-27bdeadd6e8c",
+            "path": "uploads/0d4dea8091684fd7948d50d879c591d6_coptr_demo_R2.fastq.gz",
+            "workspace_path": "uploads/0d4dea8091684fd7948d50d879c591d6_coptr_demo_R2.fastq.gz",
+            "name": "coptr_demo_R2.fastq.gz",
+            "size": 10923663,
+            "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+            "kind": "upload",
+            "content_type": "application/gzip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:5d04f944be56f865486ceb1632dd542ce34cea4b17eed6115495576e55779b8e"
+      },
+      "transfer_id": "396e0fce890f4f10917b8c72027098f5",
+      "response": {
+        "transfer_id": "396e0fce890f4f10917b8c72027098f5",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "f4e65fbb-04b1-4136-a3b1-27bdeadd6e8c",
+            "path": "uploads/878a0d53f2f4494ba833c5e53b0ebe32_coptr_log2ptr.csv",
+            "workspace_path": "uploads/878a0d53f2f4494ba833c5e53b0ebe32_coptr_log2ptr.csv",
+            "name": "coptr_log2ptr.csv",
+            "size": 36,
+            "sha256": "5f1605e60253be90d9ba876cd76b92caddbd7c34a6006cee60873f202369d152",
+            "kind": "upload",
+            "content_type": "text/csv; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:b2d6659c9717a76d28734749baf94abbefdc23d9a481e2711b1911c5de006206"
+      },
+      "transfer_id": "6663c207507f4f4f94bb18528d6dda3e",
+      "response": {
+        "transfer_id": "6663c207507f4f4f94bb18528d6dda3e",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "f4e65fbb-04b1-4136-a3b1-27bdeadd6e8c",
+            "path": "uploads/bda29ca9419a4136945798ad6ba57a71_results.zip",
+            "workspace_path": "uploads/bda29ca9419a4136945798ad6ba57a71_results.zip",
+            "name": "results.zip",
+            "size": 195,
+            "sha256": "344674096962fe33fe42d542cbbc9e04597bfa30dd4f4396d165d3e1f47b5587",
+            "kind": "upload",
+            "content_type": "application/zip"
+          }
+        }
+      }
+    }
+  ],
+  "attempt_history": [
+    {
+      "pipeline": "metagenomic_growth_rate_Calculation",
+      "engine": "wdl",
+      "manifest_sha256": "6976e3c0f6dddd8c28a882428268d34facc96140c0015474d849060468a33d64",
+      "selected_for_execution": false,
+      "execution_status": "not_executed",
+      "scope_note": "Contract and inert-transfer verification only; biological workflow/example outside the live execution safety scope.",
+      "examples": [
+        {
+          "path": "tools/runtime_tools/pipelines/metagenomic_growth_rate_Calculation/data/input/coptr_demo_R1.fastq.gz",
+          "bytes": 8952270,
+          "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265"
+        },
+        {
+          "path": "tools/runtime_tools/pipelines/metagenomic_growth_rate_Calculation/data/input/coptr_demo_R2.fastq.gz",
+          "bytes": 10923663,
+          "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0"
+        }
+      ],
+      "contract": {
+        "valid": true,
+        "inputs": [
+          "read1",
+          "read2"
+        ],
+        "outputs": [
+          "log2ptr_csv"
+        ]
+      },
+      "transfers": [
+        {
+          "operation": "push",
+          "input": {
+            "paths": [
+              "uploads/5fc36c33439e46feacd90d20f01fa8f1_contract-check.json"
+            ],
+            "destination": {
+              "project": "Bridge_full_20261109_R2",
+              "sample": "metagenomic_growth_rate_Calculation_contract_only",
+              "data_type": "meta"
+            },
+            "create_missing": true
+          },
+          "transfer_id": "828fc36bc93c45b28deda29358046bef",
+          "response": {
+            "transfer_id": "828fc36bc93c45b28deda29358046bef",
+            "site_id": "mscan",
+            "operation": "push",
+            "state": "succeeded",
+            "result": {
+              "source_registration": {
+                "status": "results_only",
+                "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+              },
+              "file_delivery": "delivered",
+              "native_qc_applied": false,
+              "files": [
+                {
+                  "name": "5fc36c33439e46feacd90d20f01fa8f1_contract-check.json",
+                  "id": "bca71dd51670b6a8fb6012ede44d24b8e2c1dc40b3470b706d8a6d3c26332ad3",
+                  "source_path": "uploads/5fc36c33439e46feacd90d20f01fa8f1_contract-check.json",
+                  "size": 190,
+                  "sha256": "41b3737fd6aa0a90e1b7c7841454dd2c0b252c0ac4731b00bf5406d74adc5d2a",
+                  "content": {
+                    "kind": "json",
+                    "preview_available": true,
+                    "shape": "object",
+                    "fields": [
+                      "pipeline",
+                      "workflow_executed",
+                      "purpose",
+                      "contract_valid"
+                    ]
+                  }
+                }
+              ],
+              "native_imports": [],
+              "qc": {},
+              "receipt_id": "828fc36bc93c45b28deda29358046bef",
+              "target": {
+                "sample_id": "51f945b4b65e310daf812a587d7a5a9b",
+                "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+                "sample_name": "metagenomic_growth_rate_Calculation_contract_only",
+                "project_name": "Bridge_full_20261109_R2",
+                "data_type": "meta"
+              }
+            }
+          }
+        },
+        {
+          "operation": "search",
+          "input": {
+            "query": "51f945b4b65e310daf812a587d7a5a9b"
+          },
+          "transfer_id": "58651c8cbe864326bdd4cbc21aa16ea8",
+          "response": {
+            "transfer_id": "58651c8cbe864326bdd4cbc21aa16ea8",
+            "site_id": "mscan",
+            "operation": "search",
+            "state": "succeeded",
+            "result": {
+              "resources": [
+                {
+                  "sha256": "41b3737fd6aa0a90e1b7c7841454dd2c0b252c0ac4731b00bf5406d74adc5d2a",
+                  "kind": "analysis_output",
+                  "sample_id": "51f945b4b65e310daf812a587d7a5a9b",
+                  "project_name": "Bridge_full_20261109_R2",
+                  "content": {
+                    "kind": "json",
+                    "preview_available": true,
+                    "shape": "object",
+                    "fields": [
+                      "pipeline",
+                      "workflow_executed",
+                      "purpose",
+                      "contract_valid"
+                    ]
+                  },
+                  "size": 190,
+                  "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+                  "name": "5fc36c33439e46feacd90d20f01fa8f1_contract-check.json",
+                  "data_type": "meta",
+                  "resource_id": "result:828fc36bc93c45b28deda29358046bef:bca71dd51670b6a8fb6012ede44d24b8e2c1dc40b3470b706d8a6d3c26332ad3",
+                  "id": "bca71dd51670b6a8fb6012ede44d24b8e2c1dc40b3470b706d8a6d3c26332ad3",
+                  "source_path": "uploads/5fc36c33439e46feacd90d20f01fa8f1_contract-check.json",
+                  "sample_name": "metagenomic_growth_rate_Calculation_contract_only"
+                },
+                {
+                  "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+                  "kind": "sample",
+                  "resource_id": "sample:meta:51f945b4b65e310daf812a587d7a5a9b",
+                  "importable": false,
+                  "sample_name": "metagenomic_growth_rate_Calculation_contract_only",
+                  "data_type": "meta",
+                  "sample_id": "51f945b4b65e310daf812a587d7a5a9b"
+                }
+              ],
+              "total": 2,
+              "offset": 0
+            }
+          }
+        },
+        {
+          "operation": "pull",
+          "input": {
+            "resource_id": "result:828fc36bc93c45b28deda29358046bef:bca71dd51670b6a8fb6012ede44d24b8e2c1dc40b3470b706d8a6d3c26332ad3"
+          },
+          "transfer_id": "d740c1bae94546538b0011a8d568bdcb",
+          "response": {
+            "transfer_id": "d740c1bae94546538b0011a8d568bdcb",
+            "site_id": "mscan",
+            "operation": "pull",
+            "state": "succeeded",
+            "result": {
+              "file": {
+                "session_id": "00c3a597-c39d-415b-8511-3cf32b9234c3",
+                "path": "uploads/5bf9e9875e854efab1681cadc547d7c9_5fc36c33439e46feacd90d20f01fa8f1_contract-check.json",
+                "workspace_path": "uploads/5bf9e9875e854efab1681cadc547d7c9_5fc36c33439e46feacd90d20f01fa8f1_contract-check.json",
+                "name": "5fc36c33439e46feacd90d20f01fa8f1_contract-check.json",
+                "size": 190,
+                "sha256": "41b3737fd6aa0a90e1b7c7841454dd2c0b252c0ac4731b00bf5406d74adc5d2a",
+                "kind": "upload",
+                "content_type": "application/json; charset=utf-8"
+              }
+            }
+          }
+        }
+      ],
+      "session_id": "00c3a597-c39d-415b-8511-3cf32b9234c3",
+      "transfer_scope": "inert software-check file only",
+      "push_status": "succeeded",
+      "target": {
+        "sample_id": "51f945b4b65e310daf812a587d7a5a9b",
+        "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+        "sample_name": "metagenomic_growth_rate_Calculation_contract_only",
+        "project_name": "Bridge_full_20261109_R2",
+        "data_type": "meta"
+      },
+      "native_imports": [],
+      "roundtrip_files": [
+        {
+          "name": "5fc36c33439e46feacd90d20f01fa8f1_contract-check.json",
+          "resource_id": "result:828fc36bc93c45b28deda29358046bef:bca71dd51670b6a8fb6012ede44d24b8e2c1dc40b3470b706d8a6d3c26332ad3",
+          "state": "succeeded",
+          "bytes": 190,
+          "sha256": "41b3737fd6aa0a90e1b7c7841454dd2c0b252c0ac4731b00bf5406d74adc5d2a",
+          "expected_sha256": "41b3737fd6aa0a90e1b7c7841454dd2c0b252c0ac4731b00bf5406d74adc5d2a",
+          "matches": true
+        }
+      ],
+      "resources": [
+        {
+          "sha256": "41b3737fd6aa0a90e1b7c7841454dd2c0b252c0ac4731b00bf5406d74adc5d2a",
+          "kind": "analysis_output",
+          "sample_id": "51f945b4b65e310daf812a587d7a5a9b",
+          "project_name": "Bridge_full_20261109_R2",
+          "content": {
+            "kind": "json",
+            "preview_available": true,
+            "shape": "object",
+            "fields": [
+              "pipeline",
+              "workflow_executed",
+              "purpose",
+              "contract_valid"
+            ]
+          },
+          "size": 190,
+          "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+          "name": "5fc36c33439e46feacd90d20f01fa8f1_contract-check.json",
+          "data_type": "meta",
+          "resource_id": "result:828fc36bc93c45b28deda29358046bef:bca71dd51670b6a8fb6012ede44d24b8e2c1dc40b3470b706d8a6d3c26332ad3",
+          "id": "bca71dd51670b6a8fb6012ede44d24b8e2c1dc40b3470b706d8a6d3c26332ad3",
+          "source_path": "uploads/5fc36c33439e46feacd90d20f01fa8f1_contract-check.json",
+          "sample_name": "metagenomic_growth_rate_Calculation_contract_only"
+        },
+        {
+          "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+          "kind": "sample",
+          "resource_id": "sample:meta:51f945b4b65e310daf812a587d7a5a9b",
+          "importable": false,
+          "sample_name": "metagenomic_growth_rate_Calculation_contract_only",
+          "data_type": "meta",
+          "sample_id": "51f945b4b65e310daf812a587d7a5a9b"
+        }
+      ],
+      "roundtrip_status": "passed",
+      "elapsed_seconds": 16.77,
+      "test_finished": true
+    }
+  ],
+  "session_id": "f4e65fbb-04b1-4136-a3b1-27bdeadd6e8c",
+  "assigned_inputs": {
+    "read1": "uploads/examples/metagenomic_growth_rate_Calculation-5b5f71a1f91f4f4f852b807d7d2c5584/coptr_demo_R1.fastq.gz",
+    "read2": "uploads/examples/metagenomic_growth_rate_Calculation-5b5f71a1f91f4f4f852b807d7d2c5584/coptr_demo_R2.fastq.gz"
+  },
+  "parameter_overrides": {},
+  "plan_id": "ebe7b3672f5a49b1be039073160ff6c3",
+  "admission_waits": 1,
+  "job_id": "ebe7b3672f5a49b1be039073160ff6c3",
+  "last_state": {
+    "job_id": "ebe7b3672f5a49b1be039073160ff6c3",
+    "plan_id": "ebe7b3672f5a49b1be039073160ff6c3",
+    "status": "succeeded",
+    "created_at": "2026-11-09T06:42:32.410801+00:00",
+    "started_at": "2026-11-09T06:42:37.836195+00:00",
+    "finished_at": "2026-11-09T06:43:29.265159+00:00",
+    "updated_at": "2026-11-09T06:43:29.266045+00:00",
+    "error": null,
+    "remote_id": "0e3c4ca5-4b59-447c-aa88-4450da150b78",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_growth_rate_Calculation"
+  },
+  "results": {
+    "job_id": "ebe7b3672f5a49b1be039073160ff6c3",
+    "plan_id": "ebe7b3672f5a49b1be039073160ff6c3",
+    "status": "succeeded",
+    "created_at": "2026-11-09T06:42:32.410801+00:00",
+    "started_at": "2026-11-09T06:42:37.836195+00:00",
+    "finished_at": "2026-11-09T06:43:29.265159+00:00",
+    "updated_at": "2026-11-09T06:43:29.266045+00:00",
+    "error": null,
+    "remote_id": "0e3c4ca5-4b59-447c-aa88-4450da150b78",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_growth_rate_Calculation",
+    "files": [
+      {
+        "name": "coptr_log2ptr.csv",
+        "path": "pipeline-artifacts/ebe7b3672f5a49b1be039073160ff6c3/0/coptr_log2ptr.csv",
+        "workspace_path": "pipeline-artifacts/ebe7b3672f5a49b1be039073160ff6c3/0/coptr_log2ptr.csv",
+        "size": 36,
+        "remote": true,
+        "artifact_id": "ebe7b3672f5a49b1be039073160ff6c3:0",
+        "pipeline_result": {
+          "job_id": "ebe7b3672f5a49b1be039073160ff6c3",
+          "pipeline_name": "metagenomic_growth_rate_Calculation",
+          "output_key": "StrainCoPTR.log2ptr_csv",
+          "output_name": "log2ptr_csv",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T06:43:29.265159+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/ebe7b3672f5a49b1be039073160ff6c3/0/coptr_log2ptr.csv",
+        "text": "log2(PTR):genome_id/sample_id,reads\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/ebe7b3672f5a49b1be039073160ff6c3/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "transfer_scope": "actual bundled inputs and execution outputs",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "metagenomic_growth_rate_Calculation",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [
+    {
+      "job_id": "ebe7b3672f5a49b1be039073160ff6c3",
+      "files_delivered": true,
+      "generic_import": {
+        "artifact_count": 1,
+        "access": "Search or pull the attached sample files; native records are a separate outcome.",
+        "state": "imported"
+      },
+      "pipeline": "metagenomic_growth_rate_Calculation",
+      "format": "StrainCoPTR",
+      "program": "growth",
+      "state": "imported",
+      "message": "Native result imported."
+    }
+  ],
+  "roundtrip_files": [
+    {
+      "name": "coptr_demo_R1.fastq.gz",
+      "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:394af40f6149e027c22d56c829bc907464cdcaafc425ade26dcf90ea0e22d794",
+      "state": "succeeded",
+      "bytes": 8952270,
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+      "expected_sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+      "matches": true
+    },
+    {
+      "name": "coptr_demo_R2.fastq.gz",
+      "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:4284cc76f218098267ae007c4d0f057362bbc9fcea110894c7dd4fad2ff30c80",
+      "state": "succeeded",
+      "bytes": 10923663,
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+      "expected_sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+      "matches": true
+    },
+    {
+      "name": "coptr_log2ptr.csv",
+      "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:5d04f944be56f865486ceb1632dd542ce34cea4b17eed6115495576e55779b8e",
+      "state": "succeeded",
+      "bytes": 36,
+      "sha256": "5f1605e60253be90d9ba876cd76b92caddbd7c34a6006cee60873f202369d152",
+      "expected_sha256": "5f1605e60253be90d9ba876cd76b92caddbd7c34a6006cee60873f202369d152",
+      "matches": true
+    },
+    {
+      "name": "results.zip",
+      "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:b2d6659c9717a76d28734749baf94abbefdc23d9a481e2711b1911c5de006206",
+      "state": "succeeded",
+      "bytes": 195,
+      "sha256": "344674096962fe33fe42d542cbbc9e04597bfa30dd4f4396d165d3e1f47b5587",
+      "expected_sha256": "344674096962fe33fe42d542cbbc9e04597bfa30dd4f4396d165d3e1f47b5587",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+      "kind": "analysis_output",
+      "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 8952270,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "coptr_demo_R1.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:394af40f6149e027c22d56c829bc907464cdcaafc425ade26dcf90ea0e22d794",
+      "id": "394af40f6149e027c22d56c829bc907464cdcaafc425ade26dcf90ea0e22d794",
+      "source_path": "uploads/examples/metagenomic_growth_rate_Calculation-5b5f71a1f91f4f4f852b807d7d2c5584/coptr_demo_R1.fastq.gz",
+      "sample_name": "metagenomic_growth_rate_Calculation"
+    },
+    {
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+      "kind": "analysis_output",
+      "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 10923663,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "coptr_demo_R2.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:4284cc76f218098267ae007c4d0f057362bbc9fcea110894c7dd4fad2ff30c80",
+      "id": "4284cc76f218098267ae007c4d0f057362bbc9fcea110894c7dd4fad2ff30c80",
+      "source_path": "uploads/examples/metagenomic_growth_rate_Calculation-5b5f71a1f91f4f4f852b807d7d2c5584/coptr_demo_R2.fastq.gz",
+      "sample_name": "metagenomic_growth_rate_Calculation"
+    },
+    {
+      "sha256": "5f1605e60253be90d9ba876cd76b92caddbd7c34a6006cee60873f202369d152",
+      "kind": "analysis_output",
+      "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+      "pipeline_result": {
+        "job_id": "ebe7b3672f5a49b1be039073160ff6c3",
+        "pipeline_name": "metagenomic_growth_rate_Calculation",
+        "output_key": "StrainCoPTR.log2ptr_csv",
+        "output_name": "log2ptr_csv",
+        "output_kind": "table",
+        "completed_at": "2026-11-09T06:43:29.265159+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "log2(PTR):genome_id/sample_id,reads\n"
+      },
+      "size": 36,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "coptr_log2ptr.csv",
+      "data_type": "meta",
+      "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:5d04f944be56f865486ceb1632dd542ce34cea4b17eed6115495576e55779b8e",
+      "id": "5d04f944be56f865486ceb1632dd542ce34cea4b17eed6115495576e55779b8e",
+      "source_path": "pipeline-artifacts/ebe7b3672f5a49b1be039073160ff6c3/0/coptr_log2ptr.csv",
+      "sample_name": "metagenomic_growth_rate_Calculation"
+    },
+    {
+      "sha256": "344674096962fe33fe42d542cbbc9e04597bfa30dd4f4396d165d3e1f47b5587",
+      "kind": "analysis_output",
+      "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 195,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "results.zip",
+      "data_type": "meta",
+      "resource_id": "result:05c594bc52c64d598448ba4fe8a94d78:b2d6659c9717a76d28734749baf94abbefdc23d9a481e2711b1911c5de006206",
+      "id": "b2d6659c9717a76d28734749baf94abbefdc23d9a481e2711b1911c5de006206",
+      "source_path": "pipeline-bundles/ebe7b3672f5a49b1be039073160ff6c3/results.zip",
+      "sample_name": "metagenomic_growth_rate_Calculation"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:9d3d758f7d0a361dbe9d9c69818d5f77",
+      "importable": false,
+      "sample_name": "metagenomic_growth_rate_Calculation",
+      "data_type": "meta",
+      "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77"
+    },
+    {
+      "size": 8952270,
+      "kind": "source_file",
+      "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+      "name": "coptr_demo_R1.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "source:meta:9d3d758f7d0a361dbe9d9c69818d5f77:R1",
+      "slot": "R1",
+      "id": "e4f7838d9dbf304fb5660cfeeba011eb",
+      "sample_name": "metagenomic_growth_rate_Calculation"
+    },
+    {
+      "size": 10923663,
+      "kind": "source_file",
+      "sample_id": "9d3d758f7d0a361dbe9d9c69818d5f77",
+      "name": "coptr_demo_R2.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "source:meta:9d3d758f7d0a361dbe9d9c69818d5f77:R2",
+      "slot": "R2",
+      "id": "61f483ecab293caf9bff69bfce209f91",
+      "sample_name": "metagenomic_growth_rate_Calculation"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 97.55,
+  "test_finished": true
+}

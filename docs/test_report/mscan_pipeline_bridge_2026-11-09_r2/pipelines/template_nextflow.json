@@ -1,0 +1,976 @@
+{
+  "pipeline": "template_nextflow",
+  "engine": "nextflow",
+  "manifest_sha256": "a7fe6832651d524b6cdb145f9ccc04ff6946ad995f9c5ae48f32e69053e9f59a",
+  "selected_for_execution": true,
+  "execution_status": "succeeded",
+  "scope_note": "",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/template_nextflow/data/input/metadata.tsv",
+      "bytes": 61,
+      "sha256": "36ef43d849815a88547be9a8be6444f76feed4c05e847633dcad98db684727f3"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/template_nextflow/data/input/sequences_segment1.fasta",
+      "bytes": 43,
+      "sha256": "b37bc1cc19ec912fca5274e6a9cf2782f9db274d0664ad7c4d06ab30cf2101ed"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "sequence",
+      "metadata"
+    ],
+    "outputs": [
+      "report",
+      "metrics",
+      "normalized_sequence"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "pipeline-bundles/407fe96f938f424e879508522f490f51/results.zip",
+          "uploads/examples/template_nextflow-f3b422e623794c429f83459ccd9cfd4d/sequences_segment1.fasta",
+          "uploads/examples/template_nextflow-f3b422e623794c429f83459ccd9cfd4d/metadata.tsv"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "template_nextflow",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "a19306cbcbac4c97b1df42aadfead7c3",
+      "response": {
+        "transfer_id": "a19306cbcbac4c97b1df42aadfead7c3",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "results.zip",
+              "id": "dfdbcdaf4e0a8c2baa89d1e243cd51b3d0b5896be0d76925d30e3e63d7a891b0",
+              "source_path": "pipeline-bundles/407fe96f938f424e879508522f490f51/results.zip",
+              "size": 825,
+              "sha256": "2c1e32e5b44a897d850268262f5b98632f04d022dfad045c9ebdcd8a17fe2d4a",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "size": 320,
+              "sha256": "f6c739425893601bf10bb35651f4705b26880d0f61a1841391c6388ba1d4d20f",
+              "name": "report.md",
+              "id": "10951c425f6134c3c5cce56caebc462a8cc85875b5a2f0bc6a515d0d3ffd94b3",
+              "source_path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/report.md",
+              "pipeline_result": {
+                "job_id": "407fe96f938f424e879508522f490f51",
+                "pipeline_name": "template_nextflow",
+                "output_key": "report",
+                "output_name": "report",
+                "output_kind": "report",
+                "completed_at": "2026-11-09T06:50:50.985156+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "# Template Nextflow Pipeline Report\n\n- Label: template_nextflow\n- Input: 0_sequences_segment1.fasta\n- Metadata: 0_metadata.tsv\n- Analysis mode: example\n- Subtype: subtype1\n- Segment: segment1\n- Time: all-time\n- Metadata rows: 1\n- Sequence length: 24\n- Minimum length: 0\n- Passes minimum length: True\n- GC percent: 41.67\n"
+              }
+            },
+            {
+              "size": 308,
+              "sha256": "ec7e2559fe83b1054fe46a690e42aaa411a5b3017dde856a4fd7afacf7825470",
+              "name": "metrics.json",
+              "id": "7e2fbbc0bb01977adf6ad754ffcbfa848310e4d0d06674a1615bf53637954e79",
+              "source_path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/metrics.json",
+              "pipeline_result": {
+                "job_id": "407fe96f938f424e879508522f490f51",
+                "pipeline_name": "template_nextflow",
+                "output_key": "metrics",
+                "output_name": "metrics",
+                "output_kind": "metrics",
+                "completed_at": "2026-11-09T06:50:50.985156+00:00"
+              },
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "status",
+                  "pipeline",
+                  "label",
+                  "analysis_mode",
+                  "subtype",
+                  "segment",
+                  "time",
+                  "metadata_rows",
+                  "sequence_length",
+                  "passes_min_length",
+                  "min_length",
+                  "gc_percent"
+                ]
+              }
+            },
+            {
+              "size": 53,
+              "sha256": "b6a2c671c2f755e70fe79d9e2b59a40cc03e9a16e45df3212ad1aece2f65545e",
+              "name": "normalized.fasta",
+              "id": "6ac8dacd68da01b22b48e703cab64f343372a07b72f263c41d6cf8f31438a556",
+              "source_path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/normalized.fasta",
+              "pipeline_result": {
+                "job_id": "407fe96f938f424e879508522f490f51",
+                "pipeline_name": "template_nextflow",
+                "output_key": "normalized_sequence",
+                "output_name": "normalized_sequence",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:50:50.985156+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">template_nextflow|segment1\nACGTACGTNNNNACGTTGCAACGT\n"
+              }
+            },
+            {
+              "name": "sequences_segment1.fasta",
+              "id": "4aff5f96da7eebbb08ea59c57b6f22d9860469565055689c43bec32d25a0737a",
+              "source_path": "uploads/examples/template_nextflow-f3b422e623794c429f83459ccd9cfd4d/sequences_segment1.fasta",
+              "size": 43,
+              "sha256": "b37bc1cc19ec912fca5274e6a9cf2782f9db274d0664ad7c4d06ab30cf2101ed",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">example_segment1\nACGTACGTNNNNACGTTGCAACGT\n"
+              }
+            },
+            {
+              "name": "metadata.tsv",
+              "id": "30818fd16e34ceb8cd4d0b98def6d8d500f55b18ec775d690bed9002cc538a8d",
+              "source_path": "uploads/examples/template_nextflow-f3b422e623794c429f83459ccd9cfd4d/metadata.tsv",
+              "size": 61,
+              "sha256": "36ef43d849815a88547be9a8be6444f76feed4c05e847633dcad98db684727f3",
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "sample_id",
+                  "subtype",
+                  "segment"
+                ],
+                "preview_rows": [
+                  [
+                    "example_segment1",
+                    "subtype1",
+                    "segment1"
+                  ]
+                ]
+              }
+            }
+          ],
+          "native_imports": [
+            {
+              "job_id": "407fe96f938f424e879508522f490f51",
+              "files_delivered": true,
+              "generic_import": {
+                "artifact_count": 3,
+                "access": "Search or pull the attached sample files; native records are a separate outcome.",
+                "state": "imported"
+              },
+              "pipeline": "template_nextflow",
+              "state": "unsupported",
+              "message": "No unambiguous native result format; files remain available."
+            }
+          ],
+          "qc": {},
+          "receipt_id": "a19306cbcbac4c97b1df42aadfead7c3",
+          "target": {
+            "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "template_nextflow",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "c7cd7d71fe5d3b0d87fd67ac52fb3290"
+      },
+      "transfer_id": "91fcc11e888843a29604d62a8cc632bb",
+      "response": {
+        "transfer_id": "91fcc11e888843a29604d62a8cc632bb",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "f6c739425893601bf10bb35651f4705b26880d0f61a1841391c6388ba1d4d20f",
+              "kind": "analysis_output",
+              "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+              "pipeline_result": {
+                "job_id": "407fe96f938f424e879508522f490f51",
+                "pipeline_name": "template_nextflow",
+                "output_key": "report",
+                "output_name": "report",
+                "output_kind": "report",
+                "completed_at": "2026-11-09T06:50:50.985156+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "# Template Nextflow Pipeline Report\n\n- Label: template_nextflow\n- Input: 0_sequences_segment1.fasta\n- Metadata: 0_metadata.tsv\n- Analysis mode: example\n- Subtype: subtype1\n- Segment: segment1\n- Time: all-time\n- Metadata rows: 1\n- Sequence length: 24\n- Minimum length: 0\n- Passes minimum length: True\n- GC percent: 41.67\n"
+              },
+              "size": 320,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "report.md",
+              "data_type": "meta",
+              "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:10951c425f6134c3c5cce56caebc462a8cc85875b5a2f0bc6a515d0d3ffd94b3",
+              "id": "10951c425f6134c3c5cce56caebc462a8cc85875b5a2f0bc6a515d0d3ffd94b3",
+              "source_path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/report.md",
+              "sample_name": "template_nextflow"
+            },
+            {
+              "sha256": "36ef43d849815a88547be9a8be6444f76feed4c05e847633dcad98db684727f3",
+              "kind": "analysis_output",
+              "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "sample_id",
+                  "subtype",
+                  "segment"
+                ],
+                "preview_rows": [
+                  [
+                    "example_segment1",
+                    "subtype1",
+                    "segment1"
+                  ]
+                ]
+              },
+              "size": 61,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "metadata.tsv",
+              "data_type": "meta",
+              "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:30818fd16e34ceb8cd4d0b98def6d8d500f55b18ec775d690bed9002cc538a8d",
+              "id": "30818fd16e34ceb8cd4d0b98def6d8d500f55b18ec775d690bed9002cc538a8d",
+              "source_path": "uploads/examples/template_nextflow-f3b422e623794c429f83459ccd9cfd4d/metadata.tsv",
+              "sample_name": "template_nextflow"
+            },
+            {
+              "sha256": "b37bc1cc19ec912fca5274e6a9cf2782f9db274d0664ad7c4d06ab30cf2101ed",
+              "kind": "analysis_output",
+              "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">example_segment1\nACGTACGTNNNNACGTTGCAACGT\n"
+              },
+              "size": 43,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "sequences_segment1.fasta",
+              "data_type": "meta",
+              "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:4aff5f96da7eebbb08ea59c57b6f22d9860469565055689c43bec32d25a0737a",
+              "id": "4aff5f96da7eebbb08ea59c57b6f22d9860469565055689c43bec32d25a0737a",
+              "source_path": "uploads/examples/template_nextflow-f3b422e623794c429f83459ccd9cfd4d/sequences_segment1.fasta",
+              "sample_name": "template_nextflow"
+            },
+            {
+              "sha256": "b6a2c671c2f755e70fe79d9e2b59a40cc03e9a16e45df3212ad1aece2f65545e",
+              "kind": "analysis_output",
+              "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+              "pipeline_result": {
+                "job_id": "407fe96f938f424e879508522f490f51",
+                "pipeline_name": "template_nextflow",
+                "output_key": "normalized_sequence",
+                "output_name": "normalized_sequence",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:50:50.985156+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">template_nextflow|segment1\nACGTACGTNNNNACGTTGCAACGT\n"
+              },
+              "size": 53,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "normalized.fasta",
+              "data_type": "meta",
+              "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:6ac8dacd68da01b22b48e703cab64f343372a07b72f263c41d6cf8f31438a556",
+              "id": "6ac8dacd68da01b22b48e703cab64f343372a07b72f263c41d6cf8f31438a556",
+              "source_path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/normalized.fasta",
+              "sample_name": "template_nextflow"
+            },
+            {
+              "sha256": "ec7e2559fe83b1054fe46a690e42aaa411a5b3017dde856a4fd7afacf7825470",
+              "kind": "analysis_output",
+              "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+              "pipeline_result": {
+                "job_id": "407fe96f938f424e879508522f490f51",
+                "pipeline_name": "template_nextflow",
+                "output_key": "metrics",
+                "output_name": "metrics",
+                "output_kind": "metrics",
+                "completed_at": "2026-11-09T06:50:50.985156+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "status",
+                  "pipeline",
+                  "label",
+                  "analysis_mode",
+                  "subtype",
+                  "segment",
+                  "time",
+                  "metadata_rows",
+                  "sequence_length",
+                  "passes_min_length",
+                  "min_length",
+                  "gc_percent"
+                ]
+              },
+              "size": 308,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "metrics.json",
+              "data_type": "meta",
+              "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:7e2fbbc0bb01977adf6ad754ffcbfa848310e4d0d06674a1615bf53637954e79",
+              "id": "7e2fbbc0bb01977adf6ad754ffcbfa848310e4d0d06674a1615bf53637954e79",
+              "source_path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/metrics.json",
+              "sample_name": "template_nextflow"
+            },
+            {
+              "sha256": "2c1e32e5b44a897d850268262f5b98632f04d022dfad045c9ebdcd8a17fe2d4a",
+              "kind": "analysis_output",
+              "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 825,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "results.zip",
+              "data_type": "meta",
+              "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:dfdbcdaf4e0a8c2baa89d1e243cd51b3d0b5896be0d76925d30e3e63d7a891b0",
+              "id": "dfdbcdaf4e0a8c2baa89d1e243cd51b3d0b5896be0d76925d30e3e63d7a891b0",
+              "source_path": "pipeline-bundles/407fe96f938f424e879508522f490f51/results.zip",
+              "sample_name": "template_nextflow"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:c7cd7d71fe5d3b0d87fd67ac52fb3290",
+              "importable": false,
+              "sample_name": "template_nextflow",
+              "data_type": "meta",
+              "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290"
+            }
+          ],
+          "total": 7,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:10951c425f6134c3c5cce56caebc462a8cc85875b5a2f0bc6a515d0d3ffd94b3"
+      },
+      "transfer_id": "227e17b719854abfa15cc63fb04a574f",
+      "response": {
+        "transfer_id": "227e17b719854abfa15cc63fb04a574f",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "3db2855f-54cb-48f4-a779-381b7342fff9",
+            "path": "uploads/fdfcf38f9dcb4eb2949607d27b3ff5fb_report.md",
+            "workspace_path": "uploads/fdfcf38f9dcb4eb2949607d27b3ff5fb_report.md",
+            "name": "report.md",
+            "size": 320,
+            "sha256": "f6c739425893601bf10bb35651f4705b26880d0f61a1841391c6388ba1d4d20f",
+            "kind": "upload",
+            "content_type": "text/markdown; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:30818fd16e34ceb8cd4d0b98def6d8d500f55b18ec775d690bed9002cc538a8d"
+      },
+      "transfer_id": "78f4eea0999d4968a46e456d490600be",
+      "response": {
+        "transfer_id": "78f4eea0999d4968a46e456d490600be",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "3db2855f-54cb-48f4-a779-381b7342fff9",
+            "path": "uploads/76615a908c36401d960f4c9ca84d7a48_metadata.tsv",
+            "workspace_path": "uploads/76615a908c36401d960f4c9ca84d7a48_metadata.tsv",
+            "name": "metadata.tsv",
+            "size": 61,
+            "sha256": "36ef43d849815a88547be9a8be6444f76feed4c05e847633dcad98db684727f3",
+            "kind": "upload",
+            "content_type": "text/tab-separated-values; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:4aff5f96da7eebbb08ea59c57b6f22d9860469565055689c43bec32d25a0737a"
+      },
+      "transfer_id": "97109b4167094308ab77c583374e3621",
+      "response": {
+        "transfer_id": "97109b4167094308ab77c583374e3621",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "3db2855f-54cb-48f4-a779-381b7342fff9",
+            "path": "uploads/adbf5853b43f4cd7bf55633920ccb171_sequences_segment1.fasta",
+            "workspace_path": "uploads/adbf5853b43f4cd7bf55633920ccb171_sequences_segment1.fasta",
+            "name": "sequences_segment1.fasta",
+            "size": 43,
+            "sha256": "b37bc1cc19ec912fca5274e6a9cf2782f9db274d0664ad7c4d06ab30cf2101ed",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:6ac8dacd68da01b22b48e703cab64f343372a07b72f263c41d6cf8f31438a556"
+      },
+      "transfer_id": "ea3f2105d1644afb9880264609dff296",
+      "response": {
+        "transfer_id": "ea3f2105d1644afb9880264609dff296",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "3db2855f-54cb-48f4-a779-381b7342fff9",
+            "path": "uploads/75c7699754a94f089c4032b1d41f8116_normalized.fasta",
+            "workspace_path": "uploads/75c7699754a94f089c4032b1d41f8116_normalized.fasta",
+            "name": "normalized.fasta",
+            "size": 53,
+            "sha256": "b6a2c671c2f755e70fe79d9e2b59a40cc03e9a16e45df3212ad1aece2f65545e",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:7e2fbbc0bb01977adf6ad754ffcbfa848310e4d0d06674a1615bf53637954e79"
+      },
+      "transfer_id": "c6c4ea5eaf5d4cf3a5412b530c72fa08",
+      "response": {
+        "transfer_id": "c6c4ea5eaf5d4cf3a5412b530c72fa08",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "3db2855f-54cb-48f4-a779-381b7342fff9",
+            "path": "uploads/df7114f812bc4f56a583232a9f56e246_metrics.json",
+            "workspace_path": "uploads/df7114f812bc4f56a583232a9f56e246_metrics.json",
+            "name": "metrics.json",
+            "size": 308,
+            "sha256": "ec7e2559fe83b1054fe46a690e42aaa411a5b3017dde856a4fd7afacf7825470",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:dfdbcdaf4e0a8c2baa89d1e243cd51b3d0b5896be0d76925d30e3e63d7a891b0"
+      },
+      "transfer_id": "ce85b2dc30ab4bfc974b2b7890fb99c7",
+      "response": {
+        "transfer_id": "ce85b2dc30ab4bfc974b2b7890fb99c7",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "3db2855f-54cb-48f4-a779-381b7342fff9",
+            "path": "uploads/bb28da4eae66478e98410ecf14d4226e_results.zip",
+            "workspace_path": "uploads/bb28da4eae66478e98410ecf14d4226e_results.zip",
+            "name": "results.zip",
+            "size": 825,
+            "sha256": "2c1e32e5b44a897d850268262f5b98632f04d022dfad045c9ebdcd8a17fe2d4a",
+            "kind": "upload",
+            "content_type": "application/zip"
+          }
+        }
+      }
+    }
+  ],
+  "attempt_history": [
+    {
+      "pipeline": "template_nextflow",
+      "engine": "nextflow",
+      "manifest_sha256": "a7fe6832651d524b6cdb145f9ccc04ff6946ad995f9c5ae48f32e69053e9f59a",
+      "selected_for_execution": true,
+      "execution_status": "setup_failed",
+      "scope_note": "",
+      "examples": [
+        {
+          "path": "tools/runtime_tools/pipelines/template_nextflow/data/input/metadata.tsv",
+          "bytes": 61,
+          "sha256": "36ef43d849815a88547be9a8be6444f76feed4c05e847633dcad98db684727f3"
+        },
+        {
+          "path": "tools/runtime_tools/pipelines/template_nextflow/data/input/sequences_segment1.fasta",
+          "bytes": 43,
+          "sha256": "b37bc1cc19ec912fca5274e6a9cf2782f9db274d0664ad7c4d06ab30cf2101ed"
+        }
+      ],
+      "contract": {
+        "valid": true,
+        "inputs": [
+          "sequence",
+          "metadata"
+        ],
+        "outputs": [
+          "report",
+          "metrics",
+          "normalized_sequence"
+        ]
+      },
+      "transfers": [],
+      "session_id": "7c7e7cae-52a1-41bb-9a95-24d7e57f25b5",
+      "assigned_inputs": {
+        "sequence": "uploads/examples/template_nextflow-c83618c0f30b4294acba428c86baeaa2/sequences_segment1.fasta",
+        "metadata": "uploads/examples/template_nextflow-c83618c0f30b4294acba428c86baeaa2/metadata.tsv"
+      },
+      "parameter_overrides": {},
+      "plan_id": "5fba0162613a4c0b8e545d16c9fa5d1d",
+      "harness_error": "ValueError: Pipeline job limit reached (2 per account, 16 server-wide).",
+      "elapsed_seconds": 0.61,
+      "test_finished": true
+    }
+  ],
+  "session_id": "3db2855f-54cb-48f4-a779-381b7342fff9",
+  "assigned_inputs": {
+    "sequence": "uploads/examples/template_nextflow-f3b422e623794c429f83459ccd9cfd4d/sequences_segment1.fasta",
+    "metadata": "uploads/examples/template_nextflow-f3b422e623794c429f83459ccd9cfd4d/metadata.tsv"
+  },
+  "parameter_overrides": {},
+  "plan_id": "407fe96f938f424e879508522f490f51",
+  "admission_waits": 54,
+  "job_id": "407fe96f938f424e879508522f490f51",
+  "last_state": {
+    "job_id": "407fe96f938f424e879508522f490f51",
+    "plan_id": "407fe96f938f424e879508522f490f51",
+    "status": "succeeded",
+    "created_at": "2026-11-09T06:45:48.817334+00:00",
+    "started_at": "2026-11-09T06:50:29.833669+00:00",
+    "finished_at": "2026-11-09T06:50:50.985156+00:00",
+    "updated_at": "2026-11-09T06:50:50.985913+00:00",
+    "pipeline_name": "template_nextflow"
+  },
+  "results": {
+    "status": "succeeded",
+    "job_id": "407fe96f938f424e879508522f490f51",
+    "pipeline_name": "template_nextflow",
+    "files": [
+      {
+        "name": "report",
+        "label": "Report",
+        "config_key": "report_path",
+        "path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/report.md",
+        "raw_path": "report.md",
+        "kind": "report",
+        "required": true,
+        "nextflow_output": "report.md",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/report.md",
+        "sha256": "f6c739425893601bf10bb35651f4705b26880d0f61a1841391c6388ba1d4d20f",
+        "size": 320,
+        "pipeline_result": {
+          "job_id": "407fe96f938f424e879508522f490f51",
+          "pipeline_name": "template_nextflow",
+          "output_key": "report",
+          "output_name": "report",
+          "output_kind": "report",
+          "completed_at": "2026-11-09T06:50:50.985156+00:00"
+        }
+      },
+      {
+        "name": "metrics",
+        "label": "Metrics",
+        "config_key": "metrics_path",
+        "path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/metrics.json",
+        "raw_path": "metrics.json",
+        "kind": "metrics",
+        "required": true,
+        "nextflow_output": "metrics.json",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/metrics.json",
+        "sha256": "ec7e2559fe83b1054fe46a690e42aaa411a5b3017dde856a4fd7afacf7825470",
+        "size": 308,
+        "pipeline_result": {
+          "job_id": "407fe96f938f424e879508522f490f51",
+          "pipeline_name": "template_nextflow",
+          "output_key": "metrics",
+          "output_name": "metrics",
+          "output_kind": "metrics",
+          "completed_at": "2026-11-09T06:50:50.985156+00:00"
+        }
+      },
+      {
+        "name": "normalized_sequence",
+        "label": "Normalized sequence",
+        "config_key": "normalized_fasta_path",
+        "path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/normalized.fasta",
+        "raw_path": "normalized.fasta",
+        "kind": "sequence",
+        "required": true,
+        "nextflow_output": "normalized.fasta",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/normalized.fasta",
+        "sha256": "b6a2c671c2f755e70fe79d9e2b59a40cc03e9a16e45df3212ad1aece2f65545e",
+        "size": 53,
+        "pipeline_result": {
+          "job_id": "407fe96f938f424e879508522f490f51",
+          "pipeline_name": "template_nextflow",
+          "output_key": "normalized_sequence",
+          "output_name": "normalized_sequence",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-09T06:50:50.985156+00:00"
+        }
+      }
+    ],
+    "metrics": {
+      "status": "ok",
+      "pipeline": "template_nextflow",
+      "label": "template_nextflow",
+      "analysis_mode": "example",
+      "subtype": "subtype1",
+      "segment": "segment1",
+      "time": "all-time",
+      "metadata_rows": 1,
+      "sequence_length": 24,
+      "passes_min_length": true,
+      "min_length": 0,
+      "gc_percent": 41.67
+    },
+    "tables": [],
+    "bundle_path": "pipeline-bundles/407fe96f938f424e879508522f490f51/results.zip"
+  },
+  "transfer_scope": "actual bundled inputs and execution outputs",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "template_nextflow",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [
+    {
+      "job_id": "407fe96f938f424e879508522f490f51",
+      "files_delivered": true,
+      "generic_import": {
+        "artifact_count": 3,
+        "access": "Search or pull the attached sample files; native records are a separate outcome.",
+        "state": "imported"
+      },
+      "pipeline": "template_nextflow",
+      "state": "unsupported",
+      "message": "No unambiguous native result format; files remain available."
+    }
+  ],
+  "roundtrip_files": [
+    {
+      "name": "report.md",
+      "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:10951c425f6134c3c5cce56caebc462a8cc85875b5a2f0bc6a515d0d3ffd94b3",
+      "state": "succeeded",
+      "bytes": 320,
+      "sha256": "f6c739425893601bf10bb35651f4705b26880d0f61a1841391c6388ba1d4d20f",
+      "expected_sha256": "f6c739425893601bf10bb35651f4705b26880d0f61a1841391c6388ba1d4d20f",
+      "matches": true
+    },
+    {
+      "name": "metadata.tsv",
+      "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:30818fd16e34ceb8cd4d0b98def6d8d500f55b18ec775d690bed9002cc538a8d",
+      "state": "succeeded",
+      "bytes": 61,
+      "sha256": "36ef43d849815a88547be9a8be6444f76feed4c05e847633dcad98db684727f3",
+      "expected_sha256": "36ef43d849815a88547be9a8be6444f76feed4c05e847633dcad98db684727f3",
+      "matches": true
+    },
+    {
+      "name": "sequences_segment1.fasta",
+      "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:4aff5f96da7eebbb08ea59c57b6f22d9860469565055689c43bec32d25a0737a",
+      "state": "succeeded",
+      "bytes": 43,
+      "sha256": "b37bc1cc19ec912fca5274e6a9cf2782f9db274d0664ad7c4d06ab30cf2101ed",
+      "expected_sha256": "b37bc1cc19ec912fca5274e6a9cf2782f9db274d0664ad7c4d06ab30cf2101ed",
+      "matches": true
+    },
+    {
+      "name": "normalized.fasta",
+      "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:6ac8dacd68da01b22b48e703cab64f343372a07b72f263c41d6cf8f31438a556",
+      "state": "succeeded",
+      "bytes": 53,
+      "sha256": "b6a2c671c2f755e70fe79d9e2b59a40cc03e9a16e45df3212ad1aece2f65545e",
+      "expected_sha256": "b6a2c671c2f755e70fe79d9e2b59a40cc03e9a16e45df3212ad1aece2f65545e",
+      "matches": true
+    },
+    {
+      "name": "metrics.json",
+      "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:7e2fbbc0bb01977adf6ad754ffcbfa848310e4d0d06674a1615bf53637954e79",
+      "state": "succeeded",
+      "bytes": 308,
+      "sha256": "ec7e2559fe83b1054fe46a690e42aaa411a5b3017dde856a4fd7afacf7825470",
+      "expected_sha256": "ec7e2559fe83b1054fe46a690e42aaa411a5b3017dde856a4fd7afacf7825470",
+      "matches": true
+    },
+    {
+      "name": "results.zip",
+      "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:dfdbcdaf4e0a8c2baa89d1e243cd51b3d0b5896be0d76925d30e3e63d7a891b0",
+      "state": "succeeded",
+      "bytes": 825,
+      "sha256": "2c1e32e5b44a897d850268262f5b98632f04d022dfad045c9ebdcd8a17fe2d4a",
+      "expected_sha256": "2c1e32e5b44a897d850268262f5b98632f04d022dfad045c9ebdcd8a17fe2d4a",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "f6c739425893601bf10bb35651f4705b26880d0f61a1841391c6388ba1d4d20f",
+      "kind": "analysis_output",
+      "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+      "pipeline_result": {
+        "job_id": "407fe96f938f424e879508522f490f51",
+        "pipeline_name": "template_nextflow",
+        "output_key": "report",
+        "output_name": "report",
+        "output_kind": "report",
+        "completed_at": "2026-11-09T06:50:50.985156+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "# Template Nextflow Pipeline Report\n\n- Label: template_nextflow\n- Input: 0_sequences_segment1.fasta\n- Metadata: 0_metadata.tsv\n- Analysis mode: example\n- Subtype: subtype1\n- Segment: segment1\n- Time: all-time\n- Metadata rows: 1\n- Sequence length: 24\n- Minimum length: 0\n- Passes minimum length: True\n- GC percent: 41.67\n"
+      },
+      "size": 320,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "report.md",
+      "data_type": "meta",
+      "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:10951c425f6134c3c5cce56caebc462a8cc85875b5a2f0bc6a515d0d3ffd94b3",
+      "id": "10951c425f6134c3c5cce56caebc462a8cc85875b5a2f0bc6a515d0d3ffd94b3",
+      "source_path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/report.md",
+      "sample_name": "template_nextflow"
+    },
+    {
+      "sha256": "36ef43d849815a88547be9a8be6444f76feed4c05e847633dcad98db684727f3",
+      "kind": "analysis_output",
+      "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "table",
+        "preview_available": true,
+        "preview_only": true,
+        "delimiter": "tab",
+        "columns": [
+          "sample_id",
+          "subtype",
+          "segment"
+        ],
+        "preview_rows": [
+          [
+            "example_segment1",
+            "subtype1",
+            "segment1"
+          ]
+        ]
+      },
+      "size": 61,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "metadata.tsv",
+      "data_type": "meta",
+      "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:30818fd16e34ceb8cd4d0b98def6d8d500f55b18ec775d690bed9002cc538a8d",
+      "id": "30818fd16e34ceb8cd4d0b98def6d8d500f55b18ec775d690bed9002cc538a8d",
+      "source_path": "uploads/examples/template_nextflow-f3b422e623794c429f83459ccd9cfd4d/metadata.tsv",
+      "sample_name": "template_nextflow"
+    },
+    {
+      "sha256": "b37bc1cc19ec912fca5274e6a9cf2782f9db274d0664ad7c4d06ab30cf2101ed",
+      "kind": "analysis_output",
+      "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": ">example_segment1\nACGTACGTNNNNACGTTGCAACGT\n"
+      },
+      "size": 43,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "sequences_segment1.fasta",
+      "data_type": "meta",
+      "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:4aff5f96da7eebbb08ea59c57b6f22d9860469565055689c43bec32d25a0737a",
+      "id": "4aff5f96da7eebbb08ea59c57b6f22d9860469565055689c43bec32d25a0737a",
+      "source_path": "uploads/examples/template_nextflow-f3b422e623794c429f83459ccd9cfd4d/sequences_segment1.fasta",
+      "sample_name": "template_nextflow"
+    },
+    {
+      "sha256": "b6a2c671c2f755e70fe79d9e2b59a40cc03e9a16e45df3212ad1aece2f65545e",
+      "kind": "analysis_output",
+      "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+      "pipeline_result": {
+        "job_id": "407fe96f938f424e879508522f490f51",
+        "pipeline_name": "template_nextflow",
+        "output_key": "normalized_sequence",
+        "output_name": "normalized_sequence",
+        "output_kind": "sequence",
+        "completed_at": "2026-11-09T06:50:50.985156+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": ">template_nextflow|segment1\nACGTACGTNNNNACGTTGCAACGT\n"
+      },
+      "size": 53,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "normalized.fasta",
+      "data_type": "meta",
+      "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:6ac8dacd68da01b22b48e703cab64f343372a07b72f263c41d6cf8f31438a556",
+      "id": "6ac8dacd68da01b22b48e703cab64f343372a07b72f263c41d6cf8f31438a556",
+      "source_path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/normalized.fasta",
+      "sample_name": "template_nextflow"
+    },
+    {
+      "sha256": "ec7e2559fe83b1054fe46a690e42aaa411a5b3017dde856a4fd7afacf7825470",
+      "kind": "analysis_output",
+      "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+      "pipeline_result": {
+        "job_id": "407fe96f938f424e879508522f490f51",
+        "pipeline_name": "template_nextflow",
+        "output_key": "metrics",
+        "output_name": "metrics",
+        "output_kind": "metrics",
+        "completed_at": "2026-11-09T06:50:50.985156+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "status",
+          "pipeline",
+          "label",
+          "analysis_mode",
+          "subtype",
+          "segment",
+          "time",
+          "metadata_rows",
+          "sequence_length",
+          "passes_min_length",
+          "min_length",
+          "gc_percent"
+        ]
+      },
+      "size": 308,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "metrics.json",
+      "data_type": "meta",
+      "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:7e2fbbc0bb01977adf6ad754ffcbfa848310e4d0d06674a1615bf53637954e79",
+      "id": "7e2fbbc0bb01977adf6ad754ffcbfa848310e4d0d06674a1615bf53637954e79",
+      "source_path": "outputs/pipelines/407fe96f938f424e879508522f490f51/outputs/metrics.json",
+      "sample_name": "template_nextflow"
+    },
+    {
+      "sha256": "2c1e32e5b44a897d850268262f5b98632f04d022dfad045c9ebdcd8a17fe2d4a",
+      "kind": "analysis_output",
+      "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 825,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "results.zip",
+      "data_type": "meta",
+      "resource_id": "result:a19306cbcbac4c97b1df42aadfead7c3:dfdbcdaf4e0a8c2baa89d1e243cd51b3d0b5896be0d76925d30e3e63d7a891b0",
+      "id": "dfdbcdaf4e0a8c2baa89d1e243cd51b3d0b5896be0d76925d30e3e63d7a891b0",
+      "source_path": "pipeline-bundles/407fe96f938f424e879508522f490f51/results.zip",
+      "sample_name": "template_nextflow"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:c7cd7d71fe5d3b0d87fd67ac52fb3290",
+      "importable": false,
+      "sample_name": "template_nextflow",
+      "data_type": "meta",
+      "sample_id": "c7cd7d71fe5d3b0d87fd67ac52fb3290"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 345.46,
+  "test_finished": true
+}

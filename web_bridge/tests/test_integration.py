@@ -6,7 +6,8 @@ import unittest
 from urllib.parse import urlencode
 from unittest.mock import patch
 
-from auth import principal_scope
+from auth import COOKIE_NAME, principal_scope
+from auth.oauth import begin_login, complete_login
 from web_bridge.identity import Federation
 from web_bridge.bridge import issue_ticket
 from web_bridge.conversations import WebsiteAccounts
@@ -63,10 +64,17 @@ class WebsiteIntegrationTests(unittest.TestCase):
 
     def test_login_grant_identity_origin_replay_and_stable_conversation(self):
         self.configure()
-        grant=self.bootstrap()
+        # The newer MSCAN connector sends identity metadata even for mapped accounts.
+        status, _, raw = self.service('bootstrap', {
+            'origin': 'https://fixture.test',
+            'identity': {'user_id': 'external-alice', 'username': 'mscan-alice'},
+        })
+        self.assertEqual(status, 200, raw)
+        grant = json.loads(raw)
         self.assertEqual(self.request('/auth/website/exchange',method='POST',body={**grant,'origin':'https://other.test'})[0],400)
         value,cookie=self.exchange(grant)
         self.assertEqual(value['user']['id'],self.alice.user_id)
+        self.assertEqual(value['user']['name'], 'alice')
         self.assertEqual(self.request('/auth/website/exchange',method='POST',body=grant)[0],401)
         again,_=self.exchange(self.bootstrap())
         self.assertEqual(value['session_id'],again['session_id'])
@@ -89,6 +97,20 @@ class WebsiteIntegrationTests(unittest.TestCase):
             value, _ = self.exchange(json.loads(raw))
             self.assertEqual(value['user'], {'id': identity['user_id'], 'name': identity['username']})
             self.assertLessEqual(value['expires_in'], 300)
+
+            with patch.dict(os.environ, {
+                'AGENT_AUTH_MODE': 'oauth',
+                'AGENT_OAUTH_SERVER_URL': 'https://identity.test',
+                'AGENT_OAUTH_CLIENT_SECRET': 's' * 32,
+                'AGENT_OAUTH_REDIRECT_URI': 'http://localhost/auth/oauth/callback',
+            }), patch('auth.oauth._exchange', return_value={**identity, 'email': '', 'sid': 'broker-session'}):
+                _, state = begin_login('/')
+                token, principal, _ = complete_login('broker-code', state, state)
+                self.assertEqual(principal.user_id, value['user']['id'])
+                status, _, data = self.request(
+                    f"/sessions/{value['session_id']}/messages", cookie=f'{COOKIE_NAME}={token}',
+                )
+                self.assertEqual(status, 200, data)
 
             status, _, raw = self.service('bootstrap', {'origin': 'https://other.test', 'identity': identity},
                                           site='other', subject=identity['user_id'])

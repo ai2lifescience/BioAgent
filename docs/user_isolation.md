@@ -102,6 +102,9 @@ Docker daemon is unavailable. It never silently falls back to host execution.
 
 ## Startup modes
 
+Choose one of three sign-in modes: local access, BioAgent accounts, or CNCB SSO
+through direct CAS or the shared OAuth broker.
+
 | Startup/configuration | Account access | Tool execution |
 | --- | --- | --- |
 | `--host 127.0.0.1`, no explicit mode | Local owner, no login | Existing local executor |
@@ -235,7 +238,8 @@ first revokes BioAgent state, then enters CAS global logout.
 ### Shared OAuth service for MSCAN and BioAgent
 
 For separate app sessions backed by one CNCB login service, run the standalone
-broker in `oauth-service/`, register its `/cas/callback` with CNCB, then configure:
+broker in `resource/mscan/oauth/`. Register its public `/cas/callback` with
+CNCB, then configure BioAgent:
 
 ```bash
 export AGENT_AUTH_MODE=oauth
@@ -257,21 +261,25 @@ profile uses the browser-visible IP address and port, for example
 ```text
 AGENT_PUBLIC_ORIGIN=https://mscan.cncb.ac.cn
 AGENT_PUBLIC_BASE_URL=https://mscan.cncb.ac.cn/OneMicro/agent
+AGENT_OAUTH_SERVER_URL=http://127.0.0.1:8090
+AGENT_OAUTH_PUBLIC_URL=https://mscan.cncb.ac.cn/OneMicro/oauth
 AGENT_OAUTH_REDIRECT_URI=https://mscan.cncb.ac.cn/OneMicro/agent/auth/oauth/callback
 AGENT_OAUTH_POST_LOGOUT_REDIRECT_URI=https://mscan.cncb.ac.cn/OneMicro/agent/
 ```
 
 Run BioAgent with `AGENT_ENV_FILE=.env.development` or
 `AGENT_ENV_FILE=.env.production`. Keep the OAuth broker URL and client secret
-outside these tracked profile files. The reverse proxy must forward
+outside tracked profile files. Set `AGENT_OAUTH_PUBLIC_URL` when browsers must
+use a different broker URL from the server-side address. Build the frontend with
+`VITE_PUBLIC_PATH=/OneMicro/agent/ npm --prefix frontend run build`. The reverse proxy must forward
 `/OneMicro/agent/` to BioAgent and remove that prefix before the request reaches
 the BioAgent listener.
 
 Add the exact BioAgent and MSCAN server callbacks to the broker's private client
 registry. The broker validates CNCB CAS tickets; each app exchanges an OAuth code
 server-to-server and creates its own application session. See
-[`oauth-service/README.md`](../../oauth-service/README.md) for broker setup and
-MSCAN configuration. BioAgent logout revokes its local session first, then uses
+[MSCAN setup](mscan_web_bridge.md#everyday-startup) for the broker and backend
+configuration. BioAgent logout revokes its local session first, then uses
 the broker's authenticated logout-request endpoint; the broker owns CNCB CAS
 logout and the registered final redirect. `AGENT_OAUTH_PROXY` is intentionally
 separate from `AGENT_PROXY`; leave it empty for a broker on localhost. The

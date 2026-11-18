@@ -1,0 +1,32 @@
+{
+  "commit": "11f845ddbe1e246072dc6ff1aca0bdb484ecaed6",
+  "services": [
+    {
+      "name": "agent",
+      "url": "http://127.0.0.1:8000/health",
+      "status": 200
+    },
+    {
+      "name": "mscan",
+      "url": "http://127.0.0.1:8848/",
+      "status": 200
+    },
+    {
+      "name": "mscan-backend",
+      "url": "http://127.0.0.1:8080/cncb/",
+      "status": 200
+    },
+    {
+      "name": "cromwell",
+      "url": "http://192.168.164.46:39000/engine/v1/version",
+      "status": 200
+    }
+  ],
+  "configuration": {
+    "cromwell_url": "http://192.168.164.46:39000",
+    "input_endpoint": "http://192.168.164.46:7070",
+    "agent_proxy": "socks5h://127.0.0.1:10801",
+    "credentials_present": true,
+    "website_config_present": true
+  }
+}

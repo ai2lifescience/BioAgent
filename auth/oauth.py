@@ -13,17 +13,10 @@ from urllib.parse import urlencode, urlparse, urlunparse
 
 import requests
 
-from .context import AuthError, Principal
+from .context import AuthError, LOCAL_USER_ID, Principal, login_return_path
 from .store import AuthStore, database, password_hash
 
 STATE_COOKIE = "bioagent_oauth_state"
-
-
-def _return_path(value: str | None) -> str:
-    value = (value or "/").strip()
-    if not value.startswith("/") or value.startswith("//") or "\\" in value or "\r" in value or "\n" in value:
-        return "/"
-    return value
 
 
 def flexible_host() -> bool:
@@ -69,7 +62,7 @@ def _rewrite_browser_host(url: str, request_origin: str | None) -> str:
     return urlunparse((target.scheme, netloc, target.path, target.params, target.query, target.fragment))
 
 
-def _callback_for(request_origin: str | None) -> str:
+def callback_url(request_origin: str | None = None) -> str:
     redirect = _settings()[3]
     if not _usable_origin(request_origin):
         return redirect
@@ -88,15 +81,20 @@ def _public_base_url() -> str:
     return value
 
 
+def _broker_url(name: str, default: str = "") -> str:
+    value = (os.getenv(name, "").strip() or default).rstrip("/")
+    parsed = urlparse(value)
+    if (parsed.scheme not in {"http", "https"} or not parsed.hostname
+            or parsed.query or parsed.fragment or parsed.username is not None):
+        raise ValueError(f"{name} must be an HTTP(S) base URL without credentials, query or fragment.")
+    return value
+
+
 def _settings() -> tuple[str, str, str, str]:
-    base = os.getenv("AGENT_OAUTH_SERVER_URL", "").strip().rstrip("/")
+    base = _broker_url("AGENT_OAUTH_SERVER_URL")
     client_id = os.getenv("AGENT_OAUTH_CLIENT_ID", "bioagent").strip()
     secret = os.getenv("AGENT_OAUTH_CLIENT_SECRET", "").strip()
     redirect = os.getenv("AGENT_OAUTH_REDIRECT_URI", "").strip()
-    parsed_base = urlparse(base)
-    if (not base or parsed_base.scheme not in {"http", "https"} or not parsed_base.netloc
-            or parsed_base.path or parsed_base.query or parsed_base.fragment or parsed_base.username):
-        raise ValueError("AGENT_OAUTH_SERVER_URL must be an HTTP(S) origin.")
     if not client_id or len(secret) < 32:
         raise ValueError("Configure AGENT_OAUTH_CLIENT_ID and a 32-character AGENT_OAUTH_CLIENT_SECRET.")
     if not redirect:
@@ -143,7 +141,8 @@ def _oauth_http() -> requests.Session:
 
 
 def validate_config() -> None:
-    _settings()
+    base, _, _, _ = _settings()
+    _broker_url("AGENT_OAUTH_PUBLIC_URL", base)
     _post_logout_redirect_uri()
 
 
@@ -157,8 +156,8 @@ def _ensure_oauth_states(db) -> None:
 
 def begin_login(return_to: str | None, db_path=None, request_origin: str | None = None) -> tuple[str, str]:
     base, client_id, _secret, _configured = _settings()
-    redirect = _callback_for(request_origin)
-    browser_base = _rewrite_browser_host(base, request_origin)
+    redirect = callback_url(request_origin)
+    browser_base = _rewrite_browser_host(_broker_url("AGENT_OAUTH_PUBLIC_URL", base), request_origin)
     store = AuthStore(db_path)
     state = secrets.token_urlsafe(32)
     verifier = secrets.token_urlsafe(48)
@@ -167,7 +166,7 @@ def begin_login(return_to: str | None, db_path=None, request_origin: str | None 
         _ensure_oauth_states(db)
         db.execute("DELETE FROM oauth_client_states WHERE expires_at<?", (time.time(),))
         db.execute("INSERT INTO oauth_client_states(digest,verifier,return_to,expires_at,redirect_uri) VALUES (?,?,?,?,?)",
-                   (hashlib.sha256(state.encode()).hexdigest(), verifier, _return_path(return_to),
+                   (hashlib.sha256(state.encode()).hexdigest(), verifier, login_return_path(return_to),
                     time.time() + 600, redirect))
     query = urlencode({
         "response_type": "code", "client_id": client_id, "redirect_uri": redirect,
@@ -257,6 +256,9 @@ def begin_logout(request_origin: str | None = None) -> str:
 
 
 def _create_login(user_id: str, username: str, email: str, sid: str) -> tuple[str, Principal]:
+    if (user_id == LOCAL_USER_ID or len(user_id) > 128 or len(username) > 100
+            or len(sid) > 256 or any(ord(char) < 32 for char in user_id + username + sid)):
+        raise AuthError("OAuth identity response contains an invalid user ID, username or session ID.")
     store = AuthStore()
     token = secrets.token_urlsafe(32)
     token_hash = hashlib.sha256(token.encode()).hexdigest()
@@ -316,4 +318,4 @@ def complete_login(code: str, state: str, cookie_state: str, db_path=None) -> tu
     token, principal = _create_login(
         identity["user_id"], identity["username"], identity["email"], identity["sid"]
     )
-    return token, principal, _return_path(row["return_to"])
+    return token, principal, login_return_path(row["return_to"])

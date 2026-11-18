@@ -1,0 +1,86 @@
+[
+  {
+    "case": "repeat_push_existing_destination",
+    "input": {
+      "paths": [
+        "uploads/07a877acf06e49f69a6df145db6e01e7_contract-check.json"
+      ],
+      "destination": {
+        "project": "4bbcd904088e354eac39e47a8a5c4d3f",
+        "sample": "b77b5992bae136eaada279c1d0e8fbd6",
+        "data_type": "meta"
+      },
+      "create_missing": false
+    },
+    "response": {
+      "transfer_id": "f09be9bde5f34d19b63e31abaac9a4d9",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "source_registration": {
+          "status": "results_only",
+          "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+        },
+        "file_delivery": "delivered",
+        "native_qc_applied": false,
+        "files": [
+          {
+            "name": "07a877acf06e49f69a6df145db6e01e7_contract-check.json",
+            "id": "2ddd3842e2e56f98242242a785be7584a6f9abcb96289c9ac000b68781ebb8d4",
+            "source_path": "uploads/07a877acf06e49f69a6df145db6e01e7_contract-check.json",
+            "size": 191,
+            "sha256": "926d32840e4971baf63c90370795c6ad7808755919720ca200a2152e7595e93a",
+            "content": {
+              "kind": "json",
+              "preview_available": true,
+              "shape": "object",
+              "fields": [
+                "pipeline",
+                "workflow_executed",
+                "purpose",
+                "contract_valid"
+              ]
+            }
+          }
+        ],
+        "native_imports": [],
+        "qc": {},
+        "receipt_id": "f09be9bde5f34d19b63e31abaac9a4d9",
+        "target": {
+          "sample_id": "b77b5992bae136eaada279c1d0e8fbd6",
+          "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+          "sample_name": "b77b5992bae136eaada279c1d0e8fbd6",
+          "project_name": "Bridge_full_20261109_R2",
+          "data_type": "meta"
+        }
+      }
+    },
+    "same_sample": true
+  },
+  {
+    "case": "invalid_resource",
+    "response": {
+      "transfer_id": "d17e02535df24c2c9e5b9ab36bcb7d32",
+      "site_id": "mscan",
+      "operation": "pull",
+      "state": "failed",
+      "result": {
+        "error": "IllegalArgumentException: Result not found."
+      }
+    }
+  },
+  {
+    "case": "retry",
+    "response": {
+      "transfer_id": "d17e02535df24c2c9e5b9ab36bcb7d32",
+      "site_id": "mscan",
+      "operation": "pull",
+      "state": "failed",
+      "result": {
+        "error": "IllegalArgumentException: Result not found."
+      }
+    },
+    "same_transfer_id": true
+  }
+]

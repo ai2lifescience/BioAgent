@@ -26,13 +26,13 @@ Pipeline2Agent can:
 
 - answer biology questions and explain biological concepts;
 - retrieve records from NCBI, PubMed, UniProt, InterPro, KEGG, QuickGO, PDB,
-and AlphaFold DB;
+  and AlphaFold DB;
 - analyze nucleotide sequences, genome maps, and protein structures;
 - inspect FASTA, CSV, TSV, JSON, Markdown, and text files;
 - read and summarize selectable-text PDF documents with page references;
 - create evidence-backed reports with sources, citations, and generated files;
 - build session-owned web knowledge collections asynchronously and answer from
-retrieved, cited RAG evidence;
+  retrieved, cited RAG evidence;
 - run Shell, Snakemake, Nextflow, and WDL pipelines; and
 - retain uploads and generated files within a chat session.
 
@@ -86,7 +86,6 @@ from the repository root before starting the server:
 conda activate openaisdk
 npm --prefix frontend ci
 npm --prefix frontend run build
-export AGENT_ENV_FILE=.env
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ```
 
@@ -97,6 +96,12 @@ Start the Python server from the repository root shown above: runtime paths are
 relative to the process working directory, so launching it from `frontend/` or
 another directory creates a separate runtime tree.
 For Vite development, see the [frontend guide](frontend/README.md).
+
+The command above uses local mode without a login. For shared deployments,
+use `AGENT_AUTH_MODE=multiuser` for BioAgent username/password accounts, or
+configure CNCB single sign-on with `AGENT_AUTH_MODE=oauth` or `cas`.
+See [startup modes](docs/user_isolation.md#startup-modes) and
+[MSCAN setup](docs/mscan_web_bridge.md#first-time-setup).
 
 In local/trusted mode, WDL pipelines use miniwdl by default; isolated mode uses
 Cromwell/S3. For [Cromwell execution](docs/web_usage.md#wdl-execution-backend),
@@ -222,6 +227,8 @@ status. Poll `GET /runs/<run_id>` or consume resumable progress from
 `POST /run_stream`, which exposes the same queued run as an SSE stream;
 `POST /approve_stream` does the same for approval resumes.
 
+
+
 ### Embedded assistant
 
 Embed the assistant as a drawer in a trusted website with the supplied
@@ -270,6 +277,7 @@ service credential and the website's authenticated user identity. See the
 observation, natural-language push/pull and the complete adapter contract, or
 [MSCAN setup](docs/mscan_web_bridge.md) for the reference integration.
 
+
 ### Python
 
 ```python
@@ -292,14 +300,14 @@ selected execution environment.
 - Snakemake pipelines require the `snakemake` package included in
 `requirements.txt`.
 - Nextflow pipelines require a local `nextflow` executable, Java 17 or newer,
-and a POSIX shell. On Windows, run Pipeline2Agent and Nextflow inside WSL.
+  and a POSIX shell. On Windows, run Pipeline2Agent and Nextflow inside WSL.
 - WDL pipelines use local `miniwdl` by default and require Docker; see the
-[web usage guide](docs/web_usage.md#wdl-execution-backend) for Cromwell setup.
+  [web usage guide](docs/web_usage.md#wdl-execution-backend) for Cromwell setup.
 - Pipeline inputs should be supplied explicitly through the request or uploaded
-through the web UI.
+  through the web UI.
 - Use the pipeline catalog to discover the workflows available in this checkout.
-See [pipeline architecture](docs/architecture.md#pipeline-engine) for file
-handling, execution, and adding pipelines.
+  See [pipeline architecture](docs/architecture.md#pipeline-engine) for file
+  handling, execution, and adding pipelines.
 
 
 
@@ -317,4 +325,3 @@ handling, execution, and adding pipelines.
 - [CLI usage and examples](docs/cli_usage.md)
 - [Team development workflow](docs/dev_workflow.md)
 - [Roadmap and open work](docs/todo.md)
-

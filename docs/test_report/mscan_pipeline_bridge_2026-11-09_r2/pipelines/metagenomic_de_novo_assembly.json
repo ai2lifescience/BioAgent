@@ -1,0 +1,253 @@
+{
+  "pipeline": "metagenomic_de_novo_assembly",
+  "engine": "wdl",
+  "manifest_sha256": "9673b8837a19057e467288d825a98ea7c9abd891e0466ff6b5051fe23842bea4",
+  "selected_for_execution": true,
+  "execution_status": "observation_timeout",
+  "scope_note": "",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/metagenomic_de_novo_assembly/data/input/assembly_demo.fastq.gz",
+      "bytes": 9480292,
+      "sha256": "4d3438f07a5ffc48b96e0a45e3c674cdf5ef6a72740450e9cc73f3bb9244405d"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "read1",
+      "read2"
+    ],
+    "outputs": [
+      "contigs",
+      "contig_report",
+      "species_report"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/49f4a1bf93bf49b9a8c89fb866b6cef6_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "metagenomic_de_novo_assembly_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "a77e8c351e794e8187b43abf758e4aa8",
+      "response": {
+        "transfer_id": "a77e8c351e794e8187b43abf758e4aa8",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "49f4a1bf93bf49b9a8c89fb866b6cef6_contract-check.json",
+              "id": "681e3a1135be76a0e5fc88a7f9f8340673c18772af78ab0ce5969fce8294665b",
+              "source_path": "uploads/49f4a1bf93bf49b9a8c89fb866b6cef6_contract-check.json",
+              "size": 183,
+              "sha256": "e3aa059764fc6eb85c8280fd89aa3e25957561cb1e94534d2166c6e56fa52583",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "a77e8c351e794e8187b43abf758e4aa8",
+          "target": {
+            "sample_id": "87329a9978933ebeb555f9dd2f5ec00e",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "metagenomic_de_novo_assembly_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "87329a9978933ebeb555f9dd2f5ec00e"
+      },
+      "transfer_id": "42ec0317bb414a429ff1c3819b641188",
+      "response": {
+        "transfer_id": "42ec0317bb414a429ff1c3819b641188",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "e3aa059764fc6eb85c8280fd89aa3e25957561cb1e94534d2166c6e56fa52583",
+              "kind": "analysis_output",
+              "sample_id": "87329a9978933ebeb555f9dd2f5ec00e",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 183,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "49f4a1bf93bf49b9a8c89fb866b6cef6_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:a77e8c351e794e8187b43abf758e4aa8:681e3a1135be76a0e5fc88a7f9f8340673c18772af78ab0ce5969fce8294665b",
+              "id": "681e3a1135be76a0e5fc88a7f9f8340673c18772af78ab0ce5969fce8294665b",
+              "source_path": "uploads/49f4a1bf93bf49b9a8c89fb866b6cef6_contract-check.json",
+              "sample_name": "metagenomic_de_novo_assembly_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:87329a9978933ebeb555f9dd2f5ec00e",
+              "importable": false,
+              "sample_name": "metagenomic_de_novo_assembly_contract_only",
+              "data_type": "meta",
+              "sample_id": "87329a9978933ebeb555f9dd2f5ec00e"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:a77e8c351e794e8187b43abf758e4aa8:681e3a1135be76a0e5fc88a7f9f8340673c18772af78ab0ce5969fce8294665b"
+      },
+      "transfer_id": "63ea3daa17004f4285ca15e677cb2ac4",
+      "response": {
+        "transfer_id": "63ea3daa17004f4285ca15e677cb2ac4",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "85ee9a76-db58-4c98-942b-0d0987df994d",
+            "path": "uploads/d846a81b0735499383b176328ea553fa_49f4a1bf93bf49b9a8c89fb866b6cef6_contract-check.json",
+            "workspace_path": "uploads/d846a81b0735499383b176328ea553fa_49f4a1bf93bf49b9a8c89fb866b6cef6_contract-check.json",
+            "name": "49f4a1bf93bf49b9a8c89fb866b6cef6_contract-check.json",
+            "size": 183,
+            "sha256": "e3aa059764fc6eb85c8280fd89aa3e25957561cb1e94534d2166c6e56fa52583",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "85ee9a76-db58-4c98-942b-0d0987df994d",
+  "assigned_inputs": {
+    "read1": "uploads/examples/metagenomic_de_novo_assembly-66e09a5625ba4760879bca65f1496f2a/assembly_demo.fastq.gz"
+  },
+  "parameter_overrides": {},
+  "plan_id": "af5ff61860524349bee7a8199304402d",
+  "job_id": "af5ff61860524349bee7a8199304402d",
+  "last_state": {
+    "job_id": "af5ff61860524349bee7a8199304402d",
+    "plan_id": "af5ff61860524349bee7a8199304402d",
+    "status": "running",
+    "created_at": "2026-11-09T06:24:40.618225+00:00",
+    "started_at": "2026-11-09T06:24:41.042493+00:00",
+    "updated_at": "2026-11-09T06:39:44.544439+00:00",
+    "remote_id": "1a609138-d3be-477a-8714-f972848637ba",
+    "pipeline_name": "metagenomic_de_novo_assembly"
+  },
+  "cancellation": {
+    "job_id": "af5ff61860524349bee7a8199304402d",
+    "plan_id": "af5ff61860524349bee7a8199304402d",
+    "status": "cancelling",
+    "created_at": "2026-11-09T06:24:40.618225+00:00",
+    "started_at": "2026-11-09T06:24:41.042493+00:00",
+    "updated_at": "2026-11-09T06:39:47.590728+00:00",
+    "remote_id": "1a609138-d3be-477a-8714-f972848637ba",
+    "pipeline_name": "metagenomic_de_novo_assembly"
+  },
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "87329a9978933ebeb555f9dd2f5ec00e",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "metagenomic_de_novo_assembly_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "49f4a1bf93bf49b9a8c89fb866b6cef6_contract-check.json",
+      "resource_id": "result:a77e8c351e794e8187b43abf758e4aa8:681e3a1135be76a0e5fc88a7f9f8340673c18772af78ab0ce5969fce8294665b",
+      "state": "succeeded",
+      "bytes": 183,
+      "sha256": "e3aa059764fc6eb85c8280fd89aa3e25957561cb1e94534d2166c6e56fa52583",
+      "expected_sha256": "e3aa059764fc6eb85c8280fd89aa3e25957561cb1e94534d2166c6e56fa52583",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "e3aa059764fc6eb85c8280fd89aa3e25957561cb1e94534d2166c6e56fa52583",
+      "kind": "analysis_output",
+      "sample_id": "87329a9978933ebeb555f9dd2f5ec00e",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 183,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "49f4a1bf93bf49b9a8c89fb866b6cef6_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:a77e8c351e794e8187b43abf758e4aa8:681e3a1135be76a0e5fc88a7f9f8340673c18772af78ab0ce5969fce8294665b",
+      "id": "681e3a1135be76a0e5fc88a7f9f8340673c18772af78ab0ce5969fce8294665b",
+      "source_path": "uploads/49f4a1bf93bf49b9a8c89fb866b6cef6_contract-check.json",
+      "sample_name": "metagenomic_de_novo_assembly_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:87329a9978933ebeb555f9dd2f5ec00e",
+      "importable": false,
+      "sample_name": "metagenomic_de_novo_assembly_contract_only",
+      "data_type": "meta",
+      "sample_id": "87329a9978933ebeb555f9dd2f5ec00e"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 926.08,
+  "test_finished": true
+}

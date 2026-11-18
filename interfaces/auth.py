@@ -9,6 +9,7 @@ import socket
 from urllib.parse import parse_qsl, parse_qs, urlencode, urlparse
 
 from auth import AuthError, AuthStore, COOKIE_NAME, auth_mode, current_principal, principal_scope, registration_enabled
+from auth.context import login_return_path
 
 
 def loopback(host: str) -> bool:
@@ -76,7 +77,7 @@ def _check_origin(handler) -> None:
     host = handler.headers.get("Host", "")
     public = os.getenv("AGENT_PUBLIC_ORIGIN", "").rstrip("/")
     hostname = urlparse("http://" + host).hostname or ""
-    flexible_local = flexible_host() and local_hostname(hostname)
+    flexible_local = auth_mode() == "oauth" and flexible_host() and local_hostname(hostname)
     if auth_mode() == "local":
         # Host validation also rejects DNS rebinding against the local service.
         if not loopback(hostname) or not loopback(handler.client_address[0]):
@@ -153,7 +154,8 @@ def redirect_unauthenticated_app(handler) -> bool:
     return_to = "/" if parsed.path in {"", "/", "/index.html"} else parsed.path
     if kept:
         return_to += "?" + urlencode(kept)
-    login = "/auth/oauth/login" if mode == "oauth" else "/auth/cas/login"
+    login = _public_app_path(f"/auth/{mode}/login")
+    return_to = _public_app_path(return_to)
     _redirect(handler, login + "?" + urlencode({"return_to": return_to}))
     return True
 
@@ -166,9 +168,13 @@ def _external_login_url() -> str | None:
     return None
 
 
-def _public_home_path() -> str:
+def _public_app_path(value: str | None) -> str:
+    path = login_return_path(value)
     base = urlparse(os.getenv("AGENT_PUBLIC_BASE_URL", "")).path.rstrip("/")
-    return (base + "/") if base else "/"
+    pathname = urlparse(path).path
+    if base and pathname != base and not pathname.startswith(base + "/"):
+        return base + path
+    return path
 
 
 def _external_logout_url() -> str:
@@ -195,11 +201,12 @@ def _auth_endpoint(handler, path: str) -> bool:
     if path == "/auth/cas/login" and handler.command == "GET":
         if auth_mode() != "cas":
             raise AuthError("CAS login is not enabled.")
-        from auth.cas import STATE_COOKIE, begin_login
+        from auth.cas import STATE_COOKIE, begin_login, service_url
         query = parse_qs(urlparse(handler.path).query)
-        location, state = begin_login((query.get("return_to") or ["/"])[0])
+        location, state = begin_login(_public_app_path((query.get("return_to") or ["/"])[0]))
+        callback_path = urlparse(service_url()).path or "/"
         handler._auth_cookie = (
-            f"{STATE_COOKIE}={state}; Path=/auth/cas; HttpOnly; SameSite=Lax; Max-Age=300"
+            f"{STATE_COOKIE}={state}; Path={callback_path}; HttpOnly; SameSite=Lax; Max-Age=300"
             + ("; Secure" if secure_cookie() else "")
         )
         _redirect(handler, location)
@@ -207,11 +214,13 @@ def _auth_endpoint(handler, path: str) -> bool:
     if path == "/auth/oauth/login" and handler.command == "GET":
         if auth_mode() != "oauth":
             raise AuthError("OAuth login is not enabled.")
-        from auth.oauth import STATE_COOKIE, begin_login
+        from auth.oauth import STATE_COOKIE, begin_login, callback_url
         query = parse_qs(urlparse(handler.path).query)
-        location, state = begin_login((query.get("return_to") or ["/"])[0], request_origin=_request_origin(handler))
+        request_origin = _request_origin(handler)
+        location, state = begin_login(_public_app_path((query.get("return_to") or ["/"])[0]), request_origin=request_origin)
+        callback_path = urlparse(callback_url(request_origin)).path or "/"
         handler._auth_cookie = (
-            f"{STATE_COOKIE}={state}; Path=/auth/oauth/callback; HttpOnly; SameSite=Lax; Max-Age=600"
+            f"{STATE_COOKIE}={state}; Path={callback_path}; HttpOnly; SameSite=Lax; Max-Age=600"
             + ("; Secure" if secure_cookie() else "")
         )
         _redirect(handler, location)
@@ -222,17 +231,12 @@ def _auth_endpoint(handler, path: str) -> bool:
         from auth.oauth import STATE_COOKIE, complete_login
         query = parse_qs(urlparse(handler.path).query)
         if (query.get("error") or [""])[0]:
-            _redirect(handler, _public_home_path())
-            return True
-        try:
-            token, _, return_to = complete_login(
-                (query.get("code") or [""])[0],
-                (query.get("state") or [""])[0],
-                _cookie(handler, STATE_COOKIE),
-            )
-        except AuthError:
-            _redirect(handler, _public_home_path())
-            return True
+            raise AuthError("The identity service declined the sign-in request.")
+        token, _, return_to = complete_login(
+            (query.get("code") or [""])[0],
+            (query.get("state") or [""])[0],
+            _cookie(handler, STATE_COOKIE),
+        )
         handler._auth_cookie = (
             f"{COOKIE_NAME}={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=28800"
             + ("; Secure" if secure_cookie() else "")

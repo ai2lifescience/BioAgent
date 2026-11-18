@@ -13,6 +13,7 @@ export function WebsiteProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let alive = true, exchanging = false;
     let refreshTimer: number | undefined;
+    const agentUrl = (path: string) => new URL(path, window.location.href);
     const originalFetch = window.fetch.bind(window);
     window.fetch = async (input, init) => {
       const url = new URL(input instanceof Request ? input.url : String(input), window.location.href);
@@ -39,7 +40,7 @@ export function WebsiteProvider({ children }: { children: ReactNode }) {
       if (event.data?.type !== 'agent-authenticate' || exchanging) return;
       exchanging = true;
       try {
-        const response = await fetch('/auth/website/exchange', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: event.data.code, site_id: site, origin, credential_mode: 'bearer' }) });
+        const response = await fetch(agentUrl('auth/website/exchange'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: event.data.code, site_id: site, origin, credential_mode: 'bearer' }) });
         const body = await response.json();
         if (!response.ok) throw new Error(body.error || 'Website sign-in failed.');
         if (alive) {
@@ -58,13 +59,13 @@ export function WebsiteProvider({ children }: { children: ReactNode }) {
       const anchor = (event.target as Element)?.closest?.('a');
       if (!anchor) return;
       const url = new URL(anchor.href, location.href);
-      if (url.origin !== location.origin || url.pathname !== '/workspace/file') return;
+      if (url.origin !== location.origin || url.pathname !== agentUrl('workspace/file').pathname) return;
       event.preventDefault();
       try {
-        const response = await fetch('/website/artifact-ticket', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ site_id: site, session_id: url.searchParams.get('session_id'), path: url.searchParams.get('path') }) });
+        const response = await fetch(agentUrl('website/artifact-ticket'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ site_id: site, session_id: url.searchParams.get('session_id'), path: url.searchParams.get('path') }) });
         const payload = await response.json();
         if (!response.ok) throw new Error(payload.error || 'Download failed.');
-        const link = document.createElement('a'); link.href = '/website/download/' + encodeURIComponent(payload.token); link.download = ''; link.referrerPolicy = 'no-referrer'; link.click();
+        const link = document.createElement('a'); link.href = agentUrl('website/download/' + encodeURIComponent(payload.token)).href; link.download = ''; link.referrerPolicy = 'no-referrer'; link.click();
       } catch (caught) { setError((caught as Error).message); }
     };
     window.addEventListener('message', receive); window.addEventListener('bioagent-auth-expired', expired);

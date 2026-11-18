@@ -1,0 +1,243 @@
+{
+  "pipeline": "bacterial_viral_variant_analysis",
+  "engine": "wdl",
+  "manifest_sha256": "bbd1b330a16d3c5b249e7db12b2eaff50bc65e65dac68d10042b5aae2d44951d",
+  "selected_for_execution": false,
+  "execution_status": "not_executed",
+  "scope_note": "Contract and inert-transfer verification only; biological workflow/example outside the live execution safety scope.",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/bacterial_viral_variant_analysis/data/input/example_bac_reads.fastq",
+      "bytes": 306,
+      "sha256": "61b8baa874e033323f09772b54c65695a809471b883d7924217c26134fea450a"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/bacterial_viral_variant_analysis/data/input/example_bac_reference.fasta",
+      "bytes": 92,
+      "sha256": "e62f1223adf2772ce28429918c6e788f0183acbdb6cbf509bda91ba5c06001d3"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/bacterial_viral_variant_analysis/data/input/example_vir_phiX174.fasta",
+      "bytes": 5404,
+      "sha256": "b9c1b4e766a0141aca5ff4cee25fbd7575dcbec2aaa49980d739c000ad114271"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/bacterial_viral_variant_analysis/data/input/example_vir_phiX174_reference.fasta",
+      "bytes": 5520,
+      "sha256": "caa155c83967cc080f4f188f14f1f28c18d77448e87c3d00d3579ed348f4de2a"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "sequence_file1",
+      "sequence_file2",
+      "reference_fasta"
+    ],
+    "outputs": [
+      "snp_matrix",
+      "variants_tsv",
+      "variants_summary"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/cfd94a1aebc742a1b0bdd6f60149e68d_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "bacterial_viral_variant_analysis_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "1f9618d1a68e4761b9ca845ce839f898",
+      "response": {
+        "transfer_id": "1f9618d1a68e4761b9ca845ce839f898",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "cfd94a1aebc742a1b0bdd6f60149e68d_contract-check.json",
+              "id": "4f0155ca507a1f5d0ae34c4dae033f1b235a0d8b1f0ad4970551e191ecf6ca9c",
+              "source_path": "uploads/cfd94a1aebc742a1b0bdd6f60149e68d_contract-check.json",
+              "size": 187,
+              "sha256": "38206710ae0058ee74f712f23ab2c9613f1952e86cf7f043982cceef1080a99c",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "1f9618d1a68e4761b9ca845ce839f898",
+          "target": {
+            "sample_id": "f629eae18d2331e086ac682eef680234",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "bacterial_viral_variant_analysis_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "f629eae18d2331e086ac682eef680234"
+      },
+      "transfer_id": "6b9f6ba6c1374c2490a4e95ad49d6830",
+      "response": {
+        "transfer_id": "6b9f6ba6c1374c2490a4e95ad49d6830",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "38206710ae0058ee74f712f23ab2c9613f1952e86cf7f043982cceef1080a99c",
+              "kind": "analysis_output",
+              "sample_id": "f629eae18d2331e086ac682eef680234",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 187,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "cfd94a1aebc742a1b0bdd6f60149e68d_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:1f9618d1a68e4761b9ca845ce839f898:4f0155ca507a1f5d0ae34c4dae033f1b235a0d8b1f0ad4970551e191ecf6ca9c",
+              "id": "4f0155ca507a1f5d0ae34c4dae033f1b235a0d8b1f0ad4970551e191ecf6ca9c",
+              "source_path": "uploads/cfd94a1aebc742a1b0bdd6f60149e68d_contract-check.json",
+              "sample_name": "bacterial_viral_variant_analysis_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:f629eae18d2331e086ac682eef680234",
+              "importable": false,
+              "sample_name": "bacterial_viral_variant_analysis_contract_only",
+              "data_type": "meta",
+              "sample_id": "f629eae18d2331e086ac682eef680234"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:1f9618d1a68e4761b9ca845ce839f898:4f0155ca507a1f5d0ae34c4dae033f1b235a0d8b1f0ad4970551e191ecf6ca9c"
+      },
+      "transfer_id": "ff996bf121c143fb9506fda35239ba95",
+      "response": {
+        "transfer_id": "ff996bf121c143fb9506fda35239ba95",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "1f45ee14-5468-4449-803d-a1f05c530a94",
+            "path": "uploads/f646ebc4bb1b42ff8711b96f49fe33ea_cfd94a1aebc742a1b0bdd6f60149e68d_contract-check.json",
+            "workspace_path": "uploads/f646ebc4bb1b42ff8711b96f49fe33ea_cfd94a1aebc742a1b0bdd6f60149e68d_contract-check.json",
+            "name": "cfd94a1aebc742a1b0bdd6f60149e68d_contract-check.json",
+            "size": 187,
+            "sha256": "38206710ae0058ee74f712f23ab2c9613f1952e86cf7f043982cceef1080a99c",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "1f45ee14-5468-4449-803d-a1f05c530a94",
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "f629eae18d2331e086ac682eef680234",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "bacterial_viral_variant_analysis_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "cfd94a1aebc742a1b0bdd6f60149e68d_contract-check.json",
+      "resource_id": "result:1f9618d1a68e4761b9ca845ce839f898:4f0155ca507a1f5d0ae34c4dae033f1b235a0d8b1f0ad4970551e191ecf6ca9c",
+      "state": "succeeded",
+      "bytes": 187,
+      "sha256": "38206710ae0058ee74f712f23ab2c9613f1952e86cf7f043982cceef1080a99c",
+      "expected_sha256": "38206710ae0058ee74f712f23ab2c9613f1952e86cf7f043982cceef1080a99c",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "38206710ae0058ee74f712f23ab2c9613f1952e86cf7f043982cceef1080a99c",
+      "kind": "analysis_output",
+      "sample_id": "f629eae18d2331e086ac682eef680234",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 187,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "cfd94a1aebc742a1b0bdd6f60149e68d_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:1f9618d1a68e4761b9ca845ce839f898:4f0155ca507a1f5d0ae34c4dae033f1b235a0d8b1f0ad4970551e191ecf6ca9c",
+      "id": "4f0155ca507a1f5d0ae34c4dae033f1b235a0d8b1f0ad4970551e191ecf6ca9c",
+      "source_path": "uploads/cfd94a1aebc742a1b0bdd6f60149e68d_contract-check.json",
+      "sample_name": "bacterial_viral_variant_analysis_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:f629eae18d2331e086ac682eef680234",
+      "importable": false,
+      "sample_name": "bacterial_viral_variant_analysis_contract_only",
+      "data_type": "meta",
+      "sample_id": "f629eae18d2331e086ac682eef680234"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 18.27,
+  "test_finished": true
+}

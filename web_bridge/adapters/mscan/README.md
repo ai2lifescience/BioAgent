@@ -58,26 +58,22 @@ transfer code stays in BioAgent.
 See the [installation guide and exact MSCAN file changes](../../../docs/mscan_web_bridge.md#install-the-web-bridge-in-mscan)
 for prerequisites, setup, builds, startup and verification.
 
-The development workspace keeps `BioAgent`, `mscan` and `mscan-app` as sibling
-repositories. Host implementation and regression checks are tracked directly
-in the two MSCAN repositories. BioAgent does not provide an installer that
-writes into them.
+In this workspace, `resource/mscan/mscan` and `resource/mscan/mscan-app` are
+independent repositories. Use `mscan_agent_dev` in both. MSCAN tracks the
+connector source and host regression checks, and BioAgent ships the client
+configuration helper and bridge protocol.
 
 ```bash
 python web_bridge/adapters/mscan/run.py init \
   --origins http://localhost:8848,http://127.0.0.1:8848,http://YOUR_SERVER_IP:8848
 npm --prefix frontend run build
 docker build -f isolation/deploy/Dockerfile -t bioagent-worker:local .
-pnpm --dir ../mscan type:check
-mvn -f ../mscan-app/pom.xml clean package -DskipTests
+pnpm --dir resource/mscan/mscan type:check
+mvn -f resource/mscan/mscan-app/pom.xml clean package -DskipTests
 ```
 
-Use an actual IP instead of `YOUR_SERVER_IP`. The direct integration changes
-three existing host files:
-`src/App.vue` mounts the assistant; `src/views/sampleProgramResults/index.vue`
-connects selected sample context, result refreshes and the download menu; and
-the backend's `application-druid.yml` contains the connector settings. No MSCAN
-database migration is required.
+Use an actual IP instead of `YOUR_SERVER_IP`. The backend's active profile
+contains the connector settings. No MSCAN database migration is required.
 
 Activate the environment providing Java, Maven, Node/pnpm and agent Python first
 (for this development checkout, `conda activate openaisdk`). Install each project's
@@ -96,7 +92,7 @@ after changing either side.
 | Frontend `src/views/sampleProgramResults/index.vue` | Sample context, result refresh and download menu |
 | Backend `application-druid.yml` | Direct `bioagent.*` connector configuration |
 | Frontend `ProgramResultPanel.vue` | Use assembly results for synthetic functional-analysis samples |
-| Backend CAS/security/session classes | Unified CAS login and front/back-channel logout |
+| Backend OAuth and session services | Shared CNCB identity and front/back-channel logout |
 | Backend DuckDB startup | Normalize inherited HTTP(S) proxy root slashes |
 
 The remaining integration files are additions owned by MSCAN: five

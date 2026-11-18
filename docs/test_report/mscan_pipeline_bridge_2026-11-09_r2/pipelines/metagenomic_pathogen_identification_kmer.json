@@ -1,0 +1,1257 @@
+{
+  "pipeline": "metagenomic_pathogen_identification_kmer",
+  "engine": "wdl",
+  "manifest_sha256": "bad75ce31ca9217f04952a49f4dc56d658fa3e7dd6a6dd07f96da5314e431a74",
+  "selected_for_execution": true,
+  "execution_status": "succeeded",
+  "scope_note": "",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/metagenomic_pathogen_identification_kmer/data/input/kmer_demo_R1.fastq.gz",
+      "bytes": 8952270,
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/metagenomic_pathogen_identification_kmer/data/input/kmer_demo_R2.fastq.gz",
+      "bytes": 10923663,
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "clean_r1",
+      "clean_r2"
+    ],
+    "outputs": [
+      "classified_tsv",
+      "report_tsv",
+      "signature_coverage_csv"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "pipeline-bundles/91f18ae76e1e4253a834a1f1213275e9/results.zip",
+          "uploads/examples/metagenomic_pathogen_identification_kmer-382cb73370a5413a97f0ef1e587587d2/kmer_demo_R1.fastq.gz",
+          "uploads/examples/metagenomic_pathogen_identification_kmer-382cb73370a5413a97f0ef1e587587d2/kmer_demo_R2.fastq.gz"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "metagenomic_pathogen_identification_kmer",
+          "data_type": "meta",
+          "source_slots": {
+            "R1": "uploads/examples/metagenomic_pathogen_identification_kmer-382cb73370a5413a97f0ef1e587587d2/kmer_demo_R1.fastq.gz",
+            "R2": "uploads/examples/metagenomic_pathogen_identification_kmer-382cb73370a5413a97f0ef1e587587d2/kmer_demo_R2.fastq.gz"
+          }
+        },
+        "create_missing": true
+      },
+      "transfer_id": "4d04b9dacfae4998b5c39c9034c40b5b",
+      "response": {
+        "transfer_id": "4d04b9dacfae4998b5c39c9034c40b5b",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "registered",
+            "slots": {
+              "R2": "b3d24a5b385a3fe7ac82b934835d26d0",
+              "R1": "4a50e8f37146381db72f54f82cfece27"
+            }
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "results.zip",
+              "id": "dd55954421585abd5a941c37532e4a1dedb3b44f0df5d8eb9c8b05c43667f011",
+              "source_path": "pipeline-bundles/91f18ae76e1e4253a834a1f1213275e9/results.zip",
+              "size": 4919093,
+              "sha256": "65544dc01906c331a05985a530cc37d99941cd2bc5f356fa43ec782cecb49b12",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "size": 15911058,
+              "sha256": "70d409c29ba84c3408640424da04c11dbd36b84f908a300b198913655a2e9729",
+              "name": "classified.tsv",
+              "id": "913500723903d93129ed1f495a81a4d27dcef6bccb6e81c185bba9c2ac675a7c",
+              "source_path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/0/classified.tsv",
+              "pipeline_result": {
+                "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+                "pipeline_name": "metagenomic_pathogen_identification_kmer",
+                "output_key": "StrobeTaxaDetection.classified_tsv",
+                "output_name": "classified_tsv",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:50:28.644580+00:00"
+              },
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "seqid",
+                  "tax_id",
+                  "base_coverage",
+                  "uniq_base_coverage",
+                  "uniq_seed_coverage",
+                  "context_weighted_seed_coverage",
+                  "seed_counts",
+                  "bin_indices"
+                ],
+                "preview_rows": [
+                  [
+                    "SRR12883954.1 1/1",
+                    "1598",
+                    "0.16438356",
+                    "0.034246575",
+                    "0.004109589",
+                    "0.0020547945",
+                    "40",
+                    "174"
+                  ],
+                  [
+                    "SRR12883954.2 2/1",
+                    "2742598",
+                    "0.36125654",
+                    "0.036649216",
+                    "0.040896967",
+                    "0.005521091",
+                    "53",
+                    "28"
+                  ],
+                  [
+                    "SRR12883954.3 3/1",
+                    "2",
+                    "0.72289157",
+                    "0.72289157",
+                    "0.2746988",
+                    "0",
+                    "50",
+                    "8"
+                  ]
+                ]
+              }
+            },
+            {
+              "size": 255290,
+              "sha256": "101d4140954fcc482561e1bbcccfdd76d4e0d8e2aced9477668b63f210650726",
+              "name": "report.tsv",
+              "id": "e98e7ca9ac81d5055d83e6514458cf8bc7e38f815135f5751bfa92724b4ed748",
+              "source_path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/1/report.tsv",
+              "pipeline_result": {
+                "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+                "pipeline_name": "metagenomic_pathogen_identification_kmer",
+                "output_key": "StrobeTaxaDetection.report_tsv",
+                "output_name": "report_tsv",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:50:28.644580+00:00"
+              },
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "tax_id",
+                  "name",
+                  "rank",
+                  "count",
+                  "fraction",
+                  "count_feat2_ge_0.6",
+                  "frac_feat2_ge_0.6",
+                  "count_feat3_ge_0.5",
+                  "frac_feat3_ge_0.5",
+                  "count_both_ge_0.6&0.5",
+                  "frac_both_ge_0.6&0.5"
+                ],
+                "preview_rows": [
+                  [
+                    "47770",
+                    "Lactobacillus crispatus",
+                    "species",
+                    "32937",
+                    "0.164685",
+                    "249",
+                    "0.007560",
+                    "27",
+                    "0.000820",
+                    "25",
+                    "0.000759"
+                  ],
+                  [
+                    "1783272",
+                    "Bacillati",
+                    "kingdom",
+                    "26005",
+                    "0.130025",
+                    "2604",
+                    "0.100135",
+                    "0",
+                    "0.000000",
+                    "0",
+                    "0.000000"
+                  ],
+                  [
+                    "2",
+                    "Bacteria",
+                    "domain",
+                    "20547",
+                    "0.102735",
+                    "2074",
+                    "0.100939",
+                    "0",
+                    "0.000000",
+                    "0",
+                    "0.000000"
+                  ]
+                ]
+              }
+            },
+            {
+              "size": 16710,
+              "sha256": "683fb11bd3fe1b1ff835cacd33065e02e4ec27d728e00f169f867a26089378a8",
+              "name": "signature_coverage.csv",
+              "id": "9ad1b9caaab71785609dc0b8e928fd949f21b289f363270fcc845541a90657dd",
+              "source_path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/2/signature_coverage.csv",
+              "pipeline_result": {
+                "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+                "pipeline_name": "metagenomic_pathogen_identification_kmer",
+                "output_key": "StrobeTaxaDetection.signature_coverage_csv",
+                "output_name": "signature_coverage_csv",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:50:28.644580+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "tax_id,species_name,type,confident_reads_count,confident_reads_relative_abundance,total_assigned_reads,genome_length_bp,cell_abundance,relative_cell_abundance,max_confident_score,novel_seed_rate,binned_reads_count,covered_bins,expected_covered_bins,covered_vs_expected,covered_vs_expected_100bins,covered_vs_expected_25bins,covered_vs_expected_5bins,coverage_frac,weighted_coverage,confidence_read_threshold,high_confidence_species,bin_0,bin_1,bin_2,bin_3,bin_4,bin_5,bin_6,bin_7,bin_8,bin_9,bin_10,bin_11,bin_12,bin_13,bin_14,bin_15,bin_16,bin_17,bin_18,bin_19,bin_20,bin_21,bin_22,bin_23,bin_24,bin_25,bin_26,bin_27,bin_28,bin_29,bin_30,bin_31,bin_32,bin_33,bin_34,bin_35,bin_36,bin_37,bin_38,bin_39,bin_40,bin_41,bin_42,bin_43,bin_44,bin_45,bin_46,bin_47,bin_48,bin_49,bin_50,bin_51,bin_52,bin_53,bin_54,bin_55,bin_56,bin_57,bin_58,bin_59,bin_60,bin_61,bin_62,bin_63,bin_64,bin_65,bin_66,bin_67,bin_68,bin_69,bin_70,bin_71,bin_72,bin_73,bin_74,bin_75,bin_76,bin_77,bin_78,bin_79,bin_80,bin_81,bin_82,bin_83,bin_84,bin_85,…"
+              }
+            },
+            {
+              "name": "kmer_demo_R1.fastq.gz",
+              "id": "24ca5352988b42894292977dc2f578559b9ada071a46e8da00708080f74ba581",
+              "source_path": "uploads/examples/metagenomic_pathogen_identification_kmer-382cb73370a5413a97f0ef1e587587d2/kmer_demo_R1.fastq.gz",
+              "size": 8952270,
+              "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "name": "kmer_demo_R2.fastq.gz",
+              "id": "7c10d5c5894afffb0ca3f0c4216bb546df56f3ef29b9d8bbceed6a1e770d16cc",
+              "source_path": "uploads/examples/metagenomic_pathogen_identification_kmer-382cb73370a5413a97f0ef1e587587d2/kmer_demo_R2.fastq.gz",
+              "size": 10923663,
+              "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            }
+          ],
+          "native_imports": [
+            {
+              "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+              "files_delivered": true,
+              "generic_import": {
+                "artifact_count": 3,
+                "access": "Search or pull the attached sample files; native records are a separate outcome.",
+                "state": "imported"
+              },
+              "pipeline": "metagenomic_pathogen_identification_kmer",
+              "format": "StrobeTaxaDetection",
+              "state": "unsupported",
+              "message": "MSCAN has no registered importer for this result format; files remain available."
+            }
+          ],
+          "qc": {},
+          "receipt_id": "4d04b9dacfae4998b5c39c9034c40b5b",
+          "target": {
+            "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "metagenomic_pathogen_identification_kmer",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "c5ec86fceace385f8d22d0dc13d8b7ee"
+      },
+      "transfer_id": "7096a7c11f3949aea45144fe53c89969",
+      "response": {
+        "transfer_id": "7096a7c11f3949aea45144fe53c89969",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+              "kind": "analysis_output",
+              "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 8952270,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "kmer_demo_R1.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:24ca5352988b42894292977dc2f578559b9ada071a46e8da00708080f74ba581",
+              "id": "24ca5352988b42894292977dc2f578559b9ada071a46e8da00708080f74ba581",
+              "source_path": "uploads/examples/metagenomic_pathogen_identification_kmer-382cb73370a5413a97f0ef1e587587d2/kmer_demo_R1.fastq.gz",
+              "sample_name": "metagenomic_pathogen_identification_kmer"
+            },
+            {
+              "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+              "kind": "analysis_output",
+              "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 10923663,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "kmer_demo_R2.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:7c10d5c5894afffb0ca3f0c4216bb546df56f3ef29b9d8bbceed6a1e770d16cc",
+              "id": "7c10d5c5894afffb0ca3f0c4216bb546df56f3ef29b9d8bbceed6a1e770d16cc",
+              "source_path": "uploads/examples/metagenomic_pathogen_identification_kmer-382cb73370a5413a97f0ef1e587587d2/kmer_demo_R2.fastq.gz",
+              "sample_name": "metagenomic_pathogen_identification_kmer"
+            },
+            {
+              "sha256": "70d409c29ba84c3408640424da04c11dbd36b84f908a300b198913655a2e9729",
+              "kind": "analysis_output",
+              "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+              "pipeline_result": {
+                "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+                "pipeline_name": "metagenomic_pathogen_identification_kmer",
+                "output_key": "StrobeTaxaDetection.classified_tsv",
+                "output_name": "classified_tsv",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:50:28.644580+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "seqid",
+                  "tax_id",
+                  "base_coverage",
+                  "uniq_base_coverage",
+                  "uniq_seed_coverage",
+                  "context_weighted_seed_coverage",
+                  "seed_counts",
+                  "bin_indices"
+                ],
+                "preview_rows": [
+                  [
+                    "SRR12883954.1 1/1",
+                    "1598",
+                    "0.16438356",
+                    "0.034246575",
+                    "0.004109589",
+                    "0.0020547945",
+                    "40",
+                    "174"
+                  ],
+                  [
+                    "SRR12883954.2 2/1",
+                    "2742598",
+                    "0.36125654",
+                    "0.036649216",
+                    "0.040896967",
+                    "0.005521091",
+                    "53",
+                    "28"
+                  ],
+                  [
+                    "SRR12883954.3 3/1",
+                    "2",
+                    "0.72289157",
+                    "0.72289157",
+                    "0.2746988",
+                    "0",
+                    "50",
+                    "8"
+                  ]
+                ]
+              },
+              "size": 15911058,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "classified.tsv",
+              "data_type": "meta",
+              "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:913500723903d93129ed1f495a81a4d27dcef6bccb6e81c185bba9c2ac675a7c",
+              "id": "913500723903d93129ed1f495a81a4d27dcef6bccb6e81c185bba9c2ac675a7c",
+              "source_path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/0/classified.tsv",
+              "sample_name": "metagenomic_pathogen_identification_kmer"
+            },
+            {
+              "sha256": "683fb11bd3fe1b1ff835cacd33065e02e4ec27d728e00f169f867a26089378a8",
+              "kind": "analysis_output",
+              "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+              "pipeline_result": {
+                "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+                "pipeline_name": "metagenomic_pathogen_identification_kmer",
+                "output_key": "StrobeTaxaDetection.signature_coverage_csv",
+                "output_name": "signature_coverage_csv",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:50:28.644580+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "tax_id,species_name,type,confident_reads_count,confident_reads_relative_abundance,total_assigned_reads,genome_length_bp,cell_abundance,relative_cell_abundance,max_confident_score,novel_seed_rate,binned_reads_count,covered_bins,expected_covered_bins,covered_vs_expected,covered_vs_expected_100bins,covered_vs_expected_25bins,covered_vs_expected_5bins,coverage_frac,weighted_coverage,confidence_read_threshold,high_confidence_species,bin_0,bin_1,bin_2,bin_3,bin_4,bin_5,bin_6,bin_7,bin_8,bin_9,bin_10,bin_11,bin_12,bin_13,bin_14,bin_15,bin_16,bin_17,bin_18,bin_19,bin_20,bin_21,bin_22,bin_23,bin_24,bin_25,bin_26,bin_27,bin_28,bin_29,bin_30,bin_31,bin_32,bin_33,bin_34,bin_35,bin_36,bin_37,bin_38,bin_39,bin_40,bin_41,bin_42,bin_43,bin_44,bin_45,bin_46,bin_47,bin_48,bin_49,bin_50,bin_51,bin_52,bin_53,bin_54,bin_55,bin_56,bin_57,bin_58,bin_59,bin_60,bin_61,bin_62,bin_63,bin_64,bin_65,bin_66,bin_67,bin_68,bin_69,bin_70,bin_71,bin_72,bin_73,bin_74,bin_75,bin_76,bin_77,bin_78,bin_79,bin_80,bin_81,bin_82,bin_83,bin_84,bin_85,…"
+              },
+              "size": 16710,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "signature_coverage.csv",
+              "data_type": "meta",
+              "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:9ad1b9caaab71785609dc0b8e928fd949f21b289f363270fcc845541a90657dd",
+              "id": "9ad1b9caaab71785609dc0b8e928fd949f21b289f363270fcc845541a90657dd",
+              "source_path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/2/signature_coverage.csv",
+              "sample_name": "metagenomic_pathogen_identification_kmer"
+            },
+            {
+              "sha256": "65544dc01906c331a05985a530cc37d99941cd2bc5f356fa43ec782cecb49b12",
+              "kind": "analysis_output",
+              "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 4919093,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "results.zip",
+              "data_type": "meta",
+              "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:dd55954421585abd5a941c37532e4a1dedb3b44f0df5d8eb9c8b05c43667f011",
+              "id": "dd55954421585abd5a941c37532e4a1dedb3b44f0df5d8eb9c8b05c43667f011",
+              "source_path": "pipeline-bundles/91f18ae76e1e4253a834a1f1213275e9/results.zip",
+              "sample_name": "metagenomic_pathogen_identification_kmer"
+            },
+            {
+              "sha256": "101d4140954fcc482561e1bbcccfdd76d4e0d8e2aced9477668b63f210650726",
+              "kind": "analysis_output",
+              "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+              "pipeline_result": {
+                "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+                "pipeline_name": "metagenomic_pathogen_identification_kmer",
+                "output_key": "StrobeTaxaDetection.report_tsv",
+                "output_name": "report_tsv",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:50:28.644580+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "tax_id",
+                  "name",
+                  "rank",
+                  "count",
+                  "fraction",
+                  "count_feat2_ge_0.6",
+                  "frac_feat2_ge_0.6",
+                  "count_feat3_ge_0.5",
+                  "frac_feat3_ge_0.5",
+                  "count_both_ge_0.6&0.5",
+                  "frac_both_ge_0.6&0.5"
+                ],
+                "preview_rows": [
+                  [
+                    "47770",
+                    "Lactobacillus crispatus",
+                    "species",
+                    "32937",
+                    "0.164685",
+                    "249",
+                    "0.007560",
+                    "27",
+                    "0.000820",
+                    "25",
+                    "0.000759"
+                  ],
+                  [
+                    "1783272",
+                    "Bacillati",
+                    "kingdom",
+                    "26005",
+                    "0.130025",
+                    "2604",
+                    "0.100135",
+                    "0",
+                    "0.000000",
+                    "0",
+                    "0.000000"
+                  ],
+                  [
+                    "2",
+                    "Bacteria",
+                    "domain",
+                    "20547",
+                    "0.102735",
+                    "2074",
+                    "0.100939",
+                    "0",
+                    "0.000000",
+                    "0",
+                    "0.000000"
+                  ]
+                ]
+              },
+              "size": 255290,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "report.tsv",
+              "data_type": "meta",
+              "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:e98e7ca9ac81d5055d83e6514458cf8bc7e38f815135f5751bfa92724b4ed748",
+              "id": "e98e7ca9ac81d5055d83e6514458cf8bc7e38f815135f5751bfa92724b4ed748",
+              "source_path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/1/report.tsv",
+              "sample_name": "metagenomic_pathogen_identification_kmer"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:c5ec86fceace385f8d22d0dc13d8b7ee",
+              "importable": false,
+              "sample_name": "metagenomic_pathogen_identification_kmer",
+              "data_type": "meta",
+              "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee"
+            },
+            {
+              "size": 8952270,
+              "kind": "source_file",
+              "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+              "name": "kmer_demo_R1.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "source:meta:c5ec86fceace385f8d22d0dc13d8b7ee:R1",
+              "slot": "R1",
+              "id": "4a50e8f37146381db72f54f82cfece27",
+              "sample_name": "metagenomic_pathogen_identification_kmer"
+            },
+            {
+              "size": 10923663,
+              "kind": "source_file",
+              "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+              "name": "kmer_demo_R2.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "source:meta:c5ec86fceace385f8d22d0dc13d8b7ee:R2",
+              "slot": "R2",
+              "id": "b3d24a5b385a3fe7ac82b934835d26d0",
+              "sample_name": "metagenomic_pathogen_identification_kmer"
+            }
+          ],
+          "total": 9,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:24ca5352988b42894292977dc2f578559b9ada071a46e8da00708080f74ba581"
+      },
+      "transfer_id": "9289b33c8d6e4f7693abade8a0ce8001",
+      "response": {
+        "transfer_id": "9289b33c8d6e4f7693abade8a0ce8001",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "ca8d0504-6dd4-44ca-8921-43af3e03133d",
+            "path": "uploads/dbc4989eab89481d9eb7406357c6d38f_kmer_demo_R1.fastq.gz",
+            "workspace_path": "uploads/dbc4989eab89481d9eb7406357c6d38f_kmer_demo_R1.fastq.gz",
+            "name": "kmer_demo_R1.fastq.gz",
+            "size": 8952270,
+            "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+            "kind": "upload",
+            "content_type": "application/gzip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:7c10d5c5894afffb0ca3f0c4216bb546df56f3ef29b9d8bbceed6a1e770d16cc"
+      },
+      "transfer_id": "c479da0480ed480682f57d756ec080ac",
+      "response": {
+        "transfer_id": "c479da0480ed480682f57d756ec080ac",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "ca8d0504-6dd4-44ca-8921-43af3e03133d",
+            "path": "uploads/7874bf700b87490f82d4c040674c2f20_kmer_demo_R2.fastq.gz",
+            "workspace_path": "uploads/7874bf700b87490f82d4c040674c2f20_kmer_demo_R2.fastq.gz",
+            "name": "kmer_demo_R2.fastq.gz",
+            "size": 10923663,
+            "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+            "kind": "upload",
+            "content_type": "application/gzip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:913500723903d93129ed1f495a81a4d27dcef6bccb6e81c185bba9c2ac675a7c"
+      },
+      "transfer_id": "43506d3c227a4a5a8338b5eba1d59ebe",
+      "response": {
+        "transfer_id": "43506d3c227a4a5a8338b5eba1d59ebe",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "ca8d0504-6dd4-44ca-8921-43af3e03133d",
+            "path": "uploads/6c42ad04fcbc40ccb6aba126cb09e929_classified.tsv",
+            "workspace_path": "uploads/6c42ad04fcbc40ccb6aba126cb09e929_classified.tsv",
+            "name": "classified.tsv",
+            "size": 15911058,
+            "sha256": "70d409c29ba84c3408640424da04c11dbd36b84f908a300b198913655a2e9729",
+            "kind": "upload",
+            "content_type": "text/tab-separated-values; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:9ad1b9caaab71785609dc0b8e928fd949f21b289f363270fcc845541a90657dd"
+      },
+      "transfer_id": "4deece2e078d4321a569ad6dfd704bdc",
+      "response": {
+        "transfer_id": "4deece2e078d4321a569ad6dfd704bdc",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "ca8d0504-6dd4-44ca-8921-43af3e03133d",
+            "path": "uploads/c02a9338d4d54863a969d3c22a48f994_signature_coverage.csv",
+            "workspace_path": "uploads/c02a9338d4d54863a969d3c22a48f994_signature_coverage.csv",
+            "name": "signature_coverage.csv",
+            "size": 16710,
+            "sha256": "683fb11bd3fe1b1ff835cacd33065e02e4ec27d728e00f169f867a26089378a8",
+            "kind": "upload",
+            "content_type": "text/csv; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:dd55954421585abd5a941c37532e4a1dedb3b44f0df5d8eb9c8b05c43667f011"
+      },
+      "transfer_id": "28722556214b4d5bbfac1d39b3ce12d0",
+      "response": {
+        "transfer_id": "28722556214b4d5bbfac1d39b3ce12d0",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "ca8d0504-6dd4-44ca-8921-43af3e03133d",
+            "path": "uploads/b0c9aca6ec0e4fd1a8b97c43f8901e12_results.zip",
+            "workspace_path": "uploads/b0c9aca6ec0e4fd1a8b97c43f8901e12_results.zip",
+            "name": "results.zip",
+            "size": 4919093,
+            "sha256": "65544dc01906c331a05985a530cc37d99941cd2bc5f356fa43ec782cecb49b12",
+            "kind": "upload",
+            "content_type": "application/zip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:e98e7ca9ac81d5055d83e6514458cf8bc7e38f815135f5751bfa92724b4ed748"
+      },
+      "transfer_id": "cffa8302d16d46969f836a3945616d53",
+      "response": {
+        "transfer_id": "cffa8302d16d46969f836a3945616d53",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "ca8d0504-6dd4-44ca-8921-43af3e03133d",
+            "path": "uploads/7cca93e4302e49cca68ada94cc9168a2_report.tsv",
+            "workspace_path": "uploads/7cca93e4302e49cca68ada94cc9168a2_report.tsv",
+            "name": "report.tsv",
+            "size": 255290,
+            "sha256": "101d4140954fcc482561e1bbcccfdd76d4e0d8e2aced9477668b63f210650726",
+            "kind": "upload",
+            "content_type": "text/tab-separated-values; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "attempt_history": [
+    {
+      "pipeline": "metagenomic_pathogen_identification_kmer",
+      "engine": "wdl",
+      "manifest_sha256": "bad75ce31ca9217f04952a49f4dc56d658fa3e7dd6a6dd07f96da5314e431a74",
+      "selected_for_execution": true,
+      "execution_status": "setup_failed",
+      "scope_note": "",
+      "examples": [
+        {
+          "path": "tools/runtime_tools/pipelines/metagenomic_pathogen_identification_kmer/data/input/kmer_demo_R1.fastq.gz",
+          "bytes": 8952270,
+          "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265"
+        },
+        {
+          "path": "tools/runtime_tools/pipelines/metagenomic_pathogen_identification_kmer/data/input/kmer_demo_R2.fastq.gz",
+          "bytes": 10923663,
+          "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0"
+        }
+      ],
+      "contract": {
+        "valid": true,
+        "inputs": [
+          "clean_r1",
+          "clean_r2"
+        ],
+        "outputs": [
+          "classified_tsv",
+          "report_tsv",
+          "signature_coverage_csv"
+        ]
+      },
+      "transfers": [],
+      "attempt_history": [
+        {
+          "pipeline": "metagenomic_pathogen_identification_kmer",
+          "engine": "wdl",
+          "manifest_sha256": "bad75ce31ca9217f04952a49f4dc56d658fa3e7dd6a6dd07f96da5314e431a74",
+          "selected_for_execution": true,
+          "execution_status": "setup_failed",
+          "scope_note": "",
+          "examples": [
+            {
+              "path": "tools/runtime_tools/pipelines/metagenomic_pathogen_identification_kmer/data/input/kmer_demo_R1.fastq.gz",
+              "bytes": 8952270,
+              "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265"
+            },
+            {
+              "path": "tools/runtime_tools/pipelines/metagenomic_pathogen_identification_kmer/data/input/kmer_demo_R2.fastq.gz",
+              "bytes": 10923663,
+              "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0"
+            }
+          ],
+          "contract": {
+            "valid": true,
+            "inputs": [
+              "clean_r1",
+              "clean_r2"
+            ],
+            "outputs": [
+              "classified_tsv",
+              "report_tsv",
+              "signature_coverage_csv"
+            ]
+          },
+          "transfers": [],
+          "session_id": "76c3a8b2-7d84-483a-accd-bb2e2d3c8815",
+          "assigned_inputs": {
+            "clean_r1": "uploads/examples/metagenomic_pathogen_identification_kmer-6b6d3adca5144bc7a3dc070e9cee3bfb/kmer_demo_R1.fastq.gz",
+            "clean_r2": "uploads/examples/metagenomic_pathogen_identification_kmer-6b6d3adca5144bc7a3dc070e9cee3bfb/kmer_demo_R2.fastq.gz"
+          },
+          "parameter_overrides": {},
+          "plan_id": "e290e93a89b94eb391a902b73ebf858c",
+          "harness_error": "ValueError: Remote job limit reached (2 per account, 16 server-wide).",
+          "elapsed_seconds": 4.05,
+          "test_finished": true
+        }
+      ],
+      "session_id": "cd89a686-ff00-42ed-8f9d-5748bfd75fe1",
+      "assigned_inputs": {
+        "clean_r1": "uploads/examples/metagenomic_pathogen_identification_kmer-645527cf691440f3a4e7f3503f6e2b04/kmer_demo_R1.fastq.gz",
+        "clean_r2": "uploads/examples/metagenomic_pathogen_identification_kmer-645527cf691440f3a4e7f3503f6e2b04/kmer_demo_R2.fastq.gz"
+      },
+      "parameter_overrides": {},
+      "plan_id": "477a340dfe084cc9b5b0dc6b423b324d",
+      "admission_waits": 170,
+      "harness_error": "ValueError: Remote job limit reached (2 per account, 16 server-wide).",
+      "elapsed_seconds": 904.86,
+      "test_finished": true
+    }
+  ],
+  "session_id": "ca8d0504-6dd4-44ca-8921-43af3e03133d",
+  "assigned_inputs": {
+    "clean_r1": "uploads/examples/metagenomic_pathogen_identification_kmer-382cb73370a5413a97f0ef1e587587d2/kmer_demo_R1.fastq.gz",
+    "clean_r2": "uploads/examples/metagenomic_pathogen_identification_kmer-382cb73370a5413a97f0ef1e587587d2/kmer_demo_R2.fastq.gz"
+  },
+  "parameter_overrides": {},
+  "plan_id": "91f18ae76e1e4253a834a1f1213275e9",
+  "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+  "last_state": {
+    "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+    "plan_id": "91f18ae76e1e4253a834a1f1213275e9",
+    "status": "succeeded",
+    "created_at": "2026-11-09T06:45:01.216620+00:00",
+    "started_at": "2026-11-09T06:45:01.525154+00:00",
+    "finished_at": "2026-11-09T06:50:28.644580+00:00",
+    "updated_at": "2026-11-09T06:50:28.645639+00:00",
+    "error": null,
+    "remote_id": "709d450b-f052-4bc8-bff8-824755330e14",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_pathogen_identification_kmer"
+  },
+  "results": {
+    "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+    "plan_id": "91f18ae76e1e4253a834a1f1213275e9",
+    "status": "succeeded",
+    "created_at": "2026-11-09T06:45:01.216620+00:00",
+    "started_at": "2026-11-09T06:45:01.525154+00:00",
+    "finished_at": "2026-11-09T06:50:28.644580+00:00",
+    "updated_at": "2026-11-09T06:50:28.645639+00:00",
+    "error": null,
+    "remote_id": "709d450b-f052-4bc8-bff8-824755330e14",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_pathogen_identification_kmer",
+    "files": [
+      {
+        "name": "classified.tsv",
+        "path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/0/classified.tsv",
+        "workspace_path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/0/classified.tsv",
+        "size": 15911058,
+        "remote": true,
+        "artifact_id": "91f18ae76e1e4253a834a1f1213275e9:0",
+        "pipeline_result": {
+          "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+          "pipeline_name": "metagenomic_pathogen_identification_kmer",
+          "output_key": "StrobeTaxaDetection.classified_tsv",
+          "output_name": "classified_tsv",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T06:50:28.644580+00:00"
+        }
+      },
+      {
+        "name": "report.tsv",
+        "path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/1/report.tsv",
+        "workspace_path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/1/report.tsv",
+        "size": 255290,
+        "remote": true,
+        "artifact_id": "91f18ae76e1e4253a834a1f1213275e9:1",
+        "pipeline_result": {
+          "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+          "pipeline_name": "metagenomic_pathogen_identification_kmer",
+          "output_key": "StrobeTaxaDetection.report_tsv",
+          "output_name": "report_tsv",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T06:50:28.644580+00:00"
+        }
+      },
+      {
+        "name": "signature_coverage.csv",
+        "path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/2/signature_coverage.csv",
+        "workspace_path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/2/signature_coverage.csv",
+        "size": 16710,
+        "remote": true,
+        "artifact_id": "91f18ae76e1e4253a834a1f1213275e9:2",
+        "pipeline_result": {
+          "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+          "pipeline_name": "metagenomic_pathogen_identification_kmer",
+          "output_key": "StrobeTaxaDetection.signature_coverage_csv",
+          "output_name": "signature_coverage_csv",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T06:50:28.644580+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/2/signature_coverage.csv",
+        "text": "tax_id,species_name,type,confident_reads_count,confident_reads_relative_abundance,total_assigned_reads,genome_length_bp,cell_abundance,relative_cell_abundance,max_confident_score,novel_seed_rate,binned_reads_count,covered_bins,expected_covered_bins,covered_vs_expected,covered_vs_expected_100bins,covered_vs_expected_25bins,covered_vs_expected_5bins,coverage_frac,weighted_coverage,confidence_read_threshold,high_confidence_species,bin_0,bin_1,bin_2,bin_3,bin_4,bin_5,bin_6,bin_7,bin_8,bin_9,bin_10,bin_11,bin_12,bin_13,bin_14,bin_15,bin_16,bin_17,bin_18,bin_19,bin_20,bin_21,bin_22,bin_23,bin_24,bin_25,bin_26,bin_27,bin_28,bin_29,bin_30,bin_31,bin_32,bin_33,bin_34,bin_35,bin_36,bin_37,bin_38,bin_39,bin_40,bin_41,bin_42,bin_43,bin_44,bin_45,bin_46,bin_47,bin_48,bin_49,bin_50,bin_51,bin_52,bin_53,bin_54,bin_55,bin_56,bin_57,bin_58,bin_59,bin_60,bin_61,bin_62,bin_63,bin_64,bin_65,bin_66,bin_67,bin_68,bin_69,bin_70,bin_71,bin_72,bin_73,bin_74,bin_75,bin_76,bin_77,bin_78,bin_79,bin_80,bin_81,bin_82,bin_83,bin_84,bin_85,bin_86,bin_87,bin_88,bin_89,bin_90,bin_91,bin_92,bin_93,bin_94,bin_95,bin_96,bin_97,bin_98,bin_99,bin_100,bin_101,bin_102,bin_103,bin_104,bin_105,bin_106,bin_107,bin_108,bin_109,bin_110,bin_111,bin_112,bin_113,bin_114,bin_115,bin_116,bin_117,bin_118,bin_119,bin_120,bin_121,bin_122,bin_123,bin_124,bin_125,bin_126,bin_127,bin_128,bin_129,bin_130,bin_131,bin_132,bin_133,bin_134,bin_135,bin_136,bin_137,bin_138,bin_139,bin_140,bin_141,bin_142,bin_143,bin_144,bin_145,bin_146,bin_147,bin_148,bin_149,bin_150,bin_151,bin_152,bin_153,bin_154,bin_155,bin_156,bin_157,bin_158,bin_159,bin_160,bin_161,bin_162,bin_163,bin_164,bin_165,bin_166,bin_167,bin_168,bin_169,bin_170,bin_171,bin_172,bin_173,bin_174,bin_175,bin_176,bin_177,bin_178,bin_179,bin_180,bin_181,bin_182,bin_183,bin_184,bin_185,bin_186,bin_187,bin_188,bin_189,bin_190,bin_191,bin_192,bin_193,bin_194,bin_195,bin_196,bin_197,bin_198,bin_199,bin_200,bin_201,bin_202,bin_203,bin_204,bin_205,bin_206,bin_207,bin_208,bin_209,bin_210,bin_211,bin_212,bin_213,bin_214,bin_215,bin_216,bin_217,bin_218,bin_219,bin_220,bin_221,bin_222,bin_223,bin_224,bin_225,bin_226,bin_227,bin_228,bin_229,bin_230,bin_231,bin_232,bin_233,bin_234,bin_235,bin_236,bin_237,bin_238,bin_239,bin_240,bin_241,bin_242,bin_243,bin_244,bin_245,bin_246,bin_247,bin_248,bin_249\r\n1624,Ligilactobacillus salivarius,bacterial,43,0.275641,4797,2045726,0.002344888807,0.063403,0.909480,0.126592,32,15,28.898301,0.519062,0.540959,0.646483,1.005431,0.060000,0.048562,0.190476,Yes,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,2,0,0,2,0,0,0\r\n47770,Lactobacillus crispatus,bacterial,27,0.173077,32937,2526154,0.013038397501,0.352543,0.890776,0.092315,27,12,25.104121,0.478009,0.434400,0.493946,1.005159,0.048000,0.049238,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,4,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n2809150,Anativirus sp.,virus,21,0.134615,71,8098,0.008767596938,0.237066,0.985200,0.071102,9,4,8.728494,0.458269,0.472264,0.540493,0.732866,0.016000,0.042446,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n1598,Limosilactobacillus reuteri,bacterial,17,0.108974,3357,2538072,0.001322657513,0.035763,0.831286,0.111023,15,8,14.340860,0.557847,0.589705,0.456154,0.638661,0.032000,0.041489,0.190476,Yes,2,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,2,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n33959,Lactobacillus johnsonii,bacterial,7,0.044872,104,2198442,0.000047306229,0.001279,0.928571,0.146843,7,2,6.839890,0.292402,0.299423,0.332152,0.266457,0.008000,0.012816,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n2832643,Caudoviricetes sp.,virus,5,0.032051,30,572750,0.000052378874,0.001416,0.810326,0.160758,2,1,1.944975,0.514146,0.519309,0.533483,0.616235,0.004000,0.004535,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n1601,Ligilactobacillus agilis,bacterial,4,0.025641,728,2187209,0.000332844278,0.009000,0.875283,0.075856,4,2,3.961415,0.504870,0.511419,0.542188,0.727273,0.008000,0.007347,0.190476,Yes,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n1751056,Flavobacterium ammonificans,bacterial,4,0.025641,18,2409408,0.000007470715,0.000202,0.815431,0.052083,2,1,1.991498,0.502135,0.505313,0.520427,0.607037,0.004000,0.003250,0.190476,,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n1632,Limosilactobacillus oris,bacterial,3,0.019231,16589,2169572,0.007646208561,0.206745,0.628147,0.110398,1,1,0.997578,1.002428,1.005793,1.021044,1.104646,0.004000,0.004797,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n512298,uncultured Subdoligranulum sp.,bacterial,3,0.019231,19,2991239,0.000006351883,0.000172,0.888660,0.105114,3,2,2.980990,0.670918,0.677586,0.708309,0.888201,0.008000,0.008912,0.190476,Yes,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n3433766,Gammacoronavirus galli,virus,3,0.019231,21,29105,0.000721525511,0.019509,0.708611,0.016949,3,2,2.966230,0.674256,0.685809,0.728306,0.915366,0.008000,0.007235,0.190476,Yes,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n1579,Lactobacillus acidophilus,bacterial,2,0.012821,1667,2092540,0.000796639491,0.021540,0.637714,0.000000,2,1,1.990661,0.502346,0.505711,0.520877,0.607329,0.004000,0.002812,0.190476,,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n1606,Ligilactobacillus aviarius,bacterial,2,0.012821,2094,1612902,0.001298280987,0.035104,0.630983,0.261905,2,1,1.991862,0.502043,0.505268,0.520321,0.606708,0.004000,0.004185,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n29378,Staphylococcus arlettae,bacterial,2,0.012821,7,2755653,0.000002540233,0.000069,0.587632,0.184211,2,1,1.990962,0.502270,0.505685,0.521118,0.607788,0.004000,0.004860,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0\r\n224209,uncultured Bacilli bacterium,bacterial,2,0.012821,36,1538818,0.000023394579,0.000633,0.724752,0.193548,2,1,1.991776,0.502064,0.505292,0.520347,0.606754,0.004000,0.005173,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n529884,Rhodoluna lacicola,bacterial,2,0.012821,2,1430433,0.000001398178,0.000038,0.622105,0.166667,2,1,1.991359,0.502170,0.505484,0.520631,0.607260,0.004000,0.005902,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n1262867,Corallococcus sp. CAG:1435,bacterial,2,0.012821,2,1591224,0.000001256894,0.000034,0.675189,0.000000,2,1,1.992004,0.502007,0.505218,0.520273,0.606653,0.004000,0.003301,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n2516557,Aquirufa nivalisilvae,bacterial,2,0.012821,2,3116291,0.000000641789,0.000017,0.652474,0.200000,2,1,1.991986,0.502012,0.505239,0.520281,0.606654,0.004000,0.003985,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n2875814,Reagent-associated CRESS-like virus 6,virus,2,0.012821,2,3517,0.000568666477,0.015376,0.768932,0.120000,2,1,1.991409,0.502157,0.505424,0.520629,0.606848,0.004000,0.005362,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n2976818,Cloacibacterium sp. TD35,bacterial,2,0.012821,2,2595287,0.000000770628,0.000021,0.500795,0.411765,2,1,1.991538,0.502124,0.505441,0.520515,0.606816,0.004000,0.004055,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n172733,uncultured Eubacteriales bacterium,bacterial,1,0.006410,11,4203429,0.000002616911,0.000071,0.801170,0.089888,0,0,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.190476,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\r\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/91f18ae76e1e4253a834a1f1213275e9/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "transfer_scope": "actual bundled inputs and execution outputs",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "metagenomic_pathogen_identification_kmer",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [
+    {
+      "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+      "files_delivered": true,
+      "generic_import": {
+        "artifact_count": 3,
+        "access": "Search or pull the attached sample files; native records are a separate outcome.",
+        "state": "imported"
+      },
+      "pipeline": "metagenomic_pathogen_identification_kmer",
+      "format": "StrobeTaxaDetection",
+      "state": "unsupported",
+      "message": "MSCAN has no registered importer for this result format; files remain available."
+    }
+  ],
+  "roundtrip_files": [
+    {
+      "name": "kmer_demo_R1.fastq.gz",
+      "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:24ca5352988b42894292977dc2f578559b9ada071a46e8da00708080f74ba581",
+      "state": "succeeded",
+      "bytes": 8952270,
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+      "expected_sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+      "matches": true
+    },
+    {
+      "name": "kmer_demo_R2.fastq.gz",
+      "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:7c10d5c5894afffb0ca3f0c4216bb546df56f3ef29b9d8bbceed6a1e770d16cc",
+      "state": "succeeded",
+      "bytes": 10923663,
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+      "expected_sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+      "matches": true
+    },
+    {
+      "name": "classified.tsv",
+      "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:913500723903d93129ed1f495a81a4d27dcef6bccb6e81c185bba9c2ac675a7c",
+      "state": "succeeded",
+      "bytes": 15911058,
+      "sha256": "70d409c29ba84c3408640424da04c11dbd36b84f908a300b198913655a2e9729",
+      "expected_sha256": "70d409c29ba84c3408640424da04c11dbd36b84f908a300b198913655a2e9729",
+      "matches": true
+    },
+    {
+      "name": "signature_coverage.csv",
+      "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:9ad1b9caaab71785609dc0b8e928fd949f21b289f363270fcc845541a90657dd",
+      "state": "succeeded",
+      "bytes": 16710,
+      "sha256": "683fb11bd3fe1b1ff835cacd33065e02e4ec27d728e00f169f867a26089378a8",
+      "expected_sha256": "683fb11bd3fe1b1ff835cacd33065e02e4ec27d728e00f169f867a26089378a8",
+      "matches": true
+    },
+    {
+      "name": "results.zip",
+      "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:dd55954421585abd5a941c37532e4a1dedb3b44f0df5d8eb9c8b05c43667f011",
+      "state": "succeeded",
+      "bytes": 4919093,
+      "sha256": "65544dc01906c331a05985a530cc37d99941cd2bc5f356fa43ec782cecb49b12",
+      "expected_sha256": "65544dc01906c331a05985a530cc37d99941cd2bc5f356fa43ec782cecb49b12",
+      "matches": true
+    },
+    {
+      "name": "report.tsv",
+      "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:e98e7ca9ac81d5055d83e6514458cf8bc7e38f815135f5751bfa92724b4ed748",
+      "state": "succeeded",
+      "bytes": 255290,
+      "sha256": "101d4140954fcc482561e1bbcccfdd76d4e0d8e2aced9477668b63f210650726",
+      "expected_sha256": "101d4140954fcc482561e1bbcccfdd76d4e0d8e2aced9477668b63f210650726",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+      "kind": "analysis_output",
+      "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 8952270,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "kmer_demo_R1.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:24ca5352988b42894292977dc2f578559b9ada071a46e8da00708080f74ba581",
+      "id": "24ca5352988b42894292977dc2f578559b9ada071a46e8da00708080f74ba581",
+      "source_path": "uploads/examples/metagenomic_pathogen_identification_kmer-382cb73370a5413a97f0ef1e587587d2/kmer_demo_R1.fastq.gz",
+      "sample_name": "metagenomic_pathogen_identification_kmer"
+    },
+    {
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+      "kind": "analysis_output",
+      "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 10923663,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "kmer_demo_R2.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:7c10d5c5894afffb0ca3f0c4216bb546df56f3ef29b9d8bbceed6a1e770d16cc",
+      "id": "7c10d5c5894afffb0ca3f0c4216bb546df56f3ef29b9d8bbceed6a1e770d16cc",
+      "source_path": "uploads/examples/metagenomic_pathogen_identification_kmer-382cb73370a5413a97f0ef1e587587d2/kmer_demo_R2.fastq.gz",
+      "sample_name": "metagenomic_pathogen_identification_kmer"
+    },
+    {
+      "sha256": "70d409c29ba84c3408640424da04c11dbd36b84f908a300b198913655a2e9729",
+      "kind": "analysis_output",
+      "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+      "pipeline_result": {
+        "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+        "pipeline_name": "metagenomic_pathogen_identification_kmer",
+        "output_key": "StrobeTaxaDetection.classified_tsv",
+        "output_name": "classified_tsv",
+        "output_kind": "table",
+        "completed_at": "2026-11-09T06:50:28.644580+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "table",
+        "preview_available": true,
+        "preview_only": true,
+        "delimiter": "tab",
+        "columns": [
+          "seqid",
+          "tax_id",
+          "base_coverage",
+          "uniq_base_coverage",
+          "uniq_seed_coverage",
+          "context_weighted_seed_coverage",
+          "seed_counts",
+          "bin_indices"
+        ],
+        "preview_rows": [
+          [
+            "SRR12883954.1 1/1",
+            "1598",
+            "0.16438356",
+            "0.034246575",
+            "0.004109589",
+            "0.0020547945",
+            "40",
+            "174"
+          ],
+          [
+            "SRR12883954.2 2/1",
+            "2742598",
+            "0.36125654",
+            "0.036649216",
+            "0.040896967",
+            "0.005521091",
+            "53",
+            "28"
+          ],
+          [
+            "SRR12883954.3 3/1",
+            "2",
+            "0.72289157",
+            "0.72289157",
+            "0.2746988",
+            "0",
+            "50",
+            "8"
+          ]
+        ]
+      },
+      "size": 15911058,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "classified.tsv",
+      "data_type": "meta",
+      "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:913500723903d93129ed1f495a81a4d27dcef6bccb6e81c185bba9c2ac675a7c",
+      "id": "913500723903d93129ed1f495a81a4d27dcef6bccb6e81c185bba9c2ac675a7c",
+      "source_path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/0/classified.tsv",
+      "sample_name": "metagenomic_pathogen_identification_kmer"
+    },
+    {
+      "sha256": "683fb11bd3fe1b1ff835cacd33065e02e4ec27d728e00f169f867a26089378a8",
+      "kind": "analysis_output",
+      "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+      "pipeline_result": {
+        "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+        "pipeline_name": "metagenomic_pathogen_identification_kmer",
+        "output_key": "StrobeTaxaDetection.signature_coverage_csv",
+        "output_name": "signature_coverage_csv",
+        "output_kind": "table",
+        "completed_at": "2026-11-09T06:50:28.644580+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "tax_id,species_name,type,confident_reads_count,confident_reads_relative_abundance,total_assigned_reads,genome_length_bp,cell_abundance,relative_cell_abundance,max_confident_score,novel_seed_rate,binned_reads_count,covered_bins,expected_covered_bins,covered_vs_expected,covered_vs_expected_100bins,covered_vs_expected_25bins,covered_vs_expected_5bins,coverage_frac,weighted_coverage,confidence_read_threshold,high_confidence_species,bin_0,bin_1,bin_2,bin_3,bin_4,bin_5,bin_6,bin_7,bin_8,bin_9,bin_10,bin_11,bin_12,bin_13,bin_14,bin_15,bin_16,bin_17,bin_18,bin_19,bin_20,bin_21,bin_22,bin_23,bin_24,bin_25,bin_26,bin_27,bin_28,bin_29,bin_30,bin_31,bin_32,bin_33,bin_34,bin_35,bin_36,bin_37,bin_38,bin_39,bin_40,bin_41,bin_42,bin_43,bin_44,bin_45,bin_46,bin_47,bin_48,bin_49,bin_50,bin_51,bin_52,bin_53,bin_54,bin_55,bin_56,bin_57,bin_58,bin_59,bin_60,bin_61,bin_62,bin_63,bin_64,bin_65,bin_66,bin_67,bin_68,bin_69,bin_70,bin_71,bin_72,bin_73,bin_74,bin_75,bin_76,bin_77,bin_78,bin_79,bin_80,bin_81,bin_82,bin_83,bin_84,bin_85,…"
+      },
+      "size": 16710,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "signature_coverage.csv",
+      "data_type": "meta",
+      "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:9ad1b9caaab71785609dc0b8e928fd949f21b289f363270fcc845541a90657dd",
+      "id": "9ad1b9caaab71785609dc0b8e928fd949f21b289f363270fcc845541a90657dd",
+      "source_path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/2/signature_coverage.csv",
+      "sample_name": "metagenomic_pathogen_identification_kmer"
+    },
+    {
+      "sha256": "65544dc01906c331a05985a530cc37d99941cd2bc5f356fa43ec782cecb49b12",
+      "kind": "analysis_output",
+      "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 4919093,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "results.zip",
+      "data_type": "meta",
+      "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:dd55954421585abd5a941c37532e4a1dedb3b44f0df5d8eb9c8b05c43667f011",
+      "id": "dd55954421585abd5a941c37532e4a1dedb3b44f0df5d8eb9c8b05c43667f011",
+      "source_path": "pipeline-bundles/91f18ae76e1e4253a834a1f1213275e9/results.zip",
+      "sample_name": "metagenomic_pathogen_identification_kmer"
+    },
+    {
+      "sha256": "101d4140954fcc482561e1bbcccfdd76d4e0d8e2aced9477668b63f210650726",
+      "kind": "analysis_output",
+      "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+      "pipeline_result": {
+        "job_id": "91f18ae76e1e4253a834a1f1213275e9",
+        "pipeline_name": "metagenomic_pathogen_identification_kmer",
+        "output_key": "StrobeTaxaDetection.report_tsv",
+        "output_name": "report_tsv",
+        "output_kind": "table",
+        "completed_at": "2026-11-09T06:50:28.644580+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "table",
+        "preview_available": true,
+        "preview_only": true,
+        "delimiter": "tab",
+        "columns": [
+          "tax_id",
+          "name",
+          "rank",
+          "count",
+          "fraction",
+          "count_feat2_ge_0.6",
+          "frac_feat2_ge_0.6",
+          "count_feat3_ge_0.5",
+          "frac_feat3_ge_0.5",
+          "count_both_ge_0.6&0.5",
+          "frac_both_ge_0.6&0.5"
+        ],
+        "preview_rows": [
+          [
+            "47770",
+            "Lactobacillus crispatus",
+            "species",
+            "32937",
+            "0.164685",
+            "249",
+            "0.007560",
+            "27",
+            "0.000820",
+            "25",
+            "0.000759"
+          ],
+          [
+            "1783272",
+            "Bacillati",
+            "kingdom",
+            "26005",
+            "0.130025",
+            "2604",
+            "0.100135",
+            "0",
+            "0.000000",
+            "0",
+            "0.000000"
+          ],
+          [
+            "2",
+            "Bacteria",
+            "domain",
+            "20547",
+            "0.102735",
+            "2074",
+            "0.100939",
+            "0",
+            "0.000000",
+            "0",
+            "0.000000"
+          ]
+        ]
+      },
+      "size": 255290,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "report.tsv",
+      "data_type": "meta",
+      "resource_id": "result:4d04b9dacfae4998b5c39c9034c40b5b:e98e7ca9ac81d5055d83e6514458cf8bc7e38f815135f5751bfa92724b4ed748",
+      "id": "e98e7ca9ac81d5055d83e6514458cf8bc7e38f815135f5751bfa92724b4ed748",
+      "source_path": "pipeline-artifacts/91f18ae76e1e4253a834a1f1213275e9/1/report.tsv",
+      "sample_name": "metagenomic_pathogen_identification_kmer"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:c5ec86fceace385f8d22d0dc13d8b7ee",
+      "importable": false,
+      "sample_name": "metagenomic_pathogen_identification_kmer",
+      "data_type": "meta",
+      "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee"
+    },
+    {
+      "size": 8952270,
+      "kind": "source_file",
+      "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+      "name": "kmer_demo_R1.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "source:meta:c5ec86fceace385f8d22d0dc13d8b7ee:R1",
+      "slot": "R1",
+      "id": "4a50e8f37146381db72f54f82cfece27",
+      "sample_name": "metagenomic_pathogen_identification_kmer"
+    },
+    {
+      "size": 10923663,
+      "kind": "source_file",
+      "sample_id": "c5ec86fceace385f8d22d0dc13d8b7ee",
+      "name": "kmer_demo_R2.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "source:meta:c5ec86fceace385f8d22d0dc13d8b7ee:R2",
+      "slot": "R2",
+      "id": "b3d24a5b385a3fe7ac82b934835d26d0",
+      "sample_name": "metagenomic_pathogen_identification_kmer"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 382.68,
+  "test_finished": true
+}

@@ -1,0 +1,1208 @@
+{
+  "pipeline": "metagenomic_qc_UniVec_Host",
+  "engine": "wdl",
+  "manifest_sha256": "fc5f376a2a8e525fa96d013eeec4ff2ed3923ce02fee29da74d3c2014d410123",
+  "selected_for_execution": true,
+  "execution_status": "succeeded",
+  "scope_note": "",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/metagenomic_qc_UniVec_Host/data/input/qc_demo_R1.fastq.gz",
+      "bytes": 8952270,
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/metagenomic_qc_UniVec_Host/data/input/qc_demo_R2.fastq.gz",
+      "bytes": 10923663,
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "read1",
+      "read2",
+      "host_fasta"
+    ],
+    "outputs": [
+      "clean_r1",
+      "clean_r2",
+      "qc_summary",
+      "multiqc_html"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "pipeline-bundles/9bd20d63bd2741cf9e08951e172cf3fd/results.zip",
+          "uploads/examples/metagenomic_qc_UniVec_Host-1166ecaf8b2544fd940e50dc362776f5/qc_demo_R1.fastq.gz",
+          "uploads/examples/metagenomic_qc_UniVec_Host-1166ecaf8b2544fd940e50dc362776f5/qc_demo_R2.fastq.gz"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "metagenomic_qc_UniVec_Host",
+          "data_type": "meta",
+          "source_slots": {
+            "R1": "uploads/examples/metagenomic_qc_UniVec_Host-1166ecaf8b2544fd940e50dc362776f5/qc_demo_R1.fastq.gz",
+            "R2": "uploads/examples/metagenomic_qc_UniVec_Host-1166ecaf8b2544fd940e50dc362776f5/qc_demo_R2.fastq.gz"
+          }
+        },
+        "create_missing": true
+      },
+      "transfer_id": "1d38f9a304de4b65842292d8da6bd29d",
+      "response": {
+        "transfer_id": "1d38f9a304de4b65842292d8da6bd29d",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "registered",
+            "slots": {
+              "R2": "a1e35f48dd8a3caab869f5a36a90183b",
+              "R1": "3e7f93fb5fbc3016a21a270154627a32"
+            }
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": true,
+          "files": [
+            {
+              "name": "results.zip",
+              "id": "5bf84d33dec429cfffeaf169aab4e05049158429c9383935f87077d5c3089496",
+              "source_path": "pipeline-bundles/9bd20d63bd2741cf9e08951e172cf3fd/results.zip",
+              "size": 15787234,
+              "sha256": "c301d2724c69da885e3d73182a6f560d0046f7f27c7f9e8f3a5f35c8e41fa95f",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "size": 7145823,
+              "sha256": "5ffa942841a1970986f08b84917f0b1d340eedbb02164eae17f3f032fc0619b0",
+              "name": "clean.R1.fastq.gz",
+              "id": "c37451b129dde3627b7968265eaaded7107833dc82aa63c9bdc5380ad1c616f4",
+              "source_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/0/clean.R1.fastq.gz",
+              "pipeline_result": {
+                "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+                "pipeline_name": "metagenomic_qc_UniVec_Host",
+                "output_key": "ReadQc.clean_r1",
+                "output_name": "clean_r1",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:42:50.243892+00:00"
+              },
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "size": 7170645,
+              "sha256": "b819855ffbf636487fd61c053c8a993d370e4c482cf53d48a57783dfa3025c76",
+              "name": "clean.R2.fastq.gz",
+              "id": "b75b47b2291255a53204680bb867dfd8496f6f0f9bf693c161aa67e21cda407a",
+              "source_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/1/clean.R2.fastq.gz",
+              "pipeline_result": {
+                "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+                "pipeline_name": "metagenomic_qc_UniVec_Host",
+                "output_key": "ReadQc.clean_r2",
+                "output_name": "clean_r2",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:42:50.243892+00:00"
+              },
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "size": 160,
+              "sha256": "8e100b1291a209da7dec7965ef42cc1e12dfac62c01d37e5e633914a8e465991",
+              "name": "qc_summary.tsv",
+              "id": "aaf4003b972a8a64d87b2a404291ed962915db46c69b3714b767ba3982e8b7bf",
+              "source_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/2/qc_summary.tsv",
+              "pipeline_result": {
+                "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+                "pipeline_name": "metagenomic_qc_UniVec_Host",
+                "output_key": "ReadQc.qc_summary",
+                "output_name": "qc_summary",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:42:50.243892+00:00"
+              },
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "sample",
+                  "layout",
+                  "raw_reads",
+                  "quality_dropped_reads",
+                  "univec_core_hit_reads",
+                  "reads_before_host",
+                  "host_reads",
+                  "final_clean_reads"
+                ],
+                "preview_rows": [
+                  [
+                    "SRR12883954",
+                    "PE",
+                    "100000",
+                    "9283",
+                    "54",
+                    "90663",
+                    "46",
+                    "90617"
+                  ]
+                ]
+              }
+            },
+            {
+              "size": 4775781,
+              "sha256": "be19f9094157ba49e45a9dbf342f46704e5a22aecf4ab146ed4bfda681eea5f2",
+              "name": "multiqc_report.html",
+              "id": "612b5981b3cadd4bb9b32aaa7619e11fcd2d2e58c49b95f6f475456eb4b48cb4",
+              "source_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/3/multiqc_report.html",
+              "pipeline_result": {
+                "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+                "pipeline_name": "metagenomic_qc_UniVec_Host",
+                "output_key": "ReadQc.multiqc_html",
+                "output_name": "multiqc_html",
+                "output_kind": "file",
+                "completed_at": "2026-11-09T06:42:50.243892+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<!--\n  __  __       _ _   _  ___   ____\n |  \\/  |_   _| | |_(_)/ _ \\ / ___|\n | |\\/| | | | | | __| | | | | |\n | |  | | |_| | | |_| | |_| | |___\n |_|  |_|\\__,_|_|\\__|_|\\__\\_\\\\____|\n\nAbandon hope all ye who enter here..\nhttp://multiqc.info\n-->\n\n  \n\n<meta charset=\"utf-8\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\n<meta name=\"description\" content=\"MultiQC: A modular tool to aggregate results from bioinformatics analyses across many samples into a single report\">\n<meta name=\"author\" content=\"MultiQC\">\n<title>MultiQC Report</title>\n\n<!-- JSON plot data -->\n<script type=\"text/plain\" id=\"mqc_compressed_plotdata\">H4sIAFBr8WoA/+x9bW8bObLuXxG8GJw9uBot39kcLBbIZu/mfti3M5P74WIQGLKtJMI4tle2Z5Id5L/f5yHZ3WSrJdmKk3gSZXaTVrObTRaLVU8Vi8Vfj04uf7lZLtTx1eL46vzy5ui7ya9HyzP8s1YynRzNL05fX642FPLf45t3V4tYPl8dv1rNr16z5Hz+7vI2VT2/vbm8Xv6Hz9ysbhcoPL08v1z9Mn+HOz8e/c6fntjFKV/6ndH4r4mXQSzO/Fm8fOnn2qYHGtHYRUh3pT1tRLxcmDNtTbx…"
+              }
+            },
+            {
+              "name": "qc_demo_R1.fastq.gz",
+              "id": "022e2f52749db74a413ccf1f71c98b945249395dd399da61fa7bab074b6bd580",
+              "source_path": "uploads/examples/metagenomic_qc_UniVec_Host-1166ecaf8b2544fd940e50dc362776f5/qc_demo_R1.fastq.gz",
+              "size": 8952270,
+              "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "name": "qc_demo_R2.fastq.gz",
+              "id": "b9ad25e73269236c3ff61641506cfde0f5d8dae3ea859f8d3535f706aec928b8",
+              "source_path": "uploads/examples/metagenomic_qc_UniVec_Host-1166ecaf8b2544fd940e50dc362776f5/qc_demo_R2.fastq.gz",
+              "size": 10923663,
+              "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            }
+          ],
+          "native_imports": [
+            {
+              "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+              "files_delivered": true,
+              "generic_import": {
+                "artifact_count": 4,
+                "access": "Search or pull the attached sample files; native records are a separate outcome.",
+                "state": "imported"
+              },
+              "pipeline": "metagenomic_qc_UniVec_Host",
+              "format": "ReadQc",
+              "state": "imported",
+              "message": "Native QC imported.",
+              "program": "qc"
+            }
+          ],
+          "qc": {
+            "QualityDroppedReads": 9283,
+            "ReadsAfterHostRemoval": 90617,
+            "HostReads": 46,
+            "UnivecCoreHitReads": 54,
+            "InputReads": 100000,
+            "ReadsAfterQC": 90663
+          },
+          "receipt_id": "1d38f9a304de4b65842292d8da6bd29d",
+          "target": {
+            "sample_id": "51ecc052b8953704a385aac712dd35df",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "metagenomic_qc_UniVec_Host",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "51ecc052b8953704a385aac712dd35df"
+      },
+      "transfer_id": "b700ea9a192d4a439cc2e9d50863a849",
+      "response": {
+        "transfer_id": "b700ea9a192d4a439cc2e9d50863a849",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "native_analysis_output",
+              "sample_id": "51ecc052b8953704a385aac712dd35df",
+              "name": "clean.R1.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "native:51ecc052b8953704a385aac712dd35df:qc:1d38f9a304de4b65842292d8da6bd29d:cleanR1Path",
+              "program": "qc",
+              "importable": true,
+              "sample_name": "metagenomic_qc_UniVec_Host"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "native_analysis_output",
+              "sample_id": "51ecc052b8953704a385aac712dd35df",
+              "name": "clean.R2.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "native:51ecc052b8953704a385aac712dd35df:qc:1d38f9a304de4b65842292d8da6bd29d:cleanR2Path",
+              "program": "qc",
+              "importable": true,
+              "sample_name": "metagenomic_qc_UniVec_Host"
+            },
+            {
+              "size": 894,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "native_analysis_record",
+              "sample_id": "51ecc052b8953704a385aac712dd35df",
+              "name": "qc-1d38f9a304de4b65842292d8da6bd29d.json",
+              "data_type": "meta",
+              "resource_id": "native:51ecc052b8953704a385aac712dd35df:qc:1d38f9a304de4b65842292d8da6bd29d:record",
+              "program": "qc",
+              "importable": true,
+              "sample_name": "metagenomic_qc_UniVec_Host"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "native_analysis_output",
+              "sample_id": "51ecc052b8953704a385aac712dd35df",
+              "name": "qc_summary.tsv",
+              "data_type": "meta",
+              "resource_id": "native:51ecc052b8953704a385aac712dd35df:qc:1d38f9a304de4b65842292d8da6bd29d:summaryPath",
+              "program": "qc",
+              "importable": true,
+              "sample_name": "metagenomic_qc_UniVec_Host"
+            },
+            {
+              "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+              "kind": "analysis_output",
+              "sample_id": "51ecc052b8953704a385aac712dd35df",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 8952270,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "qc_demo_R1.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:022e2f52749db74a413ccf1f71c98b945249395dd399da61fa7bab074b6bd580",
+              "id": "022e2f52749db74a413ccf1f71c98b945249395dd399da61fa7bab074b6bd580",
+              "source_path": "uploads/examples/metagenomic_qc_UniVec_Host-1166ecaf8b2544fd940e50dc362776f5/qc_demo_R1.fastq.gz",
+              "sample_name": "metagenomic_qc_UniVec_Host"
+            },
+            {
+              "sha256": "c301d2724c69da885e3d73182a6f560d0046f7f27c7f9e8f3a5f35c8e41fa95f",
+              "kind": "analysis_output",
+              "sample_id": "51ecc052b8953704a385aac712dd35df",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 15787234,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "results.zip",
+              "data_type": "meta",
+              "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:5bf84d33dec429cfffeaf169aab4e05049158429c9383935f87077d5c3089496",
+              "id": "5bf84d33dec429cfffeaf169aab4e05049158429c9383935f87077d5c3089496",
+              "source_path": "pipeline-bundles/9bd20d63bd2741cf9e08951e172cf3fd/results.zip",
+              "sample_name": "metagenomic_qc_UniVec_Host"
+            },
+            {
+              "sha256": "be19f9094157ba49e45a9dbf342f46704e5a22aecf4ab146ed4bfda681eea5f2",
+              "kind": "analysis_output",
+              "sample_id": "51ecc052b8953704a385aac712dd35df",
+              "pipeline_result": {
+                "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+                "pipeline_name": "metagenomic_qc_UniVec_Host",
+                "output_key": "ReadQc.multiqc_html",
+                "output_name": "multiqc_html",
+                "output_kind": "file",
+                "completed_at": "2026-11-09T06:42:50.243892+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<!--\n  __  __       _ _   _  ___   ____\n |  \\/  |_   _| | |_(_)/ _ \\ / ___|\n | |\\/| | | | | | __| | | | | |\n | |  | | |_| | | |_| | |_| | |___\n |_|  |_|\\__,_|_|\\__|_|\\__\\_\\\\____|\n\nAbandon hope all ye who enter here..\nhttp://multiqc.info\n-->\n\n  \n\n<meta charset=\"utf-8\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\n<meta name=\"description\" content=\"MultiQC: A modular tool to aggregate results from bioinformatics analyses across many samples into a single report\">\n<meta name=\"author\" content=\"MultiQC\">\n<title>MultiQC Report</title>\n\n<!-- JSON plot data -->\n<script type=\"text/plain\" id=\"mqc_compressed_plotdata\">H4sIAFBr8WoA/+x9bW8bObLuXxG8GJw9uBot39kcLBbIZu/mfti3M5P74WIQGLKtJMI4tle2Z5Id5L/f5yHZ3WSrJdmKk3gSZXaTVrObTRaLVU8Vi8Vfj04uf7lZLtTx1eL46vzy5ui7ya9HyzP8s1YynRzNL05fX642FPLf45t3V4tYPl8dv1rNr16z5Hz+7vI2VT2/vbm8Xv6Hz9ysbhcoPL08v1z9Mn+HOz8e/c6fntjFKV/6ndH4r4mXQSzO/Fm8fOnn2qYHGtHYRUh3pT1tRLxcmDNtTbx…"
+              },
+              "size": 4775781,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "multiqc_report.html",
+              "data_type": "meta",
+              "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:612b5981b3cadd4bb9b32aaa7619e11fcd2d2e58c49b95f6f475456eb4b48cb4",
+              "id": "612b5981b3cadd4bb9b32aaa7619e11fcd2d2e58c49b95f6f475456eb4b48cb4",
+              "source_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/3/multiqc_report.html",
+              "sample_name": "metagenomic_qc_UniVec_Host"
+            },
+            {
+              "sha256": "8e100b1291a209da7dec7965ef42cc1e12dfac62c01d37e5e633914a8e465991",
+              "kind": "analysis_output",
+              "sample_id": "51ecc052b8953704a385aac712dd35df",
+              "pipeline_result": {
+                "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+                "pipeline_name": "metagenomic_qc_UniVec_Host",
+                "output_key": "ReadQc.qc_summary",
+                "output_name": "qc_summary",
+                "output_kind": "table",
+                "completed_at": "2026-11-09T06:42:50.243892+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "sample",
+                  "layout",
+                  "raw_reads",
+                  "quality_dropped_reads",
+                  "univec_core_hit_reads",
+                  "reads_before_host",
+                  "host_reads",
+                  "final_clean_reads"
+                ],
+                "preview_rows": [
+                  [
+                    "SRR12883954",
+                    "PE",
+                    "100000",
+                    "9283",
+                    "54",
+                    "90663",
+                    "46",
+                    "90617"
+                  ]
+                ]
+              },
+              "size": 160,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "qc_summary.tsv",
+              "data_type": "meta",
+              "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:aaf4003b972a8a64d87b2a404291ed962915db46c69b3714b767ba3982e8b7bf",
+              "id": "aaf4003b972a8a64d87b2a404291ed962915db46c69b3714b767ba3982e8b7bf",
+              "source_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/2/qc_summary.tsv",
+              "sample_name": "metagenomic_qc_UniVec_Host"
+            },
+            {
+              "sha256": "b819855ffbf636487fd61c053c8a993d370e4c482cf53d48a57783dfa3025c76",
+              "kind": "analysis_output",
+              "sample_id": "51ecc052b8953704a385aac712dd35df",
+              "pipeline_result": {
+                "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+                "pipeline_name": "metagenomic_qc_UniVec_Host",
+                "output_key": "ReadQc.clean_r2",
+                "output_name": "clean_r2",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:42:50.243892+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 7170645,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "clean.R2.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:b75b47b2291255a53204680bb867dfd8496f6f0f9bf693c161aa67e21cda407a",
+              "id": "b75b47b2291255a53204680bb867dfd8496f6f0f9bf693c161aa67e21cda407a",
+              "source_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/1/clean.R2.fastq.gz",
+              "sample_name": "metagenomic_qc_UniVec_Host"
+            },
+            {
+              "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+              "kind": "analysis_output",
+              "sample_id": "51ecc052b8953704a385aac712dd35df",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 10923663,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "qc_demo_R2.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:b9ad25e73269236c3ff61641506cfde0f5d8dae3ea859f8d3535f706aec928b8",
+              "id": "b9ad25e73269236c3ff61641506cfde0f5d8dae3ea859f8d3535f706aec928b8",
+              "source_path": "uploads/examples/metagenomic_qc_UniVec_Host-1166ecaf8b2544fd940e50dc362776f5/qc_demo_R2.fastq.gz",
+              "sample_name": "metagenomic_qc_UniVec_Host"
+            },
+            {
+              "sha256": "5ffa942841a1970986f08b84917f0b1d340eedbb02164eae17f3f032fc0619b0",
+              "kind": "analysis_output",
+              "sample_id": "51ecc052b8953704a385aac712dd35df",
+              "pipeline_result": {
+                "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+                "pipeline_name": "metagenomic_qc_UniVec_Host",
+                "output_key": "ReadQc.clean_r1",
+                "output_name": "clean_r1",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:42:50.243892+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 7145823,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "clean.R1.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:c37451b129dde3627b7968265eaaded7107833dc82aa63c9bdc5380ad1c616f4",
+              "id": "c37451b129dde3627b7968265eaaded7107833dc82aa63c9bdc5380ad1c616f4",
+              "source_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/0/clean.R1.fastq.gz",
+              "sample_name": "metagenomic_qc_UniVec_Host"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:51ecc052b8953704a385aac712dd35df",
+              "importable": false,
+              "sample_name": "metagenomic_qc_UniVec_Host",
+              "data_type": "meta",
+              "sample_id": "51ecc052b8953704a385aac712dd35df"
+            },
+            {
+              "size": 8952270,
+              "kind": "source_file",
+              "sample_id": "51ecc052b8953704a385aac712dd35df",
+              "name": "qc_demo_R1.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "source:meta:51ecc052b8953704a385aac712dd35df:R1",
+              "slot": "R1",
+              "id": "3e7f93fb5fbc3016a21a270154627a32",
+              "sample_name": "metagenomic_qc_UniVec_Host"
+            },
+            {
+              "size": 10923663,
+              "kind": "source_file",
+              "sample_id": "51ecc052b8953704a385aac712dd35df",
+              "name": "qc_demo_R2.fastq.gz",
+              "data_type": "meta",
+              "resource_id": "source:meta:51ecc052b8953704a385aac712dd35df:R2",
+              "slot": "R2",
+              "id": "a1e35f48dd8a3caab869f5a36a90183b",
+              "sample_name": "metagenomic_qc_UniVec_Host"
+            }
+          ],
+          "total": 14,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:022e2f52749db74a413ccf1f71c98b945249395dd399da61fa7bab074b6bd580"
+      },
+      "transfer_id": "a0a2904b5b3b42a8864f63ff00e5b8d0",
+      "response": {
+        "transfer_id": "a0a2904b5b3b42a8864f63ff00e5b8d0",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "26fad7a1-7580-4483-82f3-9a96528cb4b1",
+            "path": "uploads/e4483b13aa964178967ae83321595c43_qc_demo_R1.fastq.gz",
+            "workspace_path": "uploads/e4483b13aa964178967ae83321595c43_qc_demo_R1.fastq.gz",
+            "name": "qc_demo_R1.fastq.gz",
+            "size": 8952270,
+            "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+            "kind": "upload",
+            "content_type": "application/gzip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:5bf84d33dec429cfffeaf169aab4e05049158429c9383935f87077d5c3089496"
+      },
+      "transfer_id": "2fa1e94b1ed54e0e86199a9cd78cf60a",
+      "response": {
+        "transfer_id": "2fa1e94b1ed54e0e86199a9cd78cf60a",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "26fad7a1-7580-4483-82f3-9a96528cb4b1",
+            "path": "uploads/4489e48d3cc249fcaeda30d9f71cd903_results.zip",
+            "workspace_path": "uploads/4489e48d3cc249fcaeda30d9f71cd903_results.zip",
+            "name": "results.zip",
+            "size": 15787234,
+            "sha256": "c301d2724c69da885e3d73182a6f560d0046f7f27c7f9e8f3a5f35c8e41fa95f",
+            "kind": "upload",
+            "content_type": "application/zip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:612b5981b3cadd4bb9b32aaa7619e11fcd2d2e58c49b95f6f475456eb4b48cb4"
+      },
+      "transfer_id": "8eb59668b33d49409f324cc18ed15351",
+      "response": {
+        "transfer_id": "8eb59668b33d49409f324cc18ed15351",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "26fad7a1-7580-4483-82f3-9a96528cb4b1",
+            "path": "uploads/914162adad7d475a8b9430625ac6b6d0_multiqc_report.html",
+            "workspace_path": "uploads/914162adad7d475a8b9430625ac6b6d0_multiqc_report.html",
+            "name": "multiqc_report.html",
+            "size": 4775781,
+            "sha256": "be19f9094157ba49e45a9dbf342f46704e5a22aecf4ab146ed4bfda681eea5f2",
+            "kind": "upload",
+            "content_type": "text/html; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:aaf4003b972a8a64d87b2a404291ed962915db46c69b3714b767ba3982e8b7bf"
+      },
+      "transfer_id": "82be2440f7ce4a31bed3682f8bd30af5",
+      "response": {
+        "transfer_id": "82be2440f7ce4a31bed3682f8bd30af5",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "26fad7a1-7580-4483-82f3-9a96528cb4b1",
+            "path": "uploads/2c3aa1e892c445069d3a76202edc9be5_qc_summary.tsv",
+            "workspace_path": "uploads/2c3aa1e892c445069d3a76202edc9be5_qc_summary.tsv",
+            "name": "qc_summary.tsv",
+            "size": 160,
+            "sha256": "8e100b1291a209da7dec7965ef42cc1e12dfac62c01d37e5e633914a8e465991",
+            "kind": "upload",
+            "content_type": "text/tab-separated-values; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:b75b47b2291255a53204680bb867dfd8496f6f0f9bf693c161aa67e21cda407a"
+      },
+      "transfer_id": "0f23151eaf264e84a4c08d96deae3e68",
+      "response": {
+        "transfer_id": "0f23151eaf264e84a4c08d96deae3e68",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "26fad7a1-7580-4483-82f3-9a96528cb4b1",
+            "path": "uploads/5e9aaeae97a1448b956cd39424a19746_clean.R2.fastq.gz",
+            "workspace_path": "uploads/5e9aaeae97a1448b956cd39424a19746_clean.R2.fastq.gz",
+            "name": "clean.R2.fastq.gz",
+            "size": 7170645,
+            "sha256": "b819855ffbf636487fd61c053c8a993d370e4c482cf53d48a57783dfa3025c76",
+            "kind": "upload",
+            "content_type": "application/gzip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:b9ad25e73269236c3ff61641506cfde0f5d8dae3ea859f8d3535f706aec928b8"
+      },
+      "transfer_id": "efe093a20c35418186592814129e6e29",
+      "response": {
+        "transfer_id": "efe093a20c35418186592814129e6e29",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "26fad7a1-7580-4483-82f3-9a96528cb4b1",
+            "path": "uploads/5d0e58bcfc9b408e8bf6661e87d11b1d_qc_demo_R2.fastq.gz",
+            "workspace_path": "uploads/5d0e58bcfc9b408e8bf6661e87d11b1d_qc_demo_R2.fastq.gz",
+            "name": "qc_demo_R2.fastq.gz",
+            "size": 10923663,
+            "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+            "kind": "upload",
+            "content_type": "application/gzip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:c37451b129dde3627b7968265eaaded7107833dc82aa63c9bdc5380ad1c616f4"
+      },
+      "transfer_id": "abaa3056360f45f48112d0091471b547",
+      "response": {
+        "transfer_id": "abaa3056360f45f48112d0091471b547",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "26fad7a1-7580-4483-82f3-9a96528cb4b1",
+            "path": "uploads/cbc219b957ec41d595ea612f39b9d76e_clean.R1.fastq.gz",
+            "workspace_path": "uploads/cbc219b957ec41d595ea612f39b9d76e_clean.R1.fastq.gz",
+            "name": "clean.R1.fastq.gz",
+            "size": 7145823,
+            "sha256": "5ffa942841a1970986f08b84917f0b1d340eedbb02164eae17f3f032fc0619b0",
+            "kind": "upload",
+            "content_type": "application/gzip"
+          }
+        }
+      }
+    }
+  ],
+  "attempt_history": [
+    {
+      "pipeline": "metagenomic_qc_UniVec_Host",
+      "engine": "wdl",
+      "manifest_sha256": "fc5f376a2a8e525fa96d013eeec4ff2ed3923ce02fee29da74d3c2014d410123",
+      "selected_for_execution": true,
+      "execution_status": "setup_failed",
+      "scope_note": "",
+      "examples": [
+        {
+          "path": "tools/runtime_tools/pipelines/metagenomic_qc_UniVec_Host/data/input/qc_demo_R1.fastq.gz",
+          "bytes": 8952270,
+          "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265"
+        },
+        {
+          "path": "tools/runtime_tools/pipelines/metagenomic_qc_UniVec_Host/data/input/qc_demo_R2.fastq.gz",
+          "bytes": 10923663,
+          "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0"
+        }
+      ],
+      "contract": {
+        "valid": true,
+        "inputs": [
+          "read1",
+          "read2",
+          "host_fasta"
+        ],
+        "outputs": [
+          "clean_r1",
+          "clean_r2",
+          "qc_summary",
+          "multiqc_html"
+        ]
+      },
+      "transfers": [],
+      "session_id": "c4cd9951-12ee-43ab-9385-377d5dca21f8",
+      "assigned_inputs": {
+        "read1": "uploads/examples/metagenomic_qc_UniVec_Host-0ee46c19be734441b61f2d2551d85520/qc_demo_R1.fastq.gz",
+        "read2": "uploads/examples/metagenomic_qc_UniVec_Host-0ee46c19be734441b61f2d2551d85520/qc_demo_R2.fastq.gz"
+      },
+      "parameter_overrides": {},
+      "plan_id": "66daad3cf97446ae82f257aacc9470b7",
+      "harness_error": "ValueError: Remote job limit reached (2 per account, 16 server-wide).",
+      "elapsed_seconds": 0.87,
+      "test_finished": true
+    }
+  ],
+  "session_id": "26fad7a1-7580-4483-82f3-9a96528cb4b1",
+  "assigned_inputs": {
+    "read1": "uploads/examples/metagenomic_qc_UniVec_Host-1166ecaf8b2544fd940e50dc362776f5/qc_demo_R1.fastq.gz",
+    "read2": "uploads/examples/metagenomic_qc_UniVec_Host-1166ecaf8b2544fd940e50dc362776f5/qc_demo_R2.fastq.gz"
+  },
+  "parameter_overrides": {},
+  "plan_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+  "admission_waits": 3,
+  "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+  "last_state": {
+    "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+    "plan_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+    "status": "succeeded",
+    "created_at": "2026-11-09T06:41:18.516161+00:00",
+    "started_at": "2026-11-09T06:41:34.414909+00:00",
+    "finished_at": "2026-11-09T06:42:50.243892+00:00",
+    "updated_at": "2026-11-09T06:42:50.244924+00:00",
+    "error": null,
+    "remote_id": "fb298b97-e1f6-462e-a8f6-4b2c32ac8a78",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_qc_UniVec_Host"
+  },
+  "results": {
+    "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+    "plan_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+    "status": "succeeded",
+    "created_at": "2026-11-09T06:41:18.516161+00:00",
+    "started_at": "2026-11-09T06:41:34.414909+00:00",
+    "finished_at": "2026-11-09T06:42:50.243892+00:00",
+    "updated_at": "2026-11-09T06:42:50.244924+00:00",
+    "error": null,
+    "remote_id": "fb298b97-e1f6-462e-a8f6-4b2c32ac8a78",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_qc_UniVec_Host",
+    "files": [
+      {
+        "name": "clean.R1.fastq.gz",
+        "path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/0/clean.R1.fastq.gz",
+        "workspace_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/0/clean.R1.fastq.gz",
+        "size": 7145823,
+        "remote": true,
+        "artifact_id": "9bd20d63bd2741cf9e08951e172cf3fd:0",
+        "pipeline_result": {
+          "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+          "pipeline_name": "metagenomic_qc_UniVec_Host",
+          "output_key": "ReadQc.clean_r1",
+          "output_name": "clean_r1",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-09T06:42:50.243892+00:00"
+        }
+      },
+      {
+        "name": "clean.R2.fastq.gz",
+        "path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/1/clean.R2.fastq.gz",
+        "workspace_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/1/clean.R2.fastq.gz",
+        "size": 7170645,
+        "remote": true,
+        "artifact_id": "9bd20d63bd2741cf9e08951e172cf3fd:1",
+        "pipeline_result": {
+          "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+          "pipeline_name": "metagenomic_qc_UniVec_Host",
+          "output_key": "ReadQc.clean_r2",
+          "output_name": "clean_r2",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-09T06:42:50.243892+00:00"
+        }
+      },
+      {
+        "name": "qc_summary.tsv",
+        "path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/2/qc_summary.tsv",
+        "workspace_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/2/qc_summary.tsv",
+        "size": 160,
+        "remote": true,
+        "artifact_id": "9bd20d63bd2741cf9e08951e172cf3fd:2",
+        "pipeline_result": {
+          "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+          "pipeline_name": "metagenomic_qc_UniVec_Host",
+          "output_key": "ReadQc.qc_summary",
+          "output_name": "qc_summary",
+          "output_kind": "table",
+          "completed_at": "2026-11-09T06:42:50.243892+00:00"
+        }
+      },
+      {
+        "name": "multiqc_report.html",
+        "path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/3/multiqc_report.html",
+        "workspace_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/3/multiqc_report.html",
+        "size": 4775781,
+        "remote": true,
+        "artifact_id": "9bd20d63bd2741cf9e08951e172cf3fd:3",
+        "pipeline_result": {
+          "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+          "pipeline_name": "metagenomic_qc_UniVec_Host",
+          "output_key": "ReadQc.multiqc_html",
+          "output_name": "multiqc_html",
+          "output_kind": "file",
+          "completed_at": "2026-11-09T06:42:50.243892+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/2/qc_summary.tsv",
+        "text": "sample\tlayout\traw_reads\tquality_dropped_reads\tunivec_core_hit_reads\treads_before_host\thost_reads\tfinal_clean_reads\nSRR12883954\tPE\t100000\t9283\t54\t90663\t46\t90617\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/9bd20d63bd2741cf9e08951e172cf3fd/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "transfer_scope": "actual bundled inputs and execution outputs",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "51ecc052b8953704a385aac712dd35df",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "metagenomic_qc_UniVec_Host",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [
+    {
+      "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+      "files_delivered": true,
+      "generic_import": {
+        "artifact_count": 4,
+        "access": "Search or pull the attached sample files; native records are a separate outcome.",
+        "state": "imported"
+      },
+      "pipeline": "metagenomic_qc_UniVec_Host",
+      "format": "ReadQc",
+      "state": "imported",
+      "message": "Native QC imported.",
+      "program": "qc"
+    }
+  ],
+  "roundtrip_files": [
+    {
+      "name": "qc_demo_R1.fastq.gz",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:022e2f52749db74a413ccf1f71c98b945249395dd399da61fa7bab074b6bd580",
+      "state": "succeeded",
+      "bytes": 8952270,
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+      "expected_sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+      "matches": true
+    },
+    {
+      "name": "results.zip",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:5bf84d33dec429cfffeaf169aab4e05049158429c9383935f87077d5c3089496",
+      "state": "succeeded",
+      "bytes": 15787234,
+      "sha256": "c301d2724c69da885e3d73182a6f560d0046f7f27c7f9e8f3a5f35c8e41fa95f",
+      "expected_sha256": "c301d2724c69da885e3d73182a6f560d0046f7f27c7f9e8f3a5f35c8e41fa95f",
+      "matches": true
+    },
+    {
+      "name": "multiqc_report.html",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:612b5981b3cadd4bb9b32aaa7619e11fcd2d2e58c49b95f6f475456eb4b48cb4",
+      "state": "succeeded",
+      "bytes": 4775781,
+      "sha256": "be19f9094157ba49e45a9dbf342f46704e5a22aecf4ab146ed4bfda681eea5f2",
+      "expected_sha256": "be19f9094157ba49e45a9dbf342f46704e5a22aecf4ab146ed4bfda681eea5f2",
+      "matches": true
+    },
+    {
+      "name": "qc_summary.tsv",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:aaf4003b972a8a64d87b2a404291ed962915db46c69b3714b767ba3982e8b7bf",
+      "state": "succeeded",
+      "bytes": 160,
+      "sha256": "8e100b1291a209da7dec7965ef42cc1e12dfac62c01d37e5e633914a8e465991",
+      "expected_sha256": "8e100b1291a209da7dec7965ef42cc1e12dfac62c01d37e5e633914a8e465991",
+      "matches": true
+    },
+    {
+      "name": "clean.R2.fastq.gz",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:b75b47b2291255a53204680bb867dfd8496f6f0f9bf693c161aa67e21cda407a",
+      "state": "succeeded",
+      "bytes": 7170645,
+      "sha256": "b819855ffbf636487fd61c053c8a993d370e4c482cf53d48a57783dfa3025c76",
+      "expected_sha256": "b819855ffbf636487fd61c053c8a993d370e4c482cf53d48a57783dfa3025c76",
+      "matches": true
+    },
+    {
+      "name": "qc_demo_R2.fastq.gz",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:b9ad25e73269236c3ff61641506cfde0f5d8dae3ea859f8d3535f706aec928b8",
+      "state": "succeeded",
+      "bytes": 10923663,
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+      "expected_sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+      "matches": true
+    },
+    {
+      "name": "clean.R1.fastq.gz",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:c37451b129dde3627b7968265eaaded7107833dc82aa63c9bdc5380ad1c616f4",
+      "state": "succeeded",
+      "bytes": 7145823,
+      "sha256": "5ffa942841a1970986f08b84917f0b1d340eedbb02164eae17f3f032fc0619b0",
+      "expected_sha256": "5ffa942841a1970986f08b84917f0b1d340eedbb02164eae17f3f032fc0619b0",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "native_analysis_output",
+      "sample_id": "51ecc052b8953704a385aac712dd35df",
+      "name": "clean.R1.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "native:51ecc052b8953704a385aac712dd35df:qc:1d38f9a304de4b65842292d8da6bd29d:cleanR1Path",
+      "program": "qc",
+      "importable": true,
+      "sample_name": "metagenomic_qc_UniVec_Host"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "native_analysis_output",
+      "sample_id": "51ecc052b8953704a385aac712dd35df",
+      "name": "clean.R2.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "native:51ecc052b8953704a385aac712dd35df:qc:1d38f9a304de4b65842292d8da6bd29d:cleanR2Path",
+      "program": "qc",
+      "importable": true,
+      "sample_name": "metagenomic_qc_UniVec_Host"
+    },
+    {
+      "size": 894,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "native_analysis_record",
+      "sample_id": "51ecc052b8953704a385aac712dd35df",
+      "name": "qc-1d38f9a304de4b65842292d8da6bd29d.json",
+      "data_type": "meta",
+      "resource_id": "native:51ecc052b8953704a385aac712dd35df:qc:1d38f9a304de4b65842292d8da6bd29d:record",
+      "program": "qc",
+      "importable": true,
+      "sample_name": "metagenomic_qc_UniVec_Host"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "native_analysis_output",
+      "sample_id": "51ecc052b8953704a385aac712dd35df",
+      "name": "qc_summary.tsv",
+      "data_type": "meta",
+      "resource_id": "native:51ecc052b8953704a385aac712dd35df:qc:1d38f9a304de4b65842292d8da6bd29d:summaryPath",
+      "program": "qc",
+      "importable": true,
+      "sample_name": "metagenomic_qc_UniVec_Host"
+    },
+    {
+      "sha256": "8af4a0636892c823d6464c073a06d879d370469129cd9f6881be62e37d27f265",
+      "kind": "analysis_output",
+      "sample_id": "51ecc052b8953704a385aac712dd35df",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 8952270,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "qc_demo_R1.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:022e2f52749db74a413ccf1f71c98b945249395dd399da61fa7bab074b6bd580",
+      "id": "022e2f52749db74a413ccf1f71c98b945249395dd399da61fa7bab074b6bd580",
+      "source_path": "uploads/examples/metagenomic_qc_UniVec_Host-1166ecaf8b2544fd940e50dc362776f5/qc_demo_R1.fastq.gz",
+      "sample_name": "metagenomic_qc_UniVec_Host"
+    },
+    {
+      "sha256": "c301d2724c69da885e3d73182a6f560d0046f7f27c7f9e8f3a5f35c8e41fa95f",
+      "kind": "analysis_output",
+      "sample_id": "51ecc052b8953704a385aac712dd35df",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 15787234,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "results.zip",
+      "data_type": "meta",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:5bf84d33dec429cfffeaf169aab4e05049158429c9383935f87077d5c3089496",
+      "id": "5bf84d33dec429cfffeaf169aab4e05049158429c9383935f87077d5c3089496",
+      "source_path": "pipeline-bundles/9bd20d63bd2741cf9e08951e172cf3fd/results.zip",
+      "sample_name": "metagenomic_qc_UniVec_Host"
+    },
+    {
+      "sha256": "be19f9094157ba49e45a9dbf342f46704e5a22aecf4ab146ed4bfda681eea5f2",
+      "kind": "analysis_output",
+      "sample_id": "51ecc052b8953704a385aac712dd35df",
+      "pipeline_result": {
+        "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+        "pipeline_name": "metagenomic_qc_UniVec_Host",
+        "output_key": "ReadQc.multiqc_html",
+        "output_name": "multiqc_html",
+        "output_kind": "file",
+        "completed_at": "2026-11-09T06:42:50.243892+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<!--\n  __  __       _ _   _  ___   ____\n |  \\/  |_   _| | |_(_)/ _ \\ / ___|\n | |\\/| | | | | | __| | | | | |\n | |  | | |_| | | |_| | |_| | |___\n |_|  |_|\\__,_|_|\\__|_|\\__\\_\\\\____|\n\nAbandon hope all ye who enter here..\nhttp://multiqc.info\n-->\n\n  \n\n<meta charset=\"utf-8\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\n<meta name=\"description\" content=\"MultiQC: A modular tool to aggregate results from bioinformatics analyses across many samples into a single report\">\n<meta name=\"author\" content=\"MultiQC\">\n<title>MultiQC Report</title>\n\n<!-- JSON plot data -->\n<script type=\"text/plain\" id=\"mqc_compressed_plotdata\">H4sIAFBr8WoA/+x9bW8bObLuXxG8GJw9uBot39kcLBbIZu/mfti3M5P74WIQGLKtJMI4tle2Z5Id5L/f5yHZ3WSrJdmKk3gSZXaTVrObTRaLVU8Vi8Vfj04uf7lZLtTx1eL46vzy5ui7ya9HyzP8s1YynRzNL05fX642FPLf45t3V4tYPl8dv1rNr16z5Hz+7vI2VT2/vbm8Xv6Hz9ysbhcoPL08v1z9Mn+HOz8e/c6fntjFKV/6ndH4r4mXQSzO/Fm8fOnn2qYHGtHYRUh3pT1tRLxcmDNtTbx…"
+      },
+      "size": 4775781,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "multiqc_report.html",
+      "data_type": "meta",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:612b5981b3cadd4bb9b32aaa7619e11fcd2d2e58c49b95f6f475456eb4b48cb4",
+      "id": "612b5981b3cadd4bb9b32aaa7619e11fcd2d2e58c49b95f6f475456eb4b48cb4",
+      "source_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/3/multiqc_report.html",
+      "sample_name": "metagenomic_qc_UniVec_Host"
+    },
+    {
+      "sha256": "8e100b1291a209da7dec7965ef42cc1e12dfac62c01d37e5e633914a8e465991",
+      "kind": "analysis_output",
+      "sample_id": "51ecc052b8953704a385aac712dd35df",
+      "pipeline_result": {
+        "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+        "pipeline_name": "metagenomic_qc_UniVec_Host",
+        "output_key": "ReadQc.qc_summary",
+        "output_name": "qc_summary",
+        "output_kind": "table",
+        "completed_at": "2026-11-09T06:42:50.243892+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "table",
+        "preview_available": true,
+        "preview_only": true,
+        "delimiter": "tab",
+        "columns": [
+          "sample",
+          "layout",
+          "raw_reads",
+          "quality_dropped_reads",
+          "univec_core_hit_reads",
+          "reads_before_host",
+          "host_reads",
+          "final_clean_reads"
+        ],
+        "preview_rows": [
+          [
+            "SRR12883954",
+            "PE",
+            "100000",
+            "9283",
+            "54",
+            "90663",
+            "46",
+            "90617"
+          ]
+        ]
+      },
+      "size": 160,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "qc_summary.tsv",
+      "data_type": "meta",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:aaf4003b972a8a64d87b2a404291ed962915db46c69b3714b767ba3982e8b7bf",
+      "id": "aaf4003b972a8a64d87b2a404291ed962915db46c69b3714b767ba3982e8b7bf",
+      "source_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/2/qc_summary.tsv",
+      "sample_name": "metagenomic_qc_UniVec_Host"
+    },
+    {
+      "sha256": "b819855ffbf636487fd61c053c8a993d370e4c482cf53d48a57783dfa3025c76",
+      "kind": "analysis_output",
+      "sample_id": "51ecc052b8953704a385aac712dd35df",
+      "pipeline_result": {
+        "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+        "pipeline_name": "metagenomic_qc_UniVec_Host",
+        "output_key": "ReadQc.clean_r2",
+        "output_name": "clean_r2",
+        "output_kind": "sequence",
+        "completed_at": "2026-11-09T06:42:50.243892+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 7170645,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "clean.R2.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:b75b47b2291255a53204680bb867dfd8496f6f0f9bf693c161aa67e21cda407a",
+      "id": "b75b47b2291255a53204680bb867dfd8496f6f0f9bf693c161aa67e21cda407a",
+      "source_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/1/clean.R2.fastq.gz",
+      "sample_name": "metagenomic_qc_UniVec_Host"
+    },
+    {
+      "sha256": "56b1a9aa57e0edb87aabdbd2da110d596e117d6971ada9b96b0eab68af8029e0",
+      "kind": "analysis_output",
+      "sample_id": "51ecc052b8953704a385aac712dd35df",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 10923663,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "qc_demo_R2.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:b9ad25e73269236c3ff61641506cfde0f5d8dae3ea859f8d3535f706aec928b8",
+      "id": "b9ad25e73269236c3ff61641506cfde0f5d8dae3ea859f8d3535f706aec928b8",
+      "source_path": "uploads/examples/metagenomic_qc_UniVec_Host-1166ecaf8b2544fd940e50dc362776f5/qc_demo_R2.fastq.gz",
+      "sample_name": "metagenomic_qc_UniVec_Host"
+    },
+    {
+      "sha256": "5ffa942841a1970986f08b84917f0b1d340eedbb02164eae17f3f032fc0619b0",
+      "kind": "analysis_output",
+      "sample_id": "51ecc052b8953704a385aac712dd35df",
+      "pipeline_result": {
+        "job_id": "9bd20d63bd2741cf9e08951e172cf3fd",
+        "pipeline_name": "metagenomic_qc_UniVec_Host",
+        "output_key": "ReadQc.clean_r1",
+        "output_name": "clean_r1",
+        "output_kind": "sequence",
+        "completed_at": "2026-11-09T06:42:50.243892+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 7145823,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "clean.R1.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "result:1d38f9a304de4b65842292d8da6bd29d:c37451b129dde3627b7968265eaaded7107833dc82aa63c9bdc5380ad1c616f4",
+      "id": "c37451b129dde3627b7968265eaaded7107833dc82aa63c9bdc5380ad1c616f4",
+      "source_path": "pipeline-artifacts/9bd20d63bd2741cf9e08951e172cf3fd/0/clean.R1.fastq.gz",
+      "sample_name": "metagenomic_qc_UniVec_Host"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:51ecc052b8953704a385aac712dd35df",
+      "importable": false,
+      "sample_name": "metagenomic_qc_UniVec_Host",
+      "data_type": "meta",
+      "sample_id": "51ecc052b8953704a385aac712dd35df"
+    },
+    {
+      "size": 8952270,
+      "kind": "source_file",
+      "sample_id": "51ecc052b8953704a385aac712dd35df",
+      "name": "qc_demo_R1.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "source:meta:51ecc052b8953704a385aac712dd35df:R1",
+      "slot": "R1",
+      "id": "3e7f93fb5fbc3016a21a270154627a32",
+      "sample_name": "metagenomic_qc_UniVec_Host"
+    },
+    {
+      "size": 10923663,
+      "kind": "source_file",
+      "sample_id": "51ecc052b8953704a385aac712dd35df",
+      "name": "qc_demo_R2.fastq.gz",
+      "data_type": "meta",
+      "resource_id": "source:meta:51ecc052b8953704a385aac712dd35df:R2",
+      "slot": "R2",
+      "id": "a1e35f48dd8a3caab869f5a36a90183b",
+      "sample_name": "metagenomic_qc_UniVec_Host"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 156.02,
+  "test_finished": true
+}

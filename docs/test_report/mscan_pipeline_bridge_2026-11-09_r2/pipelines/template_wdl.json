@@ -1,0 +1,813 @@
+{
+  "pipeline": "template_wdl",
+  "engine": "wdl",
+  "manifest_sha256": "ce69e6febfa8b57bb5aa5c42316bcc773c9b95584f0719ea7e18d8a026330119",
+  "selected_for_execution": true,
+  "execution_status": "succeeded",
+  "scope_note": "",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/template_wdl/data/input/example_sequence.fasta",
+      "bytes": 89,
+      "sha256": "3e1e6d3fc9ce5708c6356156dd8db2bb983628e80a0f2605511c7002beffc6fa"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "sequence"
+    ],
+    "outputs": [
+      "report",
+      "metrics",
+      "normalized_sequence"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "pipeline-bundles/1d8d35153ec74b8680ec5e1ed4afb1cc/results.zip",
+          "uploads/examples/template_wdl-0c8db5001d05454ca073f84d73fafe9a/example_sequence.fasta"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "template_wdl",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "52005587d8af49289bb44bccd2e6e86f",
+      "response": {
+        "transfer_id": "52005587d8af49289bb44bccd2e6e86f",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "results.zip",
+              "id": "d67e6c76db9c39cff646d8e41da896216a84847500c1f6230ddea62e19514bf1",
+              "source_path": "pipeline-bundles/1d8d35153ec74b8680ec5e1ed4afb1cc/results.zip",
+              "size": 829,
+              "sha256": "e52cac8ac4198f0b55674d6858ae7fabe15d4a407aa255bcef342f7720205d4d",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "size": 321,
+              "sha256": "6527b814d87ccbb9f3bdd59b663689eaa89282f82adcd3c245a77b734803cbdf",
+              "name": "report.md",
+              "id": "14996cb10bd267abfa489600fba40ff9454cdc326d65e3f99d5d56d7c6b7333e",
+              "source_path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/0/report.md",
+              "pipeline_result": {
+                "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+                "pipeline_name": "template_wdl",
+                "output_key": "TemplateWdl.report",
+                "output_name": "report",
+                "output_kind": "report",
+                "completed_at": "2026-11-09T06:52:50.873830+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "# Template WDL Pipeline Report\n\n- Label: template_wdl\n- Profile: standard\n- Input: /cromwell-executions/TemplateWdl/95cc97fd-cb55-41a1-a12f-667a02c28a0a/call-AnalyzeFasta/inputs/-584389753/3e1e6d3fc9ce5708-example_sequence.fasta\n- Sequence length: 70\n- Minimum length: 0\n- Passes minimum length: True\n- GC percent: 35.71\n"
+              }
+            },
+            {
+              "size": 198,
+              "sha256": "e48d4025b5381faa99e085e41f2e07f212e4e59024cd1e352c258e5b61badbbe",
+              "name": "metrics.json",
+              "id": "ef95dd40bda945affe1daffd9f9261da87a40329d84ca6c9347f4cf54d6cb146",
+              "source_path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/1/metrics.json",
+              "pipeline_result": {
+                "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+                "pipeline_name": "template_wdl",
+                "output_key": "TemplateWdl.metrics",
+                "output_name": "metrics",
+                "output_kind": "metrics",
+                "completed_at": "2026-11-09T06:52:50.873830+00:00"
+              },
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "status",
+                  "pipeline",
+                  "label",
+                  "profile",
+                  "sequence_length",
+                  "min_length",
+                  "passes_min_length",
+                  "gc_percent"
+                ]
+              }
+            },
+            {
+              "size": 85,
+              "sha256": "a53af77ef91fea56e294bdaa7f240d0ff34817f7e30243e5f481ba1b541fa1af",
+              "name": "normalized.fasta",
+              "id": "4cce4c5853fbd7e9e85a934000cdecdd4d08eb9879fe52da7d95cdc2ee8bcd9d",
+              "source_path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/2/normalized.fasta",
+              "pipeline_result": {
+                "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+                "pipeline_name": "template_wdl",
+                "output_key": "TemplateWdl.normalized_fasta",
+                "output_name": "normalized_sequence",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:52:50.873830+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">template_wdl\nGAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT\n"
+              }
+            },
+            {
+              "name": "example_sequence.fasta",
+              "id": "b219e6d41a2438f53473a566f68a379334025f10577e284bec289b83eb64b587",
+              "source_path": "uploads/examples/template_wdl-0c8db5001d05454ca073f84d73fafe9a/example_sequence.fasta",
+              "size": 89,
+              "sha256": "3e1e6d3fc9ce5708c6356156dd8db2bb983628e80a0f2605511c7002beffc6fa",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">example_sequence\nGAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT\n"
+              }
+            }
+          ],
+          "native_imports": [
+            {
+              "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+              "files_delivered": true,
+              "generic_import": {
+                "artifact_count": 3,
+                "access": "Search or pull the attached sample files; native records are a separate outcome.",
+                "state": "imported"
+              },
+              "pipeline": "template_wdl",
+              "format": "TemplateWdl",
+              "state": "unsupported",
+              "message": "MSCAN has no registered importer for this result format; files remain available."
+            }
+          ],
+          "qc": {},
+          "receipt_id": "52005587d8af49289bb44bccd2e6e86f",
+          "target": {
+            "sample_id": "c58803b812733e13a0ff52553a0dc90d",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "template_wdl",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "c58803b812733e13a0ff52553a0dc90d"
+      },
+      "transfer_id": "97bf73f2c1114c48bc8a55d13b95c654",
+      "response": {
+        "transfer_id": "97bf73f2c1114c48bc8a55d13b95c654",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "6527b814d87ccbb9f3bdd59b663689eaa89282f82adcd3c245a77b734803cbdf",
+              "kind": "analysis_output",
+              "sample_id": "c58803b812733e13a0ff52553a0dc90d",
+              "pipeline_result": {
+                "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+                "pipeline_name": "template_wdl",
+                "output_key": "TemplateWdl.report",
+                "output_name": "report",
+                "output_kind": "report",
+                "completed_at": "2026-11-09T06:52:50.873830+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "# Template WDL Pipeline Report\n\n- Label: template_wdl\n- Profile: standard\n- Input: /cromwell-executions/TemplateWdl/95cc97fd-cb55-41a1-a12f-667a02c28a0a/call-AnalyzeFasta/inputs/-584389753/3e1e6d3fc9ce5708-example_sequence.fasta\n- Sequence length: 70\n- Minimum length: 0\n- Passes minimum length: True\n- GC percent: 35.71\n"
+              },
+              "size": 321,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "report.md",
+              "data_type": "meta",
+              "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:14996cb10bd267abfa489600fba40ff9454cdc326d65e3f99d5d56d7c6b7333e",
+              "id": "14996cb10bd267abfa489600fba40ff9454cdc326d65e3f99d5d56d7c6b7333e",
+              "source_path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/0/report.md",
+              "sample_name": "template_wdl"
+            },
+            {
+              "sha256": "a53af77ef91fea56e294bdaa7f240d0ff34817f7e30243e5f481ba1b541fa1af",
+              "kind": "analysis_output",
+              "sample_id": "c58803b812733e13a0ff52553a0dc90d",
+              "pipeline_result": {
+                "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+                "pipeline_name": "template_wdl",
+                "output_key": "TemplateWdl.normalized_fasta",
+                "output_name": "normalized_sequence",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:52:50.873830+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">template_wdl\nGAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT\n"
+              },
+              "size": 85,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "normalized.fasta",
+              "data_type": "meta",
+              "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:4cce4c5853fbd7e9e85a934000cdecdd4d08eb9879fe52da7d95cdc2ee8bcd9d",
+              "id": "4cce4c5853fbd7e9e85a934000cdecdd4d08eb9879fe52da7d95cdc2ee8bcd9d",
+              "source_path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/2/normalized.fasta",
+              "sample_name": "template_wdl"
+            },
+            {
+              "sha256": "3e1e6d3fc9ce5708c6356156dd8db2bb983628e80a0f2605511c7002beffc6fa",
+              "kind": "analysis_output",
+              "sample_id": "c58803b812733e13a0ff52553a0dc90d",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">example_sequence\nGAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT\n"
+              },
+              "size": 89,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "example_sequence.fasta",
+              "data_type": "meta",
+              "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:b219e6d41a2438f53473a566f68a379334025f10577e284bec289b83eb64b587",
+              "id": "b219e6d41a2438f53473a566f68a379334025f10577e284bec289b83eb64b587",
+              "source_path": "uploads/examples/template_wdl-0c8db5001d05454ca073f84d73fafe9a/example_sequence.fasta",
+              "sample_name": "template_wdl"
+            },
+            {
+              "sha256": "e52cac8ac4198f0b55674d6858ae7fabe15d4a407aa255bcef342f7720205d4d",
+              "kind": "analysis_output",
+              "sample_id": "c58803b812733e13a0ff52553a0dc90d",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 829,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "results.zip",
+              "data_type": "meta",
+              "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:d67e6c76db9c39cff646d8e41da896216a84847500c1f6230ddea62e19514bf1",
+              "id": "d67e6c76db9c39cff646d8e41da896216a84847500c1f6230ddea62e19514bf1",
+              "source_path": "pipeline-bundles/1d8d35153ec74b8680ec5e1ed4afb1cc/results.zip",
+              "sample_name": "template_wdl"
+            },
+            {
+              "sha256": "e48d4025b5381faa99e085e41f2e07f212e4e59024cd1e352c258e5b61badbbe",
+              "kind": "analysis_output",
+              "sample_id": "c58803b812733e13a0ff52553a0dc90d",
+              "pipeline_result": {
+                "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+                "pipeline_name": "template_wdl",
+                "output_key": "TemplateWdl.metrics",
+                "output_name": "metrics",
+                "output_kind": "metrics",
+                "completed_at": "2026-11-09T06:52:50.873830+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "status",
+                  "pipeline",
+                  "label",
+                  "profile",
+                  "sequence_length",
+                  "min_length",
+                  "passes_min_length",
+                  "gc_percent"
+                ]
+              },
+              "size": 198,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "metrics.json",
+              "data_type": "meta",
+              "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:ef95dd40bda945affe1daffd9f9261da87a40329d84ca6c9347f4cf54d6cb146",
+              "id": "ef95dd40bda945affe1daffd9f9261da87a40329d84ca6c9347f4cf54d6cb146",
+              "source_path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/1/metrics.json",
+              "sample_name": "template_wdl"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:c58803b812733e13a0ff52553a0dc90d",
+              "importable": false,
+              "sample_name": "template_wdl",
+              "data_type": "meta",
+              "sample_id": "c58803b812733e13a0ff52553a0dc90d"
+            }
+          ],
+          "total": 6,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:14996cb10bd267abfa489600fba40ff9454cdc326d65e3f99d5d56d7c6b7333e"
+      },
+      "transfer_id": "c15af4eba2444f379e4efc9e1f953257",
+      "response": {
+        "transfer_id": "c15af4eba2444f379e4efc9e1f953257",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "61834ae5-01c5-40e1-be94-5825dba55e44",
+            "path": "uploads/ef46344781ce4631a0bb9ef06aaf8c26_report.md",
+            "workspace_path": "uploads/ef46344781ce4631a0bb9ef06aaf8c26_report.md",
+            "name": "report.md",
+            "size": 321,
+            "sha256": "6527b814d87ccbb9f3bdd59b663689eaa89282f82adcd3c245a77b734803cbdf",
+            "kind": "upload",
+            "content_type": "text/markdown; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:4cce4c5853fbd7e9e85a934000cdecdd4d08eb9879fe52da7d95cdc2ee8bcd9d"
+      },
+      "transfer_id": "a443b98c5ec544208521f0f2df797673",
+      "response": {
+        "transfer_id": "a443b98c5ec544208521f0f2df797673",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "61834ae5-01c5-40e1-be94-5825dba55e44",
+            "path": "uploads/4bc2b4b25d4d4b03b439b613074537a4_normalized.fasta",
+            "workspace_path": "uploads/4bc2b4b25d4d4b03b439b613074537a4_normalized.fasta",
+            "name": "normalized.fasta",
+            "size": 85,
+            "sha256": "a53af77ef91fea56e294bdaa7f240d0ff34817f7e30243e5f481ba1b541fa1af",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:b219e6d41a2438f53473a566f68a379334025f10577e284bec289b83eb64b587"
+      },
+      "transfer_id": "2e5ce5660e3b425da132bc013debd0fc",
+      "response": {
+        "transfer_id": "2e5ce5660e3b425da132bc013debd0fc",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "61834ae5-01c5-40e1-be94-5825dba55e44",
+            "path": "uploads/9ebb9df36acd4894914daced10f8e407_example_sequence.fasta",
+            "workspace_path": "uploads/9ebb9df36acd4894914daced10f8e407_example_sequence.fasta",
+            "name": "example_sequence.fasta",
+            "size": 89,
+            "sha256": "3e1e6d3fc9ce5708c6356156dd8db2bb983628e80a0f2605511c7002beffc6fa",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:d67e6c76db9c39cff646d8e41da896216a84847500c1f6230ddea62e19514bf1"
+      },
+      "transfer_id": "f8b20ce4e5ed4d418db82b33780c4e5f",
+      "response": {
+        "transfer_id": "f8b20ce4e5ed4d418db82b33780c4e5f",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "61834ae5-01c5-40e1-be94-5825dba55e44",
+            "path": "uploads/3cd498d835494f368c7043e07d10d158_results.zip",
+            "workspace_path": "uploads/3cd498d835494f368c7043e07d10d158_results.zip",
+            "name": "results.zip",
+            "size": 829,
+            "sha256": "e52cac8ac4198f0b55674d6858ae7fabe15d4a407aa255bcef342f7720205d4d",
+            "kind": "upload",
+            "content_type": "application/zip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:ef95dd40bda945affe1daffd9f9261da87a40329d84ca6c9347f4cf54d6cb146"
+      },
+      "transfer_id": "951ac4e8afdf4c249e8be05da940ff53",
+      "response": {
+        "transfer_id": "951ac4e8afdf4c249e8be05da940ff53",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "61834ae5-01c5-40e1-be94-5825dba55e44",
+            "path": "uploads/c3a15a0d3b1a44adad3b5e9560e8d3ab_metrics.json",
+            "workspace_path": "uploads/c3a15a0d3b1a44adad3b5e9560e8d3ab_metrics.json",
+            "name": "metrics.json",
+            "size": 198,
+            "sha256": "e48d4025b5381faa99e085e41f2e07f212e4e59024cd1e352c258e5b61badbbe",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "attempt_history": [
+    {
+      "pipeline": "template_wdl",
+      "engine": "wdl",
+      "manifest_sha256": "ce69e6febfa8b57bb5aa5c42316bcc773c9b95584f0719ea7e18d8a026330119",
+      "selected_for_execution": true,
+      "execution_status": "setup_failed",
+      "scope_note": "",
+      "examples": [
+        {
+          "path": "tools/runtime_tools/pipelines/template_wdl/data/input/example_sequence.fasta",
+          "bytes": 89,
+          "sha256": "3e1e6d3fc9ce5708c6356156dd8db2bb983628e80a0f2605511c7002beffc6fa"
+        }
+      ],
+      "contract": {
+        "valid": true,
+        "inputs": [
+          "sequence"
+        ],
+        "outputs": [
+          "report",
+          "metrics",
+          "normalized_sequence"
+        ]
+      },
+      "transfers": [],
+      "session_id": "cd6eed6d-b5c5-404c-b107-c8910d25eaee",
+      "assigned_inputs": {
+        "sequence": "uploads/examples/template_wdl-5a4f099630ab46ebba34aa70c8148f4c/example_sequence.fasta"
+      },
+      "parameter_overrides": {},
+      "plan_id": "74bf1a7118a54d17a759bcf6ebde7935",
+      "harness_error": "ValueError: Remote job limit reached (2 per account, 16 server-wide).",
+      "elapsed_seconds": 0.62,
+      "test_finished": true
+    }
+  ],
+  "session_id": "61834ae5-01c5-40e1-be94-5825dba55e44",
+  "assigned_inputs": {
+    "sequence": "uploads/examples/template_wdl-0c8db5001d05454ca073f84d73fafe9a/example_sequence.fasta"
+  },
+  "parameter_overrides": {},
+  "plan_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+  "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+  "last_state": {
+    "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+    "plan_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+    "status": "succeeded",
+    "created_at": "2026-11-09T06:52:25.018209+00:00",
+    "started_at": "2026-11-09T06:52:25.187709+00:00",
+    "finished_at": "2026-11-09T06:52:50.873830+00:00",
+    "updated_at": "2026-11-09T06:52:50.874915+00:00",
+    "error": null,
+    "remote_id": "95cc97fd-cb55-41a1-a12f-667a02c28a0a",
+    "artifact_status": "available",
+    "pipeline_name": "template_wdl"
+  },
+  "results": {
+    "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+    "plan_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+    "status": "succeeded",
+    "created_at": "2026-11-09T06:52:25.018209+00:00",
+    "started_at": "2026-11-09T06:52:25.187709+00:00",
+    "finished_at": "2026-11-09T06:52:50.873830+00:00",
+    "updated_at": "2026-11-09T06:52:50.874915+00:00",
+    "error": null,
+    "remote_id": "95cc97fd-cb55-41a1-a12f-667a02c28a0a",
+    "artifact_status": "available",
+    "pipeline_name": "template_wdl",
+    "files": [
+      {
+        "name": "report.md",
+        "path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/0/report.md",
+        "workspace_path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/0/report.md",
+        "size": 321,
+        "remote": true,
+        "artifact_id": "1d8d35153ec74b8680ec5e1ed4afb1cc:0",
+        "pipeline_result": {
+          "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+          "pipeline_name": "template_wdl",
+          "output_key": "TemplateWdl.report",
+          "output_name": "report",
+          "output_kind": "report",
+          "completed_at": "2026-11-09T06:52:50.873830+00:00"
+        }
+      },
+      {
+        "name": "metrics.json",
+        "path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/1/metrics.json",
+        "workspace_path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/1/metrics.json",
+        "size": 198,
+        "remote": true,
+        "artifact_id": "1d8d35153ec74b8680ec5e1ed4afb1cc:1",
+        "pipeline_result": {
+          "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+          "pipeline_name": "template_wdl",
+          "output_key": "TemplateWdl.metrics",
+          "output_name": "metrics",
+          "output_kind": "metrics",
+          "completed_at": "2026-11-09T06:52:50.873830+00:00"
+        }
+      },
+      {
+        "name": "normalized.fasta",
+        "path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/2/normalized.fasta",
+        "workspace_path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/2/normalized.fasta",
+        "size": 85,
+        "remote": true,
+        "artifact_id": "1d8d35153ec74b8680ec5e1ed4afb1cc:2",
+        "pipeline_result": {
+          "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+          "pipeline_name": "template_wdl",
+          "output_key": "TemplateWdl.normalized_fasta",
+          "output_name": "normalized_sequence",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-09T06:52:50.873830+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/0/report.md",
+        "text": "# Template WDL Pipeline Report\n\n- Label: template_wdl\n- Profile: standard\n- Input: /cromwell-executions/TemplateWdl/95cc97fd-cb55-41a1-a12f-667a02c28a0a/call-AnalyzeFasta/inputs/-584389753/3e1e6d3fc9ce5708-example_sequence.fasta\n- Sequence length: 70\n- Minimum length: 0\n- Passes minimum length: True\n- GC percent: 35.71\n"
+      },
+      {
+        "path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/1/metrics.json",
+        "text": "{\n  \"status\": \"ok\",\n  \"pipeline\": \"template_wdl\",\n  \"label\": \"template_wdl\",\n  \"profile\": \"standard\",\n  \"sequence_length\": 70,\n  \"min_length\": 0,\n  \"passes_min_length\": true,\n  \"gc_percent\": 35.71\n}"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/1d8d35153ec74b8680ec5e1ed4afb1cc/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "transfer_scope": "actual bundled inputs and execution outputs",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "c58803b812733e13a0ff52553a0dc90d",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "template_wdl",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [
+    {
+      "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+      "files_delivered": true,
+      "generic_import": {
+        "artifact_count": 3,
+        "access": "Search or pull the attached sample files; native records are a separate outcome.",
+        "state": "imported"
+      },
+      "pipeline": "template_wdl",
+      "format": "TemplateWdl",
+      "state": "unsupported",
+      "message": "MSCAN has no registered importer for this result format; files remain available."
+    }
+  ],
+  "roundtrip_files": [
+    {
+      "name": "report.md",
+      "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:14996cb10bd267abfa489600fba40ff9454cdc326d65e3f99d5d56d7c6b7333e",
+      "state": "succeeded",
+      "bytes": 321,
+      "sha256": "6527b814d87ccbb9f3bdd59b663689eaa89282f82adcd3c245a77b734803cbdf",
+      "expected_sha256": "6527b814d87ccbb9f3bdd59b663689eaa89282f82adcd3c245a77b734803cbdf",
+      "matches": true
+    },
+    {
+      "name": "normalized.fasta",
+      "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:4cce4c5853fbd7e9e85a934000cdecdd4d08eb9879fe52da7d95cdc2ee8bcd9d",
+      "state": "succeeded",
+      "bytes": 85,
+      "sha256": "a53af77ef91fea56e294bdaa7f240d0ff34817f7e30243e5f481ba1b541fa1af",
+      "expected_sha256": "a53af77ef91fea56e294bdaa7f240d0ff34817f7e30243e5f481ba1b541fa1af",
+      "matches": true
+    },
+    {
+      "name": "example_sequence.fasta",
+      "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:b219e6d41a2438f53473a566f68a379334025f10577e284bec289b83eb64b587",
+      "state": "succeeded",
+      "bytes": 89,
+      "sha256": "3e1e6d3fc9ce5708c6356156dd8db2bb983628e80a0f2605511c7002beffc6fa",
+      "expected_sha256": "3e1e6d3fc9ce5708c6356156dd8db2bb983628e80a0f2605511c7002beffc6fa",
+      "matches": true
+    },
+    {
+      "name": "results.zip",
+      "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:d67e6c76db9c39cff646d8e41da896216a84847500c1f6230ddea62e19514bf1",
+      "state": "succeeded",
+      "bytes": 829,
+      "sha256": "e52cac8ac4198f0b55674d6858ae7fabe15d4a407aa255bcef342f7720205d4d",
+      "expected_sha256": "e52cac8ac4198f0b55674d6858ae7fabe15d4a407aa255bcef342f7720205d4d",
+      "matches": true
+    },
+    {
+      "name": "metrics.json",
+      "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:ef95dd40bda945affe1daffd9f9261da87a40329d84ca6c9347f4cf54d6cb146",
+      "state": "succeeded",
+      "bytes": 198,
+      "sha256": "e48d4025b5381faa99e085e41f2e07f212e4e59024cd1e352c258e5b61badbbe",
+      "expected_sha256": "e48d4025b5381faa99e085e41f2e07f212e4e59024cd1e352c258e5b61badbbe",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "6527b814d87ccbb9f3bdd59b663689eaa89282f82adcd3c245a77b734803cbdf",
+      "kind": "analysis_output",
+      "sample_id": "c58803b812733e13a0ff52553a0dc90d",
+      "pipeline_result": {
+        "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+        "pipeline_name": "template_wdl",
+        "output_key": "TemplateWdl.report",
+        "output_name": "report",
+        "output_kind": "report",
+        "completed_at": "2026-11-09T06:52:50.873830+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "# Template WDL Pipeline Report\n\n- Label: template_wdl\n- Profile: standard\n- Input: /cromwell-executions/TemplateWdl/95cc97fd-cb55-41a1-a12f-667a02c28a0a/call-AnalyzeFasta/inputs/-584389753/3e1e6d3fc9ce5708-example_sequence.fasta\n- Sequence length: 70\n- Minimum length: 0\n- Passes minimum length: True\n- GC percent: 35.71\n"
+      },
+      "size": 321,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "report.md",
+      "data_type": "meta",
+      "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:14996cb10bd267abfa489600fba40ff9454cdc326d65e3f99d5d56d7c6b7333e",
+      "id": "14996cb10bd267abfa489600fba40ff9454cdc326d65e3f99d5d56d7c6b7333e",
+      "source_path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/0/report.md",
+      "sample_name": "template_wdl"
+    },
+    {
+      "sha256": "a53af77ef91fea56e294bdaa7f240d0ff34817f7e30243e5f481ba1b541fa1af",
+      "kind": "analysis_output",
+      "sample_id": "c58803b812733e13a0ff52553a0dc90d",
+      "pipeline_result": {
+        "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+        "pipeline_name": "template_wdl",
+        "output_key": "TemplateWdl.normalized_fasta",
+        "output_name": "normalized_sequence",
+        "output_kind": "sequence",
+        "completed_at": "2026-11-09T06:52:50.873830+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": ">template_wdl\nGAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT\n"
+      },
+      "size": 85,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "normalized.fasta",
+      "data_type": "meta",
+      "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:4cce4c5853fbd7e9e85a934000cdecdd4d08eb9879fe52da7d95cdc2ee8bcd9d",
+      "id": "4cce4c5853fbd7e9e85a934000cdecdd4d08eb9879fe52da7d95cdc2ee8bcd9d",
+      "source_path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/2/normalized.fasta",
+      "sample_name": "template_wdl"
+    },
+    {
+      "sha256": "3e1e6d3fc9ce5708c6356156dd8db2bb983628e80a0f2605511c7002beffc6fa",
+      "kind": "analysis_output",
+      "sample_id": "c58803b812733e13a0ff52553a0dc90d",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": ">example_sequence\nGAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT\n"
+      },
+      "size": 89,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "example_sequence.fasta",
+      "data_type": "meta",
+      "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:b219e6d41a2438f53473a566f68a379334025f10577e284bec289b83eb64b587",
+      "id": "b219e6d41a2438f53473a566f68a379334025f10577e284bec289b83eb64b587",
+      "source_path": "uploads/examples/template_wdl-0c8db5001d05454ca073f84d73fafe9a/example_sequence.fasta",
+      "sample_name": "template_wdl"
+    },
+    {
+      "sha256": "e52cac8ac4198f0b55674d6858ae7fabe15d4a407aa255bcef342f7720205d4d",
+      "kind": "analysis_output",
+      "sample_id": "c58803b812733e13a0ff52553a0dc90d",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 829,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "results.zip",
+      "data_type": "meta",
+      "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:d67e6c76db9c39cff646d8e41da896216a84847500c1f6230ddea62e19514bf1",
+      "id": "d67e6c76db9c39cff646d8e41da896216a84847500c1f6230ddea62e19514bf1",
+      "source_path": "pipeline-bundles/1d8d35153ec74b8680ec5e1ed4afb1cc/results.zip",
+      "sample_name": "template_wdl"
+    },
+    {
+      "sha256": "e48d4025b5381faa99e085e41f2e07f212e4e59024cd1e352c258e5b61badbbe",
+      "kind": "analysis_output",
+      "sample_id": "c58803b812733e13a0ff52553a0dc90d",
+      "pipeline_result": {
+        "job_id": "1d8d35153ec74b8680ec5e1ed4afb1cc",
+        "pipeline_name": "template_wdl",
+        "output_key": "TemplateWdl.metrics",
+        "output_name": "metrics",
+        "output_kind": "metrics",
+        "completed_at": "2026-11-09T06:52:50.873830+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "status",
+          "pipeline",
+          "label",
+          "profile",
+          "sequence_length",
+          "min_length",
+          "passes_min_length",
+          "gc_percent"
+        ]
+      },
+      "size": 198,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "metrics.json",
+      "data_type": "meta",
+      "resource_id": "result:52005587d8af49289bb44bccd2e6e86f:ef95dd40bda945affe1daffd9f9261da87a40329d84ca6c9347f4cf54d6cb146",
+      "id": "ef95dd40bda945affe1daffd9f9261da87a40329d84ca6c9347f4cf54d6cb146",
+      "source_path": "pipeline-artifacts/1d8d35153ec74b8680ec5e1ed4afb1cc/1/metrics.json",
+      "sample_name": "template_wdl"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:c58803b812733e13a0ff52553a0dc90d",
+      "importable": false,
+      "sample_name": "template_wdl",
+      "data_type": "meta",
+      "sample_id": "c58803b812733e13a0ff52553a0dc90d"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 65.13,
+  "test_finished": true
+}

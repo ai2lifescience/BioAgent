@@ -238,7 +238,7 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             return
         if path == "/favicon.ico":
             self.send_response(302)
-            self.send_header("Location", "/favicon.svg")
+            self.send_header("Location", "favicon.svg")
             self.end_headers()
             return
         if path == "/favicon.svg" or path.startswith("/static/"):
@@ -968,7 +968,7 @@ def main() -> int:
         _load_environment_file(Path(env_file).expanduser())
     parser = argparse.ArgumentParser(description="Run the Pipeline2Agent HTTP web UI.")
     from auth.oauth import flexible_host
-    parser.add_argument("--host", default="0.0.0.0" if flexible_host() else "127.0.0.1")
+    parser.add_argument("--host", default="0.0.0.0" if auth_mode() == "oauth" and flexible_host() else "127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()
     run_server(host=args.host, port=args.port)

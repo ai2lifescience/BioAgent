@@ -1,0 +1,1000 @@
+{
+  "pipeline": "template_snakemake",
+  "engine": "snakemake",
+  "manifest_sha256": "11bf033c16f6a89b33cec546f431f3210f7b4653a0444e94697fa31b3eb36714",
+  "selected_for_execution": true,
+  "execution_status": "succeeded",
+  "scope_note": "",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/template_snakemake/data/input/metadata.tsv",
+      "bytes": 91,
+      "sha256": "e1987302cbff797a420941562dd19c784ded13a27e75b84dcd434bffdf4ea418"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/template_snakemake/data/input/sequences_segment1.fasta",
+      "bytes": 154,
+      "sha256": "b9267f205f091c8ce27ac46ebcdc851334d65d318b4430e2752637db9b85fbb1"
+    },
+    {
+      "path": "tools/runtime_tools/pipelines/template_snakemake/data/input/sequences_segment2.fasta",
+      "bytes": 154,
+      "sha256": "9445fa82f3cbb0fafc50c428bd4e3f2fb4ba68cfad70191ac4f9fea93e0b53a3"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "sequence",
+      "metadata"
+    ],
+    "outputs": [
+      "report",
+      "metrics",
+      "normalized_sequence"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "pipeline-bundles/d9cb64bec82146608054693118bc3aab/results.zip",
+          "uploads/examples/template_snakemake-df98654ae4ba4e8e9e0e71b17daea040/sequences_segment1.fasta",
+          "uploads/examples/template_snakemake-df98654ae4ba4e8e9e0e71b17daea040/metadata.tsv"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "template_snakemake",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "77d18a80a9fc4db0bda610cf524e703b",
+      "response": {
+        "transfer_id": "77d18a80a9fc4db0bda610cf524e703b",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "results.zip",
+              "id": "0e22bf4bd53d1b3b2c37425a56999478219c32246137fdd514c341c209fa9543",
+              "source_path": "pipeline-bundles/d9cb64bec82146608054693118bc3aab/results.zip",
+              "size": 936,
+              "sha256": "bdf0c8ec87cbf581bfb0ea5c96e30607cd368aacb4f94f44ac4a5d3f801fc9cb",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              }
+            },
+            {
+              "size": 590,
+              "sha256": "6a58e1349646250d7a23903e8eafe1dabba19b69ac1a3182cf4a8696abd85ddb",
+              "name": "report.md",
+              "id": "bf8e9b7967ebf1f6a698100e5b7f4cf765d1a2974d38af6b7be294a7aad65350",
+              "source_path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/report.md",
+              "pipeline_result": {
+                "job_id": "d9cb64bec82146608054693118bc3aab",
+                "pipeline_name": "template_snakemake",
+                "output_key": "report",
+                "output_name": "report",
+                "output_kind": "report",
+                "completed_at": "2026-11-09T06:52:24.671126+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "# Template Snakemake Pipeline Report\n\n- Label: template_snakemake\n- Input: /tmp/tmpu5pyt1r7/runtime/agent_runs/d9cb64bec82146608054693118bc3aab/inputs/sequence/0_sequences_segment1.fasta\n- Metadata: /tmp/tmpu5pyt1r7/runtime/agent_runs/d9cb64bec82146608054693118bc3aab/inputs/metadata/0_metadata.tsv\n- Output directory: /tmp/tmpu5pyt1r7/runtime/agent_runs/d9cb64bec82146608054693118bc3aab/outputs\n- Analysis mode: example\n- Subtype: subtype1\n- Segment: segment1\n- Time: all-time\n- Metadata rows: 2\n- Sequence length: 108\n- Minimum length: 0\n- Passes minimum length: True\n- GC percent: 51.85\n"
+              }
+            },
+            {
+              "size": 310,
+              "sha256": "d2dc867dac1f5ea9ced421fab21d99bf6cd756ab60881dd1739ecae90f85d2d8",
+              "name": "metrics.json",
+              "id": "741e226daa41d0dc0be29403e113807201b11a4758253fc59e05331adea5f563",
+              "source_path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/metrics.json",
+              "pipeline_result": {
+                "job_id": "d9cb64bec82146608054693118bc3aab",
+                "pipeline_name": "template_snakemake",
+                "output_key": "metrics",
+                "output_name": "metrics",
+                "output_kind": "metrics",
+                "completed_at": "2026-11-09T06:52:24.671126+00:00"
+              },
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "status",
+                  "pipeline",
+                  "label",
+                  "analysis_mode",
+                  "subtype",
+                  "segment",
+                  "time",
+                  "metadata_rows",
+                  "sequence_length",
+                  "passes_min_length",
+                  "min_length",
+                  "gc_percent"
+                ]
+              }
+            },
+            {
+              "size": 139,
+              "sha256": "fcb277eef628aaff82f508f283154e1665db0bfa33d51c17e73405d6a0678eb4",
+              "name": "normalized.fasta",
+              "id": "a76dfc3a2b872c312ee6f6f2242273819ad9956d9662884da48f90bbae0e90f3",
+              "source_path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/normalized.fasta",
+              "pipeline_result": {
+                "job_id": "d9cb64bec82146608054693118bc3aab",
+                "pipeline_name": "template_snakemake",
+                "output_key": "normalized_sequence",
+                "output_name": "normalized_sequence",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:52:24.671126+00:00"
+              },
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">template_snakemake|segment1\nATGGCTGCTGACCTGATCGATCGTACGATCGGCTAGCTAGCTAACGATCGATCGATGGCCGCTGATCTGATCGATGGTAC\nGATCGGCTAGCTAGCTAATGATCGATCA\n"
+              }
+            },
+            {
+              "name": "sequences_segment1.fasta",
+              "id": "c30d33db777373608bc38cd89e93798f8ab3de00772b768ea06d8d5a1af94012",
+              "source_path": "uploads/examples/template_snakemake-df98654ae4ba4e8e9e0e71b17daea040/sequences_segment1.fasta",
+              "size": 154,
+              "sha256": "b9267f205f091c8ce27ac46ebcdc851334d65d318b4430e2752637db9b85fbb1",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">example_001|segment1\nATGGCTGCTGACCTGATCGATCGTACGATCGGCTAGCTAGCTAACGATCGATCG\n>example_002|segment1\nATGGCCGCTGATCTGATCGATGGTACGATCGGCTAGCTAGCTAATGATCGATCA\n"
+              }
+            },
+            {
+              "name": "metadata.tsv",
+              "id": "ef90db16e31fdddfe8cf879b3a5a7a80e62d2f5b11ecd69214b6687eb71bdc08",
+              "source_path": "uploads/examples/template_snakemake-df98654ae4ba4e8e9e0e71b17daea040/metadata.tsv",
+              "size": 91,
+              "sha256": "e1987302cbff797a420941562dd19c784ded13a27e75b84dcd434bffdf4ea418",
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "strain",
+                  "date",
+                  "location"
+                ],
+                "preview_rows": [
+                  [
+                    "example_001",
+                    "2024-01-15",
+                    "ExampleCity"
+                  ],
+                  [
+                    "example_002",
+                    "2024-03-22",
+                    "ExampleTown"
+                  ]
+                ]
+              }
+            }
+          ],
+          "native_imports": [
+            {
+              "job_id": "d9cb64bec82146608054693118bc3aab",
+              "files_delivered": true,
+              "generic_import": {
+                "artifact_count": 3,
+                "access": "Search or pull the attached sample files; native records are a separate outcome.",
+                "state": "imported"
+              },
+              "pipeline": "template_snakemake",
+              "state": "unsupported",
+              "message": "No unambiguous native result format; files remain available."
+            }
+          ],
+          "qc": {},
+          "receipt_id": "77d18a80a9fc4db0bda610cf524e703b",
+          "target": {
+            "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "template_snakemake",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "782805785dbb3709aa69ef9e34c84a64"
+      },
+      "transfer_id": "57e9e291aa774a08b739bbc9a9a55817",
+      "response": {
+        "transfer_id": "57e9e291aa774a08b739bbc9a9a55817",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "bdf0c8ec87cbf581bfb0ea5c96e30607cd368aacb4f94f44ac4a5d3f801fc9cb",
+              "kind": "analysis_output",
+              "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "preview_available": false,
+                "kind": "file"
+              },
+              "size": 936,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "results.zip",
+              "data_type": "meta",
+              "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:0e22bf4bd53d1b3b2c37425a56999478219c32246137fdd514c341c209fa9543",
+              "id": "0e22bf4bd53d1b3b2c37425a56999478219c32246137fdd514c341c209fa9543",
+              "source_path": "pipeline-bundles/d9cb64bec82146608054693118bc3aab/results.zip",
+              "sample_name": "template_snakemake"
+            },
+            {
+              "sha256": "d2dc867dac1f5ea9ced421fab21d99bf6cd756ab60881dd1739ecae90f85d2d8",
+              "kind": "analysis_output",
+              "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+              "pipeline_result": {
+                "job_id": "d9cb64bec82146608054693118bc3aab",
+                "pipeline_name": "template_snakemake",
+                "output_key": "metrics",
+                "output_name": "metrics",
+                "output_kind": "metrics",
+                "completed_at": "2026-11-09T06:52:24.671126+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "status",
+                  "pipeline",
+                  "label",
+                  "analysis_mode",
+                  "subtype",
+                  "segment",
+                  "time",
+                  "metadata_rows",
+                  "sequence_length",
+                  "passes_min_length",
+                  "min_length",
+                  "gc_percent"
+                ]
+              },
+              "size": 310,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "metrics.json",
+              "data_type": "meta",
+              "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:741e226daa41d0dc0be29403e113807201b11a4758253fc59e05331adea5f563",
+              "id": "741e226daa41d0dc0be29403e113807201b11a4758253fc59e05331adea5f563",
+              "source_path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/metrics.json",
+              "sample_name": "template_snakemake"
+            },
+            {
+              "sha256": "fcb277eef628aaff82f508f283154e1665db0bfa33d51c17e73405d6a0678eb4",
+              "kind": "analysis_output",
+              "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+              "pipeline_result": {
+                "job_id": "d9cb64bec82146608054693118bc3aab",
+                "pipeline_name": "template_snakemake",
+                "output_key": "normalized_sequence",
+                "output_name": "normalized_sequence",
+                "output_kind": "sequence",
+                "completed_at": "2026-11-09T06:52:24.671126+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">template_snakemake|segment1\nATGGCTGCTGACCTGATCGATCGTACGATCGGCTAGCTAGCTAACGATCGATCGATGGCCGCTGATCTGATCGATGGTAC\nGATCGGCTAGCTAGCTAATGATCGATCA\n"
+              },
+              "size": 139,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "normalized.fasta",
+              "data_type": "meta",
+              "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:a76dfc3a2b872c312ee6f6f2242273819ad9956d9662884da48f90bbae0e90f3",
+              "id": "a76dfc3a2b872c312ee6f6f2242273819ad9956d9662884da48f90bbae0e90f3",
+              "source_path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/normalized.fasta",
+              "sample_name": "template_snakemake"
+            },
+            {
+              "sha256": "6a58e1349646250d7a23903e8eafe1dabba19b69ac1a3182cf4a8696abd85ddb",
+              "kind": "analysis_output",
+              "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+              "pipeline_result": {
+                "job_id": "d9cb64bec82146608054693118bc3aab",
+                "pipeline_name": "template_snakemake",
+                "output_key": "report",
+                "output_name": "report",
+                "output_kind": "report",
+                "completed_at": "2026-11-09T06:52:24.671126+00:00"
+              },
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": "# Template Snakemake Pipeline Report\n\n- Label: template_snakemake\n- Input: /tmp/tmpu5pyt1r7/runtime/agent_runs/d9cb64bec82146608054693118bc3aab/inputs/sequence/0_sequences_segment1.fasta\n- Metadata: /tmp/tmpu5pyt1r7/runtime/agent_runs/d9cb64bec82146608054693118bc3aab/inputs/metadata/0_metadata.tsv\n- Output directory: /tmp/tmpu5pyt1r7/runtime/agent_runs/d9cb64bec82146608054693118bc3aab/outputs\n- Analysis mode: example\n- Subtype: subtype1\n- Segment: segment1\n- Time: all-time\n- Metadata rows: 2\n- Sequence length: 108\n- Minimum length: 0\n- Passes minimum length: True\n- GC percent: 51.85\n"
+              },
+              "size": 590,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "report.md",
+              "data_type": "meta",
+              "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:bf8e9b7967ebf1f6a698100e5b7f4cf765d1a2974d38af6b7be294a7aad65350",
+              "id": "bf8e9b7967ebf1f6a698100e5b7f4cf765d1a2974d38af6b7be294a7aad65350",
+              "source_path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/report.md",
+              "sample_name": "template_snakemake"
+            },
+            {
+              "sha256": "b9267f205f091c8ce27ac46ebcdc851334d65d318b4430e2752637db9b85fbb1",
+              "kind": "analysis_output",
+              "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "text",
+                "preview_only": true,
+                "preview_available": true,
+                "preview": ">example_001|segment1\nATGGCTGCTGACCTGATCGATCGTACGATCGGCTAGCTAGCTAACGATCGATCG\n>example_002|segment1\nATGGCCGCTGATCTGATCGATGGTACGATCGGCTAGCTAGCTAATGATCGATCA\n"
+              },
+              "size": 154,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "sequences_segment1.fasta",
+              "data_type": "meta",
+              "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:c30d33db777373608bc38cd89e93798f8ab3de00772b768ea06d8d5a1af94012",
+              "id": "c30d33db777373608bc38cd89e93798f8ab3de00772b768ea06d8d5a1af94012",
+              "source_path": "uploads/examples/template_snakemake-df98654ae4ba4e8e9e0e71b17daea040/sequences_segment1.fasta",
+              "sample_name": "template_snakemake"
+            },
+            {
+              "sha256": "e1987302cbff797a420941562dd19c784ded13a27e75b84dcd434bffdf4ea418",
+              "kind": "analysis_output",
+              "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "table",
+                "preview_available": true,
+                "preview_only": true,
+                "delimiter": "tab",
+                "columns": [
+                  "strain",
+                  "date",
+                  "location"
+                ],
+                "preview_rows": [
+                  [
+                    "example_001",
+                    "2024-01-15",
+                    "ExampleCity"
+                  ],
+                  [
+                    "example_002",
+                    "2024-03-22",
+                    "ExampleTown"
+                  ]
+                ]
+              },
+              "size": 91,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "metadata.tsv",
+              "data_type": "meta",
+              "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:ef90db16e31fdddfe8cf879b3a5a7a80e62d2f5b11ecd69214b6687eb71bdc08",
+              "id": "ef90db16e31fdddfe8cf879b3a5a7a80e62d2f5b11ecd69214b6687eb71bdc08",
+              "source_path": "uploads/examples/template_snakemake-df98654ae4ba4e8e9e0e71b17daea040/metadata.tsv",
+              "sample_name": "template_snakemake"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:782805785dbb3709aa69ef9e34c84a64",
+              "importable": false,
+              "sample_name": "template_snakemake",
+              "data_type": "meta",
+              "sample_id": "782805785dbb3709aa69ef9e34c84a64"
+            }
+          ],
+          "total": 7,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:0e22bf4bd53d1b3b2c37425a56999478219c32246137fdd514c341c209fa9543"
+      },
+      "transfer_id": "29f22dc632d14df0ad588ae31d41cc60",
+      "response": {
+        "transfer_id": "29f22dc632d14df0ad588ae31d41cc60",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "d14acf7a-4c61-4820-b479-eabc92386124",
+            "path": "uploads/27051e3f10844ea68561d09654a48a9b_results.zip",
+            "workspace_path": "uploads/27051e3f10844ea68561d09654a48a9b_results.zip",
+            "name": "results.zip",
+            "size": 936,
+            "sha256": "bdf0c8ec87cbf581bfb0ea5c96e30607cd368aacb4f94f44ac4a5d3f801fc9cb",
+            "kind": "upload",
+            "content_type": "application/zip"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:741e226daa41d0dc0be29403e113807201b11a4758253fc59e05331adea5f563"
+      },
+      "transfer_id": "90c32352be2f467fa67f25ae83fa1b97",
+      "response": {
+        "transfer_id": "90c32352be2f467fa67f25ae83fa1b97",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "d14acf7a-4c61-4820-b479-eabc92386124",
+            "path": "uploads/ae871cb783e64f20a902cc030bd3dfe7_metrics.json",
+            "workspace_path": "uploads/ae871cb783e64f20a902cc030bd3dfe7_metrics.json",
+            "name": "metrics.json",
+            "size": 310,
+            "sha256": "d2dc867dac1f5ea9ced421fab21d99bf6cd756ab60881dd1739ecae90f85d2d8",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:a76dfc3a2b872c312ee6f6f2242273819ad9956d9662884da48f90bbae0e90f3"
+      },
+      "transfer_id": "3a692da3c63c491d8d7f609d9b10e0ff",
+      "response": {
+        "transfer_id": "3a692da3c63c491d8d7f609d9b10e0ff",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "d14acf7a-4c61-4820-b479-eabc92386124",
+            "path": "uploads/cc4b8a0f7c9d448793a099e8e8a745cf_normalized.fasta",
+            "workspace_path": "uploads/cc4b8a0f7c9d448793a099e8e8a745cf_normalized.fasta",
+            "name": "normalized.fasta",
+            "size": 139,
+            "sha256": "fcb277eef628aaff82f508f283154e1665db0bfa33d51c17e73405d6a0678eb4",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:bf8e9b7967ebf1f6a698100e5b7f4cf765d1a2974d38af6b7be294a7aad65350"
+      },
+      "transfer_id": "83bf74b4270144e283b66cbcaf8c8a01",
+      "response": {
+        "transfer_id": "83bf74b4270144e283b66cbcaf8c8a01",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "d14acf7a-4c61-4820-b479-eabc92386124",
+            "path": "uploads/75d8f2fd27b344a49fafbdb4b4ee6732_report.md",
+            "workspace_path": "uploads/75d8f2fd27b344a49fafbdb4b4ee6732_report.md",
+            "name": "report.md",
+            "size": 590,
+            "sha256": "6a58e1349646250d7a23903e8eafe1dabba19b69ac1a3182cf4a8696abd85ddb",
+            "kind": "upload",
+            "content_type": "text/markdown; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:c30d33db777373608bc38cd89e93798f8ab3de00772b768ea06d8d5a1af94012"
+      },
+      "transfer_id": "6a5b9aa2ade646539f6ec8febfff49ac",
+      "response": {
+        "transfer_id": "6a5b9aa2ade646539f6ec8febfff49ac",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "d14acf7a-4c61-4820-b479-eabc92386124",
+            "path": "uploads/0ac4d0b6cbb641058b6e8a78a3c08bf6_sequences_segment1.fasta",
+            "workspace_path": "uploads/0ac4d0b6cbb641058b6e8a78a3c08bf6_sequences_segment1.fasta",
+            "name": "sequences_segment1.fasta",
+            "size": 154,
+            "sha256": "b9267f205f091c8ce27ac46ebcdc851334d65d318b4430e2752637db9b85fbb1",
+            "kind": "upload",
+            "content_type": "text/plain; charset=utf-8"
+          }
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:ef90db16e31fdddfe8cf879b3a5a7a80e62d2f5b11ecd69214b6687eb71bdc08"
+      },
+      "transfer_id": "0eee1ac1157b498aaec0ec0b156335bd",
+      "response": {
+        "transfer_id": "0eee1ac1157b498aaec0ec0b156335bd",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "d14acf7a-4c61-4820-b479-eabc92386124",
+            "path": "uploads/a1c5ebe959d64e56b977a3f0a69bc9fd_metadata.tsv",
+            "workspace_path": "uploads/a1c5ebe959d64e56b977a3f0a69bc9fd_metadata.tsv",
+            "name": "metadata.tsv",
+            "size": 91,
+            "sha256": "e1987302cbff797a420941562dd19c784ded13a27e75b84dcd434bffdf4ea418",
+            "kind": "upload",
+            "content_type": "text/tab-separated-values; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "attempt_history": [
+    {
+      "pipeline": "template_snakemake",
+      "engine": "snakemake",
+      "manifest_sha256": "11bf033c16f6a89b33cec546f431f3210f7b4653a0444e94697fa31b3eb36714",
+      "selected_for_execution": true,
+      "execution_status": "setup_failed",
+      "scope_note": "",
+      "examples": [
+        {
+          "path": "tools/runtime_tools/pipelines/template_snakemake/data/input/metadata.tsv",
+          "bytes": 91,
+          "sha256": "e1987302cbff797a420941562dd19c784ded13a27e75b84dcd434bffdf4ea418"
+        },
+        {
+          "path": "tools/runtime_tools/pipelines/template_snakemake/data/input/sequences_segment1.fasta",
+          "bytes": 154,
+          "sha256": "b9267f205f091c8ce27ac46ebcdc851334d65d318b4430e2752637db9b85fbb1"
+        },
+        {
+          "path": "tools/runtime_tools/pipelines/template_snakemake/data/input/sequences_segment2.fasta",
+          "bytes": 154,
+          "sha256": "9445fa82f3cbb0fafc50c428bd4e3f2fb4ba68cfad70191ac4f9fea93e0b53a3"
+        }
+      ],
+      "contract": {
+        "valid": true,
+        "inputs": [
+          "sequence",
+          "metadata"
+        ],
+        "outputs": [
+          "report",
+          "metrics",
+          "normalized_sequence"
+        ]
+      },
+      "transfers": [],
+      "session_id": "42ccaf32-6036-4da4-a54a-98639df95343",
+      "assigned_inputs": {
+        "sequence": "uploads/examples/template_snakemake-29d57e8e6a4a430d821ce1a186b796e3/sequences_segment1.fasta",
+        "metadata": "uploads/examples/template_snakemake-29d57e8e6a4a430d821ce1a186b796e3/metadata.tsv"
+      },
+      "parameter_overrides": {},
+      "plan_id": "c34428b6fee24a93984a8ec2f35fca9b",
+      "harness_error": "ValueError: Pipeline job limit reached (2 per account, 16 server-wide).",
+      "elapsed_seconds": 0.61,
+      "test_finished": true
+    }
+  ],
+  "session_id": "d14acf7a-4c61-4820-b479-eabc92386124",
+  "assigned_inputs": {
+    "sequence": "uploads/examples/template_snakemake-df98654ae4ba4e8e9e0e71b17daea040/sequences_segment1.fasta",
+    "metadata": "uploads/examples/template_snakemake-df98654ae4ba4e8e9e0e71b17daea040/metadata.tsv"
+  },
+  "parameter_overrides": {},
+  "plan_id": "d9cb64bec82146608054693118bc3aab",
+  "job_id": "d9cb64bec82146608054693118bc3aab",
+  "last_state": {
+    "job_id": "d9cb64bec82146608054693118bc3aab",
+    "plan_id": "d9cb64bec82146608054693118bc3aab",
+    "status": "succeeded",
+    "created_at": "2026-11-09T06:52:10.162846+00:00",
+    "started_at": "2026-11-09T06:52:10.454504+00:00",
+    "finished_at": "2026-11-09T06:52:24.671126+00:00",
+    "updated_at": "2026-11-09T06:52:24.672292+00:00",
+    "pipeline_name": "template_snakemake"
+  },
+  "results": {
+    "status": "succeeded",
+    "job_id": "d9cb64bec82146608054693118bc3aab",
+    "pipeline_name": "template_snakemake",
+    "files": [
+      {
+        "name": "report",
+        "label": "Report",
+        "config_key": "report_path",
+        "path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/report.md",
+        "raw_path": "report.md",
+        "kind": "report",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/report.md",
+        "sha256": "6a58e1349646250d7a23903e8eafe1dabba19b69ac1a3182cf4a8696abd85ddb",
+        "size": 590,
+        "pipeline_result": {
+          "job_id": "d9cb64bec82146608054693118bc3aab",
+          "pipeline_name": "template_snakemake",
+          "output_key": "report",
+          "output_name": "report",
+          "output_kind": "report",
+          "completed_at": "2026-11-09T06:52:24.671126+00:00"
+        }
+      },
+      {
+        "name": "metrics",
+        "label": "Metrics",
+        "config_key": "metrics_path",
+        "path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/metrics.json",
+        "raw_path": "metrics.json",
+        "kind": "metrics",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/metrics.json",
+        "sha256": "d2dc867dac1f5ea9ced421fab21d99bf6cd756ab60881dd1739ecae90f85d2d8",
+        "size": 310,
+        "pipeline_result": {
+          "job_id": "d9cb64bec82146608054693118bc3aab",
+          "pipeline_name": "template_snakemake",
+          "output_key": "metrics",
+          "output_name": "metrics",
+          "output_kind": "metrics",
+          "completed_at": "2026-11-09T06:52:24.671126+00:00"
+        }
+      },
+      {
+        "name": "normalized_sequence",
+        "label": "Normalized sequence",
+        "config_key": "normalized_fasta_path",
+        "path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/normalized.fasta",
+        "raw_path": "normalized.fasta",
+        "kind": "sequence",
+        "required": true,
+        "nextflow_output": "",
+        "wdl_output": "",
+        "exists": true,
+        "workspace_path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/normalized.fasta",
+        "sha256": "fcb277eef628aaff82f508f283154e1665db0bfa33d51c17e73405d6a0678eb4",
+        "size": 139,
+        "pipeline_result": {
+          "job_id": "d9cb64bec82146608054693118bc3aab",
+          "pipeline_name": "template_snakemake",
+          "output_key": "normalized_sequence",
+          "output_name": "normalized_sequence",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-09T06:52:24.671126+00:00"
+        }
+      }
+    ],
+    "metrics": {
+      "status": "ok",
+      "pipeline": "template_snakemake",
+      "label": "template_snakemake",
+      "analysis_mode": "example",
+      "subtype": "subtype1",
+      "segment": "segment1",
+      "time": "all-time",
+      "metadata_rows": 2,
+      "sequence_length": 108,
+      "passes_min_length": true,
+      "min_length": 0,
+      "gc_percent": 51.85
+    },
+    "tables": [],
+    "bundle_path": "pipeline-bundles/d9cb64bec82146608054693118bc3aab/results.zip"
+  },
+  "transfer_scope": "actual bundled inputs and execution outputs",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "template_snakemake",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [
+    {
+      "job_id": "d9cb64bec82146608054693118bc3aab",
+      "files_delivered": true,
+      "generic_import": {
+        "artifact_count": 3,
+        "access": "Search or pull the attached sample files; native records are a separate outcome.",
+        "state": "imported"
+      },
+      "pipeline": "template_snakemake",
+      "state": "unsupported",
+      "message": "No unambiguous native result format; files remain available."
+    }
+  ],
+  "roundtrip_files": [
+    {
+      "name": "results.zip",
+      "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:0e22bf4bd53d1b3b2c37425a56999478219c32246137fdd514c341c209fa9543",
+      "state": "succeeded",
+      "bytes": 936,
+      "sha256": "bdf0c8ec87cbf581bfb0ea5c96e30607cd368aacb4f94f44ac4a5d3f801fc9cb",
+      "expected_sha256": "bdf0c8ec87cbf581bfb0ea5c96e30607cd368aacb4f94f44ac4a5d3f801fc9cb",
+      "matches": true
+    },
+    {
+      "name": "metrics.json",
+      "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:741e226daa41d0dc0be29403e113807201b11a4758253fc59e05331adea5f563",
+      "state": "succeeded",
+      "bytes": 310,
+      "sha256": "d2dc867dac1f5ea9ced421fab21d99bf6cd756ab60881dd1739ecae90f85d2d8",
+      "expected_sha256": "d2dc867dac1f5ea9ced421fab21d99bf6cd756ab60881dd1739ecae90f85d2d8",
+      "matches": true
+    },
+    {
+      "name": "normalized.fasta",
+      "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:a76dfc3a2b872c312ee6f6f2242273819ad9956d9662884da48f90bbae0e90f3",
+      "state": "succeeded",
+      "bytes": 139,
+      "sha256": "fcb277eef628aaff82f508f283154e1665db0bfa33d51c17e73405d6a0678eb4",
+      "expected_sha256": "fcb277eef628aaff82f508f283154e1665db0bfa33d51c17e73405d6a0678eb4",
+      "matches": true
+    },
+    {
+      "name": "report.md",
+      "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:bf8e9b7967ebf1f6a698100e5b7f4cf765d1a2974d38af6b7be294a7aad65350",
+      "state": "succeeded",
+      "bytes": 590,
+      "sha256": "6a58e1349646250d7a23903e8eafe1dabba19b69ac1a3182cf4a8696abd85ddb",
+      "expected_sha256": "6a58e1349646250d7a23903e8eafe1dabba19b69ac1a3182cf4a8696abd85ddb",
+      "matches": true
+    },
+    {
+      "name": "sequences_segment1.fasta",
+      "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:c30d33db777373608bc38cd89e93798f8ab3de00772b768ea06d8d5a1af94012",
+      "state": "succeeded",
+      "bytes": 154,
+      "sha256": "b9267f205f091c8ce27ac46ebcdc851334d65d318b4430e2752637db9b85fbb1",
+      "expected_sha256": "b9267f205f091c8ce27ac46ebcdc851334d65d318b4430e2752637db9b85fbb1",
+      "matches": true
+    },
+    {
+      "name": "metadata.tsv",
+      "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:ef90db16e31fdddfe8cf879b3a5a7a80e62d2f5b11ecd69214b6687eb71bdc08",
+      "state": "succeeded",
+      "bytes": 91,
+      "sha256": "e1987302cbff797a420941562dd19c784ded13a27e75b84dcd434bffdf4ea418",
+      "expected_sha256": "e1987302cbff797a420941562dd19c784ded13a27e75b84dcd434bffdf4ea418",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "bdf0c8ec87cbf581bfb0ea5c96e30607cd368aacb4f94f44ac4a5d3f801fc9cb",
+      "kind": "analysis_output",
+      "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "preview_available": false,
+        "kind": "file"
+      },
+      "size": 936,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "results.zip",
+      "data_type": "meta",
+      "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:0e22bf4bd53d1b3b2c37425a56999478219c32246137fdd514c341c209fa9543",
+      "id": "0e22bf4bd53d1b3b2c37425a56999478219c32246137fdd514c341c209fa9543",
+      "source_path": "pipeline-bundles/d9cb64bec82146608054693118bc3aab/results.zip",
+      "sample_name": "template_snakemake"
+    },
+    {
+      "sha256": "d2dc867dac1f5ea9ced421fab21d99bf6cd756ab60881dd1739ecae90f85d2d8",
+      "kind": "analysis_output",
+      "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+      "pipeline_result": {
+        "job_id": "d9cb64bec82146608054693118bc3aab",
+        "pipeline_name": "template_snakemake",
+        "output_key": "metrics",
+        "output_name": "metrics",
+        "output_kind": "metrics",
+        "completed_at": "2026-11-09T06:52:24.671126+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "status",
+          "pipeline",
+          "label",
+          "analysis_mode",
+          "subtype",
+          "segment",
+          "time",
+          "metadata_rows",
+          "sequence_length",
+          "passes_min_length",
+          "min_length",
+          "gc_percent"
+        ]
+      },
+      "size": 310,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "metrics.json",
+      "data_type": "meta",
+      "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:741e226daa41d0dc0be29403e113807201b11a4758253fc59e05331adea5f563",
+      "id": "741e226daa41d0dc0be29403e113807201b11a4758253fc59e05331adea5f563",
+      "source_path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/metrics.json",
+      "sample_name": "template_snakemake"
+    },
+    {
+      "sha256": "fcb277eef628aaff82f508f283154e1665db0bfa33d51c17e73405d6a0678eb4",
+      "kind": "analysis_output",
+      "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+      "pipeline_result": {
+        "job_id": "d9cb64bec82146608054693118bc3aab",
+        "pipeline_name": "template_snakemake",
+        "output_key": "normalized_sequence",
+        "output_name": "normalized_sequence",
+        "output_kind": "sequence",
+        "completed_at": "2026-11-09T06:52:24.671126+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": ">template_snakemake|segment1\nATGGCTGCTGACCTGATCGATCGTACGATCGGCTAGCTAGCTAACGATCGATCGATGGCCGCTGATCTGATCGATGGTAC\nGATCGGCTAGCTAGCTAATGATCGATCA\n"
+      },
+      "size": 139,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "normalized.fasta",
+      "data_type": "meta",
+      "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:a76dfc3a2b872c312ee6f6f2242273819ad9956d9662884da48f90bbae0e90f3",
+      "id": "a76dfc3a2b872c312ee6f6f2242273819ad9956d9662884da48f90bbae0e90f3",
+      "source_path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/normalized.fasta",
+      "sample_name": "template_snakemake"
+    },
+    {
+      "sha256": "6a58e1349646250d7a23903e8eafe1dabba19b69ac1a3182cf4a8696abd85ddb",
+      "kind": "analysis_output",
+      "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+      "pipeline_result": {
+        "job_id": "d9cb64bec82146608054693118bc3aab",
+        "pipeline_name": "template_snakemake",
+        "output_key": "report",
+        "output_name": "report",
+        "output_kind": "report",
+        "completed_at": "2026-11-09T06:52:24.671126+00:00"
+      },
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": "# Template Snakemake Pipeline Report\n\n- Label: template_snakemake\n- Input: /tmp/tmpu5pyt1r7/runtime/agent_runs/d9cb64bec82146608054693118bc3aab/inputs/sequence/0_sequences_segment1.fasta\n- Metadata: /tmp/tmpu5pyt1r7/runtime/agent_runs/d9cb64bec82146608054693118bc3aab/inputs/metadata/0_metadata.tsv\n- Output directory: /tmp/tmpu5pyt1r7/runtime/agent_runs/d9cb64bec82146608054693118bc3aab/outputs\n- Analysis mode: example\n- Subtype: subtype1\n- Segment: segment1\n- Time: all-time\n- Metadata rows: 2\n- Sequence length: 108\n- Minimum length: 0\n- Passes minimum length: True\n- GC percent: 51.85\n"
+      },
+      "size": 590,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "report.md",
+      "data_type": "meta",
+      "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:bf8e9b7967ebf1f6a698100e5b7f4cf765d1a2974d38af6b7be294a7aad65350",
+      "id": "bf8e9b7967ebf1f6a698100e5b7f4cf765d1a2974d38af6b7be294a7aad65350",
+      "source_path": "outputs/pipelines/d9cb64bec82146608054693118bc3aab/outputs/report.md",
+      "sample_name": "template_snakemake"
+    },
+    {
+      "sha256": "b9267f205f091c8ce27ac46ebcdc851334d65d318b4430e2752637db9b85fbb1",
+      "kind": "analysis_output",
+      "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "text",
+        "preview_only": true,
+        "preview_available": true,
+        "preview": ">example_001|segment1\nATGGCTGCTGACCTGATCGATCGTACGATCGGCTAGCTAGCTAACGATCGATCG\n>example_002|segment1\nATGGCCGCTGATCTGATCGATGGTACGATCGGCTAGCTAGCTAATGATCGATCA\n"
+      },
+      "size": 154,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "sequences_segment1.fasta",
+      "data_type": "meta",
+      "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:c30d33db777373608bc38cd89e93798f8ab3de00772b768ea06d8d5a1af94012",
+      "id": "c30d33db777373608bc38cd89e93798f8ab3de00772b768ea06d8d5a1af94012",
+      "source_path": "uploads/examples/template_snakemake-df98654ae4ba4e8e9e0e71b17daea040/sequences_segment1.fasta",
+      "sample_name": "template_snakemake"
+    },
+    {
+      "sha256": "e1987302cbff797a420941562dd19c784ded13a27e75b84dcd434bffdf4ea418",
+      "kind": "analysis_output",
+      "sample_id": "782805785dbb3709aa69ef9e34c84a64",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "table",
+        "preview_available": true,
+        "preview_only": true,
+        "delimiter": "tab",
+        "columns": [
+          "strain",
+          "date",
+          "location"
+        ],
+        "preview_rows": [
+          [
+            "example_001",
+            "2024-01-15",
+            "ExampleCity"
+          ],
+          [
+            "example_002",
+            "2024-03-22",
+            "ExampleTown"
+          ]
+        ]
+      },
+      "size": 91,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "metadata.tsv",
+      "data_type": "meta",
+      "resource_id": "result:77d18a80a9fc4db0bda610cf524e703b:ef90db16e31fdddfe8cf879b3a5a7a80e62d2f5b11ecd69214b6687eb71bdc08",
+      "id": "ef90db16e31fdddfe8cf879b3a5a7a80e62d2f5b11ecd69214b6687eb71bdc08",
+      "source_path": "uploads/examples/template_snakemake-df98654ae4ba4e8e9e0e71b17daea040/metadata.tsv",
+      "sample_name": "template_snakemake"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:782805785dbb3709aa69ef9e34c84a64",
+      "importable": false,
+      "sample_name": "template_snakemake",
+      "data_type": "meta",
+      "sample_id": "782805785dbb3709aa69ef9e34c84a64"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 56.52,
+  "test_finished": true
+}

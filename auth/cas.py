@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 
 import requests
 
-from .context import AuthError, Principal
+from .context import AuthError, LOCAL_USER_ID, Principal, login_return_path
 from .store import AuthStore, database, password_hash
 
 STATE_COOKIE = "bioagent_cas_state"
@@ -31,19 +31,12 @@ def service_url() -> str:
     if configured:
         value = configured
     else:
-        public = _required_url("AGENT_PUBLIC_ORIGIN")
+        public = (os.getenv("AGENT_PUBLIC_BASE_URL", "").strip()
+                  or _required_url("AGENT_PUBLIC_ORIGIN"))
         value = public.rstrip("/") + "/auth/cas/callback"
     parsed = urlparse(value)
     if parsed.scheme not in {"http", "https"} or not parsed.netloc or parsed.fragment:
         raise ValueError("AGENT_CAS_SERVICE_URL must be an HTTP(S) callback URL without a fragment.")
-    return value
-
-
-def _return_path(value: str | None) -> str:
-    value = (value or "/").strip()
-    if (not value.startswith("/") or value.startswith("//") or "\\" in value
-            or "\r" in value or "\n" in value):
-        return "/"
     return value
 
 
@@ -69,7 +62,7 @@ def begin_login(return_to: str | None) -> tuple[str, str]:
         db.execute("DELETE FROM cas_states WHERE expires_at<?", (time.time(),))
         db.execute(
             "INSERT INTO cas_states VALUES (?,?,?)",
-            (digest, _return_path(return_to), time.time() + 300),
+            (digest, login_return_path(return_to), time.time() + 300),
         )
     callback = service_url() + ("&" if "?" in service_url() else "?") + urlencode({"state": state})
     login = _required_url("AGENT_CAS_LOGIN_URL", https=True)
@@ -137,6 +130,8 @@ def _validate_ticket(ticket: str, callback: str) -> tuple[str, str]:
 
 
 def _create_login(user_id: str, username: str, ticket: str) -> tuple[str, Principal]:
+    if user_id == LOCAL_USER_ID:
+        raise AuthError("CAS assertion contains a reserved user ID.")
     token = secrets.token_urlsafe(32)
     token_hash = hashlib.sha256(token.encode()).hexdigest()
     with database(AuthStore().path) as db:
@@ -180,7 +175,7 @@ def complete_login(ticket: str, state: str, cookie_state: str) -> tuple[str, Pri
     callback = service_url() + ("&" if "?" in service_url() else "?") + urlencode({"state": state})
     user_id, username = _validate_ticket(ticket, callback)
     token, principal = _create_login(user_id, username, ticket)
-    return token, principal, _return_path(row["return_to"])
+    return token, principal, login_return_path(row["return_to"])
 
 
 def consume_single_logout(body: bytes, content_type: str) -> str:
@@ -204,6 +199,8 @@ def consume_single_logout(body: bytes, content_type: str) -> str:
 
 def logout_url() -> str:
     target = _required_url("AGENT_CAS_LOGOUT_URL", https=True)
-    return_to = os.getenv("AGENT_CAS_LOGOUT_RETURN_URL", "").strip() or _required_url("AGENT_PUBLIC_ORIGIN")
+    return_to = (os.getenv("AGENT_CAS_LOGOUT_RETURN_URL", "").strip()
+                 or os.getenv("AGENT_PUBLIC_BASE_URL", "").strip()
+                 or _required_url("AGENT_PUBLIC_ORIGIN"))
     separator = "&" if "?" in target else "?"
     return target + separator + urlencode({"service": return_to})

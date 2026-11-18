@@ -1,0 +1,227 @@
+{
+  "pipeline": "viral_genome_molecular_typing",
+  "engine": "wdl",
+  "manifest_sha256": "645cf9edc5cbeb6a5ac8da400c415b174edf611434c37eeef94279f091a7c311",
+  "selected_for_execution": false,
+  "execution_status": "not_executed",
+  "scope_note": "Contract and inert-transfer verification only; biological workflow/example outside the live execution safety scope.",
+  "examples": [
+    {
+      "path": "tools/runtime_tools/pipelines/viral_genome_molecular_typing/data/input/H3N2_PX908176.1_HA.fasta",
+      "bytes": 1909,
+      "sha256": "70ff1f3ec4780c00908da5d7046f164f7345b0d59f0d99f39563fba3951f274e"
+    }
+  ],
+  "contract": {
+    "valid": true,
+    "inputs": [
+      "genome_fasta"
+    ],
+    "outputs": [
+      "result_csv",
+      "nextclade_tsv",
+      "nextclade_json",
+      "typed_fasta"
+    ]
+  },
+  "transfers": [
+    {
+      "operation": "push",
+      "input": {
+        "paths": [
+          "uploads/59fe65e4b1ea4ee388f456b9dde7374b_contract-check.json"
+        ],
+        "destination": {
+          "project": "Bridge_full_20261109_R2",
+          "sample": "viral_genome_molecular_typing_contract_only",
+          "data_type": "meta"
+        },
+        "create_missing": true
+      },
+      "transfer_id": "863e95d0e41c4f628d8a2ab09bf08fd4",
+      "response": {
+        "transfer_id": "863e95d0e41c4f628d8a2ab09bf08fd4",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "source_registration": {
+            "status": "results_only",
+            "message": "Files attached as results. Provide source_slots to register multiple sequence files as sample inputs."
+          },
+          "file_delivery": "delivered",
+          "native_qc_applied": false,
+          "files": [
+            {
+              "name": "59fe65e4b1ea4ee388f456b9dde7374b_contract-check.json",
+              "id": "45fd201ab405e64a5aaaf4d56100494d6f110ef004b0842c7aa2eca5e262b009",
+              "source_path": "uploads/59fe65e4b1ea4ee388f456b9dde7374b_contract-check.json",
+              "size": 184,
+              "sha256": "d657b8d335b33a799f985c35689784c41d0f1c79d8a5d94cca5c041ce4622f39",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              }
+            }
+          ],
+          "native_imports": [],
+          "qc": {},
+          "receipt_id": "863e95d0e41c4f628d8a2ab09bf08fd4",
+          "target": {
+            "sample_id": "232980495dd839f881c712e4d753ec66",
+            "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+            "sample_name": "viral_genome_molecular_typing_contract_only",
+            "project_name": "Bridge_full_20261109_R2",
+            "data_type": "meta"
+          }
+        }
+      }
+    },
+    {
+      "operation": "search",
+      "input": {
+        "query": "232980495dd839f881c712e4d753ec66"
+      },
+      "transfer_id": "5e5c01601ceb4038ad9b78a23e33649f",
+      "response": {
+        "transfer_id": "5e5c01601ceb4038ad9b78a23e33649f",
+        "site_id": "mscan",
+        "operation": "search",
+        "state": "succeeded",
+        "result": {
+          "resources": [
+            {
+              "sha256": "d657b8d335b33a799f985c35689784c41d0f1c79d8a5d94cca5c041ce4622f39",
+              "kind": "analysis_output",
+              "sample_id": "232980495dd839f881c712e4d753ec66",
+              "project_name": "Bridge_full_20261109_R2",
+              "content": {
+                "kind": "json",
+                "preview_available": true,
+                "shape": "object",
+                "fields": [
+                  "pipeline",
+                  "workflow_executed",
+                  "purpose",
+                  "contract_valid"
+                ]
+              },
+              "size": 184,
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "name": "59fe65e4b1ea4ee388f456b9dde7374b_contract-check.json",
+              "data_type": "meta",
+              "resource_id": "result:863e95d0e41c4f628d8a2ab09bf08fd4:45fd201ab405e64a5aaaf4d56100494d6f110ef004b0842c7aa2eca5e262b009",
+              "id": "45fd201ab405e64a5aaaf4d56100494d6f110ef004b0842c7aa2eca5e262b009",
+              "source_path": "uploads/59fe65e4b1ea4ee388f456b9dde7374b_contract-check.json",
+              "sample_name": "viral_genome_molecular_typing_contract_only"
+            },
+            {
+              "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+              "kind": "sample",
+              "resource_id": "sample:meta:232980495dd839f881c712e4d753ec66",
+              "importable": false,
+              "sample_name": "viral_genome_molecular_typing_contract_only",
+              "data_type": "meta",
+              "sample_id": "232980495dd839f881c712e4d753ec66"
+            }
+          ],
+          "total": 2,
+          "offset": 0
+        }
+      }
+    },
+    {
+      "operation": "pull",
+      "input": {
+        "resource_id": "result:863e95d0e41c4f628d8a2ab09bf08fd4:45fd201ab405e64a5aaaf4d56100494d6f110ef004b0842c7aa2eca5e262b009"
+      },
+      "transfer_id": "4a3293613c314853b35f1735d008c906",
+      "response": {
+        "transfer_id": "4a3293613c314853b35f1735d008c906",
+        "site_id": "mscan",
+        "operation": "pull",
+        "state": "succeeded",
+        "result": {
+          "file": {
+            "session_id": "b6137fb5-0dc2-4028-87ab-f9d319c6c988",
+            "path": "uploads/067a2acbad48416280be98ced2edb911_59fe65e4b1ea4ee388f456b9dde7374b_contract-check.json",
+            "workspace_path": "uploads/067a2acbad48416280be98ced2edb911_59fe65e4b1ea4ee388f456b9dde7374b_contract-check.json",
+            "name": "59fe65e4b1ea4ee388f456b9dde7374b_contract-check.json",
+            "size": 184,
+            "sha256": "d657b8d335b33a799f985c35689784c41d0f1c79d8a5d94cca5c041ce4622f39",
+            "kind": "upload",
+            "content_type": "application/json; charset=utf-8"
+          }
+        }
+      }
+    }
+  ],
+  "session_id": "b6137fb5-0dc2-4028-87ab-f9d319c6c988",
+  "transfer_scope": "inert software-check file only",
+  "push_status": "succeeded",
+  "target": {
+    "sample_id": "232980495dd839f881c712e4d753ec66",
+    "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+    "sample_name": "viral_genome_molecular_typing_contract_only",
+    "project_name": "Bridge_full_20261109_R2",
+    "data_type": "meta"
+  },
+  "native_imports": [],
+  "roundtrip_files": [
+    {
+      "name": "59fe65e4b1ea4ee388f456b9dde7374b_contract-check.json",
+      "resource_id": "result:863e95d0e41c4f628d8a2ab09bf08fd4:45fd201ab405e64a5aaaf4d56100494d6f110ef004b0842c7aa2eca5e262b009",
+      "state": "succeeded",
+      "bytes": 184,
+      "sha256": "d657b8d335b33a799f985c35689784c41d0f1c79d8a5d94cca5c041ce4622f39",
+      "expected_sha256": "d657b8d335b33a799f985c35689784c41d0f1c79d8a5d94cca5c041ce4622f39",
+      "matches": true
+    }
+  ],
+  "resources": [
+    {
+      "sha256": "d657b8d335b33a799f985c35689784c41d0f1c79d8a5d94cca5c041ce4622f39",
+      "kind": "analysis_output",
+      "sample_id": "232980495dd839f881c712e4d753ec66",
+      "project_name": "Bridge_full_20261109_R2",
+      "content": {
+        "kind": "json",
+        "preview_available": true,
+        "shape": "object",
+        "fields": [
+          "pipeline",
+          "workflow_executed",
+          "purpose",
+          "contract_valid"
+        ]
+      },
+      "size": 184,
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "name": "59fe65e4b1ea4ee388f456b9dde7374b_contract-check.json",
+      "data_type": "meta",
+      "resource_id": "result:863e95d0e41c4f628d8a2ab09bf08fd4:45fd201ab405e64a5aaaf4d56100494d6f110ef004b0842c7aa2eca5e262b009",
+      "id": "45fd201ab405e64a5aaaf4d56100494d6f110ef004b0842c7aa2eca5e262b009",
+      "source_path": "uploads/59fe65e4b1ea4ee388f456b9dde7374b_contract-check.json",
+      "sample_name": "viral_genome_molecular_typing_contract_only"
+    },
+    {
+      "project_id": "4bbcd904088e354eac39e47a8a5c4d3f",
+      "kind": "sample",
+      "resource_id": "sample:meta:232980495dd839f881c712e4d753ec66",
+      "importable": false,
+      "sample_name": "viral_genome_molecular_typing_contract_only",
+      "data_type": "meta",
+      "sample_id": "232980495dd839f881c712e4d753ec66"
+    }
+  ],
+  "roundtrip_status": "passed",
+  "elapsed_seconds": 15.27,
+  "test_finished": true
+}
