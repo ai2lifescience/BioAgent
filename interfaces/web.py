@@ -42,6 +42,7 @@ from interfaces.api import (
     update_session_metadata,
 )
 from auth import AuthError, auth_mode, current_principal
+from auth.context import trusted_singleuser
 from interfaces.auth import authenticated_request, configure_server, redirect_unauthenticated_app
 from harness.sandbox import relative_file_path, execution_access
 from isolation.limits import limits, public_limits
@@ -922,7 +923,7 @@ def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
         print(_frontend_build_diagnostic(), file=sys.stderr)
     get_queue().recover()
     server = ThreadingHTTPServer((host, port), AgentRequestHandler)
-    if auth_mode() == "local":
+    if trusted_singleuser():
         configure_local_demo(server.server_port, server.server_address[0])
     print(f"Pipeline2Agent web UI running at http://{host}:{server.server_port}")
     print(f"Access mode: {auth_mode()}", flush=True)

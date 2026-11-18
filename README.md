@@ -97,9 +97,11 @@ relative to the process working directory, so launching it from `frontend/` or
 another directory creates a separate runtime tree.
 For Vite development, see the [frontend guide](frontend/README.md).
 
-The command above uses local mode without a login. For shared deployments,
-use `AGENT_AUTH_MODE=multiuser` for BioAgent username/password accounts, or
-configure CNCB single sign-on with `AGENT_AUTH_MODE=oauth` or `cas`.
+The command above defaults to `singleuser` without a login. For no-login LAN
+access, explicitly set `AGENT_AUTH_MODE=singleuser` and listen on `0.0.0.0`.
+For shared deployments, use `AGENT_AUTH_MODE=multiuser` for BioAgent
+username/password accounts or configure CNCB SSO with `AGENT_AUTH_MODE=oauth`
+or `cas`.
 See [startup modes](docs/user_isolation.md#startup-modes) and
 [MSCAN setup](docs/mscan_web_bridge.md#first-time-setup).
 

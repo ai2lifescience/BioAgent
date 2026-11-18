@@ -54,10 +54,16 @@ def registration_enabled() -> bool:
 
 
 def auth_mode() -> str:
-    mode = os.getenv("AGENT_AUTH_MODE", "local")
-    if mode not in {"local", "multiuser", "cas", "oauth"}:
-        raise ValueError("AGENT_AUTH_MODE must be local, multiuser, cas, or oauth")
+    mode = os.getenv("AGENT_AUTH_MODE", "singleuser")
+    if mode not in {"singleuser", "multiuser", "cas", "oauth"}:
+        raise ValueError("AGENT_AUTH_MODE must be singleuser, multiuser, cas, or oauth")
     return mode
+
+
+def trusted_singleuser() -> bool:
+    """The standalone CLI or a single-user server accessible only via loopback."""
+    return (auth_mode() == "singleuser" and os.getenv("AGENT_DIRECT_HTTP") != "true"
+            and not os.getenv("AGENT_PUBLIC_ORIGIN"))
 
 
 @contextmanager
@@ -72,9 +78,9 @@ def principal_scope(principal: Principal):
 def current_principal() -> Principal:
     principal = _principal.get()
     if principal is None:
-        if auth_mode() != "local":
+        if auth_mode() != "singleuser":
             raise AuthError("Sign in to continue.")
-        return Principal(LOCAL_USER_ID, "Local user")
+        return Principal(LOCAL_USER_ID, "Single user")
     # Streams and long requests must stop serving data after logout/expiry.
     if principal.login_id:
         from .store import AuthStore

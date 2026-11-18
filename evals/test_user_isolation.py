@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 import tempfile
 import threading
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -18,7 +19,7 @@ from web_bridge import bridge as website
 from auth import AccessDenied, AuthError, AuthStore, Principal, current_principal, principal_scope, database
 from harness.sessions import SessionMetadataStore
 from interfaces import api
-from interfaces.auth import validate_server
+from interfaces.auth import _check_origin, configure_server
 from interfaces.web import AgentRequestHandler
 
 
@@ -162,7 +163,7 @@ class UserIsolationTests(unittest.TestCase):
             self.assertEqual(self.request('/auth/register', method='POST', body=body)[0], 429)
 
     def test_network_startup_chooses_accounts_and_accepts_ip_origin(self):
-        from interfaces.auth import configure_server, secure_cookie
+        from interfaces.auth import secure_cookie
         with patch.dict(os.environ):
             os.environ.pop('AGENT_AUTH_MODE', None)
             os.environ.pop('AGENT_AUTH_COOKIE_SECURE', None)
@@ -176,6 +177,14 @@ class UserIsolationTests(unittest.TestCase):
             self.assertEqual(self.request('/auth/status', headers={'Host': 'evil.test'})[0], 401)
             self.assertEqual(self.request('/auth/logout', method='POST', body={}, cookie=self.alice_cookie,
                 headers={'Host': '192.168.1.20:8000', 'Origin': 'http://evil.test'})[0], 401)
+
+    def test_multiuser_reports_configured_origin_mismatch(self):
+        with patch.dict(os.environ, {'AGENT_PUBLIC_ORIGIN': 'http://localhost:8008'}):
+            configure_server('0.0.0.0')
+            status, _, body = self.request('/auth/status', headers={'Host': '192.168.1.20:8000'})
+            self.assertEqual(status, 401, body)
+            self.assertIn(b'AGENT_PUBLIC_ORIGIN', body)
+            self.assertEqual(self.request('/auth/status', headers={'Host': 'localhost:8008'})[0], 200)
 
     def test_open_registration_cannot_enable_shared_execution(self):
         with patch.dict(os.environ, {'AGENT_ALLOW_SHARED_EXECUTION': 'true', 'AGENT_REGISTRATION': 'true'}):
@@ -344,14 +353,62 @@ class UserIsolationTests(unittest.TestCase):
                 with self.assertRaises(AccessDenied): self.store.get_or_create_session("legacy")
                 self.assertNotIn("legacy", [s["session_id"] for s in self.store.list_sessions()])
 
-    def test_local_mode_and_network_restrictions(self):
-        with patch.dict(os.environ, {"AGENT_AUTH_MODE": "local"}):
-            self.assertEqual(self.request("/auth/status")[0], 200)
-            payload = json.loads(self.request("/auth/status")[2])
+    def test_singleuser_is_the_loopback_default(self):
+        with patch.dict(os.environ):
+            os.environ.pop('AGENT_AUTH_MODE', None)
+            configure_server('127.0.0.1')
+            status, _, body = self.request('/auth/status')
+            self.assertEqual(status, 200, body)
+            payload = json.loads(body)
+            self.assertEqual(payload['mode'], 'singleuser')
             self.assertEqual(payload["user"]["id"], "local")
-            with self.assertRaises(ValueError): validate_server("0.0.0.0")
             self.assertEqual(self.request("/sessions", headers={"Host": "evil.test"})[0], 401)
-        with self.assertRaises(ValueError): validate_server("0.0.0.0")
+
+    def test_singleuser_opens_local_workspace_without_a_login(self):
+        with patch.dict(os.environ, {'AGENT_AUTH_MODE': 'singleuser'}):
+            configure_server('127.0.0.1')
+            status, _, body = self.request('/sessions', method='POST', body={})
+            self.assertEqual(status, 201, body)
+            session = json.loads(body)['session_id']
+
+        with patch.dict(os.environ, {
+            'AGENT_AUTH_MODE': 'singleuser',
+            'AGENT_ALLOW_SHARED_EXECUTION': 'true',
+            'AGENT_PUBLIC_ORIGIN': 'https://oauth-deployment.test',
+            'AGENT_PUBLIC_BASE_URL': 'https://oauth-deployment.test/agent',
+        }):
+            configure_server('0.0.0.0')
+            headers = {'Host': '192.168.1.20:8000'}
+            status, _, body = self.request('/auth/status', headers=headers)
+            self.assertEqual(status, 200, body)
+            payload = json.loads(body)
+            self.assertEqual(payload['mode'], 'singleuser')
+            self.assertEqual(payload['user']['id'], 'local')
+            self.assertFalse(payload['registration_enabled'])
+            self.assertEqual(self.request(f'/sessions/{session}/messages', headers=headers)[0], 200)
+            self.assertEqual(self.request('/sessions', method='POST', body={},
+                                          headers={**headers, 'Origin': 'http://192.168.1.20:8000'})[0], 201)
+            self.assertEqual(self.request('/auth/status', headers={'Host': 'oauth-deployment.test'})[0], 401)
+            self.assertEqual(self.request(f'/sessions/{self.sid}/messages', headers=headers,
+                                          cookie=self.alice_cookie)[0], 404)
+            self.assertEqual(self.request('/auth/login', method='POST', body={}, headers=headers)[0], 401)
+            self.assertEqual(self.request('/sessions', method='POST', body={},
+                                          headers={**headers, 'Origin': 'http://untrusted.test'})[0], 401)
+            status, _, body = self.request('/run', method='POST', headers=headers,
+                                           body={'session_id': session, 'request': 'hello'})
+            self.assertEqual(status, 403, body)
+            self.assertIn(b'requires Docker workers', body)
+
+    def test_singleuser_checks_actual_peer_address(self):
+        with patch.dict(os.environ, {'AGENT_AUTH_MODE': 'singleuser'}):
+            configure_server('0.0.0.0')
+            request = SimpleNamespace(command='GET', client_address=('192.168.1.21', 1234),
+                                      headers={'Host': '192.168.1.20:8000'})
+            _check_origin(request)
+            request.client_address = ('203.0.113.5', 1234)
+            request.headers['X-Forwarded-For'] = '192.168.1.21'
+            with self.assertRaisesRegex(AuthError, 'private LAN'):
+                _check_origin(request)
 
 
 if __name__ == "__main__":

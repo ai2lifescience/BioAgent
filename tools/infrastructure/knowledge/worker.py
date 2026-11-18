@@ -13,8 +13,9 @@ from .service import KnowledgeService
 
 
 def execute(store: KnowledgeService, job_id: str) -> int:
-    from auth import OwnershipStore, Principal, auth_mode, database, principal_scope
-    if auth_mode() != "local":
+    from auth import OwnershipStore, Principal, database, principal_scope
+    from auth.context import trusted_singleuser
+    if not trusted_singleuser():
         spec = store.jobs.job_spec(job_id)
         ownership = OwnershipStore(Path(os.getenv("AGENT_METADATA_DIR", "runtime/session_metadata")).expanduser().resolve())
         with database(ownership.path) as db:

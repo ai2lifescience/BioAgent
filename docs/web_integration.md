@@ -101,10 +101,10 @@ default runtime paths are relative to the current process directory.
 Open `http://localhost:8000/assistant-demo`. Click the assistant launcher and
 ask it to explain the visible table or figure. The page requests a short-lived
 demo ticket from `/website/demo-token`; the signing secret stays on the server.
-In local mode, when website settings are absent, startup generates a process-local
-signing secret and trusts localhost for the demo. Local mode must bind to a
-loopback address. Network listeners default to authenticated multi-user mode;
-see [User accounts and isolation](user_isolation.md) for LAN access and HTTPS deployment.
+With a localhost `singleuser` listener and no website settings, startup
+generates a process-local signing secret and trusts localhost for the demo.
+Network listeners default to authenticated multi-user mode. See
+[User accounts and isolation](user_isolation.md) for LAN access and HTTPS deployment.
 
 An explicitly set `AGENT_WEBSITE_SITES` always takes precedence, including an
 empty allowlist. In multi-user mode, configure a stable `AGENT_WEBSITE_SECRET`

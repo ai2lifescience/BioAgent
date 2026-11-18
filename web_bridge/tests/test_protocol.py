@@ -59,7 +59,7 @@ class WebsiteBridgeSmoke(unittest.IsolatedAsyncioTestCase):
         from harness.sessions import SessionMetadataStore
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
-        settings = patch.dict(os.environ, {"AGENT_AUTH_MODE": "local", "AGENT_SESSIONS_DIR": temporary.name + "/workspaces"})
+        settings = patch.dict(os.environ, {"AGENT_AUTH_MODE": "singleuser", "AGENT_SESSIONS_DIR": temporary.name + "/workspaces"})
         settings.start()
         self.addCleanup(settings.stop)
         state = patch.object(runtime, "STATE_STORE", SessionMetadataStore(Path(temporary.name) / "metadata"))

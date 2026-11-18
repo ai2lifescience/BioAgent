@@ -7,6 +7,7 @@ from pathlib import Path
 import re
 
 from auth import ExecutionUnavailable, OwnershipStore, auth_mode, registration_enabled
+from auth.context import trusted_singleuser
 from .network import NETWORK_TOOLS
 from .embeddings import TOOLS as EMBEDDING_TOOLS
 
@@ -51,7 +52,7 @@ ISOLATED_TOOLS = OFFLINE_TOOLS | NETWORK_TOOLS | EMBEDDING_TOOLS | SERVICE_TOOLS
 
 
 def isolated_execution() -> bool:
-    default = 'docker' if auth_mode() != 'local' else 'local'
+    default = 'local' if trusted_singleuser() else 'docker'
     backend = os.getenv('AGENT_WORKER_BACKEND', default)
     if backend not in {'docker', 'local'}:
         raise ExecutionUnavailable('AGENT_WORKER_BACKEND must be docker or local.')
@@ -59,12 +60,14 @@ def isolated_execution() -> bool:
 
 
 def require_execution_policy() -> None:
-    if auth_mode() == "local":
+    if trusted_singleuser():
         return
     from .supervisor import ensure_available
     if isolated_execution():
         ensure_available()
         return
+    if auth_mode() == "singleuser":
+        raise ExecutionUnavailable("Single-user network access requires Docker workers.")
     if registration_enabled() or os.getenv("AGENT_ALLOW_SHARED_EXECUTION") != "true":
         raise ExecutionUnavailable(
             "Multi-user execution requires Docker workers. Shared execution requires disabled registration "

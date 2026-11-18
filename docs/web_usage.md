@@ -23,14 +23,35 @@ For the other model-facing tool contracts, see
 
 ## Start the server
 
-From the repository root, install the frontend dependencies with Node.js/npm,
-build the UI, set the model provider credential, and start the local web server:
+From the repository root, install the frontend dependencies and build the UI:
 
 ~~~bash
 conda activate openaisdk
 npm --prefix frontend ci
 npm --prefix frontend run build
-export OPENROUTER_API_KEY="your-key"
+~~~
+
+### Settings
+
+#### OpenRouter API key
+
+Export your OpenRouter API key in the terminal where you will start BioAgent:
+
+~~~bash
+export OPENROUTER_API_KEY="YOUR_OPENROUTER_API_KEY"
+~~~
+
+#### SOCKS proxy (optional)
+
+If OpenRouter needs your local SOCKS proxy, also export:
+
+~~~bash
+export AGENT_PROXY=socks5h://127.0.0.1:10801
+~~~
+
+### Launch
+
+~~~bash
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ~~~
 
@@ -118,26 +139,45 @@ WDL execution requires Cromwell/S3; it does not fall back to host miniwdl.
 
 ### Proxy and LAN access
 
-If OpenRouter requires a SOCKS proxy, set `AGENT_PROXY` in the same terminal
-before starting the server. `ALL_PROXY` is not required when `AGENT_PROXY` is
-set.
+For SOCKS proxy configuration, see [Settings](#settings).
+
+For direct LAN access, choose one mode below. From your browser, open the
+server's LAN address on port `8000`, for example `http://192.168.75.56:8000`.
+Both modes use Docker workers on network listeners. See
+[User accounts and isolation](user_isolation.md) for worker setup and HTTPS deployment.
+
+#### Single-user access
+
+`singleuser` opens one account without a login. To access it from a private LAN:
 
 ~~~bash
-export AGENT_PROXY=socks5h://127.0.0.1:10801
-python -B -m interfaces.web --host 127.0.0.1 --port 8000
+AGENT_AUTH_MODE=singleuser python -B -m interfaces.web --host 0.0.0.0 --port 8000
 ~~~
 
-Local mode is restricted to loopback. For direct LAN access, start with
-`--host 0.0.0.0`; this enables login, registration, and Docker tool workers.
-See [User accounts and isolation](user_isolation.md) for the worker image build,
-supported tools, HTTPS deployment, and existing-conversation migration.
+Any device that can reach BioAgent from the private network can access the same
+chats and files. Use `--host 127.0.0.1` for access from this machine only.
+`singleuser` is the default when the server binds to localhost.
+
+#### Multi-user access
+
+`multiuser` gives each user a BioAgent username and password. Password accounts
+are separate from MSCAN's SSO accounts. For direct LAN access, run:
+
+~~~bash
+AGENT_AUTH_MODE=multiuser python -B -m interfaces.web --host 0.0.0.0 --port 8000
+~~~
+
+If switching from SSO, start in a fresh terminal and use a configuration file
+without SSO URLs. Registration is enabled by default. To restrict sign-up, set
+`AGENT_REGISTRATION=false` before starting the server and create accounts with
+`python -m auth add-user alice`.
 
 #### Ubuntu firewall (UFW)
 
-For a server running on port 8000, allow access from anywhere with:
+To allow port `8000` from your LAN only, replace the example subnet with yours:
 
 ~~~bash
-sudo ufw allow 8000/tcp
+sudo ufw allow from 192.168.1.0/24 to any port 8000 proto tcp
 sudo ufw status
 ~~~
 

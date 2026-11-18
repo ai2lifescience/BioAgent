@@ -102,20 +102,20 @@ Docker daemon is unavailable. It never silently falls back to host execution.
 
 ## Startup modes
 
-Choose one of three sign-in modes: local access, BioAgent accounts, or CNCB SSO
-through direct CAS or the shared OAuth broker.
+Choose between password-free access, BioAgent accounts, and CNCB SSO through
+direct CAS or the shared OAuth broker.
 
 | Startup/configuration | Account access | Tool execution |
 | --- | --- | --- |
-| `--host 127.0.0.1`, no explicit mode | Local owner, no login | Existing local executor |
+| `--host 127.0.0.1`, default or explicit `AGENT_AUTH_MODE=singleuser` | Single account, no login | Existing local executor |
+| `AGENT_AUTH_MODE=singleuser`, network listener | Single account, no login from a private LAN | Isolated Docker workers |
 | `--host 0.0.0.0`, no explicit mode | Multi-user login and registration | Isolated Docker workers |
 | `AGENT_AUTH_MODE=multiuser`, loopback listener | Multi-user login and registration | Isolated Docker workers |
 | `AGENT_AUTH_MODE=cas` | CNCB CAS users; passwords and registration disabled | Isolated Docker workers |
 | `AGENT_AUTH_MODE=oauth` | Shared CNCB OAuth broker; passwords and registration disabled | Isolated Docker workers |
-| Explicit `AGENT_AUTH_MODE=local`, network listener | Rejected | None |
 
-Explicit settings are honored. If you previously exported `AGENT_AUTH_MODE=local`,
-unset it before using automatic network startup. Local mode stays loopback-only:
+For access from this machine only, leave the authentication mode unset or set
+it to `singleuser` and bind to localhost:
 
 ```bash
 python -B -m interfaces.web --host 127.0.0.1 --port 8000
@@ -123,6 +123,20 @@ python -B -m interfaces.web --host 127.0.0.1 --port 8000
 
 Local and registered accounts have separate conversations. Switching startup mode
 does not change ownership or automatically transfer existing conversations.
+
+### Single-user LAN access
+
+Use `singleuser` to open the same account from a private network without a login:
+
+```bash
+export AGENT_AUTH_MODE=singleuser
+python -B -m interfaces.web --host 0.0.0.0 --port 8000
+```
+
+Open port `8000` at the server's LAN IP in the browser. Any device that can
+reach this listener from the private network shares the same chats and files.
+BioAgent checks the connection's source IP directly. Use this mode for direct
+LAN connections. Agent runs on a network listener require Docker workers.
 
 ## Model and remote service settings
 

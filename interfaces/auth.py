@@ -8,8 +8,15 @@ import os
 import socket
 from urllib.parse import parse_qsl, parse_qs, urlencode, urlparse
 
-from auth import AuthError, AuthStore, COOKIE_NAME, auth_mode, current_principal, principal_scope, registration_enabled
-from auth.context import login_return_path
+from auth import (
+    AuthError, AuthStore, COOKIE_NAME, Principal, auth_mode,
+    current_principal, principal_scope, registration_enabled,
+)
+from auth.context import login_return_path, trusted_singleuser
+
+PRIVATE_LAN_NETWORKS = tuple(ipaddress.IPv4Network(network) for network in (
+    "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16",
+))
 
 
 def loopback(host: str) -> bool:
@@ -26,19 +33,29 @@ def secure_cookie() -> bool:
     return os.getenv("AGENT_AUTH_COOKIE_SECURE", default).lower() != "false"
 
 
+def _private_lan(address: str) -> bool:
+    try:
+        peer = ipaddress.IPv4Address(address)
+    except ValueError:
+        return False
+    return peer.is_loopback or any(peer in network for network in PRIVATE_LAN_NETWORKS)
+
+
 def configure_server(host: str) -> None:
-    """Network listeners default to accounts; explicit local mode stays local."""
-    if not loopback(host):
+    """Default to account login for network listeners unless a mode was selected."""
+    on_network = not loopback(host)
+    if on_network:
         os.environ.setdefault("AGENT_AUTH_MODE", "multiuser")
-    if auth_mode() != "local" and not os.getenv("AGENT_PUBLIC_ORIGIN"):
+    if auth_mode() == "singleuser":
+        os.environ["AGENT_DIRECT_HTTP"] = "true" if on_network else "false"
+    elif not os.getenv("AGENT_PUBLIC_ORIGIN"):
         os.environ["AGENT_DIRECT_HTTP"] = "true"
     validate_server(host)
 
 
 def validate_server(host: str) -> None:
-    if auth_mode() == "local" and not loopback(host):
-        raise ValueError("Local mode must bind to localhost. Use AGENT_AUTH_MODE=multiuser for network access.")
-    if auth_mode() != "local" and os.getenv("AGENT_PUBLIC_ORIGIN"):
+    mode = auth_mode()
+    if mode != "singleuser" and os.getenv("AGENT_PUBLIC_ORIGIN"):
         origin = urlparse(os.getenv("AGENT_PUBLIC_ORIGIN", ""))
         if origin.scheme not in {"http", "https"} or not origin.netloc or origin.path not in {"", "/"} or origin.query or origin.fragment or origin.username:
             raise ValueError("AGENT_PUBLIC_ORIGIN must be an HTTP(S) origin without a path.")
@@ -50,13 +67,13 @@ def validate_server(host: str) -> None:
             if (base.scheme != origin.scheme or base.netloc != origin.netloc
                     or base.query or base.fragment or base.username):
                 raise ValueError("AGENT_PUBLIC_BASE_URL must use the AGENT_PUBLIC_ORIGIN scheme and host.")
-    elif auth_mode() != "local" and not loopback(host) and os.getenv("AGENT_DIRECT_HTTP") != "true":
+    elif not loopback(host) and os.getenv("AGENT_DIRECT_HTTP") != "true":
         raise ValueError("Configure the direct HTTP listener before network access.")
-    if auth_mode() == "cas":
+    if mode == "cas":
         from auth.cas import service_url
         service_url()
         _external_logout_url()
-    elif auth_mode() == "oauth":
+    elif mode == "oauth":
         from auth.oauth import validate_config
         validate_config()
 
@@ -74,16 +91,24 @@ def _request_origin(handler) -> str:
 def _check_origin(handler) -> None:
     from auth.oauth import flexible_host, local_hostname
 
+    mode = auth_mode()
+    if mode == "singleuser" and not _private_lan(handler.client_address[0]):
+        raise AuthError("Single-user mode is available only from localhost or a private LAN.")
     host = handler.headers.get("Host", "")
-    public = os.getenv("AGENT_PUBLIC_ORIGIN", "").rstrip("/")
+    public = "" if mode == "singleuser" else os.getenv("AGENT_PUBLIC_ORIGIN", "").rstrip("/")
     hostname = urlparse("http://" + host).hostname or ""
-    flexible_local = auth_mode() == "oauth" and flexible_host() and local_hostname(hostname)
-    if auth_mode() == "local":
+    flexible_local = mode == "oauth" and flexible_host() and local_hostname(hostname)
+    if trusted_singleuser():
         # Host validation also rejects DNS rebinding against the local service.
         if not loopback(hostname) or not loopback(handler.client_address[0]):
-            raise AuthError("Local mode is available only through localhost.")
+            raise AuthError("This listener is available only through localhost.")
     elif public:
         if host != urlparse(public).netloc and not flexible_local:
+            if mode == "multiuser":
+                raise AuthError(
+                    "Request host does not match AGENT_PUBLIC_ORIGIN. Open the configured address, "
+                    "or clear AGENT_PUBLIC_ORIGIN for direct LAN access and restart BioAgent."
+                )
             raise AuthError("Unexpected request host.")
     elif os.getenv("AGENT_DIRECT_HTTP") == "true":
         # Numeric server addresses work on a LAN without trusting arbitrary DNS
@@ -92,6 +117,8 @@ def _check_origin(handler) -> None:
             ipaddress.ip_address(hostname)
         except ValueError:
             if hostname not in {"localhost", socket.gethostname().lower()}:
+                if mode == "singleuser":
+                    raise AuthError("Open BioAgent using localhost or the server's LAN IP.") from None
                 raise AuthError("Use the server IP address or configure AGENT_PUBLIC_ORIGIN.") from None
     elif not loopback(hostname) or not loopback(handler.client_address[0]):
         raise AuthError("Configure AGENT_PUBLIC_ORIGIN for network access.")
@@ -119,6 +146,12 @@ def _credential(handler) -> str:
         raise AuthError("Invalid session cookie.") from None
     value = cookies.get(COOKIE_NAME)
     return value.value if value else ""
+
+
+def _request_principal(handler) -> Principal:
+    if auth_mode() == "singleuser":
+        return current_principal()
+    return AuthStore().authenticate(_credential(handler))
 
 
 def _cookie(handler, name: str) -> str:
@@ -184,13 +217,10 @@ def _external_logout_url() -> str:
 
 def _auth_endpoint(handler, path: str) -> bool:
     if path == "/auth/status" and handler.command == "GET":
-        if auth_mode() == "local":
-            principal = current_principal()
-        else:
-            try:
-                principal = AuthStore().authenticate(_credential(handler))
-            except AuthError:
-                principal = None
+        try:
+            principal = _request_principal(handler)
+        except AuthError:
+            principal = None
         handler._send_json({
             "mode": auth_mode(),
             "registration_enabled": registration_enabled(),
@@ -346,8 +376,7 @@ def authenticated_request(method):
             )
             if public:
                 return method(handler)
-            principal = current_principal() if auth_mode() == "local" else AuthStore().authenticate(_credential(handler))
-            with principal_scope(principal):
+            with principal_scope(_request_principal(handler)):
                 return method(handler)
         except AuthError as exc:
             if handler._streaming:

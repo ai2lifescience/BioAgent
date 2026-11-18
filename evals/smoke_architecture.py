@@ -33,7 +33,7 @@ def main() -> int:
     # a developer's multi-user deployment settings and persisted conversations.
     with tempfile.TemporaryDirectory() as temporary, \
          patch.dict(os.environ, {
-             'AGENT_AUTH_MODE': 'local', 'AGENT_WORKER_BACKEND': 'local',
+             'AGENT_AUTH_MODE': 'singleuser', 'AGENT_WORKER_BACKEND': 'local',
              'AGENT_METADATA_DIR': str(Path(temporary) / 'metadata'),
              'AGENT_SESSIONS_DIR': str(Path(temporary) / 'workspaces'),
              'AGENT_SESSION_DB': str(Path(temporary) / 'history.sqlite3'),

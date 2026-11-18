@@ -15,7 +15,7 @@ COPY models /app/models
 COPY tools /app/tools
 RUN find /app -type d -name __pycache__ -prune -exec rm -rf {} + && chmod -R a+rX /app
 LABEL io.bioagent.worker-protocol="3"
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 HOME=/tmp USER=worker LOGNAME=worker AGENT_AUTH_MODE=local
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 HOME=/tmp USER=worker LOGNAME=worker AGENT_AUTH_MODE=singleuser
 ENV NXF_OFFLINE=true NXF_HOME=/tmp/nextflow NXF_OPTS="-Xms128m -Xmx512m -XX:ActiveProcessorCount=1"
 USER 10001:10001
 ENTRYPOINT ["python", "-m", "isolation.worker"]

@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type FormEvent, type Reac
 import './auth.css';
 
 type Status = {
-  mode: 'local' | 'multiuser' | 'cas' | 'oauth';
+  mode: 'singleuser' | 'multiuser' | 'cas' | 'oauth';
   registration_enabled?: boolean;
   login_url?: string | null;
   user: { id: string; name: string } | null;
@@ -47,7 +47,12 @@ export function AuthGate({ children }: { children: ReactNode }) {
         if (alive && version === generation.current) { setStatus(null); setError((e as Error).message); }
       }
     };
-    const expired = () => { ++generation.current; setStatus(previous => previous ? { ...previous, user: null } : null); setPassword(''); };
+    const expired = () => {
+      ++generation.current;
+      setStatus(previous => previous && previous.mode !== 'singleuser'
+        ? { ...previous, user: null } : previous);
+      setPassword('');
+    };
     const changed = (event: StorageEvent) => {
       if (event.key === CHANGE_KEY) { setStatus(null); void refresh(); }
     };
@@ -148,7 +153,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
     {status.registration_enabled && <button className="auth-switch" type="button" disabled={busy} onClick={() => { setRegistering(!registering); setError(''); setPassword(''); setConfirmPassword(''); }}>{registering ? 'Already registered? Sign in' : 'Create account'}</button>}
   </form></main>;
   return <div className="auth-shell" key={status.user.id}>
-    {status.mode !== 'local' && <div className="auth-bar"><span>{status.user.name}</span>{error && <span role="alert">{error}</span>}<button disabled={busy} onClick={logout}>Sign out</button></div>}
+    {status.mode !== 'singleuser' && <div className="auth-bar"><span>{status.user.name}</span>{error && <span role="alert">{error}</span>}<button disabled={busy} onClick={logout}>Sign out</button></div>}
     <div className="auth-content">{children}</div>
   </div>;
 }

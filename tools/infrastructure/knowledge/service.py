@@ -10,8 +10,8 @@ from .repository import KnowledgeRepository
 
 
 def _require_owner(session_id: str) -> None:
-    from auth import auth_mode
-    if auth_mode() != "local":
+    from auth.context import trusted_singleuser
+    if not trusted_singleuser():
         from harness.runtime import STATE_STORE
         STATE_STORE.ownership.require(session_id)
 
