@@ -78,6 +78,44 @@ class TransferTests(unittest.TestCase):
         self.assertEqual(status,200,body)
         self.assertEqual(len(json.loads(body)['commands']),1)
 
+    def test_result_sync_requires_live_advertised_capability(self):
+        transfers=self.prepare()
+        payload={'cromwell_task_id':'11111111-1111-1111-1111-111111111111',
+                 'pipeline_name':'fixture','destination':{'project':'p','sample':'s','data_type':'meta'}}
+        with principal_scope(self.alice),self.assertRaisesRegex(ValueError,'offline'):
+            transfers.create(self.sid,'fixture','result_sync',payload)
+        transfers.pending('fixture',capabilities={'operations':['search','pull','push']})
+        with principal_scope(self.alice),self.assertRaisesRegex(ValueError,'does not support result_sync'):
+            transfers.create(self.sid,'fixture','result_sync',payload)
+        transfers.pending('fixture',capabilities={
+            'operations':['search','pull','push','result_sync'],
+            'cromwell_result_sync':{
+                'protocol_version':1,
+                'importers':[{'pipeline_key':'fixture','contract_version':2}],
+            },
+        })
+        with principal_scope(self.alice),self.assertRaisesRegex(ValueError,'no compatible contract'):
+            transfers.create(self.sid,'fixture','result_sync',payload)
+        transfers.pending('fixture',capabilities={
+            'operations':['search','pull','push','result_sync'],
+            'cromwell_result_sync':{
+                'protocol_version':1,
+                'engine':'cromwell',
+                'importers':[{'pipeline_key':'fixture','contract_version':1}],
+            },
+        })
+        with principal_scope(self.alice):
+            unsupported={**payload,'pipeline_name':'missing'}
+            with self.assertRaisesRegex(ValueError,'no Cromwell importer'):
+                transfers.create(self.sid,'fixture','result_sync',unsupported)
+            result=transfers.create(self.sid,'fixture','result_sync',payload)
+            self.assertEqual(result['state'],'queued')
+            transfers.pending('fixture')
+            stored=transfers.service_command('fixture',result['transfer_id'])
+            manifest=json.loads(stored['payload'])
+            self.assertEqual(manifest['result_sync_protocol_version'],1)
+            self.assertEqual(manifest['pipeline_contract_version'],1)
+
     def test_command_upload_into_standalone_session(self):
         transfers=self.prepare()
         with principal_scope(self.alice):
@@ -225,3 +263,22 @@ class TransferTests(unittest.TestCase):
             source.write_bytes(b'changed')
             with self.assertRaises(ValueError):
                 transfers.create(self.sid,'fixture','push',{'paths':[bundle]})
+
+    def test_result_sync_job_uses_protected_broker_store(self):
+        from types import SimpleNamespace
+        from harness.sandbox import execution_access
+        from tools.function_tools.website.transfer import _result_sync_job
+        from tools.infrastructure.pipeline_engine import broker
+        from tools.infrastructure.pipeline_engine.store import JobStore
+        self.prepare()
+        with principal_scope(self.alice):
+            access=execution_access()
+            root=access.workspace(self.sid)
+            store=JobStore(broker._owned(root,access))
+            job=store.create({'pipeline_name':'fixture'})
+            store.update(job['job_id'],status='succeeded',
+                         remote_id='11111111-1111-1111-1111-111111111111')
+            context=SimpleNamespace(execution_access=access,session_id=self.sid)
+            loaded=_result_sync_job(context,job['job_id'])
+            self.assertEqual(loaded['job_id'],job['job_id'])
+            self.assertEqual(loaded['remote_id'],'11111111-1111-1111-1111-111111111111')

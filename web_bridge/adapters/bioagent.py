@@ -5,6 +5,7 @@ import tempfile
 from pathlib import Path
 
 from auth import AuthError, AccessDenied, Principal, current_principal, principal_scope
+from auth.context import LOCAL_USER_ID
 from auth.store import AuthStore, database, password_hash
 
 
@@ -26,11 +27,24 @@ class Accounts:
         return Principal(row['user_id'], row['username'])
 
     def create_user(self, user_id, username):
+        if user_id == LOCAL_USER_ID:
+            raise AuthError('Website identity contains a reserved user ID.')
+        self._check_username(user_id, username)
         self.db.execute('INSERT INTO users(user_id,username,password_hash) VALUES (?,?,?)',
                         (user_id, username, password_hash(secrets.token_urlsafe(48))))
 
+    def _check_username(self, user_id, username):
+        collision = self.db.execute('SELECT user_id FROM users WHERE username=?', (username,)).fetchone()
+        if collision and collision['user_id'] != user_id:
+            raise ValueError('Website username is already assigned to another account.')
+
+    def sync_username(self, user_id, username):
+        self._check_username(user_id, username)
+        self.db.execute('UPDATE users SET username=? WHERE user_id=?', (username, user_id))
+
     def create_login(self, digest, user_id, expires):
-        self.db.execute('INSERT INTO logins VALUES (?,?,?)', (digest, user_id, expires))
+        self.db.execute('INSERT INTO logins(token_hash,user_id,expires_at) VALUES (?,?,?)',
+                        (digest, user_id, expires))
 
     def revoke_login(self, digest):
         self.db.execute('DELETE FROM logins WHERE token_hash=?', (digest,))

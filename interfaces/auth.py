@@ -6,9 +6,10 @@ from http.cookies import SimpleCookie
 import ipaddress
 import os
 import socket
-from urllib.parse import urlparse
+from urllib.parse import parse_qsl, parse_qs, urlencode, urlparse
 
 from auth import AuthError, AuthStore, COOKIE_NAME, auth_mode, current_principal, principal_scope, registration_enabled
+from auth.context import login_return_path
 
 
 def loopback(host: str) -> bool:
@@ -29,7 +30,7 @@ def configure_server(host: str) -> None:
     """Network listeners default to accounts; explicit local mode stays local."""
     if not loopback(host):
         os.environ.setdefault("AGENT_AUTH_MODE", "multiuser")
-    if auth_mode() == "multiuser" and not os.getenv("AGENT_PUBLIC_ORIGIN"):
+    if auth_mode() != "local" and not os.getenv("AGENT_PUBLIC_ORIGIN"):
         os.environ["AGENT_DIRECT_HTTP"] = "true"
     validate_server(host)
 
@@ -37,26 +38,52 @@ def configure_server(host: str) -> None:
 def validate_server(host: str) -> None:
     if auth_mode() == "local" and not loopback(host):
         raise ValueError("Local mode must bind to localhost. Use AGENT_AUTH_MODE=multiuser for network access.")
-    if auth_mode() == "multiuser" and os.getenv("AGENT_PUBLIC_ORIGIN"):
+    if auth_mode() != "local" and os.getenv("AGENT_PUBLIC_ORIGIN"):
         origin = urlparse(os.getenv("AGENT_PUBLIC_ORIGIN", ""))
         if origin.scheme not in {"http", "https"} or not origin.netloc or origin.path not in {"", "/"} or origin.query or origin.fragment or origin.username:
             raise ValueError("AGENT_PUBLIC_ORIGIN must be an HTTP(S) origin without a path.")
         if origin.scheme == "https" and not secure_cookie():
             raise ValueError("HTTPS requires secure cookies.")
-    elif auth_mode() == "multiuser" and not loopback(host) and os.getenv("AGENT_DIRECT_HTTP") != "true":
+        public_base = os.getenv("AGENT_PUBLIC_BASE_URL", "").strip()
+        if public_base:
+            base = urlparse(public_base)
+            if (base.scheme != origin.scheme or base.netloc != origin.netloc
+                    or base.query or base.fragment or base.username):
+                raise ValueError("AGENT_PUBLIC_BASE_URL must use the AGENT_PUBLIC_ORIGIN scheme and host.")
+    elif auth_mode() != "local" and not loopback(host) and os.getenv("AGENT_DIRECT_HTTP") != "true":
         raise ValueError("Configure the direct HTTP listener before network access.")
+    if auth_mode() == "cas":
+        from auth.cas import service_url
+        service_url()
+        _external_logout_url()
+    elif auth_mode() == "oauth":
+        from auth.oauth import validate_config
+        validate_config()
+
+
+def _request_origin(handler) -> str:
+    host = (handler.headers.get("Host") or "").strip()
+    if not host or any(char in host for char in "\r\n "):
+        return ""
+    proto = (handler.headers.get("X-Forwarded-Proto") or "http").split(",")[0].strip().lower()
+    if proto not in {"http", "https"}:
+        proto = "http"
+    return f"{proto}://{host}"
 
 
 def _check_origin(handler) -> None:
+    from auth.oauth import flexible_host, local_hostname
+
     host = handler.headers.get("Host", "")
     public = os.getenv("AGENT_PUBLIC_ORIGIN", "").rstrip("/")
     hostname = urlparse("http://" + host).hostname or ""
+    flexible_local = auth_mode() == "oauth" and flexible_host() and local_hostname(hostname)
     if auth_mode() == "local":
         # Host validation also rejects DNS rebinding against the local service.
         if not loopback(hostname) or not loopback(handler.client_address[0]):
             raise AuthError("Local mode is available only through localhost.")
     elif public:
-        if host != urlparse(public).netloc:
+        if host != urlparse(public).netloc and not flexible_local:
             raise AuthError("Unexpected request host.")
     elif os.getenv("AGENT_DIRECT_HTTP") == "true":
         # Numeric server addresses work on a LAN without trusting arbitrary DNS
@@ -73,8 +100,9 @@ def _check_origin(handler) -> None:
         if handler.headers.get("Sec-Fetch-Site") == "cross-site":
             raise AuthError("Cross-site requests are not accepted.")
         if origin:
-            allowed = {public} if public else {"http://" + host, "https://" + host}
-            if origin not in allowed:
+            allowed = {public} if public and not flexible_local else {public, "http://" + host, "https://" + host}
+            allowed.discard("")
+            if origin.rstrip("/") not in {item.rstrip("/") for item in allowed}:
                 raise AuthError("Request origin does not match this application.")
 
 
@@ -93,6 +121,67 @@ def _credential(handler) -> str:
     return value.value if value else ""
 
 
+def _cookie(handler, name: str) -> str:
+    cookies = SimpleCookie()
+    try:
+        cookies.load(handler.headers.get("Cookie", ""))
+    except Exception:
+        raise AuthError("Invalid session cookie.") from None
+    value = cookies.get(name)
+    return value.value if value else ""
+
+
+def _redirect(handler, location: str, status: int = 302) -> None:
+    handler.send_response(status)
+    handler.send_header("Location", location)
+    handler.send_header("Cache-Control", "no-store")
+    handler.send_header("Content-Length", "0")
+    handler.end_headers()
+
+
+def redirect_unauthenticated_app(handler) -> bool:
+    """Open the identity login page instead of the unsigned-in application shell."""
+    mode = auth_mode()
+    if mode not in {"cas", "oauth"}:
+        return False
+    try:
+        if AuthStore().authenticate(_credential(handler)):
+            return False
+    except AuthError:
+        pass
+    parsed = urlparse(handler.path)
+    kept = [(key, value) for key, value in parse_qsl(parsed.query, keep_blank_values=True) if key != "logged_out"]
+    return_to = "/" if parsed.path in {"", "/", "/index.html"} else parsed.path
+    if kept:
+        return_to += "?" + urlencode(kept)
+    login = _public_app_path(f"/auth/{mode}/login")
+    return_to = _public_app_path(return_to)
+    _redirect(handler, login + "?" + urlencode({"return_to": return_to}))
+    return True
+
+
+def _external_login_url() -> str | None:
+    if auth_mode() == "cas":
+        return "/auth/cas/login"
+    if auth_mode() == "oauth":
+        return "/auth/oauth/login"
+    return None
+
+
+def _public_app_path(value: str | None) -> str:
+    path = login_return_path(value)
+    base = urlparse(os.getenv("AGENT_PUBLIC_BASE_URL", "")).path.rstrip("/")
+    pathname = urlparse(path).path
+    if base and pathname != base and not pathname.startswith(base + "/"):
+        return base + path
+    return path
+
+
+def _external_logout_url() -> str:
+    from auth.cas import logout_url as cas_logout_url
+    return cas_logout_url()
+
+
 def _auth_endpoint(handler, path: str) -> bool:
     if path == "/auth/status" and handler.command == "GET":
         if auth_mode() == "local":
@@ -102,7 +191,110 @@ def _auth_endpoint(handler, path: str) -> bool:
                 principal = AuthStore().authenticate(_credential(handler))
             except AuthError:
                 principal = None
-        handler._send_json({"mode": auth_mode(), "registration_enabled": registration_enabled(), "user": {"id": principal.user_id, "name": principal.username} if principal else None})
+        handler._send_json({
+            "mode": auth_mode(),
+            "registration_enabled": registration_enabled(),
+            "login_url": _external_login_url(),
+            "user": {"id": principal.user_id, "name": principal.username} if principal else None,
+        })
+        return True
+    if path == "/auth/cas/login" and handler.command == "GET":
+        if auth_mode() != "cas":
+            raise AuthError("CAS login is not enabled.")
+        from auth.cas import STATE_COOKIE, begin_login, service_url
+        query = parse_qs(urlparse(handler.path).query)
+        location, state = begin_login(_public_app_path((query.get("return_to") or ["/"])[0]))
+        callback_path = urlparse(service_url()).path or "/"
+        handler._auth_cookie = (
+            f"{STATE_COOKIE}={state}; Path={callback_path}; HttpOnly; SameSite=Lax; Max-Age=300"
+            + ("; Secure" if secure_cookie() else "")
+        )
+        _redirect(handler, location)
+        return True
+    if path == "/auth/oauth/login" and handler.command == "GET":
+        if auth_mode() != "oauth":
+            raise AuthError("OAuth login is not enabled.")
+        from auth.oauth import STATE_COOKIE, begin_login, callback_url
+        query = parse_qs(urlparse(handler.path).query)
+        request_origin = _request_origin(handler)
+        location, state = begin_login(_public_app_path((query.get("return_to") or ["/"])[0]), request_origin=request_origin)
+        callback_path = urlparse(callback_url(request_origin)).path or "/"
+        handler._auth_cookie = (
+            f"{STATE_COOKIE}={state}; Path={callback_path}; HttpOnly; SameSite=Lax; Max-Age=600"
+            + ("; Secure" if secure_cookie() else "")
+        )
+        _redirect(handler, location)
+        return True
+    if path == "/auth/oauth/callback" and handler.command == "GET":
+        if auth_mode() != "oauth":
+            raise AuthError("OAuth login is not enabled.")
+        from auth.oauth import STATE_COOKIE, complete_login
+        query = parse_qs(urlparse(handler.path).query)
+        if (query.get("error") or [""])[0]:
+            raise AuthError("The identity service declined the sign-in request.")
+        token, _, return_to = complete_login(
+            (query.get("code") or [""])[0],
+            (query.get("state") or [""])[0],
+            _cookie(handler, STATE_COOKIE),
+        )
+        handler._auth_cookie = (
+            f"{COOKIE_NAME}={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=28800"
+            + ("; Secure" if secure_cookie() else "")
+        )
+        _redirect(handler, return_to)
+        return True
+    if path == "/auth/oauth/backchannel-logout" and handler.command == "POST":
+        if auth_mode() != "oauth":
+            raise AuthError("OAuth login is not enabled.")
+        length = int(handler.headers.get("Content-Length", "0"))
+        if length <= 0 or length > 16384:
+            raise AuthError("Invalid OAuth backchannel logout.")
+        from auth.oauth import consume_backchannel_logout
+        revoked = consume_backchannel_logout(
+            handler.rfile.read(length),
+            handler.headers.get("X-OAuth-Logout-Signature", ""),
+        )
+        handler._send_json({"revoked": revoked})
+        return True
+    if path == "/auth/cas/callback" and handler.command == "GET":
+        if auth_mode() != "cas":
+            raise AuthError("CAS login is not enabled.")
+        from auth.cas import STATE_COOKIE, complete_login
+        query = parse_qs(urlparse(handler.path).query)
+        token, _, return_to = complete_login(
+            (query.get("ticket") or [""])[0],
+            (query.get("state") or [""])[0],
+            _cookie(handler, STATE_COOKIE),
+        )
+        handler._auth_cookie = (
+            f"{COOKIE_NAME}={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=28800"
+            + ("; Secure" if secure_cookie() else "")
+        )
+        _redirect(handler, return_to)
+        return True
+    if path == "/auth/cas/callback" and handler.command == "POST":
+        if auth_mode() != "cas":
+            raise AuthError("CAS login is not enabled.")
+        from auth.cas import consume_single_logout
+        length = int(handler.headers.get("Content-Length", "0"))
+        user_id = consume_single_logout(handler.rfile.read(length), handler.headers.get("Content-Type", ""))
+        if user_id:
+            from web_bridge import revoke_user
+            revoke_user(user_id)
+        handler._send_json({"signed_out": True})
+        return True
+    if path == "/auth/cas/logout" and handler.command == "POST":
+        if auth_mode() != "cas":
+            raise AuthError("CAS login is not enabled.")
+        principal = AuthStore().authenticate(_credential(handler))
+        AuthStore().logout(principal)
+        from web_bridge import revoke_user
+        revoke_user(principal.user_id)
+        handler._auth_cookie = (
+            f"{COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0"
+            + ("; Secure" if secure_cookie() else "")
+        )
+        handler._send_json({"signed_out": True, "logout_url": _external_logout_url()})
         return True
     if path in {"/auth/login", "/auth/register"} and handler.command == "POST":
         if auth_mode() != "multiuser":
@@ -117,13 +309,19 @@ def _auth_endpoint(handler, path: str) -> bool:
         handler._send_json({"user": {"id": principal.user_id, "name": principal.username}}, status=201 if path == "/auth/register" else 200)
         return True
     if path == "/auth/logout" and handler.command == "POST":
-        if auth_mode() == "multiuser":
+        if auth_mode() == "cas":
+            raise AuthError("Use CAS single logout.")
+        if auth_mode() in {"multiuser", "oauth"}:
             principal = AuthStore().authenticate(_credential(handler))
             AuthStore().logout(principal)
             from web_bridge import revoke_user
             revoke_user(principal.user_id)
         handler._auth_cookie = f"{COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0" + ("; Secure" if secure_cookie() else "")
-        handler._send_json({"signed_out": True})
+        payload = {"signed_out": True}
+        if auth_mode() == "oauth":
+            from auth.oauth import begin_logout
+            payload["logout_url"] = begin_logout(_request_origin(handler))
+        handler._send_json(payload)
         return True
     return False
 
@@ -143,7 +341,7 @@ def authenticated_request(method):
             if _auth_endpoint(handler, path):
                 return
             public = handler.command == "GET" and (
-                path in {"/", "/index.html", "/assistant", "/assistant/", "/assistant.html", "/assistant-demo", "/assistant-demo/", "/assistant-demo.html", "/favicon.svg", "/health"}
+                path in {"/", "/index.html", "/assistant", "/assistant/", "/assistant.html", "/assistant-demo", "/assistant-demo/", "/assistant-demo.html", "/favicon.ico", "/favicon.svg", "/health"}
                 or path.startswith("/static/")
             )
             if public:

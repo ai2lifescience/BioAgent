@@ -42,7 +42,7 @@ from interfaces.api import (
     update_session_metadata,
 )
 from auth import AuthError, auth_mode, current_principal
-from interfaces.auth import authenticated_request, configure_server
+from interfaces.auth import authenticated_request, configure_server, redirect_unauthenticated_app
 from harness.sandbox import relative_file_path, execution_access
 from isolation.limits import limits, public_limits
 from isolation.files import open_regular
@@ -59,6 +59,30 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 FRONTEND_DIST_DIR = PROJECT_ROOT / "frontend" / "dist"
 FRONTEND_ENTRYPOINTS = ("index.html", "assistant.html", "assistant-demo.html")
 MAX_UPLOAD_BYTES = int(os.getenv("AGENT_MAX_UPLOAD_BYTES", str(256 * 1024 * 1024)))
+
+
+def _load_environment_file(path: Path) -> None:
+    """Load the project launch configuration before server validation."""
+    if not path.is_file():
+        return
+    root = str(PROJECT_ROOT)
+    for number, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("export "):
+            line = line[7:].strip()
+        if "=" not in line:
+            raise ValueError(f"{path}:{number}: expected NAME=value")
+        name, value = line.split("=", 1)
+        name = name.strip()
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", name):
+            raise ValueError(f"{path}:{number}: invalid environment variable name")
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
+            value = value[1:-1]
+        value = value.replace("${PWD}", root).replace("$PWD", root)
+        os.environ[name] = value
 
 
 def _frontend_asset_path(relative_path: str) -> Path | None:
@@ -195,6 +219,8 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         path = urlparse(self.path).path
         if path in {"/", "/index.html"}:
+            if redirect_unauthenticated_app(self):
+                return
             self._send_frontend_page("index.html")
             return
         if path == "/assistant/":
@@ -209,6 +235,11 @@ class AgentRequestHandler(BaseHTTPRequestHandler):
             return
         if path in {"/assistant-demo", "/assistant-demo/", "/assistant-demo.html"}:
             self._send_frontend_page("assistant-demo.html")
+            return
+        if path == "/favicon.ico":
+            self.send_response(302)
+            self.send_header("Location", "favicon.svg")
+            self.end_headers()
             return
         if path == "/favicon.svg" or path.startswith("/static/"):
             asset = _frontend_asset_path(path[1:])
@@ -932,8 +963,12 @@ def _multipart_boundary(content_type: str) -> bytes:
 
 
 def main() -> int:
+    env_file = os.getenv("AGENT_ENV_FILE", str(PROJECT_ROOT / ".env")).strip()
+    if env_file:
+        _load_environment_file(Path(env_file).expanduser())
     parser = argparse.ArgumentParser(description="Run the Pipeline2Agent HTTP web UI.")
-    parser.add_argument("--host", default="127.0.0.1")
+    from auth.oauth import flexible_host
+    parser.add_argument("--host", default="0.0.0.0" if auth_mode() == "oauth" and flexible_host() else "127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()
     run_server(host=args.host, port=args.port)

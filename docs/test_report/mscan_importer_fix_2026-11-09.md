@@ -24,7 +24,7 @@ This was a shared storage-reader environment error, not evidence of ten independ
 
 ## Changes
 
-- `run.py backend` now removes a root trailing slash from HTTP(S) proxy URLs, preserving credentials and NO_PROXY settings. The direct `java -jar` startup documentation includes equivalent exports. The live backend was restarted with its original configuration and normalized proxy environment.
+- MSCAN's own `mscan-app/start.sh` removes a root trailing slash from inherited HTTP(S) proxy URLs before starting Java, preserving credentials and `NO_PROXY`. The live backend was restarted with its original configuration and normalized proxy environment.
 - `ImportFailure` classifies nested failures using stable, credential-free error codes. It does not return raw JDBC SQL or proxy credentials.
 - `ResultArtifactInspector` adds pipeline-independent metadata for newly delivered TSV, quoted CSV, JSON, text, and binary files. It reads at most 64 KiB, samples at most three table rows, and bounds each metadata object to 1,536 bytes. These limits affect previews only; full artifacts remain unchanged and downloadable.
 - Receipts explicitly separate `generic_import` (sample file attachment) from native mapping status. Connector capabilities advertise generic results alongside native format contracts.
@@ -82,6 +82,8 @@ Test-harness note: repeating the test against the same sample correctly preserve
 
 ## Deployment and limits
 
-The canonical changes live in the web-bridge adapter and documentation. The installer copied them into the local MSCAN checkout; one narrow original-file fix was added in ProgramResultPanel.vue for synthetic-sample result display. Existing App.vue and sampleProgramResults hooks remain unchanged. The live agent and MSCAN frontend remained running. The rebuilt MSCAN backend is running with normalized proxy settings.
+The canonical host-side implementation now lives directly in the `mscan` and
+`mscan-app` repositories. BioAgent retains only the bridge protocol and launch
+configuration; it no longer carries duplicate Java or frontend host sources.
 
 MSCAN still uses the development login bypass. This follow-up does not establish production-login readiness, arbitrary native-format compatibility, or scientific pipeline correctness. Older successfully delivered receipts retain their original metadata; new deliveries receive generic previews. Real application screenshots are included above; no generated evidence pages are presented as application UI.

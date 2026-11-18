@@ -40,7 +40,7 @@ export interface ApiClient {
   approve(payload: Record<string, unknown>, signal: AbortSignal, onFrame: (frame: StreamFrame) => void): Promise<RunResult>;
 }
 
-export function createApiClient(fetchImpl: typeof fetch = (...args) => window.fetch(...args), baseUrl = '', transport: 'stream' | 'poll' = 'stream'): ApiClient {
+export function createApiClient(fetchImpl: typeof fetch = (...args) => window.fetch(...args), baseUrl = new URL(import.meta.env.BASE_URL, window.location.origin).toString(), transport: 'stream' | 'poll' = 'stream'): ApiClient {
   const resolve = (path: string) => {
     if (!baseUrl) return path;
     return new URL(path.replace(/^\//, ''), baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`).toString();

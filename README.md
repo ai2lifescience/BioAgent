@@ -97,6 +97,12 @@ relative to the process working directory, so launching it from `frontend/` or
 another directory creates a separate runtime tree.
 For Vite development, see the [frontend guide](frontend/README.md).
 
+The command above uses local mode without a login. For shared deployments,
+use `AGENT_AUTH_MODE=multiuser` for BioAgent username/password accounts, or
+configure CNCB single sign-on with `AGENT_AUTH_MODE=oauth` or `cas`.
+See [startup modes](docs/user_isolation.md#startup-modes) and
+[MSCAN setup](docs/mscan_web_bridge.md#first-time-setup).
+
 In local/trusted mode, WDL pipelines use miniwdl by default; isolated mode uses
 Cromwell/S3. For [Cromwell execution](docs/web_usage.md#wdl-execution-backend),
 [SOCKS proxy configuration](docs/web_usage.md#proxy-and-lan-access), or LAN access,

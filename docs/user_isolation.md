@@ -102,11 +102,16 @@ Docker daemon is unavailable. It never silently falls back to host execution.
 
 ## Startup modes
 
+Choose one of three sign-in modes: local access, BioAgent accounts, or CNCB SSO
+through direct CAS or the shared OAuth broker.
+
 | Startup/configuration | Account access | Tool execution |
 | --- | --- | --- |
 | `--host 127.0.0.1`, no explicit mode | Local owner, no login | Existing local executor |
 | `--host 0.0.0.0`, no explicit mode | Multi-user login and registration | Isolated Docker workers |
 | `AGENT_AUTH_MODE=multiuser`, loopback listener | Multi-user login and registration | Isolated Docker workers |
+| `AGENT_AUTH_MODE=cas` | CNCB CAS users; passwords and registration disabled | Isolated Docker workers |
+| `AGENT_AUTH_MODE=oauth` | Shared CNCB OAuth broker; passwords and registration disabled | Isolated Docker workers |
 | Explicit `AGENT_AUTH_MODE=local`, network listener | Rejected | None |
 
 Explicit settings are honored. If you previously exported `AGENT_AUTH_MODE=local`,
@@ -164,7 +169,8 @@ the workflow safety policy and session ownership.
 ## Registration and authentication
 
 `GET /auth/status` returns the mode, `registration_enabled`, and the current user
-or null. `POST /auth/register` accepts only the identity fields it needs:
+or null. In `multiuser` mode, `POST /auth/register` accepts only the identity
+fields it needs:
 
 ```json
 {"username": "alice", "password": "a-long-unique-password"}
@@ -202,6 +208,84 @@ Cookies expire after eight hours, use SameSite=Lax, and are stored as hashes in
 HTTPS public origins require Secure cookies. Browser-origin checks protect state
 changes, including registration and login. UI account changes clear old chat
 state across tabs.
+
+### Direct CNCB CAS login
+
+CAS mode makes BioAgent validate its own CNCB tickets. Use it when BioAgent is a
+separate CAS client and no shared OAuth broker is configured:
+
+```bash
+export AGENT_AUTH_MODE=cas
+export AGENT_PUBLIC_ORIGIN=https://agent.example.com
+export AGENT_CAS_LOGIN_URL=https://sso.cncb.ac.cn/login
+export AGENT_CAS_VALIDATE_URL=https://sso.cncb.ac.cn/p3/serviceValidate
+export AGENT_CAS_LOGOUT_URL=https://sso.cncb.ac.cn/logout
+export AGENT_CAS_SERVICE_URL=https://agent.example.com/auth/cas/callback
+export AGENT_CAS_LOGOUT_RETURN_URL=https://agent.example.com
+```
+
+Register the exact `AGENT_CAS_SERVICE_URL` in CAS. BioAgent validates each
+single-use service ticket itself and requires the same `userId` attribute MSCAN
+uses; this stable ID owns conversations, files and runs. The display username is
+synchronized from CAS, but authorization never relies on it. Password login and
+public registration are disabled in this mode.
+
+The callback uses a five-minute HttpOnly state cookie to prevent login CSRF. CAS
+service tickets are linked to hashed BioAgent login tokens so a back-channel CAS
+`logoutRequest` immediately revokes the matching session. Application logout
+first revokes BioAgent state, then enters CAS global logout.
+
+### Shared OAuth service for MSCAN and BioAgent
+
+For separate app sessions backed by one CNCB login service, run the standalone
+broker in `resource/mscan/oauth/`. Register its public `/cas/callback` with
+CNCB, then configure BioAgent:
+
+```bash
+export AGENT_AUTH_MODE=oauth
+export AGENT_PUBLIC_ORIGIN=https://agent.example.com
+export AGENT_OAUTH_SERVER_URL=https://auth.example.org
+export AGENT_OAUTH_CLIENT_ID=bioagent
+export AGENT_OAUTH_CLIENT_SECRET=YOUR_BIOAGENT_OAUTH_CLIENT_SECRET
+export AGENT_OAUTH_REDIRECT_URI=https://agent.example.com/auth/oauth/callback
+export AGENT_OAUTH_POST_LOGOUT_REDIRECT_URI=https://agent.example.com/
+export AGENT_OAUTH_PROXY=
+```
+
+### Development and production URLs
+
+Use a dedicated BioAgent environment file per deployment. The development
+profile uses the browser-visible IP address and port, for example
+`http://192.168.1.100:8008`. The production profile uses:
+
+```text
+AGENT_PUBLIC_ORIGIN=https://mscan.cncb.ac.cn
+AGENT_PUBLIC_BASE_URL=https://mscan.cncb.ac.cn/OneMicro/agent
+AGENT_OAUTH_SERVER_URL=http://127.0.0.1:8090
+AGENT_OAUTH_PUBLIC_URL=https://mscan.cncb.ac.cn/OneMicro/oauth
+AGENT_OAUTH_REDIRECT_URI=https://mscan.cncb.ac.cn/OneMicro/agent/auth/oauth/callback
+AGENT_OAUTH_POST_LOGOUT_REDIRECT_URI=https://mscan.cncb.ac.cn/OneMicro/agent/
+```
+
+Run BioAgent with `AGENT_ENV_FILE=.env.development` or
+`AGENT_ENV_FILE=.env.production`. Keep the OAuth broker URL and client secret
+outside tracked profile files. Set `AGENT_OAUTH_PUBLIC_URL` when browsers must
+use a different broker URL from the server-side address. Build the frontend with
+`VITE_PUBLIC_PATH=/OneMicro/agent/ npm --prefix frontend run build`. The reverse proxy must forward
+`/OneMicro/agent/` to BioAgent and remove that prefix before the request reaches
+the BioAgent listener.
+
+Add the exact BioAgent and MSCAN server callbacks to the broker's private client
+registry. The broker validates CNCB CAS tickets; each app exchanges an OAuth code
+server-to-server and creates its own application session. See
+[MSCAN setup](mscan_web_bridge.md#everyday-startup) for the broker and backend
+configuration. BioAgent logout revokes its local session first, then uses
+the broker's authenticated logout-request endpoint; the broker owns CNCB CAS
+logout and the registered final redirect. `AGENT_OAUTH_PROXY` is intentionally
+separate from `AGENT_PROXY`; leave it empty for a broker on localhost. The
+broker-issued `sid` is stored with each application login. Signed backchannel
+logout events revoke matching BioAgent and MSCAN sessions, so logout propagates
+across both applications.
 
 ## What is isolated
 

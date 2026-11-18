@@ -37,14 +37,41 @@ class Transfers:
         links = [r for r in self.connections() if r['site_id'] == site]
         if len(links) != 1:
             raise ValueError('Website must have exactly one explicitly linked account for this user.')
-        if operation not in {'search', 'pull', 'push'}:
+        if operation not in {'search', 'pull', 'push', 'result_sync'}:
             raise ValueError('Unsupported transfer operation.')
+        if operation == 'result_sync':
+            link = links[0]
+            last_seen = link.get('backend_last_seen')
+            capabilities = link.get('capabilities') or {}
+            operations = capabilities.get('operations') or []
+            if last_seen is None or time.time() - float(last_seen) > 30:
+                raise ValueError('MSCAN connector is offline; restart it before synchronizing results.')
+            if operation not in operations:
+                raise ValueError('MSCAN connector does not support result_sync; deploy and restart the updated MSCAN backend.')
+            sync = capabilities.get('cromwell_result_sync') or {}
+            if not isinstance(sync, dict) or sync.get('protocol_version') != 1:
+                raise ValueError('MSCAN connector has no compatible result_sync protocol; deploy and restart the updated backend.')
+            matching = [item for item in sync.get('importers') or []
+                        if isinstance(item, dict) and item.get('pipeline_key') == payload.get('pipeline_name')]
+            if not matching:
+                raise ValueError(f"MSCAN has no Cromwell importer for pipeline: {payload.get('pipeline_name')}")
+            if not any(item.get('contract_version') == 1 for item in matching):
+                raise ValueError('MSCAN pipeline importer has no compatible contract version.')
         payload = dict(payload)
         if operation == 'push':
             paths = payload.pop('paths', [])
             if not paths or len(paths) > 100:
                 raise ValueError('Select between 1 and 100 files to push.')
             payload['files'] = get_host().resolve_transfer_files(session, paths)
+        if operation == 'result_sync':
+            required = ('cromwell_task_id', 'pipeline_name', 'destination')
+            if any(not payload.get(key) for key in required):
+                raise ValueError('Result synchronization requires the Cromwell task, pipeline and destination.')
+            if not isinstance(payload['destination'], dict):
+                raise ValueError('Result synchronization destination must be an object.')
+            payload.setdefault('result_sync_protocol_version', 1)
+            payload.setdefault('pipeline_contract_version', 1)
+            payload.setdefault('execution_engine', 'cromwell')
         if len(json.dumps(payload)) > 512*1024: raise ValueError('Transfer manifest is too large.')
         identifier = uuid4().hex
         with self.bridge.db(True) as db:

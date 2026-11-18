@@ -14,7 +14,7 @@ from tools.function_tools.website.page import TableResult
 
 class WebsiteDemoConfigurationSmoke(unittest.TestCase):
     def setUp(self):
-        environment = patch.dict(os.environ, clear=True)
+        environment = patch.dict(os.environ, {"AGENT_WEBSITE_CLIENTS": "{}"}, clear=True)
         environment.start()
         self.addCleanup(environment.stop)
 

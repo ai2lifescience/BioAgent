@@ -10,6 +10,14 @@ LOCAL_USER_ID = "local"
 COOKIE_NAME = "bioagent_session"
 
 
+def login_return_path(value: str | None) -> str:
+    value = (value or "/").strip()
+    if (not value.startswith("/") or value.startswith("//") or "\\" in value
+            or any(ord(char) < 32 for char in value)):
+        return "/"
+    return value
+
+
 class AuthError(Exception):
     status = 401
 
@@ -35,6 +43,7 @@ class Principal:
     user_id: str
     username: str = ""
     login_id: str | None = None
+    sid: str | None = None
 
 
 _principal: ContextVar[Principal | None] = ContextVar("bioagent_principal", default=None)
@@ -46,8 +55,8 @@ def registration_enabled() -> bool:
 
 def auth_mode() -> str:
     mode = os.getenv("AGENT_AUTH_MODE", "local")
-    if mode not in {"local", "multiuser"}:
-        raise ValueError("AGENT_AUTH_MODE must be local or multiuser")
+    if mode not in {"local", "multiuser", "cas", "oauth"}:
+        raise ValueError("AGENT_AUTH_MODE must be local, multiuser, cas, or oauth")
     return mode
 
 

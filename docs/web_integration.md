@@ -118,14 +118,20 @@ or third-party cookies. Never put service or signing secrets in browser code.
 
 The [independent web bridge module](../web_bridge/README.md) owns the connector in `web_bridge/identity.py`,
 `web_bridge/conversations.py` and `web_bridge/http.py`. It has no MSCAN
-schema dependencies. [The MSCAN reference adapter](../web_bridge/adapters/mscan/README.md)
-adds a controller, backend connection/transfer/import services and frontend hooks.
-Its installer changes two existing frontend files and adds adapter-owned files;
-existing MSCAN backend source files remain unchanged.
+schema dependencies. [The MSCAN integration](../web_bridge/adapters/mscan/README.md)
+adds a controller, backend connection/transfer/import services and frontend hooks
+in the sibling host repositories.
+The runnable integration is tracked directly in the sibling `mscan` and
+`mscan-app` repositories: it changes two existing frontend files, adds
+adapter-owned frontend/backend files and configures the backend's local
+`application-druid.yml` profile. It does not import files from BioAgent at
+runtime.
 
 Configure `AGENT_WEBSITE_CLIENTS_FILE` with the absolute path to a private JSON
-file outside version control. Each site has a different random service secret,
-an agent-only signing secret, and exact allowed browser origins:
+file outside version control. When neither client environment variable is set,
+the server also checks `runtime/website-integration/clients.json` relative to its
+working directory. Each site has a different random service secret, an agent-only
+signing secret, and exact allowed browser origins:
 
 ```json
 {
@@ -159,10 +165,19 @@ An explicitly linked website is trusted to authenticate as that account. The
 embedded assistant uses its normal account permissions; use separate provisioned
 accounts when a website must not share an existing standalone account's data.
 
+A trusted SSO adapter can instead opt into `"identity_mode": "shared_user_id"`.
+Its backend must send an `identity` object whose `user_id` exactly matches the
+authenticated `subject`, plus a non-empty `username`. The bridge then creates or
+reuses the BioAgent account with that verified user ID, including across sites
+using the same mode. Existing `(site_id, external_subject)` mappings continue to
+win for upgrade compatibility. Use this only when the sites and BioAgent share
+one authoritative user-ID namespace; the MSCAN `run.py init` command configures
+this mode automatically.
+
 | Backend endpoint | Input and result |
 | --- | --- |
-| `POST /website/service/bootstrap` | `{subject, origin, scope_key?}` → single-use login `code` (60 seconds). Creates or restores the user's current website conversation. Default scope is `workspace`. |
-| `POST /website/service/ticket` | `{subject, origin}` → short-lived bridge `token`. The service resolves the internal account ID. |
+| `POST /website/service/bootstrap` | `{subject, identity?, origin, scope_key?}` → single-use login `code` (60 seconds). Creates or restores the user's current website conversation. Default scope is `workspace`. |
+| `POST /website/service/ticket` | `{subject, identity?, origin}` → short-lived bridge `token`. The service resolves the internal account ID. |
 | `POST /website/service/results` | `{subject, scope_key?}` → conversations, recent runs (up to 100 per conversation), original page context, answers and workspace file metadata. |
 | `POST /website/service/uploads` | `{subject, session_id, resource_id, revision, filename, size}` → resumable upload state. A repeated source/revision reuses a matching upload or completed file. |
 | `PATCH /website/service/uploads/{upload_id}` | Raw bytes, `Upload-Offset`, `Content-Length`, and `X-Website-Subject`. Uses the ordinary owned-upload quotas and chunk limit. |
@@ -193,7 +208,7 @@ open; completion events are a UI refresh hint, not the durable result store.
 Page callbacks need a live host browser; detached pipeline execution does not.
 
 On host logout, call `revoke` from the authenticated backend before invalidating
-the host session, and destroy the drawer. The MSCAN reference adapter hooks its
+the host session, and destroy the drawer. The MSCAN integration hooks its
 existing token invalidation service through an added Spring aspect and also
 subscribes to the frontend logout action. MSCAN's original login/security source
 files remain unchanged. Server revocation
@@ -459,7 +474,8 @@ running backend connector; no browser tab or transfer buttons are required.
 | `website_connections` | List linked sites, advertised destination fields/import formats and last backend contact. |
 | `website_search` | Find owned projects, samples and resources; use returned IDs to resolve ambiguity. |
 | `website_pull` | Copy a selected resource into the current owned session. |
-| `website_push` | Send selected files or owned pipeline outputs to a destination. `create_missing` requests destination creation where the adapter supports it. |
+| `website_push` | Send selected ordinary workspace files to a destination. `create_missing` requests destination creation where the adapter supports it. |
+| `website_result_sync` | Explicitly request native import of one succeeded remote Cromwell job. The caller supplies the session-owned BioAgent `job_id`; BioAgent derives its Cromwell task ID and pipeline name, and the receiving website reads Cromwell itself. |
 | `website_transfer_status` | Obtain the completed file path, receipt or failure. A queued/running response is not completion. |
 | `website_transfer_retry` | Retry a failed transfer using its existing command ID. |
 
@@ -483,11 +499,65 @@ retried after its reported error is resolved. The adapter must remain running to
 process commands. See the [module protocol](../web_bridge/README.md#independent-browser-and-transfer-modules)
 for implementation details.
 
-Pushing an owned pipeline results ZIP also includes available individual outputs
-from its job manifest, with result provenance for the adapter's native importers.
-Remote outputs can be transferred without first materializing them in the local
-workspace. A stored archive alone is not proof that native analysis records were
-populated.
+For MSCAN, a user-requested remote pipeline-result synchronization uses
+`website_result_sync`, not file transfer. BioAgent verifies that the selected
+job succeeded on remote Cromwell by loading it through the protected pipeline
+broker store, then queues its Cromwell task ID, pipeline name, destination,
+`result_sync_protocol_version=1`, `pipeline_contract_version=1` and
+`execution_engine=cromwell`. MSCAN verifies the destination owner, retrieves
+the workflow metadata and outputs through its own Cromwell configuration, then
+runs its native parser. Jobs are never synchronized automatically. Ordinary
+file pushes remain available for source files and reports. The two operations
+do not silently fall back to each other: MSCAN logs `operation=result_sync` for
+metadata-only synchronization and `operation=push` for file transfer.
+
+MSCAN advertises `cromwell_result_sync.protocol_version` and its importer
+contracts while polling. BioAgent rejects an offline connector, unsupported
+pipeline or incompatible contract version before queueing the command. The
+current MSCAN registry covers all 23 non-template BioAgent pipelines. Direct
+sync uses the workflow-derived task-row ID as its idempotency boundary and
+returns stable `error_code` and `retryable` fields on failure.
+
+The queued command payload has this shape:
+
+```json
+{
+  "cromwell_task_id": "11111111-1111-1111-1111-111111111111",
+  "pipeline_name": "metagenomic_read_quality_control",
+  "result_sync_protocol_version": 1,
+  "pipeline_contract_version": 1,
+  "execution_engine": "cromwell",
+  "destination": {
+    "project": "agent",
+    "sample": "demo",
+    "data_type": "meta"
+  },
+  "create_missing": true
+}
+```
+
+This is an internal backend command. Agent callers supply `job_id`; they must
+not supply or invent the Cromwell ID or pipeline name directly.
+
+The MSCAN connector advertises compatibility in its command poll:
+
+```json
+{
+  "operations": ["search", "pull", "push", "result_sync"],
+  "cromwell_result_sync": {
+    "protocol_version": 1,
+    "engine": "cromwell",
+    "importers": [
+      {
+        "pipeline_key": "metagenomic_read_quality_control",
+        "program": "qc",
+        "contract_version": 1,
+        "sample_types": ["meta", "shortReads"]
+      }
+    ]
+  }
+}
+```
 
 MSCAN now has a separate [analysis import module](../web_bridge/README.md#analysis-result-exchange)
 that reuses its native result parsers. Push receipts distinguish `file_delivery`
