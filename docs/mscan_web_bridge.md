@@ -219,7 +219,6 @@ Rebuild the JAR if you change backend code or configuration packaged in it.
 conda activate openaisdk
 cd resource/mscan/mscan
 
-export BIOAGENT_PORT=8008  # Vite uses this for its development API proxy.
 pnpm --ignore-workspace run dev
 ```
 
