@@ -16,8 +16,7 @@ Cromwell results.
 Page observation requires an open MSCAN tab. Backend transfers can continue
 after the tab closes.
 
-Already configured? Go to [Everyday startup](#everyday-startup). For a new
-installation, complete the setup below first.
+Already configured? Go to [Everyday startup](#everyday-startup).
 
 <a id="install-the-web-bridge-in-mscan"></a>
 
@@ -25,23 +24,13 @@ installation, complete the setup below first.
 
 ### 1. Prepare the applications
 
-Use the `mscan_agent_dev` branch in both MSCAN repositories for the embedded
-assistant and the Cromwell `result_sync` connector. In this workspace the
-checkouts are under `resource/mscan/`:
-
-```text
-BioAgent/
-└── resource/mscan/
-    ├── mscan/      # MSCAN Vue frontend
-    ├── mscan-app/  # MSCAN Java backend
-    └── oauth/      # CNCB OAuth broker, develop branch
-```
-
-In each MSCAN checkout, switch branches after saving any local changes:
+Keep the three checkouts under `resource/mscan/`. After saving local changes,
+switch to the integration branches from the BioAgent root.
 
 ```bash
 git -C resource/mscan/mscan switch mscan_agent_dev
 git -C resource/mscan/mscan-app switch mscan_agent_dev
+git -C resource/mscan/oauth switch develop
 ```
 
 Use the `openaisdk` environment with the BioAgent Python dependencies, Java 17,
@@ -49,169 +38,121 @@ Maven, Node.js and pnpm. MSCAN also needs its database, Redis and object storage
 
 ### 2. Configure the connection
 
-The OAuth example below uses `localhost`. Include the exact MSCAN origin users
-open in their browser when configuring the connector.
-
 ```bash
 conda activate openaisdk
-python web_bridge/adapters/mscan/run.py init \
-  --origins http://localhost:8848,http://127.0.0.1:8848,http://192.168.75.56:8848
+python web_bridge/adapters/mscan/run.py init
 ```
 
-This configures BioAgent's private
-`runtime/website-integration/clients.json`, including the service/signing
-credentials, exact allowed MSCAN origins and shared-SSO identity mode.
+`init` writes `runtime/website-integration/clients.json`, configures shared
+SSO, and allows MSCAN at `http://localhost:8848` and `http://127.0.0.1:8848`.
+To use other origins, pass the full comma-separated list to `init --origins`
+and set `BIOAGENT_ORIGINS` in the MSCAN backend to match. Rerunning `init`
+preserves the existing service and signing secrets.
 
-The MSCAN backend derives its BioAgent service URL and browser URL from the
-`BIOAGENT_PORT` exported in Terminal 2. Match the site ID, secret, and allowed
-origins to the BioAgent client entry only when overriding their defaults; keep
-real credentials in private configuration.
-
-In the same active Spring profile, configure MSCAN's `oauth.server-url`,
-`oauth.client-secret`, `oauth.redirect-uri` and `oauth.post-logout-redirect-uri`
-to match its broker registration. The development callback uses
-`/cncb/oauth/callback` on the MSCAN backend and follows `MSCAN_PORT`.
+Terminal 2 loads `BIOAGENT_SECRET` from the `mscan.secret` value in that file.
+Use the same `OAUTH_MSCAN_CLIENT_SECRET` in Terminals 0 and 2.
 
 ### 3. Install dependencies and build
 
-If pnpm reports `packages field missing or empty`, add `packages: ['.']` at the
-top level of `resource/mscan/mscan/pnpm-workspace.yaml` and keep its existing
-`allowBuilds` settings. Then run these commands from the BioAgent root:
+Run these commands from the BioAgent root.
 
 ```bash
 npm --prefix frontend ci
-pnpm --dir resource/mscan/mscan install --frozen-lockfile
+pnpm --dir resource/mscan/mscan --ignore-workspace install --frozen-lockfile
 npm --prefix frontend run build
 mvn -f resource/mscan/mscan-app/pom.xml clean package -DskipTests
 ```
 
-For LAN deployments, build the agent's Docker worker image as described in
-[user isolation](user_isolation.md):
+If you use isolated workers, [build the worker image](user_isolation.md#build-the-worker-image).
+
+For a production MSCAN frontend build, run the following command.
 
 ```bash
-docker build -f isolation/deploy/Dockerfile -t bioagent-worker:local .
-```
-
-For a production MSCAN frontend deployment, also build its static files and
-deploy the generated output through your existing hosting setup:
-
-```bash
-pnpm --dir resource/mscan/mscan run build:pro
+pnpm --dir resource/mscan/mscan --ignore-workspace run build:pro
 ```
 
 ## Everyday startup
 
-The MSCAN frontend uses `8848`. BioAgent and the OAuth broker automatically
-load their repository-root `.env` files for stable, non-secret settings. The
-files are ignored by Git. Explicit `export` values take precedence over `.env`.
+BioAgent uses port `8000`. The broker uses `8090`, the MSCAN backend uses
+`8080`, and the MSCAN frontend uses `8848`.
 
-Only ports and secrets need to be exported before starting a service. To move a
-service, change only `BIOAGENT_PORT`, `MSCAN_PORT`, or `OAUTH_PORT`; BioAgent,
-the OAuth broker, MSCAN, and the Vite proxy derive their dependent local URLs
-from those values. Export only the settings listed in the terminal where that
-service starts.
-
-After [first-time setup](#install-the-web-bridge-in-mscan), run each application
-in a separate terminal. Paths are relative to the BioAgent repository root.
-Stop the MSCAN backend before rebuilding its JAR or starting another instance
-on the same port.
+After [first-time setup](#install-the-web-bridge-in-mscan), start each block in
+a separate terminal from the BioAgent root.
+Replace the credential placeholders with your private values. For BioAgent
+and the broker, shell exports take precedence over values in `.env` files.
 
 ### Terminal 0 — CNCB OAuth service
 
-Follow `resource/mscan/oauth/README.md` to create the `cncb-oauth` environment
-and configure the broker. Register its public `/cas/callback` with CNCB CAS,
-then register each application's exact callback and logout URLs in the broker.
-Use a separate client secret for BioAgent and MSCAN. Before starting the
-broker, its repository-root `.env` is loaded automatically. Export only
-its ports, database URL, and client secrets:
+Use `resource/mscan/oauth/README.md` to create the `cncb-oauth` environment
+and register the broker's public `/cas/callback` with CNCB CAS. Use separate
+client secrets for BioAgent and MSCAN. URL-encode the database password in
+`OAUTH_DB`.
 
 ```bash
 cd resource/mscan/oauth
 conda activate cncb-oauth
 
-# OAuth derives registered callback URLs from all three ports.
-export BIOAGENT_PORT=8008
-export MSCAN_PORT=8080
-export OAUTH_PORT=8090
-export BIOAGENT_OAUTH_CLIENT_SECRET="REPLACE_BIOAGENT_OAUTH_CLIENT_SECRET"
-export OAUTH_MSCAN_CLIENT_SECRET="REPLACE_WITH_THE_MSCAN_OAUTH_CLIENT_SECRET"
-export OAUTH_DB="mysql://REPLACE_DB_USER:REPLACE_DB_PASSWORD@REPLACE_DB_HOST:3306/cncb_oauth?charset=utf8mb4"
-```
+export BIOAGENT_PORT=8000
+export OAUTH_BIND_HOST=0.0.0.0
 
-The OAuth `.env` supplies its bind host, public host, and CAS endpoints.
+export BIOAGENT_OAUTH_CLIENT_SECRET="YOUR_BIOAGENT_OAUTH_SECRET"
+export OAUTH_MSCAN_CLIENT_SECRET="YOUR_MSCAN_OAUTH_SECRET"
+export OAUTH_DB="mysql://YOUR_DB_USER:YOUR_DB_PASSWORD@YOUR_DB_HOST:3306/cncb_oauth?charset=utf8mb4"
 
-Optional: require CNCB sign-in even if the supplied development configuration
-enables the bypass.
-
-```bash
+export CNCB_CAS_LOGIN_URL=https://sso.cncb.ac.cn/login
+export CNCB_CAS_VALIDATE_URL=https://sso.cncb.ac.cn/serviceValidate
+export CNCB_CAS_LOGOUT_URL=https://sso.cncb.ac.cn/logout
+export OAUTH_FLEXIBLE_REDIRECTS=true
 export OAUTH_AGENT_LOGIN_BYPASS=false
-```
 
-Start the broker:
-
-```bash
 python -m oauth_service.server
 ```
 
 ### Terminal 1 — BioAgent
 
-#### Runtime and MSCAN connector
-
-Before starting BioAgent, its repository-root `.env` is loaded automatically.
-Export only `BIOAGENT_PORT`, `OAUTH_PORT`, and the model, OAuth, and storage
-secrets:
+Use the same `BIOAGENT_OAUTH_CLIENT_SECRET` as Terminal 0.
 
 ```bash
 conda activate openaisdk
 
-export BIOAGENT_PORT=8008
-export OAUTH_PORT=8090
 export OPENROUTER_API_KEY="YOUR_OPENROUTER_API_KEY"
+export AGENT_PROXY=socks5h://127.0.0.1:10801
+
+export AGENT_AUTH_MODE=oauth
+export BIOAGENT_OAUTH_CLIENT_SECRET="YOUR_BIOAGENT_OAUTH_SECRET"
+export AGENT_OAUTH_FLEXIBLE_HOST=true
+
+export CROMWELL_URL=http://192.168.164.46:39000
+export CROMWELL_INPUT_STORAGE_ENDPOINT=http://192.168.164.46:7070
+export CROMWELL_INPUT_STORAGE_URI=s3://cncb-web-server-mic/files
+export CROMWELL_INPUT_STORAGE_REGION=us-east-1
+export CROMWELL_INPUT_STORAGE_MOUNT_PREFIX=/data/versitygw/data/s3
 export CROMWELL_INPUT_STORAGE_ACCESS_KEY="YOUR_STORAGE_ACCESS_KEY"
 export CROMWELL_INPUT_STORAGE_SECRET_KEY="YOUR_STORAGE_SECRET_KEY"
-export BIOAGENT_OAUTH_CLIENT_SECRET="REPLACE_BIOAGENT_OAUTH_CLIENT_SECRET"
-```
+export CROMWELL_OUTPUT_STORAGE_URI=s3://cncb-web-server-mic/cromwell/outputs
+export CROMWELL_OUTPUT_STORAGE_MOUNT_PREFIX=/data/versitygw/data/s3/cncb-web-server-mic/cromwell/outputs
+export CROMWELL_OUTPUT_STORAGE_EXECUTION_PATH_PREFIXES=/data/zhaomh/cromwell-workspace/cromwell-executions,/cromwell-share/cloud_cromwell/cromwell-executions
 
-The `.env` file contains the stable proxy, Cromwell endpoint and path settings.
-
-#### Authentication
-
-Choose OAuth or CAS for BioAgent SSO. The MSCAN backend uses its own OAuth
-client configuration. For standalone access without SSO, see
-[BioAgent web usage](web_usage.md#proxy-and-lan-access).
-
-##### Shared CNCB OAuth with MSCAN
-
-Use this mode when the browser, BioAgent, MSCAN and the OAuth broker run on the
-same machine and both apps sign in through the shared CNCB broker.
-
-The required BioAgent settings are listed under Terminal 1; MSCAN's listener
-and OAuth client settings are listed under Terminal 2.
-
-#### Start BioAgent
-
-Start BioAgent for the localhost OAuth example:
-
-```bash
-python -B -m interfaces.web --host "$BIOAGENT_BIND_HOST" --port "$BIOAGENT_PORT"
+python -B -m interfaces.web --host 0.0.0.0 --port 8000
 ```
 
 ### Terminal 2 — MSCAN backend
 
 ```bash
 conda activate openaisdk
+export BIOAGENT_SECRET="$(
+  python -c 'import json; print(json.load(open("runtime/website-integration/clients.json"))["mscan"]["secret"])'
+)"
 cd resource/mscan/mscan-app
 
-export BIOAGENT_PORT=8008  # Must match Terminal 1.
+export BIOAGENT_PORT=8000  # Must match Terminal 1.
+export OAUTH_PORT=8090
 export MSCAN_PORT=8080
-export OAUTH_PORT=8090     # Must match Terminal 0.
-export OAUTH_MSCAN_CLIENT_SECRET="REPLACE_WITH_THE_MSCAN_OAUTH_CLIENT_SECRET"
+export OAUTH_MSCAN_CLIENT_SECRET="YOUR_MSCAN_OAUTH_SECRET"
 
 java -jar mscan-admin/target/mscan-admin.jar \
   --spring.profiles.active=druid
 ```
-
-Rebuild the JAR if you change backend code or configuration packaged in it.
 
 ### Terminal 3 — MSCAN frontend
 
@@ -223,7 +164,8 @@ pnpm --ignore-workspace run dev
 ```
 
 Open MSCAN at `http://localhost:8848`, sign in, select a sample and open
-**Ask assistant**. Enable that origin in both applications.
+**Ask assistant**. Confirm the assistant opens and MSCAN logout ends the
+embedded session.
 
 ## Unified identity and login
 
@@ -250,11 +192,9 @@ for the ownership and logout rules.
 
 > “Upload these files to sample B in project C. Create the destination if it is missing.”
 
-Use the **BioAgent pipeline job ID** with `website_result_sync`. BioAgent uses
-it to look up the completed job in the current session and sends the recorded
-Cromwell task ID and pipeline key to MSCAN. MSCAN retrieves the result from
-Cromwell and reports `state: imported` when it finishes. This path produces no
-file receipt.
+Use the **BioAgent pipeline job ID** from the current session with
+`website_result_sync`. MSCAN retrieves the result directly from Cromwell.
+Check `website_transfer_status(transfer_id)` for `state: imported`.
 
 Use `website_push` to copy files. They appear in **Download files** on the
 sample toolbar. Check `file_delivery` for delivery and `native_imports` for any
@@ -276,44 +216,21 @@ native records MSCAN was able to create. See the
 | Files arrived but native results are missing | Inspect `native_imports` for missing output roles, incompatible sample types, unsupported formats or parser errors. Resolve the reported cause before retrying a failed transfer. |
 | Native results exist but the page is stale | Reload the selected sample or result view after confirming the import status. |
 
-For agent login, Docker workers and storage limits, see [user isolation](user_isolation.md).
-For generic API, origin and transfer contracts, see [web integration](web_integration.md).
-
 ## After code or configuration changes
 
 | Change | Required action |
 | --- | --- |
-| MSCAN adapter source | Apply the change directly in the tracked `mscan` or `mscan-app` integration files, rebuild the affected project and restart it. |
+| MSCAN frontend source | Reload the Vite development page or rebuild the production frontend. |
+| MSCAN backend source or packaged configuration | Stop the backend, rebuild its JAR and restart it. |
 | Agent frontend or embed SDK | Run `npm --prefix frontend run build`, then reload the browser. |
 | Agent Python code | Restart BioAgent. Rebuild the Docker worker image when worker or tool code changes. |
 | Dependencies or lockfiles | Reinstall the affected dependencies and rebuild that application/image. |
-| Client origins, URLs or service credentials | Update both configurations. Rebuild the MSCAN JAR if it contains the changed settings, then restart both services. |
-
-Keep the private configuration and account databases across restarts. Rerun
-`init` when the set of allowed MSCAN origins changes. It preserves existing
-service and signing secrets.
+| Origins, URLs or credentials set at startup | Update the matching settings and restart the affected services. |
 
 ## Technical reference
 
-BioAgent's generic bridge handles identity, page context and transfer commands.
-MSCAN owns the mapping to projects and samples, file receipts and native result
-imports. The agent tools live under `tools/function_tools/website/`.
-
-### Flow chart
-
-```mermaid
-flowchart TD
-    Login[MSCAN login] --> Account[Verified BioAgent account]
-    Page[Open MSCAN page] -->|Page context| Agent[BioAgent conversation]
-    Account --> Agent
-    Agent --> Connector[MSCAN connector checks ownership]
-    Connector -->|Search or pull| Workspace[Find files or copy them to the workspace]
-    Connector -->|File push| Files[Attach files to an MSCAN sample]
-    Connector -->|Result sync| Cromwell[Read the completed result from Cromwell]
-    Cromwell --> Import[Import native MSCAN records]
-    Files --> Status[Transfer status]
-    Import --> Status
-```
+The agent tools live under `tools/function_tools/website/`. The generic API,
+origin and transfer contracts are documented in [web integration](web_integration.md).
 
 ### MSCAN integration paths
 
@@ -329,18 +246,14 @@ Paths below are relative to `resource/mscan/`.
 
 ### Verify the direct integration
 
-Build the directly integrated projects and run the adapter checks:
+After packaging the MSCAN backend, run the checks from the BioAgent root.
 
 ```bash
-pnpm --dir resource/mscan/mscan type:check
-mvn -f resource/mscan/mscan-app/pom.xml clean package -DskipTests
+pnpm --dir resource/mscan/mscan --ignore-workspace run type:check
 python -B -m web_bridge.tests.check_mscan_java --root resource/mscan/mscan-app
 python -B -m web_bridge.tests.check_mscan_logout \
   --mscan-root resource/mscan/mscan-app
 ```
 
-These cover frontend typing, backend compilation, native resource ownership,
-result importing, QC formats, scoped download security, bounded transfer
-concurrency and logout revocation. They do not run analysis pipelines.
-For browser acceptance checks and their requirements, see
-[Validate](../web_bridge/adapters/mscan/README.md#validate).
+For live browser checks and their prerequisites, see
+[MSCAN adapter validation](../web_bridge/adapters/mscan/README.md#validate).
