@@ -83,7 +83,24 @@ def _load_environment_file(path: Path) -> None:
         if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
             value = value[1:-1]
         value = value.replace("${PWD}", root).replace("$PWD", root)
-        os.environ[name] = value
+        os.environ.setdefault(name, os.path.expandvars(value))
+
+
+def _configure_development_urls(port: int) -> None:
+    """Derive local OAuth URLs after .env and explicit exports are available."""
+    os.environ["BIOAGENT_PORT"] = str(port)
+    public_host = os.getenv("BIOAGENT_PUBLIC_HOST", "localhost").strip()
+    public_scheme = os.getenv("BIOAGENT_PUBLIC_SCHEME", "http").strip()
+    oauth_host = os.getenv("OAUTH_PUBLIC_HOST", "localhost").strip()
+    oauth_scheme = os.getenv("OAUTH_PUBLIC_SCHEME", "http").strip()
+    oauth_port = os.getenv("OAUTH_PORT", "8090").strip()
+    public_base = f"{public_scheme}://{public_host}:{port}"
+    oauth_base = f"{oauth_scheme}://{oauth_host}:{oauth_port}"
+    os.environ.setdefault("AGENT_PUBLIC_ORIGIN", public_base)
+    os.environ.setdefault("AGENT_PUBLIC_BASE_URL", public_base)
+    os.environ.setdefault("AGENT_OAUTH_SERVER_URL", oauth_base)
+    os.environ.setdefault("AGENT_OAUTH_REDIRECT_URI", public_base + "/auth/oauth/callback")
+    os.environ.setdefault("AGENT_OAUTH_POST_LOGOUT_REDIRECT_URI", public_base + "/")
 
 
 def _frontend_asset_path(relative_path: str) -> Path | None:
@@ -970,8 +987,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Run the Pipeline2Agent HTTP web UI.")
     from auth.oauth import flexible_host
     parser.add_argument("--host", default="0.0.0.0" if auth_mode() == "oauth" and flexible_host() else "127.0.0.1")
-    parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--port", type=int, default=int(os.getenv("BIOAGENT_PORT", "8000")))
     args = parser.parse_args()
+    _configure_development_urls(args.port)
     run_server(host=args.host, port=args.port)
     return 0
 

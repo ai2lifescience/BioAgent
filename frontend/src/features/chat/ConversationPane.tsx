@@ -11,7 +11,7 @@ import { useRunProgress } from '../messages/useRunProgress';
 import { LineIcon } from '../../components/icons';
 
 export type ConversationStatus = 'idle' | 'queued' | 'running' | 'cancelling' | 'cancelled' | 'pending_approval' | 'uploading' | 'reconnecting' | 'succeeded' | 'failed';
-const api = createApiClient(undefined, '', 'poll');
+const api = createApiClient(undefined, undefined, 'poll');
 const nowIso = () => new Date().toISOString();
 function workspaceFiles(value: unknown): WorkspaceFile[] {
   return Array.isArray(value) ? value.filter(item => item && typeof item === 'object') as WorkspaceFile[] : [];

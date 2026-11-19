@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { RunResult, WorkspaceFile } from '../../types';
 import { workspacePathOf } from '../../types';
 import { StructureViewer } from './StructureViewer';
+import { applicationUrl } from '../../applicationUrl';
 
 type RecordValue = Record<string, unknown>;
 const valueRecord = (value: unknown): RecordValue => (value && typeof value === 'object' ? value as RecordValue : {});
@@ -14,7 +15,7 @@ const artifactPath = (value: unknown): string => typeof value === 'string' ? val
 function fileUrl(sessionId: string, path: string, viewer?: string): string {
   if (!pathIsSafe(path)) return '#';
   const query = new URLSearchParams({ session_id: sessionId, path }); if (viewer) query.set('viewer', viewer);
-  return `/workspace/file?${query.toString()}`;
+  return applicationUrl(`workspace/file?${query.toString()}`);
 }
 
 function evidenceRecords(result: RunResult): RecordValue[] {
