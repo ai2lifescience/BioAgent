@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+  const backendUrl = env.VITE_BACKEND_URL
+    || `http://127.0.0.1:${process.env.BIOAGENT_PORT || '8000'}`;
 
   return {
     plugins: [react()],
@@ -15,7 +17,7 @@ export default defineConfig(({ mode }) => {
       proxy: Object.fromEntries([
         '/auth', '/config', '/health', '/sessions', '/workspace', '/run_stream',
         '/approve_stream', '/runs', '/knowledge', '/website', '/static',
-      ].map(path => [path, { target: env.VITE_BACKEND_URL || 'http://127.0.0.1:8000', changeOrigin: false }])),
+      ].map(path => [path, { target: backendUrl, changeOrigin: false }])),
     },
     build: {
       // `dist` is disposable build output. The Python server serves it, while

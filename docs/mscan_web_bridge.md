@@ -62,31 +62,15 @@ This configures BioAgent's private
 `runtime/website-integration/clients.json`, including the service/signing
 credentials, exact allowed MSCAN origins and shared-SSO identity mode.
 
-Configure the matching backend values directly in
-`resource/mscan/mscan-app/mscan-admin/src/main/resources/application-druid.yml`:
-
-```yaml
-bioagent:
-  enabled: true
-  url: http://localhost:8000
-  public-url: http://localhost:8000
-  site-id: mscan
-  secret: "MATCH_THE_MSCAN_SECRET_IN_CLIENTS_JSON"
-  origins: "http://localhost:8848,http://127.0.0.1:8848,http://192.168.75.56:8848"
-  results-root: ./data/agent-results
-```
-
-`url` must be reachable by the Java backend. `public-url` must be reachable by
-the browser. If BioAgent sets `AGENT_PUBLIC_ORIGIN`, the browser URL must use
-that origin. Use `localhost` for both URLs in this example because BioAgent
-checks the request host on Java's calls as well. Match the site ID, secret and
-allowed origins to the BioAgent client entry. Keep real credentials in private
-configuration.
+The MSCAN backend derives its BioAgent service URL and browser URL from the
+`BIOAGENT_PORT` exported in Terminal 2. Match the site ID, secret, and allowed
+origins to the BioAgent client entry only when overriding their defaults; keep
+real credentials in private configuration.
 
 In the same active Spring profile, configure MSCAN's `oauth.server-url`,
 `oauth.client-secret`, `oauth.redirect-uri` and `oauth.post-logout-redirect-uri`
 to match its broker registration. The development callback uses
-`/cncb/oauth/callback` on the MSCAN backend, port `8080`.
+`/cncb/oauth/callback` on the MSCAN backend and follows `MSCAN_PORT`.
 
 ### 3. Install dependencies and build
 
@@ -117,8 +101,15 @@ pnpm --dir resource/mscan/mscan run build:pro
 
 ## Everyday startup
 
-BioAgent uses port `8000`. The broker uses `8090`, the MSCAN backend uses
-`8080`, and the MSCAN frontend uses `8848`.
+The MSCAN frontend uses `8848`. BioAgent and the OAuth broker automatically
+load their repository-root `.env` files for stable, non-secret settings. The
+files are ignored by Git. Explicit `export` values take precedence over `.env`.
+
+Only ports and secrets need to be exported before starting a service. To move a
+service, change only `BIOAGENT_PORT`, `MSCAN_PORT`, or `OAUTH_PORT`; BioAgent,
+the OAuth broker, MSCAN, and the Vite proxy derive their dependent local URLs
+from those values. Export only the settings listed in the terminal where that
+service starts.
 
 After [first-time setup](#install-the-web-bridge-in-mscan), run each application
 in a separate terminal. Paths are relative to the BioAgent repository root.
@@ -131,16 +122,23 @@ Follow `resource/mscan/oauth/README.md` to create the `cncb-oauth` environment
 and configure the broker. Register its public `/cas/callback` with CNCB CAS,
 then register each application's exact callback and logout URLs in the broker.
 Use a separate client secret for BioAgent and MSCAN. Before starting the
-broker, set its required `OAUTH_...` variables with `export`. Do not create or
-use `.env` or `OAUTH_ENV_FILE`.
+broker, its repository-root `.env` is loaded automatically. Export only
+its ports, database URL, and client secrets:
 
 ```bash
 cd resource/mscan/oauth
 conda activate cncb-oauth
+
+# OAuth derives registered callback URLs from all three ports.
+export BIOAGENT_PORT=8008
+export MSCAN_PORT=8080
+export OAUTH_PORT=8090
+export BIOAGENT_OAUTH_CLIENT_SECRET="REPLACE_BIOAGENT_OAUTH_CLIENT_SECRET"
+export OAUTH_MSCAN_CLIENT_SECRET="REPLACE_WITH_THE_MSCAN_OAUTH_CLIENT_SECRET"
+export OAUTH_DB="mysql://REPLACE_DB_USER:REPLACE_DB_PASSWORD@REPLACE_DB_HOST:3306/cncb_oauth?charset=utf8mb4"
 ```
 
-For this localhost example, set `OAUTH_PUBLIC_ORIGIN` in the broker config to
-`http://localhost:8090`.
+The OAuth `.env` supplies its bind host, public host, and CAS endpoints.
 
 Optional: require CNCB sign-in even if the supplied development configuration
 enables the bypass.
@@ -159,34 +157,22 @@ python -m oauth_service.server
 
 #### Runtime and MSCAN connector
 
-Before starting BioAgent, set its required `AGENT_...` variables with
-`export`. Do not create or use `.env` or `AGENT_ENV_FILE`.
+Before starting BioAgent, its repository-root `.env` is loaded automatically.
+Export only `BIOAGENT_PORT`, `OAUTH_PORT`, and the model, OAuth, and storage
+secrets:
 
 ```bash
 conda activate openaisdk
-```
 
-Set the following values for the deployment:
-
-```bash
+export BIOAGENT_PORT=8008
+export OAUTH_PORT=8090
 export OPENROUTER_API_KEY="YOUR_OPENROUTER_API_KEY"
-
-export AGENT_PROXY=socks5h://127.0.0.1:10801
-
-export CROMWELL_URL=http://192.168.164.46:39000
-export CROMWELL_INPUT_STORAGE_ENDPOINT=http://192.168.164.46:7070
-export CROMWELL_INPUT_STORAGE_URI=s3://cncb-web-server-mic/files
-export CROMWELL_INPUT_STORAGE_REGION=us-east-1
-export CROMWELL_INPUT_STORAGE_MOUNT_PREFIX=/data/versitygw/data/s3
 export CROMWELL_INPUT_STORAGE_ACCESS_KEY="YOUR_STORAGE_ACCESS_KEY"
 export CROMWELL_INPUT_STORAGE_SECRET_KEY="YOUR_STORAGE_SECRET_KEY"
-export CROMWELL_OUTPUT_STORAGE_URI=s3://cncb-web-server-mic/cromwell/outputs
-export CROMWELL_OUTPUT_STORAGE_MOUNT_PREFIX=/data/versitygw/data/s3/cncb-web-server-mic/cromwell/outputs
-export CROMWELL_OUTPUT_STORAGE_EXECUTION_PATH_PREFIXES=/data/zhaomh/cromwell-workspace/cromwell-executions,/cromwell-share/cloud_cromwell/cromwell-executions
-
-unset AGENT_WEBSITE_CLIENTS
-export AGENT_WEBSITE_CLIENTS_FILE="$PWD/runtime/website-integration/clients.json"
+export BIOAGENT_OAUTH_CLIENT_SECRET="REPLACE_BIOAGENT_OAUTH_CLIENT_SECRET"
 ```
+
+The `.env` file contains the stable proxy, Cromwell endpoint and path settings.
 
 #### Authentication
 
@@ -199,46 +185,15 @@ client configuration. For standalone access without SSO, see
 Use this mode when the browser, BioAgent, MSCAN and the OAuth broker run on the
 same machine and both apps sign in through the shared CNCB broker.
 
-```bash
-export AGENT_AUTH_MODE=oauth
-export AGENT_PUBLIC_ORIGIN=http://localhost:8000
-export AGENT_PUBLIC_BASE_URL=http://localhost:8000
-export AGENT_OAUTH_SERVER_URL=http://127.0.0.1:8090
-export AGENT_OAUTH_CLIENT_ID=bioagent
-export AGENT_OAUTH_CLIENT_SECRET="REPLACE_WITH_THE_BIOAGENT_CLIENT_SECRET"
-export AGENT_OAUTH_REDIRECT_URI=http://localhost:8000/auth/oauth/callback
-export AGENT_OAUTH_POST_LOGOUT_REDIRECT_URI=http://localhost:8000/
-export AGENT_OAUTH_PROXY=
-export AGENT_WEBSITE_LOGIN_TTL_SECONDS=120
-```
-
-Use the broker's private `bioagent` client secret. Register the callback and
-post-logout URLs above, plus `http://localhost:8000/auth/oauth/backchannel-logout`
-for backchannel logout. An empty `AGENT_OAUTH_PROXY` sends broker requests
-directly to localhost. The website login TTL is 120 seconds. Open BioAgent at
-`http://localhost:8000` to match the configured browser origin.
-
-##### Direct CNCB CAS
-
-```bash
-export AGENT_AUTH_MODE=cas
-export AGENT_PUBLIC_ORIGIN=https://agent.example.com
-export AGENT_CAS_LOGIN_URL=https://sso.cncb.ac.cn/login
-export AGENT_CAS_VALIDATE_URL=https://sso.cncb.ac.cn/p3/serviceValidate
-export AGENT_CAS_LOGOUT_URL=https://sso.cncb.ac.cn/logout
-export AGENT_CAS_SERVICE_URL=https://agent.example.com/auth/cas/callback
-export AGENT_CAS_LOGOUT_RETURN_URL=https://agent.example.com
-```
-
-Replace `agent.example.com` with the deployed HTTPS address and register the
-exact callback URL with CNCB CAS. See [direct CAS setup](user_isolation.md#direct-cncb-cas-login).
+The required BioAgent settings are listed under Terminal 1; MSCAN's listener
+and OAuth client settings are listed under Terminal 2.
 
 #### Start BioAgent
 
 Start BioAgent for the localhost OAuth example:
 
 ```bash
-python -B -m interfaces.web --host 127.0.0.1 --port 8000
+python -B -m interfaces.web --host "$BIOAGENT_BIND_HOST" --port "$BIOAGENT_PORT"
 ```
 
 ### Terminal 2 — MSCAN backend
@@ -246,6 +201,11 @@ python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ```bash
 conda activate openaisdk
 cd resource/mscan/mscan-app
+
+export BIOAGENT_PORT=8008  # Must match Terminal 1.
+export MSCAN_PORT=8080
+export OAUTH_PORT=8090     # Must match Terminal 0.
+export OAUTH_MSCAN_CLIENT_SECRET="REPLACE_WITH_THE_MSCAN_OAUTH_CLIENT_SECRET"
 
 java -jar mscan-admin/target/mscan-admin.jar \
   --spring.profiles.active=druid
@@ -259,6 +219,7 @@ Rebuild the JAR if you change backend code or configuration packaged in it.
 conda activate openaisdk
 cd resource/mscan/mscan
 
+export BIOAGENT_PORT=8008  # Vite uses this for its development API proxy.
 pnpm --ignore-workspace run dev
 ```
 

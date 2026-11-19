@@ -268,10 +268,17 @@ export AGENT_OAUTH_PROXY=
 
 ### Development and production URLs
 
-Set the deployment's `AGENT_...` values in the shell that starts BioAgent with
-`export`; do not create or use `.env`, `.env.*`, or `AGENT_ENV_FILE`. In
-development, `AGENT_PUBLIC_ORIGIN` uses the browser-visible IP address and
-port, for example `http://192.168.1.100:8008`. Production uses:
+BioAgent automatically loads its repository-root `.env` for stable,
+non-secret settings. Export ports and secrets in the shell that starts
+BioAgent; explicit exports take precedence over `.env`. In development,
+`AGENT_PUBLIC_ORIGIN` is derived from the browser-visible host and
+`BIOAGENT_PORT`, for example `http://192.168.1.100:8008`. Production uses:
+
+For the combined local BioAgent, MSCAN, and OAuth setup, use the shared export
+block in [MSCAN bridge startup](mscan_web_bridge.md#everyday-startup). Change
+only `BIOAGENT_PORT` and execute the complete block before starting each
+related process. It derives the `AGENT_PUBLIC_*` and `AGENT_OAUTH_*` URLs, so
+do not edit their port values separately.
 
 ```bash
 export AGENT_PUBLIC_ORIGIN=https://mscan.cncb.ac.cn
