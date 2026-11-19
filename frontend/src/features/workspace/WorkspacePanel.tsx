@@ -3,6 +3,7 @@ import type { DragEvent, KeyboardEvent } from 'react';
 import type { WorkspaceFile } from '../../types';
 import { workspacePathOf } from '../../types';
 import { LineIcon } from '../../components/icons';
+import { applicationUrl } from '../../applicationUrl';
 
 export interface WorkspacePanelProps {
   sessionId: string;
@@ -28,7 +29,9 @@ function bytes(value: number | string | undefined) {
   return `${(size / (1024 ** index)).toFixed(index ? 1 : 0)} ${units[index]}`;
 }
 function nameOf(file: WorkspaceFile, path: string) { return file.name || path.split('/').pop() || path; }
-function fileUrl(sessionId: string, path: string) { return `/workspace/file?session_id=${encodeURIComponent(sessionId)}&path=${encodeURIComponent(path)}`; }
+function fileUrl(sessionId: string, path: string) {
+  return applicationUrl(`workspace/file?session_id=${encodeURIComponent(sessionId)}&path=${encodeURIComponent(path)}`);
+}
 
 export function WorkspacePanel({
   sessionId, files, maxFileBytes, search, filter, busy = false, uploading = false, mobileOpen = false, onClose,
@@ -65,7 +68,7 @@ export function WorkspacePanel({
   const importRemote = async (path: string) => {
     setRefreshing(true); setError('');
     try {
-      const response = await fetch('/workspace/pipeline-artifacts/materialize', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ session_id: sessionId, path }) });
+      const response = await fetch(applicationUrl('workspace/pipeline-artifacts/materialize'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ session_id: sessionId, path }) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'Import failed.');
       await onRefresh();

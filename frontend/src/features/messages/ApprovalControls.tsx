@@ -6,7 +6,7 @@ export interface ApprovalMeta { approved?: boolean; intermediate?: boolean; item
 interface Props { result: RunResult; busy: boolean; onResult: (result: RunResult, meta?: ApprovalMeta) => void; onBusy: (busy: boolean) => void; onProgress?: (frame: StreamFrame) => void }
 
 export default function ApprovalControls({ result, busy, onResult, onBusy, onProgress }: Props) {
-  const [status, setStatus] = useState<Record<string, string>>({}); const api = createApiClient(undefined, '', 'poll');
+  const [status, setStatus] = useState<Record<string, string>>({}); const api = createApiClient(undefined, undefined, 'poll');
   const controllerRef = useRef<AbortController | null>(null);
   useEffect(() => () => controllerRef.current?.abort(), []);
   const [planOpen, setPlanOpen] = useState<Record<string, boolean>>({});
