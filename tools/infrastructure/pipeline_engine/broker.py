@@ -28,8 +28,8 @@ from isolation.storage import storage_lock, check_quota
 import tempfile
 from isolation.policy import WorkspaceAccess
 from . import service
-from .commands import mapping, parse_command
-from .store import JobStore, TERMINAL, atomic_json, confined, now
+from .commands import WORKFLOW_OPERATIONS, mapping, parse_command
+from .store import CapacityReached, JobStore, TERMINAL, atomic_json, confined, now
 
 from . import contracts
 from .engine import cromwell
@@ -81,17 +81,14 @@ def public_plan(plan):
     return value
 
 
-def _plan(root, private, args):
-    _, manifest, config = contracts.definition(args.pipeline)
+def _plan(root, private, pipeline, inputs, params, cores, timeout):
+    _, manifest, config = contracts.definition(pipeline)
     local = manifest['engine'] in contracts.LOCAL_ENGINES
-    if args.dry_run:
-        raise ValueError('Use plan to validate inputs; remote dry-run execution is not supported.')
     if not local:
         _configured()
     store = JobStore(private)
     if sum(row['status'] == 'planned' for row in store.list()) >= 32:
         raise ValueError('This session already has 32 pending plans; cancel unused plans first.')
-    params, inputs = mapping(args.param, decode=True), mapping(args.input, decode=True)
     contracts.validate_parameters(params, manifest, config)
     from .engine.inputs import pipeline_input_specs
     specs = pipeline_input_specs(manifest)
@@ -99,7 +96,7 @@ def _plan(root, private, args):
         raise ValueError('Unknown pipeline input slot.')
     missing = [slot for slot, spec in specs.items() if spec['required'] and not inputs.get(slot)]
     if missing:
-        return {'status': 'needs_input', 'needs_input': True, 'pipeline_name': args.pipeline,
+        return {'status': 'needs_input', 'needs_input': True, 'pipeline_name': pipeline,
                 'requested_inputs': [{**specs[slot], 'slot': slot} for slot in missing]}
     snapshot, public_inputs = {}, {}
     files = inventory(root)
@@ -122,8 +119,8 @@ def _plan(root, private, args):
         public_inputs[slot] = values if isinstance(value, list) else values[0]
     if local:
         from isolation.policy import WORKER_TIMEOUT
-        args.timeout = min(args.timeout or int(manifest.get('timeout', 300)), WORKER_TIMEOUT)
-    result = service.plan(private, args.pipeline, snapshot, params, args.cores, args.timeout, False)
+        timeout = min(timeout or int(manifest.get('timeout', 300)), WORKER_TIMEOUT)
+    result = service.plan(private, pipeline, snapshot, params, cores, timeout, False)
     if 'plan_id' in result:
         record = store.get(result['plan_id'])
         plan = record['plan']
@@ -188,7 +185,7 @@ def _start(private, identifier, access: WorkspaceAccess):
         active = [job for folder in private.parent.iterdir() if folder.is_dir()
                   for job in JobStore(folder).list() if job['status'] in ACTIVE or job.get('submission_unknown')]
         if len(active) >= 16 or sum(job['plan']['owner_user_id'] == plan['owner_user_id'] for job in active) >= 2:
-            raise ValueError('Remote job limit reached (2 per account, 16 server-wide).')
+            raise CapacityReached('Remote job limit reached (2 per account, 16 server-wide).')
         store.update(identifier, status='submitting', started_at=now(),
                      deadline=time.time() + plan['timeout_seconds'], remote_base=base)
     submitted = False
@@ -282,7 +279,7 @@ def _collect(private, record):
             artifact = dict(item)
             if isinstance(raw, list):
                 artifact.update(name=f"{item.get('name', 'output')}[{index}]",
-                                path=str(target.with_name(f'{target.stem}-{index}{target.suffix}')))
+                                path=str(target.with_name(f'{index}-{target.name}')))
             collected.append({**artifact, 'exists': False, 'size': size,
                               'remote': {'bucket': bucket, 'key': key, 'etag': metadata.get('ETag'),
                                          'version_id': metadata.get('VersionId'),
@@ -586,10 +583,34 @@ def _stage_example(root, name, access):
         release(access, reservation)
 
 
-def dispatch(root, command, *, access: WorkspaceAccess):
+@contextmanager
+def _locked_workspace(root, access):
     root = Path(root).resolve()
     private = _owned(root, access)
+    # Same lock as disposable tools: result imports and input snapshots are serialized.
+    with _lock(access.metadata_root / '.worker-locks' / root.name), _lock(private / '.broker.lock'):
+        _owned(root, access)
+        yield root, private
+
+
+def create_plan(root, pipeline, inputs, params, cores, timeout, *, access: WorkspaceAccess):
+    with _locked_workspace(root, access) as (root, private), storage_lock(access):
+        extra = sum(confined(root, item).stat().st_size for value in inputs.values()
+                    for item in (value if isinstance(value, list) else [value]) if isinstance(item, str))
+        check_quota(access, root.name, extra)
+        return _plan(root, private, pipeline, inputs, params, cores, timeout)
+
+
+def dispatch(root, command, *, access: WorkspaceAccess):
     args = parse_command(command)
+    if args.operation in WORKFLOW_OPERATIONS:
+        from .workflow import dispatch as dispatch_workflow
+        return dispatch_workflow(root, args, access=access, isolated=True)
+    if args.operation == 'plan':
+        if args.dry_run:
+            raise ValueError('Use plan to validate inputs; remote dry-run execution is not supported.')
+        return create_plan(root, args.pipeline, mapping(args.input, decode=True), mapping(args.param, decode=True),
+                           args.cores, args.timeout, access=access)
     if args.operation == 'wait':
         if not math.isfinite(args.seconds) or not 0 <= args.seconds <= 30:
             raise ValueError('Wait must be between 0 and 30 seconds.')
@@ -599,9 +620,7 @@ def dispatch(root, command, *, access: WorkspaceAccess):
             if value['status'] in TERMINAL | {'planned'} or time.monotonic() >= deadline:
                 return value
             time.sleep(min(1, max(0, deadline - time.monotonic())))
-    # Same lock as disposable tools: result imports and input snapshots are serialized.
-    with _lock(access.metadata_root / '.worker-locks' / root.name), _lock(private / '.broker.lock'):
-        _owned(root, access)  # Recheck after waiting for another tool or controller.
+    with _locked_workspace(root, access) as (root, private):
         if args.operation == 'catalog':
             return {'pipelines': catalog()}
         if args.operation == 'files':
@@ -609,12 +628,6 @@ def dispatch(root, command, *, access: WorkspaceAccess):
         if args.operation == 'example':
             contracts.definition(args.pipeline)
             return _stage_example(root, args.pipeline, access)
-        if args.operation == 'plan':
-            with storage_lock(access):
-                values = mapping(args.input, decode=True)
-                extra = sum(confined(root, item).stat().st_size for value in values.values() for item in (value if isinstance(value, list) else [value]) if isinstance(item, str))
-                check_quota(access, root.name, extra)
-                return _plan(root, private, args)
         if args.operation == 'run':
             return _start(private, args.plan_id, access)
         if args.operation == 'jobs':
@@ -625,7 +638,7 @@ def dispatch(root, command, *, access: WorkspaceAccess):
             row = JobStore(private).get(args.job_id)
             if row['status'] == 'planned':
                 return _summary(JobStore(private).update(args.job_id, status='cancelled', finished_at=now()))
-            if row['status'] not in TERMINAL:
+            if row['status'] not in TERMINAL | {'submitting'}:
                 JobStore(private).update(args.job_id, status='cancelling', timeout_abort=False)
             return _status(private, args.job_id)
         return _publish(root, private, args.job_id, args.max_table_rows, access)

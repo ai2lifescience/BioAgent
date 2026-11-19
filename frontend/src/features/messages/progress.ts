@@ -16,12 +16,15 @@ const scopeOf = (payload: StreamFrame['payload']) => JSON.stringify([payload.age
 // Reasoning, arguments, log dumps, and typed sub-agent results are not narration.
 export function advanceProgress(entries: ProgressEntry[], { event, payload }: StreamFrame): ProgressEntry[] {
   const scope = scopeOf(payload);
-  if (event === 'pipeline_job_status' && payload.job_id) {
-    const id = `pipeline:${payload.job_id}`;
+  if (event === 'pipeline_job_status' && (payload.job_id || payload.workflow_id)) {
+    const id = payload.workflow_id
+      ? `workflow:${payload.workflow_id}:${payload.step_id}`
+      : `pipeline:${payload.job_id}`;
     const status = String(payload.status || 'running');
     const name = String(payload.pipeline_name || 'Pipeline').replaceAll('_', ' ');
-    const entry: ProgressEntry = { id, kind: 'tool', text: `${name} · ${status}`, scope,
-      active: ['queued', 'running'].includes(status) };
+    const label = payload.step_id ? `${payload.step_id} · ${name}` : name;
+    const entry: ProgressEntry = { id, kind: 'tool', text: `${label} · ${status}`, scope,
+      active: ['waiting', 'launching', 'submitting', 'queued', 'running', 'cancelling'].includes(status) };
     return entries.some(item => item.id === id) ? entries.map(item => item.id === id ? entry : item) : [...entries, entry];
   }
   if (event === 'sdk_run_item' && payload.name === 'tool_called' && payload.call_id) {

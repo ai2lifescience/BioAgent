@@ -428,6 +428,20 @@ Check pipeline job JOB_ID and collect its verified results if it succeeded.
 Do not rerun it.
 ~~~
 
+For tasks that span multiple pipelines, ask the agent to plan how each step
+gets its input and approve the saved workflow when prompted. A dependent step
+waits for its prerequisites to succeed and for any files it needs to be
+verified. Up to two independent steps in the workflow can run at once, subject
+to the executor's capacity.
+
+The run shows each step's progress. A failed prerequisite or a missing output
+blocks the steps that need it. Independent steps can still finish. Use
+`agent-pipeline workflow-list` to find recent workflows in the current session
+and `agent-pipeline workflow-status --workflow-id ID` to review a saved run.
+**Stop** cancels the current workflow's waiting steps and requests cancellation
+of active jobs. Approved workflows resume monitoring after the web server
+restarts with the same workspace, metadata, and execution backend.
+
 ### 9. Coding inside the workspace
 
 ~~~text

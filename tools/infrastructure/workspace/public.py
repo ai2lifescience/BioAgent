@@ -15,6 +15,7 @@ INTERNAL_RELATIVE_PATH = re.compile(
     r"(?<![\w/])(?:runtime|tools/runtime_tools|harness|interfaces)/"
     r"(?:[\w.~-]+/)*[\w.~-]+"
 )
+PIPELINE_FILE = re.compile(r"runtime/agent_runs/[a-f0-9]{32}/(?:outputs/|results\.zip$|std(?:out|err)\.log$)")
 # Match URLs first so paths within citations are preserved. Also cover paths in
 # exception messages, quoted commands, and logs, not just fields named *_path.
 PATH_TOKEN = re.compile(
@@ -55,6 +56,13 @@ def public_payload(value: Any, workspace_root: Path | str | None = None) -> Any:
             raw = re.sub(r"(?<![\w/])" + re.escape(prefix) + r"/", "", raw)
         if raw.startswith("/") and not raw.startswith("//") and "\n" not in raw:
             return leading + INTERNAL_PATH + trailing
+        if root and PIPELINE_FILE.match(raw) and all(not part.startswith(".") for part in raw.split("/")):
+            candidate = root / raw
+            try:
+                if candidate.resolve().is_relative_to(root) and candidate.is_file():
+                    return leading + raw + trailing
+            except (OSError, RuntimeError, ValueError):
+                pass
         raw = INTERNAL_RELATIVE_PATH.sub(INTERNAL_PATH, raw)
         transformed = PATH_TOKEN.sub(
             lambda match: match.group() if match.group().startswith(("https://", "http://")) else INTERNAL_PATH,

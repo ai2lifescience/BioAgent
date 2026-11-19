@@ -8,7 +8,7 @@ from pathlib import Path
 from agents import ShellTool
 from agents.tool import ShellCommandRequest, ShellCommandOutput, ShellResult, ShellCallOutcome
 
-from tools.infrastructure.pipeline_engine.commands import dispatch, parse_command
+from tools.infrastructure.pipeline_engine.commands import WORKFLOW_OPERATIONS, dispatch, parse_command
 from tools.infrastructure.pipeline_engine.store import JobStore
 
 PIPELINE_INSTRUCTIONS = """
@@ -37,12 +37,32 @@ Commands:
 - agent-pipeline results --job-id ID [--max-table-rows 10] : verified outputs,
   metrics, table previews, and a ZIP bundle, without rerunning.
 - agent-pipeline cancel --job-id ID : stop the local process group (SDK approval).
+- agent-pipeline workflow-plan --steps 'JSON_ARRAY' : save a multi-pipeline
+  graph. Each step has an id, pipeline, and inputs mapping, with optional
+  params, cores, timeout, and depends_on (a list of prerequisite step IDs).
+  An input is a workspace file path, an output reference, or a list of these
+  for an array slot. Example binding:
+  {"inputs":{"input":{"step":"prepare","output":"clean_file"}}}.
+  Use the output name declared in the catalog, not an anticipated file path.
+- agent-pipeline workflow-run --workflow-id ID : approve and start the entire
+  saved graph. The scheduler handles submissions and output handoffs.
+- agent-pipeline workflow-list : list saved workflows for this session.
+- agent-pipeline workflow-status --workflow-id ID : get step states and
+  verified outputs, including why a step was blocked.
+- agent-pipeline workflow-cancel --workflow-id ID : cancel waiting steps and
+  stop active jobs (SDK approval).
 
 Inspect catalog and session files, reuse known paths, then plan. Choose a
 pipeline by its display name, description, use_when, avoid_when, inputs, and
 limitations. Treat entries marked visibility=internal as demonstrations and
 select them only when the user asks for a demo or runtime test. Resolve missing
 inputs or parameters before run. Use the returned plan ID; never invent an ID.
+When one pipeline requires another pipeline's output or successful completion,
+use workflow-plan and workflow-run. Put all dependent steps in the same graph.
+Use a step/output reference for data handoffs and depends_on for completion-only
+prerequisites. Do not create standalone plans or run downstream jobs yourself.
+After starting a workflow, end the current response with a short progress update.
+The runtime will monitor the graph and provide terminal results automatically.
 Do not modify job state or pipeline definitions through filesystem tools.
 Use existing data retrieval tools to obtain requested public data before planning;
 use example files only when the user requested examples. The agent selects data
@@ -106,7 +126,7 @@ async def needs_approval(ctx, action, call_id) -> bool:
                 return False
         except ValueError:
             return False
-    return args.operation in {"run", "cancel"}
+    return args.operation in {"run", "cancel", "workflow-run", "workflow-cancel"}
 
 
 async def execute_local_pipeline_command(request: ShellCommandRequest) -> ShellResult:
@@ -123,12 +143,16 @@ async def execute_local_pipeline_command(request: ShellCommandRequest) -> ShellR
         timeout = request.data.action.timeout_ms
         if args.operation == "wait" and timeout and args.seconds * 1000 > timeout:
             raise ValueError("--seconds exceeds the shell action timeout_ms budget.")
-        if isolated_execution():
+        if args.operation in WORKFLOW_OPERATIONS:
+            from tools.infrastructure.pipeline_engine.workflow import dispatch as executor
+            operation = asyncio.to_thread(executor, workspace(context), args, access=context.execution_access,
+                                          isolated=isolated_execution())
+        elif isolated_execution():
             from tools.infrastructure.pipeline_engine.broker import dispatch as executor
             operation = asyncio.to_thread(executor, workspace(context), command, access=context.execution_access)
         else:
             operation = asyncio.to_thread(dispatch, workspace(context), command)
-        if args.operation == 'run':
+        if args.operation in {"run", "workflow-run"}:
             # A submitted remote job must be recorded before Stop can cancel it.
             task = asyncio.create_task(operation)
             try:

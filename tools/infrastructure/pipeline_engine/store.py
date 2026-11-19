@@ -15,6 +15,10 @@ PIPELINE_RUN_ROOT = "runtime/agent_runs"
 PIPELINE_STATE_ROOT = f"{PIPELINE_RUN_ROOT}/.pipeline"
 
 
+class CapacityReached(ValueError):
+    """A job was left planned because the executor had no free slot."""
+
+
 def now() -> str:
     return datetime.now(timezone.utc).isoformat()
 

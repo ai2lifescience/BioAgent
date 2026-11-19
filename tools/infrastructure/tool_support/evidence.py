@@ -62,6 +62,7 @@ RESULT_PATH_KEYS = (
 )
 COMPACT_RESULT_KEYS = (
     "job_id",
+    "workflow_id",
     "plan_id",
     "logs",
     "bundle_path",
