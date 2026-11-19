@@ -130,18 +130,20 @@ on the same port.
 Follow `resource/mscan/oauth/README.md` to create the `cncb-oauth` environment
 and configure the broker. Register its public `/cas/callback` with CNCB CAS,
 then register each application's exact callback and logout URLs in the broker.
-Use a separate client secret for BioAgent and MSCAN.
+Use a separate client secret for BioAgent and MSCAN. Before starting the
+broker, set its required `OAUTH_...` variables with `export`. Do not create or
+use `.env` or `OAUTH_ENV_FILE`.
 
 ```bash
 cd resource/mscan/oauth
 conda activate cncb-oauth
-export OAUTH_ENV_FILE=.env
 ```
 
 For this localhost example, set `OAUTH_PUBLIC_ORIGIN` in the broker config to
 `http://localhost:8090`.
 
-Optional: require CNCB sign-in even if `.env` enables the development bypass.
+Optional: require CNCB sign-in even if the supplied development configuration
+enables the bypass.
 
 ```bash
 export OAUTH_AGENT_LOGIN_BYPASS=false
@@ -157,9 +159,16 @@ python -m oauth_service.server
 
 #### Runtime and MSCAN connector
 
+Before starting BioAgent, set its required `AGENT_...` variables with
+`export`. Do not create or use `.env` or `AGENT_ENV_FILE`.
+
 ```bash
 conda activate openaisdk
+```
 
+Set the following values for the deployment:
+
+```bash
 export OPENROUTER_API_KEY="YOUR_OPENROUTER_API_KEY"
 
 export AGENT_PROXY=socks5h://127.0.0.1:10801

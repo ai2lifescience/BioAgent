@@ -5,10 +5,10 @@ accounts, public registration, and Docker tool workers:
 
 ```bash
 conda activate openaisdk
-python -B -m interfaces.web --host 0.0.0.0 --port 8000
+python -B -m interfaces.web --host 0.0.0.0 --port 8008
 ```
 
-Open `http://<server-ip>:8000` from your browser, then choose **Create account**.
+Open `http://<server-ip>:8008` from your browser, then choose **Create account**.
 No SSH tunnel is required. `0.0.0.0` is a listening address; use the server's IP
 address in the browser. Direct HTTP is intended for LAN development. Use HTTPS
 for internet deployment because HTTP does not encrypt passwords or cookies.
@@ -118,7 +118,7 @@ For access from this machine only, leave the authentication mode unset or set
 it to `singleuser` and bind to localhost:
 
 ```bash
-python -B -m interfaces.web --host 127.0.0.1 --port 8000
+python -B -m interfaces.web --host 127.0.0.1 --port 8008
 ```
 
 Local and registered accounts have separate conversations. Switching startup mode
@@ -130,10 +130,10 @@ Use `singleuser` to open the same account from a private network without a login
 
 ```bash
 export AGENT_AUTH_MODE=singleuser
-python -B -m interfaces.web --host 0.0.0.0 --port 8000
+python -B -m interfaces.web --host 0.0.0.0 --port 8008
 ```
 
-Open port `8000` at the server's LAN IP in the browser. Any device that can
+Open port `8008` at the server's LAN IP in the browser. Any device that can
 reach this listener from the private network shares the same chats and files.
 BioAgent checks the connection's source IP directly. Use this mode for direct
 LAN connections. Agent runs on a network listener require Docker workers.
@@ -268,23 +268,23 @@ export AGENT_OAUTH_PROXY=
 
 ### Development and production URLs
 
-Use a dedicated BioAgent environment file per deployment. The development
-profile uses the browser-visible IP address and port, for example
-`http://192.168.1.100:8008`. The production profile uses:
+Set the deployment's `AGENT_...` values in the shell that starts BioAgent with
+`export`; do not create or use `.env`, `.env.*`, or `AGENT_ENV_FILE`. In
+development, `AGENT_PUBLIC_ORIGIN` uses the browser-visible IP address and
+port, for example `http://192.168.1.100:8008`. Production uses:
 
-```text
-AGENT_PUBLIC_ORIGIN=https://mscan.cncb.ac.cn
-AGENT_PUBLIC_BASE_URL=https://mscan.cncb.ac.cn/OneMicro/agent
-AGENT_OAUTH_SERVER_URL=http://127.0.0.1:8090
-AGENT_OAUTH_PUBLIC_URL=https://mscan.cncb.ac.cn/OneMicro/oauth
-AGENT_OAUTH_REDIRECT_URI=https://mscan.cncb.ac.cn/OneMicro/agent/auth/oauth/callback
-AGENT_OAUTH_POST_LOGOUT_REDIRECT_URI=https://mscan.cncb.ac.cn/OneMicro/agent/
+```bash
+export AGENT_PUBLIC_ORIGIN=https://mscan.cncb.ac.cn
+export AGENT_PUBLIC_BASE_URL=https://mscan.cncb.ac.cn/OneMicro/agent
+export AGENT_OAUTH_SERVER_URL=http://127.0.0.1:8090
+export AGENT_OAUTH_PUBLIC_URL=https://mscan.cncb.ac.cn/OneMicro/oauth
+export AGENT_OAUTH_REDIRECT_URI=https://mscan.cncb.ac.cn/OneMicro/agent/auth/oauth/callback
+export AGENT_OAUTH_POST_LOGOUT_REDIRECT_URI=https://mscan.cncb.ac.cn/OneMicro/agent/
 ```
 
-Run BioAgent with `AGENT_ENV_FILE=.env.development` or
-`AGENT_ENV_FILE=.env.production`. Keep the OAuth broker URL and client secret
-outside tracked profile files. Set `AGENT_OAUTH_PUBLIC_URL` when browsers must
-use a different broker URL from the server-side address. Build the frontend with
+Keep the OAuth broker URL and client secret outside version control. Set
+`AGENT_OAUTH_PUBLIC_URL` when browsers must use a different broker URL from the
+server-side address. Build the frontend with
 `VITE_PUBLIC_PATH=/OneMicro/agent/ npm --prefix frontend run build`. The reverse proxy must forward
 `/OneMicro/agent/` to BioAgent and remove that prefix before the request reaches
 the BioAgent listener.
@@ -490,7 +490,7 @@ restart the server with the Cromwell/S3 environment above:
 python -m pip install -r requirements.txt
 docker build -f isolation/deploy/Dockerfile -t bioagent-worker:local .
 npm --prefix frontend run build
-python -B -m interfaces.web --host 0.0.0.0 --port 8000
+python -B -m interfaces.web --host 0.0.0.0 --port 8008
 ```
 
 Try “Fetch https://example.com/ and summarize it” or “Run the bundled WDL template
@@ -504,7 +504,7 @@ For an internet-facing service, use a TLS reverse proxy:
 ```bash
 export AGENT_AUTH_MODE=multiuser
 export AGENT_PUBLIC_ORIGIN=https://agent.example.com
-python -B -m interfaces.web --host 127.0.0.1 --port 8000
+python -B -m interfaces.web --host 127.0.0.1 --port 8008
 ```
 
 Forward the original Host header and keep the backend private. The public origin
@@ -652,7 +652,7 @@ private plan snapshots, cross-account denial, persisted polling/cancellation,
 ambiguous submissions, and output scope.
 
 At validation time, the separate test instance used
-`http://192.168.75.56:8010`; the older server on port 8000 was left unchanged.
+`http://192.168.75.56:8010`; the older server on port 8008 was left unchanged.
 The test instance used its own state directory rather than the default account
 and conversation databases. This is a recorded test address, not a deployment
 default or a guarantee that the process is still running.
