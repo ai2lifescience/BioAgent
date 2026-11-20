@@ -2,7 +2,7 @@
 
 This registry intentionally owns only ``Agent.as_tool()`` specialists.  The
 root application registry in :mod:`tools.registry` adds these to the public
-function, hosted, and runtime tool categories.
+function and hosted tool categories.
 """
 
 from __future__ import annotations

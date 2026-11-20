@@ -485,9 +485,19 @@ async def _execute(
         if pending:
             # Restore agent definitions; this run resolves models through a fresh
             # provider instead of retaining clients from the approval pause.
-            run_input = await RunState.from_json(
-                agent, pending["state"], context_deserializer=lambda _data: context,
-            )
+            registered_tools = agent.tools
+            if any(item.get("agent") == agent.name and item.get("tool_name") == "pipeline_shell"
+                   for item in pending["approvals"]):
+                from tools.agent_tools.specialist.pipeline.pipeline_shell import pipeline_shell
+                # The SDK binds saved calls to their tools while loading. Restore
+                # older root approvals without exposing the tool to a model turn.
+                agent.tools = [*registered_tools, pipeline_shell]
+            try:
+                run_input = await RunState.from_json(
+                    agent, pending["state"], context_deserializer=lambda _data: context,
+                )
+            finally:
+                agent.tools = registered_tools
             assert decision is not None
             index, approved = decision
             item = run_input.get_interruptions()[index]

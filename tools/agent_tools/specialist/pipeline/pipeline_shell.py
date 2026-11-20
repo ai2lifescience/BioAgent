@@ -1,4 +1,4 @@
-"""Agents SDK local ShellTool for the Pipeline2Agent pipeline command protocol."""
+"""The pipeline specialist's allowlisted ShellTool commands and approvals."""
 from __future__ import annotations
 
 import asyncio
@@ -21,8 +21,13 @@ dependencies. Do not suggest installing pipeline dependencies into the agent
 environment.
 
 Commands:
-- agent-pipeline catalog : discover intent-focused pipeline names, descriptions,
-  use cases, limitations, inputs, parameters, and outputs.
+- agent-pipeline catalog [--offset N] [--limit N] : discover pages of pipeline
+  names, descriptions, use cases, limitations, inputs, parameters, and outputs.
+  Offset is nonnegative and limit is between 1 and 32.
+  Follow next_offset until all relevant pipelines have been discovered. A
+  pipeline missing from one page may appear on a later page.
+- agent-pipeline catalog --pipeline NAME : inspect one named pipeline's full
+  catalog entry, including its declared input slots, output names and parameters.
 - agent-pipeline files : discover session workspace-relative input paths.
 - agent-pipeline example --pipeline template_shell : stage bundled internal
   demonstration data, only when the user requested a demonstration/example.
@@ -44,8 +49,9 @@ Commands:
   for an array slot. Example binding:
   {"inputs":{"input":{"step":"prepare","output":"clean_file"}}}.
   Use the output name declared in the catalog, not an anticipated file path.
-- agent-pipeline workflow-run --workflow-id ID : approve and start the entire
-  saved graph. The scheduler handles submissions and output handoffs.
+- agent-pipeline workflow-run --workflow-id ID : request SDK approval for the
+  saved graph. Execution starts after approval; the scheduler handles submissions
+  and output handoffs.
 - agent-pipeline workflow-list : list saved workflows for this session.
 - agent-pipeline workflow-status --workflow-id ID : get step states and
   verified outputs, including why a step was blocked.
@@ -57,23 +63,25 @@ pipeline by its display name, description, use_when, avoid_when, inputs, and
 limitations. Treat entries marked visibility=internal as demonstrations and
 select them only when the user asks for a demo or runtime test. Resolve missing
 inputs or parameters before run. Use the returned plan ID; never invent an ID.
+To request execution approval, call run or workflow-run with the saved ID. The
+SDK opens the plan review and pauses before execution. When the user asks to
+approve before running, make this tool call so the chat displays approval controls.
 When one pipeline requires another pipeline's output or successful completion,
-use workflow-plan and workflow-run. Put all dependent steps in the same graph.
+call autograph_specialist to design the graph. Copy its ready steps into
+workflow-plan and request approval with workflow-run. Include its reason and
+input_reasons fields in the saved plan. Put all dependent steps in the same graph.
 Use a step/output reference for data handoffs and depends_on for completion-only
 prerequisites. Do not create standalone plans or run downstream jobs yourself.
-After starting a workflow, end the current response with a short progress update.
-The runtime will monitor the graph and provide terminal results automatically.
+After starting a workflow, return its ID and current status to the main agent.
+The runtime monitors the graph and supplies terminal results to the main agent.
 Do not modify job state or pipeline definitions through filesystem tools.
-Use existing data retrieval tools to obtain requested public data before planning;
-use example files only when the user requested examples. The agent selects data
-and parameters; deterministic code validates them.
-A queued/running job is not a successful pipeline. After starting a job, perform
-at most one short status/wait check. If it is still active, END your current
-response with a brief progress update; do not keep calling wait or status in a
-loop. The runtime will monitor it without consuming model turns, then supply
-verified terminal results so you can finish the original request automatically,
-including any requested analysis. Do not ask the user to check again or claim
-completion before receiving those results.
+Use inputs provided by the main agent or already present in the session. If a
+required file is missing, tell the main agent what it needs to retrieve or ask
+for. Use example files only when the user requested examples.
+After starting a job, perform at most one short status or wait check. Return
+the job ID and its actual status to the main agent. The runtime monitors active
+jobs without consuming model turns and supplies verified terminal results to the
+main agent for its final answer.
 On later requests inspect existing jobs. Never rerun to review outputs. Do not
 automatically retry failed/interrupted jobs. Preserve logs and explain failures.
 

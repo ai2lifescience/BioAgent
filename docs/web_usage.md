@@ -106,8 +106,9 @@ python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ~~~
 
 These settings configure the host-side Cromwell/S3 adapter. In isolated mode,
-`pipeline_shell` routes compatible installed WDL workflows through this broker;
-containers retain no network interface or credentials. A live synthetic template workflow
+`pipeline_specialist` uses `pipeline_shell` to route compatible WDL workflows
+through this broker. The broker holds the credentials and Docker runs its workers
+with networking disabled. A live synthetic template workflow
 completed and its outputs downloaded successfully. See the
 [live validation findings](user_isolation.md#live-validation-2026-11-03) for scope.
 
@@ -413,8 +414,8 @@ Use the suitable pipeline with uploads/sample.fasta. Create a validated plan,
 show the input mapping and parameters, and run it after I approve the plan.
 ~~~
 
-Expected behavior: pipeline_specialist or pipeline_shell uses the
-agent-pipeline protocol:
+The main agent delegates the request to `pipeline_specialist`. The specialist
+uses the `agent-pipeline` protocol through its `pipeline_shell` tool.
 
 ~~~text
 catalog -> files -> plan -> approval -> run -> status/wait -> results
@@ -435,9 +436,8 @@ verified. Up to two independent steps in the workflow can run at once, subject
 to the executor's capacity.
 
 The run shows each step's progress. A failed prerequisite or a missing output
-blocks the steps that need it. Independent steps can still finish. Use
-`agent-pipeline workflow-list` to find recent workflows in the current session
-and `agent-pipeline workflow-status --workflow-id ID` to review a saved run.
+blocks the steps that need it. Independent steps can still finish. Ask in chat
+to list recent workflows in the current session or review a saved workflow by ID.
 **Stop** cancels the current workflow's waiting steps and requests cancellation
 of active jobs. Approved workflows resume monitoring after the web server
 restarts with the same workspace, metadata, and execution backend.

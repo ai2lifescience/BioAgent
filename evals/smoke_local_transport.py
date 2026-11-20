@@ -26,11 +26,13 @@ from models.openrouter_provider import OpenRouterProvider
 class LocalTransportTests(unittest.IsolatedAsyncioTestCase):
     async def check_runtime(self, streaming):
         requests = []
+        shell = {"id": "shell-1", "type": "function", "function": {
+            "name": "pipeline_shell", "arguments": json.dumps({
+                "commands": ["agent-pipeline catalog --pipeline template_shell"],
+                "timeout_ms": None, "max_output_length": None})}}
         calls = [
-            {"id": "shell-1", "type": "function", "function": {
-                "name": "pipeline_shell", "arguments": json.dumps({
-                    "commands": ["agent-pipeline catalog"],
-                    "timeout_ms": None, "max_output_length": None})}},
+            {"id": "specialist-1", "type": "function", "function": {
+                "name": "pipeline_specialist", "arguments": json.dumps({"task": "List the local pipelines."})}},
             {"id": "patch-1", "type": "function", "function": {
                 "name": "apply_patch", "arguments": json.dumps({
                     "input": "*** Begin Patch\n*** Add File: note.txt\n+transport works\n*** End Patch"})}},
@@ -43,22 +45,25 @@ class LocalTransportTests(unittest.IsolatedAsyncioTestCase):
         def respond(request):
             body = json.loads(request.content)
             requests.append(body)
-            first = len(requests) == 1
+            nested = any(item["function"]["name"] == "pipeline_shell" for item in body["tools"])
+            first = not any(item["role"] == "tool" for item in body["messages"])
+            tool_calls = [shell] if nested else calls
+            answer = "The local pipeline catalog is available." if nested else "Completed."
             base = {"id": "chat-test", "created": 1, "model": "offline-model"}
             if not body.get("stream"):
-                message = {"role": "assistant", "content": None, "tool_calls": calls} if first else {
-                    "role": "assistant", "content": "Completed."}
+                message = {"role": "assistant", "content": None, "tool_calls": tool_calls} if first else {
+                    "role": "assistant", "content": answer}
                 return httpx2.Response(200, json={**base, "object": "chat.completion", "choices": [{
                     "index": 0, "message": message, "finish_reason": "tool_calls" if first else "stop"}]})
             deltas = []
             if first:
-                for index, call in enumerate(calls):
+                for index, call in enumerate(tool_calls):
                     deltas.append({"tool_calls": [{**call, "index": index, "function": {
                         "name": call["function"]["name"], "arguments": ""}}]})
                     deltas.append({"tool_calls": [{"index": index, "function": {
                         "arguments": call["function"]["arguments"]}}]})
             else:
-                deltas.append({"role": "assistant", "content": "Completed."})
+                deltas.append({"role": "assistant", "content": answer})
             chunks = [{**base, "object": "chat.completion.chunk", "choices": [{
                 "index": 0, "delta": delta, "finish_reason": None}]} for delta in deltas]
             chunks.append({**base, "object": "chat.completion.chunk", "choices": [{
@@ -90,16 +95,19 @@ class LocalTransportTests(unittest.IsolatedAsyncioTestCase):
                         self.assertEqual(result.final_output, "Completed.")
                         self.assertEqual(await sandbox.read_file(workspace, "note.txt"), b"transport works")
                     types = {item["type"] for item in result.to_input_list() if "type" in item}
-                    self.assertTrue({"shell_call", "shell_call_output", "custom_tool_call", "custom_tool_call_output"} <= types)
+                    self.assertTrue({"function_call", "function_call_output", "custom_tool_call", "custom_tool_call_output"} <= types)
 
-        self.assertEqual(len(requests), 2)
+        self.assertEqual(len(requests), 4)
         self.assertTrue(all(request["model"] == resolve_model_id("gpt-oss") for request in requests))
         tools = {item["function"]["name"]: item["function"] for item in requests[0]["tools"]}
-        self.assertIn("pipeline_shell", tools)
+        self.assertIn("pipeline_specialist", tools)
+        self.assertNotIn("pipeline_shell", tools)
         self.assertIn("input", tools["apply_patch"]["parameters"]["properties"])
-        outputs = {item["tool_call_id"]: item["content"] for item in requests[1]["messages"] if item["role"] == "tool"}
-        self.assertEqual(set(outputs), {"shell-1", "patch-1", "function-1"})
-        self.assertIn("template_shell", outputs["shell-1"])
+        nested_outputs = {item["tool_call_id"]: item["content"] for item in requests[2]["messages"] if item["role"] == "tool"}
+        self.assertIn("template_shell", nested_outputs["shell-1"])
+        outputs = {item["tool_call_id"]: item["content"] for item in requests[3]["messages"] if item["role"] == "tool"}
+        self.assertEqual(set(outputs), {"specialist-1", "patch-1", "function-1"})
+        self.assertIn("The local pipeline catalog is available.", outputs["specialist-1"])
         self.assertIn("note.txt", outputs["patch-1"])
         stats = json.loads(outputs["function-1"])
         self.assertEqual(stats["status"], "ok")

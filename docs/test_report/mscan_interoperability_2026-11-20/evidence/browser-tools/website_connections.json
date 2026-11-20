@@ -1,0 +1,463 @@
+{
+  "tool": "website_connections",
+  "args": {},
+  "session_id": "de8f02d5-dfd4-4b35-8f0b-baceefa636ad",
+  "result": {
+    "status": "ok",
+    "data": {
+      "value": {
+        "connections": [
+          {
+            "site_id": "mscan",
+            "external_subject": "4f5d4597-00a0-444a-94de-60881822b1bc",
+            "capabilities": {
+              "operations": [
+                "search",
+                "pull",
+                "push",
+                "result_sync"
+              ],
+              "destination_fields": {
+                "source_slots": "Optional map of R1/R2 or genome to selected workspace paths",
+                "sample": "Exact sample ID or name in the project",
+                "project": "Exact owned project ID or name",
+                "data_type": "meta, shortReads, genomic or synthetic"
+              },
+              "cromwell_result_sync": {
+                "engine": "cromwell",
+                "protocol_version": 1,
+                "importers": [
+                  {
+                    "pipeline_key": "metagenomic_read_quality_control",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "meta",
+                      "shortReads"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "qc"
+                  },
+                  {
+                    "pipeline_key": "metagenomic_qc_UniVec_Host",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "meta",
+                      "shortReads"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "read_qc"
+                  },
+                  {
+                    "pipeline_key": "metagenomic_de_novo_assembly",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "meta",
+                      "shortReads"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "assembly"
+                  },
+                  {
+                    "pipeline_key": "metax_classification_abundance_analysis",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "meta",
+                      "shortReads"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "metax"
+                  },
+                  {
+                    "pipeline_key": "metagenomic_pathogen_identification_marker",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "meta",
+                      "shortReads"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "strain_meta"
+                  },
+                  {
+                    "pipeline_key": "metagenomic_growth_rate_Calculation",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "meta",
+                      "shortReads"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "growth"
+                  },
+                  {
+                    "pipeline_key": "bacterial_defense_system_annotation",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "shortReads",
+                      "genomic",
+                      "synthetic",
+                      "meta"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "bacdef"
+                  },
+                  {
+                    "pipeline_key": "bacterial_secretion_system_annotation",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "shortReads",
+                      "genomic",
+                      "synthetic",
+                      "meta"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "bacsec"
+                  },
+                  {
+                    "pipeline_key": "bacterial_biosynthetic_gene_clusters",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "shortReads",
+                      "genomic",
+                      "synthetic",
+                      "meta"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "bacbgc"
+                  },
+                  {
+                    "pipeline_key": "bacterial_viral_variant_analysis",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "shortReads",
+                      "genomic",
+                      "synthetic",
+                      "meta"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "snp"
+                  },
+                  {
+                    "pipeline_key": "metagenomic_pathogen_identification",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "meta",
+                      "shortReads"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "detection"
+                  },
+                  {
+                    "pipeline_key": "metagenomic_pathogen_identification_kmer",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "meta",
+                      "shortReads"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "detectionKmer"
+                  },
+                  {
+                    "pipeline_key": "genomic_pathogen_identification",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "genomic"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "detection"
+                  },
+                  {
+                    "pipeline_key": "risk_screen",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "synthetic"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "screenmec"
+                  },
+                  {
+                    "pipeline_key": "viral_read_molecular_typing",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "meta",
+                      "shortReads"
+                    ],
+                    "requires_pathogen_reference": true,
+                    "program": "molecular"
+                  },
+                  {
+                    "pipeline_key": "viral_genome_molecular_typing",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "genomic"
+                    ],
+                    "requires_pathogen_reference": true,
+                    "program": "molecular"
+                  },
+                  {
+                    "pipeline_key": "pathogen_variant_risk_assessment",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "meta",
+                      "shortReads"
+                    ],
+                    "requires_pathogen_reference": true,
+                    "program": "risk"
+                  },
+                  {
+                    "pipeline_key": "pathogen_variant_risk_assessment_consensus",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "genomic"
+                    ],
+                    "requires_pathogen_reference": true,
+                    "program": "risk"
+                  },
+                  {
+                    "pipeline_key": "traceback_covid19",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "genomic",
+                      "shortReads",
+                      "meta"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "tracing"
+                  },
+                  {
+                    "pipeline_key": "phi_annotator_genome",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "genomic",
+                      "synthetic"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "phi"
+                  },
+                  {
+                    "pipeline_key": "phi_annotator_metagenome",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "meta",
+                      "shortReads"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "phi"
+                  },
+                  {
+                    "pipeline_key": "tcdb_annotator_genome",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "genomic",
+                      "synthetic"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "tcdb"
+                  },
+                  {
+                    "pipeline_key": "tcdb_annotator_metagenome",
+                    "contract_version": 1,
+                    "sample_types": [
+                      "meta",
+                      "shortReads"
+                    ],
+                    "requires_pathogen_reference": false,
+                    "program": "tcdb"
+                  }
+                ]
+              },
+              "native_result_importers": [
+                {
+                  "program": "assembly",
+                  "required_outputs": [
+                    "final_contigs_renamed",
+                    "contig_report_tsv",
+                    "species_report_tsv"
+                  ],
+                  "format": "AssemblyId",
+                  "sample_types": [
+                    "meta",
+                    "shortReads"
+                  ]
+                },
+                {
+                  "program": "metax",
+                  "required_outputs": [
+                    "profile"
+                  ],
+                  "format": "metax",
+                  "sample_types": [
+                    "meta",
+                    "shortReads"
+                  ]
+                },
+                {
+                  "program": "funcflow",
+                  "required_outputs": [
+                    "gene_annotations_tsv"
+                  ],
+                  "format": "FuncReads",
+                  "sample_types": [
+                    "meta",
+                    "shortReads"
+                  ]
+                },
+                {
+                  "program": "funcflow",
+                  "required_outputs": [
+                    "gene_annotations_tsv"
+                  ],
+                  "format": "FuncAssembly",
+                  "sample_types": [
+                    "genomic",
+                    "synthetic"
+                  ]
+                },
+                {
+                  "program": "strain_meta",
+                  "required_outputs": [
+                    "profile"
+                  ],
+                  "format": "StrainMeta",
+                  "sample_types": [
+                    "meta",
+                    "shortReads"
+                  ]
+                },
+                {
+                  "program": "growth",
+                  "required_outputs": [
+                    "log2ptr_csv"
+                  ],
+                  "format": "StrainCoPTR",
+                  "sample_types": [
+                    "meta",
+                    "shortReads"
+                  ]
+                },
+                {
+                  "program": "bacdef",
+                  "required_outputs": [
+                    "defense_genes",
+                    "defense_systems",
+                    "defense_hmmer_hits"
+                  ],
+                  "format": "BacDef",
+                  "sample_types": [
+                    "shortReads",
+                    "genomic",
+                    "synthetic",
+                    "meta"
+                  ]
+                },
+                {
+                  "program": "bacsec",
+                  "required_outputs": [
+                    "secretion_systems",
+                    "secretion_genes"
+                  ],
+                  "format": "BacSec",
+                  "sample_types": [
+                    "shortReads",
+                    "genomic",
+                    "synthetic",
+                    "meta"
+                  ]
+                },
+                {
+                  "program": "bacbgc",
+                  "required_outputs": [
+                    "bgc_clusters",
+                    "bgc_genes",
+                    "bgc_features"
+                  ],
+                  "format": "BacBGC",
+                  "sample_types": [
+                    "shortReads",
+                    "genomic",
+                    "synthetic",
+                    "meta"
+                  ]
+                },
+                {
+                  "program": "phi",
+                  "required_outputs": [
+                    "summary",
+                    "hits"
+                  ],
+                  "format": "PhiAnnotatorGenome",
+                  "sample_types": [
+                    "genomic",
+                    "synthetic"
+                  ]
+                },
+                {
+                  "program": "phi",
+                  "required_outputs": [
+                    "summary",
+                    "hits"
+                  ],
+                  "format": "PhiAnnotatorMetagenome",
+                  "sample_types": [
+                    "meta",
+                    "shortReads"
+                  ]
+                },
+                {
+                  "program": "tcdb",
+                  "required_outputs": [
+                    "summary",
+                    "hits"
+                  ],
+                  "format": "TcdbAnnotatorGenome",
+                  "sample_types": [
+                    "genomic",
+                    "synthetic"
+                  ]
+                },
+                {
+                  "program": "tcdb",
+                  "required_outputs": [
+                    "summary",
+                    "hits"
+                  ],
+                  "format": "TcdbAnnotatorMetagenome",
+                  "sample_types": [
+                    "meta",
+                    "shortReads"
+                  ]
+                },
+                {
+                  "program": "qc",
+                  "required_outputs": [
+                    "qc_counts"
+                  ],
+                  "format": "MetagenomicQc",
+                  "sample_types": [
+                    "meta",
+                    "shortReads"
+                  ]
+                },
+                {
+                  "program": "qc",
+                  "required_outputs": [
+                    "qc_summary"
+                  ],
+                  "format": "ReadQc",
+                  "sample_types": [
+                    "meta",
+                    "shortReads"
+                  ]
+                }
+              ],
+              "existing_sources": "preserved",
+              "create_missing": true
+            },
+            "backend_last_seen": 1795142135.952643
+          }
+        ]
+      }
+    },
+    "files": [],
+    "evidence": [],
+    "error": null
+  }
+}

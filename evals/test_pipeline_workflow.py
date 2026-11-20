@@ -11,7 +11,7 @@ from time import monotonic, sleep
 from unittest import TestCase, skipUnless
 from unittest.mock import patch
 
-from agents.testing import ModelStep, ScriptedModel, assistant_message
+from agents.testing import ModelStep, ScriptedModel, assistant_message, function_call
 from openai.types.responses.response_function_shell_tool_call import ResponseFunctionShellToolCall
 
 from auth import AccessDenied, Principal, principal_scope
@@ -213,16 +213,40 @@ class WorkflowTests(TestCase):
             stop.set()
 
     def test_sdk_reviews_graph_and_collects_real_terminal_result(self):
-        identifier = self.plan(stage("a"), stage("b", output("a")))
-        command = f"agent-pipeline workflow-run --workflow-id {identifier}"
-        model = ScriptedModel([ModelStep(output=[shell_call(command, "workflow-review")])])
+        steps = [stage("a"), stage("b", output("a"))]
+        command = shlex.join(("agent-pipeline", "workflow-plan", "--steps", json.dumps(steps)))
+
+        def start_saved_workflow(call):
+            self.assertIn("pipeline_shell", {tool.name for tool in call.tools})
+            saved, = self.command("workflow-list")["workflows"]
+            self.assertEqual(saved["status"], "planned")
+            return [shell_call(f"agent-pipeline workflow-run --workflow-id {saved['workflow_id']}", "workflow-review")]
+
+        model = ScriptedModel([
+            ModelStep(output=[function_call("pipeline_specialist", {"task": "Run the two-step fixture workflow."},
+                                            call_id="delegate-workflow")]),
+            ModelStep(output=[shell_call(command, "workflow-plan")]),
+            ModelStep.respond(start_saved_workflow),
+        ])
         run = asyncio.run(runtime.async_run_agent("Run the text fixture workflow.", session_id="fixture", model=model))
         self.assertEqual(run["status"], "pending_approval", run)
+        self.assertNotIn("pipeline_shell", {tool.name for tool in model.calls[0].tools})
         approval = run["approvals"][0]
+        self.assertEqual(approval["agent"], "pipeline_specialist")
         self.assertEqual(approval["plan"]["steps"][1]["inputs"]["reads"], output("a"))
         self.assertEqual(service.JobStore(self.root).list(), [])
-        model = ScriptedModel([ModelStep(output=[assistant_message("Working.")]),
-                               ModelStep(output=[assistant_message("The workflow finished.")])])
+
+        def summarize_completed(call):
+            self.assertNotIn("pipeline_shell", {tool.name for tool in call.tools})
+            notice = next(item["content"] for item in call.input if isinstance(item, dict)
+                          and item.get("role") == "developer" and "pipeline_workflows" in str(item.get("content")))
+            completed, = json.loads(notice.split("\n", 1)[1])["pipeline_workflows"]
+            self.assertEqual(completed["status"], "succeeded")
+            return [assistant_message("The workflow finished.")]
+
+        model = ScriptedModel([ModelStep(output=[assistant_message("Workflow launched.")]),
+                               ModelStep(output=[assistant_message("Working.")]),
+                               ModelStep.respond(summarize_completed)])
         run = asyncio.run(runtime.async_resume_agent("fixture", True, approval["approval_id"], model=model))
         self.assertEqual(run["status"], "ok", run)
         self.assertEqual(run["answer"], "The workflow finished.")
@@ -232,10 +256,15 @@ class WorkflowTests(TestCase):
     def test_sdk_rejection_leaves_workflow_unapproved(self):
         identifier = self.plan(stage("a"), stage("b", output("a")))
         command = f"agent-pipeline workflow-run --workflow-id {identifier}"
-        model = ScriptedModel([ModelStep(output=[shell_call(command, "workflow-review")])])
+        model = ScriptedModel([
+            ModelStep(output=[function_call("pipeline_specialist", {"task": "Review the fixture workflow."},
+                                            call_id="delegate-review")]),
+            ModelStep(output=[shell_call(command, "workflow-review")]),
+        ])
         run = asyncio.run(runtime.async_run_agent("Review the text fixture workflow.", session_id="fixture", model=model))
         approval = run["approvals"][0]
-        model = ScriptedModel([ModelStep(output=[assistant_message("Workflow rejected.")])])
+        model = ScriptedModel([ModelStep(output=[assistant_message("Approval declined.")]),
+                               ModelStep(output=[assistant_message("Workflow rejected.")])])
         run = asyncio.run(runtime.async_resume_agent("fixture", False, approval["approval_id"], model=model))
         self.assertEqual(run["status"], "ok", run)
         self.assertEqual(self.tick(identifier)[0]["status"], "planned")

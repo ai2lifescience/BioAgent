@@ -1,0 +1,103 @@
+{
+  "approved_at": "2026-11-20T10:02:27.040923+00:00",
+  "approval": {
+    "approval_id": "fe9e1a3d5ac84d3db8264f41bfecb5e4",
+    "call_id": "call_L9odzbzMlEGkOCluRrcMQjLe",
+    "agent": "pipeline_specialist",
+    "tool_name": "pipeline_shell",
+    "arguments": {
+      "commands": [
+        "agent-pipeline workflow-run --workflow-id 3667336148ce4e7d800ebeea6bce340b"
+      ],
+      "max_output_length": 40000,
+      "timeout_ms": 30000
+    },
+    "plan": {
+      "workflow_id": "3667336148ce4e7d800ebeea6bce340b",
+      "status": "planned",
+      "created_at": "2026-11-20T10:02:16.618078+00:00",
+      "step_count": 4,
+      "steps": [
+        {
+          "id": "qc",
+          "pipeline": "metagenomic_read_quality_control",
+          "depends_on": [],
+          "inputs": {
+            "read1": "uploads/DRR000852_subset_R1.fastq.gz",
+            "read2": "uploads/DRR000852_subset_R2.fastq.gz"
+          },
+          "params": {
+            "sample_id": "DRR000852"
+          },
+          "cores": 1,
+          "timeout": 86400,
+          "status": "waiting"
+        },
+        {
+          "id": "assembly",
+          "pipeline": "metagenomic_de_novo_assembly",
+          "depends_on": [
+            "qc"
+          ],
+          "inputs": {
+            "read1": {
+              "step": "qc",
+              "output": "clean_r1"
+            },
+            "read2": {
+              "step": "qc",
+              "output": "clean_r2"
+            }
+          },
+          "params": {
+            "sample_id": "DRR000852"
+          },
+          "cores": 1,
+          "timeout": 86400,
+          "status": "waiting"
+        },
+        {
+          "id": "metax",
+          "pipeline": "metax_classification_abundance_analysis",
+          "depends_on": [
+            "qc"
+          ],
+          "inputs": {
+            "reads": {
+              "step": "qc",
+              "output": "clean_r1"
+            },
+            "reads2": {
+              "step": "qc",
+              "output": "clean_r2"
+            }
+          },
+          "params": {},
+          "cores": 1,
+          "timeout": 86400,
+          "status": "waiting"
+        },
+        {
+          "id": "tcdb",
+          "pipeline": "tcdb_annotator_genome",
+          "depends_on": [
+            "assembly"
+          ],
+          "inputs": {
+            "genome_fasta": {
+              "step": "assembly",
+              "output": "contigs"
+            }
+          },
+          "params": {
+            "sample_id": "DRR000852",
+            "genome_context": "metagenome"
+          },
+          "cores": 1,
+          "timeout": 86400,
+          "status": "waiting"
+        }
+      ]
+    }
+  }
+}

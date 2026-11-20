@@ -1,0 +1,71 @@
+{
+  "checked_at": "2026-11-20T09:58:50.523156+00:00",
+  "commit": "92486c5",
+  "model": "openai/gpt-5.6-sol-pro",
+  "cromwell": {},
+  "docker_ready": true,
+  "pipelines": {
+    "metagenomic_read_quality_control": {
+      "definition_sha256": "1ac9af8c14b1b2954f027fe805950ea2f964f81097089f13f51d78336f4e4dee",
+      "engine": "wdl",
+      "workflow": "stage0_qc.wdl",
+      "input_slots": [
+        "read1",
+        "read2"
+      ],
+      "outputs": [
+        "clean_r1",
+        "clean_r2",
+        "qc_counts",
+        "phase1_metrics"
+      ]
+    },
+    "metagenomic_de_novo_assembly": {
+      "definition_sha256": "06d3be811c0645b479f8f86142e23b86b0827135c8154afbc713f67cabbce564",
+      "engine": "wdl",
+      "workflow": "assembly_id.wdl",
+      "input_slots": [
+        "read1",
+        "read2"
+      ],
+      "outputs": [
+        "contigs",
+        "contig_report",
+        "species_report"
+      ]
+    },
+    "metax_classification_abundance_analysis": {
+      "definition_sha256": "ac382e79ca14a25da1bbea90c36eb38327f1d8be5578dae7a5bc7c242696c284",
+      "engine": "wdl",
+      "workflow": "workflow.wdl",
+      "input_slots": [
+        "reads",
+        "reads2"
+      ],
+      "outputs": [
+        "profile"
+      ]
+    },
+    "tcdb_annotator_genome": {
+      "definition_sha256": "42380b16db0e0b265729412d75b185742148350a027918ef26818600cfbeed1d",
+      "engine": "wdl",
+      "workflow": "workflow.wdl",
+      "input_slots": [
+        "genome_fasta",
+        "protein_fasta"
+      ],
+      "outputs": [
+        "hits",
+        "summary",
+        "tm_predictions",
+        "qc",
+        "status",
+        "manifest",
+        "report"
+      ]
+    }
+  },
+  "storage_access": "S3 list succeeded",
+  "session_isolation": "Dedicated metadata, workspace and conversation database",
+  "max_parallel_pipeline_jobs": 2
+}

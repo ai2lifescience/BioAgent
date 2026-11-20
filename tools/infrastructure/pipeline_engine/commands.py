@@ -21,7 +21,11 @@ def parse_command(command: str) -> argparse.Namespace:
         raise ValueError("Only agent-pipeline commands are supported.")
     parser = Parser(prog="agent-pipeline", add_help=False, allow_abbrev=False)
     subs = parser.add_subparsers(dest="operation", required=True, parser_class=Parser)
-    for name in ("catalog", "files", "jobs"):
+    catalog = subs.add_parser("catalog", add_help=False, allow_abbrev=False)
+    catalog.add_argument("--pipeline")
+    catalog.add_argument("--offset", type=int, default=0)
+    catalog.add_argument("--limit", type=int, default=8)
+    for name in ("files", "jobs"):
         subs.add_parser(name, add_help=False, allow_abbrev=False)
     example = subs.add_parser("example", add_help=False, allow_abbrev=False)
     example.add_argument("--pipeline", default="template_shell")
@@ -71,7 +75,7 @@ def dispatch(root, command: str) -> dict:
     if args.operation in WORKFLOW_OPERATIONS:
         raise ValueError("Workflow commands require an owned agent session.")
     if args.operation == "catalog":
-        return {"pipelines": service.catalog(compact=True)}
+        return service.catalog_page(service.catalog(compact=True), args.pipeline, args.offset, args.limit)
     if args.operation == "files":
         return {"files": service.files(root)}
     if args.operation == "example":

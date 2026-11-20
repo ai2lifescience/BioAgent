@@ -60,6 +60,7 @@ def catalog(*, compact: bool = False) -> list[dict]:
             continue
         try:
             _, manifest, config = definition(path.name)
+            max_cores, max_timeout = resource_bounds(manifest)
             entries.append({
                 "name": path.name,
                 "display_name": manifest.get("display_name") or path.name,
@@ -77,12 +78,34 @@ def catalog(*, compact: bool = False) -> list[dict]:
                 "outputs": pipeline_output_specs(manifest),
                 "parameters": manifest.get("param_overrides") or config.get("params", {}),
                 "timeout_seconds": manifest.get("timeout", 300),
+                "plan_limits": {"max_cores": max_cores, "max_timeout_seconds": max_timeout},
             })
         except (ValueError, OSError) as exc:
             entries.append({"name": path.name, "error": str(exc)})
     if not compact:
         return entries
     return [_compact_catalog_entry(entry) for entry in entries]
+
+
+def catalog_page(entries, name=None, offset=0, limit=8):
+    """Keep complete catalog entries within the SDK shell response budget."""
+    if offset < 0 or not 1 <= limit <= 32:
+        raise ValueError("Catalog offset must be nonnegative and limit must be 1..32.")
+    if name is not None:
+        entries = [entry for entry in entries if entry["name"] == name]
+        if not entries:
+            raise ValueError(f"Pipeline is unavailable: {name}.")
+    page = {"pipelines": [], "total": len(entries), "offset": offset, "next_offset": None}
+    for entry in entries[offset:offset + limit]:
+        candidate = {**page, "pipelines": [*page["pipelines"], entry]}
+        # Account for the escaped stdout string in the SDK's JSON tool output.
+        if page["pipelines"] and len(json.dumps({"stdout": json.dumps(candidate)})) > 28000:
+            break
+        page = candidate
+    following = offset + len(page["pipelines"])
+    if following < len(entries):
+        page["next_offset"] = following
+    return page
 
 
 def _compact_catalog_entry(entry: dict) -> dict:

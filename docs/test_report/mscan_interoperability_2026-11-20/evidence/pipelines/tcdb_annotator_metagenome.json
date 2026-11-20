@@ -1,0 +1,686 @@
+{
+  "pipeline": "tcdb_annotator_metagenome",
+  "execution": "succeeded",
+  "stack": "standard",
+  "project": "Bridge_expanded_20261120_standard",
+  "session_id": "fd96f339-7b22-4b81-8df4-6bb51e330ae0",
+  "engine": "wdl",
+  "catalog_name": "tcdb_annotator_metagenome",
+  "manifest_sha256": "227d760e471c88baf5b34a34e592dad1dca0018449a103cb115343aa1792c442",
+  "inputs": {
+    "read1": "uploads/2a91c5d089374f87a0a6653d7c3609f0_annotation_R1.fastq.gz",
+    "read2": "uploads/e0252b028fc1484893aca76a2deeeaa1_annotation_R2.fastq.gz"
+  },
+  "parameters": {},
+  "input_scope": "Deterministic paired reads sampled from unmodified E. coli K-12 MG1655; no experimental or clinical data.",
+  "plan_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+  "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+  "last_state": {
+    "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+    "plan_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:13:59.421720+00:00",
+    "started_at": "2026-11-20T02:13:59.595329+00:00",
+    "finished_at": "2026-11-20T02:14:28.667288+00:00",
+    "updated_at": "2026-11-20T02:14:28.668404+00:00",
+    "error": null,
+    "remote_id": "513e6d6a-6970-4d31-bd7d-484770cbafac",
+    "artifact_status": "available",
+    "pipeline_name": "tcdb_annotator_metagenome"
+  },
+  "outputs": {
+    "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+    "plan_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:13:59.421720+00:00",
+    "started_at": "2026-11-20T02:13:59.595329+00:00",
+    "finished_at": "2026-11-20T02:14:28.667288+00:00",
+    "updated_at": "2026-11-20T02:14:28.668404+00:00",
+    "error": null,
+    "remote_id": "513e6d6a-6970-4d31-bd7d-484770cbafac",
+    "artifact_status": "available",
+    "pipeline_name": "tcdb_annotator_metagenome",
+    "files": [
+      {
+        "name": "tcdb_hits.tsv",
+        "path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/0/tcdb_hits.tsv",
+        "workspace_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/0/tcdb_hits.tsv",
+        "size": 149204,
+        "remote": true,
+        "artifact_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4:0",
+        "pipeline_result": {
+          "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+          "pipeline_name": "tcdb_annotator_metagenome",
+          "output_key": "TcdbAnnotatorMetagenome.hits",
+          "output_name": "hits",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:14:28.667288+00:00"
+        }
+      },
+      {
+        "name": "tcdb_read_hits.tsv",
+        "path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/1/tcdb_read_hits.tsv",
+        "workspace_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/1/tcdb_read_hits.tsv",
+        "size": 251896,
+        "remote": true,
+        "artifact_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4:1",
+        "pipeline_result": {
+          "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+          "pipeline_name": "tcdb_annotator_metagenome",
+          "output_key": "TcdbAnnotatorMetagenome.read_hits",
+          "output_name": "read_hits",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:14:28.667288+00:00"
+        }
+      },
+      {
+        "name": "tcdb_summary.tsv",
+        "path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/2/tcdb_summary.tsv",
+        "workspace_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/2/tcdb_summary.tsv",
+        "size": 10393,
+        "remote": true,
+        "artifact_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4:2",
+        "pipeline_result": {
+          "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+          "pipeline_name": "tcdb_annotator_metagenome",
+          "output_key": "TcdbAnnotatorMetagenome.summary",
+          "output_name": "summary",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:14:28.667288+00:00"
+        }
+      },
+      {
+        "name": "qc.json",
+        "path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/3/qc.json",
+        "workspace_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/3/qc.json",
+        "size": 1345,
+        "remote": true,
+        "artifact_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4:3",
+        "pipeline_result": {
+          "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+          "pipeline_name": "tcdb_annotator_metagenome",
+          "output_key": "TcdbAnnotatorMetagenome.qc",
+          "output_name": "qc",
+          "output_kind": "file",
+          "completed_at": "2026-11-20T02:14:28.667288+00:00"
+        }
+      },
+      {
+        "name": "status.json",
+        "path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/4/status.json",
+        "workspace_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/4/status.json",
+        "size": 691,
+        "remote": true,
+        "artifact_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4:4",
+        "pipeline_result": {
+          "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+          "pipeline_name": "tcdb_annotator_metagenome",
+          "output_key": "TcdbAnnotatorMetagenome.status",
+          "output_name": "status",
+          "output_kind": "file",
+          "completed_at": "2026-11-20T02:14:28.667288+00:00"
+        }
+      },
+      {
+        "name": "manifest.json",
+        "path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/5/manifest.json",
+        "workspace_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/5/manifest.json",
+        "size": 2098,
+        "remote": true,
+        "artifact_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4:5",
+        "pipeline_result": {
+          "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+          "pipeline_name": "tcdb_annotator_metagenome",
+          "output_key": "TcdbAnnotatorMetagenome.manifest",
+          "output_name": "manifest",
+          "output_kind": "file",
+          "completed_at": "2026-11-20T02:14:28.667288+00:00"
+        }
+      },
+      {
+        "name": "report.md",
+        "path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/6/report.md",
+        "workspace_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/6/report.md",
+        "size": 4456,
+        "remote": true,
+        "artifact_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4:6",
+        "pipeline_result": {
+          "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+          "pipeline_name": "tcdb_annotator_metagenome",
+          "output_key": "TcdbAnnotatorMetagenome.report",
+          "output_name": "report",
+          "output_kind": "file",
+          "completed_at": "2026-11-20T02:14:28.667288+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/2/tcdb_summary.tsv",
+        "text": "dimension\tvalue\thit_count\tunique_query_count\tsupporting_reads\ntc_class\t1\t41\t37\t81\ntc_class\t2\t103\t90\t196\ntc_class\t3\t84\t73\t159\ntc_class\t4\t18\t16\t32\ntc_class\t5\t6\t6\t13\ntc_class\t8\t5\t5\t8\ntc_class\t9\t24\t22\t37\ntc_subclass\t1.A\t12\t10\t20\ntc_subclass\t1.B\t29\t27\t61\ntc_subclass\t2.A\t102\t89\t194\ntc_subclass\t2.C\t1\t1\t2\ntc_subclass\t3.A\t63\t58\t123\ntc_subclass\t3.D\t21\t15\t36\ntc_subclass\t4.A\t14\t12\t22\ntc_subclass\t4.C\t1\t1\t2\ntc_subclass\t4.D\t2\t2\t7\ntc_subclass\t4.H\t1\t1\t1\ntc_subclass\t5.A\t6\t6\t13\ntc_subclass\t8.A\t5\t5\t8\ntc_subclass\t9.A\t4\t4\t9\ntc_subclass\t9.B\t20\t18\t28\ntc_family\t1.A.11\t1\t1\t1\ntc_family\t1.A.112\t2\t1\t4\ntc_family\t1.A.13\t1\t1\t2\ntc_family\t1.A.16\t1\t1\t1\ntc_family\t1.A.22\t1\t1\t1\ntc_family\t1.A.23\t2\t2\t5\ntc_family\t1.A.33\t3\t2\t4\ntc_family\t1.A.34\t1\t1\t2\ntc_family\t1.B.1\t4\t3\t7\ntc_family\t1.B.11\t4\t4\t10\ntc_family\t1.B.12\t3\t3\t8\ntc_family\t1.B.14\t4\t4\t7\ntc_family\t1.B.17\t1\t1\t2\ntc_family\t1.B.18\t1\t1\t2\ntc_family\t1.B.22\t2\t2\t3\ntc_family\t1.B.3\t1\t1\t2\ntc_family\t1.B.33\t2\t2\t4\ntc_family\t1.B.39\t2\t1\t4\ntc_family\t1.B.46\t1\t1\t2\ntc_family\t1.B.54\t2\t2\t7\ntc_family\t1.B.6\t2\t2\t3\ntc_family\t2.A.1\t23\t23\t52\ntc_family\t2.A.103\t1\t1\t1\ntc_family\t2.A.107\t1\t1\t2\ntc_family\t2.A.113\t1\t1\t1\ntc_family\t2.A.114\t3\t1\t7\ntc_family\t2.A.127\t2\t1\t8\ntc_family\t2.A.14\t1\t1\t1\ntc_family\t2.A.19\t1\t1\t1\ntc_family\t2.A.2\t1\t1\t3\ntc_family\t2.A.21\t2\t2\t2\ntc_family\t2.A.23\t2\t2\t4\ntc_family\t2.A.3\t7\t5\t10\ntc_family\t2.A.33\t1\t1\t4\ntc_family\t2.A.36\t1\t1\t2\ntc_family\t2.A.37\t1\t1\t2\ntc_family\t2.A.4\t1\t1\t2\ntc_family\t2.A.40\t1\t1\t2\ntc_family\t2.A.41\t1\t1\t2\ntc_family\t2.A.42\t4\t4\t7\ntc_family\t2.A.47\t4\t4\t8\ntc_family\t2.A.49\t2\t1\t2\ntc_family\t2.A.56\t1\t1\t2\ntc_family\t2.A.6\t14\t8\t23\ntc_family\t2.A.61\t1\t1\t2\ntc_family\t2.A.66\t3\t3\t5\ntc_family\t2.A.7\t7\t7\t14\ntc_family\t2.A.75\t1\t1\t1\ntc_family\t2.A.76\t1\t1\t1\ntc_family\t2.A.78\t1\t1\t2\ntc_family\t2.A.8\t3\t3\t5\ntc_family\t2.A.81\t2\t2\t5\ntc_family\t2.A.85\t5\t4\t8\ntc_family\t2.A.86\t1\t1\t1\ntc_family\t2.A.98\t1\t1\t2\ntc_family\t2.C.1\t1\t1\t2\ntc_family\t3.A.1\t54\t50\t110\ntc_family\t3.A.12\t1\t1\t2\ntc_family\t3.A.15\t2\t1\t2\ntc_family\t3.A.3\t2\t2\t3\ntc_family\t3.A.4\t1\t1\t2\ntc_family\t3.A.5\t1\t1\t1\ntc_family\t3.A.6\t2\t2\t3\ntc_family\t3.D.1\t10\t7\t18\ntc_family\t3.D.11\t3\t3\t6\ntc_family\t3.D.13\t1\t1\t1\ntc_family\t3.D.2\t1\t1\t2\ntc_family\t3.D.4\t2\t1\t3\ntc_family\t3.D.6\t2\t2\t3\ntc_family\t3.D.7\t1\t1\t2\ntc_family\t3.D.9\t1\t1\t1\ntc_family\t4.A.1\t2\t2\t3\ntc_family\t4.A.2\t2\t2\t3\ntc_family\t4.A.3\t3\t2\t5\ntc_family\t4.A.4\t2\t1\t2\ntc_family\t4.A.5\t2\t2\t3\ntc_family\t4.A.6\t2\t2\t4\ntc_family\t4.A.7\t1\t1\t2\ntc_family\t4.C.1\t1\t1\t2\ntc_family\t4.D.2\t1\t1\t1\ntc_family\t4.D.3\t1\t1\t6\ntc_family\t4.H.1\t1\t1\t1\ntc_family\t5.A.3\t6\t6\t13\ntc_family\t8.A.1\t1\t1\t2\ntc_family\t8.A.2\t1\t1\t1\ntc_family\t8.A.3\t1\t1\t2\ntc_family\t8.A.5\t1\t1\t2\ntc_family\t8.A.79\t1\t1\t1\ntc_family\t9.A.69\t4\t4\t9\ntc_family\t9.B.118\t1\t1\t2\ntc_family\t9.B.120\t1\t1\t1\ntc_family\t9.B.121\t3\t2\t3\ntc_family\t9.B.124\t1\t1\t1\ntc_family\t9.B.14\t2\t1\t3\ntc_family\t9.B.149\t1\t1\t2\ntc_family\t9.B.156\t1\t1\t1\ntc_family\t9.B.160\t1\t1\t1\ntc_family\t9.B.27\t1\t1\t1\ntc_family\t9.B.318\t1\t1\t2\ntc_family\t9.B.331\t1\t1\t1\ntc_family\t9.B.334\t1\t1\t2\ntc_family\t9.B.34\t1\t1\t2\ntc_family\t9.B.44\t1\t1\t2\ntc_family\t9.B.444\t1\t1\t1\ntc_family\t9.B.62\t1\t1\t1\ntc_family\t9.B.72\t1\t1\t2\nfamily_name\tThe 11 or 12 TMS YhfT (YhfT) Family\t1\t1\t2\nfamily_name\tThe 3 TMS cyd Operon Protein, CydX (CydX) Family\t1\t1\t1\nfamily_name\tThe 4 TMS GlpM (GlpM) Family\t1\t1\t2\nfamily_name\tThe ATP Binding Protein (ATP-BP) Family\t1\t1\t1\nfamily_name\tThe ATP-binding Cassette (ABC) Superfamily\t54\t50\t110\nfamily_name\tThe Amino Acid-Polyamine-Organocation (APC) Family\t7\t5\t10\nfamily_name\tThe Ammonium Transporter Channel (Amt) Family\t1\t1\t1\nfamily_name\tThe Archael N-terminal Transmembrane Domain Linked to a Sensor Kinase or MCP Domain (N-TM/SK/MCP) Family\t1\t1\t2\nfamily_name\tThe Aromatic Acid Exporter (ArAE) Family\t5\t4\t8\nfamily_name\tThe Arsenite-Antimonite (ArsAB) Efflux Family\t1\t1\t2\nfamily_name\tThe AsmA (AsmA) Family\t3\t2\t3\nfamily_name\tThe Aspartate:Alanine Exchanger (AAEx) Family\t2\t2\t5\nfamily_name\tThe Autoinducer-2 Exporter (AI-2E) Family (Formerly the PerM Family, TC #9.B.22)\t1\t1\t1\nfamily_name\tThe Autotransporter-1 (AT-1) Family\t3\t3\t8\nfamily_name\tThe Bacillus Gap Junction-like Channel-forming Complex (GJ-CC) Family\t1\t1\t2\nfamily_name\tThe Bacterial Murein Precursor Exporter (MPE) Family\t1\t1\t1\nfamily_name\tThe Bacterial Porin, OmpW (OmpW) Family\t2\t1\t4\nfamily_name\tThe Branched Chain Amino Acid Exporter (LIV-E) Family\t1\t1\t2\nfamily_name\tThe C4-dicarboxylate Uptake C (DcuC) Family\t1\t1\t2\nfamily_name\tThe Ca2+:Cation Antiporter (CaCA) Family\t1\t1\t1\nfamily_name\tThe Cation Channel-forming Heat Shock Protein-70 (Hsp70) Family\t3\t2\t4\nfamily_name\tThe Cation Diffusion Facilitator (CDF) Family\t1\t1\t2\nfamily_name\tThe Chloride Carrier/Channel (ClC) Family\t2\t1\t2\nfamily_name\tThe Colicin V Production (CvpA) Family\t1\t1\t1\nfamily_name\tThe Concentrative Nucleoside Transporter (CNT) Family\t1\t1\t2\nfamily_name\tThe Copper Resistance (CopD) Family\t1\t1\t1\nfamily_name\tThe Cyclin M Mg2+ Exporter (CNNM) Family\t2\t1\t4\nfamily_name\tThe Cytoplasmic Membrane-Periplasmic Auxiliary-1 (MPA1) Protein with Cytoplasmic (C) Domain (MPA1-C or MPA1+C) Family\t1\t1\t2\nfamily_name\tThe DUF554 (DUF554) Family\t1\t1\t1\nfamily_name\tThe DUF805 or PF05656 (DUF805) Family\t1\t1\t1\nfamily_name\tThe Death Effector Domain A (DedA) Family\t1\t1\t1\nfamily_name\tThe Dicarboxylate/Amino Acid:Cation (Na+ or H+) Symporter (DAACS) Family\t2\t2\t4\nfamily_name\tThe Divalent Anion:Na+ Symporter (DASS) Family\t4\t4\t8\nfamily_name\tThe Drug/Metabolite Transporter (DMT) Superfamily\t7\t7\t14\nfamily_name\tThe Enterobacterial Cardiolipin Transporter (CLT) Family\t2\t1\t8\nfamily_name\tThe Epithelial Chloride Channel (E-ClC) Family\t1\t1\t2\nfamily_name\tThe Fatty Acid Group Translocation (FAT) Family\t1\t1\t2\nfamily_name\tThe Formate-Nitrite Transporter (FNT) Family\t1\t1\t1\nfamily_name\tThe General Bacterial Porin (GBP) Family\t4\t3\t7\nfamily_name\tThe General Secretory Pathway (Sec) Family\t1\t1\t1\nfamily_name\tThe Gluconate:H+ Symporter (GntP) Family\t3\t3\t5\nfamily_name\tThe Glycan Glucosyl Transferase (OpgH) Family\t1\t1\t6\nfamily_name\tThe Glycoside-Pentoside-Hexuronide (GPH):Cation Symporter Family\t1\t1\t3\nfamily_name\tThe Glycosyl Transferase 2 (GT2) Family\t1\t1\t1\nfamily_name\tThe H+ Extruding F420 Dehydrogenase (FPO) Complex Family\t1\t1\t1\nfamily_name\tThe H+ or Na+-translocating NADH Dehydrogenase (NDH) Family\t10\t7\t18\nfamily_name\tThe H+-translocating F420H2 Dehydrogenase (F420H2DH) Family\t1\t1\t1\nfamily_name\tThe H2:Heterodisulfide Oxidoreductase (HHO) Family\t1\t1\t2\nfamily_name\tThe Hydroxy/Aromatic Amino Acid Permease (HAAAP) Family\t4\t4\t7\nfamily_name\tThe Intermembrane Phospholipid Translocase (IMPL-T) Family\t4\t4\t9\nfamily_name\tThe Intimin/Invasin (Int/Inv) or Autotransporter-3 (AT-3) Family\t2\t2\t7\nfamily_name\tThe Ion (H+ or Na+)-translocating NADH:Ferredoxin Oxidoreductase (NFO or RNF) Family\t2\t2\t3\nfamily_name\tThe Kinase/Phosphatase/Cyclic-GMP Synthase/Cyclic di-GMP Hydrolase (KPSH) Family\t1\t1\t2\nfamily_name\tThe L-Lysine Exporter (LysE) Family\t1\t1\t1\nfamily_name\tThe Lactate Permease (LctP) Family\t1\t1\t1\nfamily_name\tThe Large Conductance Mechanosensitive Ion Channel (MscL) Family\t1\t1\t1\nfamily_name\tThe Lysyl Phosphatidylglycerol Synthase/Flippase (MprF) Family\t1\t1\t1\nfamily_name\tThe M50 Peptidase (M50-P) Family\t1\t1\t2\nfamily_name\tThe Major Facilitator Superfamily (MFS)\t23\t23\t52\nfamily_name\tThe Membrane Fusion Protein (MFP) Family\t1\t1\t2\nfamily_name\tThe MntP Mn2+ exporter (MntP) Family\t1\t1\t2\nfamily_name\tThe Monovalent Cation:Proton Antiporter-1 (CPA1) Family\t1\t1\t2\nfamily_name\tThe Monovalent Cation:Proton Antiporter-2 (CPA2) Family\t1\t1\t2\nfamily_name\tThe Multidrug/Oligosaccharidyl-lipid/Polysaccharide (MOP) Flippase Superfamily\t3\t3\t5\nfamily_name\tThe NhaA Na+:H+ Antiporter (NhaA) Family\t1\t1\t4\nfamily_name\tThe Nickel/cobalt Transporter (NicO) Family\t1\t1\t1\nfamily_name\tThe Nucleobase/Ascorbate Transporter (NAT) or Nucleobase:Cation Symporter-2 (NCS2) Family\t1\t1\t2\nfamily_name\tThe OmpA-OmpF Porin (OOP) Family\t2\t2\t3\nfamily_name\tThe Outer Bacterial Membrane Secretin (Secretin) Family\t2\t2\t3\nfamily_name\tThe Outer Membrane Auxiliary (OMA) Protein Family\t1\t1\t2\nfamily_name\tThe Outer Membrane Factor (OMF) Family\t1\t1\t2\nfamily_name\tThe Outer Membrane Fimbrial Usher Porin (FUP) Family\t4\t4\t10\nfamily_name\tThe Outer Membrane LolAB Lipoprotein Insertion Apparatus (LolAB) Family\t1\t1\t2\nfamily_name\tThe Outer Membrane Protein Insertion Porin (Bam Complex) (OmpIP) Family\t2\t2\t4\nfamily_name\tThe Outer Membrane Protein Secreting Main Terminal Branch (MTB) Family\t2\t1\t2\nfamily_name\tThe Outer Membrane Receptor (OMR) Family\t4\t4\t7\nfamily_name\tThe P-type ATPase (P-ATPase) Superfamily\t2\t2\t3\nfamily_name\tThe PTS Fructose-Mannitol (Fru) Family\t2\t2\t3\nfamily_name\tThe PTS Galactitol (Gat) Family\t2\t2\t3\nfamily_name\tThe PTS Glucitol (Gut) Family\t2\t1\t2\nfamily_name\tThe PTS Glucose-Glucoside (Glc) Family\t2\t2\t3\nfamily_name\tThe PTS L-Ascorbate (L-Asc) Family\t1\t1\t2\nfamily_name\tThe PTS Lactose-N,N'-Diacetylchitobiose-β-glucoside (Lac) Family\t3\t2\t5\nfamily_name\tThe PTS Mannose-Fructose-Sorbose (Man) Family\t2\t2\t4\nfamily_name\tThe Periplasmic Nitrate Reductase Complex (NAP) Complex Family\t3\t3\t6\nfamily_name\tThe Prokaryotic Molybdopterin-containing Oxidoreductase (PMO) Family\t6\t6\t13\nfamily_name\tThe Proton-translocating Cytochrome Oxidase (COX) Superfamily\t2\t1\t3\nfamily_name\tThe Proton-translocating Transhydrogenase (PTH) Family\t1\t1\t2\nfamily_name\tThe Putative 4-10 TMS Permease (4-10P) Family\t1\t1\t1\nfamily_name\tThe Putative Heme Handling Protein (HHP) Family\t2\t1\t3\nfamily_name\tThe Putative Peptide Transporter Carbon Starvation CstA (CstA) Family\t3\t1\t7\nfamily_name\tThe Putative Sulfate Exporter (PSE) Family\t1\t1\t2\nfamily_name\tThe Resistance to Homoserine/Threonine (RhtB) Family\t1\t1\t1\nfamily_name\tThe Resistance-Nodulation-Cell Division (RND) Superfamily\t14\t8\t23\nfamily_name\tThe Secretin Auxiliary Lipoprotein (SAL) Family\t1\t1\t1\nfamily_name\tThe Septal DNA Translocator (S-DNA-T) Family\t1\t1\t2\nfamily_name\tThe Small Conductance Mechanosensitive Ion Channel (MscS) Family\t2\t2\t5\nfamily_name\tThe Solute:Sodium Symporter (SSS) Family\t2\t2\t2\nfamily_name\tThe Sugar Porin (SP) Family\t1\t1\t2\nfamily_name\tThe TonB-ExbB-ExbD/TolA-TolQ-TolR Outer Membrane Receptor Energizers and Stabilizers (TonB/TolA) Family\t1\t1\t2\nfamily_name\tThe Tripartite ATP-independent Periplasmic Transporter (TRAP-T) Family\t1\t1\t2\nfamily_name\tThe Type III (Virulence-related) Secretory Pathway (IIISP) Family\t2\t2\t3\nfamily_name\tThe Uncharacterized YjeO/YgiZ (YjeO/YgiZ) Family\t1\t1\t1\nfamily_name\tThe Voltage-gated K+ Channel β-subunit (Kvβ) Family\t1\t1\t2\nfamily_name\tThe YiaA-YiaB (YiaAB) Family\t1\t1\t2\nfamily_name\tThe YjgJ or DUF898 (DUF898) Family\t1\t1\t2\nsubstrate\tUnspecified\t281\t249\t526\n"
+      },
+      {
+        "path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/3/qc.json",
+        "text": "{\n  \"pipeline\": \"tcdb-annotator-v2\",\n  \"pipeline_version\": \"0.2.0\",\n  \"sample_id\": \"SRR3405414\",\n  \"input_type\": \"reads\",\n  \"analysis_mode\": \"blastx\",\n  \"backend\": \"diamond\",\n  \"program\": \"blastx\",\n  \"input_files\": 2,\n  \"input_file_names\": [\n    \"4d5098cdaa930891-2a91c5d089374f87a0a6653d7c3609f0_annotation_R1.fastq.gz\",\n    \"4fa54efef0424aee-e0252b028fc1484893aca76a2deeeaa1_annotation_R2.fastq.gz\"\n  ],\n  \"protein_count\": 2000,\n  \"query_length_unit\": \"nt\",\n  \"residue_count\": 300000,\n  \"raw_hit_count\": 1352,\n  \"filtered_alignment_count\": 526,\n  \"annotation_row_count\": 281,\n  \"aggregation_level\": \"subject\",\n  \"unique_hit_queries\": 465,\n  \"orf_metadata_available\": 0,\n  \"rows_with_orf_coordinates\": 0,\n  \"unmatched_metadata_hits\": 0,\n  \"database_version\": \"TCDB 2026-08-23\",\n  \"tm_prediction\": \"off\",\n  \"tm_predicted_proteins\": 0,\n  \"thresholds\": {\n    \"min_identity\": 80.0,\n    \"min_query_coverage\": 0.0,\n    \"min_subject_coverage\": 0.0,\n    \"max_evalue\": 1e-05,\n    \"max_target_seqs\": 25,\n    \"min_alignment_length\": 30\n  },\n  \"result\": \"hits\",\n  \"dry_run\": false,\n  \"started_at\": \"2026-11-20T02:14:18.809568+00:00\",\n  \"finished_at\": \"2026-11-20T02:14:19.788619+00:00\",\n  \"read_count\": 2000,\n  \"reads_kept\": 2000,\n  \"reads_filtered_below_min_length\": 0,\n  \"read_bases_kept\": 300000,\n  \"min_read_length\": 0,\n  \"assembly_performed\": false\n}\n"
+      },
+      {
+        "path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/4/status.json",
+        "text": "{\n  \"status\": \"ok\",\n  \"result\": \"hits\",\n  \"pipeline\": \"tcdb-annotator-v2\",\n  \"sample_id\": \"SRR3405414\",\n  \"input_type\": \"reads\",\n  \"analysis_mode\": \"blastx\",\n  \"backend\": \"diamond\",\n  \"required_outputs\": [\n    \"/cromwell-executions/TcdbAnnotatorMetagenome/513e6d6a-6970-4d31-bd7d-484770cbafac/call-RunTcdbMetagenome/execution/tcdb_out/tcdb_hits.tsv\",\n    \"/cromwell-executions/TcdbAnnotatorMetagenome/513e6d6a-6970-4d31-bd7d-484770cbafac/call-RunTcdbMetagenome/execution/tcdb_out/qc.json\",\n    \"/cromwell-executions/TcdbAnnotatorMetagenome/513e6d6a-6970-4d31-bd7d-484770cbafac/call-RunTcdbMetagenome/execution/tcdb_out/status.json\"\n  ],\n  \"finished_at\": \"2026-11-20T02:14:19.788619+00:00\"\n}\n"
+      },
+      {
+        "path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/5/manifest.json",
+        "text": "{\n  \"pipeline\": \"tcdb-annotator-v2\",\n  \"pipeline_version\": \"0.2.0\",\n  \"database_version\": \"TCDB 2026-08-23\",\n  \"database\": \"/data/zhaomh/program/database/tcdb/2026-08-23/diamond/tcdb\",\n  \"metadata\": \"/data/zhaomh/program/database/tcdb/2026-08-23/normalized/tcdb_metadata.tsv\",\n  \"resolved_metadata_fields\": {\n    \"subject_id\": \"subject_id\",\n    \"tcid\": \"tcid\",\n    \"protein_name\": \"protein_name\",\n    \"family_name\": \"family_name\",\n    \"system_name\": \"system_name\",\n    \"description\": \"description\",\n    \"substrate\": \"substrate\",\n    \"organism\": \"organism\"\n  },\n  \"inputs\": [\n    {\n      \"path\": \"/cromwell-executions/TcdbAnnotatorMetagenome/513e6d6a-6970-4d31-bd7d-484770cbafac/call-RunTcdbMetagenome/execution/wdl_reads/4d5098cdaa930891-2a91c5d089374f87a0a6653d7c3609f0_annotation_R1.fastq.gz\",\n      \"sha256\": \"4d5098cdaa930891139ef7d59bba5f3c5da5de5cfda4c57be05e3ca5db36f98c\"\n    },\n    {\n      \"path\": \"/cromwell-executions/TcdbAnnotatorMetagenome/513e6d6a-6970-4d31-bd7d-484770cbafac/call-RunTcdbMetagenome/execution/wdl_reads/4fa54efef0424aee-e0252b028fc1484893aca76a2deeeaa1_annotation_R2.fastq.gz\",\n      \"sha256\": \"4fa54efef0424aeedbcc8f836874d8ef0b9d7d90d3a32446051e1876568de6a6\"\n    }\n  ],\n  \"commands\": [\n    [\n      \"diamond\",\n      \"blastx\",\n      \"--query\",\n      \"/cromwell-executions/TcdbAnnotatorMetagenome/513e6d6a-6970-4d31-bd7d-484770cbafac/call-RunTcdbMetagenome/execution/tcdb_out/work/queries.faa\",\n      \"--db\",\n      \"/data/zhaomh/program/database/tcdb/2026-08-23/diamond/tcdb\",\n      \"--out\",\n      \"/cromwell-executions/TcdbAnnotatorMetagenome/513e6d6a-6970-4d31-bd7d-484770cbafac/call-RunTcdbMetagenome/execution/tcdb_out/work/diamond_blastx_hits.tsv\",\n      \"--outfmt\",\n      \"6\",\n      \"qseqid\",\n      \"sseqid\",\n      \"pident\",\n      \"length\",\n      \"mismatch\",\n      \"gapopen\",\n      \"qstart\",\n      \"qend\",\n      \"sstart\",\n      \"send\",\n      \"evalue\",\n      \"bitscore\",\n      \"qlen\",\n      \"slen\",\n      \"qcovhsp\",\n      \"qframe\",\n      \"--evalue\",\n      \"1e-05\",\n      \"--max-target-seqs\",\n      \"25\",\n      \"--threads\",\n      \"8\"\n    ]\n  ],\n  \"dry_run\": false\n}\n"
+      },
+      {
+        "path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/6/report.md",
+        "text": "# tcdb-annotator-v2 run report\n\n- sample: SRR3405414\n- input_type: reads (analysis_mode: blastx)\n- genome_context: n/a\n- search backend: diamond (blastx)\n- database: TCDB 2026-08-23\n- tm_prediction: off\n- input files: 2\n- queries searched: 2000 (nt)\n- raw alignments: 1352, after filtering: 526\n- result: hits, output rows: 281\n- dry run: False\n\n## thresholds in effect\n\n- min_identity: 80.0\n- min_query_coverage: 0.0\n- min_subject_coverage: 0.0\n- max_evalue: 1e-05\n- max_target_seqs: 25\n- min_alignment_length: 30\n\n## interpretation note (reads mode)\n\nReads were translated and searched without assembly. A hit means that a short\ntranslated fragment is homologous to a TCDB reference protein, so the transporter\nclass is a screening-level assignment only. Substrate specificity and transport\ndirection cannot be inferred from a short fragment, and TMbed topology prediction\nis intentionally disabled in this mode.\n\n## top hits\n\n- TCDB000418_A3N295 | 3.A.1.20.3 | Ferric transport system permease protein fbpB OS=Actinobacillus pleuropneumoniae serotype 5b (strain L20) GN=afuB PE=3 SV=1 | pident=91.800 | evalue=3.18e-21 | reads=1\n- TCDB000830_A7ZJR5 | 2.A.81.1.4 | Putative transport protein YbjL OS=Escherichia coli O139:H28 (strain E24377A / ETEC) GN=ybjL PE=3 SV=1 | pident=100.000 | evalue=4.9e-28 | reads=3\n- TCDB000840_A8ALD3 | 2.A.49.5.5 | H(+)/Cl(-) exchange transporter ClcA OS=Citrobacter koseri (strain ATCC BAA-895 / CDC 4225-83 / SGSC4696) GN=clcA PE=3 SV=1 | pident=93.900 | evalue=6.66e-23 | reads=1\n- TCDB002172_B7L6M8 | 3.A.1.19.4 | Uncharacterized protein OS=Escherichia coli (strain 55989 / EAEC) GN=ynjB PE=4 SV=1 | pident=98.000 | evalue=1.71e-30 | reads=2\n- TCDB002176_B7L824 | 2.A.81.1.5 | Putative transport protein YidE OS=Escherichia coli (strain 55989 / EAEC) GN=yidE PE=3 SV=1 | pident=100.000 | evalue=2.67e-28 | reads=2\n- TCDB002186_B7LEG0 | 1.A.34.1.2 | Outer membrane lipoprotein OS=Escherichia coli (strain 55989 / EAEC) GN=nlpD PE=4 SV=1 | pident=100.000 | evalue=4.37e-24 | reads=2\n- TCDB002705_C4X745 | 4.A.3.2.7 | PEP-dependent phosphotransferase enzyme II OS=Klebsiella pneumoniae subsp. pneumoniae NTUH-K2044 GN=celB PE=4 SV=1 | pident=88.000 | evalue=5.71e-26 | reads=2\n- TCDB002749_C5W789 | 2.A.1.3.36 | EmrY protein OS=Escherichia coli (strain B / BL21) GN=emrY PE=4 SV=1 | pident=100.000 | evalue=3.65e-26 | reads=1\n- TCDB002750_C5W790 | 2.A.1.3.36 | EmrK protein OS=Escherichia coli (strain B / BL21) GN=emrK PE=4 SV=1 | pident=100.000 | evalue=1.75e-24 | reads=1\n- TCDB002887_C8TJS4 | 3.A.1.105.16 | Fused ribosome-associated ATPase RbbA: ATP-binding protein/ATP-binding protein/predicted membrane protein OS=Escherichia coli O26:H11 (strain 11368 / EHEC) GN=rbbA PE=3 SV=1 | pident=100.000 | evalue=4.75e-29 | reads=2\n- TCDB002890_C8UN36 | 9.B.156.1.1 | Conserved predicted inner membrane protein OS=Escherichia coli O111:H- (strain 11128 / EHEC) GN=yjiG PE=4 SV=1 | pident=98.000 | evalue=8.98e-24 | reads=1\n- TCDB003809_E1ILD8 | 2.A.7.3.18 | Integral membrane protein DUF6 OS=Escherichia coli MS 145-7 GN=HMPREF9348_00928 PE=4 SV=1 | pident=100.000 | evalue=2.22e-27 | reads=2\n- TCDB003891_E3DBE3 | 2.A.6.2.48 | Acriflavine resistance protein B OS=Erwinia sp. (strain Ejp617) GN=acrB PE=4 SV=1 | pident=83.000 | evalue=1.06e-17 | reads=1\n- TCDB004992_G4NXA5 | 1.A.33.1.4 | Chaperone protein DnaK OS=Bacillus subtilis subsp. spizizenii TU-B-10 GN=dnaK PE=3 SV=1 | pident=83.700 | evalue=3.42e-19 | reads=1\n- TCDB005575_I2UL24 | 1.B.6.2.20 | Enterobacterial Ail/Lom protein OS=Escherichia coli 4.0522 GN=EC40522_0893 PE=4 SV=1 | pident=97.600 | evalue=5.83e-25 | reads=1\n- TCDB007618_O32333 | 4.A.4.1.2 | Glucitol/sorbitol-specific phosphotransferase enzyme IIB component OS=Clostridium beijerinckii (strain ATCC 51743 / NCIMB 8052) GN=srlE PE=4 SV=1 | pident=81.300 | evalue=2.96e-21 | reads=1\n- TCDB008787_P02915 | 3.A.1.3.1 | Histidine transport ATP-binding protein hisP - Salmonella typhimurium. | pident=94.000 | evalue=1.17e-26 | reads=3\n- TCDB008789_P02920 | 2.A.1.5.1 | Lactose permease (Lactose-proton symport) - Escherichia coli. | pident=100.000 | evalue=2.15e-24 | reads=2\n- TCDB008794_P02931 | 1.B.1.1.1 | OUTER MEMBRANE PROTEIN F PRECURSOR (PORIN OMPF) (OUTER MEMBRANE PROTEIN 1A, IA, OR B) - Escherichia coli. | pident=80.900 | evalue=1.93e-22 | reads=1\n- TCDB008795_P02932 | 1.B.1.1.2 | OUTER MEMBRANE PORE PROTEIN E PRECURSOR - Escherichia coli. | pident=100.000 | evalue=1.52e-29 | reads=2\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/4865d8dc9bf34bcfa0594cf8d52fa6e4/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "roundtrip": {
+    "push": {
+      "transfer_id": "74cf69437f79454cbe60bafb4fa38f73",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "tcdb_annotator_metagenome_files",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "200a7cb3e5da3f1b9dafc22466bf30af"
+        },
+        "receipt_id": "74cf69437f79454cbe60bafb4fa38f73",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+            "files_delivered": true,
+            "generic_import": {
+              "access": "Search or pull the attached sample files; native records are a separate outcome.",
+              "artifact_count": 7,
+              "state": "imported"
+            },
+            "pipeline": "tcdb_annotator_metagenome",
+            "format": "TcdbAnnotatorMetagenome",
+            "program": "tcdb",
+            "state": "imported",
+            "message": "Native result imported."
+          }
+        ],
+        "files": [
+          {
+            "name": "2a91c5d089374f87a0a6653d7c3609f0_annotation_R1.fastq.gz",
+            "source_path": "uploads/2a91c5d089374f87a0a6653d7c3609f0_annotation_R1.fastq.gz",
+            "id": "ae6ac18cf96f01650458b130700561e07617bb758634b650a610e5008daede39",
+            "size": 51187,
+            "sha256": "4d5098cdaa930891139ef7d59bba5f3c5da5de5cfda4c57be05e3ca5db36f98c",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "e0252b028fc1484893aca76a2deeeaa1_annotation_R2.fastq.gz",
+            "source_path": "uploads/e0252b028fc1484893aca76a2deeeaa1_annotation_R2.fastq.gz",
+            "id": "8666252865cb56cf938847f9029c40a48d088a32510db7f6faf76538650710f6",
+            "size": 51186,
+            "sha256": "4fa54efef0424aeedbcc8f836874d8ef0b9d7d90d3a32446051e1876568de6a6",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/4865d8dc9bf34bcfa0594cf8d52fa6e4/results.zip",
+            "id": "833f5394c27fa69d33d0fd9fa02f00eddb32f654c4a939930ed337cbab4cff20",
+            "size": 73435,
+            "sha256": "9c8701d231774086a32d2f574eee02ff4faf2b3ba606e0bd22d9dec531a8b26a",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "size": 149204,
+            "sha256": "a6245228c6371ee46950e7bc77826ba71b5a3bd821e00ce5a67354de70ef55b5",
+            "name": "tcdb_hits.tsv",
+            "source_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/0/tcdb_hits.tsv",
+            "id": "fe9935f85f82bc9083c37de7b3c8acfa522adbfff501d568624e9591eee48dc3",
+            "pipeline_result": {
+              "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+              "pipeline_name": "tcdb_annotator_metagenome",
+              "output_key": "TcdbAnnotatorMetagenome.hits",
+              "output_name": "hits",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:14:28.667288+00:00"
+            },
+            "content": {
+              "preview": "sample_id\tquery_id\toriginal_query_id\tsource_file\tsubject_id\ttcid\ttc_class\ttc_subclass\ttc_family\ttc_subfamily\ttc_system\tprotein_name\tfamily_name\tsystem_name\tdescription\tsubstrate\torganism\tpident\talignment_length\tquery_coverage\tsubject_coverage\tevalue\tbitscore\ttm_alpha_segments\ttm_beta_segments\tsignal_peptide\ttm_prediction_status\tbest_hit\tinput_type\tanalysis_mode\tgenome_context\tcontig_id\torf_id\torf_start\torf_end\tstrand\torf_partial\tquery_start\tquery_end\tquery_frame\taggregation_level\tsupporting_reads\tmean_pident\tbest_read\nSRR3405414\tqueries_normalized__1582__annotation_581_2\tannotation_581/2\tqueries_normalized.faa\tTCDB000418_A3N295\t3.A.1.20.3\t3\t3.A\t3.A.1\t3.A.1.20\t3.A.1.20.3\tFerric transport system permease protein fbpB OS=Actinobacillus pleuropneumoniae serotype 5b (strain L20) GN=afuB PE=3 SV=1\tThe ATP-binding Cassette (ABC) Superfamily\t\tFerric transport system permease protein fbpB OS=Actinobacillus pleuropneumoniae serotype 5b (strain L20) GN=afuB PE=3 SV=1\t\tActinobacillus pleuropneumoniae serotype 5b (strain …",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 251896,
+            "sha256": "2179aa607b7c3c9ef109813a726f2bfe94bad70c941c7fdfb7c6a29fa1f7cbf4",
+            "name": "tcdb_read_hits.tsv",
+            "source_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/1/tcdb_read_hits.tsv",
+            "id": "85758f79fbfd51923722cb6c5bcd503becc095dfce3c159484e749dc801cf69b",
+            "pipeline_result": {
+              "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+              "pipeline_name": "tcdb_annotator_metagenome",
+              "output_key": "TcdbAnnotatorMetagenome.read_hits",
+              "output_name": "read_hits",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:14:28.667288+00:00"
+            },
+            "content": {
+              "preview": "sample_id\tquery_id\toriginal_query_id\tsource_file\tsubject_id\ttcid\ttc_class\ttc_subclass\ttc_family\ttc_subfamily\ttc_system\tprotein_name\tfamily_name\tsystem_name\tdescription\tsubstrate\torganism\tpident\talignment_length\tquery_coverage\tsubject_coverage\tevalue\tbitscore\ttm_alpha_segments\ttm_beta_segments\tsignal_peptide\ttm_prediction_status\tbest_hit\tinput_type\tanalysis_mode\tgenome_context\tcontig_id\torf_id\torf_start\torf_end\tstrand\torf_partial\tquery_start\tquery_end\tquery_frame\taggregation_level\tsupporting_reads\tmean_pident\tbest_read\nSRR3405414\tqueries_normalized__1010__annotation_9_2\tannotation_9/2\tqueries_normalized.faa\tTCDB011256_P46474\t9.B.121.2.4\t9\t9.B\t9.B.121\t9.B.121.2\t9.B.121.2.4\tUncharacterized protein YhdP OS=Escherichia coli (strain K12) OX=83333 GN=yhdP PE=3 SV=4\tThe AsmA (AsmA) Family\t\tUncharacterized protein YhdP OS=Escherichia coli (strain K12) OX=83333 GN=yhdP PE=3 SV=4\t\tEscherichia coli (strain K12)\t100.000\t49\t98.000\t3.870\t5.84e-26\t97.100\t\t\t\tnot_run\ttrue\treads\tblastx\t\t\t\t\t\t\t\t3\t149\t3\tquery\t\t\t\nSRR3405414\tqueries…",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 10393,
+            "sha256": "0926ea14bf9ef124ed721b8155a0578477668ca6e63f5f38ed3cb255d348d9b2",
+            "name": "tcdb_summary.tsv",
+            "source_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/2/tcdb_summary.tsv",
+            "id": "628a526ad9acfa6fb89edef9c2ca9f51da49a7d6a1128579137ad25cd08a8927",
+            "pipeline_result": {
+              "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+              "pipeline_name": "tcdb_annotator_metagenome",
+              "output_key": "TcdbAnnotatorMetagenome.summary",
+              "output_name": "summary",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:14:28.667288+00:00"
+            },
+            "content": {
+              "preview_rows": [
+                [
+                  "tc_class",
+                  "1",
+                  "41",
+                  "37",
+                  "81"
+                ],
+                [
+                  "tc_class",
+                  "2",
+                  "103",
+                  "90",
+                  "196"
+                ],
+                [
+                  "tc_class",
+                  "3",
+                  "84",
+                  "73",
+                  "159"
+                ]
+              ],
+              "columns": [
+                "dimension",
+                "value",
+                "hit_count",
+                "unique_query_count",
+                "supporting_reads"
+              ],
+              "delimiter": "tab",
+              "preview_only": true,
+              "preview_available": true,
+              "kind": "table"
+            }
+          },
+          {
+            "size": 1345,
+            "sha256": "b2b796db0d86b4d737dc744f5a77f0aa3288e742891b9fe06e10ef98cad4bd3d",
+            "name": "qc.json",
+            "source_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/3/qc.json",
+            "id": "f048f837bcd8753831d694f923c30dfa4114c433eeb2ea1ff94fa2c05cf2607f",
+            "pipeline_result": {
+              "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+              "pipeline_name": "tcdb_annotator_metagenome",
+              "output_key": "TcdbAnnotatorMetagenome.qc",
+              "output_name": "qc",
+              "output_kind": "file",
+              "completed_at": "2026-11-20T02:14:28.667288+00:00"
+            },
+            "content": {
+              "fields": [
+                "pipeline",
+                "pipeline_version",
+                "sample_id",
+                "input_type",
+                "analysis_mode",
+                "backend",
+                "program",
+                "input_files",
+                "input_file_names",
+                "protein_count",
+                "query_length_unit",
+                "residue_count",
+                "raw_hit_count",
+                "filtered_alignment_count",
+                "annotation_row_count",
+                "aggregation_level",
+                "unique_hit_queries",
+                "orf_metadata_available",
+                "rows_with_orf_coordinates",
+                "unmatched_metadata_hits",
+                "database_version",
+                "tm_prediction",
+                "tm_predicted_proteins",
+                "thresholds",
+                "result",
+                "dry_run",
+                "started_at",
+                "finished_at",
+                "read_count",
+                "reads_kept",
+                "reads_filtered_below_min_length",
+                "read_bases_kept"
+              ],
+              "shape": "object",
+              "preview_available": true,
+              "kind": "json"
+            }
+          },
+          {
+            "size": 691,
+            "sha256": "d7cf733ba4f401e9dcd5ad77d478a9948ff443d41bbe51d22918b5db5ed1c7f7",
+            "name": "status.json",
+            "source_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/4/status.json",
+            "id": "904bab38ca47832fb5b73efb3e9176c5b1f531de3223ef47682b115b4844ce3c",
+            "pipeline_result": {
+              "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+              "pipeline_name": "tcdb_annotator_metagenome",
+              "output_key": "TcdbAnnotatorMetagenome.status",
+              "output_name": "status",
+              "output_kind": "file",
+              "completed_at": "2026-11-20T02:14:28.667288+00:00"
+            },
+            "content": {
+              "fields": [
+                "status",
+                "result",
+                "pipeline",
+                "sample_id",
+                "input_type",
+                "analysis_mode",
+                "backend",
+                "required_outputs",
+                "finished_at"
+              ],
+              "shape": "object",
+              "preview_available": true,
+              "kind": "json"
+            }
+          },
+          {
+            "size": 2098,
+            "sha256": "d9c39b6268ab7e89ca24b99ce2f762dbca1b1697714a9af258a13893fec01c9c",
+            "name": "manifest.json",
+            "source_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/5/manifest.json",
+            "id": "b7dfe5273ee44c6da9eb167b6917c7ba546477e04072be92b4225f62753a72f0",
+            "pipeline_result": {
+              "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+              "pipeline_name": "tcdb_annotator_metagenome",
+              "output_key": "TcdbAnnotatorMetagenome.manifest",
+              "output_name": "manifest",
+              "output_kind": "file",
+              "completed_at": "2026-11-20T02:14:28.667288+00:00"
+            },
+            "content": {
+              "fields": [
+                "pipeline",
+                "pipeline_version",
+                "database_version",
+                "database",
+                "metadata",
+                "resolved_metadata_fields",
+                "inputs",
+                "commands",
+                "dry_run"
+              ],
+              "shape": "object",
+              "preview_available": true,
+              "kind": "json"
+            }
+          },
+          {
+            "size": 4456,
+            "sha256": "38f5059ce2fe7c9f6645d09b8a09c7b65cd10f78a640783248f5e1e3b3725f91",
+            "name": "report.md",
+            "source_path": "pipeline-artifacts/4865d8dc9bf34bcfa0594cf8d52fa6e4/6/report.md",
+            "id": "f166c96d6c2e5742eb7261c327f5cd94f2bd81fb7a9ca29056e2ed9e5004bbb9",
+            "pipeline_result": {
+              "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+              "pipeline_name": "tcdb_annotator_metagenome",
+              "output_key": "TcdbAnnotatorMetagenome.report",
+              "output_name": "report",
+              "output_kind": "file",
+              "completed_at": "2026-11-20T02:14:28.667288+00:00"
+            },
+            "content": {
+              "preview": "# tcdb-annotator-v2 run report\n\n- sample: SRR3405414\n- input_type: reads (analysis_mode: blastx)\n- genome_context: n/a\n- search backend: diamond (blastx)\n- database: TCDB 2026-08-23\n- tm_prediction: off\n- input files: 2\n- queries searched: 2000 (nt)\n- raw alignments: 1352, after filtering: 526\n- result: hits, output rows: 281\n- dry run: False\n\n## thresholds in effect\n\n- min_identity: 80.0\n- min_query_coverage: 0.0\n- min_subject_coverage: 0.0\n- max_evalue: 1e-05\n- max_target_seqs: 25\n- min_alignment_length: 30\n\n## interpretation note (reads mode)\n\nReads were translated and searched without assembly. A hit means that a short\ntranslated fragment is homologous to a TCDB reference protein, so the transporter\nclass is a screening-level assignment only. Substrate specificity and transport\ndirection cannot be inferred from a short fragment, and TMbed topology prediction\nis intentionally disabled in this mode.\n\n## top hits\n\n- TCDB000418_A3N295 | 3.A.1.20.3 | Ferric transport system permease protein fbpB OS=Actinobacil…",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          }
+        ],
+        "native_qc_applied": false,
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R2": "e021a4d169213ac69b44b8a05f27f6c4",
+            "R1": "85d7bc6beec03932bd4c5d41005e60ae"
+          },
+          "status": "registered"
+        }
+      }
+    },
+    "files": [
+      {
+        "name": "tcdb_summary.tsv",
+        "resource_id": "result:74cf69437f79454cbe60bafb4fa38f73:628a526ad9acfa6fb89edef9c2ca9f51da49a7d6a1128579137ad25cd08a8927",
+        "state": "succeeded",
+        "expected_sha256": "0926ea14bf9ef124ed721b8155a0578477668ca6e63f5f38ed3cb255d348d9b2",
+        "bytes": 10393,
+        "sha256": "0926ea14bf9ef124ed721b8155a0578477668ca6e63f5f38ed3cb255d348d9b2",
+        "matches": true
+      },
+      {
+        "name": "results.zip",
+        "resource_id": "result:74cf69437f79454cbe60bafb4fa38f73:833f5394c27fa69d33d0fd9fa02f00eddb32f654c4a939930ed337cbab4cff20",
+        "state": "succeeded",
+        "expected_sha256": "9c8701d231774086a32d2f574eee02ff4faf2b3ba606e0bd22d9dec531a8b26a",
+        "bytes": 73435,
+        "sha256": "9c8701d231774086a32d2f574eee02ff4faf2b3ba606e0bd22d9dec531a8b26a",
+        "matches": true
+      },
+      {
+        "name": "tcdb_read_hits.tsv",
+        "resource_id": "result:74cf69437f79454cbe60bafb4fa38f73:85758f79fbfd51923722cb6c5bcd503becc095dfce3c159484e749dc801cf69b",
+        "state": "succeeded",
+        "expected_sha256": "2179aa607b7c3c9ef109813a726f2bfe94bad70c941c7fdfb7c6a29fa1f7cbf4",
+        "bytes": 251896,
+        "sha256": "2179aa607b7c3c9ef109813a726f2bfe94bad70c941c7fdfb7c6a29fa1f7cbf4",
+        "matches": true
+      },
+      {
+        "name": "e0252b028fc1484893aca76a2deeeaa1_annotation_R2.fastq.gz",
+        "resource_id": "result:74cf69437f79454cbe60bafb4fa38f73:8666252865cb56cf938847f9029c40a48d088a32510db7f6faf76538650710f6",
+        "state": "succeeded",
+        "expected_sha256": "4fa54efef0424aeedbcc8f836874d8ef0b9d7d90d3a32446051e1876568de6a6",
+        "bytes": 51186,
+        "sha256": "4fa54efef0424aeedbcc8f836874d8ef0b9d7d90d3a32446051e1876568de6a6",
+        "matches": true
+      },
+      {
+        "name": "status.json",
+        "resource_id": "result:74cf69437f79454cbe60bafb4fa38f73:904bab38ca47832fb5b73efb3e9176c5b1f531de3223ef47682b115b4844ce3c",
+        "state": "succeeded",
+        "expected_sha256": "d7cf733ba4f401e9dcd5ad77d478a9948ff443d41bbe51d22918b5db5ed1c7f7",
+        "bytes": 691,
+        "sha256": "d7cf733ba4f401e9dcd5ad77d478a9948ff443d41bbe51d22918b5db5ed1c7f7",
+        "matches": true
+      },
+      {
+        "name": "2a91c5d089374f87a0a6653d7c3609f0_annotation_R1.fastq.gz",
+        "resource_id": "result:74cf69437f79454cbe60bafb4fa38f73:ae6ac18cf96f01650458b130700561e07617bb758634b650a610e5008daede39",
+        "state": "succeeded",
+        "expected_sha256": "4d5098cdaa930891139ef7d59bba5f3c5da5de5cfda4c57be05e3ca5db36f98c",
+        "bytes": 51187,
+        "sha256": "4d5098cdaa930891139ef7d59bba5f3c5da5de5cfda4c57be05e3ca5db36f98c",
+        "matches": true
+      },
+      {
+        "name": "manifest.json",
+        "resource_id": "result:74cf69437f79454cbe60bafb4fa38f73:b7dfe5273ee44c6da9eb167b6917c7ba546477e04072be92b4225f62753a72f0",
+        "state": "succeeded",
+        "expected_sha256": "d9c39b6268ab7e89ca24b99ce2f762dbca1b1697714a9af258a13893fec01c9c",
+        "bytes": 2098,
+        "sha256": "d9c39b6268ab7e89ca24b99ce2f762dbca1b1697714a9af258a13893fec01c9c",
+        "matches": true
+      },
+      {
+        "name": "qc.json",
+        "resource_id": "result:74cf69437f79454cbe60bafb4fa38f73:f048f837bcd8753831d694f923c30dfa4114c433eeb2ea1ff94fa2c05cf2607f",
+        "state": "succeeded",
+        "expected_sha256": "b2b796db0d86b4d737dc744f5a77f0aa3288e742891b9fe06e10ef98cad4bd3d",
+        "bytes": 1345,
+        "sha256": "b2b796db0d86b4d737dc744f5a77f0aa3288e742891b9fe06e10ef98cad4bd3d",
+        "matches": true
+      },
+      {
+        "name": "report.md",
+        "resource_id": "result:74cf69437f79454cbe60bafb4fa38f73:f166c96d6c2e5742eb7261c327f5cd94f2bd81fb7a9ca29056e2ed9e5004bbb9",
+        "state": "succeeded",
+        "expected_sha256": "38f5059ce2fe7c9f6645d09b8a09c7b65cd10f78a640783248f5e1e3b3725f91",
+        "bytes": 4456,
+        "sha256": "38f5059ce2fe7c9f6645d09b8a09c7b65cd10f78a640783248f5e1e3b3725f91",
+        "matches": true
+      },
+      {
+        "name": "tcdb_hits.tsv",
+        "resource_id": "result:74cf69437f79454cbe60bafb4fa38f73:fe9935f85f82bc9083c37de7b3c8acfa522adbfff501d568624e9591eee48dc3",
+        "state": "succeeded",
+        "expected_sha256": "a6245228c6371ee46950e7bc77826ba71b5a3bd821e00ce5a67354de70ef55b5",
+        "bytes": 149204,
+        "sha256": "a6245228c6371ee46950e7bc77826ba71b5a3bd821e00ce5a67354de70ef55b5",
+        "matches": true
+      }
+    ],
+    "search_state": "succeeded",
+    "matched_all": true,
+    "native_exports": [
+      {
+        "resource_id": "native:200a7cb3e5da3f1b9dafc22466bf30af:annotation:990fac6e5faec6bc3e1c149b8dfa9b94:record",
+        "kind": "native_analysis_record",
+        "state": "succeeded",
+        "bytes": 1323,
+        "sha256": "d26be55389b774d8d31efff7bc7fe84e2076b90f72b56809fa2763211e38efea",
+        "sample_id_matches": true
+      },
+      {
+        "resource_id": "result:74cf69437f79454cbe60bafb4fa38f73:628a526ad9acfa6fb89edef9c2ca9f51da49a7d6a1128579137ad25cd08a8927",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 10393,
+        "sha256": "0926ea14bf9ef124ed721b8155a0578477668ca6e63f5f38ed3cb255d348d9b2"
+      },
+      {
+        "resource_id": "result:74cf69437f79454cbe60bafb4fa38f73:833f5394c27fa69d33d0fd9fa02f00eddb32f654c4a939930ed337cbab4cff20",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 73435,
+        "sha256": "9c8701d231774086a32d2f574eee02ff4faf2b3ba606e0bd22d9dec531a8b26a"
+      },
+      {
+        "resource_id": "result:74cf69437f79454cbe60bafb4fa38f73:85758f79fbfd51923722cb6c5bcd503becc095dfce3c159484e749dc801cf69b",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 251896,
+        "sha256": "2179aa607b7c3c9ef109813a726f2bfe94bad70c941c7fdfb7c6a29fa1f7cbf4"
+      }
+    ]
+  },
+  "result_sync": {
+    "tool_response": {
+      "status": "ok",
+      "data": {
+        "value": {
+          "transfer_id": "d079c04115a247c3b51d59ae1b28057e",
+          "site_id": "mscan",
+          "operation": "result_sync",
+          "state": "succeeded",
+          "result": {
+            "cromwell_task_id": "513e6d6a-6970-4d31-bd7d-484770cbafac",
+            "pipeline_name": "tcdb_annotator_metagenome",
+            "target": {
+              "data_type": "meta",
+              "project_name": "Bridge_expanded_20261120_standard",
+              "sample_name": "tcdb_annotator_metagenome_sync",
+              "project_id": "4a651c555eae32c39c8bfdd142321567",
+              "sample_id": "42c1afa1e4a23c058ccab8e5bc5df996"
+            },
+            "state": "imported",
+            "program": "tcdb"
+          }
+        }
+      },
+      "files": [],
+      "evidence": [],
+      "error": null
+    },
+    "transfer": {
+      "transfer_id": "d079c04115a247c3b51d59ae1b28057e",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "cromwell_task_id": "513e6d6a-6970-4d31-bd7d-484770cbafac",
+        "pipeline_name": "tcdb_annotator_metagenome",
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "tcdb_annotator_metagenome_sync",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "42c1afa1e4a23c058ccab8e5bc5df996"
+        },
+        "state": "imported",
+        "program": "tcdb"
+      }
+    },
+    "repeat": {
+      "transfer_id": "42c9d8a7d3ec48299f82547e5450d3ad",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "42c1afa1e4a23c058ccab8e5bc5df996",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "42c1afa1e4a23c058ccab8e5bc5df996"
+        },
+        "program": "tcdb",
+        "state": "imported",
+        "cromwell_task_id": "513e6d6a-6970-4d31-bd7d-484770cbafac",
+        "message": "Native result already imported.",
+        "pipeline_name": "tcdb_annotator_metagenome"
+      }
+    }
+  },
+  "elapsed_seconds": 75.9,
+  "finished": true
+}

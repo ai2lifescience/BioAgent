@@ -1,0 +1,1667 @@
+{
+  "result_contract_version": 1,
+  "answer": "Review the requested tool arguments and approve or reject each pending call.",
+  "status": "pending_approval",
+  "session_id": "autograph-live-planning",
+  "approval_required": true,
+  "approvals": [
+    {
+      "approval_id": "4c569d33ca73416caf15e4396fa4d3dc",
+      "call_id": "call_UoP9m30JNJuLbXdkdgqjU9BZ",
+      "agent": "pipeline_specialist",
+      "tool_name": "pipeline_shell",
+      "arguments": {
+        "commands": [
+          "agent-pipeline workflow-run --workflow-id be015035efc74b38b02bab8664d409ed"
+        ],
+        "max_output_length": 12000,
+        "timeout_ms": 30000
+      },
+      "plan": {
+        "workflow_id": "be015035efc74b38b02bab8664d409ed",
+        "status": "planned",
+        "created_at": "2026-11-20T11:51:31.064551+00:00",
+        "step_count": 4,
+        "steps": [
+          {
+            "id": "qc_clean",
+            "pipeline": "metagenomic_read_quality_control",
+            "depends_on": [],
+            "inputs": {
+              "read1": "uploads/DRR000852_subset_R1.fastq.gz",
+              "read2": "uploads/DRR000852_subset_R2.fastq.gz"
+            },
+            "params": {
+              "sample_id": "DRR000852_subset"
+            },
+            "cores": 4,
+            "timeout": 86400,
+            "reason": "Clean and quality-control the paired reads. No host-filter parameter is set, avoiding an unintended override; mounted workflow resources remain contract-managed.",
+            "input_reasons": {
+              "read1": "Verified paired-end read 1.",
+              "read2": "Verified matching paired-end read 2."
+            },
+            "status": "waiting"
+          },
+          {
+            "id": "assemble_clean_reads",
+            "pipeline": "metagenomic_de_novo_assembly",
+            "depends_on": [
+              "qc_clean"
+            ],
+            "inputs": {
+              "read1": {
+                "step": "qc_clean",
+                "output": "clean_r1"
+              },
+              "read2": {
+                "step": "qc_clean",
+                "output": "clean_r2"
+              }
+            },
+            "params": {
+              "sample_id": "DRR000852_subset"
+            },
+            "cores": 4,
+            "timeout": 86400,
+            "reason": "Perform paired-end de novo assembly after QC.",
+            "input_reasons": {
+              "read1": "Assemble cleaned read 1 from QC.",
+              "read2": "Preserve pairing by assembling the corresponding cleaned read 2."
+            },
+            "status": "waiting"
+          },
+          {
+            "id": "profile_clean_reads",
+            "pipeline": "metax_classification_abundance_analysis",
+            "depends_on": [
+              "qc_clean"
+            ],
+            "inputs": {
+              "reads": {
+                "step": "qc_clean",
+                "output": "clean_r1"
+              },
+              "reads2": {
+                "step": "qc_clean",
+                "output": "clean_r2"
+              }
+            },
+            "params": {},
+            "cores": 4,
+            "timeout": 86400,
+            "reason": "Branch after QC to generate a MetaX taxonomic profile from the cleaned paired reads.",
+            "input_reasons": {
+              "reads": "Profile the same cleaned read 1 used for assembly.",
+              "reads2": "Run MetaX in paired mode with the matching cleaned read 2."
+            },
+            "status": "waiting"
+          },
+          {
+            "id": "annotate_assembled_contigs",
+            "pipeline": "tcdb_annotator_genome",
+            "depends_on": [
+              "assemble_clean_reads"
+            ],
+            "inputs": {
+              "genome_fasta": {
+                "step": "assemble_clean_reads",
+                "output": "contigs"
+              }
+            },
+            "params": {
+              "sample_id": "DRR000852_subset"
+            },
+            "cores": 4,
+            "timeout": 86400,
+            "reason": "Annotate assembled contigs against TCDB using genome mode; protein_fasta is intentionally omitted to satisfy the exactly-one-input constraint.",
+            "input_reasons": {
+              "genome_fasta": "Use assembled nucleotide contigs as the sole TCDB sequence input."
+            },
+            "status": "waiting"
+          }
+        ]
+      }
+    }
+  ],
+  "evidence": {
+    "retrieval_date": "2026-11-20",
+    "tools": [
+      "pipeline_shell",
+      "autograph_catalog",
+      "autograph_files",
+      "autograph_specialist"
+    ],
+    "databases": [],
+    "query_terms": [],
+    "record_ids": [],
+    "citations": [],
+    "urls": [],
+    "files": [
+      "uploads/DRR000852_subset_R1.fastq.gz",
+      "uploads/DRR000852_subset_R2.fastq.gz"
+    ],
+    "outputs": [
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "error",
+        "error": "Catalog offset must be nonnegative and limit must be 1..32."
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "autograph_catalog",
+        "arguments": {
+          "pipeline": "metax_classification_abundance_analysis",
+          "offset": 0,
+          "limit": 8
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "autograph_catalog",
+        "arguments": {
+          "pipeline": "metagenomic_read_quality_control",
+          "offset": 0,
+          "limit": 8
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "autograph_catalog",
+        "arguments": {
+          "pipeline": "metagenomic_de_novo_assembly",
+          "offset": 0,
+          "limit": 8
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "autograph_catalog",
+        "arguments": {
+          "pipeline": "tcdb_annotator_genome",
+          "offset": 0,
+          "limit": 8
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "autograph_files",
+        "arguments": {
+          "prefix": "uploads/DRR000852_subset_",
+          "offset": 0,
+          "limit": 50
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "autograph_specialist",
+        "status": "error",
+        "error": "Step qc_clean requires 1..4 cores and a timeout of 1..86400 seconds."
+      },
+      {
+        "tool": "autograph_catalog",
+        "arguments": {
+          "pipeline": "metagenomic_de_novo_assembly",
+          "offset": 0,
+          "limit": 8
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "autograph_catalog",
+        "arguments": {
+          "pipeline": "tcdb_annotator_genome",
+          "offset": 0,
+          "limit": 8
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "autograph_catalog",
+        "arguments": {
+          "pipeline": "metagenomic_read_quality_control",
+          "offset": 0,
+          "limit": 8
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "autograph_catalog",
+        "arguments": {
+          "pipeline": "metax_classification_abundance_analysis",
+          "offset": 0,
+          "limit": 8
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "autograph_files",
+        "arguments": {
+          "prefix": "uploads/DRR000852_subset_",
+          "offset": 0,
+          "limit": 50
+        },
+        "status": "ok"
+      },
+      {
+        "tool": "autograph_specialist",
+        "status": "ok",
+        "summary": "QC paired reads, branch cleaned pairs to assembly and MetaX profiling, then annotate assembled contigs with TCDB."
+      },
+      {
+        "tool": "pipeline_shell",
+        "workflow_id": "be015035efc74b38b02bab8664d409ed",
+        "status": "planned"
+      }
+    ],
+    "tool_outputs": [
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "error",
+        "error": "Catalog offset must be nonnegative and limit must be 1..32."
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "planned",
+        "workflow_id": "be015035efc74b38b02bab8664d409ed"
+      }
+    ],
+    "tool_errors": [
+      {
+        "tool": "pipeline_shell",
+        "error": "Catalog offset must be nonnegative and limit must be 1..32.",
+        "error_type": null
+      },
+      {
+        "tool": "autograph_specialist",
+        "error": "Step qc_clean requires 1..4 cores and a timeout of 1..86400 seconds.",
+        "error_type": "ValueError"
+      }
+    ]
+  },
+  "trace": [
+    {
+      "timestamp": "2026-11-20T11:49:53.546254+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "run_started",
+      "data": {
+        "request": "For the public Bacillus subtilis 168 paired-end reads in uploads/DRR000852_subset_R1.fastq.gz and uploads/DRR000852_subset_R2.fastq.gz, run quality control, assemble the cleaned reads, profile the cleaned reads with MetaX, and annotate transport-related functions from the assembled contigs using TCDB. Request my approval before execution.",
+        "model_key": "gpt-5.6-sol"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:49:53.597508+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_trace_started",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:49:53.607185+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_1415c005e48f4a32bd6dfe89",
+        "parent_id": "span_a33d17faaa584e6fb4561b26",
+        "span_type": "guardrail",
+        "name": "bio_safety_input",
+        "model": null,
+        "started_at": "2026-11-20T11:49:53.606035+00:00",
+        "ended_at": "2026-11-20T11:49:53.606226+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:49:53.610681+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_a36171a45ecb4fd8ab8e15de",
+        "parent_id": "span_58750c39cabb4c1086a99010",
+        "span_type": "custom",
+        "name": "sandbox.running",
+        "model": null,
+        "started_at": "2026-11-20T11:49:53.609435+00:00",
+        "ended_at": "2026-11-20T11:49:53.609674+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:49:53.611966+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_4709b3f18cd944af9224ec79",
+        "parent_id": "span_58750c39cabb4c1086a99010",
+        "span_type": "custom",
+        "name": "sandbox.running",
+        "model": null,
+        "started_at": "2026-11-20T11:49:53.610921+00:00",
+        "ended_at": "2026-11-20T11:49:53.611064+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:49:53.619053+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_88324d07e75e446dbbedf79b",
+        "parent_id": "span_58750c39cabb4c1086a99010",
+        "span_type": "custom",
+        "name": "sandbox.exec",
+        "model": null,
+        "started_at": "2026-11-20T11:49:53.612665+00:00",
+        "ended_at": "2026-11-20T11:49:53.618112+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:49:53.624688+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_e99f1843c5f44fada27285df",
+        "parent_id": "span_58750c39cabb4c1086a99010",
+        "span_type": "custom",
+        "name": "sandbox.exec",
+        "model": null,
+        "started_at": "2026-11-20T11:49:53.619194+00:00",
+        "ended_at": "2026-11-20T11:49:53.623724+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:49:53.626486+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_58750c39cabb4c1086a99010",
+        "parent_id": "span_a33d17faaa584e6fb4561b26",
+        "span_type": "custom",
+        "name": "sandbox.prepare_agent",
+        "model": null,
+        "started_at": "2026-11-20T11:49:53.607428+00:00",
+        "ended_at": "2026-11-20T11:49:53.625588+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:49:53.628707+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "agent_started",
+      "data": {
+        "agent": "Pipeline2Agent",
+        "message": "Agent started: Pipeline2Agent."
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:49:53.684471+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "model_requested",
+      "data": {
+        "agent": "Pipeline2Agent"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:01.777272+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_0aaa728894da4bf68c1cded9",
+        "parent_id": "span_6af017275e7441f594a62fa2",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T11:49:53.690853+00:00",
+        "ended_at": "2026-11-20T11:50:01.776887+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:01.779647+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "model_responded",
+      "data": {
+        "agent": "Pipeline2Agent",
+        "input_tokens": 41908,
+        "output_tokens": 547
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:01.781437+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_tool_started",
+      "data": {
+        "tool": "pipeline_specialist"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:01.785215+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_c1fdce5d00634a56a9faa46c",
+        "parent_id": "span_a75836291a9d4ab09f1e1277",
+        "span_type": "guardrail",
+        "name": "bio_safety_input",
+        "model": null,
+        "started_at": "2026-11-20T11:50:01.784310+00:00",
+        "ended_at": "2026-11-20T11:50:01.784488+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:06.602216+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_e56883c6dcb444b7bb776fb3",
+        "parent_id": "span_90f620d686ad4c03bde1dee7",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T11:50:01.786205+00:00",
+        "ended_at": "2026-11-20T11:50:06.601131+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:06.631241+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "pipeline_command_finished",
+      "data": {
+        "command": "agent-pipeline files",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:06.634435+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_8d4d1e01eb5f491e84f07800",
+        "parent_id": "span_90f620d686ad4c03bde1dee7",
+        "span_type": "function",
+        "name": "pipeline_shell",
+        "model": null,
+        "started_at": "2026-11-20T11:50:06.607621+00:00",
+        "ended_at": "2026-11-20T11:50:06.633550+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:07.253420+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "pipeline_command_finished",
+      "data": {
+        "command": "agent-pipeline catalog --offset 0 --limit 100",
+        "status": "error"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:07.256815+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_d78e9848ffba48f092078fc4",
+        "parent_id": "span_90f620d686ad4c03bde1dee7",
+        "span_type": "function",
+        "name": "pipeline_shell",
+        "model": null,
+        "started_at": "2026-11-20T11:50:06.634739+00:00",
+        "ended_at": "2026-11-20T11:50:07.255914+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:07.258813+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_90f620d686ad4c03bde1dee7",
+        "parent_id": "span_c8206d2ce6f24d2388b39813",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T11:50:01.785481+00:00",
+        "ended_at": "2026-11-20T11:50:07.257932+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:10.586390+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_020f0861ba704e60bb5669aa",
+        "parent_id": "span_78b00a2ae1a345ed97b31f19",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T11:50:07.265164+00:00",
+        "ended_at": "2026-11-20T11:50:10.585456+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:11.255265+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "pipeline_command_finished",
+      "data": {
+        "command": "agent-pipeline catalog --offset 0 --limit 32",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:11.258892+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_a7ac5260c59e4907b236018b",
+        "parent_id": "span_78b00a2ae1a345ed97b31f19",
+        "span_type": "function",
+        "name": "pipeline_shell",
+        "model": null,
+        "started_at": "2026-11-20T11:50:10.591486+00:00",
+        "ended_at": "2026-11-20T11:50:11.258125+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:11.260360+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_78b00a2ae1a345ed97b31f19",
+        "parent_id": "span_c8206d2ce6f24d2388b39813",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T11:50:07.263269+00:00",
+        "ended_at": "2026-11-20T11:50:11.259685+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:16.088053+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_46ca99446a46469eb325fc17",
+        "parent_id": "span_dac1fd75e64c4612be345245",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T11:50:11.265338+00:00",
+        "ended_at": "2026-11-20T11:50:16.087135+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:16.749766+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "pipeline_command_finished",
+      "data": {
+        "command": "agent-pipeline catalog --offset 11 --limit 16",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:16.753008+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_877ad47302c94d568a450b08",
+        "parent_id": "span_dac1fd75e64c4612be345245",
+        "span_type": "function",
+        "name": "pipeline_shell",
+        "model": null,
+        "started_at": "2026-11-20T11:50:16.092550+00:00",
+        "ended_at": "2026-11-20T11:50:16.752274+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:16.754320+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_dac1fd75e64c4612be345245",
+        "parent_id": "span_c8206d2ce6f24d2388b39813",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T11:50:11.263319+00:00",
+        "ended_at": "2026-11-20T11:50:16.753688+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:22.561182+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_0749ecdf71d144629f29f034",
+        "parent_id": "span_ff3ed671baa2452ebf7b4045",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T11:50:16.759100+00:00",
+        "ended_at": "2026-11-20T11:50:22.560258+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:23.207327+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "pipeline_command_finished",
+      "data": {
+        "command": "agent-pipeline catalog --offset 23 --limit 4",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:23.212281+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_17c767e2d54d49a9933fb09f",
+        "parent_id": "span_ff3ed671baa2452ebf7b4045",
+        "span_type": "function",
+        "name": "pipeline_shell",
+        "model": null,
+        "started_at": "2026-11-20T11:50:22.565880+00:00",
+        "ended_at": "2026-11-20T11:50:23.211376+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:23.215010+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_ff3ed671baa2452ebf7b4045",
+        "parent_id": "span_c8206d2ce6f24d2388b39813",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T11:50:16.757052+00:00",
+        "ended_at": "2026-11-20T11:50:23.214048+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:32.622125+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_aee5ed0c4bea470d88904d99",
+        "parent_id": "span_03f6a9403c9749bd9cbb4498",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T11:50:23.224034+00:00",
+        "ended_at": "2026-11-20T11:50:32.621141+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:32.646536+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_cbf4000e55f34aa1ab1233e9",
+        "parent_id": "span_88ac3b088be74f8994a3e054",
+        "span_type": "guardrail",
+        "name": "bio_safety_input",
+        "model": null,
+        "started_at": "2026-11-20T11:50:32.645404+00:00",
+        "ended_at": "2026-11-20T11:50:32.645824+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:37.364647+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_58db4468d21b4d21b382333b",
+        "parent_id": "span_16be79c63a65432c9124b312",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T11:50:32.678828+00:00",
+        "ended_at": "2026-11-20T11:50:37.363634+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:42.771142+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "tool_finished",
+      "data": {
+        "tool": "autograph_catalog",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:42.786385+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_1f67c01970c74ac5b3253346",
+        "parent_id": "span_16be79c63a65432c9124b312",
+        "span_type": "function",
+        "name": "autograph_catalog",
+        "model": null,
+        "started_at": "2026-11-20T11:50:37.377834+00:00",
+        "ended_at": "2026-11-20T11:50:42.785319+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:42.920965+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "tool_finished",
+      "data": {
+        "tool": "autograph_catalog",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:42.927337+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_49faf56d476b4fd6a10eee1c",
+        "parent_id": "span_16be79c63a65432c9124b312",
+        "span_type": "function",
+        "name": "autograph_catalog",
+        "model": null,
+        "started_at": "2026-11-20T11:50:37.376411+00:00",
+        "ended_at": "2026-11-20T11:50:42.926134+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:43.028455+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "tool_finished",
+      "data": {
+        "tool": "autograph_catalog",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:43.034140+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_97a3d92408c94a168e86b2db",
+        "parent_id": "span_16be79c63a65432c9124b312",
+        "span_type": "function",
+        "name": "autograph_catalog",
+        "model": null,
+        "started_at": "2026-11-20T11:50:37.377335+00:00",
+        "ended_at": "2026-11-20T11:50:43.033219+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:43.148798+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "tool_finished",
+      "data": {
+        "tool": "autograph_catalog",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:43.154226+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_12fbeea18b884367aaf2707d",
+        "parent_id": "span_16be79c63a65432c9124b312",
+        "span_type": "function",
+        "name": "autograph_catalog",
+        "model": null,
+        "started_at": "2026-11-20T11:50:37.378256+00:00",
+        "ended_at": "2026-11-20T11:50:43.153379+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:43.155968+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "tool_finished",
+      "data": {
+        "tool": "autograph_files",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:43.157093+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_17e3a915e1694c198bd0d6b0",
+        "parent_id": "span_16be79c63a65432c9124b312",
+        "span_type": "function",
+        "name": "autograph_files",
+        "model": null,
+        "started_at": "2026-11-20T11:50:42.786846+00:00",
+        "ended_at": "2026-11-20T11:50:43.156324+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:43.159175+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_16be79c63a65432c9124b312",
+        "parent_id": "span_a142f75c07094f49b163a3c9",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T11:50:32.653346+00:00",
+        "ended_at": "2026-11-20T11:50:43.158379+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:51.746442+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_320d2fca4580461eb44eba37",
+        "parent_id": "span_3cea4658cc9d4a62b1fc9375",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T11:50:43.180010+00:00",
+        "ended_at": "2026-11-20T11:50:51.745518+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:51.753933+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_3cea4658cc9d4a62b1fc9375",
+        "parent_id": "span_a142f75c07094f49b163a3c9",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T11:50:43.165805+00:00",
+        "ended_at": "2026-11-20T11:50:51.753109+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:51.756323+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "guardrail_completed",
+      "data": {
+        "guardrail": "output",
+        "warnings": []
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:51.757111+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_90fa7e1acf724d95b7af3630",
+        "parent_id": "span_a142f75c07094f49b163a3c9",
+        "span_type": "guardrail",
+        "name": "bio_evidence_output",
+        "model": null,
+        "started_at": "2026-11-20T11:50:51.755136+00:00",
+        "ended_at": "2026-11-20T11:50:51.756371+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:51.758316+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_a142f75c07094f49b163a3c9",
+        "parent_id": "span_88ac3b088be74f8994a3e054",
+        "span_type": "agent",
+        "name": "autograph_specialist",
+        "model": null,
+        "started_at": "2026-11-20T11:50:32.653197+00:00",
+        "ended_at": "2026-11-20T11:50:51.757513+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:51.759186+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_88ac3b088be74f8994a3e054",
+        "parent_id": "span_556045db4d46493bac9b0669",
+        "span_type": "task",
+        "name": "Pipeline2Agent",
+        "model": null,
+        "started_at": "2026-11-20T11:50:32.644153+00:00",
+        "ended_at": "2026-11-20T11:50:51.758429+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:51.787605+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "tool_failed",
+      "data": {
+        "tool": "autograph_specialist",
+        "error_type": "ValueError"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:51.789292+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_556045db4d46493bac9b0669",
+        "parent_id": "span_03f6a9403c9749bd9cbb4498",
+        "span_type": "function",
+        "name": "autograph_specialist",
+        "model": null,
+        "started_at": "2026-11-20T11:50:32.628891+00:00",
+        "ended_at": "2026-11-20T11:50:51.788272+00:00",
+        "has_error": true
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:50:51.790890+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_03f6a9403c9749bd9cbb4498",
+        "parent_id": "span_c8206d2ce6f24d2388b39813",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T11:50:23.219885+00:00",
+        "ended_at": "2026-11-20T11:50:51.790016+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:00.552004+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_2f9c1b2768224540a84995a5",
+        "parent_id": "span_4569f9d365044deab1b80008",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T11:50:51.797407+00:00",
+        "ended_at": "2026-11-20T11:51:00.551071+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:00.571457+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_0387aa8614074d1e8a5bc6b6",
+        "parent_id": "span_9086609684104d8993013bb9",
+        "span_type": "guardrail",
+        "name": "bio_safety_input",
+        "model": null,
+        "started_at": "2026-11-20T11:51:00.570317+00:00",
+        "ended_at": "2026-11-20T11:51:00.570688+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:06.519537+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_14c415f101cd45bf9b648e2a",
+        "parent_id": "span_ed3cacaff05c43eb9cdba401",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T11:51:00.591500+00:00",
+        "ended_at": "2026-11-20T11:51:06.518623+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:12.285516+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "tool_finished",
+      "data": {
+        "tool": "autograph_catalog",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:12.323907+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_ad78a3e561e54960beb03baa",
+        "parent_id": "span_ed3cacaff05c43eb9cdba401",
+        "span_type": "function",
+        "name": "autograph_catalog",
+        "model": null,
+        "started_at": "2026-11-20T11:51:06.529627+00:00",
+        "ended_at": "2026-11-20T11:51:12.320741+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:12.428142+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "tool_finished",
+      "data": {
+        "tool": "autograph_catalog",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:12.448975+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "tool_finished",
+      "data": {
+        "tool": "autograph_catalog",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:12.474341+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_e3d6f6e32471470bb6af4b14",
+        "parent_id": "span_ed3cacaff05c43eb9cdba401",
+        "span_type": "function",
+        "name": "autograph_catalog",
+        "model": null,
+        "started_at": "2026-11-20T11:51:06.530446+00:00",
+        "ended_at": "2026-11-20T11:51:12.450057+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:12.476677+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_03c95a016cef44e2a76377df",
+        "parent_id": "span_ed3cacaff05c43eb9cdba401",
+        "span_type": "function",
+        "name": "autograph_catalog",
+        "model": null,
+        "started_at": "2026-11-20T11:51:06.529049+00:00",
+        "ended_at": "2026-11-20T11:51:12.474479+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:12.519190+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "tool_finished",
+      "data": {
+        "tool": "autograph_catalog",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:12.525779+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_01eebd7b80994623ae698784",
+        "parent_id": "span_ed3cacaff05c43eb9cdba401",
+        "span_type": "function",
+        "name": "autograph_catalog",
+        "model": null,
+        "started_at": "2026-11-20T11:51:06.530053+00:00",
+        "ended_at": "2026-11-20T11:51:12.524551+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:12.527678+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "tool_finished",
+      "data": {
+        "tool": "autograph_files",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:12.528910+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_6d225ae4ef29439f87f62b2f",
+        "parent_id": "span_ed3cacaff05c43eb9cdba401",
+        "span_type": "function",
+        "name": "autograph_files",
+        "model": null,
+        "started_at": "2026-11-20T11:51:12.324884+00:00",
+        "ended_at": "2026-11-20T11:51:12.528086+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:12.531140+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_ed3cacaff05c43eb9cdba401",
+        "parent_id": "span_95f251017d1b4f728740453b",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T11:51:00.578425+00:00",
+        "ended_at": "2026-11-20T11:51:12.530293+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:21.300971+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_b441319051a04514abe8b0a8",
+        "parent_id": "span_e2594acd432242979d9e41ec",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T11:51:12.558670+00:00",
+        "ended_at": "2026-11-20T11:51:21.300005+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:21.308940+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_e2594acd432242979d9e41ec",
+        "parent_id": "span_95f251017d1b4f728740453b",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T11:51:12.537974+00:00",
+        "ended_at": "2026-11-20T11:51:21.307990+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:21.311412+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "guardrail_completed",
+      "data": {
+        "guardrail": "output",
+        "warnings": []
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:21.312253+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_935c4f972a4048d5856d812b",
+        "parent_id": "span_95f251017d1b4f728740453b",
+        "span_type": "guardrail",
+        "name": "bio_evidence_output",
+        "model": null,
+        "started_at": "2026-11-20T11:51:21.310279+00:00",
+        "ended_at": "2026-11-20T11:51:21.311460+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:21.313411+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_95f251017d1b4f728740453b",
+        "parent_id": "span_9086609684104d8993013bb9",
+        "span_type": "agent",
+        "name": "autograph_specialist",
+        "model": null,
+        "started_at": "2026-11-20T11:51:00.578287+00:00",
+        "ended_at": "2026-11-20T11:51:21.312633+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:21.314302+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_9086609684104d8993013bb9",
+        "parent_id": "span_3bfce06c520c4f5a9e77c69d",
+        "span_type": "task",
+        "name": "Pipeline2Agent",
+        "model": null,
+        "started_at": "2026-11-20T11:51:00.569211+00:00",
+        "ended_at": "2026-11-20T11:51:21.313538+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:21.504682+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "tool_finished",
+      "data": {
+        "tool": "autograph_specialist",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:21.510428+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_3bfce06c520c4f5a9e77c69d",
+        "parent_id": "span_4569f9d365044deab1b80008",
+        "span_type": "function",
+        "name": "autograph_specialist",
+        "model": null,
+        "started_at": "2026-11-20T11:51:00.557292+00:00",
+        "ended_at": "2026-11-20T11:51:21.509486+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:21.511977+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_4569f9d365044deab1b80008",
+        "parent_id": "span_c8206d2ce6f24d2388b39813",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T11:50:51.794342+00:00",
+        "ended_at": "2026-11-20T11:51:21.511183+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:30.869298+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_e0bc3c48797e476da722dd90",
+        "parent_id": "span_438dbb6d06a54048bce7187f",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T11:51:21.518091+00:00",
+        "ended_at": "2026-11-20T11:51:30.868376+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:31.107750+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "pipeline_command_finished",
+      "data": {
+        "command": "agent-pipeline workflow-plan --steps '[{\"id\":\"qc_clean\",\"pipeline\":\"metagenomic_read_quality_control\",\"inputs\":{\"read1\":\"uploads/DRR000852_subset_R1.fastq.gz\",\"read2\":\"uploads/DRR000852_subset_R2.fastq.gz\"},\"params\":{\"sample_id\":\"DRR000852_subset\"},\"cores\":4,\"timeout\":86400,\"depends_on\":[],\"reason\":\"Clean and quality-control the paired reads. No host-filter parameter is set, avoiding an unintended override; mounted workflow resources remain contract-managed.\",\"input_reasons\":{\"read1\":\"Verified paired-end read 1.\",\"read2\":\"Verified matching paired-end read 2.\"}},{\"id\":\"assemble_clean_reads\",\"pipeline\":\"metagenomic_de_novo_assembly\",\"inputs\":{\"read1\":{\"step\":\"qc_clean\",\"output\":\"clean_r1\"},\"read2\":{\"step\":\"qc_clean\",\"output\":\"clean_r2\"}},\"params\":{\"sample_id\":\"DRR000852_subset\"},\"cores\":4,\"timeout\":86400,\"depends_on\":[],\"reason\":\"Perform paired-end de novo assembly after QC.\",\"input_reasons\":{\"read1\":\"Assemble cleaned read 1 from QC.\",\"read2\":\"Preserve pairing by assembling the corresponding cleaned read 2.\"}},{\"id\":\"profile_clean_reads\",\"pipeline\":\"metax_classification_abundance_analysis\",\"inputs\":{\"reads\":{\"step\":\"qc_clean\",\"output\":\"clean_r1\"},\"reads2\":{\"step\":\"qc_clean\",\"output\":\"clean_r2\"}},\"params\":{},\"cores\":4,\"timeout\":86400,\"depends_on\":[],\"reason\":\"Branch after QC to generate a MetaX taxonomic profile from the cleaned paired reads.\",\"input_reasons\":{\"reads\":\"Profile the same cleaned read 1 used for assembly.\",\"reads2\":\"Run MetaX in paired mode with the matching cleaned read 2.\"}},{\"id\":\"annotate_assembled_contigs\",\"pipeline\":\"tcdb_annotator_genome\",\"inputs\":{\"genome_fasta\":{\"step\":\"assemble_clean_reads\",\"output\":\"contigs\"}},\"params\":{\"sample_id\":\"DRR000852_subset\"},\"cores\":4,\"timeout\":86400,\"depends_on\":[],\"reason\":\"Annotate assembled contigs against TCDB using genome mode; protein_fasta is intentionally omitted to satisfy the exactly-one-input constraint.\",\"input_reasons\":{\"genome_fasta\":\"Use assembled nucleotide contigs as the sole TCDB sequence input.\"}}]'",
+        "status": "planned"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:31.112048+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_a65eca27caed402dbe950627",
+        "parent_id": "span_438dbb6d06a54048bce7187f",
+        "span_type": "function",
+        "name": "pipeline_shell",
+        "model": null,
+        "started_at": "2026-11-20T11:51:30.875304+00:00",
+        "ended_at": "2026-11-20T11:51:31.111157+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:31.113808+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_438dbb6d06a54048bce7187f",
+        "parent_id": "span_c8206d2ce6f24d2388b39813",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T11:51:21.515331+00:00",
+        "ended_at": "2026-11-20T11:51:31.112945+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:35.770330+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_b36d06c3dd9640a8898387f0",
+        "parent_id": "span_e8d01645dae1447fa5c0fcef",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T11:51:31.120169+00:00",
+        "ended_at": "2026-11-20T11:51:35.769370+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:35.782450+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_4d0d048898d04369b6303b82",
+        "parent_id": "span_e8d01645dae1447fa5c0fcef",
+        "span_type": "function",
+        "name": "pipeline_shell",
+        "model": null,
+        "started_at": "2026-11-20T11:51:35.776019+00:00",
+        "ended_at": "2026-11-20T11:51:35.781442+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:35.784313+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_e8d01645dae1447fa5c0fcef",
+        "parent_id": "span_c8206d2ce6f24d2388b39813",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T11:51:31.117231+00:00",
+        "ended_at": "2026-11-20T11:51:35.783447+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:35.788549+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_c8206d2ce6f24d2388b39813",
+        "parent_id": "span_a75836291a9d4ab09f1e1277",
+        "span_type": "agent",
+        "name": "pipeline_specialist",
+        "model": null,
+        "started_at": "2026-11-20T11:50:01.785411+00:00",
+        "ended_at": "2026-11-20T11:51:35.787660+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:35.789512+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_a75836291a9d4ab09f1e1277",
+        "parent_id": "span_95b857b0c4534d1fb380a042",
+        "span_type": "task",
+        "name": "Pipeline2Agent",
+        "model": null,
+        "started_at": "2026-11-20T11:50:01.783223+00:00",
+        "ended_at": "2026-11-20T11:51:35.788689+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:35.791192+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_95b857b0c4534d1fb380a042",
+        "parent_id": "span_6af017275e7441f594a62fa2",
+        "span_type": "function",
+        "name": "pipeline_specialist",
+        "model": null,
+        "started_at": "2026-11-20T11:50:01.780998+00:00",
+        "ended_at": "2026-11-20T11:51:35.790313+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:35.793349+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_6af017275e7441f594a62fa2",
+        "parent_id": "span_bd21a924524c44c6b407ca5a",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T11:49:53.628086+00:00",
+        "ended_at": "2026-11-20T11:51:35.792481+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:35.819867+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_bd21a924524c44c6b407ca5a",
+        "parent_id": "span_a33d17faaa584e6fb4561b26",
+        "span_type": "agent",
+        "name": "Pipeline2Agent",
+        "model": null,
+        "started_at": "2026-11-20T11:49:53.627900+00:00",
+        "ended_at": "2026-11-20T11:51:35.818947+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:35.820795+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf",
+        "span_id": "span_a33d17faaa584e6fb4561b26",
+        "parent_id": null,
+        "span_type": "task",
+        "name": "Pipeline2Agent",
+        "model": null,
+        "started_at": "2026-11-20T11:49:53.597727+00:00",
+        "ended_at": "2026-11-20T11:51:35.819975+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:35.821172+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "sdk_trace_finished",
+      "data": {
+        "trace_id": "trace_0838d23dac644386855a9c924de973bf"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T11:51:35.892761+00:00",
+      "session_id": "autograph-live-planning",
+      "event": "run_paused",
+      "data": {
+        "reason": "tool_approval",
+        "tool_names": [
+          "pipeline_shell"
+        ]
+      }
+    }
+  ],
+  "workspace_files": [
+    {
+      "path": "uploads/DRR000852_subset_R1.fastq.gz",
+      "workspace_path": "uploads/DRR000852_subset_R1.fastq.gz",
+      "name": "DRR000852_subset_R1.fastq.gz",
+      "size": 11894885,
+      "modified_at": 1795175393523094587,
+      "kind": "upload",
+      "content_type": "application/gzip"
+    },
+    {
+      "path": "uploads/DRR000852_subset_R2.fastq.gz",
+      "workspace_path": "uploads/DRR000852_subset_R2.fastq.gz",
+      "name": "DRR000852_subset_R2.fastq.gz",
+      "size": 11548154,
+      "modified_at": 1795175393540094724,
+      "kind": "upload",
+      "content_type": "application/gzip"
+    }
+  ],
+  "artifacts": [],
+  "files": [
+    {
+      "path": "uploads/DRR000852_subset_R1.fastq.gz",
+      "workspace_path": "uploads/DRR000852_subset_R1.fastq.gz",
+      "name": "DRR000852_subset_R1.fastq.gz",
+      "size": 11894885,
+      "modified_at": 1795175393523094587,
+      "kind": "upload",
+      "content_type": "application/gzip"
+    },
+    {
+      "path": "uploads/DRR000852_subset_R2.fastq.gz",
+      "workspace_path": "uploads/DRR000852_subset_R2.fastq.gz",
+      "name": "DRR000852_subset_R2.fastq.gz",
+      "size": 11548154,
+      "modified_at": 1795175393540094724,
+      "kind": "upload",
+      "content_type": "application/gzip"
+    }
+  ],
+  "max_turns": 20,
+  "messages": [
+    {
+      "role": "user",
+      "content": "For the public Bacillus subtilis 168 paired-end reads in uploads/DRR000852_subset_R1.fastq.gz and uploads/DRR000852_subset_R2.fastq.gz, run quality control, assemble the cleaned reads, profile the cleaned reads with MetaX, and annotate transport-related functions from the assembled contigs using TCDB. Request my approval before execution."
+    },
+    {
+      "role": "assistant",
+      "content": "Review the requested tool arguments and approve or reject each pending call."
+    }
+  ],
+  "run": {
+    "run_id": "15d122bb-d83a-4071-be56-75e6d222f89f",
+    "session_dir": ".",
+    "runtime_dir": "runs/15d122bb-d83a-4071-be56-75e6d222f89f",
+    "workspace_dir": "outputs"
+  },
+  "approval_decision": null,
+  "runtime": "agents_sdk",
+  "model_key": "gpt-5.6-sol"
+}

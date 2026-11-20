@@ -3,7 +3,6 @@
 This package contains runtime implementation details shared by the agent, web
 server, CLI, and pipeline workers. Model-facing tools remain under `tools/`.
 
-- `sdk_adapters/` — SDK adapters such as the approval-aware `pipeline_shell`.
 - `pipeline_engine/` — pipeline catalog, validation, job storage, workers, and
   engine adapters.
 - `tool_support/` — generic guardrails, context, evidence artifact contracts,
@@ -20,8 +19,9 @@ server, CLI, and pipeline workers. Model-facing tools remain under `tools/`.
 Durable agent-run queueing is application runtime infrastructure in
 `harness/jobs.py` (queue, worker process, status, and SSE event history); it is
 not a model-facing tool category. Pipeline jobs are the separate
-`pipeline_engine/` concern behind the `pipeline_shell` adapter. The Agents SDK
-still owns each model run and its native tool loop; the queue only makes that
+`pipeline_engine/` concern behind the
+[pipeline specialist's shell tool](../agent_tools/specialist/pipeline/pipeline_shell.py).
+The Agents SDK still owns each model run and its native tool loop; the queue only makes that
 run restartable and observable for HTTP/CLI callers.
 
 The local knowledge repository defaults to `runtime/knowledge.sqlite3` and can

@@ -1,0 +1,427 @@
+{
+  "workflowName": "AssemblyId",
+  "workflowProcessingEvents": [
+    {
+      "cromwellId": "cromid-51667ed",
+      "description": "PickedUp",
+      "timestamp": "2026-11-20T10:04:33.874Z",
+      "cromwellVersion": "91"
+    },
+    {
+      "cromwellId": "cromid-51667ed",
+      "description": "Finished",
+      "timestamp": "2026-11-20T10:23:56.761Z",
+      "cromwellVersion": "91"
+    }
+  ],
+  "actualWorkflowLanguageVersion": "1.0",
+  "submittedFiles": {
+    "workflow": "version 1.0\n\n# =============================================================================\n# \u5b8f\u57fa\u56e0\u7ec4\u7ec4\u88c5\u4e0e\u9274\u5b9a Pipeline\uff08Assembly & ID\uff09\u2014 Cromwell / WDL \u7248\n#\n# \u5bf9\u5e94 bash \u6d41\u7a0b main.sh \u56db\u6b65\uff1a\n#   Assembly (MEGAHIT) \u2192 ReadSupport \u2192 Identify (minimap2) \u2192 Evaluate (MetaQUAST)\n#\n# \u955c\u50cf\u5185\u542b\u5de5\u5177\u4e0e\u811a\u672c\uff1b\u5927\u5e93\uff08.mmi / .fa\uff09\u4e0e\u6ce8\u91ca\u8868\u4ee5 File \u8f93\u5165\u4ea4\u7531 Cromwell \u540e\u7aef\u672c\u5730\u5316\u3002\n#\n# \u6784\u5efa\uff08\u5728 assembly_id_pipeline/ \u76ee\u5f55\uff09:\n#   bash wdl/build_images.sh\n#\n# \u63d0\u4ea4:\n#   java -jar cromwell.jar run wdl/assembly_id.wdl \\\n#     --inputs wdl/inputs.example.json \\\n#     -Dconfig.file=wdl/cromwell.conf\n# =============================================================================\n\nworkflow AssemblyId {\n  input {\n    String sample_id\n    File   fastq_r1\n    File?  fastq_r2\n\n    # \u9274\u5b9a\u5e93\uff08minimap2 \u7d22\u5f15\uff09\uff1bFile \u8f93\u5165\u7531 WDL \u5f15\u64ce\u6302\u8f7d\u5230\u4efb\u52a1\u5bb9\u5668\n    String db_bacteria\n    String db_fungi\n    String db_parasite\n    String db_virus\n\n    # \u7269\u79cd\u6ce8\u91ca\u8868\n    String annot_pathogen\n    String annot_virus\n\n    # \u539f\u59cb FASTA \u7528\u4e8e\u7d22\u5f15\u7f3a\u5931\u65f6\u56de\u9000\u6bd4\u5bf9\u4ee5\u53ca\u53ef\u9009 MetaQUAST \u8bc4\u4f30\n    String? fasta_bacteria\n    String? fasta_fungi\n    String? fasta_parasite\n    String? fasta_virus\n\n    # \u662f\u5426\u8dd1 MetaQUAST\uff08\u9ed8\u8ba4 true\uff1b\u8c03\u8bd5\u53ef\u8bbe false\uff09\n    Boolean do_evaluate = true\n\n    # MEGAHIT\n    Int    megahit_min_contig_len = 100\n    String megahit_k_list = \"15,21,29,39\"\n    String megahit_extra_params = \"--min-count 1\"\n\n    # minimap2\n    String minimap2_params = \"-x asm20 -N 5\"\n    String minimap2_read_params = \"-ax sr --secondary=no\"\n\n    # soft clipping \u9608\u503c\n    Int   softclip_min_clip = 5\n    Int   softclip_min_reads = 3\n    Float softclip_min_fraction = 0.2\n    Int   softclip_edge_bp = 10\n\n    # MetaQUAST\n    Int    max_unique_references = 100\n    String metaquast_params = \"--no-plots --no-html --no-icarus --fast\"\n\n    Int threads = 32\n\n    String docker_image = \"cncb/assembly-id:v1.0\"\n    Int cpu_assembly = 32\n    Int cpu_map = 32\n    Int cpu_eval = 16\n    Int mem_assembly_gb = 64\n    Int mem_map_gb = 64\n    Int mem_eval_gb = 32\n    Int disk_gb = 500\n  }\n\n  String work_base = \"assembly_id_\" + sample_id\n\n  call Assembly {\n    input:\n      sample_id              = sample_id,\n      fastq_r1               = fastq_r1,\n      fastq_r2               = fastq_r2,\n      work_base              = work_base,\n      threads                = threads,\n      megahit_min_contig_len = megahit_min_contig_len,\n      megahit_k_list         = megahit_k_list,\n      megahit_extra_params   = megahit_extra_params,\n      docker_image           = docker_image,\n      cpu                    = cpu_assembly,\n      memory_gb              = mem_assembly_gb,\n      disk_gb                = disk_gb\n  }\n\n  call ReadSupport {\n    input:\n      sample_id              = sample_id,\n      fastq_r1               = fastq_r1,\n      fastq_r2               = fastq_r2,\n      contigs                = Assembly.contigs_renamed,\n      work_base              = work_base,\n      threads                = threads,\n      minimap2_read_params   = minimap2_read_params,\n      softclip_min_clip      = softclip_min_clip,\n      softclip_min_reads     = softclip_min_reads,\n      softclip_min_fraction  = softclip_min_fraction,\n      softclip_edge_bp       = softclip_edge_bp,\n      docker_image           = docker_image,\n      cpu                    = cpu_map,\n      memory_gb              = mem_map_gb,\n      disk_gb                = disk_gb\n  }\n\n  call Identify {\n    input:\n      sample_id         = sample_id,\n      contigs           = Assembly.contigs_renamed,\n      read_support_tsv  = ReadSupport.read_support_contig_tsv,\n      db_bacteria       = db_bacteria,\n      db_fungi          = db_fungi,\n      db_parasite       = db_parasite,\n      db_virus          = db_virus,\n      fasta_bacteria    = fasta_bacteria,\n      fasta_fungi       = fasta_fungi,\n      fasta_parasite    = fasta_parasite,\n      fasta_virus       = fasta_virus,\n      annot_pathogen    = annot_pathogen,\n      annot_virus       = annot_virus,\n      work_base         = work_base,\n      threads           = threads,\n      minimap2_params   = minimap2_params,\n      docker_image      = docker_image,\n      cpu               = cpu_map,\n      memory_gb         = mem_map_gb,\n      disk_gb           = disk_gb\n  }\n\n  if (do_evaluate) {\n    call Evaluate {\n      input:\n        sample_id              = sample_id,\n        contigs_raw            = Assembly.contigs_raw,\n        contigs_renamed        = Assembly.contigs_renamed,\n        best_hits              = Identify.best_hits_tsv,\n        identification_tsv     = Identify.identification_tsv,\n        read_support_tsv       = ReadSupport.read_support_contig_tsv,\n        fasta_bacteria         = fasta_bacteria,\n        fasta_fungi            = fasta_fungi,\n        fasta_parasite         = fasta_parasite,\n        fasta_virus            = fasta_virus,\n        work_base              = work_base,\n        threads                = threads,\n        max_unique_references  = max_unique_references,\n        metaquast_params       = metaquast_params,\n        docker_image           = docker_image,\n        cpu                    = cpu_eval,\n        memory_gb              = mem_eval_gb,\n        disk_gb                = disk_gb\n    }\n  }\n\n  output {\n    File final_contigs_renamed = select_first([Evaluate.final_contigs_renamed, Assembly.contigs_renamed])\n    File contig_report_tsv     = select_first([Evaluate.contig_report_tsv, Identify.contig_report_tsv])\n    File species_report_tsv    = select_first([Evaluate.species_report_tsv, Identify.species_report_tsv])\n    Array[File] paf_files      = Identify.paf_files\n  }\n}\n\n\ntask Assembly {\n  input {\n    String sample_id\n    File   fastq_r1\n    File?  fastq_r2\n    String work_base\n    Int    threads\n    Int    megahit_min_contig_len\n    String megahit_k_list\n    String megahit_extra_params\n    String docker_image\n    Int    cpu\n    Int    memory_gb\n    Int    disk_gb\n  }\n\n  # Cromwell \u5bf9\u672a\u7ed1\u5b9a\u7684 File? \u63d2\u503c\u4e3a\u7a7a\u4e32\uff1b\u7ed1\u5b9a\u4e3a File \u65f6\u4f1a\u672c\u5730\u5316\u8fdb\u5bb9\u5668\n  command <<<\n    set -euo pipefail\n    OUT=\"~{work_base}/01_assembly_work\"\n    mkdir -p \"${OUT}\"\n\n    EXTRA_ARGS=()\n    if [ -n \"~{fastq_r2}\" ]; then\n      EXTRA_ARGS+=(--r2 \"~{fastq_r2}\")\n    fi\n\n    bash /app/scripts/run_assembly.sh \\\n      --sample \"~{sample_id}\" \\\n      --r1 \"~{fastq_r1}\" \\\n      \"${EXTRA_ARGS[@]}\" \\\n      --out-dir \"${OUT}\" \\\n      --threads ~{threads} \\\n      --min-contig-len ~{megahit_min_contig_len} \\\n      --k-list \"~{megahit_k_list}\" \\\n      --extra-params \"~{megahit_extra_params}\"\n\n    mkdir -p outputs\n    cp -f \"${OUT}/outputs/final.contigs.fa\" outputs/final.contigs.fa\n    cp -f \"${OUT}/outputs/final.contigs.renamed.fa\" outputs/final.contigs.renamed.fa\n  >>>\n\n  output {\n    File contigs_raw     = \"outputs/final.contigs.fa\"\n    File contigs_renamed = \"outputs/final.contigs.renamed.fa\"\n  }\n\n  runtime {\n    docker: docker_image\n    cpu: cpu\n    memory: \"~{memory_gb} GB\"\n    disks: \"local-disk ~{disk_gb} SSD\"\n  }\n}\n\n\ntask ReadSupport {\n  input {\n    String sample_id\n    File   fastq_r1\n    File?  fastq_r2\n    File   contigs\n    String work_base\n    Int    threads\n    String minimap2_read_params\n    Int    softclip_min_clip\n    Int    softclip_min_reads\n    Float  softclip_min_fraction\n    Int    softclip_edge_bp\n    String docker_image\n    Int    cpu\n    Int    memory_gb\n    Int    disk_gb\n  }\n\n  command <<<\n    set -euo pipefail\n    OUT=\"~{work_base}/02_read_support_work\"\n    mkdir -p \"${OUT}\"\n\n    EXTRA_ARGS=()\n    if [ -n \"~{fastq_r2}\" ]; then\n      EXTRA_ARGS+=(--r2 \"~{fastq_r2}\")\n    fi\n\n    bash /app/scripts/run_read_support.sh \\\n      --sample \"~{sample_id}\" \\\n      --r1 \"~{fastq_r1}\" \\\n      \"${EXTRA_ARGS[@]}\" \\\n      --contigs \"~{contigs}\" \\\n      --out-dir \"${OUT}\" \\\n      --threads ~{threads} \\\n      --read-params \"~{minimap2_read_params}\" \\\n      --softclip-min-clip ~{softclip_min_clip} \\\n      --softclip-min-reads ~{softclip_min_reads} \\\n      --softclip-min-fraction ~{softclip_min_fraction} \\\n      --softclip-edge-bp ~{softclip_edge_bp}\n\n    mkdir -p outputs\n    cp -f \"${OUT}/outputs/~{sample_id}_read_support_contig.tsv\" outputs/read_support_contig.tsv\n    cp -f \"${OUT}/outputs/~{sample_id}_read_alignment_summary.tsv\" outputs/read_alignment_summary.tsv\n    cp -f \"${OUT}/outputs/~{sample_id}.reads_to_contigs.bam\" outputs/reads_to_contigs.bam\n    cp -f \"${OUT}/outputs/~{sample_id}.reads_to_contigs.bam.bai\" outputs/reads_to_contigs.bam.bai\n  >>>\n\n  output {\n    File read_support_contig_tsv    = \"outputs/read_support_contig.tsv\"\n    File read_alignment_summary_tsv = \"outputs/read_alignment_summary.tsv\"\n    File reads_to_contigs_bam       = \"outputs/reads_to_contigs.bam\"\n    File reads_to_contigs_bam_bai   = \"outputs/reads_to_contigs.bam.bai\"\n  }\n\n  runtime {\n    docker: docker_image\n    cpu: cpu\n    memory: \"~{memory_gb} GB\"\n    disks: \"local-disk ~{disk_gb} SSD\"\n  }\n}\n\n\ntask Identify {\n  input {\n    String sample_id\n    File   contigs\n    File   read_support_tsv\n    File db_bacteria\n    File db_fungi\n    File db_parasite\n    File db_virus\n    File? fasta_bacteria\n    File? fasta_fungi\n    File? fasta_parasite\n    File? fasta_virus\n    File annot_pathogen\n    File annot_virus\n    String work_base\n    Int    threads\n    String minimap2_params\n    String docker_image\n    Int    cpu\n    Int    memory_gb\n    Int    disk_gb\n  }\n\n  command <<<\n    set -euo pipefail\n    trap 'rc=$?; echo \"ERROR: Identify task failed at line ${LINENO} (exit code ${rc})\" >&2; exit \"${rc}\"' ERR\n\n    for REQUIRED_FILE in \\\n      \"~{db_bacteria}\" \\\n      \"~{db_fungi}\" \\\n      \"~{db_parasite}\" \\\n      \"~{db_virus}\" \\\n      \"~{annot_pathogen}\" \\\n      \"~{annot_virus}\"; do\n      if [ ! -r \"${REQUIRED_FILE}\" ]; then\n        echo \"ERROR: required Identify input is not readable in the task container: ${REQUIRED_FILE}\" >&2\n        exit 2\n      fi\n    done\n\n    OUT=\"~{work_base}/03_identify_work\"\n    mkdir -p \"${OUT}\"\n\n    bash /app/scripts/run_identify.sh \\\n      --sample \"~{sample_id}\" \\\n      --contigs \"~{contigs}\" \\\n      --read-support-tsv \"~{read_support_tsv}\" \\\n      --out-dir \"${OUT}\" \\\n      --threads ~{threads} \\\n      --minimap2-params \"~{minimap2_params}\" \\\n      --db-bacteria \"~{db_bacteria}\" \\\n      --db-fungi \"~{db_fungi}\" \\\n      --db-parasite \"~{db_parasite}\" \\\n      --db-virus \"~{db_virus}\" \\\n      --fasta-bacteria \"~{fasta_bacteria}\" \\\n      --fasta-fungi \"~{fasta_fungi}\" \\\n      --fasta-parasite \"~{fasta_parasite}\" \\\n      --fasta-virus \"~{fasta_virus}\" \\\n      --annot-pathogen \"~{annot_pathogen}\" \\\n      --annot-virus \"~{annot_virus}\"\n\n    mkdir -p outputs\n    cp -f \"${OUT}/outputs/~{sample_id}_identification.tsv\" outputs/identification.tsv\n    cp -f \"${OUT}/outputs/query_best_hits.tsv\" outputs/query_best_hits.tsv\n    cp -f \"${OUT}/outputs/~{sample_id}_contig_report.tsv\" outputs/contig_report.tsv\n    cp -f \"${OUT}/outputs/~{sample_id}_species_report.tsv\" outputs/species_report.tsv\n\n    mkdir -p outputs/paf\n    if compgen -G \"${OUT}/02_identification/paf/*.paf\" > /dev/null; then\n      cp -f \"${OUT}/02_identification/paf/\"*.paf outputs/paf/\n    fi\n  >>>\n\n  output {\n    File identification_tsv = \"outputs/identification.tsv\"\n    File best_hits_tsv      = \"outputs/query_best_hits.tsv\"\n    Array[File] paf_files   = glob(\"outputs/paf/*.paf\")\n    File contig_report_tsv  = \"outputs/contig_report.tsv\"\n    File species_report_tsv = \"outputs/species_report.tsv\"\n  }\n\n  runtime {\n    docker: docker_image\n    cpu: cpu\n    memory: \"~{memory_gb} GB\"\n    disks: \"local-disk ~{disk_gb} SSD\"\n  }\n}\n\n\ntask Evaluate {\n  input {\n    String sample_id\n    File   contigs_raw\n    File   contigs_renamed\n    File   best_hits\n    File   identification_tsv\n    File   read_support_tsv\n    File? fasta_bacteria\n    File? fasta_fungi\n    File? fasta_parasite\n    File? fasta_virus\n    String work_base\n    Int    threads\n    Int    max_unique_references\n    String metaquast_params\n    String docker_image\n    Int    cpu\n    Int    memory_gb\n    Int    disk_gb\n  }\n\n  command <<<\n    set -euo pipefail\n    OUT=\"~{work_base}/04_evaluate_work\"\n    mkdir -p \"${OUT}\"\n\n    bash /app/scripts/run_evaluate.sh \\\n      --sample \"~{sample_id}\" \\\n      --contigs-raw \"~{contigs_raw}\" \\\n      --contigs-renamed \"~{contigs_renamed}\" \\\n      --best-hits \"~{best_hits}\" \\\n      --identification-tsv \"~{identification_tsv}\" \\\n      --read-support-tsv \"~{read_support_tsv}\" \\\n      --out-dir \"${OUT}\" \\\n      --threads ~{threads} \\\n      --max-unique-references ~{max_unique_references} \\\n      --metaquast-params \"~{metaquast_params}\" \\\n      --fasta-bacteria \"~{fasta_bacteria}\" \\\n      --fasta-fungi \"~{fasta_fungi}\" \\\n      --fasta-parasite \"~{fasta_parasite}\" \\\n      --fasta-virus \"~{fasta_virus}\"\n\n    mkdir -p outputs\n    cp -f \"${OUT}/outputs/references.fa\" outputs/references.fa\n    cp -f \"${OUT}/outputs/metaquast.tar.gz\" outputs/metaquast.tar.gz\n    cp -f \"${OUT}/outputs/~{sample_id}_contig_report.tsv\" outputs/contig_report.tsv\n    cp -f \"${OUT}/outputs/~{sample_id}_species_report.tsv\" outputs/species_report.tsv\n    cp -f \"${OUT}/01_assembly/final.contigs.renamed.fa\" outputs/final.contigs.renamed.fa\n  >>>\n\n  output {\n    File final_contigs_renamed = \"outputs/final.contigs.renamed.fa\"\n    File references_fa         = \"outputs/references.fa\"\n    File metaquast_tar_gz      = \"outputs/metaquast.tar.gz\"\n    File contig_report_tsv     = \"outputs/contig_report.tsv\"\n    File species_report_tsv    = \"outputs/species_report.tsv\"\n  }\n\n  runtime {\n    docker: docker_image\n    cpu: cpu\n    memory: \"~{memory_gb} GB\"\n    disks: \"local-disk ~{disk_gb} SSD\"\n  }\n}\n",
+    "root": "",
+    "options": "{\n  \"final_workflow_outputs_dir\": \"/data/versitygw/data/s3/cncb-web-server-mic/cromwell/outputs\",\n  \"note\": \"BioAgent submits this workflow options document to Cromwell after rewriting the output directory into the per-run artifact directory.\",\n  \"read_from_cache\": false,\n  \"use_relative_output_paths\": false,\n  \"write_to_cache\": false\n}",
+    "inputs": "{\"AssemblyId.annot_pathogen\":\"/data/zhaomh/program/database/assembly_database/stat/Filtered_Total_Pathogen_Annotation_New_species_b3fp1_final.trimmed.tsv\",\"AssemblyId.annot_virus\":\"/data/zhaomh/program/database/assembly_database/stat/Filtered_Total_Virus_Annotation_New_species.trimmed.tsv\",\"AssemblyId.cpu_assembly\":32,\"AssemblyId.cpu_eval\":16,\"AssemblyId.cpu_map\":32,\"AssemblyId.db_bacteria\":\"/data/zhaomh/program/database/assembly_database/filtered_bacteria_last_150bp.mmi\",\"AssemblyId.db_fungi\":\"/data/zhaomh/program/database/assembly_database/filtered_fungi_last_150bp.mmi\",\"AssemblyId.db_parasite\":\"/data/zhaomh/program/database/assembly_database/filtered_parasite_last_150bp.mmi\",\"AssemblyId.db_virus\":\"/data/zhaomh/program/database/assembly_database/filtered_virus_last_100bp.mmi\",\"AssemblyId.disk_gb\":500,\"AssemblyId.do_evaluate\":true,\"AssemblyId.docker_image\":\"cncb/assembly-id:v1.0\",\"AssemblyId.fasta_bacteria\":\"/data/zhaomh/program/database/assembly_database/filtered_bacteria_last_150bp.fa\",\"AssemblyId.fasta_fungi\":\"/data/zhaomh/program/database/assembly_database/filtered_fungi_last_150bp.fa\",\"AssemblyId.fasta_parasite\":\"/data/zhaomh/program/database/assembly_database/filtered_parasite_last_150bp.fa\",\"AssemblyId.fasta_virus\":\"/data/zhaomh/program/database/assembly_database/filtered_virus_last_100bp.fa\",\"AssemblyId.fastq_r1\":\"/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metagenomic_de_novo_assembly/63f2a8e6b8d845a6949a889700d0f95f/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq\",\"AssemblyId.fastq_r2\":\"/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metagenomic_de_novo_assembly/63f2a8e6b8d845a6949a889700d0f95f/4eae54861990fe3b-01634d66a0d644a39c76220c59bc5a31_clean.R2.fq\",\"AssemblyId.max_unique_references\":100,\"AssemblyId.megahit_extra_params\":\"--min-count 1\",\"AssemblyId.megahit_k_list\":\"15,21,29,39\",\"AssemblyId.megahit_min_contig_len\":100,\"AssemblyId.mem_assembly_gb\":64,\"AssemblyId.mem_eval_gb\":32,\"AssemblyId.mem_map_gb\":64,\"AssemblyId.metaquast_params\":\"--no-plots --no-html --no-icarus --fast\",\"AssemblyId.minimap2_params\":\"-x asm20 -N 5\",\"AssemblyId.minimap2_read_params\":\"-ax sr --secondary=no\",\"AssemblyId.sample_id\":\"DRR000852\",\"AssemblyId.threads\":32}",
+    "workflowUrl": "",
+    "labels": "{}"
+  },
+  "calls": {
+    "AssemblyId.ReadSupport": [
+      {
+        "executionStatus": "Done",
+        "stdout": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-ReadSupport/execution/stdout",
+        "backendStatus": "Done",
+        "commandLine": "set -euo pipefail\nOUT=\"assembly_id_DRR000852/02_read_support_work\"\nmkdir -p \"${OUT}\"\n\nEXTRA_ARGS=()\nif [ -n \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-ReadSupport/inputs/-435737051/4eae54861990fe3b-01634d66a0d644a39c76220c59bc5a31_clean.R2.fq\" ]; then\n  EXTRA_ARGS+=(--r2 \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-ReadSupport/inputs/-435737051/4eae54861990fe3b-01634d66a0d644a39c76220c59bc5a31_clean.R2.fq\")\nfi\n\nbash /app/scripts/run_read_support.sh \\\n  --sample \"DRR000852\" \\\n  --r1 \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-ReadSupport/inputs/-435737051/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq\" \\\n  \"${EXTRA_ARGS[@]}\" \\\n  --contigs \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-ReadSupport/inputs/-89782018/final.contigs.renamed.fa\" \\\n  --out-dir \"${OUT}\" \\\n  --threads 32 \\\n  --read-params \"-ax sr --secondary=no\" \\\n  --softclip-min-clip 5 \\\n  --softclip-min-reads 3 \\\n  --softclip-min-fraction 0.2 \\\n  --softclip-edge-bp 10\n\nmkdir -p outputs\ncp -f \"${OUT}/outputs/DRR000852_read_support_contig.tsv\" outputs/read_support_contig.tsv\ncp -f \"${OUT}/outputs/DRR000852_read_alignment_summary.tsv\" outputs/read_alignment_summary.tsv\ncp -f \"${OUT}/outputs/DRR000852.reads_to_contigs.bam\" outputs/reads_to_contigs.bam\ncp -f \"${OUT}/outputs/DRR000852.reads_to_contigs.bam.bai\" outputs/reads_to_contigs.bam.bai",
+        "shardIndex": -1,
+        "outputs": {
+          "reads_to_contigs_bam": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-ReadSupport/execution/outputs/reads_to_contigs.bam",
+          "reads_to_contigs_bam_bai": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-ReadSupport/execution/outputs/reads_to_contigs.bam.bai",
+          "read_alignment_summary_tsv": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-ReadSupport/execution/outputs/read_alignment_summary.tsv",
+          "read_support_contig_tsv": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-ReadSupport/execution/outputs/read_support_contig.tsv"
+        },
+        "runtimeAttributes": {
+          "failOnStderr": "false",
+          "continueOnReturnCode": "0",
+          "maxRetries": "0",
+          "docker": "cncb/assembly-id:v1.0"
+        },
+        "callCaching": {
+          "allowResultReuse": false,
+          "effectiveCallCachingMode": "CallCachingOff"
+        },
+        "inputs": {
+          "cpu": 32,
+          "sample_id": "DRR000852",
+          "fastq_r1": "/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metagenomic_de_novo_assembly/63f2a8e6b8d845a6949a889700d0f95f/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq",
+          "work_base": "assembly_id_DRR000852",
+          "softclip_edge_bp": 10,
+          "docker_image": "cncb/assembly-id:v1.0",
+          "contigs": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Assembly/execution/outputs/final.contigs.renamed.fa",
+          "disk_gb": 500,
+          "minimap2_read_params": "-ax sr --secondary=no",
+          "softclip_min_fraction": 0.2,
+          "memory_gb": 64,
+          "softclip_min_reads": 3,
+          "softclip_min_clip": 5,
+          "fastq_r2": "/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metagenomic_de_novo_assembly/63f2a8e6b8d845a6949a889700d0f95f/4eae54861990fe3b-01634d66a0d644a39c76220c59bc5a31_clean.R2.fq",
+          "threads": 32
+        },
+        "returnCode": 0,
+        "jobId": "3882856",
+        "backend": "Local",
+        "start": "2026-11-20T10:05:01.433Z",
+        "end": "2026-11-20T10:05:14.203Z",
+        "dockerImageUsed": "cncb/assembly-id:v1.0",
+        "stderr": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-ReadSupport/execution/stderr",
+        "callRoot": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-ReadSupport",
+        "attempt": 1,
+        "executionEvents": [
+          {
+            "startTime": "2026-11-20T10:05:13.884Z",
+            "description": "UpdatingJobStore",
+            "endTime": "2026-11-20T10:05:14.203Z"
+          },
+          {
+            "startTime": "2026-11-20T10:05:08.344Z",
+            "description": "PreparingJob",
+            "endTime": "2026-11-20T10:05:08.346Z"
+          },
+          {
+            "startTime": "2026-11-20T10:05:08.344Z",
+            "description": "WaitingForValueStore",
+            "endTime": "2026-11-20T10:05:08.344Z"
+          },
+          {
+            "startTime": "2026-11-20T10:05:08.346Z",
+            "description": "RunningJob",
+            "endTime": "2026-11-20T10:05:13.884Z"
+          },
+          {
+            "startTime": "2026-11-20T10:05:01.434Z",
+            "description": "RequestingExecutionToken",
+            "endTime": "2026-11-20T10:05:08.344Z"
+          },
+          {
+            "startTime": "2026-11-20T10:05:01.433Z",
+            "description": "Pending",
+            "endTime": "2026-11-20T10:05:01.434Z"
+          }
+        ]
+      }
+    ],
+    "AssemblyId.Assembly": [
+      {
+        "executionStatus": "Done",
+        "stdout": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Assembly/execution/stdout",
+        "backendStatus": "Done",
+        "commandLine": "set -euo pipefail\nOUT=\"assembly_id_DRR000852/01_assembly_work\"\nmkdir -p \"${OUT}\"\n\nEXTRA_ARGS=()\nif [ -n \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Assembly/inputs/-435737051/4eae54861990fe3b-01634d66a0d644a39c76220c59bc5a31_clean.R2.fq\" ]; then\n  EXTRA_ARGS+=(--r2 \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Assembly/inputs/-435737051/4eae54861990fe3b-01634d66a0d644a39c76220c59bc5a31_clean.R2.fq\")\nfi\n\nbash /app/scripts/run_assembly.sh \\\n  --sample \"DRR000852\" \\\n  --r1 \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Assembly/inputs/-435737051/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq\" \\\n  \"${EXTRA_ARGS[@]}\" \\\n  --out-dir \"${OUT}\" \\\n  --threads 32 \\\n  --min-contig-len 100 \\\n  --k-list \"15,21,29,39\" \\\n  --extra-params \"--min-count 1\"\n\nmkdir -p outputs\ncp -f \"${OUT}/outputs/final.contigs.fa\" outputs/final.contigs.fa\ncp -f \"${OUT}/outputs/final.contigs.renamed.fa\" outputs/final.contigs.renamed.fa",
+        "shardIndex": -1,
+        "outputs": {
+          "contigs_raw": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Assembly/execution/outputs/final.contigs.fa",
+          "contigs_renamed": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Assembly/execution/outputs/final.contigs.renamed.fa"
+        },
+        "runtimeAttributes": {
+          "maxRetries": "0",
+          "failOnStderr": "false",
+          "continueOnReturnCode": "0",
+          "docker": "cncb/assembly-id:v1.0"
+        },
+        "callCaching": {
+          "allowResultReuse": false,
+          "effectiveCallCachingMode": "CallCachingOff"
+        },
+        "inputs": {
+          "megahit_k_list": "15,21,29,39",
+          "megahit_min_contig_len": 100,
+          "megahit_extra_params": "--min-count 1",
+          "work_base": "assembly_id_DRR000852",
+          "cpu": 32,
+          "memory_gb": 64,
+          "sample_id": "DRR000852",
+          "fastq_r1": "/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metagenomic_de_novo_assembly/63f2a8e6b8d845a6949a889700d0f95f/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq",
+          "docker_image": "cncb/assembly-id:v1.0",
+          "disk_gb": 500,
+          "fastq_r2": "/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metagenomic_de_novo_assembly/63f2a8e6b8d845a6949a889700d0f95f/4eae54861990fe3b-01634d66a0d644a39c76220c59bc5a31_clean.R2.fq",
+          "threads": 32
+        },
+        "returnCode": 0,
+        "jobId": "3880259",
+        "backend": "Local",
+        "start": "2026-11-20T10:04:36.954Z",
+        "end": "2026-11-20T10:05:00.199Z",
+        "dockerImageUsed": "cncb/assembly-id:v1.0",
+        "stderr": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Assembly/execution/stderr",
+        "callRoot": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Assembly",
+        "attempt": 1,
+        "executionEvents": [
+          {
+            "startTime": "2026-11-20T10:04:36.954Z",
+            "description": "RequestingExecutionToken",
+            "endTime": "2026-11-20T10:04:38.343Z"
+          },
+          {
+            "startTime": "2026-11-20T10:04:59.744Z",
+            "description": "UpdatingJobStore",
+            "endTime": "2026-11-20T10:05:00.199Z"
+          },
+          {
+            "startTime": "2026-11-20T10:04:38.346Z",
+            "description": "RunningJob",
+            "endTime": "2026-11-20T10:04:59.744Z"
+          },
+          {
+            "startTime": "2026-11-20T10:04:36.954Z",
+            "description": "Pending",
+            "endTime": "2026-11-20T10:04:36.954Z"
+          },
+          {
+            "startTime": "2026-11-20T10:04:38.343Z",
+            "description": "WaitingForValueStore",
+            "endTime": "2026-11-20T10:04:38.343Z"
+          },
+          {
+            "startTime": "2026-11-20T10:04:38.343Z",
+            "description": "PreparingJob",
+            "endTime": "2026-11-20T10:04:38.346Z"
+          }
+        ]
+      }
+    ],
+    "AssemblyId.Identify": [
+      {
+        "executionStatus": "Done",
+        "stdout": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/stdout",
+        "backendStatus": "Done",
+        "commandLine": "set -euo pipefail\ntrap 'rc=$?; echo \"ERROR: Identify task failed at line ${LINENO} (exit code ${rc})\" >&2; exit \"${rc}\"' ERR\n\nfor REQUIRED_FILE in \\\n  \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-397724947/filtered_bacteria_last_150bp.mmi\" \\\n  \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-397724947/filtered_fungi_last_150bp.mmi\" \\\n  \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-397724947/filtered_parasite_last_150bp.mmi\" \\\n  \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-397724947/filtered_virus_last_100bp.mmi\" \\\n  \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/2015162422/Filtered_Total_Pathogen_Annotation_New_species_b3fp1_final.trimmed.tsv\" \\\n  \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/2015162422/Filtered_Total_Virus_Annotation_New_species.trimmed.tsv\"; do\n  if [ ! -r \"${REQUIRED_FILE}\" ]; then\n    echo \"ERROR: required Identify input is not readable in the task container: ${REQUIRED_FILE}\" >&2\n    exit 2\n  fi\ndone\n\nOUT=\"assembly_id_DRR000852/03_identify_work\"\nmkdir -p \"${OUT}\"\n\nbash /app/scripts/run_identify.sh \\\n  --sample \"DRR000852\" \\\n  --contigs \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-89782018/final.contigs.renamed.fa\" \\\n  --read-support-tsv \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-1343991911/read_support_contig.tsv\" \\\n  --out-dir \"${OUT}\" \\\n  --threads 32 \\\n  --minimap2-params \"-x asm20 -N 5\" \\\n  --db-bacteria \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-397724947/filtered_bacteria_last_150bp.mmi\" \\\n  --db-fungi \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-397724947/filtered_fungi_last_150bp.mmi\" \\\n  --db-parasite \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-397724947/filtered_parasite_last_150bp.mmi\" \\\n  --db-virus \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-397724947/filtered_virus_last_100bp.mmi\" \\\n  --fasta-bacteria \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-397724947/filtered_bacteria_last_150bp.fa\" \\\n  --fasta-fungi \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-397724947/filtered_fungi_last_150bp.fa\" \\\n  --fasta-parasite \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-397724947/filtered_parasite_last_150bp.fa\" \\\n  --fasta-virus \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/-397724947/filtered_virus_last_100bp.fa\" \\\n  --annot-pathogen \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/2015162422/Filtered_Total_Pathogen_Annotation_New_species_b3fp1_final.trimmed.tsv\" \\\n  --annot-virus \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/inputs/2015162422/Filtered_Total_Virus_Annotation_New_species.trimmed.tsv\"\n\nmkdir -p outputs\ncp -f \"${OUT}/outputs/DRR000852_identification.tsv\" outputs/identification.tsv\ncp -f \"${OUT}/outputs/query_best_hits.tsv\" outputs/query_best_hits.tsv\ncp -f \"${OUT}/outputs/DRR000852_contig_report.tsv\" outputs/contig_report.tsv\ncp -f \"${OUT}/outputs/DRR000852_species_report.tsv\" outputs/species_report.tsv\n\nmkdir -p outputs/paf\nif compgen -G \"${OUT}/02_identification/paf/*.paf\" > /dev/null; then\n  cp -f \"${OUT}/02_identification/paf/\"*.paf outputs/paf/\nfi",
+        "shardIndex": -1,
+        "outputs": {
+          "best_hits_tsv": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/outputs/query_best_hits.tsv",
+          "identification_tsv": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/outputs/identification.tsv",
+          "species_report_tsv": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/outputs/species_report.tsv",
+          "contig_report_tsv": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/outputs/contig_report.tsv",
+          "paf_files": [
+            "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/glob-c80d8adfdedd1e4809c08f353ad33e1b/bacteria.paf",
+            "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/glob-c80d8adfdedd1e4809c08f353ad33e1b/fungi.paf",
+            "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/glob-c80d8adfdedd1e4809c08f353ad33e1b/parasite.paf",
+            "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/glob-c80d8adfdedd1e4809c08f353ad33e1b/virus.paf"
+          ]
+        },
+        "runtimeAttributes": {
+          "failOnStderr": "false",
+          "continueOnReturnCode": "0",
+          "maxRetries": "0",
+          "docker": "cncb/assembly-id:v1.0"
+        },
+        "callCaching": {
+          "allowResultReuse": false,
+          "effectiveCallCachingMode": "CallCachingOff"
+        },
+        "inputs": {
+          "db_virus": "/data/zhaomh/program/database/assembly_database/filtered_virus_last_100bp.mmi",
+          "fasta_virus": "/data/zhaomh/program/database/assembly_database/filtered_virus_last_100bp.fa",
+          "read_support_tsv": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-ReadSupport/execution/outputs/read_support_contig.tsv",
+          "sample_id": "DRR000852",
+          "db_parasite": "/data/zhaomh/program/database/assembly_database/filtered_parasite_last_150bp.mmi",
+          "db_fungi": "/data/zhaomh/program/database/assembly_database/filtered_fungi_last_150bp.mmi",
+          "db_bacteria": "/data/zhaomh/program/database/assembly_database/filtered_bacteria_last_150bp.mmi",
+          "minimap2_params": "-x asm20 -N 5",
+          "work_base": "assembly_id_DRR000852",
+          "cpu": 32,
+          "memory_gb": 64,
+          "threads": 32,
+          "fasta_fungi": "/data/zhaomh/program/database/assembly_database/filtered_fungi_last_150bp.fa",
+          "annot_pathogen": "/data/zhaomh/program/database/assembly_database/stat/Filtered_Total_Pathogen_Annotation_New_species_b3fp1_final.trimmed.tsv",
+          "annot_virus": "/data/zhaomh/program/database/assembly_database/stat/Filtered_Total_Virus_Annotation_New_species.trimmed.tsv",
+          "fasta_parasite": "/data/zhaomh/program/database/assembly_database/filtered_parasite_last_150bp.fa",
+          "docker_image": "cncb/assembly-id:v1.0",
+          "fasta_bacteria": "/data/zhaomh/program/database/assembly_database/filtered_bacteria_last_150bp.fa",
+          "contigs": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Assembly/execution/outputs/final.contigs.renamed.fa",
+          "disk_gb": 500
+        },
+        "returnCode": 0,
+        "jobId": "3883958",
+        "backend": "Local",
+        "start": "2026-11-20T10:05:15.713Z",
+        "end": "2026-11-20T10:23:41.213Z",
+        "dockerImageUsed": "cncb/assembly-id:v1.0",
+        "stderr": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/stderr",
+        "callRoot": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify",
+        "attempt": 1,
+        "executionEvents": [
+          {
+            "startTime": "2026-11-20T10:05:15.713Z",
+            "description": "RequestingExecutionToken",
+            "endTime": "2026-11-20T10:05:18.343Z"
+          },
+          {
+            "startTime": "2026-11-20T10:05:18.344Z",
+            "description": "PreparingJob",
+            "endTime": "2026-11-20T10:05:18.345Z"
+          },
+          {
+            "startTime": "2026-11-20T10:05:15.713Z",
+            "description": "Pending",
+            "endTime": "2026-11-20T10:05:15.713Z"
+          },
+          {
+            "startTime": "2026-11-20T10:05:18.345Z",
+            "description": "RunningJob",
+            "endTime": "2026-11-20T10:23:40.205Z"
+          },
+          {
+            "startTime": "2026-11-20T10:05:18.343Z",
+            "description": "WaitingForValueStore",
+            "endTime": "2026-11-20T10:05:18.344Z"
+          },
+          {
+            "startTime": "2026-11-20T10:23:40.205Z",
+            "description": "UpdatingJobStore",
+            "endTime": "2026-11-20T10:23:41.213Z"
+          }
+        ]
+      }
+    ],
+    "AssemblyId.Evaluate": [
+      {
+        "executionStatus": "Done",
+        "stdout": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/execution/stdout",
+        "backendStatus": "Done",
+        "commandLine": "set -euo pipefail\nOUT=\"assembly_id_DRR000852/04_evaluate_work\"\nmkdir -p \"${OUT}\"\n\nbash /app/scripts/run_evaluate.sh \\\n  --sample \"DRR000852\" \\\n  --contigs-raw \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/inputs/-89782018/final.contigs.fa\" \\\n  --contigs-renamed \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/inputs/-89782018/final.contigs.renamed.fa\" \\\n  --best-hits \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/inputs/-1236239196/query_best_hits.tsv\" \\\n  --identification-tsv \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/inputs/-1236239196/identification.tsv\" \\\n  --read-support-tsv \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/inputs/-1343991911/read_support_contig.tsv\" \\\n  --out-dir \"${OUT}\" \\\n  --threads 32 \\\n  --max-unique-references 100 \\\n  --metaquast-params \"--no-plots --no-html --no-icarus --fast\" \\\n  --fasta-bacteria \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/inputs/-397724947/filtered_bacteria_last_150bp.fa\" \\\n  --fasta-fungi \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/inputs/-397724947/filtered_fungi_last_150bp.fa\" \\\n  --fasta-parasite \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/inputs/-397724947/filtered_parasite_last_150bp.fa\" \\\n  --fasta-virus \"/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/inputs/-397724947/filtered_virus_last_100bp.fa\"\n\nmkdir -p outputs\ncp -f \"${OUT}/outputs/references.fa\" outputs/references.fa\ncp -f \"${OUT}/outputs/metaquast.tar.gz\" outputs/metaquast.tar.gz\ncp -f \"${OUT}/outputs/DRR000852_contig_report.tsv\" outputs/contig_report.tsv\ncp -f \"${OUT}/outputs/DRR000852_species_report.tsv\" outputs/species_report.tsv\ncp -f \"${OUT}/01_assembly/final.contigs.renamed.fa\" outputs/final.contigs.renamed.fa",
+        "shardIndex": -1,
+        "outputs": {
+          "metaquast_tar_gz": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/execution/outputs/metaquast.tar.gz",
+          "final_contigs_renamed": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/execution/outputs/final.contigs.renamed.fa",
+          "species_report_tsv": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/execution/outputs/species_report.tsv",
+          "references_fa": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/execution/outputs/references.fa",
+          "contig_report_tsv": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/execution/outputs/contig_report.tsv"
+        },
+        "runtimeAttributes": {
+          "maxRetries": "0",
+          "failOnStderr": "false",
+          "continueOnReturnCode": "0",
+          "docker": "cncb/assembly-id:v1.0"
+        },
+        "callCaching": {
+          "allowResultReuse": false,
+          "effectiveCallCachingMode": "CallCachingOff"
+        },
+        "inputs": {
+          "fasta_virus": "/data/zhaomh/program/database/assembly_database/filtered_virus_last_100bp.fa",
+          "read_support_tsv": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-ReadSupport/execution/outputs/read_support_contig.tsv",
+          "sample_id": "DRR000852",
+          "best_hits": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/outputs/query_best_hits.tsv",
+          "identification_tsv": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/outputs/identification.tsv",
+          "fasta_parasite": "/data/zhaomh/program/database/assembly_database/filtered_parasite_last_150bp.fa",
+          "contigs_renamed": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Assembly/execution/outputs/final.contigs.renamed.fa",
+          "contigs_raw": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Assembly/execution/outputs/final.contigs.fa",
+          "work_base": "assembly_id_DRR000852",
+          "cpu": 16,
+          "memory_gb": 32,
+          "threads": 32,
+          "fasta_fungi": "/data/zhaomh/program/database/assembly_database/filtered_fungi_last_150bp.fa",
+          "docker_image": "cncb/assembly-id:v1.0",
+          "fasta_bacteria": "/data/zhaomh/program/database/assembly_database/filtered_bacteria_last_150bp.fa",
+          "disk_gb": 500,
+          "metaquast_params": "--no-plots --no-html --no-icarus --fast",
+          "max_unique_references": 100
+        },
+        "returnCode": 0,
+        "jobId": "3902276",
+        "backend": "Local",
+        "start": "2026-11-20T10:23:42.473Z",
+        "end": "2026-11-20T10:23:54.200Z",
+        "dockerImageUsed": "cncb/assembly-id:v1.0",
+        "stderr": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/execution/stderr",
+        "callRoot": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate",
+        "attempt": 1,
+        "executionEvents": [
+          {
+            "startTime": "2026-11-20T10:23:48.349Z",
+            "description": "RunningJob",
+            "endTime": "2026-11-20T10:23:53.193Z"
+          },
+          {
+            "startTime": "2026-11-20T10:23:42.474Z",
+            "description": "RequestingExecutionToken",
+            "endTime": "2026-11-20T10:23:48.343Z"
+          },
+          {
+            "startTime": "2026-11-20T10:23:42.473Z",
+            "description": "Pending",
+            "endTime": "2026-11-20T10:23:42.474Z"
+          },
+          {
+            "startTime": "2026-11-20T10:23:48.343Z",
+            "description": "WaitingForValueStore",
+            "endTime": "2026-11-20T10:23:48.343Z"
+          },
+          {
+            "startTime": "2026-11-20T10:23:53.193Z",
+            "description": "UpdatingJobStore",
+            "endTime": "2026-11-20T10:23:54.200Z"
+          },
+          {
+            "endTime": "2026-11-20T10:23:48.349Z",
+            "description": "PreparingJob",
+            "startTime": "2026-11-20T10:23:48.343Z"
+          }
+        ]
+      }
+    ]
+  },
+  "outputs": {
+    "AssemblyId.final_contigs_renamed": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/execution/outputs/final.contigs.renamed.fa",
+    "AssemblyId.contig_report_tsv": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/execution/outputs/contig_report.tsv",
+    "AssemblyId.paf_files": [
+      "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/glob-c80d8adfdedd1e4809c08f353ad33e1b/bacteria.paf",
+      "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/glob-c80d8adfdedd1e4809c08f353ad33e1b/fungi.paf",
+      "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/glob-c80d8adfdedd1e4809c08f353ad33e1b/parasite.paf",
+      "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Identify/execution/glob-c80d8adfdedd1e4809c08f353ad33e1b/virus.paf"
+    ],
+    "AssemblyId.species_report_tsv": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3/call-Evaluate/execution/outputs/species_report.tsv"
+  },
+  "workflowRoot": "/data/zhaomh/cromwell-workspace/cromwell-executions/AssemblyId/6761928e-7de2-4dac-90d3-a08291b7f7d3",
+  "actualWorkflowLanguage": "WDL",
+  "status": "Succeeded",
+  "end": "2026-11-20T10:23:56.761Z",
+  "start": "2026-11-20T10:04:33.874Z",
+  "id": "6761928e-7de2-4dac-90d3-a08291b7f7d3",
+  "inputs": {
+    "db_virus": "/data/zhaomh/program/database/assembly_database/filtered_virus_last_100bp.mmi",
+    "cpu_eval": 16,
+    "db_parasite": "/data/zhaomh/program/database/assembly_database/filtered_parasite_last_150bp.mmi",
+    "megahit_min_contig_len": 100,
+    "db_fungi": "/data/zhaomh/program/database/assembly_database/filtered_fungi_last_150bp.mmi",
+    "db_bacteria": "/data/zhaomh/program/database/assembly_database/filtered_bacteria_last_150bp.mmi",
+    "softclip_edge_bp": 10,
+    "mem_eval_gb": 32,
+    "mem_map_gb": 64,
+    "do_evaluate": true,
+    "fasta_fungi": "/data/zhaomh/program/database/assembly_database/filtered_fungi_last_150bp.fa",
+    "megahit_k_list": "15,21,29,39",
+    "fasta_virus": "/data/zhaomh/program/database/assembly_database/filtered_virus_last_100bp.fa",
+    "sample_id": "DRR000852",
+    "cpu_map": 32,
+    "fastq_r1": "/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metagenomic_de_novo_assembly/63f2a8e6b8d845a6949a889700d0f95f/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq",
+    "annot_virus": "/data/zhaomh/program/database/assembly_database/stat/Filtered_Total_Virus_Annotation_New_species.trimmed.tsv",
+    "fasta_parasite": "/data/zhaomh/program/database/assembly_database/filtered_parasite_last_150bp.fa",
+    "minimap2_params": "-x asm20 -N 5",
+    "megahit_extra_params": "--min-count 1",
+    "docker_image": "cncb/assembly-id:v1.0",
+    "fasta_bacteria": "/data/zhaomh/program/database/assembly_database/filtered_bacteria_last_150bp.fa",
+    "disk_gb": 500,
+    "minimap2_read_params": "-ax sr --secondary=no",
+    "softclip_min_fraction": 0.2,
+    "softclip_min_reads": 3,
+    "softclip_min_clip": 5,
+    "metaquast_params": "--no-plots --no-html --no-icarus --fast",
+    "max_unique_references": 100,
+    "fastq_r2": "/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metagenomic_de_novo_assembly/63f2a8e6b8d845a6949a889700d0f95f/4eae54861990fe3b-01634d66a0d644a39c76220c59bc5a31_clean.R2.fq",
+    "cpu_assembly": 32,
+    "threads": 32,
+    "annot_pathogen": "/data/zhaomh/program/database/assembly_database/stat/Filtered_Total_Pathogen_Annotation_New_species_b3fp1_final.trimmed.tsv",
+    "mem_assembly_gb": 64
+  },
+  "labels": {
+    "cromwell-workflow-id": "cromwell-6761928e-7de2-4dac-90d3-a08291b7f7d3"
+  },
+  "submission": "2026-11-20T10:04:30.090Z"
+}

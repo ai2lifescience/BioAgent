@@ -1,0 +1,1250 @@
+[
+  {
+    "pipeline": "bacterial_biosynthetic_gene_clusters",
+    "job_id": "7c788e896eae40a2b04743f43ec29700",
+    "outputs": [
+      {
+        "name": "bgc_clusters.tsv",
+        "declared_bytes": 530,
+        "actual_bytes": 530,
+        "size_matches": true,
+        "sha256": "bc5ff0e7f095b799649f8157a3301b4df21fa01bb06d784424501a1ccc17fce2",
+        "nonempty_lines": 3,
+        "data_rows": 2,
+        "header": "sample_id\tcluster_id\tsequence_id\tcontig_id\tstart\tend\tlength_bp\ttype\taverage_probability\tmaximum_probability\tedge_proximity"
+      },
+      {
+        "name": "bgc_genes.tsv",
+        "declared_bytes": 8789,
+        "actual_bytes": 8789,
+        "size_matches": true,
+        "sha256": "3245eb7d6d267092e18644088a1e7ed7e581bf8af5a49dc9855fbe2541a50804",
+        "nonempty_lines": 38,
+        "data_rows": 37,
+        "header": "sample_id\tcluster_id\tsequence_id\tcontig_id\tprotein_id\tstart\tend\tstrand\taverage_probability\tmaximum_probability"
+      },
+      {
+        "name": "bgc_features.tsv",
+        "declared_bytes": 1043786,
+        "actual_bytes": 1043786,
+        "size_matches": true,
+        "sha256": "5b1b13f05b83e037ac65616d16feed8d060a635f4c8592556eb9b58a5d1c2a97",
+        "nonempty_lines": 5331,
+        "data_rows": 5330,
+        "header": "sample_id\tcluster_id\tsequence_id\tcontig_id\tprotein_id\tdomain\thmm\ti_evalue\tpvalue\tdomain_start\tdomain_end"
+      }
+    ]
+  },
+  {
+    "pipeline": "bacterial_defense_system_annotation",
+    "job_id": "0649b80c7aa04e44bdc6f26c94b44ec3",
+    "outputs": [
+      {
+        "name": "defense_systems.tsv",
+        "declared_bytes": 3705,
+        "actual_bytes": 3705,
+        "size_matches": true,
+        "sha256": "ae33d9a686159c013b4bb08cb1ace49c2e8d98299acb478bcc7e45555a8e2373",
+        "nonempty_lines": 10,
+        "data_rows": 9,
+        "header": "sample_id\tsystem_id\ttype\tsubtype\treplicon_id\tcontig_id\tbegin_gene\tend_gene\tgene_count\tproteins\tprofiles"
+      },
+      {
+        "name": "defense_genes.tsv",
+        "declared_bytes": 6183,
+        "actual_bytes": 6183,
+        "size_matches": true,
+        "sha256": "db5a4bb917a66f9fb9b4e2a30a13fb6fb9c2e607b3e90e5c4d776939da8a3a33",
+        "nonempty_lines": 24,
+        "data_rows": 23,
+        "header": "sample_id\tsystem_id\ttype\tsubtype\treplicon_id\tcontig_id\thit_id\thit_position\tgene_name\tprofile\tcoverage\tscore\tevalue"
+      },
+      {
+        "name": "defense_hmmer_hits.tsv",
+        "declared_bytes": 22770,
+        "actual_bytes": 22770,
+        "size_matches": true,
+        "sha256": "7232c40355f2694c920a044780b87b4672776e791513170135e1d3ff32a50c1f",
+        "nonempty_lines": 148,
+        "data_rows": 147,
+        "header": "sample_id\thit_id\treplicon_id\tcontig_id\thit_position\tgene_name\tscore\tevalue"
+      }
+    ]
+  },
+  {
+    "pipeline": "bacterial_secretion_system_annotation",
+    "job_id": "e11a574c399e4b749338b0bdb7a8e6f5",
+    "outputs": [
+      {
+        "name": "secretion_systems.tsv",
+        "declared_bytes": 2629,
+        "actual_bytes": 2629,
+        "size_matches": true,
+        "sha256": "c8d210de144a99f7fe0e3f5099b4da784196069b20fc5b0db8ce1d4e81ada5bf",
+        "nonempty_lines": 14,
+        "data_rows": 13,
+        "header": "sample_id\tsystem_id\tsystem_type\treplicon_id\tcontig_id\tcompleteness\tgene_count\tfirst_gene_position\tlast_gene_position\tedge_proximity\tmodel_fqn"
+      },
+      {
+        "name": "secretion_genes.tsv",
+        "declared_bytes": 10684,
+        "actual_bytes": 10684,
+        "size_matches": true,
+        "sha256": "b9d37fc6157da6c3a36a3cadacc6f9382d76ead70b64a427e1fac328506f0831",
+        "nonempty_lines": 45,
+        "data_rows": 44,
+        "header": "sample_id\tsystem_id\tsystem_type\treplicon_id\tcontig_id\thit_id\thit_position\tgene_name\tgene_status\tprofile_coverage\tsequence_coverage\tscore\tevalue"
+      }
+    ]
+  },
+  {
+    "pipeline": "bacterial_viral_variant_analysis",
+    "job_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+    "outputs": [
+      {
+        "name": "snp_matrix",
+        "declared_bytes": 75,
+        "actual_bytes": 75,
+        "size_matches": true,
+        "sha256": "79f73d6f08bd04b5fb99d2df6c6ba0bacb86f3c5d0d7d6d955f46535c3ce3552"
+      },
+      {
+        "name": "variants.tsv",
+        "declared_bytes": 226,
+        "actual_bytes": 226,
+        "size_matches": true,
+        "sha256": "0749d47e33c576ff45ef75b1aab687b856922541eeb29ba47b37c0888a63183c",
+        "nonempty_lines": 4,
+        "data_rows": 3,
+        "header": "REGION\tPOS\tREF\tsample\tVARIANT_TYPE\tREF_CODON\tREF_AA\tALT_CODON\tALT_AA\tEFFECT"
+      },
+      {
+        "name": "variants_summary.txt",
+        "declared_bytes": 57,
+        "actual_bytes": 57,
+        "size_matches": true,
+        "sha256": "30efa329dab808ad0957eb01c7e15c5f67b659c8876082915269200ac427670f",
+        "nonempty_lines": 3,
+        "data_rows": 2,
+        "header": "unique_variant_positions\t3"
+      }
+    ]
+  },
+  {
+    "pipeline": "genomic_pathogen_identification",
+    "job_id": "f7361d57f57844819ac19bfc043866ff",
+    "outputs": [
+      {
+        "name": "summary.tsv",
+        "declared_bytes": 282,
+        "actual_bytes": 282,
+        "size_matches": true,
+        "sha256": "a599803d68456cf60991812a59fc7ea0fb549aec053a623c4dc96b453ed7351c",
+        "nonempty_lines": 2,
+        "data_rows": 1,
+        "header": "sample\tprimary_category\tprimary_lca_rank\tprimary_lca_name\tfamily\tgenus\tspecies\tstrain\ttaxonomy\tbest_supported_taxon\tvirus_subtype\tsegments_detected\tnum_contigs_supporting"
+      },
+      {
+        "name": "per_contig_call.tsv",
+        "declared_bytes": 430,
+        "actual_bytes": 430,
+        "size_matches": true,
+        "sha256": "7a52cfe4d68ce4e43ebb803e590b0845dc20fae3dcf0992a2ac6215bcd41b988",
+        "nonempty_lines": 2,
+        "data_rows": 1,
+        "header": "query\tbest_category\tlca_rank\tlca_name\tlca_taxid\tfamily\tgenus\tspecies\tstrain\ttaxonomy\tbest_supported_rank\tbest_supported_name\tbest_supported_taxid\tbest_hit\tbest_distance\tbest_pvalue\tshared_hashes\tshared_frac\tsubtype\tsegment\tsupport_hits\tscore"
+      },
+      {
+        "name": "annotated_hits.tsv",
+        "declared_bytes": 491,
+        "actual_bytes": 491,
+        "size_matches": true,
+        "sha256": "8bc43bcac8fae356940623253a618cfe4cefd15873e37f25c0398ef8dad59a82",
+        "nonempty_lines": 2,
+        "data_rows": 1,
+        "header": "category\tquery\treference\tdistance\tpvalue\tshared_hashes\tshared_frac\tdescription\tlineage"
+      },
+      {
+        "name": "mash_dist-0",
+        "declared_bytes": 677706,
+        "actual_bytes": 677706,
+        "size_matches": true,
+        "sha256": "556399d277b19ab7a708ee91de4070b7a33789c9f42cd426c8d6e7a6eca8ef71"
+      },
+      {
+        "name": "mash_dist-1",
+        "declared_bytes": 55716,
+        "actual_bytes": 55716,
+        "size_matches": true,
+        "sha256": "eb61b925a69f5762398f679245da8f1e10171c8042c68632a35b78778beb974a"
+      },
+      {
+        "name": "mash_dist-2",
+        "declared_bytes": 17606,
+        "actual_bytes": 17606,
+        "size_matches": true,
+        "sha256": "ff40a19dc15d06acddcc33e34c554855db1825acb3f941ecc184074719b0cf21"
+      },
+      {
+        "name": "mash_dist-3",
+        "declared_bytes": 24328712,
+        "actual_bytes": 24328712,
+        "size_matches": true,
+        "sha256": "a4f76d9affdb9ebfc1c3a0a574358e32cd1257ca3c6b0abb4bc2c161d94465c8"
+      }
+    ]
+  },
+  {
+    "pipeline": "metagenomic_growth_rate_Calculation",
+    "job_id": "10953f447b684f75b50ab2f5f4e7c59e",
+    "outputs": [
+      {
+        "name": "coptr_log2ptr.csv",
+        "declared_bytes": 90,
+        "actual_bytes": 90,
+        "size_matches": true,
+        "sha256": "c548c78f1ab096757c59281edcae701b920d63ecfb4255a02a5ea68a9c086763",
+        "nonempty_lines": 2,
+        "data_rows": 1,
+        "header": "log2(PTR):genome_id/sample_id,reads"
+      }
+    ]
+  },
+  {
+    "pipeline": "metagenomic_pathogen_identification_kmer",
+    "job_id": "e6b557d3121940a8bc3234eaead353e3",
+    "outputs": [
+      {
+        "name": "classified.tsv",
+        "declared_bytes": 1444258,
+        "actual_bytes": 1444258,
+        "size_matches": true,
+        "sha256": "94f730ca19af3eee04aa5347ec4f2ed0018b98f7ea18008f8f95718792777346",
+        "nonempty_lines": 24001,
+        "data_rows": 24000,
+        "header": "\"seqid\"\t\"tax_id\"\t\"base_coverage\"\t\"uniq_base_coverage\"\t\"uniq_seed_coverage\"\t\"context_weighted_seed_coverage\"\t\"seed_counts\"\t\"bin_indices\""
+      },
+      {
+        "name": "report.tsv",
+        "declared_bytes": 12442,
+        "actual_bytes": 12442,
+        "size_matches": true,
+        "sha256": "96c27ca82706eb4728f0b01f64d925d5fcab2fb72b6c8f2398fee745a25e35d1",
+        "nonempty_lines": 151,
+        "data_rows": 150,
+        "header": "tax_id\tname\trank\tcount\tfraction\tcount_feat2_ge_0.6\tfrac_feat2_ge_0.6\tcount_feat3_ge_0.5\tfrac_feat3_ge_0.5\tcount_both_ge_0.6&0.5\tfrac_both_ge_0.6&0.5"
+      },
+      {
+        "name": "signature_coverage.csv",
+        "declared_bytes": 2323,
+        "actual_bytes": 2323,
+        "size_matches": true,
+        "sha256": "428fd70a4a1400c847f8504632834be43ac2b428399dc2e2e81c4616e7260da0",
+        "nonempty_lines": 1,
+        "data_rows": 0,
+        "header": "tax_id,species_name,type,confident_reads_count,confident_reads_relative_abundance,total_assigned_reads,genome_length_bp,cell_abundance,relative_cell_abundance,max_confident_score,novel_seed_rate,binned_reads_count,covered_bins,expected_covered_bins,covered_vs_expected,covered_vs_expected_100bins,covered_vs_expected_25bins,covered_vs_expected_5bins,coverage_frac,weighted_coverage,confidence_read_threshold,high_confidence_species,bin_0,bin_1,bin_2,bin_3,bin_4,bin_5,bin_6,bin_7,bin_8,bin_9,bin_10,b"
+      }
+    ]
+  },
+  {
+    "pipeline": "metagenomic_qc_UniVec_Host",
+    "job_id": "f9537100334f4cdc939093f47461b08d",
+    "outputs": [
+      {
+        "name": "clean.R1.fastq.gz",
+        "declared_bytes": 664404,
+        "actual_bytes": 664404,
+        "size_matches": true,
+        "sha256": "edd63c239dd53c66806c4f6ffaa9faa75370aa1a2b6c50110e235c7a9173a898",
+        "fastq_records": 11869,
+        "complete_four_line_records": true
+      },
+      {
+        "name": "clean.R2.fastq.gz",
+        "declared_bytes": 664493,
+        "actual_bytes": 664493,
+        "size_matches": true,
+        "sha256": "7e88c9d188d442288b126d2a4c33c495d9d9eb504662a792a948f2b12ad82b3d",
+        "fastq_records": 11869,
+        "complete_four_line_records": true
+      },
+      {
+        "name": "qc_summary.tsv",
+        "declared_bytes": 156,
+        "actual_bytes": 156,
+        "size_matches": true,
+        "sha256": "b8deea7e6f87e06c8c37d5c72cb4e751f51d53cb7ba4fa87361fa300c91d18cb",
+        "nonempty_lines": 2,
+        "data_rows": 1,
+        "header": "sample\tlayout\traw_reads\tquality_dropped_reads\tunivec_core_hit_reads\treads_before_host\thost_reads\tfinal_clean_reads"
+      },
+      {
+        "name": "multiqc_report.html",
+        "declared_bytes": 4718734,
+        "actual_bytes": 4718734,
+        "size_matches": true,
+        "sha256": "c12786a5cb7343e9bdf642a4ac758f72e169e108393c41b8f4b426620c6b89aa"
+      }
+    ]
+  },
+  {
+    "pipeline": "metagenomic_read_quality_control",
+    "job_id": "50cc6d12074b411ba72591d197a386d2",
+    "outputs": [
+      {
+        "name": "clean.R1.fq",
+        "declared_bytes": 3799177,
+        "actual_bytes": 3799177,
+        "size_matches": true,
+        "sha256": "98372baa8f495e3e2abaceab62a35e189a9e288e1f98527d01dcaa5c6d9561c4",
+        "fastq_records": 11908,
+        "complete_four_line_records": true
+      },
+      {
+        "name": "clean.R2.fq",
+        "declared_bytes": 3799127,
+        "actual_bytes": 3799127,
+        "size_matches": true,
+        "sha256": "fbc5de63c5374828ccbde5212b472216847db449ee0950dc17c755347329ef15",
+        "fastq_records": 11908,
+        "complete_four_line_records": true
+      },
+      {
+        "name": "qc_counts.tsv",
+        "declared_bytes": 87,
+        "actual_bytes": 87,
+        "size_matches": true,
+        "sha256": "1cdf80591958f6c08682aedfa17b16d377880fefde9d0e2b83e7d8d4a7e283cd",
+        "nonempty_lines": 4,
+        "data_rows": 3,
+        "header": "MetricName\tMetricValue"
+      },
+      {
+        "name": "phase1_read_overview.tsv",
+        "declared_bytes": 78,
+        "actual_bytes": 78,
+        "size_matches": true,
+        "sha256": "c242bc7edaaab17061f3f0a170482ba4c16a1d717bddd454985794861ffecbf8",
+        "nonempty_lines": 2,
+        "data_rows": 1,
+        "header": "SampleId\tInputReads\tReadsAfterQC\tReadsAfterHostRemoval"
+      }
+    ]
+  },
+  {
+    "pipeline": "metax_classification_abundance_analysis",
+    "job_id": "770e24c64ab240a68c41d741846033ec",
+    "outputs": [
+      {
+        "name": "profile.txt",
+        "declared_bytes": 460,
+        "actual_bytes": 460,
+        "size_matches": true,
+        "sha256": "c7d803f883c3b945e8d022c789e4228481907cfe5e05a88a899f04a98a26d4ff",
+        "nonempty_lines": 4,
+        "data_rows": 3,
+        "header": "Escherichia coli\t562\tspecies\t1339.00000\t0.04111\t97.77289\t0.03794\t0.04027\t1.00000\t0.48379\t0.96293\t0.70249\t0.00000"
+      }
+    ]
+  },
+  {
+    "pipeline": "risk_screen",
+    "job_id": "03941148394c465fb065172a9c70549f",
+    "outputs": [
+      {
+        "name": "screenmec.tsv",
+        "declared_bytes": 35,
+        "actual_bytes": 35,
+        "size_matches": true,
+        "sha256": "9f1485a4a0b12ea0c4c7436cdb23830cb7f350c73502690d8d33f728db7b487d",
+        "nonempty_lines": 1,
+        "data_rows": 0,
+        "header": "synthetic_negative_control\t\t\t\tFLAG"
+      }
+    ]
+  },
+  {
+    "pipeline": "tcdb_annotator_genome",
+    "job_id": "1a1c9da99ce94db1b4d80213a7a61311",
+    "outputs": [
+      {
+        "name": "tcdb_hits.tsv",
+        "declared_bytes": 4516524,
+        "actual_bytes": 4516524,
+        "size_matches": true,
+        "sha256": "c1256cd5864781e3e89655fa43ca6b275fd34e5d7198081c817de2f713433e2b",
+        "nonempty_lines": 7937,
+        "data_rows": 7936,
+        "header": "sample_id\tquery_id\toriginal_query_id\tsource_file\tsubject_id\ttcid\ttc_class\ttc_subclass\ttc_family\ttc_subfamily\ttc_system\tprotein_name\tfamily_name\tsystem_name\tdescription\tsubstrate\torganism\tpident\talignment_length\tquery_coverage\tsubject_coverage\tevalue\tbitscore\ttm_alpha_segments\ttm_beta_segments\tsignal_peptide\ttm_prediction_status\tbest_hit\tinput_type\tanalysis_mode\tgenome_context\tcontig_id\torf_id\torf_start\torf_end\tstrand\torf_partial\tquery_start\tquery_end\tquery_frame\taggregation_level\tsupporting_read"
+      },
+      {
+        "name": "tcdb_summary.tsv",
+        "declared_bytes": 32103,
+        "actual_bytes": 32103,
+        "size_matches": true,
+        "sha256": "9b32ae7cea156f2a3499855a8d6b8a2101fe4435770b2d027ffc71a69cbd9c1d",
+        "nonempty_lines": 718,
+        "data_rows": 717,
+        "header": "dimension\tvalue\thit_count\tunique_query_count\tsupporting_reads"
+      },
+      {
+        "name": "tm_predictions.tsv",
+        "declared_bytes": 127,
+        "actual_bytes": 127,
+        "size_matches": true,
+        "sha256": "e1126f18aa67647c5a4b5d226f3c5a8598f44bf6d8f6cbd4f9cb81a18cb7a5a9",
+        "nonempty_lines": 1,
+        "data_rows": 0,
+        "header": "query_id\toriginal_query_id\tsource_file\tcontig_id\torf_id\ttm_alpha_segments\ttm_beta_segments\tsignal_peptide\ttm_prediction_status"
+      },
+      {
+        "name": "qc.json",
+        "declared_bytes": 1313,
+        "actual_bytes": 1313,
+        "size_matches": true,
+        "sha256": "d2b7cc77279f094c3a4301d146f720a8fcd5ff7af83102e080201258f439b071",
+        "json_type": "dict",
+        "top_level_keys": [
+          "pipeline",
+          "pipeline_version",
+          "sample_id",
+          "input_type",
+          "analysis_mode",
+          "backend",
+          "program",
+          "input_files",
+          "input_file_names",
+          "protein_count",
+          "query_length_unit",
+          "residue_count",
+          "raw_hit_count",
+          "filtered_alignment_count",
+          "annotation_row_count",
+          "aggregation_level",
+          "unique_hit_queries",
+          "orf_metadata_available",
+          "rows_with_orf_coordinates",
+          "unmatched_metadata_hits",
+          "database_version",
+          "tm_prediction",
+          "tm_predicted_proteins",
+          "thresholds",
+          "result",
+          "dry_run",
+          "started_at",
+          "finished_at",
+          "genome_context",
+          "prodigal_mode"
+        ]
+      },
+      {
+        "name": "status.json",
+        "declared_bytes": 686,
+        "actual_bytes": 686,
+        "size_matches": true,
+        "sha256": "539afb6b7cd2aaf7f44365b7b769358298e3ab9ea4c85a0c0eb56f1d49b02871",
+        "json_type": "dict",
+        "top_level_keys": [
+          "status",
+          "result",
+          "pipeline",
+          "sample_id",
+          "input_type",
+          "analysis_mode",
+          "backend",
+          "required_outputs",
+          "finished_at"
+        ]
+      },
+      {
+        "name": "manifest.json",
+        "declared_bytes": 2343,
+        "actual_bytes": 2343,
+        "size_matches": true,
+        "sha256": "a51e084a32543b0cd9d4cb64724177f9b7e1f5090abf851483a2eab5e49c5c3b",
+        "json_type": "dict",
+        "top_level_keys": [
+          "pipeline",
+          "pipeline_version",
+          "database_version",
+          "database",
+          "metadata",
+          "resolved_metadata_fields",
+          "inputs",
+          "commands",
+          "dry_run"
+        ]
+      },
+      {
+        "name": "report.md",
+        "declared_bytes": 3794,
+        "actual_bytes": 3794,
+        "size_matches": true,
+        "sha256": "abaab06e27549eaaa526470f0c060169996ddd7424f6ecd44319a39859a9f902"
+      }
+    ]
+  },
+  {
+    "pipeline": "tcdb_annotator_metagenome",
+    "job_id": "4865d8dc9bf34bcfa0594cf8d52fa6e4",
+    "outputs": [
+      {
+        "name": "tcdb_hits.tsv",
+        "declared_bytes": 149204,
+        "actual_bytes": 149204,
+        "size_matches": true,
+        "sha256": "a6245228c6371ee46950e7bc77826ba71b5a3bd821e00ce5a67354de70ef55b5",
+        "nonempty_lines": 282,
+        "data_rows": 281,
+        "header": "sample_id\tquery_id\toriginal_query_id\tsource_file\tsubject_id\ttcid\ttc_class\ttc_subclass\ttc_family\ttc_subfamily\ttc_system\tprotein_name\tfamily_name\tsystem_name\tdescription\tsubstrate\torganism\tpident\talignment_length\tquery_coverage\tsubject_coverage\tevalue\tbitscore\ttm_alpha_segments\ttm_beta_segments\tsignal_peptide\ttm_prediction_status\tbest_hit\tinput_type\tanalysis_mode\tgenome_context\tcontig_id\torf_id\torf_start\torf_end\tstrand\torf_partial\tquery_start\tquery_end\tquery_frame\taggregation_level\tsupporting_read"
+      },
+      {
+        "name": "tcdb_read_hits.tsv",
+        "declared_bytes": 251896,
+        "actual_bytes": 251896,
+        "size_matches": true,
+        "sha256": "2179aa607b7c3c9ef109813a726f2bfe94bad70c941c7fdfb7c6a29fa1f7cbf4",
+        "nonempty_lines": 527,
+        "data_rows": 526,
+        "header": "sample_id\tquery_id\toriginal_query_id\tsource_file\tsubject_id\ttcid\ttc_class\ttc_subclass\ttc_family\ttc_subfamily\ttc_system\tprotein_name\tfamily_name\tsystem_name\tdescription\tsubstrate\torganism\tpident\talignment_length\tquery_coverage\tsubject_coverage\tevalue\tbitscore\ttm_alpha_segments\ttm_beta_segments\tsignal_peptide\ttm_prediction_status\tbest_hit\tinput_type\tanalysis_mode\tgenome_context\tcontig_id\torf_id\torf_start\torf_end\tstrand\torf_partial\tquery_start\tquery_end\tquery_frame\taggregation_level\tsupporting_read"
+      },
+      {
+        "name": "tcdb_summary.tsv",
+        "declared_bytes": 10393,
+        "actual_bytes": 10393,
+        "size_matches": true,
+        "sha256": "0926ea14bf9ef124ed721b8155a0578477668ca6e63f5f38ed3cb255d348d9b2",
+        "nonempty_lines": 235,
+        "data_rows": 234,
+        "header": "dimension\tvalue\thit_count\tunique_query_count\tsupporting_reads"
+      },
+      {
+        "name": "qc.json",
+        "declared_bytes": 1345,
+        "actual_bytes": 1345,
+        "size_matches": true,
+        "sha256": "b2b796db0d86b4d737dc744f5a77f0aa3288e742891b9fe06e10ef98cad4bd3d",
+        "json_type": "dict",
+        "top_level_keys": [
+          "pipeline",
+          "pipeline_version",
+          "sample_id",
+          "input_type",
+          "analysis_mode",
+          "backend",
+          "program",
+          "input_files",
+          "input_file_names",
+          "protein_count",
+          "query_length_unit",
+          "residue_count",
+          "raw_hit_count",
+          "filtered_alignment_count",
+          "annotation_row_count",
+          "aggregation_level",
+          "unique_hit_queries",
+          "orf_metadata_available",
+          "rows_with_orf_coordinates",
+          "unmatched_metadata_hits",
+          "database_version",
+          "tm_prediction",
+          "tm_predicted_proteins",
+          "thresholds",
+          "result",
+          "dry_run",
+          "started_at",
+          "finished_at",
+          "read_count",
+          "reads_kept"
+        ]
+      },
+      {
+        "name": "status.json",
+        "declared_bytes": 691,
+        "actual_bytes": 691,
+        "size_matches": true,
+        "sha256": "d7cf733ba4f401e9dcd5ad77d478a9948ff443d41bbe51d22918b5db5ed1c7f7",
+        "json_type": "dict",
+        "top_level_keys": [
+          "status",
+          "result",
+          "pipeline",
+          "sample_id",
+          "input_type",
+          "analysis_mode",
+          "backend",
+          "required_outputs",
+          "finished_at"
+        ]
+      },
+      {
+        "name": "manifest.json",
+        "declared_bytes": 2098,
+        "actual_bytes": 2098,
+        "size_matches": true,
+        "sha256": "d9c39b6268ab7e89ca24b99ce2f762dbca1b1697714a9af258a13893fec01c9c",
+        "json_type": "dict",
+        "top_level_keys": [
+          "pipeline",
+          "pipeline_version",
+          "database_version",
+          "database",
+          "metadata",
+          "resolved_metadata_fields",
+          "inputs",
+          "commands",
+          "dry_run"
+        ]
+      },
+      {
+        "name": "report.md",
+        "declared_bytes": 4456,
+        "actual_bytes": 4456,
+        "size_matches": true,
+        "sha256": "38f5059ce2fe7c9f6645d09b8a09c7b65cd10f78a640783248f5e1e3b3725f91"
+      }
+    ]
+  },
+  {
+    "pipeline": "template_wdl",
+    "job_id": "3d50dad036b240a6b3e11c6a37531f61",
+    "outputs": [
+      {
+        "name": "report.md",
+        "declared_bytes": 321,
+        "actual_bytes": 321,
+        "size_matches": true,
+        "sha256": "5fd6156d46a408e05498fd2f25fa21c4193e5f38ffd7a0b9943ff107574bf113"
+      },
+      {
+        "name": "metrics.json",
+        "declared_bytes": 198,
+        "actual_bytes": 198,
+        "size_matches": true,
+        "sha256": "e48d4025b5381faa99e085e41f2e07f212e4e59024cd1e352c258e5b61badbbe",
+        "json_type": "dict",
+        "top_level_keys": [
+          "status",
+          "pipeline",
+          "label",
+          "profile",
+          "sequence_length",
+          "min_length",
+          "passes_min_length",
+          "gc_percent"
+        ]
+      },
+      {
+        "name": "normalized.fasta",
+        "declared_bytes": 85,
+        "actual_bytes": 85,
+        "size_matches": true,
+        "sha256": "a53af77ef91fea56e294bdaa7f240d0ff34817f7e30243e5f481ba1b541fa1af",
+        "fasta_records": 1,
+        "sequence_characters": 70
+      }
+    ]
+  },
+  {
+    "pipeline": "traceback_covid19",
+    "job_id": "12f86b2f5056405582622c9d85533ac1",
+    "outputs": [
+      {
+        "name": "combined.fa",
+        "declared_bytes": 60732,
+        "actual_bytes": 60732,
+        "size_matches": true,
+        "sha256": "f8205b6a3e074fc882e7a401ac60c24938a4b15189f21fec892e097dca91f56a",
+        "fasta_records": 2,
+        "sequence_characters": 59713
+      },
+      {
+        "name": "mafft_result",
+        "declared_bytes": 61023,
+        "actual_bytes": 61023,
+        "size_matches": true,
+        "sha256": "434552372f49c336b3e6c844ae083c0ae7a90c541010cd1911acf65549566407"
+      },
+      {
+        "name": "mutation_result",
+        "declared_bytes": 1503,
+        "actual_bytes": 1503,
+        "size_matches": true,
+        "sha256": "14b7f6a3ff9162336b91f475e8b60d7cca0bf1eb00f716a0d424de47d6d6ff42"
+      },
+      {
+        "name": "ResultGenotypeRank.tsv",
+        "declared_bytes": 33990,
+        "actual_bytes": 33990,
+        "size_matches": true,
+        "sha256": "f5d7e89c3be141a64ec25ccc733c4cf6bfaf85f48ae7fc973fa223f7c86cfd9b",
+        "nonempty_lines": 51,
+        "data_rows": 50,
+        "header": "QuerySeqName\tSeqID\tAccession\tScore\tLineage\tMutation\tSubject private\tQuery private"
+      },
+      {
+        "name": "ResultGenotypeRank.tsv.mutlist",
+        "declared_bytes": 62015,
+        "actual_bytes": 62015,
+        "size_matches": true,
+        "sha256": "d7a7fb77d0ab0d2aa32ec15f7ca8eb2e657c00b6710e005a22176b12585a497e"
+      },
+      {
+        "name": "ResultGenotypeRank.tsv.mutlist.snp.fa",
+        "declared_bytes": 13374,
+        "actual_bytes": 13374,
+        "size_matches": true,
+        "sha256": "f9fc29d93a030a633235416d0107375ef59ca42cc79238fcb183dc33859261ab",
+        "fasta_records": 52,
+        "sequence_characters": 12688
+      },
+      {
+        "name": "tree_file",
+        "declared_bytes": 2140,
+        "actual_bytes": 2140,
+        "size_matches": true,
+        "sha256": "d4169d730d24003701bb506c04cb2531e3f926ed05a08fca060360019834152e"
+      }
+    ]
+  },
+  {
+    "pipeline": "viral_genome_molecular_typing",
+    "job_id": "3ca5de4f66f748ddbcdba9723c388de9",
+    "outputs": [
+      {
+        "name": "result.csv",
+        "declared_bytes": 120,
+        "actual_bytes": 120,
+        "size_matches": true,
+        "sha256": "54b4a9b5ee29f0dacedf2635648d96c7c388134905ec3d900ddb86c4bcb9524e",
+        "nonempty_lines": 2,
+        "data_rows": 1,
+        "header": "sequence_name,clade,subclade,legacy-clade,quality,coverage,ha_length"
+      },
+      {
+        "name": "nextclade.tsv",
+        "declared_bytes": 3132,
+        "actual_bytes": 3132,
+        "size_matches": true,
+        "sha256": "1857ba6b8d560dd6fb4e3e01538689f8f05c533dc2c181d5910de622704890ba",
+        "nonempty_lines": 2,
+        "data_rows": 1,
+        "header": "index\tseqName\tclade\tproposedSubclade\tshort-clade\tsubclade\tlegacy-clade\tRBD\tglycosylation\tqc.overallScore\tqc.overallStatus\ttotalSubstitutions\ttotalDeletions\ttotalInsertions\ttotalFrameShifts\ttotalMissing\ttotalNonACGTNs\ttotalAminoacidSubstitutions\ttotalAminoacidDeletions\ttotalAminoacidInsertions\ttotalUnknownAa\talignmentScore\talignmentStart\talignmentEnd\tcoverage\tcdsCoverage\tisReverseComplement\tsubstitutions\tdeletions\tinsertions\tframeShifts\taaSubstitutions\taaDeletions\taaInsertions\tprivateNucMutations"
+      },
+      {
+        "name": "nextclade.json",
+        "declared_bytes": 89834,
+        "actual_bytes": 89834,
+        "size_matches": true,
+        "sha256": "34c8c178c57ba642df54dc0b709617517638641074d02e5ffe1fc4f24eeabf7f",
+        "json_type": "dict",
+        "top_level_keys": [
+          "$schema",
+          "schemaVersion",
+          "nextcladeAlgoVersion",
+          "createdAt",
+          "cladeNodeAttrKeys",
+          "phenotypeAttrKeys",
+          "refNodes",
+          "results",
+          "errors"
+        ]
+      },
+      {
+        "name": "typed_sequence.fasta",
+        "declared_bytes": 1727,
+        "actual_bytes": 1727,
+        "size_matches": true,
+        "sha256": "b6ed5f04faa280d9845c29edc30c22f9b8008c9a549521171438b5d3dbf11b97",
+        "fasta_records": 1,
+        "sequence_characters": 1718
+      }
+    ]
+  },
+  {
+    "pipeline": "viral_read_molecular_typing",
+    "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+    "outputs": [
+      {
+        "name": "result.csv",
+        "declared_bytes": 117,
+        "actual_bytes": 117,
+        "size_matches": true,
+        "sha256": "c8232b87f32eac800fbbd8b2f6243f193de48e8e60085c81fe9069cbb66a2837",
+        "nonempty_lines": 2,
+        "data_rows": 1,
+        "header": "sequence_name,clade,subclade,legacy-clade,quality,coverage,depth"
+      },
+      {
+        "name": "nextclade.tsv",
+        "declared_bytes": 3726,
+        "actual_bytes": 3726,
+        "size_matches": true,
+        "sha256": "bad10379e1f9d804593516535958d83f2e7aa81cb2dbbc7c748578043232ce72",
+        "nonempty_lines": 2,
+        "data_rows": 1,
+        "header": "index\tseqName\tclade\tproposedSubclade\tsubclade\tshort-clade\tlegacy-clade\tglycosylation\tqc.overallScore\tqc.overallStatus\ttotalSubstitutions\ttotalDeletions\ttotalInsertions\ttotalFrameShifts\ttotalMissing\ttotalNonACGTNs\ttotalAminoacidSubstitutions\ttotalAminoacidDeletions\ttotalAminoacidInsertions\ttotalUnknownAa\talignmentScore\talignmentStart\talignmentEnd\tcoverage\tcdsCoverage\tisReverseComplement\tsubstitutions\tdeletions\tinsertions\tframeShifts\taaSubstitutions\taaDeletions\taaInsertions\tprivateNucMutations.rev"
+      },
+      {
+        "name": "nextclade.json",
+        "declared_bytes": 115101,
+        "actual_bytes": 115101,
+        "size_matches": true,
+        "sha256": "4ae6a5e2e1a04cfa0424b92af45786da983a2477a1fb907987877b318e43ddd6",
+        "json_type": "dict",
+        "top_level_keys": [
+          "$schema",
+          "schemaVersion",
+          "nextcladeAlgoVersion",
+          "createdAt",
+          "cladeNodeAttrKeys",
+          "phenotypeAttrKeys",
+          "refNodes",
+          "results",
+          "errors"
+        ]
+      },
+      {
+        "name": "consensus.fa",
+        "declared_bytes": 1709,
+        "actual_bytes": 1709,
+        "size_matches": true,
+        "sha256": "f5a4061e054d90043e83c178d44990b7613e0ed1d1e53f1307471c9bf3e19ee3",
+        "fasta_records": 1,
+        "sequence_characters": 1700
+      },
+      {
+        "name": "final.bam",
+        "declared_bytes": 1016260,
+        "actual_bytes": 1016260,
+        "size_matches": true,
+        "sha256": "09d2cf43cc7a55649925bcd8a65a98c3eb5dca53157fabef8a87671feae1ccb7"
+      }
+    ]
+  },
+  {
+    "pipeline": "metagenomic_pathogen_identification",
+    "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+    "outputs": [
+      {
+        "name": "priority_with_confidence.tsv",
+        "declared_bytes": 30734,
+        "actual_bytes": 30734,
+        "size_matches": true,
+        "sha256": "d6dc567f10c446e26fdace53a07a23fb9f72e24b6a7867676dcbe8b561b13d98",
+        "nonempty_lines": 144,
+        "data_rows": 143,
+        "header": "SampleId\tCategory\tTaxonID\tTaxonName\tTaxonRank\tAssembly\tRefSMRN\tRefMRN\tTaxonSMRN\tTaxonMRN\tRelativeAbundance\tBreadth\tBreadthPct\tDepth\tObservedExpectedBreadthRatio\tShannonEntropy\tSubRank2\tSubRank2_ID\tSubRank2SMRN\tSubRank2MRN\tSubRank1\tSubRank1_ID\tSubRank1SMRN\tSubRank1MRN\tSpeciesGroup\tSpeciesGroup_ID\tSpeciesGroupSMRN\tSpeciesGroupMRN\tSpecies\tSpecies_ID\tSpeciesSMRN\tSpeciesMRN\tGenus\tGenus_ID\tGenusSMRN\tGenusMRN\tConfidence"
+      },
+      {
+        "name": "priority_microbe_panel.tsv",
+        "declared_bytes": 30437,
+        "actual_bytes": 30437,
+        "size_matches": true,
+        "sha256": "b9d443ad371657920e97a5bf1b91fb67550d63de443f2060ae9c56a6c98142ba",
+        "nonempty_lines": 144,
+        "data_rows": 143,
+        "header": "SampleId\tCategory\tTaxonID\tTaxonName\tTaxonRank\tAssembly\tRefSMRN\tRefMRN\tTaxonSMRN\tTaxonMRN\tRelativeAbundance\tBreadth\tBreadthPct\tDepth\tObservedExpectedBreadthRatio\tShannonEntropy\tSubRank2\tSubRank2_ID\tSubRank2SMRN\tSubRank2MRN\tSubRank1\tSubRank1_ID\tSubRank1SMRN\tSubRank1MRN\tSpeciesGroup\tSpeciesGroup_ID\tSpeciesGroupSMRN\tSpeciesGroupMRN\tSpecies\tSpecies_ID\tSpeciesSMRN\tSpeciesMRN\tGenus\tGenus_ID\tGenusSMRN\tGenusMRN"
+      },
+      {
+        "name": "sample_overview.tsv",
+        "declared_bytes": 138,
+        "actual_bytes": 138,
+        "size_matches": true,
+        "sha256": "c155eddecffec26f67b4f55773164f0f1374450188a34c290775702cf49a3f84",
+        "nonempty_lines": 2,
+        "data_rows": 1,
+        "header": "SampleId\tMappedMicrobeReads\tMappedBacteriaReads\tMappedFungiReads\tMappedParasiteReads\tMappedVirusReads"
+      },
+      {
+        "name": "stage2_read_accounting.tsv",
+        "declared_bytes": 271,
+        "actual_bytes": 271,
+        "size_matches": true,
+        "sha256": "a7f295464e2acfd591937cb9221f43370856cb9af808311883841daf1f2283e9",
+        "nonempty_lines": 5,
+        "data_rows": 4,
+        "header": "Domain\tRetainedReadUnits\tRetainedPrimaryAlignments\tRetainedSecondaryAlignments\tDroppedTie\tDroppedLowerScoreDb\tDroppedHotspot\tDroppedMissingPrimary"
+      },
+      {
+        "name": "stage2_crossdb_signature.tsv",
+        "declared_bytes": 11,
+        "actual_bytes": 11,
+        "size_matches": true,
+        "sha256": "98388c26898b45e85e8287305386120c3a4b24be9f9a4f9fdfff9e8af86a4362",
+        "nonempty_lines": 1,
+        "data_rows": 0,
+        "header": "read_id\tdb"
+      }
+    ]
+  },
+  {
+    "pipeline": "metagenomic_pathogen_identification_marker",
+    "job_id": "be6aa35643414a50a11288104fd3b51c",
+    "outputs": [
+      {
+        "name": "profile.txt",
+        "output_role": "profile.txt",
+        "declared_bytes": 12652,
+        "actual_bytes": 12652,
+        "size_matches": true,
+        "sha256": "362380e6bd381c1dbef41c2b496700fe691f241aef787f69f6ab9280a7ebe8b1",
+        "nonempty_lines": 9,
+        "data_rows": 8,
+        "header": "UNCLASSIFIED\t-1\t0.0\t"
+      },
+      {
+        "name": "sam.bz2",
+        "output_role": "sam.bz2",
+        "declared_bytes": 64048226,
+        "actual_bytes": 64048226,
+        "size_matches": true,
+        "sha256": "75836187cf4d449eb38fdea6b006004cf828340400bb4ec913124205f18e419f",
+        "inspection": "Full source byte stream hashed; content parsing exceeds the 32 MiB limit."
+      },
+      {
+        "name": "consensus_marker.json.bz2",
+        "output_role": "consensus_marker.json.bz2",
+        "declared_bytes": 122,
+        "actual_bytes": 122,
+        "size_matches": true,
+        "sha256": "fe8b90a630423e814827aa69ac492114798ba7a04ee257a64605b5454d94730e"
+      }
+    ]
+  },
+  {
+    "pipeline": "template_bio",
+    "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+    "outputs": [
+      {
+        "name": "report.md",
+        "output_role": "report",
+        "declared_bytes": 2442,
+        "actual_bytes": 2442,
+        "size_matches": true,
+        "sha256": "43da879b8b7e02844261e6a7ed28700fed4a6eb5e891c31a450eab09fbf728e8"
+      },
+      {
+        "name": "metrics.json",
+        "output_role": "metrics",
+        "declared_bytes": 1240,
+        "actual_bytes": 1240,
+        "size_matches": true,
+        "sha256": "8d325baafc5e32e9efbe02a92ace5aaed42541d0d8aba3395f3f7337262bc1bd",
+        "json_type": "dict",
+        "top_level_keys": [
+          "aligned_read_count",
+          "base_retention_percent",
+          "bases_at_3x_percent",
+          "covered_reference_bases",
+          "failed_read_count",
+          "filter_outcomes",
+          "input_base_count",
+          "input_read_count",
+          "maximum_retained_depth",
+          "mean_input_gc_percent",
+          "mean_input_quality",
+          "mean_input_read_length",
+          "mean_retained_depth",
+          "mean_retained_read_length",
+          "metadata_field_count",
+          "mode",
+          "parameters",
+          "passed_read_count",
+          "phylogenetic_tree_emitted",
+          "pipeline",
+          "q20_base_percent",
+          "q30_base_percent",
+          "read_retention_percent",
+          "reference_coverage_percent",
+          "reference_id",
+          "reference_length",
+          "retained_base_count",
+          "sample_id",
+          "status",
+          "transition_count"
+        ]
+      },
+      {
+        "name": "report.html",
+        "output_role": "html_report",
+        "declared_bytes": 240684,
+        "actual_bytes": 240684,
+        "size_matches": true,
+        "sha256": "d13b2720e4a5f0c07fc2cc5b0601eb8d5a214db81ea7943a361ddbc78150e02f"
+      },
+      {
+        "name": "filtered_reads.fastq",
+        "output_role": "filtered_reads",
+        "declared_bytes": 253,
+        "actual_bytes": 253,
+        "size_matches": true,
+        "sha256": "07c3e1d2623c1df14a10e5b4672a7518dc23f48dfa05317f59f064ab1f961d54",
+        "fastq_records": 3,
+        "complete_four_line_records": true
+      },
+      {
+        "name": "read_qc.tsv",
+        "output_role": "read_qc",
+        "declared_bytes": 238,
+        "actual_bytes": 238,
+        "size_matches": true,
+        "sha256": "2a35486b26655a75cf649c494b0d88d9009933e488ab235bd64aa24ac10c322b",
+        "nonempty_lines": 6,
+        "data_rows": 5,
+        "header": "read_id\tlength\tgc_percent\tmean_quality\tq20_bases\tq30_bases\tstatus"
+      },
+      {
+        "name": "sample_summary.tsv",
+        "output_role": "sample_summary",
+        "declared_bytes": 364,
+        "actual_bytes": 364,
+        "size_matches": true,
+        "sha256": "1f9e8c0708537fe213d2da845f0d1278f6ffb2a72f6c7b4282a88449b8393ac8",
+        "nonempty_lines": 2,
+        "data_rows": 1,
+        "header": "sample_id\torganism\tcondition\treplicate\tlibrary_layout\tplatform\tcollection_date\tinput_read_count\tpassed_read_count\tread_retention_percent\tmean_input_read_length\tmean_input_quality\tq30_base_percent\tmean_retained_depth\treference_coverage_percent\tvariant_count"
+      },
+      {
+        "name": "coverage.tsv",
+        "output_role": "coverage",
+        "declared_bytes": 889,
+        "actual_bytes": 889,
+        "size_matches": true,
+        "sha256": "4c0e47b4faac72a220407e4f22fa11a0f38a522753a68631d21743b7048191bb",
+        "nonempty_lines": 25,
+        "data_rows": 24,
+        "header": "chrom\tposition\treference\tdepth\tA\tC\tG\tT\tconsensus\tvariant"
+      },
+      {
+        "name": "alignments.sam",
+        "output_role": "alignments",
+        "declared_bytes": 438,
+        "actual_bytes": 438,
+        "size_matches": true,
+        "sha256": "298bce179fe675293de783a7e5d983632c88bcef9eea88491bd2644297ded53a"
+      },
+      {
+        "name": "consensus.fasta",
+        "output_role": "consensus",
+        "declared_bytes": 48,
+        "actual_bytes": 48,
+        "size_matches": true,
+        "sha256": "4abdef905000d380f63a84da444729a253af59655f1223a0bdf43df96bd8292d",
+        "fasta_records": 1,
+        "sequence_characters": 24
+      },
+      {
+        "name": "variants.vcf",
+        "output_role": "variants",
+        "declared_bytes": 578,
+        "actual_bytes": 578,
+        "size_matches": true,
+        "sha256": "062e8abb162232d2fcc1b039ee9a2ea51a09fcc3a90cda62b044e0866b54fdd5"
+      },
+      {
+        "name": "variant_summary.tsv",
+        "output_role": "variant_table",
+        "declared_bytes": 133,
+        "actual_bytes": 133,
+        "size_matches": true,
+        "sha256": "cf2fda9b1d77ff559bdf39679792a7d9f3db8418e940c6f0810192f01b72a95d",
+        "nonempty_lines": 2,
+        "data_rows": 1,
+        "header": "chrom\tposition\tref\talt\tdepth\tref_depth\talt_depth\talt_fraction\tchange_type\tfilter"
+      },
+      {
+        "name": "qc_overview.png",
+        "output_role": "qc_figure",
+        "declared_bytes": 79528,
+        "actual_bytes": 79528,
+        "size_matches": true,
+        "sha256": "8fbb68db592ee65cdd2c16d4bbef378ac006c43c97472e40666a243f02e4e22a"
+      },
+      {
+        "name": "coverage.png",
+        "output_role": "coverage_figure",
+        "declared_bytes": 35889,
+        "actual_bytes": 35889,
+        "size_matches": true,
+        "sha256": "ad9b29f6427999634547ea0a74749c91fe00f6cf539c77ebf36e9ac7be2cea7c"
+      },
+      {
+        "name": "variant_allele_fraction.png",
+        "output_role": "variant_figure",
+        "declared_bytes": 28447,
+        "actual_bytes": 28447,
+        "size_matches": true,
+        "sha256": "0113be9f3870d6819612d47d18ac8d1e81a6dc00a1b0405ae802d870512ed3bd"
+      },
+      {
+        "name": "phylogenetic_tree.nwk",
+        "output_role": "phylogenetic_tree",
+        "declared_bytes": 58,
+        "actual_bytes": 58,
+        "size_matches": true,
+        "sha256": "079bce3c8066706a599d2e43834b64c48d66285985866df895c6ac9d27129ebf"
+      },
+      {
+        "name": "phylogenetic_tree.png",
+        "output_role": "phylogenetic_tree_figure",
+        "declared_bytes": 32702,
+        "actual_bytes": 32702,
+        "size_matches": true,
+        "sha256": "4accf066bee5fe78569eada9122f0a02a2b0d3761e09dd7142f6ac434c53306e"
+      }
+    ]
+  },
+  {
+    "pipeline": "template_nextflow",
+    "job_id": "889da2d171cc44ae917bcda552166ebc",
+    "outputs": [
+      {
+        "name": "report.md",
+        "output_role": "report",
+        "declared_bytes": 320,
+        "actual_bytes": 320,
+        "size_matches": true,
+        "sha256": "f6c739425893601bf10bb35651f4705b26880d0f61a1841391c6388ba1d4d20f"
+      },
+      {
+        "name": "metrics.json",
+        "output_role": "metrics",
+        "declared_bytes": 308,
+        "actual_bytes": 308,
+        "size_matches": true,
+        "sha256": "ec7e2559fe83b1054fe46a690e42aaa411a5b3017dde856a4fd7afacf7825470",
+        "json_type": "dict",
+        "top_level_keys": [
+          "status",
+          "pipeline",
+          "label",
+          "analysis_mode",
+          "subtype",
+          "segment",
+          "time",
+          "metadata_rows",
+          "sequence_length",
+          "passes_min_length",
+          "min_length",
+          "gc_percent"
+        ]
+      },
+      {
+        "name": "normalized.fasta",
+        "output_role": "normalized_sequence",
+        "declared_bytes": 53,
+        "actual_bytes": 53,
+        "size_matches": true,
+        "sha256": "b6a2c671c2f755e70fe79d9e2b59a40cc03e9a16e45df3212ad1aece2f65545e",
+        "fasta_records": 1,
+        "sequence_characters": 24
+      }
+    ]
+  },
+  {
+    "pipeline": "template_shell",
+    "job_id": "8feaff715bdc41978272d4d1faeccb4c",
+    "outputs": [
+      {
+        "name": "report.md",
+        "output_role": "report",
+        "declared_bytes": 763,
+        "actual_bytes": 763,
+        "size_matches": true,
+        "sha256": "a531ce2973223a71bd13016bd01bbc8addeb4cbf0f986b8399690191427cd945"
+      },
+      {
+        "name": "metrics.json",
+        "output_role": "metrics",
+        "declared_bytes": 276,
+        "actual_bytes": 276,
+        "size_matches": true,
+        "sha256": "a8d973d244259b7922cbf1281bdae12c53952333caada4c89e096d9a2b19b521",
+        "json_type": "dict",
+        "top_level_keys": [
+          "status",
+          "pipeline",
+          "label",
+          "normalize_mode",
+          "uppercase",
+          "line_count",
+          "word_count",
+          "char_count",
+          "sequence_count",
+          "assigned_subtype_count",
+          "unassigned_subtype_count"
+        ]
+      },
+      {
+        "name": "normalized.txt",
+        "output_role": "normalized_text",
+        "declared_bytes": 161,
+        "actual_bytes": 161,
+        "size_matches": true,
+        "sha256": "bf213903a66a22a93d0e2f518bd86ce08d762447ea0ec52641c95f652d04290c",
+        "nonempty_lines": 1,
+        "data_rows": 0,
+        "header": "read_001 ATGCGTACGTAGCTAGCTAG microbial example alpha read_002 ATGCGTACGTAGCTAGAAAA microbial example beta read_003 TTTGCGTACGTAGCTAGCTA microbial example gamma "
+      },
+      {
+        "name": "subtypes.tsv",
+        "output_role": "subtype_assignments",
+        "declared_bytes": 64,
+        "actual_bytes": 64,
+        "size_matches": true,
+        "sha256": "fd4cf6bb4f6a6a28fda1fa23763bcb73c30e9447391b4d77c935a2933a9ddc97",
+        "nonempty_lines": 4,
+        "data_rows": 3,
+        "header": "sequence_id\tsubtype"
+      }
+    ]
+  },
+  {
+    "pipeline": "template_snakemake",
+    "job_id": "5db5e5358b594456a3d20bc6f2b82805",
+    "outputs": [
+      {
+        "name": "report.md",
+        "output_role": "report",
+        "declared_bytes": 590,
+        "actual_bytes": 590,
+        "size_matches": true,
+        "sha256": "e4bd69df5c87b9b1d2718a0c341ea4a6039b0c4963a2c574f6f305ece75029b6"
+      },
+      {
+        "name": "metrics.json",
+        "output_role": "metrics",
+        "declared_bytes": 310,
+        "actual_bytes": 310,
+        "size_matches": true,
+        "sha256": "d2dc867dac1f5ea9ced421fab21d99bf6cd756ab60881dd1739ecae90f85d2d8",
+        "json_type": "dict",
+        "top_level_keys": [
+          "status",
+          "pipeline",
+          "label",
+          "analysis_mode",
+          "subtype",
+          "segment",
+          "time",
+          "metadata_rows",
+          "sequence_length",
+          "passes_min_length",
+          "min_length",
+          "gc_percent"
+        ]
+      },
+      {
+        "name": "normalized.fasta",
+        "output_role": "normalized_sequence",
+        "declared_bytes": 139,
+        "actual_bytes": 139,
+        "size_matches": true,
+        "sha256": "fcb277eef628aaff82f508f283154e1665db0bfa33d51c17e73405d6a0678eb4",
+        "fasta_records": 1,
+        "sequence_characters": 108
+      }
+    ]
+  }
+]

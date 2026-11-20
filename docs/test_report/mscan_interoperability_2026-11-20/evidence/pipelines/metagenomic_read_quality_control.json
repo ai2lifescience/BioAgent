@@ -1,0 +1,489 @@
+{
+  "pipeline": "metagenomic_read_quality_control",
+  "execution": "succeeded",
+  "stack": "standard",
+  "project": "Bridge_expanded_20261120_standard",
+  "session_id": "67a8e8df-a2d3-41c8-a202-262a459a1be2",
+  "engine": "wdl",
+  "catalog_name": "metagenomic_read_quality_control",
+  "manifest_sha256": "029702c5f4327479f84300dc953001455179ac0a89ae197eb655a41855b403c8",
+  "inputs": {
+    "read1": "uploads/473af5e35aec44d59289f0bf03edd13b_benign_R1.fastq.gz",
+    "read2": "uploads/8b6be0e3206c4f88babfe2a495bcbd97_benign_R2.fastq.gz"
+  },
+  "parameters": {},
+  "input_scope": "Deterministic paired reads sampled from unmodified E. coli K-12 MG1655; no experimental or clinical data.",
+  "plan_id": "50cc6d12074b411ba72591d197a386d2",
+  "job_id": "50cc6d12074b411ba72591d197a386d2",
+  "last_state": {
+    "job_id": "50cc6d12074b411ba72591d197a386d2",
+    "plan_id": "50cc6d12074b411ba72591d197a386d2",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:11:40.011728+00:00",
+    "started_at": "2026-11-20T02:11:40.254395+00:00",
+    "finished_at": "2026-11-20T02:12:31.168027+00:00",
+    "updated_at": "2026-11-20T02:12:31.169048+00:00",
+    "error": null,
+    "remote_id": "6599c6ea-64c0-4543-8097-12eac773d28e",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_read_quality_control"
+  },
+  "outputs": {
+    "job_id": "50cc6d12074b411ba72591d197a386d2",
+    "plan_id": "50cc6d12074b411ba72591d197a386d2",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:11:40.011728+00:00",
+    "started_at": "2026-11-20T02:11:40.254395+00:00",
+    "finished_at": "2026-11-20T02:12:31.168027+00:00",
+    "updated_at": "2026-11-20T02:12:31.169048+00:00",
+    "error": null,
+    "remote_id": "6599c6ea-64c0-4543-8097-12eac773d28e",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_read_quality_control",
+    "files": [
+      {
+        "name": "clean.R1.fq",
+        "path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/0/clean.R1.fq",
+        "workspace_path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/0/clean.R1.fq",
+        "size": 3799177,
+        "remote": true,
+        "artifact_id": "50cc6d12074b411ba72591d197a386d2:0",
+        "pipeline_result": {
+          "job_id": "50cc6d12074b411ba72591d197a386d2",
+          "pipeline_name": "metagenomic_read_quality_control",
+          "output_key": "MetagenomicQc.clean_r1",
+          "output_name": "clean_r1",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-20T02:12:31.168027+00:00"
+        }
+      },
+      {
+        "name": "clean.R2.fq",
+        "path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/1/clean.R2.fq",
+        "workspace_path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/1/clean.R2.fq",
+        "size": 3799127,
+        "remote": true,
+        "artifact_id": "50cc6d12074b411ba72591d197a386d2:1",
+        "pipeline_result": {
+          "job_id": "50cc6d12074b411ba72591d197a386d2",
+          "pipeline_name": "metagenomic_read_quality_control",
+          "output_key": "MetagenomicQc.clean_r2",
+          "output_name": "clean_r2",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-20T02:12:31.168027+00:00"
+        }
+      },
+      {
+        "name": "qc_counts.tsv",
+        "path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/2/qc_counts.tsv",
+        "workspace_path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/2/qc_counts.tsv",
+        "size": 87,
+        "remote": true,
+        "artifact_id": "50cc6d12074b411ba72591d197a386d2:2",
+        "pipeline_result": {
+          "job_id": "50cc6d12074b411ba72591d197a386d2",
+          "pipeline_name": "metagenomic_read_quality_control",
+          "output_key": "MetagenomicQc.qc_counts",
+          "output_name": "qc_counts",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:12:31.168027+00:00"
+        }
+      },
+      {
+        "name": "phase1_read_overview.tsv",
+        "path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/3/phase1_read_overview.tsv",
+        "workspace_path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/3/phase1_read_overview.tsv",
+        "size": 78,
+        "remote": true,
+        "artifact_id": "50cc6d12074b411ba72591d197a386d2:3",
+        "pipeline_result": {
+          "job_id": "50cc6d12074b411ba72591d197a386d2",
+          "pipeline_name": "metagenomic_read_quality_control",
+          "output_key": "MetagenomicQc.phase1_metrics",
+          "output_name": "phase1_metrics",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:12:31.168027+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/2/qc_counts.tsv",
+        "text": "MetricName\tMetricValue\nInputReads\t12000\nReadsAfterQC\t12000\nReadsAfterHostRemoval\t11908\n"
+      },
+      {
+        "path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/3/phase1_read_overview.tsv",
+        "text": "SampleId\tInputReads\tReadsAfterQC\tReadsAfterHostRemoval\n0722\t12000\t12000\t11908\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/50cc6d12074b411ba72591d197a386d2/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "roundtrip": {
+    "push": {
+      "transfer_id": "7cb498413623474ea6fbd9d2004481f1",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "metagenomic_read_quality_control_files",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "807365c0780a3dbebae673cbf68d1b29"
+        },
+        "receipt_id": "7cb498413623474ea6fbd9d2004481f1",
+        "qc": {
+          "InputReads": 12000,
+          "ReadsAfterHostRemoval": 11908,
+          "ReadsAfterQC": 12000
+        },
+        "native_imports": [
+          {
+            "job_id": "50cc6d12074b411ba72591d197a386d2",
+            "files_delivered": true,
+            "generic_import": {
+              "access": "Search or pull the attached sample files; native records are a separate outcome.",
+              "artifact_count": 4,
+              "state": "imported"
+            },
+            "pipeline": "metagenomic_read_quality_control",
+            "format": "MetagenomicQc",
+            "state": "imported",
+            "message": "Native QC imported.",
+            "program": "qc"
+          }
+        ],
+        "files": [
+          {
+            "name": "473af5e35aec44d59289f0bf03edd13b_benign_R1.fastq.gz",
+            "source_path": "uploads/473af5e35aec44d59289f0bf03edd13b_benign_R1.fastq.gz",
+            "id": "c54265f153cb3890a56c0ad6d88a3ae63561e792024af0f94a7b2ae758964f40",
+            "size": 606829,
+            "sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "8b6be0e3206c4f88babfe2a495bcbd97_benign_R2.fastq.gz",
+            "source_path": "uploads/8b6be0e3206c4f88babfe2a495bcbd97_benign_R2.fastq.gz",
+            "id": "c7a8124d61ad0719def0fb1da3ad5006258d35ec047d38bdb7fbba5517a6e18f",
+            "size": 606829,
+            "sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/50cc6d12074b411ba72591d197a386d2/results.zip",
+            "id": "97005509aecd35cbaa11bc7443b07a63d6a618b7b2ed041c4e925a37bf88b7c9",
+            "size": 1235286,
+            "sha256": "918b2e371a78910b868c4e8d84ebfbbcc6f313fac5a0b1a588527dadd6fa3e83",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "size": 3799177,
+            "sha256": "98372baa8f495e3e2abaceab62a35e189a9e288e1f98527d01dcaa5c6d9561c4",
+            "name": "clean.R1.fq",
+            "source_path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/0/clean.R1.fq",
+            "id": "fd72951857adcb90667919313ab20959e2c45f6606db1108527ea6d96dfe8cee",
+            "pipeline_result": {
+              "job_id": "50cc6d12074b411ba72591d197a386d2",
+              "pipeline_name": "metagenomic_read_quality_control",
+              "output_key": "MetagenomicQc.clean_r1",
+              "output_name": "clean_r1",
+              "output_kind": "sequence",
+              "completed_at": "2026-11-20T02:12:31.168027+00:00"
+            },
+            "content": {
+              "preview": "@benign_0/1\nGCTGTTTACGGTCCTGATGACAGGACCGTTTTCCAACCGATTAATCATAAATATGAAAAATAATTGTTGCATCACCCGCCAATGCGTGGCTTAATGCACATCAACGGTTTGACGTACAGACCATTAAAGCAGTGTAGTAAGGCAAGTCCC\n+\nIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII\n@benign_1/1\nTTACCTCAAGTTGATATCACTAATAAATAACCATCAAAATGGTTTAAATGACTTATTAATCTCGATTTGTTAGTGTTATAAACTGAAAGTTAATTTATTCATAACCAATTGTTTTTACGACAGTTAATCGTTGCTCTCCTGTATCATATT\n+\nIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII\n@benign_2/1\nGACACAGCCCACGGTTGGCAGGATCCACAGCTCATTACGCACCCCGACATCGCCGTTAGCGCGACGATAGATCTGCACTTCACGATCTGCCGCTTGCGCAGGCAGATCCTGAAAATCAGGTTGATAGCGATACTGATCCAGATCGCTCAG\n+\nIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII\n@benign_3/1\nAATGATCTTCAGCGCATTAAAAGAAATATATGATGGAGATCCTGGTTTTATCTTCGATAAGATA…",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 3799127,
+            "sha256": "fbc5de63c5374828ccbde5212b472216847db449ee0950dc17c755347329ef15",
+            "name": "clean.R2.fq",
+            "source_path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/1/clean.R2.fq",
+            "id": "ace46e0c160a6394ad6e132a60d3923ee95d2a7f9b3fa264f0e7f35e1ba7b519",
+            "pipeline_result": {
+              "job_id": "50cc6d12074b411ba72591d197a386d2",
+              "pipeline_name": "metagenomic_read_quality_control",
+              "output_key": "MetagenomicQc.clean_r2",
+              "output_name": "clean_r2",
+              "output_kind": "sequence",
+              "completed_at": "2026-11-20T02:12:31.168027+00:00"
+            },
+            "content": {
+              "preview": "@benign_0/2\nCATCTTTAGAGCCATCGTCAGGAGTGATGAAGCCGAAGCCTTTGTCAGCGTTGAACCATTTTACGATACCAGTCATTTTACCGGACATAGTGTATTACCTTTAATAATTAAGTGTGCCTTTCGGCGATATGGCGTGCTTTACAGATTTTG\n+\nIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII\n@benign_1/2\nTTTATATGCTGGCAACAGGCGCGGTCGCCAACTGGCTGGCAGGCGTCGTGGCACAGCAGACGACAGAGTCGCAAATTAGCGGTATGGCAATTGCAGCTTACCAGCGATTCTTTTCTCAGATGGGAGAGTGGACGTTGGCTTGTGTCGCGA\n+\nIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII\n@benign_2/2\nCAGATTTGGCTGAAGGCACAGAAGTCAGTGTCGATAACCAGACTGTTACGCTGCGCCAGGATGTTGCTCGTGGACATAAATTTGCGTTAACGGATATCGCAAAAGGGGCCAATGTCATCAAATATGGCCTGCCGATTGGTTATGCATTGG\n+\nIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII\n@benign_3/2\nATTCTGCCATGATAGCTTTACTGCTTTCAAACCACGCTGAAGCACTCCTGGCGTTTTCACTACA…",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 87,
+            "sha256": "1cdf80591958f6c08682aedfa17b16d377880fefde9d0e2b83e7d8d4a7e283cd",
+            "name": "qc_counts.tsv",
+            "source_path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/2/qc_counts.tsv",
+            "id": "69227c61e94c44359de283e0953e964ce84f8769492159861ec944be1f0b92c3",
+            "pipeline_result": {
+              "job_id": "50cc6d12074b411ba72591d197a386d2",
+              "pipeline_name": "metagenomic_read_quality_control",
+              "output_key": "MetagenomicQc.qc_counts",
+              "output_name": "qc_counts",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:12:31.168027+00:00"
+            },
+            "content": {
+              "preview_rows": [
+                [
+                  "InputReads",
+                  "12000"
+                ],
+                [
+                  "ReadsAfterQC",
+                  "12000"
+                ],
+                [
+                  "ReadsAfterHostRemoval",
+                  "11908"
+                ]
+              ],
+              "columns": [
+                "MetricName",
+                "MetricValue"
+              ],
+              "delimiter": "tab",
+              "preview_only": true,
+              "preview_available": true,
+              "kind": "table"
+            }
+          },
+          {
+            "size": 78,
+            "sha256": "c242bc7edaaab17061f3f0a170482ba4c16a1d717bddd454985794861ffecbf8",
+            "name": "phase1_read_overview.tsv",
+            "source_path": "pipeline-artifacts/50cc6d12074b411ba72591d197a386d2/3/phase1_read_overview.tsv",
+            "id": "a0f37d4c89db89106fe9aecfb47d55e8adb2790b9a0568e62d1be2fa03843b7f",
+            "pipeline_result": {
+              "job_id": "50cc6d12074b411ba72591d197a386d2",
+              "pipeline_name": "metagenomic_read_quality_control",
+              "output_key": "MetagenomicQc.phase1_metrics",
+              "output_name": "phase1_metrics",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:12:31.168027+00:00"
+            },
+            "content": {
+              "preview_rows": [
+                [
+                  "0722",
+                  "12000",
+                  "12000",
+                  "11908"
+                ]
+              ],
+              "columns": [
+                "SampleId",
+                "InputReads",
+                "ReadsAfterQC",
+                "ReadsAfterHostRemoval"
+              ],
+              "delimiter": "tab",
+              "preview_only": true,
+              "preview_available": true,
+              "kind": "table"
+            }
+          }
+        ],
+        "native_qc_applied": true,
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R2": "6c7cdd85bb0f35afa9221e449490c4fc",
+            "R1": "8ee70297adab3234925641e3bb075287"
+          },
+          "status": "registered"
+        }
+      }
+    },
+    "files": [
+      {
+        "name": "qc_counts.tsv",
+        "resource_id": "result:7cb498413623474ea6fbd9d2004481f1:69227c61e94c44359de283e0953e964ce84f8769492159861ec944be1f0b92c3",
+        "state": "succeeded",
+        "expected_sha256": "1cdf80591958f6c08682aedfa17b16d377880fefde9d0e2b83e7d8d4a7e283cd",
+        "bytes": 87,
+        "sha256": "1cdf80591958f6c08682aedfa17b16d377880fefde9d0e2b83e7d8d4a7e283cd",
+        "matches": true
+      },
+      {
+        "name": "results.zip",
+        "resource_id": "result:7cb498413623474ea6fbd9d2004481f1:97005509aecd35cbaa11bc7443b07a63d6a618b7b2ed041c4e925a37bf88b7c9",
+        "state": "succeeded",
+        "expected_sha256": "918b2e371a78910b868c4e8d84ebfbbcc6f313fac5a0b1a588527dadd6fa3e83",
+        "bytes": 1235286,
+        "sha256": "918b2e371a78910b868c4e8d84ebfbbcc6f313fac5a0b1a588527dadd6fa3e83",
+        "matches": true
+      },
+      {
+        "name": "phase1_read_overview.tsv",
+        "resource_id": "result:7cb498413623474ea6fbd9d2004481f1:a0f37d4c89db89106fe9aecfb47d55e8adb2790b9a0568e62d1be2fa03843b7f",
+        "state": "succeeded",
+        "expected_sha256": "c242bc7edaaab17061f3f0a170482ba4c16a1d717bddd454985794861ffecbf8",
+        "bytes": 78,
+        "sha256": "c242bc7edaaab17061f3f0a170482ba4c16a1d717bddd454985794861ffecbf8",
+        "matches": true
+      },
+      {
+        "name": "clean.R2.fq",
+        "resource_id": "result:7cb498413623474ea6fbd9d2004481f1:ace46e0c160a6394ad6e132a60d3923ee95d2a7f9b3fa264f0e7f35e1ba7b519",
+        "state": "succeeded",
+        "expected_sha256": "fbc5de63c5374828ccbde5212b472216847db449ee0950dc17c755347329ef15",
+        "bytes": 3799127,
+        "sha256": "fbc5de63c5374828ccbde5212b472216847db449ee0950dc17c755347329ef15",
+        "matches": true
+      },
+      {
+        "name": "473af5e35aec44d59289f0bf03edd13b_benign_R1.fastq.gz",
+        "resource_id": "result:7cb498413623474ea6fbd9d2004481f1:c54265f153cb3890a56c0ad6d88a3ae63561e792024af0f94a7b2ae758964f40",
+        "state": "succeeded",
+        "expected_sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+        "bytes": 606829,
+        "sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+        "matches": true
+      },
+      {
+        "name": "8b6be0e3206c4f88babfe2a495bcbd97_benign_R2.fastq.gz",
+        "resource_id": "result:7cb498413623474ea6fbd9d2004481f1:c7a8124d61ad0719def0fb1da3ad5006258d35ec047d38bdb7fbba5517a6e18f",
+        "state": "succeeded",
+        "expected_sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+        "bytes": 606829,
+        "sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+        "matches": true
+      },
+      {
+        "name": "clean.R1.fq",
+        "resource_id": "result:7cb498413623474ea6fbd9d2004481f1:fd72951857adcb90667919313ab20959e2c45f6606db1108527ea6d96dfe8cee",
+        "state": "succeeded",
+        "expected_sha256": "98372baa8f495e3e2abaceab62a35e189a9e288e1f98527d01dcaa5c6d9561c4",
+        "bytes": 3799177,
+        "sha256": "98372baa8f495e3e2abaceab62a35e189a9e288e1f98527d01dcaa5c6d9561c4",
+        "matches": true
+      }
+    ],
+    "search_state": "succeeded",
+    "matched_all": true,
+    "native_exports": [
+      {
+        "resource_id": "native:807365c0780a3dbebae673cbf68d1b29:qc:7cb498413623474ea6fbd9d2004481f1:record",
+        "kind": "native_analysis_record",
+        "state": "succeeded",
+        "bytes": 884,
+        "sha256": "b9a02d77c7550010e86196f8a939b27a146bf20a9122f766b11f9c3068f0c35e",
+        "sample_id_matches": true
+      },
+      {
+        "resource_id": "result:7cb498413623474ea6fbd9d2004481f1:69227c61e94c44359de283e0953e964ce84f8769492159861ec944be1f0b92c3",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 87,
+        "sha256": "1cdf80591958f6c08682aedfa17b16d377880fefde9d0e2b83e7d8d4a7e283cd"
+      },
+      {
+        "resource_id": "result:7cb498413623474ea6fbd9d2004481f1:97005509aecd35cbaa11bc7443b07a63d6a618b7b2ed041c4e925a37bf88b7c9",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 1235286,
+        "sha256": "918b2e371a78910b868c4e8d84ebfbbcc6f313fac5a0b1a588527dadd6fa3e83"
+      },
+      {
+        "resource_id": "result:7cb498413623474ea6fbd9d2004481f1:a0f37d4c89db89106fe9aecfb47d55e8adb2790b9a0568e62d1be2fa03843b7f",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 78,
+        "sha256": "c242bc7edaaab17061f3f0a170482ba4c16a1d717bddd454985794861ffecbf8"
+      }
+    ]
+  },
+  "result_sync": {
+    "tool_response": {
+      "status": "ok",
+      "data": {
+        "value": {
+          "transfer_id": "fcc4fde87e41456cbbfdfb289be50699",
+          "site_id": "mscan",
+          "operation": "result_sync",
+          "state": "succeeded",
+          "result": {
+            "cromwell_task_id": "6599c6ea-64c0-4543-8097-12eac773d28e",
+            "pipeline_name": "metagenomic_read_quality_control",
+            "target": {
+              "data_type": "meta",
+              "project_name": "Bridge_expanded_20261120_standard",
+              "sample_name": "metagenomic_read_quality_control_sync",
+              "project_id": "4a651c555eae32c39c8bfdd142321567",
+              "sample_id": "589a637f04cc3ebb986c421145adb48f"
+            },
+            "state": "imported",
+            "program": "qc"
+          }
+        }
+      },
+      "files": [],
+      "evidence": [],
+      "error": null
+    },
+    "transfer": {
+      "transfer_id": "fcc4fde87e41456cbbfdfb289be50699",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "cromwell_task_id": "6599c6ea-64c0-4543-8097-12eac773d28e",
+        "pipeline_name": "metagenomic_read_quality_control",
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "metagenomic_read_quality_control_sync",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "589a637f04cc3ebb986c421145adb48f"
+        },
+        "state": "imported",
+        "program": "qc"
+      }
+    },
+    "repeat": {
+      "transfer_id": "3f6fd7a53dc54f7c954f725726f0dbcb",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "589a637f04cc3ebb986c421145adb48f",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "589a637f04cc3ebb986c421145adb48f"
+        },
+        "program": "qc",
+        "state": "imported",
+        "cromwell_task_id": "6599c6ea-64c0-4543-8097-12eac773d28e",
+        "message": "Native result already imported.",
+        "pipeline_name": "metagenomic_read_quality_control"
+      }
+    }
+  },
+  "elapsed_seconds": 96.8,
+  "finished": true
+}

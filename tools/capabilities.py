@@ -25,7 +25,7 @@ def describe(pipelines):
         name = tool.name
         route = ('container' if name in OFFLINE_TOOLS else 'provider_broker' if name in NETWORK_TOOLS
                  else 'embedding_broker' if name in EMBEDDING_TOOLS else 'knowledge_service' if name in SERVICE_TOOLS
-                 else 'pipeline_broker' if name == 'pipeline_shell' else 'agent_or_service') if isolated else 'local'
+                 else 'pipeline_broker' if name == 'pipeline_specialist' else 'agent_or_service') if isolated else 'local'
         needs_key = name in EMBEDDING_TOOLS | {'knowledge_ingest', 'knowledge_retrieve', 'report_review', 'report_synthesize', 'research_specialist'}
         ready = not needs_key or bool(os.getenv('OPENROUTER_API_KEY', '').strip())
         tools[name] = {'status': 'available' if ready else 'needs_configuration', 'execution': route,

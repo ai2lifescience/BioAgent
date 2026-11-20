@@ -60,3 +60,9 @@
 .assistant-page .assistant-message-shell .message.user { align-self: flex-end; max-width: min(92%, 640px); margin-left: auto; }
 .assistant-page .assistant-message-shell .message.user .message-body { white-space: normal; background: var(--assistant-soft); border-color: #cce6e0; }
 .assistant-page .assistant-message-shell > a { display: block; margin-top: 7px; color: var(--assistant-accent); font-size: 12px; }
+.assistant-page.assistant-embedded .assistant-message-shell { max-width: 960px; margin-inline: auto; }
+.assistant-page.assistant-embedded .assistant-messages > .run-progress { max-width: 960px; width: 100%; margin-inline: auto; }
+.assistant-page.assistant-embedded .assistant-composer { width: min(960px, calc(100% - 2 * clamp(12px, 4vw, 32px))); margin: 10px auto 14px; }
+.assistant-page.assistant-embedded .assistant-progress { padding-inline: max(18px, calc((100% - 960px) / 2)); }
+.assistant-page.assistant-embedded .assistant-context-summary { padding-inline: max(18px, calc((100% - 960px) / 2)); }
+@media (max-width: 520px) { .assistant-page.assistant-embedded .assistant-composer { width: calc(100% - 18px); margin: 8px auto 10px; } }

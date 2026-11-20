@@ -1,0 +1,207 @@
+{
+  "workflowName": "TcdbAnnotatorGenome",
+  "workflowProcessingEvents": [
+    {
+      "cromwellId": "cromid-51667ed",
+      "description": "Finished",
+      "cromwellVersion": "91",
+      "timestamp": "2026-11-20T10:25:34.981Z"
+    },
+    {
+      "cromwellId": "cromid-51667ed",
+      "description": "PickedUp",
+      "cromwellVersion": "91",
+      "timestamp": "2026-11-20T10:24:06.220Z"
+    }
+  ],
+  "actualWorkflowLanguageVersion": "1.0",
+  "submittedFiles": {
+    "workflow": "version 1.0\n\n## TCDB \u5168\u57fa\u56e0\u7ec4 / \u86cb\u767d\u6ce8\u91ca\n##\n## \u4e8c\u9009\u4e00\uff1a\n##   genome_fasta  -> input_type=nucleic, Prodigal \u9884\u6d4b ORF \u540e\u86cb\u767d\u6bd4\u5bf9\n##   protein_fasta -> input_type=protein, \u76f4\u63a5\u86cb\u767d\u6bd4\u5bf9\n## \u9ed8\u8ba4 backend=blast\uff08\u4e0e v1 \u4e00\u81f4\uff09\uff1b\u53ef\u6539\u4e3a diamond\u3002\n## \u5168\u90e8\u8fd0\u884c\u53c2\u6570\u5728 input \u4e2d\uff0c\u4e0d\u8bfb\u53d6 config.yaml\u3002\n## \u6570\u636e\u5e93\u4ee5 String \u8def\u5f84\u4f20\u5165\uff0c\u7531\u8fd0\u884c\u73af\u5883\u6302\u8f7d\uff0cCromwell \u4e0d\u672c\u5730\u5316\u3002\n\nworkflow TcdbAnnotatorGenome {\n  input {\n    String sample_id\n    File?  genome_fasta\n    File?  protein_fasta\n\n    String blast_db\n    String diamond_db\n    String metadata\n    String db_version = \"TCDB 2026-08-23\"\n    String backend = \"blast\"\n\n    Int    threads = 8\n    String genome_context = \"complete\"\n    Int    min_contig_length = 0\n    String tm_prediction = \"off\"\n    String tmbed_model_dir = \"\"\n    String tmbed_module = \"tmbed\"\n    Boolean tmbed_use_gpu = false\n    Int    tmbed_batch_size = 1000\n\n    Float min_identity = 30.0\n    Float min_query_coverage = 50.0\n    Float min_subject_coverage = 0.0\n    Float max_evalue = 0.00001\n    Int   max_target_seqs = 25\n    Int   min_alignment_length = 0\n\n    String blastp_executable = \"blastp\"\n    String blastp_options = \"\"\n    String diamond_executable = \"diamond\"\n    String diamond_options = \"--sensitive\"\n    String prodigal_executable = \"prodigal\"\n    String prodigal_options = \"\"\n    String tmbed_executable = \"python\"\n\n    Array[String] metadata_fields = [\n      \"subject_id=subject_id\",\n      \"tcid=tcid\",\n      \"protein_name=protein_name\",\n      \"family_name=family_name\",\n      \"system_name=system_name\",\n      \"description=description\",\n      \"substrate=substrate\",\n      \"organism=organism\"\n    ]\n\n    String pipeline_dir = \"/opt/tcdb-annotator-v2\"\n    String docker_image = \"cncb/tcdb-annotator:v1.0\"\n    Int    memory_gb = 32\n    Int    disk_gb = 100\n  }\n\n  call RunTcdbGenome {\n    input:\n      sample_id            = sample_id,\n      genome_fasta         = genome_fasta,\n      protein_fasta        = protein_fasta,\n      blast_db             = blast_db,\n      diamond_db           = diamond_db,\n      metadata             = metadata,\n      db_version           = db_version,\n      backend              = backend,\n      threads              = threads,\n      genome_context       = genome_context,\n      min_contig_length    = min_contig_length,\n      tm_prediction        = tm_prediction,\n      tmbed_model_dir      = tmbed_model_dir,\n      tmbed_module         = tmbed_module,\n      tmbed_use_gpu        = tmbed_use_gpu,\n      tmbed_batch_size     = tmbed_batch_size,\n      min_identity         = min_identity,\n      min_query_coverage   = min_query_coverage,\n      min_subject_coverage = min_subject_coverage,\n      max_evalue           = max_evalue,\n      max_target_seqs      = max_target_seqs,\n      min_alignment_length = min_alignment_length,\n      blastp_executable    = blastp_executable,\n      blastp_options       = blastp_options,\n      diamond_executable   = diamond_executable,\n      diamond_options      = diamond_options,\n      prodigal_executable  = prodigal_executable,\n      prodigal_options     = prodigal_options,\n      tmbed_executable     = tmbed_executable,\n      metadata_fields      = metadata_fields,\n      pipeline_dir         = pipeline_dir,\n      docker_image         = docker_image,\n      memory_gb            = memory_gb,\n      disk_gb              = disk_gb\n  }\n\n  output {\n    File hits           = RunTcdbGenome.hits\n    File summary        = RunTcdbGenome.summary\n    File tm_predictions = RunTcdbGenome.tm_predictions\n    File qc             = RunTcdbGenome.qc\n    File status         = RunTcdbGenome.status\n    File manifest       = RunTcdbGenome.manifest\n    File report         = RunTcdbGenome.report\n    String sample       = sample_id\n  }\n}\n\ntask RunTcdbGenome {\n  input {\n    String sample_id\n    File?  genome_fasta\n    File?  protein_fasta\n\n    String blast_db\n    String diamond_db\n    String metadata\n    String db_version\n    String backend\n\n    Int     threads\n    String  genome_context\n    Int     min_contig_length\n    String  tm_prediction\n    String  tmbed_model_dir\n    String  tmbed_module\n    Boolean tmbed_use_gpu\n    Int     tmbed_batch_size\n\n    Float min_identity\n    Float min_query_coverage\n    Float min_subject_coverage\n    Float max_evalue\n    Int   max_target_seqs\n    Int   min_alignment_length\n\n    String blastp_executable\n    String blastp_options\n    String diamond_executable\n    String diamond_options\n    String prodigal_executable\n    String prodigal_options\n    String tmbed_executable\n    Array[String] metadata_fields\n\n    String pipeline_dir\n    String docker_image\n    Int    memory_gb\n    Int    disk_gb\n  }\n\n  command <<<\n    set -euo pipefail\n    export HF_HUB_OFFLINE=\"${HF_HUB_OFFLINE:-1}\"\n    export TRANSFORMERS_OFFLINE=\"${TRANSFORMERS_OFFLINE:-1}\"\n\n    GENOME=\"~{genome_fasta}\"\n    PROTEIN=\"~{protein_fasta}\"\n    if [[ -n \"$GENOME\" && -f \"$GENOME\" && -n \"$PROTEIN\" && -f \"$PROTEIN\" ]]; then\n      echo \"Provide either genome_fasta or protein_fasta, not both.\" >&2\n      exit 1\n    fi\n    if [[ -n \"$GENOME\" && -f \"$GENOME\" ]]; then\n      INPUT=\"$GENOME\"\n      INPUT_TYPE=\"nucleic\"\n    elif [[ -n \"$PROTEIN\" && -f \"$PROTEIN\" ]]; then\n      INPUT=\"$PROTEIN\"\n      INPUT_TYPE=\"protein\"\n    else\n      echo \"genome_fasta or protein_fasta is required.\" >&2\n      exit 1\n    fi\n\n    OUT_DIR=\"$PWD/tcdb_out\"\n    mkdir -p \"$OUT_DIR\"\n\n    EXTRA_ARGS=()\n    if [[ \"$INPUT_TYPE\" == \"nucleic\" ]]; then\n      EXTRA_ARGS+=(--genome-context \"~{genome_context}\" --min-contig-length ~{min_contig_length})\n    fi\n    if [[ -n \"~{tmbed_model_dir}\" ]]; then\n      EXTRA_ARGS+=(--tmbed-model-dir \"~{tmbed_model_dir}\")\n    fi\n    if [[ -n \"~{blastp_options}\" ]]; then\n      EXTRA_ARGS+=(--blastp-options=\"~{blastp_options}\")\n    fi\n    if [[ -n \"~{diamond_options}\" ]]; then\n      EXTRA_ARGS+=(--diamond-options=\"~{diamond_options}\")\n    fi\n    if [[ -n \"~{prodigal_options}\" ]]; then\n      EXTRA_ARGS+=(--prodigal-options=\"~{prodigal_options}\")\n    fi\n\n    python \"~{pipeline_dir}/workflow.py\" run \\\n      --input \"$INPUT\" \\\n      --output \"$OUT_DIR\" \\\n      --sample-id \"~{sample_id}\" \\\n      --input-type \"$INPUT_TYPE\" \\\n      --backend \"~{backend}\" \\\n      --tm-prediction \"~{tm_prediction}\" \\\n      --threads ~{threads} \\\n      --blast-db \"~{blast_db}\" \\\n      --diamond-db \"~{diamond_db}\" \\\n      --metadata \"~{metadata}\" \\\n      --db-version \"~{db_version}\" \\\n      --blastp-executable \"~{blastp_executable}\" \\\n      --diamond-executable \"~{diamond_executable}\" \\\n      --prodigal-executable \"~{prodigal_executable}\" \\\n      --tmbed-executable \"~{tmbed_executable}\" \\\n      --tmbed-module \"~{tmbed_module}\" \\\n      ~{if tmbed_use_gpu then \"--tmbed-use-gpu\" else \"--no-tmbed-use-gpu\"} \\\n      --tmbed-batch-size ~{tmbed_batch_size} \\\n      --min-identity ~{min_identity} \\\n      --min-query-coverage ~{min_query_coverage} \\\n      --min-subject-coverage ~{min_subject_coverage} \\\n      --max-evalue ~{max_evalue} \\\n      --max-target-seqs ~{max_target_seqs} \\\n      --min-alignment-length ~{min_alignment_length} \\\n      --metadata-field ~{sep=\" --metadata-field \" metadata_fields} \\\n      \"${EXTRA_ARGS[@]}\"\n  >>>\n\n  output {\n    File hits           = \"tcdb_out/tcdb_hits.tsv\"\n    File summary        = \"tcdb_out/tcdb_summary.tsv\"\n    File tm_predictions = \"tcdb_out/tm_predictions.tsv\"\n    File qc             = \"tcdb_out/qc.json\"\n    File status         = \"tcdb_out/status.json\"\n    File manifest       = \"tcdb_out/manifest.json\"\n    File report         = \"tcdb_out/report.md\"\n  }\n\n  runtime {\n    docker: docker_image\n    cpu:    threads\n    memory: memory_gb + \" GB\"\n    disks:  \"local-disk \" + disk_gb + \" SSD\"\n  }\n}\n",
+    "root": "",
+    "options": "{\n  \"final_workflow_outputs_dir\": \"/data/versitygw/data/s3/cncb-web-server-mic/cromwell/outputs\",\n  \"note\": \"BioAgent submits this workflow options document to Cromwell after rewriting the output directory into the per-run artifact directory.\",\n  \"read_from_cache\": false,\n  \"use_relative_output_paths\": false,\n  \"write_to_cache\": false\n}",
+    "inputs": "{\"TcdbAnnotatorGenome.backend\":\"blast\",\"TcdbAnnotatorGenome.blast_db\":\"/data/zhaomh/program/database/tcdb/2026-08-23/blastdb/tcdb\",\"TcdbAnnotatorGenome.db_version\":\"TCDB 2026-08-23\",\"TcdbAnnotatorGenome.diamond_db\":\"/data/zhaomh/program/database/tcdb/2026-08-23/diamond/tcdb\",\"TcdbAnnotatorGenome.disk_gb\":100,\"TcdbAnnotatorGenome.docker_image\":\"cncb/tcdb-annotator:v1.0\",\"TcdbAnnotatorGenome.genome_context\":\"metagenome\",\"TcdbAnnotatorGenome.genome_fasta\":\"/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/tcdb_annotator_genome/49703919a33941eea7db87d17defc84e/8d6336834c915e47-7548337c8d60402b9a433b1a822950b1_final.contigs.renamed.fa\",\"TcdbAnnotatorGenome.memory_gb\":32,\"TcdbAnnotatorGenome.metadata\":\"/data/zhaomh/program/database/tcdb/2026-08-23/normalized/tcdb_metadata.tsv\",\"TcdbAnnotatorGenome.sample_id\":\"DRR000852\",\"TcdbAnnotatorGenome.threads\":8}",
+    "workflowUrl": "",
+    "labels": "{}"
+  },
+  "calls": {
+    "TcdbAnnotatorGenome.RunTcdbGenome": [
+      {
+        "executionStatus": "Done",
+        "stdout": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/stdout",
+        "backendStatus": "Done",
+        "commandLine": "set -euo pipefail\nexport HF_HUB_OFFLINE=\"${HF_HUB_OFFLINE:-1}\"\nexport TRANSFORMERS_OFFLINE=\"${TRANSFORMERS_OFFLINE:-1}\"\n\nGENOME=\"/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/inputs/-1121310661/8d6336834c915e47-7548337c8d60402b9a433b1a822950b1_final.contigs.renamed.fa\"\nPROTEIN=\"\"\nif [[ -n \"$GENOME\" && -f \"$GENOME\" && -n \"$PROTEIN\" && -f \"$PROTEIN\" ]]; then\n  echo \"Provide either genome_fasta or protein_fasta, not both.\" >&2\n  exit 1\nfi\nif [[ -n \"$GENOME\" && -f \"$GENOME\" ]]; then\n  INPUT=\"$GENOME\"\n  INPUT_TYPE=\"nucleic\"\nelif [[ -n \"$PROTEIN\" && -f \"$PROTEIN\" ]]; then\n  INPUT=\"$PROTEIN\"\n  INPUT_TYPE=\"protein\"\nelse\n  echo \"genome_fasta or protein_fasta is required.\" >&2\n  exit 1\nfi\n\nOUT_DIR=\"$PWD/tcdb_out\"\nmkdir -p \"$OUT_DIR\"\n\nEXTRA_ARGS=()\nif [[ \"$INPUT_TYPE\" == \"nucleic\" ]]; then\n  EXTRA_ARGS+=(--genome-context \"metagenome\" --min-contig-length 0)\nfi\nif [[ -n \"\" ]]; then\n  EXTRA_ARGS+=(--tmbed-model-dir \"\")\nfi\nif [[ -n \"\" ]]; then\n  EXTRA_ARGS+=(--blastp-options=\"\")\nfi\nif [[ -n \"--sensitive\" ]]; then\n  EXTRA_ARGS+=(--diamond-options=\"--sensitive\")\nfi\nif [[ -n \"\" ]]; then\n  EXTRA_ARGS+=(--prodigal-options=\"\")\nfi\n\npython \"/opt/tcdb-annotator-v2/workflow.py\" run \\\n  --input \"$INPUT\" \\\n  --output \"$OUT_DIR\" \\\n  --sample-id \"DRR000852\" \\\n  --input-type \"$INPUT_TYPE\" \\\n  --backend \"blast\" \\\n  --tm-prediction \"off\" \\\n  --threads 8 \\\n  --blast-db \"/data/zhaomh/program/database/tcdb/2026-08-23/blastdb/tcdb\" \\\n  --diamond-db \"/data/zhaomh/program/database/tcdb/2026-08-23/diamond/tcdb\" \\\n  --metadata \"/data/zhaomh/program/database/tcdb/2026-08-23/normalized/tcdb_metadata.tsv\" \\\n  --db-version \"TCDB 2026-08-23\" \\\n  --blastp-executable \"blastp\" \\\n  --diamond-executable \"diamond\" \\\n  --prodigal-executable \"prodigal\" \\\n  --tmbed-executable \"python\" \\\n  --tmbed-module \"tmbed\" \\\n  --no-tmbed-use-gpu \\\n  --tmbed-batch-size 1000 \\\n  --min-identity 30.0 \\\n  --min-query-coverage 50.0 \\\n  --min-subject-coverage 0.0 \\\n  --max-evalue 1.0E-5 \\\n  --max-target-seqs 25 \\\n  --min-alignment-length 0 \\\n  --metadata-field subject_id=subject_id --metadata-field tcid=tcid --metadata-field protein_name=protein_name --metadata-field family_name=family_name --metadata-field system_name=system_name --metadata-field description=description --metadata-field substrate=substrate --metadata-field organism=organism \\\n  \"${EXTRA_ARGS[@]}\"",
+        "shardIndex": -1,
+        "outputs": {
+          "qc": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/qc.json",
+          "tm_predictions": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/tm_predictions.tsv",
+          "hits": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/tcdb_hits.tsv",
+          "status": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/status.json",
+          "report": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/report.md",
+          "manifest": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/manifest.json",
+          "summary": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/tcdb_summary.tsv"
+        },
+        "runtimeAttributes": {
+          "continueOnReturnCode": "0",
+          "failOnStderr": "false",
+          "maxRetries": "0",
+          "docker": "cncb/tcdb-annotator:v1.0"
+        },
+        "callCaching": {
+          "allowResultReuse": false,
+          "effectiveCallCachingMode": "CallCachingOff"
+        },
+        "inputs": {
+          "min_identity": 30.0,
+          "diamond_db": "/data/zhaomh/program/database/tcdb/2026-08-23/diamond/tcdb",
+          "blastp_executable": "blastp",
+          "blast_db": "/data/zhaomh/program/database/tcdb/2026-08-23/blastdb/tcdb",
+          "tmbed_use_gpu": false,
+          "diamond_executable": "diamond",
+          "max_evalue": 1e-05,
+          "min_contig_length": 0,
+          "genome_fasta": "/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/tcdb_annotator_genome/49703919a33941eea7db87d17defc84e/8d6336834c915e47-7548337c8d60402b9a433b1a822950b1_final.contigs.renamed.fa",
+          "metadata_fields": [
+            "subject_id=subject_id",
+            "tcid=tcid",
+            "protein_name=protein_name",
+            "family_name=family_name",
+            "system_name=system_name",
+            "description=description",
+            "substrate=substrate",
+            "organism=organism"
+          ],
+          "prodigal_options": "",
+          "protein_fasta": null,
+          "tmbed_batch_size": 1000,
+          "max_target_seqs": 25,
+          "min_subject_coverage": 0.0,
+          "tm_prediction": "off",
+          "sample_id": "DRR000852",
+          "genome_context": "metagenome",
+          "pipeline_dir": "/opt/tcdb-annotator-v2",
+          "docker_image": "cncb/tcdb-annotator:v1.0",
+          "db_version": "TCDB 2026-08-23",
+          "disk_gb": 100,
+          "prodigal_executable": "prodigal",
+          "diamond_options": "--sensitive",
+          "tmbed_executable": "python",
+          "backend": "blast",
+          "metadata": "/data/zhaomh/program/database/tcdb/2026-08-23/normalized/tcdb_metadata.tsv",
+          "blastp_options": "",
+          "memory_gb": 32,
+          "tmbed_module": "tmbed",
+          "min_query_coverage": 50.0,
+          "threads": 8,
+          "min_alignment_length": 0,
+          "tmbed_model_dir": ""
+        },
+        "returnCode": 0,
+        "jobId": "3903322",
+        "backend": "Local",
+        "start": "2026-11-20T10:24:08.273Z",
+        "end": "2026-11-20T10:25:33.210Z",
+        "dockerImageUsed": "cncb/tcdb-annotator:v1.0",
+        "stderr": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/stderr",
+        "callRoot": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome",
+        "attempt": 1,
+        "executionEvents": [
+          {
+            "startTime": "2026-11-20T10:24:08.348Z",
+            "description": "RunningJob",
+            "endTime": "2026-11-20T10:25:33.005Z"
+          },
+          {
+            "startTime": "2026-11-20T10:24:08.343Z",
+            "description": "PreparingJob",
+            "endTime": "2026-11-20T10:24:08.348Z"
+          },
+          {
+            "startTime": "2026-11-20T10:24:08.273Z",
+            "description": "RequestingExecutionToken",
+            "endTime": "2026-11-20T10:24:08.343Z"
+          },
+          {
+            "startTime": "2026-11-20T10:24:08.273Z",
+            "description": "Pending",
+            "endTime": "2026-11-20T10:24:08.273Z"
+          },
+          {
+            "startTime": "2026-11-20T10:24:08.343Z",
+            "description": "WaitingForValueStore",
+            "endTime": "2026-11-20T10:24:08.343Z"
+          },
+          {
+            "startTime": "2026-11-20T10:25:33.005Z",
+            "description": "UpdatingJobStore",
+            "endTime": "2026-11-20T10:25:33.210Z"
+          }
+        ]
+      }
+    ]
+  },
+  "outputs": {
+    "TcdbAnnotatorGenome.report": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/report.md",
+    "TcdbAnnotatorGenome.summary": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/tcdb_summary.tsv",
+    "TcdbAnnotatorGenome.tm_predictions": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/tm_predictions.tsv",
+    "TcdbAnnotatorGenome.sample": "DRR000852",
+    "TcdbAnnotatorGenome.status": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/status.json",
+    "TcdbAnnotatorGenome.manifest": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/manifest.json",
+    "TcdbAnnotatorGenome.hits": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/tcdb_hits.tsv",
+    "TcdbAnnotatorGenome.qc": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec/call-RunTcdbGenome/execution/tcdb_out/qc.json"
+  },
+  "workflowRoot": "/data/zhaomh/cromwell-workspace/cromwell-executions/TcdbAnnotatorGenome/dd3bcc97-c3df-40cb-a8a1-be7cc9649dec",
+  "actualWorkflowLanguage": "WDL",
+  "status": "Succeeded",
+  "end": "2026-11-20T10:25:34.981Z",
+  "start": "2026-11-20T10:24:06.221Z",
+  "id": "dd3bcc97-c3df-40cb-a8a1-be7cc9649dec",
+  "inputs": {
+    "min_identity": 30.0,
+    "diamond_db": "/data/zhaomh/program/database/tcdb/2026-08-23/diamond/tcdb",
+    "blastp_executable": "blastp",
+    "blast_db": "/data/zhaomh/program/database/tcdb/2026-08-23/blastdb/tcdb",
+    "tmbed_use_gpu": false,
+    "diamond_executable": "diamond",
+    "max_evalue": 1e-05,
+    "min_contig_length": 0,
+    "genome_fasta": "/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/tcdb_annotator_genome/49703919a33941eea7db87d17defc84e/8d6336834c915e47-7548337c8d60402b9a433b1a822950b1_final.contigs.renamed.fa",
+    "metadata_fields": [
+      "subject_id=subject_id",
+      "tcid=tcid",
+      "protein_name=protein_name",
+      "family_name=family_name",
+      "system_name=system_name",
+      "description=description",
+      "substrate=substrate",
+      "organism=organism"
+    ],
+    "prodigal_options": "",
+    "protein_fasta": null,
+    "tmbed_batch_size": 1000,
+    "max_target_seqs": 25,
+    "min_subject_coverage": 0.0,
+    "tm_prediction": "off",
+    "sample_id": "DRR000852",
+    "genome_context": "metagenome",
+    "pipeline_dir": "/opt/tcdb-annotator-v2",
+    "docker_image": "cncb/tcdb-annotator:v1.0",
+    "db_version": "TCDB 2026-08-23",
+    "disk_gb": 100,
+    "prodigal_executable": "prodigal",
+    "diamond_options": "--sensitive",
+    "tmbed_executable": "python",
+    "backend": "blast",
+    "metadata": "/data/zhaomh/program/database/tcdb/2026-08-23/normalized/tcdb_metadata.tsv",
+    "blastp_options": "",
+    "memory_gb": 32,
+    "tmbed_module": "tmbed",
+    "min_query_coverage": 50.0,
+    "threads": 8,
+    "min_alignment_length": 0,
+    "tmbed_model_dir": ""
+  },
+  "labels": {
+    "cromwell-workflow-id": "cromwell-dd3bcc97-c3df-40cb-a8a1-be7cc9649dec"
+  },
+  "submission": "2026-11-20T10:24:03.405Z"
+}

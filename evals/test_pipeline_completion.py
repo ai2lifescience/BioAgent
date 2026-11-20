@@ -41,7 +41,7 @@ class CompletionTests(unittest.IsolatedAsyncioTestCase):
     async def test_stop_during_submission_records_job_before_cancellation(self):
         from threading import Event
         from importlib import import_module
-        adapter = import_module('tools.infrastructure.sdk_adapters.pipeline_shell')
+        adapter = import_module('tools.agent_tools.specialist.pipeline.pipeline_shell')
         started, release = Event(), Event()
         context = self.context(); context.tool_results = []; context.sandbox_session = None
         request = SimpleNamespace(ctx_wrapper=SimpleNamespace(context=context),

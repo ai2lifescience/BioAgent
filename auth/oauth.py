@@ -93,7 +93,8 @@ def _broker_url(name: str, default: str = "") -> str:
 def _settings() -> tuple[str, str, str, str]:
     base = _broker_url("AGENT_OAUTH_SERVER_URL")
     client_id = os.getenv("AGENT_OAUTH_CLIENT_ID", "bioagent").strip()
-    secret = os.getenv("AGENT_OAUTH_CLIENT_SECRET", "").strip()
+    secret = (os.getenv("AGENT_OAUTH_CLIENT_SECRET", "").strip()
+              or os.getenv("BIOAGENT_OAUTH_CLIENT_SECRET", "").strip())
     redirect = os.getenv("AGENT_OAUTH_REDIRECT_URI", "").strip()
     if not client_id or len(secret) < 32:
         raise ValueError("Configure AGENT_OAUTH_CLIENT_ID and a 32-character AGENT_OAUTH_CLIENT_SECRET.")

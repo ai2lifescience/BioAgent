@@ -1,0 +1,60 @@
+{
+  "method": "Application resume_agent cancellation callback used by Stop",
+  "stop_requested_at": [
+    "2026-11-20T10:04:33.099848+00:00"
+  ],
+  "agent_status": "cancelled",
+  "workflow": {
+    "workflow_id": "8d906c1c30a7465a9f831ed2f00c9304",
+    "status": "cancelled",
+    "created_at": "2026-11-20T10:04:01.529034+00:00",
+    "step_count": 2,
+    "steps": [
+      {
+        "id": "qc",
+        "pipeline": "metagenomic_read_quality_control",
+        "depends_on": [],
+        "inputs": {
+          "read1": "uploads/DRR000852_subset_R1.fastq.gz",
+          "read2": "uploads/DRR000852_subset_R2.fastq.gz"
+        },
+        "params": {
+          "sample_id": "orchestration_stop_test"
+        },
+        "cores": 1,
+        "timeout": 86400,
+        "status": "cancelled",
+        "job_id": "4de4707d2e0040f995d667b4ca235693"
+      },
+      {
+        "id": "profile",
+        "pipeline": "metax_classification_abundance_analysis",
+        "depends_on": [
+          "qc"
+        ],
+        "inputs": {
+          "reads": {
+            "step": "qc",
+            "output": "clean_r1"
+          },
+          "reads2": {
+            "step": "qc",
+            "output": "clean_r2"
+          }
+        },
+        "params": {},
+        "cores": 1,
+        "timeout": 86400,
+        "status": "cancelled"
+      }
+    ]
+  },
+  "remote_jobs": [
+    {
+      "job_id": "4de4707d2e0040f995d667b4ca235693",
+      "remote_id": "e751bac9-c9cc-4709-91e6-7ef8eff7fb46",
+      "status": "cancelled"
+    }
+  ],
+  "passed": true
+}

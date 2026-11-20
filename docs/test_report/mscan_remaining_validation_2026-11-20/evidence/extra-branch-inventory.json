@@ -1,0 +1,65 @@
+{
+  "cases": [
+    {
+      "case": "qc_single_end",
+      "pipeline": "metagenomic_read_quality_control",
+      "seconds": 900,
+      "type": "meta",
+      "input_files": {
+        "read1": "/media/data/fuhaoyi/codes/BioAgent/runtime/live-validation/mscan-expanded-20261120/inputs/assembly_R1.fastq.gz"
+      },
+      "scope": "Previously untested single-end branch using the original benign K-12 simulated reads; default scientific parameters."
+    },
+    {
+      "case": "metax_single_end",
+      "pipeline": "metax_classification_abundance_analysis",
+      "seconds": 900,
+      "type": "meta",
+      "input_files": {
+        "reads": "/media/data/fuhaoyi/codes/BioAgent/runtime/live-validation/mscan-expanded-20261120/inputs/assembly_R1.fastq.gz"
+      },
+      "scope": "Previously untested single-end branch using the original benign K-12 simulated reads; default scientific parameters."
+    },
+    {
+      "case": "growth_single_end",
+      "pipeline": "metagenomic_growth_rate_Calculation",
+      "seconds": 900,
+      "type": "meta",
+      "input_files": {
+        "read1": "/media/data/fuhaoyi/codes/BioAgent/runtime/live-validation/mscan-expanded-20261120/inputs/assembly_R1.fastq.gz"
+      },
+      "scope": "Previously untested single-end branch using the original benign K-12 simulated reads; default scientific parameters."
+    },
+    {
+      "case": "marker_single_end",
+      "pipeline": "metagenomic_pathogen_identification_marker",
+      "seconds": 900,
+      "type": "meta",
+      "input_files": {
+        "read1": "/media/data/fuhaoyi/codes/BioAgent/runtime/live-validation/mscan-expanded-20261120/inputs/assembly_R1.fastq.gz"
+      },
+      "scope": "Previously untested single-end branch using the original benign K-12 simulated reads; default scientific parameters."
+    },
+    {
+      "case": "tcdb_metagenome_single_negative",
+      "pipeline": "tcdb_annotator_metagenome",
+      "seconds": 900,
+      "type": "meta",
+      "input_files": {
+        "read1": "/media/data/fuhaoyi/codes/BioAgent/runtime/live-validation/mscan-remaining-20261120/inputs/negative_R1.fastq.gz"
+      },
+      "scope": "Artificial low-complexity single-end negative control; wrapper and empty-output exchange coverage only."
+    },
+    {
+      "case": "tcdb_genome_protein_negative",
+      "pipeline": "tcdb_annotator_genome",
+      "seconds": 900,
+      "type": "synthetic",
+      "input_files": {
+        "protein_fasta": "/media/data/fuhaoyi/codes/BioAgent/runtime/live-validation/mscan-remaining-20261120/inputs/negative_protein.faa"
+      },
+      "scope": "Artificial nonfunctional protein negative control; checks whether the common alternative-input preparation failure also affects this wrapper."
+    }
+  ],
+  "purpose": "Previously untested input branches; not reruns of unchanged native-import blockers."
+}

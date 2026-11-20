@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import './auth.css';
+import { applicationUrl } from '../applicationUrl';
 
 type Status = {
   mode: 'singleuser' | 'multiuser' | 'cas' | 'oauth';
@@ -8,7 +9,6 @@ type Status = {
   user: { id: string; name: string } | null;
 };
 const CHANGE_KEY = 'bioagent.auth.changed';
-const applicationUrl = (path: string) => new URL(path.replace(/^\//, ''), new URL(import.meta.env.BASE_URL, window.location.origin)).toString();
 const endpoint = (path: string) => applicationUrl(`auth/${path}`);
 
 // Covers normal API requests, streaming handshakes, and iframe bridge calls.

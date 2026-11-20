@@ -1,0 +1,797 @@
+{
+  "result_contract_version": 1,
+  "answer": "Review the requested tool arguments and approve or reject each pending call.",
+  "status": "pending_approval",
+  "session_id": "live-combination-20261120",
+  "approval_required": true,
+  "approvals": [
+    {
+      "approval_id": "fe9e1a3d5ac84d3db8264f41bfecb5e4",
+      "call_id": "call_L9odzbzMlEGkOCluRrcMQjLe",
+      "agent": "pipeline_specialist",
+      "tool_name": "pipeline_shell",
+      "arguments": {
+        "commands": [
+          "agent-pipeline workflow-run --workflow-id 3667336148ce4e7d800ebeea6bce340b"
+        ],
+        "max_output_length": 40000,
+        "timeout_ms": 30000
+      },
+      "plan": {
+        "workflow_id": "3667336148ce4e7d800ebeea6bce340b",
+        "status": "planned",
+        "created_at": "2026-11-20T10:02:16.618078+00:00",
+        "step_count": 4,
+        "steps": [
+          {
+            "id": "qc",
+            "pipeline": "metagenomic_read_quality_control",
+            "depends_on": [],
+            "inputs": {
+              "read1": "uploads/DRR000852_subset_R1.fastq.gz",
+              "read2": "uploads/DRR000852_subset_R2.fastq.gz"
+            },
+            "params": {
+              "sample_id": "DRR000852"
+            },
+            "cores": 1,
+            "timeout": 86400,
+            "status": "waiting"
+          },
+          {
+            "id": "assembly",
+            "pipeline": "metagenomic_de_novo_assembly",
+            "depends_on": [
+              "qc"
+            ],
+            "inputs": {
+              "read1": {
+                "step": "qc",
+                "output": "clean_r1"
+              },
+              "read2": {
+                "step": "qc",
+                "output": "clean_r2"
+              }
+            },
+            "params": {
+              "sample_id": "DRR000852"
+            },
+            "cores": 1,
+            "timeout": 86400,
+            "status": "waiting"
+          },
+          {
+            "id": "metax",
+            "pipeline": "metax_classification_abundance_analysis",
+            "depends_on": [
+              "qc"
+            ],
+            "inputs": {
+              "reads": {
+                "step": "qc",
+                "output": "clean_r1"
+              },
+              "reads2": {
+                "step": "qc",
+                "output": "clean_r2"
+              }
+            },
+            "params": {},
+            "cores": 1,
+            "timeout": 86400,
+            "status": "waiting"
+          },
+          {
+            "id": "tcdb",
+            "pipeline": "tcdb_annotator_genome",
+            "depends_on": [
+              "assembly"
+            ],
+            "inputs": {
+              "genome_fasta": {
+                "step": "assembly",
+                "output": "contigs"
+              }
+            },
+            "params": {
+              "sample_id": "DRR000852",
+              "genome_context": "metagenome"
+            },
+            "cores": 1,
+            "timeout": 86400,
+            "status": "waiting"
+          }
+        ]
+      }
+    }
+  ],
+  "evidence": {
+    "retrieval_date": "2026-11-20",
+    "tools": [
+      "pipeline_shell"
+    ],
+    "databases": [],
+    "query_terms": [],
+    "record_ids": [],
+    "citations": [],
+    "urls": [],
+    "files": [
+      "uploads/DRR000852_subset_R1.fastq.gz",
+      "uploads/DRR000852_subset_R2.fastq.gz"
+    ],
+    "outputs": [
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "pipeline_shell",
+        "workflow_id": "3667336148ce4e7d800ebeea6bce340b",
+        "status": "planned"
+      }
+    ],
+    "tool_outputs": [
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "ok"
+      },
+      {
+        "tool": "pipeline_shell",
+        "status": "planned",
+        "workflow_id": "3667336148ce4e7d800ebeea6bce340b"
+      }
+    ],
+    "tool_errors": []
+  },
+  "trace": [
+    {
+      "timestamp": "2026-11-20T10:01:49.345610+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "run_started",
+      "data": {
+        "request": "Live workflow orchestration test using a public Bacillus subtilis 168 dataset, accession DRR000852. The input files are uploads/DRR000852_subset_R1.fastq.gz and uploads/DRR000852_subset_R2.fastq.gz. Use pipeline_specialist to inspect the catalog and prepare one saved multi-pipeline workflow. Perform read quality control, assemble the cleaned paired reads, generate a MetaX taxonomic profile from the cleaned paired reads, and annotate transport-related functions from the assembled contigs using TCDB genome annotation. Finally summarize the actual results and output files. Infer and save explicit upstream-output input links. Assembly and taxonomic profiling can run independently after QC, while annotation must consume the assembly. Use the installed deployment databases and images. Use genome_context=metagenome for fragmentary contigs. Save the workflow and request approval before execution. Return IDs and progress when started so the application runtime can monitor execution. Do not substitute bundled demo files. Do not run unrelated analysis or modify existing MSCAN records.",
+        "model_key": "gpt-5.6-sol"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:01:49.409163+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_trace_started",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:01:49.413356+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_91867ac562594939bde08674",
+        "parent_id": "span_53242db30f184624930d0728",
+        "span_type": "guardrail",
+        "name": "bio_safety_input",
+        "model": null,
+        "started_at": "2026-11-20T10:01:49.412394+00:00",
+        "ended_at": "2026-11-20T10:01:49.412642+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:01:49.415785+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_33ebf14b08654d51a52a09e0",
+        "parent_id": "span_b7354b698fd3482aad35fd19",
+        "span_type": "custom",
+        "name": "sandbox.running",
+        "model": null,
+        "started_at": "2026-11-20T10:01:49.414685+00:00",
+        "ended_at": "2026-11-20T10:01:49.414998+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:01:49.416797+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_dd740cfe4ac34a32a6f6485e",
+        "parent_id": "span_b7354b698fd3482aad35fd19",
+        "span_type": "custom",
+        "name": "sandbox.running",
+        "model": null,
+        "started_at": "2026-11-20T10:01:49.415963+00:00",
+        "ended_at": "2026-11-20T10:01:49.416076+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:01:49.422751+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_73883584a6464bb7b9fd660f",
+        "parent_id": "span_b7354b698fd3482aad35fd19",
+        "span_type": "custom",
+        "name": "sandbox.exec",
+        "model": null,
+        "started_at": "2026-11-20T10:01:49.417317+00:00",
+        "ended_at": "2026-11-20T10:01:49.421964+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:01:49.427919+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_2d6839bba1c04c96aeead4b9",
+        "parent_id": "span_b7354b698fd3482aad35fd19",
+        "span_type": "custom",
+        "name": "sandbox.exec",
+        "model": null,
+        "started_at": "2026-11-20T10:01:49.422871+00:00",
+        "ended_at": "2026-11-20T10:01:49.427045+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:01:49.429442+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_b7354b698fd3482aad35fd19",
+        "parent_id": "span_53242db30f184624930d0728",
+        "span_type": "custom",
+        "name": "sandbox.prepare_agent",
+        "model": null,
+        "started_at": "2026-11-20T10:01:49.413508+00:00",
+        "ended_at": "2026-11-20T10:01:49.428622+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:01:49.431282+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "agent_started",
+      "data": {
+        "agent": "Pipeline2Agent",
+        "message": "Agent started: Pipeline2Agent."
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:01:49.485331+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "model_requested",
+      "data": {
+        "agent": "Pipeline2Agent"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:01:57.295099+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_1c84ce75999d4bc183a07b37",
+        "parent_id": "span_fd65f99d93184864884988a7",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T10:01:49.490899+00:00",
+        "ended_at": "2026-11-20T10:01:57.294111+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:01:57.301298+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "model_responded",
+      "data": {
+        "agent": "Pipeline2Agent",
+        "input_tokens": 47177,
+        "output_tokens": 842
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:01:57.304962+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_tool_started",
+      "data": {
+        "tool": "pipeline_specialist"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:01:57.309923+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_2633ff24942b4752a73eb62a",
+        "parent_id": "span_3156f4a10355458ea98bc419",
+        "span_type": "guardrail",
+        "name": "bio_safety_input",
+        "model": null,
+        "started_at": "2026-11-20T10:01:57.308717+00:00",
+        "ended_at": "2026-11-20T10:01:57.309051+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:00.517042+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_af155212ddb6439392802233",
+        "parent_id": "span_f0717ef695954d299d7ee650",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T10:01:57.312077+00:00",
+        "ended_at": "2026-11-20T10:02:00.516088+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:01.425448+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "pipeline_command_finished",
+      "data": {
+        "command": "agent-pipeline catalog",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:01.429205+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_7b36ac5c4ab24d66af408048",
+        "parent_id": "span_f0717ef695954d299d7ee650",
+        "span_type": "function",
+        "name": "pipeline_shell",
+        "model": null,
+        "started_at": "2026-11-20T10:02:00.521420+00:00",
+        "ended_at": "2026-11-20T10:02:01.428592+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:01.430444+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_f0717ef695954d299d7ee650",
+        "parent_id": "span_d10fb14524224074af6bc575",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T10:01:57.310452+00:00",
+        "ended_at": "2026-11-20T10:02:01.429879+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:06.598630+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_b17d8de4d03147ef8fb71abf",
+        "parent_id": "span_1389a332f7be4f7697d41904",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T10:02:01.433989+00:00",
+        "ended_at": "2026-11-20T10:02:06.597698+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:07.303189+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "pipeline_command_finished",
+      "data": {
+        "command": "agent-pipeline catalog",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:07.306836+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_4a4a1e746970456b924227c0",
+        "parent_id": "span_1389a332f7be4f7697d41904",
+        "span_type": "function",
+        "name": "pipeline_shell",
+        "model": null,
+        "started_at": "2026-11-20T10:02:06.603643+00:00",
+        "ended_at": "2026-11-20T10:02:07.306216+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:07.308050+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_1389a332f7be4f7697d41904",
+        "parent_id": "span_d10fb14524224074af6bc575",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T10:02:01.432443+00:00",
+        "ended_at": "2026-11-20T10:02:07.307489+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:11.534211+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_9467b679978041a59ee23249",
+        "parent_id": "span_3e0bae81a80e46a0adcf8ee6",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T10:02:07.311930+00:00",
+        "ended_at": "2026-11-20T10:02:11.533278+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:11.559010+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "pipeline_command_finished",
+      "data": {
+        "command": "agent-pipeline files",
+        "status": "ok"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:11.561954+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_07283199552949a789d5f657",
+        "parent_id": "span_3e0bae81a80e46a0adcf8ee6",
+        "span_type": "function",
+        "name": "pipeline_shell",
+        "model": null,
+        "started_at": "2026-11-20T10:02:11.538554+00:00",
+        "ended_at": "2026-11-20T10:02:11.561063+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:11.563607+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_3e0bae81a80e46a0adcf8ee6",
+        "parent_id": "span_d10fb14524224074af6bc575",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T10:02:07.310065+00:00",
+        "ended_at": "2026-11-20T10:02:11.562747+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:16.430363+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_d51dd8c9f47f4cbcafe282d9",
+        "parent_id": "span_21198a5b3ad84b8fa79837bc",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T10:02:11.568930+00:00",
+        "ended_at": "2026-11-20T10:02:16.429428+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:16.628473+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "pipeline_command_finished",
+      "data": {
+        "command": "agent-pipeline workflow-plan --steps '[{\"id\":\"qc\",\"pipeline\":\"metagenomic_read_quality_control\",\"inputs\":{\"read1\":\"uploads/DRR000852_subset_R1.fastq.gz\",\"read2\":\"uploads/DRR000852_subset_R2.fastq.gz\"},\"params\":{\"sample_id\":\"DRR000852\"}},{\"id\":\"assembly\",\"pipeline\":\"metagenomic_de_novo_assembly\",\"inputs\":{\"read1\":{\"step\":\"qc\",\"output\":\"clean_r1\"},\"read2\":{\"step\":\"qc\",\"output\":\"clean_r2\"}},\"params\":{\"sample_id\":\"DRR000852\"},\"depends_on\":[\"qc\"]},{\"id\":\"metax\",\"pipeline\":\"metax_classification_abundance_analysis\",\"inputs\":{\"reads\":{\"step\":\"qc\",\"output\":\"clean_r1\"},\"reads2\":{\"step\":\"qc\",\"output\":\"clean_r2\"}},\"depends_on\":[\"qc\"]},{\"id\":\"tcdb\",\"pipeline\":\"tcdb_annotator_genome\",\"inputs\":{\"genome_fasta\":{\"step\":\"assembly\",\"output\":\"contigs\"}},\"params\":{\"sample_id\":\"DRR000852\",\"genome_context\":\"metagenome\"},\"depends_on\":[\"assembly\"]}]'",
+        "status": "planned"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:16.631544+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_d5758e5ce8dc4faa936185cd",
+        "parent_id": "span_21198a5b3ad84b8fa79837bc",
+        "span_type": "function",
+        "name": "pipeline_shell",
+        "model": null,
+        "started_at": "2026-11-20T10:02:16.435100+00:00",
+        "ended_at": "2026-11-20T10:02:16.630624+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:16.633385+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_21198a5b3ad84b8fa79837bc",
+        "parent_id": "span_d10fb14524224074af6bc575",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T10:02:11.566334+00:00",
+        "ended_at": "2026-11-20T10:02:16.632348+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:26.790359+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_50a2436c71de43d1a5dcd776",
+        "parent_id": "span_1fc840d73527400f85ccafc8",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T10:02:16.638887+00:00",
+        "ended_at": "2026-11-20T10:02:26.789418+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:26.800990+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_7c77eda37eee4552b2d4029d",
+        "parent_id": "span_1fc840d73527400f85ccafc8",
+        "span_type": "function",
+        "name": "pipeline_shell",
+        "model": null,
+        "started_at": "2026-11-20T10:02:26.795173+00:00",
+        "ended_at": "2026-11-20T10:02:26.799913+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:26.802479+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_1fc840d73527400f85ccafc8",
+        "parent_id": "span_d10fb14524224074af6bc575",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T10:02:16.636203+00:00",
+        "ended_at": "2026-11-20T10:02:26.801656+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:26.804967+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_d10fb14524224074af6bc575",
+        "parent_id": "span_3156f4a10355458ea98bc419",
+        "span_type": "agent",
+        "name": "pipeline_specialist",
+        "model": null,
+        "started_at": "2026-11-20T10:01:57.310290+00:00",
+        "ended_at": "2026-11-20T10:02:26.804183+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:26.805903+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_3156f4a10355458ea98bc419",
+        "parent_id": "span_6ac485c6ce064bd88d43126a",
+        "span_type": "task",
+        "name": "Pipeline2Agent",
+        "model": null,
+        "started_at": "2026-11-20T10:01:57.307394+00:00",
+        "ended_at": "2026-11-20T10:02:26.805077+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:26.807247+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_6ac485c6ce064bd88d43126a",
+        "parent_id": "span_fd65f99d93184864884988a7",
+        "span_type": "function",
+        "name": "pipeline_specialist",
+        "model": null,
+        "started_at": "2026-11-20T10:01:57.303877+00:00",
+        "ended_at": "2026-11-20T10:02:26.806442+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:26.808488+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_fd65f99d93184864884988a7",
+        "parent_id": "span_2b6c13364e9e4e8382c21d3e",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T10:01:49.430772+00:00",
+        "ended_at": "2026-11-20T10:02:26.807738+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:26.835079+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_2b6c13364e9e4e8382c21d3e",
+        "parent_id": "span_53242db30f184624930d0728",
+        "span_type": "agent",
+        "name": "Pipeline2Agent",
+        "model": null,
+        "started_at": "2026-11-20T10:01:49.430613+00:00",
+        "ended_at": "2026-11-20T10:02:26.833612+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:26.836902+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62",
+        "span_id": "span_53242db30f184624930d0728",
+        "parent_id": null,
+        "span_type": "task",
+        "name": "Pipeline2Agent",
+        "model": null,
+        "started_at": "2026-11-20T10:01:49.409304+00:00",
+        "ended_at": "2026-11-20T10:02:26.835399+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:26.837514+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "sdk_trace_finished",
+      "data": {
+        "trace_id": "trace_966cf79323184d4ca37d8a22e0318b62"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:02:26.917464+00:00",
+      "session_id": "live-combination-20261120",
+      "event": "run_paused",
+      "data": {
+        "reason": "tool_approval",
+        "tool_names": [
+          "pipeline_shell"
+        ]
+      }
+    }
+  ],
+  "workspace_files": [
+    {
+      "path": "uploads/DRR000852_subset_R1.fastq.gz",
+      "workspace_path": "uploads/DRR000852_subset_R1.fastq.gz",
+      "name": "DRR000852_subset_R1.fastq.gz",
+      "size": 11894885,
+      "modified_at": 1795168894569113952,
+      "kind": "upload",
+      "content_type": "application/gzip"
+    },
+    {
+      "path": "uploads/DRR000852_subset_R2.fastq.gz",
+      "workspace_path": "uploads/DRR000852_subset_R2.fastq.gz",
+      "name": "DRR000852_subset_R2.fastq.gz",
+      "size": 11548154,
+      "modified_at": 1795168899156145680,
+      "kind": "upload",
+      "content_type": "application/gzip"
+    }
+  ],
+  "artifacts": [],
+  "files": [
+    {
+      "path": "uploads/DRR000852_subset_R1.fastq.gz",
+      "workspace_path": "uploads/DRR000852_subset_R1.fastq.gz",
+      "name": "DRR000852_subset_R1.fastq.gz",
+      "size": 11894885,
+      "modified_at": 1795168894569113952,
+      "kind": "upload",
+      "content_type": "application/gzip"
+    },
+    {
+      "path": "uploads/DRR000852_subset_R2.fastq.gz",
+      "workspace_path": "uploads/DRR000852_subset_R2.fastq.gz",
+      "name": "DRR000852_subset_R2.fastq.gz",
+      "size": 11548154,
+      "modified_at": 1795168899156145680,
+      "kind": "upload",
+      "content_type": "application/gzip"
+    }
+  ],
+  "max_turns": 20,
+  "messages": [
+    {
+      "role": "user",
+      "content": "Live workflow orchestration test using a public Bacillus subtilis 168 dataset, accession DRR000852. The input files are uploads/DRR000852_subset_R1.fastq.gz and uploads/DRR000852_subset_R2.fastq.gz. Use pipeline_specialist to inspect the catalog and prepare one saved multi-pipeline workflow. Perform read quality control, assemble the cleaned paired reads, generate a MetaX taxonomic profile from the cleaned paired reads, and annotate transport-related functions from the assembled contigs using TCDB genome annotation. Finally summarize the actual results and output files. Infer and save explicit upstream-output input links. Assembly and taxonomic profiling can run independently after QC, while annotation must consume the assembly. Use the installed deployment databases and images. Use genome_context=metagenome for fragmentary contigs. Save the workflow and request approval before execution. Return IDs and progress when started so the application runtime can monitor execution. Do not substitute bundled demo files. Do not run unrelated analysis or modify existing MSCAN records."
+    },
+    {
+      "role": "assistant",
+      "content": "Review the requested tool arguments and approve or reject each pending call."
+    }
+  ],
+  "run": {
+    "run_id": "e64f906f-1e06-4c54-a7c1-d4fa92ce7f73",
+    "session_dir": ".",
+    "runtime_dir": "runs/e64f906f-1e06-4c54-a7c1-d4fa92ce7f73",
+    "workspace_dir": "outputs"
+  },
+  "approval_decision": null,
+  "runtime": "agents_sdk",
+  "model_key": "gpt-5.6-sol"
+}

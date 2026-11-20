@@ -1,7 +1,6 @@
-"""Persist and execute approved graphs of existing pipeline jobs."""
+"""Persist, schedule and reconcile approved pipeline graphs."""
 from contextlib import closing, contextmanager
 import fcntl
-from graphlib import CycleError, TopologicalSorter
 import json
 import logging
 from pathlib import Path
@@ -11,16 +10,13 @@ from threading import Event, Thread
 from uuid import uuid4
 
 from auth import AccessDenied, AuthError, Principal, current_principal, principal_scope
-from isolation.files import fingerprint
-from . import contracts, service
-from .engine.inputs import pipeline_input_specs, validate_input_path
-from .store import TERMINAL, CapacityReached, confined, now
+from . import contracts, dependency_graph, service
+from .engine.inputs import pipeline_input_specs
+from .store import TERMINAL, CapacityReached, now
 
 ACTIVE = {"queued", "running", "cancelling"}
 STEP_DONE = TERMINAL | {"blocked"}
-MAX_STEPS = 16
 MAX_PARALLEL = 2
-STEP_NAME = re.compile(r"[A-Za-z][A-Za-z0-9_-]{0,39}")
 ID = re.compile(r"[a-f0-9]{32}")
 log = logging.getLogger(__name__)
 
@@ -90,7 +86,7 @@ def _session(root, access):
 def _public(workflow):
     steps = []
     for step in workflow["steps"].values():
-        fields = ("id", "pipeline", "depends_on", "inputs", "params", "cores", "timeout",
+        fields = ("id", "pipeline", "depends_on", "inputs", "params", "cores", "timeout", "reason", "input_reasons",
                   "status", "job_id", "error", "files", "bundle_path")
         steps.append({key: step[key] for key in fields if key in step})
     return {**_summary(workflow), "steps": steps}
@@ -105,93 +101,12 @@ def _definition(pipeline, isolated):
     return (contracts.definition if isolated else service.definition)(pipeline)
 
 
-def _bindings(value):
-    return value if isinstance(value, list) else [value]
-
-
-def _validate_step(root, raw, isolated, fingerprints):
-    fields = {"id", "pipeline", "inputs", "params", "cores", "timeout", "depends_on"}
-    if not isinstance(raw, dict) or raw.keys() - fields:
-        raise ValueError("Each workflow step must use the declared workflow fields.")
-    identifier, name = raw.get("id"), raw.get("pipeline")
-    if not isinstance(identifier, str) or not STEP_NAME.fullmatch(identifier) or not isinstance(name, str):
-        raise ValueError("Each step needs a valid id and pipeline name.")
-    directory, manifest, config = _definition(name, isolated)
-    inputs, params = raw.get("inputs", {}), raw.get("params", {})
-    dependencies = raw.get("depends_on", [])
-    if not isinstance(inputs, dict) or not isinstance(params, dict):
-        raise ValueError(f"Step {identifier} needs input and parameter mappings.")
-    if not isinstance(dependencies, list) or any(not isinstance(item, str) for item in dependencies):
-        raise ValueError(f"Step {identifier} needs a list of dependency step IDs.")
-    dependencies = set(dependencies)
-    cores = raw.get("cores", 1)
-    max_cores, max_timeout = service.resource_bounds(manifest)
-    if isolated and manifest["engine"] in contracts.LOCAL_ENGINES:
-        from isolation.policy import WORKER_TIMEOUT
-        max_timeout = min(max_timeout, WORKER_TIMEOUT)
-    timeout = raw.get("timeout", max_timeout)
-    if type(cores) is not int or type(timeout) is not int or not (1 <= cores <= max_cores and 1 <= timeout <= max_timeout):
-        raise ValueError(f"Step {identifier} requires 1..{max_cores} cores and a timeout of 1..{max_timeout} seconds.")
-    if isolated:
-        contracts.validate_parameters(params, manifest, config)
-    missing = service.required_parameters(manifest, params)
-    if missing:
-        names = ", ".join(item["name"] for item in missing)
-        raise ValueError(f"Step {identifier} is missing required parameters: {names}.")
-    _, outputs = service.plan_configuration(root, manifest, config, params)
-
-    specs = pipeline_input_specs(manifest)
-    missing_slots = {slot for slot, spec in specs.items() if spec["required"]} - inputs.keys()
-    if missing_slots or inputs.keys() - specs.keys():
-        raise ValueError(f"Step {identifier} has missing or invalid inputs. "
-                         f"Missing: {sorted(missing_slots)}. Unknown: {sorted(inputs.keys() - specs.keys())}.")
-    for slot, value in inputs.items():
-        bindings = _bindings(value)
-        if not bindings or (len(bindings) > 1 and not specs[slot]["multiple"]):
-            raise ValueError(f"Step {identifier} input {slot} has invalid file cardinality.")
-        for binding in bindings:
-            if isinstance(binding, str):
-                path = confined(root, binding)
-                if not path.is_file():
-                    raise ValueError(f"Step {identifier} input {slot} requires an existing file: {binding}")
-                validate_input_path(path, specs[slot])
-                if binding not in fingerprints:
-                    fingerprints[binding] = fingerprint(root, binding)
-            elif (isinstance(binding, dict) and binding.keys() == {"step", "output"}
-                  and all(isinstance(item, str) for item in binding.values())):
-                dependencies.add(binding["step"])
-            else:
-                raise ValueError(f"Step {identifier} input {slot} needs a file path or a step/output reference.")
-    return {"id": identifier, "pipeline": name, "inputs": inputs, "params": params,
-            "cores": cores, "timeout": timeout, "depends_on": sorted(dependencies), "status": "waiting",
-            "definition_sha256": service.definition_hash(directory), "output_names": sorted(outputs)}
-
-
 def plan(root, steps, *, access, isolated):
     root = _session(root, access)
-    if not isinstance(steps, list) or not 2 <= len(steps) <= MAX_STEPS:
-        raise ValueError(f"A workflow must have between 2 and {MAX_STEPS} steps.")
-    graph, fingerprints = {}, {}
-    for raw in steps:
-        step = _validate_step(root, raw, isolated, fingerprints)
-        if step["id"] in graph:
-            raise ValueError(f"Duplicate workflow step: {step['id']}.")
-        graph[step["id"]] = step
-    for step in graph.values():
-        for dependency in step["depends_on"]:
-            if dependency not in graph:
-                raise ValueError(f"Step {step['id']} depends on unknown step {dependency}.")
-        for value in step["inputs"].values():
-            for binding in _bindings(value):
-                if isinstance(binding, dict) and binding["output"] not in graph[binding["step"]]["output_names"]:
-                    raise ValueError(f"Step {binding['step']} does not declare output {binding['output']}.")
-    try:
-        order = list(TopologicalSorter({key: step["depends_on"] for key, step in graph.items()}).static_order())
-    except CycleError as exc:
-        raise ValueError("Workflow dependencies contain a cycle.") from exc
+    graph, fingerprints = dependency_graph.build(root, steps, isolated=isolated)
     workflow = {"workflow_id": uuid4().hex, "session_id": root.name, "owner": current_principal().user_id,
                 "status": "planned", "created_at": now(), "isolated": isolated,
-                "steps": {key: graph[key] for key in order}, "fingerprints": fingerprints, "imported": {}}
+                "steps": graph, "fingerprints": fingerprints, "imported": {}}
     WorkflowStore(access).save(workflow)
     return _public(workflow)
 
@@ -255,7 +170,7 @@ def _create_job(root, workflow, step, access, isolated):
     specs = pipeline_input_specs(manifest)
     for slot, value in step["inputs"].items():
         resolved = []
-        for binding in _bindings(value):
+        for binding in dependency_graph.input_bindings(value):
             if isinstance(binding, str):
                 resolved.append((binding, workflow["fingerprints"][binding]["sha256"]))
             else:

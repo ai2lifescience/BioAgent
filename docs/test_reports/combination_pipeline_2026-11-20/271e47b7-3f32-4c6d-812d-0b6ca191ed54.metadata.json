@@ -1,0 +1,167 @@
+{
+  "workflowName": "metax",
+  "workflowProcessingEvents": [
+    {
+      "cromwellId": "cromid-51667ed",
+      "description": "Finished",
+      "timestamp": "2026-11-20T10:14:17.865Z",
+      "cromwellVersion": "91"
+    },
+    {
+      "cromwellId": "cromid-51667ed",
+      "description": "PickedUp",
+      "timestamp": "2026-11-20T10:05:03.942Z",
+      "cromwellVersion": "91"
+    }
+  ],
+  "actualWorkflowLanguageVersion": "1.0",
+  "submittedFiles": {
+    "workflow": "version 1.0\n\n# Single-sample Metax 0.9.23-beta profiling.\n# metax and maCMD come from the Docker image (wdl/Dockerfile).\n# Index and databases are prepared outside this workflow. Every input\n# path is a String; Cromwell must bind-mount those host paths\n# (see wdl/cromwell.local.conf). Output prefix is taken from the reads filename.\n\nworkflow metax {\n  input {\n    String reads\n    String? reads2\n\n    # Absolute path to the Metax database JSON (e.g. metax_db.json).\n    String db\n\n    # Absolute path to NCBI taxdump (nodes.dmp, names.dmp, merged.dmp).\n    String? dmp_dir\n\n    String sequencer = \"Illumina\"\n    String mode = \"default\"\n    Boolean strain = false\n    Boolean lowbiomass = false\n    Boolean genus_fallback = false\n    Boolean strict = false\n    Boolean keep_raw = false\n    Boolean compress_sam = false\n    Boolean by_aligned = false\n    Boolean resume = false\n\n    String? reuse_sam\n    String? pathogen_host\n    String? host\n\n    Float? identity\n    Int? mapped_len\n    Float? fraction\n    Float? min_breadth\n    Float? min_cbreadth\n    Int? min_reads\n    Float? min_oebr\n    Float? min_coebr\n\n    Int threads = 20\n    Int memory_gb = 64\n    Int disk_gb = 100\n    String docker = \"metax:0.9.23-beta\"\n  }\n\n  String in_seq = if defined(reads2) then reads + \",\" + select_first([reads2]) else reads\n  Boolean is_paired = defined(reads2)\n\n  call MetaxProfile {\n    input:\n      reads = reads,\n      in_seq = in_seq,\n      is_paired = is_paired,\n      db = db,\n      dmp_dir = dmp_dir,\n      sequencer = sequencer,\n      mode = mode,\n      strain = strain,\n      lowbiomass = lowbiomass,\n      genus_fallback = genus_fallback,\n      strict = strict,\n      keep_raw = keep_raw,\n      compress_sam = compress_sam,\n      by_aligned = by_aligned,\n      resume = resume,\n      reuse_sam = reuse_sam,\n      pathogen_host = pathogen_host,\n      host = host,\n      identity = identity,\n      mapped_len = mapped_len,\n      fraction = fraction,\n      min_breadth = min_breadth,\n      min_cbreadth = min_cbreadth,\n      min_reads = min_reads,\n      min_oebr = min_oebr,\n      min_coebr = min_coebr,\n      threads = threads,\n      memory_gb = memory_gb,\n      disk_gb = disk_gb,\n      docker = docker\n  }\n\n  output {\n    File profile = MetaxProfile.profile\n  }\n}\n\ntask MetaxProfile {\n  input {\n    String reads\n    String in_seq\n    Boolean is_paired\n    String db\n    String? dmp_dir\n    String sequencer\n    String mode\n    Boolean strain\n    Boolean lowbiomass\n    Boolean genus_fallback\n    Boolean strict\n    Boolean keep_raw\n    Boolean compress_sam\n    Boolean by_aligned\n    Boolean resume\n    String? reuse_sam\n    String? pathogen_host\n    String? host\n    Float? identity\n    Int? mapped_len\n    Float? fraction\n    Float? min_breadth\n    Float? min_cbreadth\n    Int? min_reads\n    Float? min_oebr\n    Float? min_coebr\n    Int threads\n    Int memory_gb\n    Int disk_gb\n    String docker\n  }\n\n  command <<<\n    set -eo pipefail\n\n    metax --version\n    if [[ -z \"~{select_first([reuse_sam, \"\"])}\" ]] && ! command -v maCMD >/dev/null 2>&1; then\n      echo \"maCMD not found in the image. Rebuild with wdl/Dockerfile.\" >&2\n      exit 1\n    fi\n\n    prefix=$(basename \"~{reads}\")\n    prefix=$(printf '%s\\n' \"$prefix\" | sed -E 's/\\.gz$//; s/\\.(fastq|fq|fasta|fa)$//; s/(_R1|_1)$//')\n    echo \"$prefix\" > prefix.txt\n\n    set -- metax profile --db \"~{db}\" -i \"~{in_seq}\" -o \"$prefix\" --sequencer \"~{sequencer}\" --mode \"~{mode}\" -t ~{threads}\n    ~{if defined(dmp_dir) then \"set -- \\\"$@\\\" --dmp-dir \\\"\" + select_first([dmp_dir]) + \"\\\"\" else \"\"}\n    ~{if is_paired then \"set -- \\\"$@\\\" -p\" else \"\"}\n    ~{if strain then \"set -- \\\"$@\\\" --strain\" else \"\"}\n    ~{if lowbiomass then \"set -- \\\"$@\\\" --lowbiomass\" else \"\"}\n    ~{if genus_fallback then \"set -- \\\"$@\\\" --genus-fallback\" else \"\"}\n    ~{if strict then \"set -- \\\"$@\\\" --strict\" else \"\"}\n    ~{if keep_raw then \"set -- \\\"$@\\\" --keep-raw\" else \"\"}\n    ~{if compress_sam then \"set -- \\\"$@\\\" --compress-sam\" else \"\"}\n    ~{if by_aligned then \"set -- \\\"$@\\\" --by-aligned\" else \"\"}\n    ~{if resume then \"set -- \\\"$@\\\" --resume\" else \"\"}\n    ~{if defined(reuse_sam) then \"set -- \\\"$@\\\" --reuse-sam \\\"\" + select_first([reuse_sam]) + \"\\\"\" else \"\"}\n    ~{if defined(pathogen_host) then \"set -- \\\"$@\\\" --pathogen-host \\\"\" + select_first([pathogen_host]) + \"\\\"\" else \"\"}\n    ~{if defined(host) then \"set -- \\\"$@\\\" --host \\\"\" + select_first([host]) + \"\\\"\" else \"\"}\n    ~{if defined(identity) then \"set -- \\\"$@\\\" --identity \\\"\" + select_first([identity]) + \"\\\"\" else \"\"}\n    ~{if defined(mapped_len) then \"set -- \\\"$@\\\" --mapped-len \\\"\" + select_first([mapped_len]) + \"\\\"\" else \"\"}\n    ~{if defined(fraction) then \"set -- \\\"$@\\\" --fraction \\\"\" + select_first([fraction]) + \"\\\"\" else \"\"}\n    ~{if defined(min_breadth) then \"set -- \\\"$@\\\" --min-breadth \\\"\" + select_first([min_breadth]) + \"\\\"\" else \"\"}\n    ~{if defined(min_cbreadth) then \"set -- \\\"$@\\\" --min-cbreadth \\\"\" + select_first([min_cbreadth]) + \"\\\"\" else \"\"}\n    ~{if defined(min_reads) then \"set -- \\\"$@\\\" --min-reads \\\"\" + select_first([min_reads]) + \"\\\"\" else \"\"}\n    ~{if defined(min_oebr) then \"set -- \\\"$@\\\" --min-oebr \\\"\" + select_first([min_oebr]) + \"\\\"\" else \"\"}\n    ~{if defined(min_coebr) then \"set -- \\\"$@\\\" --min-coebr \\\"\" + select_first([min_coebr]) + \"\\\"\" else \"\"}\n    \"$@\"\n\n    ls -lh \"$prefix\".* || true\n  >>>\n\n  output {\n    File profile = glob(\"*.profile.txt\")[0]\n  }\n\n  runtime {\n    cpu: threads\n    memory: \"~{memory_gb} GiB\"\n    disks: \"local-disk ~{disk_gb} HDD\"\n    docker: docker\n  }\n}\n",
+    "root": "",
+    "options": "{\n  \"final_workflow_outputs_dir\": \"/data/versitygw/data/s3/cncb-web-server-mic/cromwell/outputs\",\n  \"note\": \"BioAgent submits this workflow options document to Cromwell after rewriting the output directory into the per-run artifact directory.\",\n  \"read_from_cache\": false,\n  \"use_relative_output_paths\": false,\n  \"write_to_cache\": false\n}",
+    "inputs": "{\"metax.db\":\"/data/zhaomh/program/database/metax/metax_newdb/metax-abfph_cc-v_ccs-refseq_202509/metax-abfphv.json\",\"metax.disk_gb\":100,\"metax.dmp_dir\":\"/data/zhaomh/program/database/metax/taxonomy\",\"metax.docker\":\"metax:0.9.23-beta\",\"metax.memory_gb\":64,\"metax.reads\":\"/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metax_classification_abundance_analysis/7e04e9371b6247be87fbdda17ca95b23/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq\",\"metax.reads2\":\"/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metax_classification_abundance_analysis/7e04e9371b6247be87fbdda17ca95b23/4eae54861990fe3b-01634d66a0d644a39c76220c59bc5a31_clean.R2.fq\",\"metax.threads\":20}",
+    "workflowUrl": "",
+    "labels": "{}"
+  },
+  "calls": {
+    "metax.MetaxProfile": [
+      {
+        "executionStatus": "Done",
+        "stdout": "/data/zhaomh/cromwell-workspace/cromwell-executions/metax/271e47b7-3f32-4c6d-812d-0b6ca191ed54/call-MetaxProfile/execution/stdout",
+        "backendStatus": "Done",
+        "commandLine": "set -eo pipefail\n\nmetax --version\nif [[ -z \"\" ]] && ! command -v maCMD >/dev/null 2>&1; then\n  echo \"maCMD not found in the image. Rebuild with wdl/Dockerfile.\" >&2\n  exit 1\nfi\n\nprefix=$(basename \"/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metax_classification_abundance_analysis/7e04e9371b6247be87fbdda17ca95b23/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq\")\nprefix=$(printf '%s\\n' \"$prefix\" | sed -E 's/\\.gz$//; s/\\.(fastq|fq|fasta|fa)$//; s/(_R1|_1)$//')\necho \"$prefix\" > prefix.txt\n\nset -- metax profile --db \"/data/zhaomh/program/database/metax/metax_newdb/metax-abfph_cc-v_ccs-refseq_202509/metax-abfphv.json\" -i \"/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metax_classification_abundance_analysis/7e04e9371b6247be87fbdda17ca95b23/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq,/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metax_classification_abundance_analysis/7e04e9371b6247be87fbdda17ca95b23/4eae54861990fe3b-01634d66a0d644a39c76220c59bc5a31_clean.R2.fq\" -o \"$prefix\" --sequencer \"Illumina\" --mode \"default\" -t 20\nset -- \"$@\" --dmp-dir \"/data/zhaomh/program/database/metax/taxonomy\"\nset -- \"$@\" -p\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\"$@\"\n\nls -lh \"$prefix\".* || true",
+        "shardIndex": -1,
+        "outputs": {
+          "profile": "/data/zhaomh/cromwell-workspace/cromwell-executions/metax/271e47b7-3f32-4c6d-812d-0b6ca191ed54/call-MetaxProfile/execution/glob-645187eb1a1ef1df7a5fce98adea640e/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.profile.txt"
+        },
+        "runtimeAttributes": {
+          "maxRetries": "0",
+          "failOnStderr": "false",
+          "continueOnReturnCode": "0",
+          "docker": "metax:0.9.23-beta"
+        },
+        "callCaching": {
+          "allowResultReuse": false,
+          "effectiveCallCachingMode": "CallCachingOff"
+        },
+        "inputs": {
+          "min_breadth": null,
+          "disk_gb": 100,
+          "by_aligned": false,
+          "is_paired": true,
+          "reads": "/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metax_classification_abundance_analysis/7e04e9371b6247be87fbdda17ca95b23/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq",
+          "threads": 20,
+          "strict": false,
+          "fraction": null,
+          "resume": false,
+          "strain": false,
+          "keep_raw": false,
+          "host": null,
+          "lowbiomass": false,
+          "pathogen_host": null,
+          "mapped_len": null,
+          "db": "/data/zhaomh/program/database/metax/metax_newdb/metax-abfph_cc-v_ccs-refseq_202509/metax-abfphv.json",
+          "min_coebr": null,
+          "min_cbreadth": null,
+          "docker": "metax:0.9.23-beta",
+          "genus_fallback": false,
+          "in_seq": "/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metax_classification_abundance_analysis/7e04e9371b6247be87fbdda17ca95b23/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq,/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metax_classification_abundance_analysis/7e04e9371b6247be87fbdda17ca95b23/4eae54861990fe3b-01634d66a0d644a39c76220c59bc5a31_clean.R2.fq",
+          "mode": "default",
+          "memory_gb": 64,
+          "sequencer": "Illumina",
+          "reuse_sam": null,
+          "identity": null,
+          "dmp_dir": "/data/zhaomh/program/database/metax/taxonomy",
+          "min_oebr": null,
+          "min_reads": null,
+          "compress_sam": false
+        },
+        "returnCode": 0,
+        "jobId": "3882852",
+        "backend": "Local",
+        "start": "2026-11-20T10:05:07.013Z",
+        "end": "2026-11-20T10:14:16.210Z",
+        "dockerImageUsed": "metax:0.9.23-beta",
+        "stderr": "/data/zhaomh/cromwell-workspace/cromwell-executions/metax/271e47b7-3f32-4c6d-812d-0b6ca191ed54/call-MetaxProfile/execution/stderr",
+        "callRoot": "/data/zhaomh/cromwell-workspace/cromwell-executions/metax/271e47b7-3f32-4c6d-812d-0b6ca191ed54/call-MetaxProfile",
+        "attempt": 1,
+        "executionEvents": [
+          {
+            "startTime": "2026-11-20T10:05:07.013Z",
+            "description": "RequestingExecutionToken",
+            "endTime": "2026-11-20T10:05:08.344Z"
+          },
+          {
+            "startTime": "2026-11-20T10:05:08.344Z",
+            "description": "WaitingForValueStore",
+            "endTime": "2026-11-20T10:05:08.344Z"
+          },
+          {
+            "startTime": "2026-11-20T10:05:08.344Z",
+            "description": "PreparingJob",
+            "endTime": "2026-11-20T10:05:08.348Z"
+          },
+          {
+            "startTime": "2026-11-20T10:05:08.348Z",
+            "description": "RunningJob",
+            "endTime": "2026-11-20T10:14:15.785Z"
+          },
+          {
+            "startTime": "2026-11-20T10:14:15.785Z",
+            "description": "UpdatingJobStore",
+            "endTime": "2026-11-20T10:14:16.210Z"
+          },
+          {
+            "startTime": "2026-11-20T10:05:07.013Z",
+            "description": "Pending",
+            "endTime": "2026-11-20T10:05:07.013Z"
+          }
+        ]
+      }
+    ]
+  },
+  "outputs": {
+    "metax.profile": "/data/zhaomh/cromwell-workspace/cromwell-executions/metax/271e47b7-3f32-4c6d-812d-0b6ca191ed54/call-MetaxProfile/execution/glob-645187eb1a1ef1df7a5fce98adea640e/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.profile.txt"
+  },
+  "workflowRoot": "/data/zhaomh/cromwell-workspace/cromwell-executions/metax/271e47b7-3f32-4c6d-812d-0b6ca191ed54",
+  "actualWorkflowLanguage": "WDL",
+  "status": "Succeeded",
+  "end": "2026-11-20T10:14:17.865Z",
+  "start": "2026-11-20T10:05:03.942Z",
+  "id": "271e47b7-3f32-4c6d-812d-0b6ca191ed54",
+  "inputs": {
+    "min_breadth": null,
+    "disk_gb": 100,
+    "by_aligned": false,
+    "reads": "/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metax_classification_abundance_analysis/7e04e9371b6247be87fbdda17ca95b23/74bbc796efd9fa33-8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq",
+    "strict": false,
+    "fraction": null,
+    "resume": false,
+    "strain": false,
+    "keep_raw": false,
+    "host": null,
+    "lowbiomass": false,
+    "pathogen_host": null,
+    "mapped_len": null,
+    "db": "/data/zhaomh/program/database/metax/metax_newdb/metax-abfph_cc-v_ccs-refseq_202509/metax-abfphv.json",
+    "min_coebr": null,
+    "min_cbreadth": null,
+    "docker": "metax:0.9.23-beta",
+    "genus_fallback": false,
+    "mode": "default",
+    "memory_gb": 64,
+    "sequencer": "Illumina",
+    "reuse_sam": null,
+    "identity": null,
+    "reads2": "/data/versitygw/data/s3/cncb-web-server-mic/files/bioagent/metax_classification_abundance_analysis/7e04e9371b6247be87fbdda17ca95b23/4eae54861990fe3b-01634d66a0d644a39c76220c59bc5a31_clean.R2.fq",
+    "threads": 20,
+    "dmp_dir": "/data/zhaomh/program/database/metax/taxonomy",
+    "min_oebr": null,
+    "min_reads": null,
+    "compress_sam": false
+  },
+  "labels": {
+    "cromwell-workflow-id": "cromwell-271e47b7-3f32-4c6d-812d-0b6ca191ed54"
+  },
+  "submission": "2026-11-20T10:05:01.051Z"
+}

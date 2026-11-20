@@ -1,0 +1,533 @@
+{
+  "pipeline": "metagenomic_pathogen_identification",
+  "execution": "succeeded",
+  "stack": "standard",
+  "project": "Bridge_expanded_20261120_standard",
+  "session_id": "a089813d-626a-4417-927c-9d2ef7cb89fe",
+  "engine": "wdl",
+  "catalog_name": "metagenomic_pathogen_identification",
+  "manifest_sha256": "bfd3459fb744b868d119945d0b14efc54854c22fe356cb564a3473610ab73f33",
+  "inputs": {
+    "sequence_file1": "uploads/6b4deb1ee347423eaa81d0db46254583_benign_R1.fastq.gz",
+    "sequence_file2": "uploads/75687354e21f4d24a245cda65f66e532_benign_R2.fastq.gz"
+  },
+  "parameters": {},
+  "input_scope": "Deterministic paired reads sampled from unmodified E. coli K-12 MG1655; no experimental or clinical data.",
+  "plan_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+  "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+  "last_state": {
+    "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+    "plan_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:52:21.971371+00:00",
+    "started_at": "2026-11-20T02:52:22.193487+00:00",
+    "finished_at": "2026-11-20T03:04:30.168845+00:00",
+    "updated_at": "2026-11-20T03:04:30.169979+00:00",
+    "error": null,
+    "remote_id": "ae2f070a-498a-4654-bf7d-b2bcca0fa0be",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_pathogen_identification"
+  },
+  "outputs": {
+    "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+    "plan_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:52:21.971371+00:00",
+    "started_at": "2026-11-20T02:52:22.193487+00:00",
+    "finished_at": "2026-11-20T03:04:30.168845+00:00",
+    "updated_at": "2026-11-20T03:04:30.169979+00:00",
+    "error": null,
+    "remote_id": "ae2f070a-498a-4654-bf7d-b2bcca0fa0be",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_pathogen_identification",
+    "files": [
+      {
+        "name": "priority_with_confidence.tsv",
+        "path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/0/priority_with_confidence.tsv",
+        "workspace_path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/0/priority_with_confidence.tsv",
+        "size": 30734,
+        "remote": true,
+        "artifact_id": "7bb1a15ee2da436bb8fbb4a6603c692d:0",
+        "pipeline_result": {
+          "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+          "pipeline_name": "metagenomic_pathogen_identification",
+          "output_key": "MetagenomicDetection.final_report_with_confidence",
+          "output_name": "final_report",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T03:04:30.168845+00:00"
+        }
+      },
+      {
+        "name": "priority_microbe_panel.tsv",
+        "path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/1/priority_microbe_panel.tsv",
+        "workspace_path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/1/priority_microbe_panel.tsv",
+        "size": 30437,
+        "remote": true,
+        "artifact_id": "7bb1a15ee2da436bb8fbb4a6603c692d:1",
+        "pipeline_result": {
+          "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+          "pipeline_name": "metagenomic_pathogen_identification",
+          "output_key": "MetagenomicDetection.stage5_priority_panel",
+          "output_name": "priority_panel",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T03:04:30.168845+00:00"
+        }
+      },
+      {
+        "name": "sample_overview.tsv",
+        "path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/2/sample_overview.tsv",
+        "workspace_path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/2/sample_overview.tsv",
+        "size": 138,
+        "remote": true,
+        "artifact_id": "7bb1a15ee2da436bb8fbb4a6603c692d:2",
+        "pipeline_result": {
+          "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+          "pipeline_name": "metagenomic_pathogen_identification",
+          "output_key": "MetagenomicDetection.sample_overview",
+          "output_name": "sample_overview",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T03:04:30.168845+00:00"
+        }
+      },
+      {
+        "name": "stage2_read_accounting.tsv",
+        "path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/3/stage2_read_accounting.tsv",
+        "workspace_path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/3/stage2_read_accounting.tsv",
+        "size": 271,
+        "remote": true,
+        "artifact_id": "7bb1a15ee2da436bb8fbb4a6603c692d:3",
+        "pipeline_result": {
+          "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+          "pipeline_name": "metagenomic_pathogen_identification",
+          "output_key": "MetagenomicDetection.stage2_read_accounting",
+          "output_name": "read_accounting",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T03:04:30.168845+00:00"
+        }
+      },
+      {
+        "name": "stage2_crossdb_signature.tsv",
+        "path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/4/stage2_crossdb_signature.tsv",
+        "workspace_path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/4/stage2_crossdb_signature.tsv",
+        "size": 11,
+        "remote": true,
+        "artifact_id": "7bb1a15ee2da436bb8fbb4a6603c692d:4",
+        "pipeline_result": {
+          "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+          "pipeline_name": "metagenomic_pathogen_identification",
+          "output_key": "MetagenomicDetection.stage2_crossdb_signature",
+          "output_name": "crossdb_signature",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T03:04:30.168845+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/0/priority_with_confidence.tsv",
+        "text": "SampleId\tCategory\tTaxonID\tTaxonName\tTaxonRank\tAssembly\tRefSMRN\tRefMRN\tTaxonSMRN\tTaxonMRN\tRelativeAbundance\tBreadth\tBreadthPct\tDepth\tObservedExpectedBreadthRatio\tShannonEntropy\tSubRank2\tSubRank2_ID\tSubRank2SMRN\tSubRank2MRN\tSubRank1\tSubRank1_ID\tSubRank1SMRN\tSubRank1MRN\tSpeciesGroup\tSpeciesGroup_ID\tSpeciesGroupSMRN\tSpeciesGroupMRN\tSpecies\tSpecies_ID\tSpeciesSMRN\tSpeciesMRN\tGenus\tGenus_ID\tGenusSMRN\tGenusMRN\tConfidence\r\ndetection_sample\tparasite\t6269\tAnisakis simplex\tspecies\tGCA_900576815.1\t5286\t5579\t5286\t5579\t68.56\t1353029/144170987\t0.9385\t1.33\t0.76\t0.67\t\t\t\t\t\t\t\t\t\t\t\t\tAnisakis simplex\t6269\t5286\t5579\tAnisakis\t6268\t5286\t5579\t0\r\ndetection_sample\tbacteria\t562\tEscherichia coli\tspecies\tGCF_036503815\t198\t282\t738\t943\t44.45\t95569/5199666\t1.84\t1.17\t0.86\t0.97\t\t\t\t\t\t\t\t\t\t\t\t\tEscherichia coli\t562\t738\t943\tEscherichia\t561\t1046\t1288\t1\r\ndetection_sample\tbacteria\t866789\tEscherichia coli DSM 30083 = JCM 1649 = ATCC 11775\tsublevel1\tGCF_003697165\t430\t593\t430\t593\t28.87\t157765/5034844\t3.13\t1.16\t0.87\t0.98\t\t\t\t\tEscherichia coli DSM 30083 = JCM 1649 = ATCC 11775\t866789\t430\t593\t\t\t\t\tEscherichia coli\t562\t738\t943\tEscherichia\t561\t1046\t1288\t1\r\ndetection_sample\tparasite\t36087\tTrichuris trichiura\tspecies\tGCA_000613005.1\t303\t1228\t303\t1228\t28.81\t277579/75525372\t0.3675\t1.33\t0.75\t0.50\t\t\t\t\t\t\t\t\t\t\t\t\tTrichuris trichiura\t36087\t303\t1228\tTrichuris\t36086\t303\t1228\t0\r\ndetection_sample\tbacteria\t585054\tEscherichia fergusonii ATCC 35469\tsublevel1\tGCF_000026225\t93\t179\t93\t179\t9.45\t44953/4643871\t0.9680\t1.23\t0.82\t1.00\t\t\t\t\tEscherichia fergusonii ATCC 35469\t585054\t93\t179\t\t\t\t\tEscherichia fergusonii\t564\t93\t179\tEscherichia\t561\t1046\t1288\t1\r\ndetection_sample\tbacteria\t2608867\tEscherichia ruysiae\tspecies\tGCF_031323975\t45\t76\t45\t76\t4.02\t23078/4635336\t0.4979\t1.21\t0.83\t0.91\t\t\t\t\t\t\t\t\t\t\t\t\tEscherichia ruysiae\t2608867\t45\t76\tEscherichia\t561\t1046\t1288\t1\r\ndetection_sample\tbacteria\t1499973\tEscherichia marmotae\tspecies\tGCF_002900365\t17\t41\t17\t41\t2.05\t15990/4896311\t0.3266\t1.06\t0.95\t0.92\t\t\t\t\t\t\t\t\t\t\t\t\tEscherichia marmotae\t1499973\t17\t41\tEscherichia\t561\t1046\t1288\t1\r\ndetection_sample\tbacteria\t2762229\tEscherichia whittamii\tspecies\tGCF_014836715\t16\t32\t16\t32\t1.72\t13373/4550194\t0.2939\t1.19\t0.84\t0.97\t\t\t\t\t\t\t\t\t\t\t\t\tEscherichia whittamii\t2762229\t16\t32\tEscherichia\t561\t1046\t1288\t1\r\ndetection_sample\tparasite\t2878363\tAuanema sp. JU1783\tspecies\tGCA_943334845.2\t15\t20\t15\t20\t0.66\t13466/54038938\t0.0249\t1.27\t0.79\t0.45\t\t\t\t\t\t\t\t\t\t\t\t\tAuanema sp. JU1783\t2878363\t15\t20\tAuanema\t2038651\t15\t20\t0\r\ndetection_sample\tparasite\t51028\tEnterobius vermicularis\tspecies\tGCA_900576705.1\t14\t39\t14\t39\t0.48\t13009/144974553\t0.0090\t1.30\t0.77\t0.31\t\t\t\t\t\t\t\t\t\t\t\t\tEnterobius vermicularis\t51028\t14\t39\tEnterobius\t51027\t14\t39\t0\r\ndetection_sample\tbacteria\t1392775\tFlavobacterium paronense\tspecies\tGCF_030409795\t12\t12\t12\t12\t0.81\t2825/3653122\t0.0773\t1.16\t0.86\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tFlavobacterium paronense\t1392775\t12\t12\tFlavobacterium\t237\t12\t12\t0\r\ndetection_sample\tbacteria\t2891570\tPseudocitrobacter corydidari\tspecies\tGCF_021172065\t10\t15\t10\t15\t0.73\t3373/5015040\t0.0673\t1.42\t0.70\t0.72\t\t\t\t\t\t\t\t\t\t\t\t\tPseudocitrobacter corydidari\t2891570\t10\t15\tPseudocitrobacter\t1504576\t10\t19\t0\r\ndetection_sample\tbacteria\t1463164\tKlebsiella quasipneumoniae subsp. similipneumoniae\tsublevel1\tGCF_004321175\t7\t10\t7\t10\t0.44\t1442/5531387\t0.0261\t1.33\t0.75\t0.39\t\t\t\t\tKlebsiella quasipneumoniae subsp. similipneumoniae\t1463164\t7\t10\tKlebsiella pneumoniae complex\t3390273\t7\t10\tKlebsiella quasipneumoniae\t1463165\t7\t10\tKlebsiella\t570\t8\t11\t1\r\ndetection_sample\tparasite\t71465\tCylicostephanus goldi\tspecies\tGCA_900617965.1\t7\t16\t7\t16\t0.17\t8376/167203920\t0.0050\t1.18\t0.85\t0.98\t\t\t\t\t\t\t\t\t\t\t\t\tCylicostephanus goldi\t71465\t7\t16\tCylicostephanus\t71460\t7\t16\t1\r\ndetection_sample\tbacteria\t908627\tCaballeronia mineralivorans PML1(12)\tsublevel1\tGCF_001028175\t6\t21\t6\t21\t0.55\t3064/9372009\t0.0327\t1.31\t0.76\t0.00\t\t\t\t\tCaballeronia mineralivorans PML1(12)\t908627\t6\t21\t\t\t\t\tCaballeronia mineralivorans\t2010198\t6\t21\tCaballeronia\t1827195\t7\t22\t0\r\ndetection_sample\tparasite\t370354\tEntamoeba dispar SAW760\tsublevel1\tGCA_000209125.2\t6\t12\t6\t12\t0.69\t1948/30639184\t0.0064\t1.85\t0.54\t0.85\t\t\t\t\tEntamoeba dispar SAW760\t370354\t6\t12\t\t\t\t\tEntamoeba dispar\t46681\t6\t12\tEntamoeba\t5758\t6\t12\t1\r\ndetection_sample\tparasite\t1250332\tMicoletzkya japonica\tspecies\tGCA_900490955.1\t5\t48\t5\t48\t0.47\t11013/181895534\t0.0061\t1.40\t0.72\t0.41\t\t\t\t\t\t\t\t\t\t\t\t\tMicoletzkya japonica\t1250332\t5\t48\tMicoletzkya\t669149\t5\t48\t0\r\ndetection_sample\tbacteria\t165597\tCrocosphaera watsonii WH 8501\tsublevel1\tGCF_000167195\t4\t5\t4\t5\t0.20\t1103/6241353\t0.0177\t1.36\t0.73\t0.00\t\t\t\t\tCrocosphaera watsonii WH 8501\t165597\t4\t5\t\t\t\t\tCrocosphaera watsonii\t263511\t4\t5\tCrocosphaera\t263510\t4\t5\t1\r\ndetection_sample\tbacteria\t1115511\tEscherichia albertii NBRC 107761 = DSM 17582\tsublevel1\tGCF_000759775\t3\t17\t3\t17\t0.94\t4169/4424756\t0.0942\t1.07\t0.93\t0.89\t\t\t\t\tEscherichia albertii NBRC 107761 = DSM 17582\t1115511\t3\t17\t\t\t\t\tEscherichia albertii\t208962\t3\t17\tEscherichia\t561\t1046\t1288\t1\r\ndetection_sample\tbacteria\t2038277\tMethylobacterium frigidaeris\tspecies\tGCF_022179185\t3\t5\t3\t5\t0.15\t503/7913663\t0.0064\t1.49\t0.67\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tMethylobacterium frigidaeris\t2038277\t3\t5\tMethylobacterium\t407\t3\t7\t1\r\ndetection_sample\tbacteria\t441769\tBacillus coahuilensis m4-4\tsublevel1\tGCF_000171615\t3\t4\t3\t4\t0.29\t672/3379408\t0.0199\t1.34\t0.75\t0.00\t\t\t\t\tBacillus coahuilensis m4-4\t441769\t3\t4\t\t\t\t\tBacillus coahuilensis\t408580\t3\t4\tBacillus\t1386\t3\t4\t1\r\ndetection_sample\tbacteria\t1216966\tEdwardsiella hoshinae NBRC 105699 = ATCC 33379\tsublevel1\tGCF_000474215\t3\t4\t3\t4\t0.26\t549/3707698\t0.0148\t1.37\t0.73\t0.00\t\t\t\t\tEdwardsiella hoshinae NBRC 105699 = ATCC 33379\t1216966\t3\t4\t\t\t\t\tEdwardsiella hoshinae\t93378\t3\t4\tEdwardsiella\t635\t3\t4\t1\r\ndetection_sample\tbacteria\t72000\tKocuria rhizophila\tspecies\tGCF_003667225\t3\t4\t3\t4\t0.36\t426/2703476\t0.0158\t2.42\t0.41\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tKocuria rhizophila\t72000\t3\t4\tKocuria\t57493\t3\t4\t1\r\ndetection_sample\tbacteria\t1986155\tStaphylococcus cornubiensis\tspecies\tGCF_900183575\t3\t4\t3\t4\t0.37\t581/2676854\t0.0217\t1.03\t0.97\t0.00\t\t\t\t\t\t\t\t\tStaphylococcus intermedius group\t2815305\t3\t4\tStaphylococcus cornubiensis\t1986155\t3\t4\tStaphylococcus\t1279\t3\t4\t1\r\ndetection_sample\tbacteria\t59406\tAromatoleum evansii\tspecies\tGCF_012910805\t3\t3\t3\t3\t0.12\t324/5942291\t0.0055\t2.78\t0.36\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tAromatoleum evansii\t59406\t3\t3\tAromatoleum\t551759\t3\t4\t1\r\ndetection_sample\tbacteria\t2060068\tChimaeribacter coloradensis\tspecies\tGCF_002858715\t3\t3\t3\t3\t0.16\t219/4687281\t0.0047\t2.05\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tChimaeribacter coloradensis\t2060068\t3\t3\tChimaeribacter\t2716544\t3\t3\t1\r\ndetection_sample\tbacteria\t187304\tRoseibium aggregatum\tspecies\tGCF_014692675\t3\t3\t3\t3\t0.13\t328/5663154\t0.0058\t2.29\t0.44\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tRoseibium aggregatum\t187304\t3\t3\tRoseibium\t150830\t3\t3\t1\r\ndetection_sample\tbacteria\t1914243\tCitrobacter europaeus\tspecies\tGCA_020099315\t2\t2\t2\t2\t0.10\t303/5093523\t0.0059\t1.49\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCitrobacter europaeus\t1914243\t2\t2\tCitrobacter\t544\t4\t5\t1\r\ndetection_sample\tbacteria\t2950104\tFrankia tisae\tspecies\tGCF_025403405\t2\t2\t2\t2\t0.07\t188/7077447\t0.0027\t1.60\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tFrankia tisae\t2950104\t2\t2\tFrankia\t1854\t2\t2\t1\r\ndetection_sample\tbacteria\t2697024\tPusillimonas minor\tspecies\tGCF_014237865\t2\t2\t2\t2\t0.15\t800/3202898\t0.0250\t1.31\t0.76\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tPusillimonas minor\t2697024\t2\t2\tPusillimonas\t305976\t2\t2\t1\r\ndetection_sample\tbacteria\t293958\tRhizobium lusitanum\tspecies\tGCF_010668395\t2\t2\t2\t2\t0.06\t220/7758118\t0.0028\t1.36\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tRhizobium lusitanum\t293958\t2\t2\tRhizobium\t379\t2\t3\t1\r\ndetection_sample\tbacteria\t2799638\tTenebrionibacter intestinalis\tspecies\tGCF_016632365\t2\t2\t2\t2\t0.12\t492/3988153\t0.0123\t1.52\t0.66\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tTenebrionibacter intestinalis\t2799638\t2\t2\tTenebrionibacter\t2918836\t2\t2\t1\r\ndetection_sample\tbacteria\t2493090\tThermomonospora catenispora\tspecies\tGCF_006363815\t2\t2\t2\t2\t0.09\t490/5347384\t0.0092\t1.22\t0.82\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tThermomonospora catenispora\t2493090\t2\t2\tThermomonospora\t2019\t2\t2\t1\r\ndetection_sample\tbacteria\t887465\tActinacidiphila cocklensis\tspecies\tGCA_028657175\t1\t4\t1\t4\t0.11\t512/9195858\t0.0056\t1.17\t0.85\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tActinacidiphila cocklensis\t887465\t1\t4\tActinacidiphila\t2995702\t1\t4\t1\r\ndetection_sample\tbacteria\t161398\tPseudoalteromonas phenolica\tspecies\tGCF_005886345\t1\t2\t1\t2\t0.11\t247/4568244\t0.0054\t1.21\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPseudoalteromonas phenolica\t161398\t1\t2\tPseudoalteromonas\t53246\t1\t2\t1\r\ndetection_sample\tbacteria\t255519\tAtlantibacter subterraneus\tspecies\tGCF_027853245\t1\t1\t1\t1\t0.05\t271/4776022\t0.0057\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAtlantibacter subterraneus\t255519\t1\t1\tAtlantibacter\t1903434\t1\t1\t1\r\ndetection_sample\tbacteria\t755\tAvibacterium gallinarum\tspecies\tGCF_002921135\t1\t1\t1\t1\t0.10\t300/2346344\t0.0128\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAvibacterium gallinarum\t755\t1\t1\tAvibacterium\t292486\t1\t1\t1\r\ndetection_sample\tbacteria\t196367\tCaballeronia sordidicola\tspecies\tGCF_000729995\t1\t1\t1\t1\t0.02\t150/10264041\t0.0015\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCaballeronia sordidicola\t196367\t1\t1\tCaballeronia\t1827195\t7\t22\t1\r\ndetection_sample\tbacteria\t1639133\tCitrobacter portucalensis\tspecies\tGCF_002042885\t1\t1\t1\t1\t0.05\t450/4916696\t0.0092\t1.00\t\t\t\t\t\t\t\t\t\t\tCitrobacter freundii complex\t1344959\t1\t2\tCitrobacter portucalensis\t1639133\t1\t1\tCitrobacter\t544\t4\t5\t1\r\ndetection_sample\tbacteria\t1218085\tCitrobacter rodentium NBRC 105723 = DSM 16636\tsublevel1\tGCF_021278985\t1\t1\t1\t1\t0.05\t150/5381147\t0.0028\t1.00\t\t\t\t\t\t\tCitrobacter rodentium NBRC 105723 = DSM 16636\t1218085\t1\t1\t\t\t\t\tCitrobacter rodentium\t67825\t1\t1\tCitrobacter\t544\t4\t5\t1\r\ndetection_sample\tbacteria\t2316720\tCorallococcus interemptor\tspecies\tGCF_003668875\t1\t1\t1\t1\t0.03\t150/9476520\t0.0016\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCorallococcus interemptor\t2316720\t1\t1\tCorallococcus\t83461\t1\t3\t1\r\ndetection_sample\tbacteria\t1134687\tKlebsiella michiganensis\tspecies\tGCF_002925905\t1\t1\t1\t1\t0.04\t1050/6193319\t0.0170\t1.00\t1.00\t0.37\t\t\t\t\t\t\t\t\t\t\t\t\tKlebsiella michiganensis\t1134687\t1\t1\tKlebsiella\t570\t8\t11\t1\r\ndetection_sample\tbacteria\t2056810\tMeridianimarinicoccus zhengii\tspecies\tGCF_003254465\t1\t1\t1\t1\t0.05\t300/4599271\t0.0065\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMeridianimarinicoccus zhengii\t2056810\t1\t1\tMeridianimarinicoccus\t2917831\t1\t1\t1\r\ndetection_sample\tbacteria\t515350\tMicromonospora endophytica\tspecies\tGCF_003236305\t1\t1\t1\t1\t0.04\t450/6523752\t0.0069\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMicromonospora endophytica\t515350\t1\t1\tMicromonospora\t1873\t1\t1\t1\r\ndetection_sample\tbacteria\t2815722\tNocardia noduli\tspecies\tGCF_019038455\t1\t1\t1\t1\t0.03\t332/8932372\t0.0037\t1.33\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tNocardia noduli\t2815722\t1\t1\tNocardia\t1817\t1\t1\t1\r\ndetection_sample\tbacteria\t28112\tTannerella forsythia\tspecies\tGCF_001006485\t1\t1\t1\t1\t0.07\t300/3283148\t0.0091\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tTannerella forsythia\t28112\t1\t1\tTannerella\t195950\t1\t1\t1\r\ndetection_sample\tbacteria\t2597270\tAlkalicoccobacillus porphyridii\tspecies\tGCF_007293315\t0\t6\t0\t6\t0.34\t1072/4387235\t0.0244\t1.38\t0.73\t0.61\t\t\t\t\t\t\t\t\t\t\t\t\tAlkalicoccobacillus porphyridii\t2597270\t0\t6\tAlkalicoccobacillus\t2893059\t0\t6\t1\r\ndetection_sample\tbacteria\t1398493\tPseudocitrobacter faecalis\tspecies\tGCA_003315335\t0\t4\t0\t4\t0.19\t904/5155721\t0.0175\t1.16\t0.86\t0.98\t\t\t\t\t\t\t\t\t\t\t\t\tPseudocitrobacter faecalis\t1398493\t0\t4\tPseudocitrobacter\t1504576\t10\t19\t1\r\ndetection_sample\tbacteria\t525255\tAnaerococcus tetradius ATCC 35098\tsublevel1\tGCF_000159095\t0\t2\t0\t2\t0.23\t163/2104384\t0.0077\t1.84\t\t\t\t\t\t\tAnaerococcus tetradius ATCC 35098\t525255\t0\t2\t\t\t\t\tAnaerococcus tetradius\t33036\t0\t2\tAnaerococcus\t165779\t0\t2\t1\r\ndetection_sample\tbacteria\t2316722\tCorallococcus aberystwythensis\tspecies\tGCF_003612165\t0\t2\t0\t2\t0.05\t265/9988076\t0.0027\t1.13\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCorallococcus aberystwythensis\t2316722\t0\t2\tCorallococcus\t83461\t1\t3\t1\r\ndetection_sample\tbacteria\t61645\tEnterobacter asburiae\tspecies\tGCF_001521715\t0\t2\t0\t2\t0.10\t4033/4806259\t0.0839\t1.00\t1.00\t0.97\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter asburiae\t61645\t0\t2\tEnterobacter\t547\t0\t4\t1\r\ndetection_sample\tbacteria\t525245\tGleimia coleocanis DSM 15436\tsublevel1\tGCF_000159015\t0\t2\t0\t2\t0.29\t300/1719736\t0.0174\t1.00\t\t\t\t\t\t\tGleimia coleocanis DSM 15436\t525245\t0\t2\t\t\t\t\tGleimia coleocanis\t103618\t0\t2\tGleimia\t2692113\t0\t2\t1\r\ndetection_sample\tbacteria\t39956\tMethylobacterium mesophilicum\tspecies\tGCF_022179445\t0\t2\t0\t2\t0.08\t450/5904555\t0.0076\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMethylobacterium mesophilicum\t39956\t0\t2\tMethylobacterium\t407\t3\t7\t1\r\ndetection_sample\tbacteria\t67774\tNeorhizobium huautlense\tspecies\tGCF_002968575\t0\t2\t0\t2\t0.09\t300/5727389\t0.0052\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tNeorhizobium huautlense\t67774\t0\t2\tNeorhizobium\t1525371\t0\t2\t1\r\ndetection_sample\tbacteria\t446660\tAdlercreutzia equolifaciens\tspecies\tGCF_029076695\t0\t1\t0\t1\t0.08\t150/3081655\t0.0049\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAdlercreutzia equolifaciens\t446660\t0\t1\tAdlercreutzia\t447020\t0\t1\t1\r\ndetection_sample\tbacteria\t75796\tAromatoleum diolicum\tspecies\tGCF_012910955\t0\t1\t0\t1\t0.05\t150/5147725\t0.0029\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAromatoleum diolicum\t75796\t0\t1\tAromatoleum\t551759\t3\t4\t1\r\ndetection_sample\tbacteria\t2486855\tArthrobacter sulfonylureivorans\tspecies\tGCA_004000035\t0\t1\t0\t1\t0.06\t205/4127296\t0.0050\t2.20\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tArthrobacter sulfonylureivorans\t2486855\t0\t1\tArthrobacter\t1663\t0\t1\t1\r\ndetection_sample\tbacteria\t133448\tCitrobacter youngae\tspecies\tGCF_003818115\t0\t1\t0\t1\t0.05\t433/4820150\t0.0090\t1.00\t\t\t\t\t\t\t\t\t\t\tCitrobacter freundii complex\t1344959\t1\t2\tCitrobacter youngae\t133448\t0\t1\tCitrobacter\t544\t4\t5\t0\r\ndetection_sample\tbacteria\t525263\tCorynebacterium lipophiloflavum DSM 44291\tsublevel1\tGCF_000159635\t0\t1\t0\t1\t0.11\t150/2295513\t0.0065\t1.00\t\t\t\t\t\t\tCorynebacterium lipophiloflavum DSM 44291\t525263\t0\t1\t\t\t\t\tCorynebacterium lipophiloflavum\t161889\t0\t1\tCorynebacterium\t1716\t0\t2\t1\r\ndetection_sample\tbacteria\t525268\tCorynebacterium striatum ATCC 6940\tsublevel1\tGCF_000159135\t0\t1\t0\t1\t0.09\t288/2726038\t0.0106\t1.00\t\t\t\t\t\t\tCorynebacterium striatum ATCC 6940\t525268\t0\t1\t\t\t\t\tCorynebacterium striatum\t43770\t0\t1\tCorynebacterium\t1716\t0\t2\t1\r\ndetection_sample\tbacteria\t1487935\tEnterobacillus tribolii\tspecies\tGCF_003363015\t0\t1\t0\t1\t0.05\t150/4930417\t0.0030\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnterobacillus tribolii\t1487935\t0\t1\tEnterobacillus\t1822002\t0\t1\t1\r\ndetection_sample\tbacteria\t716541\tEnterobacter cloacae subsp. cloacae ATCC 13047\tsublevel2\tGCF_000025565\t0\t1\t0\t1\t0.04\t1050/5598816\t0.0188\t1.00\t1.00\t0.54\tEnterobacter cloacae subsp. cloacae ATCC 13047\t716541\t0\t1\tEnterobacter cloacae subsp. cloacae\t336306\t0\t1\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter cloacae\t550\t0\t1\tEnterobacter\t547\t0\t4\t1\r\ndetection_sample\tbacteria\t158836\tEnterobacter hormaechei\tspecies\tGCF_033342915\t0\t1\t0\t1\t0.05\t300/5043987\t0.0059\t1.00\t\t\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter hormaechei\t158836\t0\t1\tEnterobacter\t547\t0\t4\t0\r\ndetection_sample\tbacteria\t2594790\tLacisediminihabitans profunda\tspecies\tGCF_008040105\t0\t1\t0\t1\t0.06\t150/4018280\t0.0037\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tLacisediminihabitans profunda\t2594790\t0\t1\tLacisediminihabitans\t2740558\t0\t1\t1\r\ndetection_sample\tbacteria\t2213161\tModestobacter excelsi\tspecies\tGCF_005930495\t0\t1\t0\t1\t0.05\t150/5257676\t0.0029\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tModestobacter excelsi\t2213161\t0\t1\tModestobacter\t88138\t0\t1\t1\r\ndetection_sample\tbacteria\t933266\tNeisseria sicca 4320\tsublevel1\tGCF_000193735\t0\t1\t0\t1\t0.10\t150/2517771\t0.0060\t1.00\t\t\t\t\t\t\tNeisseria sicca 4320\t933266\t0\t1\t\t\t\t\tNeisseria sicca\t490\t0\t1\tNeisseria\t482\t0\t1\t1\r\ndetection_sample\tbacteria\t587\tProvidencia rettgeri\tspecies\tGCA_900455085\t0\t1\t0\t1\t0.05\t150/4653539\t0.0032\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tProvidencia rettgeri\t587\t0\t1\tProvidencia\t586\t0\t1\t1\r\ndetection_sample\tbacteria\t396\tRhizobium phaseoli\tspecies\tGCF_010668805\t0\t1\t0\t1\t0.04\t150/6612293\t0.0023\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tRhizobium phaseoli\t396\t0\t1\tRhizobium\t379\t2\t3\t1\r\ndetection_sample\tbacteria\t160434\tSamsonia erythrinae\tspecies\tGCF_004342665\t0\t1\t0\t1\t0.06\t150/3879234\t0.0039\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSamsonia erythrinae\t160434\t0\t1\tSamsonia\t160433\t0\t1\t1\r\ndetection_sample\tbacteria\t615\tSerratia marcescens\tspecies\tGCF_001902635\t0\t1\t0\t1\t0.05\t150/5259174\t0.0029\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSerratia marcescens\t615\t0\t1\tSerratia\t613\t0\t1\t1\r\ndetection_sample\tbacteria\t1505757\tSiccibacter colletis\tspecies\tGCF_000696575\t0\t1\t0\t1\t0.06\t150/4255864\t0.0035\t1.01\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSiccibacter colletis\t1505757\t0\t1\tSiccibacter\t1649298\t0\t1\t1\r\ndetection_sample\tbacteria\t2767826\tStreptomyces polyasparticus\tspecies\tGCF_014493765\t0\t1\t0\t1\t0.02\t318/10156909\t0.0031\t1.42\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tStreptomyces polyasparticus\t2767826\t0\t1\tStreptomyces\t1883\t0\t1\t1\r\ndetection_sample\tbacteria\t379893\tTrabulsiella odontotermitis\tspecies\tGCF_030053895\t0\t1\t0\t1\t0.05\t1800/4702262\t0.0383\t1.00\t1.00\t0.98\t\t\t\t\t\t\t\t\t\t\t\t\tTrabulsiella odontotermitis\t379893\t0\t1\tTrabulsiella\t158851\t0\t1\t1\r\ndetection_sample\tbacteria\t2607663\tYersinia canariae\tspecies\tGCF_009831415\t0\t1\t0\t1\t0.05\t150/4710154\t0.0032\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tYersinia canariae\t2607663\t0\t1\tYersinia\t629\t0\t1\t1\r\ndetection_sample\tbacteria\t701347\t[Enterobacter] lignolyticus SCF1\tsublevel1\tGCF_000164865\t0\t1\t0\t1\t0.05\t454/4814049\t0.0094\t1.32\t0.76\t0.51\t\t\t\t\t[Enterobacter] lignolyticus SCF1\t701347\t0\t1\t\t\t\t\t[Enterobacter] lignolyticus\t1334193\t0\t1\tPluralibacter\t1330546\t0\t1\t1\r\ndetection_sample\tbacteria\t656\tAeromonas allosaccharophila\tspecies\tGCF_029024985\t0\t0\t0\t0\t0.00\t150/5493224\t0.0027\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAeromonas allosaccharophila\t656\t0\t0\tAeromonas\t642\t0\t0\t1\r\ndetection_sample\tbacteria\t440079\tAeromonas bivalvium\tspecies\tGCF_000819765\t0\t0\t0\t0\t0.00\t150/4282073\t0.0035\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAeromonas bivalvium\t440079\t0\t0\tAeromonas\t642\t0\t0\t1\r\ndetection_sample\tbacteria\t591962\tAeromonas fluvialis\tspecies\tGCF_000819885\t0\t0\t0\t0\t0.00\t150/3900111\t0.0038\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAeromonas fluvialis\t591962\t0\t0\tAeromonas\t642\t0\t0\t0\r\ndetection_sample\tbacteria\t654\tAeromonas veronii\tspecies\tGCA_041319085\t0\t0\t0\t0\t0.00\t150/4216129\t0.0036\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAeromonas veronii\t654\t0\t0\tAeromonas\t642\t0\t0\t0\r\ndetection_sample\tbacteria\t92002\tAromatoleum toluvorans\tspecies\tGCF_012910905\t0\t0\t0\t0\t0.00\t150/4798756\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAromatoleum toluvorans\t92002\t0\t0\tAromatoleum\t551759\t3\t4\t0\r\ndetection_sample\tbacteria\t2724944\tArthrobacter mobilis\tspecies\tGCF_012395835\t0\t0\t0\t0\t0.00\t150/4400240\t0.0034\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tArthrobacter mobilis\t2724944\t0\t0\tArthrobacter\t1663\t0\t1\t1\r\ndetection_sample\tbacteria\t273384\tBrevibacterium aurantiacum\tspecies\tGCF_007558825\t0\t0\t0\t0\t0.00\t150/4899542\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tBrevibacterium aurantiacum\t273384\t0\t0\tBrevibacterium\t1696\t0\t0\t1\r\ndetection_sample\tbacteria\t158822\tCedecea neteri\tspecies\tGCF_000757825\t0\t0\t0\t0\t0.00\t150/4876443\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCedecea neteri\t158822\t0\t0\tCedecea\t158483\t0\t0\t1\r\ndetection_sample\tbacteria\t35703\tCitrobacter amalonaticus\tspecies\tGCF_001559075\t0\t0\t0\t0\t0.00\t150/4904719\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCitrobacter amalonaticus\t35703\t0\t0\tCitrobacter\t544\t4\t5\t0\r\ndetection_sample\tbacteria\t1261127\tCitrobacter amalonaticus Y19\tsublevel1\tGCF_000981805\t0\t0\t0\t0\t0.00\t900/5875361\t0.0153\t1.00\t1.00\t0.92\t\t\t\t\tCitrobacter amalonaticus Y19\t1261127\t0\t0\t\t\t\t\tCitrobacter amalonaticus\t35703\t0\t0\tCitrobacter\t544\t4\t5\t0\r\ndetection_sample\tbacteria\t57706\tCitrobacter braakii\tspecies\tGCF_041319885\t0\t0\t0\t0\t0.00\t300/6171899\t0.0049\t1.00\t\t\t\t\t\t\t\t\t\t\tCitrobacter freundii complex\t1344959\t1\t2\tCitrobacter braakii\t57706\t0\t0\tCitrobacter\t544\t4\t5\t0\r\ndetection_sample\tbacteria\t67824\tCitrobacter farmeri\tspecies\tGCF_019048065\t0\t0\t0\t0\t0.00\t150/4964825\t0.0030\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCitrobacter farmeri\t67824\t0\t0\tCitrobacter\t544\t4\t5\t0\r\ndetection_sample\tbacteria\t1006003\tCitrobacter freundii ATCC 8090 = MTCC 1658 = NBRC 12681\tsublevel1\tGCF_011064845\t0\t0\t0\t0\t0.00\t300/4957773\t0.0061\t1.00\t\t\t\t\t\t\tCitrobacter freundii ATCC 8090 = MTCC 1658 = NBRC 12681\t1006003\t0\t0\tCitrobacter freundii complex\t1344959\t1\t2\tCitrobacter freundii\t546\t0\t0\tCitrobacter\t544\t4\t5\t0\r\ndetection_sample\tbacteria\t290338\tCitrobacter koseri ATCC BAA-895\tsublevel1\tGCF_000018045\t0\t0\t0\t0\t0.00\t154/4735377\t0.0033\t1.95\t\t\t\t\t\t\tCitrobacter koseri ATCC BAA-895\t290338\t0\t0\t\t\t\t\tCitrobacter koseri\t545\t0\t0\tCitrobacter\t544\t4\t5\t0\r\ndetection_sample\tbacteria\t1218086\tCitrobacter sedlakii NBRC 105722\tsublevel1\tGCF_000759835\t0\t0\t0\t0\t0.00\t150/4631756\t0.0032\t1.00\t\t\t\t\t\t\tCitrobacter sedlakii NBRC 105722\t1218086\t0\t0\tCitrobacter freundii complex\t1344959\t1\t2\tCitrobacter sedlakii\t67826\t0\t0\tCitrobacter\t544\t4\t5\t0\r\ndetection_sample\tbacteria\t2316736\tCorallococcus exercitus\tspecies\tGCF_003611585\t0\t0\t0\t0\t0.00\t149/10157784\t0.0015\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCorallococcus exercitus\t2316736\t0\t0\tCorallococcus\t83461\t1\t3\t0\r\ndetection_sample\tbacteria\t2686017\tCraterilacuibacter sinensis\tspecies\tGCF_009831765\t0\t0\t0\t0\t0.00\t205/3218710\t0.0064\t2.20\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCraterilacuibacter sinensis\t2686017\t0\t0\tCraterilacuibacter\t2870907\t0\t0\t1\r\ndetection_sample\tbacteria\t28141\tCronobacter sakazakii\tspecies\tGCF_000982825\t0\t0\t0\t0\t0.00\t137/4663595\t0.0029\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCronobacter sakazakii\t28141\t0\t0\tCronobacter\t413496\t0\t0\t1\r\ndetection_sample\tbacteria\t2494701\tEnterobacter chengduensis\tspecies\tGCF_001984825\t0\t0\t0\t0\t0.00\t450/5218135\t0.0086\t1.00\t\t\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter chengduensis\t2494701\t0\t0\tEnterobacter\t547\t0\t4\t0\r\ndetection_sample\tbacteria\t2497875\tEnterobacter chuandaensis\tspecies\tGCF_003594915\t0\t0\t0\t0\t0.00\t150/4634694\t0.0032\t1.00\t\t\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter chuandaensis\t2497875\t0\t0\tEnterobacter\t547\t0\t4\t0\r\ndetection_sample\tbacteria\t888063\tEnterobacter hormaechei ATCC 49162\tsublevel2\tGCF_001875655\t0\t0\t0\t0\t0.00\t1050/4883975\t0.0215\t1.00\t1.00\t0.87\tEnterobacter hormaechei ATCC 49162\t888063\t0\t0\tEnterobacter hormaechei subsp. hormaechei\t301105\t0\t0\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter hormaechei\t158836\t0\t1\tEnterobacter\t547\t0\t4\t0\r\ndetection_sample\tbacteria\t208224\tEnterobacter kobei\tspecies\tGCF_001729765\t0\t0\t0\t0\t0.00\t1950/4927488\t0.0396\t1.00\t1.00\t0.92\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter kobei\t208224\t0\t0\tEnterobacter\t547\t0\t4\t0\r\ndetection_sample\tbacteria\t299767\tEnterobacter ludwigii\tspecies\tGCA_023023105\t0\t0\t0\t0\t0.00\t745/4834794\t0.0154\t1.00\t1.00\t0.00\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter ludwigii\t299767\t0\t0\tEnterobacter\t547\t0\t4\t0\r\ndetection_sample\tbacteria\t3029761\tEnterobacter pasteurii\tspecies\tGCF_028890245\t0\t0\t0\t0\t0.00\t150/4816084\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter pasteurii\t3029761\t0\t0\tEnterobacter\t547\t0\t4\t0\r\ndetection_sample\tbacteria\t1354263\tHafnia paralvei ATCC 29927\tsublevel1\tGCF_001655005\t0\t0\t0\t0\t0.00\t300/4826970\t0.0062\t1.00\t\t\t\t\t\t\tHafnia paralvei ATCC 29927\t1354263\t0\t0\t\t\t\t\tHafnia paralvei\t546367\t0\t0\tHafnia\t568\t0\t0\t1\r\ndetection_sample\tbacteria\t1349784\tKlebsiella ornithinolytica NBRC 105727 = ATCC 31898\tsublevel1\tGCF_001598295\t0\t0\t0\t0\t0.00\t150/5534270\t0.0027\t1.00\t\t\t\t\t\t\tKlebsiella ornithinolytica NBRC 105727 = ATCC 31898\t1349784\t0\t0\t\t\t\t\tKlebsiella ornithinolytica\t54291\t0\t0\tKlebsiella\t570\t8\t11\t0\r\ndetection_sample\tbacteria\t2026240\tKlebsiella quasivariicola\tspecies\tGCF_002269255\t0\t0\t0\t0\t0.00\t1350/5946736\t0.0227\t1.00\t1.00\t0.48\t\t\t\t\t\t\t\t\tKlebsiella pneumoniae complex\t3390273\t7\t10\tKlebsiella quasivariicola\t2026240\t0\t0\tKlebsiella\t570\t8\t11\t0\r\ndetection_sample\tbacteria\t1218112\tKluyvera cryocrescens NBRC 102467\tsublevel1\tGCF_001571285\t0\t0\t0\t0\t0.00\t604/5045663\t0.0120\t1.24\t0.81\t0.00\t\t\t\t\tKluyvera cryocrescens NBRC 102467\t1218112\t0\t0\t\t\t\t\tKluyvera cryocrescens\t580\t0\t0\tKluyvera\t579\t0\t0\t1\r\ndetection_sample\tbacteria\t1354264\tKluyvera georgiana ATCC 51603\tsublevel1\tGCF_001654985\t0\t0\t0\t0\t0.00\t150/5070604\t0.0030\t1.00\t\t\t\t\t\t\tKluyvera georgiana ATCC 51603\t1354264\t0\t0\t\t\t\t\tKluyvera georgiana\t73098\t0\t0\tKluyvera\t579\t0\t0\t1\r\ndetection_sample\tbacteria\t61648\tKluyvera intermedia\tspecies\tGCF_021440345\t0\t0\t0\t0\t0.00\t304/4749628\t0.0064\t1.48\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tKluyvera intermedia\t61648\t0\t0\tKluyvera\t579\t0\t0\t0\r\ndetection_sample\tbacteria\t1005667\tKosakonia oryziphila\tspecies\tGCF_900094795\t0\t0\t0\t0\t0.00\t150/4812395\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tKosakonia oryziphila\t1005667\t0\t0\tKosakonia\t1330547\t0\t0\t1\r\ndetection_sample\tbacteria\t1177180\tKosakonia radicincitans DSM 16656\tsublevel1\tGCF_000280495\t0\t0\t0\t0\t0.00\t150/6122473\t0.0024\t1.00\t\t\t\t\t\t\tKosakonia radicincitans DSM 16656\t1177180\t0\t0\t\t\t\t\tKosakonia radicincitans\t283686\t0\t0\tKosakonia\t1330547\t0\t0\t1\r\ndetection_sample\tbacteria\t2100822\tKushneria phyllosphaerae\tspecies\tGCF_900312995\t0\t0\t0\t0\t0.00\t131/3764098\t0.0035\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tKushneria phyllosphaerae\t2100822\t0\t0\tKushneria\t504090\t0\t0\t1\r\ndetection_sample\tbacteria\t765909\tLamprocystis purpurea DSM 4197\tsublevel1\tGCF_000379525\t0\t0\t0\t0\t0.00\t150/6905110\t0.0022\t1.00\t\t\t\t\t\t\tLamprocystis purpurea DSM 4197\t765909\t0\t0\t\t\t\t\tLamprocystis purpurea\t61598\t0\t0\tLamprocystis\t53452\t0\t0\t1\r\ndetection_sample\tbacteria\t83655\tLeclercia adecarboxylata\tspecies\tGCF_006171285\t0\t0\t0\t0\t0.00\t450/5764539\t0.0078\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tLeclercia adecarboxylata\t83655\t0\t0\tLeclercia\t83654\t0\t0\t1\r\ndetection_sample\tbacteria\t2951405\tMethylocystis suflitae\tspecies\tGCF_024448135\t0\t0\t0\t0\t0.00\t150/3823387\t0.0039\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMethylocystis suflitae\t2951405\t0\t0\tMethylocystis\t133\t0\t0\t1\r\ndetection_sample\tbacteria\t33917\tMicrobacterium barkeri\tspecies\tGCF_027921765\t0\t0\t0\t0\t0.00\t150/3507141\t0.0043\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMicrobacterium barkeri\t33917\t0\t0\tMicrobacterium\t33882\t0\t0\t1\r\ndetection_sample\tbacteria\t284570\tMicrobacterium natoriense\tspecies\tGCF_039527915\t0\t0\t0\t0\t0.00\t150/3922524\t0.0038\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMicrobacterium natoriense\t284570\t0\t0\tMicrobacterium\t33882\t0\t0\t1\r\ndetection_sample\tbacteria\t2562439\tMixta tenebrionis\tspecies\tGCF_006517625\t0\t0\t0\t0\t0.00\t150/4656195\t0.0032\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMixta tenebrionis\t2562439\t0\t0\tMixta\t2100764\t0\t0\t1\r\ndetection_sample\tbacteria\t82983\tObesumbacterium proteus\tspecies\tGCF_001586165\t0\t0\t0\t0\t0.00\t900/5011796\t0.0180\t1.00\t1.00\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\tObesumbacterium proteus\t82983\t0\t0\tObesumbacterium\t82982\t0\t0\t1\r\ndetection_sample\tbacteria\t494023\tPaeniglutamicibacter antarcticus\tspecies\tGCA_900010755\t0\t0\t0\t0\t0.00\t150/4434773\t0.0034\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPaeniglutamicibacter antarcticus\t494023\t0\t0\tPaeniglutamicibacter\t1742990\t0\t0\t1\r\ndetection_sample\tbacteria\t59814\tPantoea dispersa\tspecies\tGCF_014155765\t0\t0\t0\t0\t0.00\t150/4922294\t0.0030\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPantoea dispersa\t59814\t0\t0\tPantoea\t53335\t0\t0\t1\r\ndetection_sample\tbacteria\t2364647\tPantoea piersonii\tspecies\tGCF_003612015\t0\t0\t0\t0\t0.00\t150/4852091\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPantoea piersonii\t2364647\t0\t0\tPantoea\t53335\t0\t0\t1\r\ndetection_sample\tbacteria\t1851568\tPhotorhabdus namnaonensis\tspecies\tGCF_001684335\t0\t0\t0\t0\t0.00\t150/5419286\t0.0028\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPhotorhabdus namnaonensis\t1851568\t0\t0\tPhotorhabdus\t29487\t0\t0\t1\r\ndetection_sample\tbacteria\t3034157\tPollutibacter soli\tspecies\tGCF_029269725\t0\t0\t0\t0\t0.00\t150/6117423\t0.0025\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPollutibacter soli\t3034157\t0\t0\tPollutibacter\t3132307\t0\t0\t1\r\ndetection_sample\tbacteria\t585\tProteus vulgaris\tspecies\tGCF_011045815\t0\t0\t0\t0\t0.00\t150/4612025\t0.0033\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tProteus vulgaris\t585\t0\t0\tProteus\t583\t0\t0\t1\r\ndetection_sample\tbacteria\t2518973\tPseudoalteromonas rhizosphaerae\tspecies\tGCF_902498845\t0\t0\t0\t0\t0.00\t150/5265908\t0.0028\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPseudoalteromonas rhizosphaerae\t2518973\t0\t0\tPseudoalteromonas\t53246\t1\t2\t1\r\ndetection_sample\tbacteria\t2488306\tPseudocitrobacter vendiensis\tspecies\tGCF_943590815\t0\t0\t0\t0\t0.00\t900/5400633\t0.0167\t1.00\t1.00\t0.92\t\t\t\t\t\t\t\t\t\t\t\t\tPseudocitrobacter vendiensis\t2488306\t0\t0\tPseudocitrobacter\t1504576\t10\t19\t0\r\ndetection_sample\tbacteria\t1839807\tRappaport israeli\tspecies\tGCF_001888055\t0\t0\t0\t0\t0.00\t150/1751410\t0.0086\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tRappaport israeli\t1839807\t0\t0\tRappaport\t1955421\t0\t0\t1\r\ndetection_sample\tbacteria\t218493\tSalmonella bongori NCTC 12419\tsublevel1\tGCF_000252995\t0\t0\t0\t0\t0.00\t300/4460105\t0.0067\t1.00\t\t\t\t\t\t\tSalmonella bongori NCTC 12419\t218493\t0\t0\t\t\t\t\tSalmonella bongori\t54736\t0\t0\tSalmonella\t590\t0\t0\t1\r\ndetection_sample\tbacteria\t59204\tSalmonella enterica subsp. diarizonae\tsublevel1\tGCF_008692785\t0\t0\t0\t0\t0.00\t300/4930077\t0.0061\t1.00\t\t\t\t\t\t\tSalmonella enterica subsp. diarizonae\t59204\t0\t0\t\t\t\t\tSalmonella enterica\t28901\t0\t0\tSalmonella\t590\t0\t0\t1\r\ndetection_sample\tbacteria\t99287\tSalmonella enterica subsp. enterica serovar Typhimurium\tsublevel2\tGCF_000006945\t0\t0\t0\t0\t0.00\t150/4951393\t0.0030\t1.00\t\t\tSalmonella enterica subsp. enterica serovar Typhimurium\t90371\t0\t0\tSalmonella enterica subsp. enterica\t59201\t0\t0\t\t\t\t\tSalmonella enterica\t28901\t0\t0\tSalmonella\t590\t0\t0\t1\r\ndetection_sample\tbacteria\t2577858\tSalmonella enterica subsp. salamae serovar 56:b:[1,5]\tsublevel2\tGCF_003324815\t0\t0\t0\t0\t0.00\t150/5155431\t0.0029\t1.00\t\t\tSalmonella enterica subsp. salamae serovar 56:b:[1,5]\t2577858\t0\t0\tSalmonella enterica subsp. salamae\t59202\t0\t0\t\t\t\t\tSalmonella enterica\t28901\t0\t0\tSalmonella\t590\t0\t0\t0\r\ndetection_sample\tbacteria\t2926520\tScandinavium manionii\tspecies\tGCF_024764775\t0\t0\t0\t0\t0.00\t140/4650132\t0.0030\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tScandinavium manionii\t2926520\t0\t0\tScandinavium\t2726810\t0\t0\t1\r\ndetection_sample\tbacteria\t640633\tShewanella algicola\tspecies\tGCF_014648035\t0\t0\t0\t0\t0.00\t150/4939980\t0.0030\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tShewanella algicola\t640633\t0\t0\tShewanella\t22\t0\t0\t1\r\ndetection_sample\tbacteria\t1239307\tSodalis praecaptivus\tspecies\tGCF_000517425\t0\t0\t0\t0\t0.00\t150/5159435\t0.0029\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSodalis praecaptivus\t1239307\t0\t0\tSodalis\t84565\t0\t0\t1\r\ndetection_sample\tbacteria\t2303576\tSphingomonas mesophila\tspecies\tGCF_003499275\t0\t0\t0\t0\t0.00\t205/2291471\t0.0089\t2.20\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSphingomonas mesophila\t2303576\t0\t0\tSphingomonas\t13687\t0\t0\t1\r\ndetection_sample\tbacteria\t68193\tStreptomyces djakartensis\tspecies\tGCF_041028145\t0\t0\t0\t0\t0.00\t140/7750742\t0.0018\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tStreptomyces djakartensis\t68193\t0\t0\tStreptomyces\t1883\t0\t1\t1\r\ndetection_sample\tbacteria\t1970\tStreptomyces morookaense\tspecies\tGCF_013030945\t0\t0\t0\t0\t0.00\t150/7471796\t0.0020\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tStreptomyces morookaense\t1970\t0\t0\tStreptomyces\t1883\t0\t1\t0\r\ndetection_sample\tbacteria\t2022662\tSuperficieibacter electus\tspecies\tGCF_002915575\t0\t0\t0\t0\t0.00\t150/5681027\t0.0026\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSuperficieibacter electus\t2022662\t0\t0\tSuperficieibacter\t2303321\t0\t0\t1\r\ndetection_sample\tbacteria\t2726741\tVibrio agarilyticus\tspecies\tGCF_012641465\t0\t0\t0\t0\t0.00\t150/4353152\t0.0034\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tVibrio agarilyticus\t2726741\t0\t0\tVibrio\t662\t0\t0\t1\r\ndetection_sample\tbacteria\t2890315\tYersinia artesiana\tspecies\tGCF_902726545\t0\t0\t0\t0\t0.00\t150/4408420\t0.0034\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tYersinia artesiana\t2890315\t0\t0\tYersinia\t629\t0\t1\t1\r\ndetection_sample\tparasite\t1317128\tPristionchus maxplancki\tspecies\tGCA_900490775.1\t0\t4\t0\t4\t0.03\t917/223407312\t0.0004\t1.12\t0.89\t0.72\t\t\t\t\t\t\t\t\t\t\t\t\tPristionchus maxplancki\t1317128\t0\t4\tPristionchus\t54125\t0\t4\t1\r\ndetection_sample\tparasite\t5866\tBabesia bigemina\tspecies\tGCA_000981445.1\t0\t1\t0\t1\t0.13\t450/13845756\t0.0033\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tBabesia bigemina\t5866\t0\t1\tBabesia\t5864\t0\t1\t1\r\ndetection_sample\tparasite\t40348\tStrongylus vulgaris\tspecies\tGCA_900624965.1\t0\t1\t0\t1\t0.01\t2353/269442212\t0.0009\t1.08\t0.92\t0.79\t\t\t\t\t\t\t\t\t\t\t\t\tStrongylus vulgaris\t40348\t0\t1\tStrongylus\t40345\t0\t1\t1\r\ndetection_sample\tparasite\t2777116\tCaenorhabditis auriculariae\tspecies\tGCA_904845305.1\t0\t0\t0\t0\t0.00\t287/109586468\t0.0003\t1.02\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCaenorhabditis auriculariae\t2777116\t0\t0\tCaenorhabditis\t6237\t0\t0\t1\r\ndetection_sample\tvirus\t3052230\tHepacivirus hominis\tspecies\tCS131702.1\t0\t1\t0\t1\t100.00\t300/6710\t4.47\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tHepacivirus hominis\t3052230\t0\t1\tHepacivirus\t11102\t0\t1\t1\r\ndetection_sample\tvirus\t3418650\tLentivirus humimdef1\tspecies\tCS793684.1\t0\t0\t0\t0\t0.00\t300/14226\t2.11\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tLentivirus humimdef1\t3418650\t0\t0\tLentivirus\t11646\t0\t0\t1\r\n"
+      },
+      {
+        "path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/1/priority_microbe_panel.tsv",
+        "text": "SampleId\tCategory\tTaxonID\tTaxonName\tTaxonRank\tAssembly\tRefSMRN\tRefMRN\tTaxonSMRN\tTaxonMRN\tRelativeAbundance\tBreadth\tBreadthPct\tDepth\tObservedExpectedBreadthRatio\tShannonEntropy\tSubRank2\tSubRank2_ID\tSubRank2SMRN\tSubRank2MRN\tSubRank1\tSubRank1_ID\tSubRank1SMRN\tSubRank1MRN\tSpeciesGroup\tSpeciesGroup_ID\tSpeciesGroupSMRN\tSpeciesGroupMRN\tSpecies\tSpecies_ID\tSpeciesSMRN\tSpeciesMRN\tGenus\tGenus_ID\tGenusSMRN\tGenusMRN\r\ndetection_sample\tparasite\t6269\tAnisakis simplex\tspecies\tGCA_900576815.1\t5286\t5579\t5286\t5579\t68.56\t1353029/144170987\t0.9385\t1.33\t0.76\t0.67\t\t\t\t\t\t\t\t\t\t\t\t\tAnisakis simplex\t6269\t5286\t5579\tAnisakis\t6268\t5286\t5579\r\ndetection_sample\tbacteria\t562\tEscherichia coli\tspecies\tGCF_036503815\t198\t282\t738\t943\t44.45\t95569/5199666\t1.84\t1.17\t0.86\t0.97\t\t\t\t\t\t\t\t\t\t\t\t\tEscherichia coli\t562\t738\t943\tEscherichia\t561\t1046\t1288\r\ndetection_sample\tbacteria\t866789\tEscherichia coli DSM 30083 = JCM 1649 = ATCC 11775\tsublevel1\tGCF_003697165\t430\t593\t430\t593\t28.87\t157765/5034844\t3.13\t1.16\t0.87\t0.98\t\t\t\t\tEscherichia coli DSM 30083 = JCM 1649 = ATCC 11775\t866789\t430\t593\t\t\t\t\tEscherichia coli\t562\t738\t943\tEscherichia\t561\t1046\t1288\r\ndetection_sample\tparasite\t36087\tTrichuris trichiura\tspecies\tGCA_000613005.1\t303\t1228\t303\t1228\t28.81\t277579/75525372\t0.3675\t1.33\t0.75\t0.50\t\t\t\t\t\t\t\t\t\t\t\t\tTrichuris trichiura\t36087\t303\t1228\tTrichuris\t36086\t303\t1228\r\ndetection_sample\tbacteria\t585054\tEscherichia fergusonii ATCC 35469\tsublevel1\tGCF_000026225\t93\t179\t93\t179\t9.45\t44953/4643871\t0.9680\t1.23\t0.82\t1.00\t\t\t\t\tEscherichia fergusonii ATCC 35469\t585054\t93\t179\t\t\t\t\tEscherichia fergusonii\t564\t93\t179\tEscherichia\t561\t1046\t1288\r\ndetection_sample\tbacteria\t2608867\tEscherichia ruysiae\tspecies\tGCF_031323975\t45\t76\t45\t76\t4.02\t23078/4635336\t0.4979\t1.21\t0.83\t0.91\t\t\t\t\t\t\t\t\t\t\t\t\tEscherichia ruysiae\t2608867\t45\t76\tEscherichia\t561\t1046\t1288\r\ndetection_sample\tbacteria\t1499973\tEscherichia marmotae\tspecies\tGCF_002900365\t17\t41\t17\t41\t2.05\t15990/4896311\t0.3266\t1.06\t0.95\t0.92\t\t\t\t\t\t\t\t\t\t\t\t\tEscherichia marmotae\t1499973\t17\t41\tEscherichia\t561\t1046\t1288\r\ndetection_sample\tbacteria\t2762229\tEscherichia whittamii\tspecies\tGCF_014836715\t16\t32\t16\t32\t1.72\t13373/4550194\t0.2939\t1.19\t0.84\t0.97\t\t\t\t\t\t\t\t\t\t\t\t\tEscherichia whittamii\t2762229\t16\t32\tEscherichia\t561\t1046\t1288\r\ndetection_sample\tparasite\t2878363\tAuanema sp. JU1783\tspecies\tGCA_943334845.2\t15\t20\t15\t20\t0.66\t13466/54038938\t0.0249\t1.27\t0.79\t0.45\t\t\t\t\t\t\t\t\t\t\t\t\tAuanema sp. JU1783\t2878363\t15\t20\tAuanema\t2038651\t15\t20\r\ndetection_sample\tparasite\t51028\tEnterobius vermicularis\tspecies\tGCA_900576705.1\t14\t39\t14\t39\t0.48\t13009/144974553\t0.0090\t1.30\t0.77\t0.31\t\t\t\t\t\t\t\t\t\t\t\t\tEnterobius vermicularis\t51028\t14\t39\tEnterobius\t51027\t14\t39\r\ndetection_sample\tbacteria\t1392775\tFlavobacterium paronense\tspecies\tGCF_030409795\t12\t12\t12\t12\t0.81\t2825/3653122\t0.0773\t1.16\t0.86\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tFlavobacterium paronense\t1392775\t12\t12\tFlavobacterium\t237\t12\t12\r\ndetection_sample\tbacteria\t2891570\tPseudocitrobacter corydidari\tspecies\tGCF_021172065\t10\t15\t10\t15\t0.73\t3373/5015040\t0.0673\t1.42\t0.70\t0.72\t\t\t\t\t\t\t\t\t\t\t\t\tPseudocitrobacter corydidari\t2891570\t10\t15\tPseudocitrobacter\t1504576\t10\t19\r\ndetection_sample\tbacteria\t1463164\tKlebsiella quasipneumoniae subsp. similipneumoniae\tsublevel1\tGCF_004321175\t7\t10\t7\t10\t0.44\t1442/5531387\t0.0261\t1.33\t0.75\t0.39\t\t\t\t\tKlebsiella quasipneumoniae subsp. similipneumoniae\t1463164\t7\t10\tKlebsiella pneumoniae complex\t3390273\t7\t10\tKlebsiella quasipneumoniae\t1463165\t7\t10\tKlebsiella\t570\t8\t11\r\ndetection_sample\tparasite\t71465\tCylicostephanus goldi\tspecies\tGCA_900617965.1\t7\t16\t7\t16\t0.17\t8376/167203920\t0.0050\t1.18\t0.85\t0.98\t\t\t\t\t\t\t\t\t\t\t\t\tCylicostephanus goldi\t71465\t7\t16\tCylicostephanus\t71460\t7\t16\r\ndetection_sample\tbacteria\t908627\tCaballeronia mineralivorans PML1(12)\tsublevel1\tGCF_001028175\t6\t21\t6\t21\t0.55\t3064/9372009\t0.0327\t1.31\t0.76\t0.00\t\t\t\t\tCaballeronia mineralivorans PML1(12)\t908627\t6\t21\t\t\t\t\tCaballeronia mineralivorans\t2010198\t6\t21\tCaballeronia\t1827195\t7\t22\r\ndetection_sample\tparasite\t370354\tEntamoeba dispar SAW760\tsublevel1\tGCA_000209125.2\t6\t12\t6\t12\t0.69\t1948/30639184\t0.0064\t1.85\t0.54\t0.85\t\t\t\t\tEntamoeba dispar SAW760\t370354\t6\t12\t\t\t\t\tEntamoeba dispar\t46681\t6\t12\tEntamoeba\t5758\t6\t12\r\ndetection_sample\tparasite\t1250332\tMicoletzkya japonica\tspecies\tGCA_900490955.1\t5\t48\t5\t48\t0.47\t11013/181895534\t0.0061\t1.40\t0.72\t0.41\t\t\t\t\t\t\t\t\t\t\t\t\tMicoletzkya japonica\t1250332\t5\t48\tMicoletzkya\t669149\t5\t48\r\ndetection_sample\tbacteria\t165597\tCrocosphaera watsonii WH 8501\tsublevel1\tGCF_000167195\t4\t5\t4\t5\t0.20\t1103/6241353\t0.0177\t1.36\t0.73\t0.00\t\t\t\t\tCrocosphaera watsonii WH 8501\t165597\t4\t5\t\t\t\t\tCrocosphaera watsonii\t263511\t4\t5\tCrocosphaera\t263510\t4\t5\r\ndetection_sample\tbacteria\t1115511\tEscherichia albertii NBRC 107761 = DSM 17582\tsublevel1\tGCF_000759775\t3\t17\t3\t17\t0.94\t4169/4424756\t0.0942\t1.07\t0.93\t0.89\t\t\t\t\tEscherichia albertii NBRC 107761 = DSM 17582\t1115511\t3\t17\t\t\t\t\tEscherichia albertii\t208962\t3\t17\tEscherichia\t561\t1046\t1288\r\ndetection_sample\tbacteria\t2038277\tMethylobacterium frigidaeris\tspecies\tGCF_022179185\t3\t5\t3\t5\t0.15\t503/7913663\t0.0064\t1.49\t0.67\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tMethylobacterium frigidaeris\t2038277\t3\t5\tMethylobacterium\t407\t3\t7\r\ndetection_sample\tbacteria\t441769\tBacillus coahuilensis m4-4\tsublevel1\tGCF_000171615\t3\t4\t3\t4\t0.29\t672/3379408\t0.0199\t1.34\t0.75\t0.00\t\t\t\t\tBacillus coahuilensis m4-4\t441769\t3\t4\t\t\t\t\tBacillus coahuilensis\t408580\t3\t4\tBacillus\t1386\t3\t4\r\ndetection_sample\tbacteria\t1216966\tEdwardsiella hoshinae NBRC 105699 = ATCC 33379\tsublevel1\tGCF_000474215\t3\t4\t3\t4\t0.26\t549/3707698\t0.0148\t1.37\t0.73\t0.00\t\t\t\t\tEdwardsiella hoshinae NBRC 105699 = ATCC 33379\t1216966\t3\t4\t\t\t\t\tEdwardsiella hoshinae\t93378\t3\t4\tEdwardsiella\t635\t3\t4\r\ndetection_sample\tbacteria\t72000\tKocuria rhizophila\tspecies\tGCF_003667225\t3\t4\t3\t4\t0.36\t426/2703476\t0.0158\t2.42\t0.41\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tKocuria rhizophila\t72000\t3\t4\tKocuria\t57493\t3\t4\r\ndetection_sample\tbacteria\t1986155\tStaphylococcus cornubiensis\tspecies\tGCF_900183575\t3\t4\t3\t4\t0.37\t581/2676854\t0.0217\t1.03\t0.97\t0.00\t\t\t\t\t\t\t\t\tStaphylococcus intermedius group\t2815305\t3\t4\tStaphylococcus cornubiensis\t1986155\t3\t4\tStaphylococcus\t1279\t3\t4\r\ndetection_sample\tbacteria\t59406\tAromatoleum evansii\tspecies\tGCF_012910805\t3\t3\t3\t3\t0.12\t324/5942291\t0.0055\t2.78\t0.36\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tAromatoleum evansii\t59406\t3\t3\tAromatoleum\t551759\t3\t4\r\ndetection_sample\tbacteria\t2060068\tChimaeribacter coloradensis\tspecies\tGCF_002858715\t3\t3\t3\t3\t0.16\t219/4687281\t0.0047\t2.05\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tChimaeribacter coloradensis\t2060068\t3\t3\tChimaeribacter\t2716544\t3\t3\r\ndetection_sample\tbacteria\t187304\tRoseibium aggregatum\tspecies\tGCF_014692675\t3\t3\t3\t3\t0.13\t328/5663154\t0.0058\t2.29\t0.44\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tRoseibium aggregatum\t187304\t3\t3\tRoseibium\t150830\t3\t3\r\ndetection_sample\tbacteria\t1914243\tCitrobacter europaeus\tspecies\tGCA_020099315\t2\t2\t2\t2\t0.10\t303/5093523\t0.0059\t1.49\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCitrobacter europaeus\t1914243\t2\t2\tCitrobacter\t544\t4\t5\r\ndetection_sample\tbacteria\t2950104\tFrankia tisae\tspecies\tGCF_025403405\t2\t2\t2\t2\t0.07\t188/7077447\t0.0027\t1.60\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tFrankia tisae\t2950104\t2\t2\tFrankia\t1854\t2\t2\r\ndetection_sample\tbacteria\t2697024\tPusillimonas minor\tspecies\tGCF_014237865\t2\t2\t2\t2\t0.15\t800/3202898\t0.0250\t1.31\t0.76\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tPusillimonas minor\t2697024\t2\t2\tPusillimonas\t305976\t2\t2\r\ndetection_sample\tbacteria\t293958\tRhizobium lusitanum\tspecies\tGCF_010668395\t2\t2\t2\t2\t0.06\t220/7758118\t0.0028\t1.36\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tRhizobium lusitanum\t293958\t2\t2\tRhizobium\t379\t2\t3\r\ndetection_sample\tbacteria\t2799638\tTenebrionibacter intestinalis\tspecies\tGCF_016632365\t2\t2\t2\t2\t0.12\t492/3988153\t0.0123\t1.52\t0.66\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tTenebrionibacter intestinalis\t2799638\t2\t2\tTenebrionibacter\t2918836\t2\t2\r\ndetection_sample\tbacteria\t2493090\tThermomonospora catenispora\tspecies\tGCF_006363815\t2\t2\t2\t2\t0.09\t490/5347384\t0.0092\t1.22\t0.82\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tThermomonospora catenispora\t2493090\t2\t2\tThermomonospora\t2019\t2\t2\r\ndetection_sample\tbacteria\t887465\tActinacidiphila cocklensis\tspecies\tGCA_028657175\t1\t4\t1\t4\t0.11\t512/9195858\t0.0056\t1.17\t0.85\t0.00\t\t\t\t\t\t\t\t\t\t\t\t\tActinacidiphila cocklensis\t887465\t1\t4\tActinacidiphila\t2995702\t1\t4\r\ndetection_sample\tbacteria\t161398\tPseudoalteromonas phenolica\tspecies\tGCF_005886345\t1\t2\t1\t2\t0.11\t247/4568244\t0.0054\t1.21\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPseudoalteromonas phenolica\t161398\t1\t2\tPseudoalteromonas\t53246\t1\t2\r\ndetection_sample\tbacteria\t255519\tAtlantibacter subterraneus\tspecies\tGCF_027853245\t1\t1\t1\t1\t0.05\t271/4776022\t0.0057\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAtlantibacter subterraneus\t255519\t1\t1\tAtlantibacter\t1903434\t1\t1\r\ndetection_sample\tbacteria\t755\tAvibacterium gallinarum\tspecies\tGCF_002921135\t1\t1\t1\t1\t0.10\t300/2346344\t0.0128\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAvibacterium gallinarum\t755\t1\t1\tAvibacterium\t292486\t1\t1\r\ndetection_sample\tbacteria\t196367\tCaballeronia sordidicola\tspecies\tGCF_000729995\t1\t1\t1\t1\t0.02\t150/10264041\t0.0015\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCaballeronia sordidicola\t196367\t1\t1\tCaballeronia\t1827195\t7\t22\r\ndetection_sample\tbacteria\t1639133\tCitrobacter portucalensis\tspecies\tGCF_002042885\t1\t1\t1\t1\t0.05\t450/4916696\t0.0092\t1.00\t\t\t\t\t\t\t\t\t\t\tCitrobacter freundii complex\t1344959\t1\t2\tCitrobacter portucalensis\t1639133\t1\t1\tCitrobacter\t544\t4\t5\r\ndetection_sample\tbacteria\t1218085\tCitrobacter rodentium NBRC 105723 = DSM 16636\tsublevel1\tGCF_021278985\t1\t1\t1\t1\t0.05\t150/5381147\t0.0028\t1.00\t\t\t\t\t\t\tCitrobacter rodentium NBRC 105723 = DSM 16636\t1218085\t1\t1\t\t\t\t\tCitrobacter rodentium\t67825\t1\t1\tCitrobacter\t544\t4\t5\r\ndetection_sample\tbacteria\t2316720\tCorallococcus interemptor\tspecies\tGCF_003668875\t1\t1\t1\t1\t0.03\t150/9476520\t0.0016\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCorallococcus interemptor\t2316720\t1\t1\tCorallococcus\t83461\t1\t3\r\ndetection_sample\tbacteria\t1134687\tKlebsiella michiganensis\tspecies\tGCF_002925905\t1\t1\t1\t1\t0.04\t1050/6193319\t0.0170\t1.00\t1.00\t0.37\t\t\t\t\t\t\t\t\t\t\t\t\tKlebsiella michiganensis\t1134687\t1\t1\tKlebsiella\t570\t8\t11\r\ndetection_sample\tbacteria\t2056810\tMeridianimarinicoccus zhengii\tspecies\tGCF_003254465\t1\t1\t1\t1\t0.05\t300/4599271\t0.0065\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMeridianimarinicoccus zhengii\t2056810\t1\t1\tMeridianimarinicoccus\t2917831\t1\t1\r\ndetection_sample\tbacteria\t515350\tMicromonospora endophytica\tspecies\tGCF_003236305\t1\t1\t1\t1\t0.04\t450/6523752\t0.0069\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMicromonospora endophytica\t515350\t1\t1\tMicromonospora\t1873\t1\t1\r\ndetection_sample\tbacteria\t2815722\tNocardia noduli\tspecies\tGCF_019038455\t1\t1\t1\t1\t0.03\t332/8932372\t0.0037\t1.33\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tNocardia noduli\t2815722\t1\t1\tNocardia\t1817\t1\t1\r\ndetection_sample\tbacteria\t28112\tTannerella forsythia\tspecies\tGCF_001006485\t1\t1\t1\t1\t0.07\t300/3283148\t0.0091\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tTannerella forsythia\t28112\t1\t1\tTannerella\t195950\t1\t1\r\ndetection_sample\tbacteria\t2597270\tAlkalicoccobacillus porphyridii\tspecies\tGCF_007293315\t0\t6\t0\t6\t0.34\t1072/4387235\t0.0244\t1.38\t0.73\t0.61\t\t\t\t\t\t\t\t\t\t\t\t\tAlkalicoccobacillus porphyridii\t2597270\t0\t6\tAlkalicoccobacillus\t2893059\t0\t6\r\ndetection_sample\tbacteria\t1398493\tPseudocitrobacter faecalis\tspecies\tGCA_003315335\t0\t4\t0\t4\t0.19\t904/5155721\t0.0175\t1.16\t0.86\t0.98\t\t\t\t\t\t\t\t\t\t\t\t\tPseudocitrobacter faecalis\t1398493\t0\t4\tPseudocitrobacter\t1504576\t10\t19\r\ndetection_sample\tbacteria\t525255\tAnaerococcus tetradius ATCC 35098\tsublevel1\tGCF_000159095\t0\t2\t0\t2\t0.23\t163/2104384\t0.0077\t1.84\t\t\t\t\t\t\tAnaerococcus tetradius ATCC 35098\t525255\t0\t2\t\t\t\t\tAnaerococcus tetradius\t33036\t0\t2\tAnaerococcus\t165779\t0\t2\r\ndetection_sample\tbacteria\t2316722\tCorallococcus aberystwythensis\tspecies\tGCF_003612165\t0\t2\t0\t2\t0.05\t265/9988076\t0.0027\t1.13\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCorallococcus aberystwythensis\t2316722\t0\t2\tCorallococcus\t83461\t1\t3\r\ndetection_sample\tbacteria\t61645\tEnterobacter asburiae\tspecies\tGCF_001521715\t0\t2\t0\t2\t0.10\t4033/4806259\t0.0839\t1.00\t1.00\t0.97\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter asburiae\t61645\t0\t2\tEnterobacter\t547\t0\t4\r\ndetection_sample\tbacteria\t525245\tGleimia coleocanis DSM 15436\tsublevel1\tGCF_000159015\t0\t2\t0\t2\t0.29\t300/1719736\t0.0174\t1.00\t\t\t\t\t\t\tGleimia coleocanis DSM 15436\t525245\t0\t2\t\t\t\t\tGleimia coleocanis\t103618\t0\t2\tGleimia\t2692113\t0\t2\r\ndetection_sample\tbacteria\t39956\tMethylobacterium mesophilicum\tspecies\tGCF_022179445\t0\t2\t0\t2\t0.08\t450/5904555\t0.0076\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMethylobacterium mesophilicum\t39956\t0\t2\tMethylobacterium\t407\t3\t7\r\ndetection_sample\tbacteria\t67774\tNeorhizobium huautlense\tspecies\tGCF_002968575\t0\t2\t0\t2\t0.09\t300/5727389\t0.0052\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tNeorhizobium huautlense\t67774\t0\t2\tNeorhizobium\t1525371\t0\t2\r\ndetection_sample\tbacteria\t446660\tAdlercreutzia equolifaciens\tspecies\tGCF_029076695\t0\t1\t0\t1\t0.08\t150/3081655\t0.0049\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAdlercreutzia equolifaciens\t446660\t0\t1\tAdlercreutzia\t447020\t0\t1\r\ndetection_sample\tbacteria\t75796\tAromatoleum diolicum\tspecies\tGCF_012910955\t0\t1\t0\t1\t0.05\t150/5147725\t0.0029\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAromatoleum diolicum\t75796\t0\t1\tAromatoleum\t551759\t3\t4\r\ndetection_sample\tbacteria\t2486855\tArthrobacter sulfonylureivorans\tspecies\tGCA_004000035\t0\t1\t0\t1\t0.06\t205/4127296\t0.0050\t2.20\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tArthrobacter sulfonylureivorans\t2486855\t0\t1\tArthrobacter\t1663\t0\t1\r\ndetection_sample\tbacteria\t133448\tCitrobacter youngae\tspecies\tGCF_003818115\t0\t1\t0\t1\t0.05\t433/4820150\t0.0090\t1.00\t\t\t\t\t\t\t\t\t\t\tCitrobacter freundii complex\t1344959\t1\t2\tCitrobacter youngae\t133448\t0\t1\tCitrobacter\t544\t4\t5\r\ndetection_sample\tbacteria\t525263\tCorynebacterium lipophiloflavum DSM 44291\tsublevel1\tGCF_000159635\t0\t1\t0\t1\t0.11\t150/2295513\t0.0065\t1.00\t\t\t\t\t\t\tCorynebacterium lipophiloflavum DSM 44291\t525263\t0\t1\t\t\t\t\tCorynebacterium lipophiloflavum\t161889\t0\t1\tCorynebacterium\t1716\t0\t2\r\ndetection_sample\tbacteria\t525268\tCorynebacterium striatum ATCC 6940\tsublevel1\tGCF_000159135\t0\t1\t0\t1\t0.09\t288/2726038\t0.0106\t1.00\t\t\t\t\t\t\tCorynebacterium striatum ATCC 6940\t525268\t0\t1\t\t\t\t\tCorynebacterium striatum\t43770\t0\t1\tCorynebacterium\t1716\t0\t2\r\ndetection_sample\tbacteria\t1487935\tEnterobacillus tribolii\tspecies\tGCF_003363015\t0\t1\t0\t1\t0.05\t150/4930417\t0.0030\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tEnterobacillus tribolii\t1487935\t0\t1\tEnterobacillus\t1822002\t0\t1\r\ndetection_sample\tbacteria\t716541\tEnterobacter cloacae subsp. cloacae ATCC 13047\tsublevel2\tGCF_000025565\t0\t1\t0\t1\t0.04\t1050/5598816\t0.0188\t1.00\t1.00\t0.54\tEnterobacter cloacae subsp. cloacae ATCC 13047\t716541\t0\t1\tEnterobacter cloacae subsp. cloacae\t336306\t0\t1\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter cloacae\t550\t0\t1\tEnterobacter\t547\t0\t4\r\ndetection_sample\tbacteria\t158836\tEnterobacter hormaechei\tspecies\tGCF_033342915\t0\t1\t0\t1\t0.05\t300/5043987\t0.0059\t1.00\t\t\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter hormaechei\t158836\t0\t1\tEnterobacter\t547\t0\t4\r\ndetection_sample\tbacteria\t2594790\tLacisediminihabitans profunda\tspecies\tGCF_008040105\t0\t1\t0\t1\t0.06\t150/4018280\t0.0037\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tLacisediminihabitans profunda\t2594790\t0\t1\tLacisediminihabitans\t2740558\t0\t1\r\ndetection_sample\tbacteria\t2213161\tModestobacter excelsi\tspecies\tGCF_005930495\t0\t1\t0\t1\t0.05\t150/5257676\t0.0029\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tModestobacter excelsi\t2213161\t0\t1\tModestobacter\t88138\t0\t1\r\ndetection_sample\tbacteria\t933266\tNeisseria sicca 4320\tsublevel1\tGCF_000193735\t0\t1\t0\t1\t0.10\t150/2517771\t0.0060\t1.00\t\t\t\t\t\t\tNeisseria sicca 4320\t933266\t0\t1\t\t\t\t\tNeisseria sicca\t490\t0\t1\tNeisseria\t482\t0\t1\r\ndetection_sample\tbacteria\t587\tProvidencia rettgeri\tspecies\tGCA_900455085\t0\t1\t0\t1\t0.05\t150/4653539\t0.0032\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tProvidencia rettgeri\t587\t0\t1\tProvidencia\t586\t0\t1\r\ndetection_sample\tbacteria\t396\tRhizobium phaseoli\tspecies\tGCF_010668805\t0\t1\t0\t1\t0.04\t150/6612293\t0.0023\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tRhizobium phaseoli\t396\t0\t1\tRhizobium\t379\t2\t3\r\ndetection_sample\tbacteria\t160434\tSamsonia erythrinae\tspecies\tGCF_004342665\t0\t1\t0\t1\t0.06\t150/3879234\t0.0039\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSamsonia erythrinae\t160434\t0\t1\tSamsonia\t160433\t0\t1\r\ndetection_sample\tbacteria\t615\tSerratia marcescens\tspecies\tGCF_001902635\t0\t1\t0\t1\t0.05\t150/5259174\t0.0029\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSerratia marcescens\t615\t0\t1\tSerratia\t613\t0\t1\r\ndetection_sample\tbacteria\t1505757\tSiccibacter colletis\tspecies\tGCF_000696575\t0\t1\t0\t1\t0.06\t150/4255864\t0.0035\t1.01\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSiccibacter colletis\t1505757\t0\t1\tSiccibacter\t1649298\t0\t1\r\ndetection_sample\tbacteria\t2767826\tStreptomyces polyasparticus\tspecies\tGCF_014493765\t0\t1\t0\t1\t0.02\t318/10156909\t0.0031\t1.42\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tStreptomyces polyasparticus\t2767826\t0\t1\tStreptomyces\t1883\t0\t1\r\ndetection_sample\tbacteria\t379893\tTrabulsiella odontotermitis\tspecies\tGCF_030053895\t0\t1\t0\t1\t0.05\t1800/4702262\t0.0383\t1.00\t1.00\t0.98\t\t\t\t\t\t\t\t\t\t\t\t\tTrabulsiella odontotermitis\t379893\t0\t1\tTrabulsiella\t158851\t0\t1\r\ndetection_sample\tbacteria\t2607663\tYersinia canariae\tspecies\tGCF_009831415\t0\t1\t0\t1\t0.05\t150/4710154\t0.0032\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tYersinia canariae\t2607663\t0\t1\tYersinia\t629\t0\t1\r\ndetection_sample\tbacteria\t701347\t[Enterobacter] lignolyticus SCF1\tsublevel1\tGCF_000164865\t0\t1\t0\t1\t0.05\t454/4814049\t0.0094\t1.32\t0.76\t0.51\t\t\t\t\t[Enterobacter] lignolyticus SCF1\t701347\t0\t1\t\t\t\t\t[Enterobacter] lignolyticus\t1334193\t0\t1\tPluralibacter\t1330546\t0\t1\r\ndetection_sample\tbacteria\t656\tAeromonas allosaccharophila\tspecies\tGCF_029024985\t0\t0\t0\t0\t0.00\t150/5493224\t0.0027\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAeromonas allosaccharophila\t656\t0\t0\tAeromonas\t642\t0\t0\r\ndetection_sample\tbacteria\t440079\tAeromonas bivalvium\tspecies\tGCF_000819765\t0\t0\t0\t0\t0.00\t150/4282073\t0.0035\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAeromonas bivalvium\t440079\t0\t0\tAeromonas\t642\t0\t0\r\ndetection_sample\tbacteria\t591962\tAeromonas fluvialis\tspecies\tGCF_000819885\t0\t0\t0\t0\t0.00\t150/3900111\t0.0038\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAeromonas fluvialis\t591962\t0\t0\tAeromonas\t642\t0\t0\r\ndetection_sample\tbacteria\t654\tAeromonas veronii\tspecies\tGCA_041319085\t0\t0\t0\t0\t0.00\t150/4216129\t0.0036\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAeromonas veronii\t654\t0\t0\tAeromonas\t642\t0\t0\r\ndetection_sample\tbacteria\t92002\tAromatoleum toluvorans\tspecies\tGCF_012910905\t0\t0\t0\t0\t0.00\t150/4798756\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tAromatoleum toluvorans\t92002\t0\t0\tAromatoleum\t551759\t3\t4\r\ndetection_sample\tbacteria\t2724944\tArthrobacter mobilis\tspecies\tGCF_012395835\t0\t0\t0\t0\t0.00\t150/4400240\t0.0034\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tArthrobacter mobilis\t2724944\t0\t0\tArthrobacter\t1663\t0\t1\r\ndetection_sample\tbacteria\t273384\tBrevibacterium aurantiacum\tspecies\tGCF_007558825\t0\t0\t0\t0\t0.00\t150/4899542\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tBrevibacterium aurantiacum\t273384\t0\t0\tBrevibacterium\t1696\t0\t0\r\ndetection_sample\tbacteria\t158822\tCedecea neteri\tspecies\tGCF_000757825\t0\t0\t0\t0\t0.00\t150/4876443\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCedecea neteri\t158822\t0\t0\tCedecea\t158483\t0\t0\r\ndetection_sample\tbacteria\t35703\tCitrobacter amalonaticus\tspecies\tGCF_001559075\t0\t0\t0\t0\t0.00\t150/4904719\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCitrobacter amalonaticus\t35703\t0\t0\tCitrobacter\t544\t4\t5\r\ndetection_sample\tbacteria\t1261127\tCitrobacter amalonaticus Y19\tsublevel1\tGCF_000981805\t0\t0\t0\t0\t0.00\t900/5875361\t0.0153\t1.00\t1.00\t0.92\t\t\t\t\tCitrobacter amalonaticus Y19\t1261127\t0\t0\t\t\t\t\tCitrobacter amalonaticus\t35703\t0\t0\tCitrobacter\t544\t4\t5\r\ndetection_sample\tbacteria\t57706\tCitrobacter braakii\tspecies\tGCF_041319885\t0\t0\t0\t0\t0.00\t300/6171899\t0.0049\t1.00\t\t\t\t\t\t\t\t\t\t\tCitrobacter freundii complex\t1344959\t1\t2\tCitrobacter braakii\t57706\t0\t0\tCitrobacter\t544\t4\t5\r\ndetection_sample\tbacteria\t67824\tCitrobacter farmeri\tspecies\tGCF_019048065\t0\t0\t0\t0\t0.00\t150/4964825\t0.0030\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCitrobacter farmeri\t67824\t0\t0\tCitrobacter\t544\t4\t5\r\ndetection_sample\tbacteria\t1006003\tCitrobacter freundii ATCC 8090 = MTCC 1658 = NBRC 12681\tsublevel1\tGCF_011064845\t0\t0\t0\t0\t0.00\t300/4957773\t0.0061\t1.00\t\t\t\t\t\t\tCitrobacter freundii ATCC 8090 = MTCC 1658 = NBRC 12681\t1006003\t0\t0\tCitrobacter freundii complex\t1344959\t1\t2\tCitrobacter freundii\t546\t0\t0\tCitrobacter\t544\t4\t5\r\ndetection_sample\tbacteria\t290338\tCitrobacter koseri ATCC BAA-895\tsublevel1\tGCF_000018045\t0\t0\t0\t0\t0.00\t154/4735377\t0.0033\t1.95\t\t\t\t\t\t\tCitrobacter koseri ATCC BAA-895\t290338\t0\t0\t\t\t\t\tCitrobacter koseri\t545\t0\t0\tCitrobacter\t544\t4\t5\r\ndetection_sample\tbacteria\t1218086\tCitrobacter sedlakii NBRC 105722\tsublevel1\tGCF_000759835\t0\t0\t0\t0\t0.00\t150/4631756\t0.0032\t1.00\t\t\t\t\t\t\tCitrobacter sedlakii NBRC 105722\t1218086\t0\t0\tCitrobacter freundii complex\t1344959\t1\t2\tCitrobacter sedlakii\t67826\t0\t0\tCitrobacter\t544\t4\t5\r\ndetection_sample\tbacteria\t2316736\tCorallococcus exercitus\tspecies\tGCF_003611585\t0\t0\t0\t0\t0.00\t149/10157784\t0.0015\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCorallococcus exercitus\t2316736\t0\t0\tCorallococcus\t83461\t1\t3\r\ndetection_sample\tbacteria\t2686017\tCraterilacuibacter sinensis\tspecies\tGCF_009831765\t0\t0\t0\t0\t0.00\t205/3218710\t0.0064\t2.20\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCraterilacuibacter sinensis\t2686017\t0\t0\tCraterilacuibacter\t2870907\t0\t0\r\ndetection_sample\tbacteria\t28141\tCronobacter sakazakii\tspecies\tGCF_000982825\t0\t0\t0\t0\t0.00\t137/4663595\t0.0029\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCronobacter sakazakii\t28141\t0\t0\tCronobacter\t413496\t0\t0\r\ndetection_sample\tbacteria\t2494701\tEnterobacter chengduensis\tspecies\tGCF_001984825\t0\t0\t0\t0\t0.00\t450/5218135\t0.0086\t1.00\t\t\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter chengduensis\t2494701\t0\t0\tEnterobacter\t547\t0\t4\r\ndetection_sample\tbacteria\t2497875\tEnterobacter chuandaensis\tspecies\tGCF_003594915\t0\t0\t0\t0\t0.00\t150/4634694\t0.0032\t1.00\t\t\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter chuandaensis\t2497875\t0\t0\tEnterobacter\t547\t0\t4\r\ndetection_sample\tbacteria\t888063\tEnterobacter hormaechei ATCC 49162\tsublevel2\tGCF_001875655\t0\t0\t0\t0\t0.00\t1050/4883975\t0.0215\t1.00\t1.00\t0.87\tEnterobacter hormaechei ATCC 49162\t888063\t0\t0\tEnterobacter hormaechei subsp. hormaechei\t301105\t0\t0\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter hormaechei\t158836\t0\t1\tEnterobacter\t547\t0\t4\r\ndetection_sample\tbacteria\t208224\tEnterobacter kobei\tspecies\tGCF_001729765\t0\t0\t0\t0\t0.00\t1950/4927488\t0.0396\t1.00\t1.00\t0.92\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter kobei\t208224\t0\t0\tEnterobacter\t547\t0\t4\r\ndetection_sample\tbacteria\t299767\tEnterobacter ludwigii\tspecies\tGCA_023023105\t0\t0\t0\t0\t0.00\t745/4834794\t0.0154\t1.00\t1.00\t0.00\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter ludwigii\t299767\t0\t0\tEnterobacter\t547\t0\t4\r\ndetection_sample\tbacteria\t3029761\tEnterobacter pasteurii\tspecies\tGCF_028890245\t0\t0\t0\t0\t0.00\t150/4816084\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\tEnterobacter cloacae complex\t354276\t0\t4\tEnterobacter pasteurii\t3029761\t0\t0\tEnterobacter\t547\t0\t4\r\ndetection_sample\tbacteria\t1354263\tHafnia paralvei ATCC 29927\tsublevel1\tGCF_001655005\t0\t0\t0\t0\t0.00\t300/4826970\t0.0062\t1.00\t\t\t\t\t\t\tHafnia paralvei ATCC 29927\t1354263\t0\t0\t\t\t\t\tHafnia paralvei\t546367\t0\t0\tHafnia\t568\t0\t0\r\ndetection_sample\tbacteria\t1349784\tKlebsiella ornithinolytica NBRC 105727 = ATCC 31898\tsublevel1\tGCF_001598295\t0\t0\t0\t0\t0.00\t150/5534270\t0.0027\t1.00\t\t\t\t\t\t\tKlebsiella ornithinolytica NBRC 105727 = ATCC 31898\t1349784\t0\t0\t\t\t\t\tKlebsiella ornithinolytica\t54291\t0\t0\tKlebsiella\t570\t8\t11\r\ndetection_sample\tbacteria\t2026240\tKlebsiella quasivariicola\tspecies\tGCF_002269255\t0\t0\t0\t0\t0.00\t1350/5946736\t0.0227\t1.00\t1.00\t0.48\t\t\t\t\t\t\t\t\tKlebsiella pneumoniae complex\t3390273\t7\t10\tKlebsiella quasivariicola\t2026240\t0\t0\tKlebsiella\t570\t8\t11\r\ndetection_sample\tbacteria\t1218112\tKluyvera cryocrescens NBRC 102467\tsublevel1\tGCF_001571285\t0\t0\t0\t0\t0.00\t604/5045663\t0.0120\t1.24\t0.81\t0.00\t\t\t\t\tKluyvera cryocrescens NBRC 102467\t1218112\t0\t0\t\t\t\t\tKluyvera cryocrescens\t580\t0\t0\tKluyvera\t579\t0\t0\r\ndetection_sample\tbacteria\t1354264\tKluyvera georgiana ATCC 51603\tsublevel1\tGCF_001654985\t0\t0\t0\t0\t0.00\t150/5070604\t0.0030\t1.00\t\t\t\t\t\t\tKluyvera georgiana ATCC 51603\t1354264\t0\t0\t\t\t\t\tKluyvera georgiana\t73098\t0\t0\tKluyvera\t579\t0\t0\r\ndetection_sample\tbacteria\t61648\tKluyvera intermedia\tspecies\tGCF_021440345\t0\t0\t0\t0\t0.00\t304/4749628\t0.0064\t1.48\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tKluyvera intermedia\t61648\t0\t0\tKluyvera\t579\t0\t0\r\ndetection_sample\tbacteria\t1005667\tKosakonia oryziphila\tspecies\tGCF_900094795\t0\t0\t0\t0\t0.00\t150/4812395\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tKosakonia oryziphila\t1005667\t0\t0\tKosakonia\t1330547\t0\t0\r\ndetection_sample\tbacteria\t1177180\tKosakonia radicincitans DSM 16656\tsublevel1\tGCF_000280495\t0\t0\t0\t0\t0.00\t150/6122473\t0.0024\t1.00\t\t\t\t\t\t\tKosakonia radicincitans DSM 16656\t1177180\t0\t0\t\t\t\t\tKosakonia radicincitans\t283686\t0\t0\tKosakonia\t1330547\t0\t0\r\ndetection_sample\tbacteria\t2100822\tKushneria phyllosphaerae\tspecies\tGCF_900312995\t0\t0\t0\t0\t0.00\t131/3764098\t0.0035\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tKushneria phyllosphaerae\t2100822\t0\t0\tKushneria\t504090\t0\t0\r\ndetection_sample\tbacteria\t765909\tLamprocystis purpurea DSM 4197\tsublevel1\tGCF_000379525\t0\t0\t0\t0\t0.00\t150/6905110\t0.0022\t1.00\t\t\t\t\t\t\tLamprocystis purpurea DSM 4197\t765909\t0\t0\t\t\t\t\tLamprocystis purpurea\t61598\t0\t0\tLamprocystis\t53452\t0\t0\r\ndetection_sample\tbacteria\t83655\tLeclercia adecarboxylata\tspecies\tGCF_006171285\t0\t0\t0\t0\t0.00\t450/5764539\t0.0078\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tLeclercia adecarboxylata\t83655\t0\t0\tLeclercia\t83654\t0\t0\r\ndetection_sample\tbacteria\t2951405\tMethylocystis suflitae\tspecies\tGCF_024448135\t0\t0\t0\t0\t0.00\t150/3823387\t0.0039\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMethylocystis suflitae\t2951405\t0\t0\tMethylocystis\t133\t0\t0\r\ndetection_sample\tbacteria\t33917\tMicrobacterium barkeri\tspecies\tGCF_027921765\t0\t0\t0\t0\t0.00\t150/3507141\t0.0043\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMicrobacterium barkeri\t33917\t0\t0\tMicrobacterium\t33882\t0\t0\r\ndetection_sample\tbacteria\t284570\tMicrobacterium natoriense\tspecies\tGCF_039527915\t0\t0\t0\t0\t0.00\t150/3922524\t0.0038\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMicrobacterium natoriense\t284570\t0\t0\tMicrobacterium\t33882\t0\t0\r\ndetection_sample\tbacteria\t2562439\tMixta tenebrionis\tspecies\tGCF_006517625\t0\t0\t0\t0\t0.00\t150/4656195\t0.0032\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tMixta tenebrionis\t2562439\t0\t0\tMixta\t2100764\t0\t0\r\ndetection_sample\tbacteria\t82983\tObesumbacterium proteus\tspecies\tGCF_001586165\t0\t0\t0\t0\t0.00\t900/5011796\t0.0180\t1.00\t1.00\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\tObesumbacterium proteus\t82983\t0\t0\tObesumbacterium\t82982\t0\t0\r\ndetection_sample\tbacteria\t494023\tPaeniglutamicibacter antarcticus\tspecies\tGCA_900010755\t0\t0\t0\t0\t0.00\t150/4434773\t0.0034\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPaeniglutamicibacter antarcticus\t494023\t0\t0\tPaeniglutamicibacter\t1742990\t0\t0\r\ndetection_sample\tbacteria\t59814\tPantoea dispersa\tspecies\tGCF_014155765\t0\t0\t0\t0\t0.00\t150/4922294\t0.0030\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPantoea dispersa\t59814\t0\t0\tPantoea\t53335\t0\t0\r\ndetection_sample\tbacteria\t2364647\tPantoea piersonii\tspecies\tGCF_003612015\t0\t0\t0\t0\t0.00\t150/4852091\t0.0031\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPantoea piersonii\t2364647\t0\t0\tPantoea\t53335\t0\t0\r\ndetection_sample\tbacteria\t1851568\tPhotorhabdus namnaonensis\tspecies\tGCF_001684335\t0\t0\t0\t0\t0.00\t150/5419286\t0.0028\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPhotorhabdus namnaonensis\t1851568\t0\t0\tPhotorhabdus\t29487\t0\t0\r\ndetection_sample\tbacteria\t3034157\tPollutibacter soli\tspecies\tGCF_029269725\t0\t0\t0\t0\t0.00\t150/6117423\t0.0025\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPollutibacter soli\t3034157\t0\t0\tPollutibacter\t3132307\t0\t0\r\ndetection_sample\tbacteria\t585\tProteus vulgaris\tspecies\tGCF_011045815\t0\t0\t0\t0\t0.00\t150/4612025\t0.0033\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tProteus vulgaris\t585\t0\t0\tProteus\t583\t0\t0\r\ndetection_sample\tbacteria\t2518973\tPseudoalteromonas rhizosphaerae\tspecies\tGCF_902498845\t0\t0\t0\t0\t0.00\t150/5265908\t0.0028\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPseudoalteromonas rhizosphaerae\t2518973\t0\t0\tPseudoalteromonas\t53246\t1\t2\r\ndetection_sample\tbacteria\t2488306\tPseudocitrobacter vendiensis\tspecies\tGCF_943590815\t0\t0\t0\t0\t0.00\t900/5400633\t0.0167\t1.00\t1.00\t0.92\t\t\t\t\t\t\t\t\t\t\t\t\tPseudocitrobacter vendiensis\t2488306\t0\t0\tPseudocitrobacter\t1504576\t10\t19\r\ndetection_sample\tbacteria\t1839807\tRappaport israeli\tspecies\tGCF_001888055\t0\t0\t0\t0\t0.00\t150/1751410\t0.0086\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tRappaport israeli\t1839807\t0\t0\tRappaport\t1955421\t0\t0\r\ndetection_sample\tbacteria\t218493\tSalmonella bongori NCTC 12419\tsublevel1\tGCF_000252995\t0\t0\t0\t0\t0.00\t300/4460105\t0.0067\t1.00\t\t\t\t\t\t\tSalmonella bongori NCTC 12419\t218493\t0\t0\t\t\t\t\tSalmonella bongori\t54736\t0\t0\tSalmonella\t590\t0\t0\r\ndetection_sample\tbacteria\t59204\tSalmonella enterica subsp. diarizonae\tsublevel1\tGCF_008692785\t0\t0\t0\t0\t0.00\t300/4930077\t0.0061\t1.00\t\t\t\t\t\t\tSalmonella enterica subsp. diarizonae\t59204\t0\t0\t\t\t\t\tSalmonella enterica\t28901\t0\t0\tSalmonella\t590\t0\t0\r\ndetection_sample\tbacteria\t99287\tSalmonella enterica subsp. enterica serovar Typhimurium\tsublevel2\tGCF_000006945\t0\t0\t0\t0\t0.00\t150/4951393\t0.0030\t1.00\t\t\tSalmonella enterica subsp. enterica serovar Typhimurium\t90371\t0\t0\tSalmonella enterica subsp. enterica\t59201\t0\t0\t\t\t\t\tSalmonella enterica\t28901\t0\t0\tSalmonella\t590\t0\t0\r\ndetection_sample\tbacteria\t2577858\tSalmonella enterica subsp. salamae serovar 56:b:[1,5]\tsublevel2\tGCF_003324815\t0\t0\t0\t0\t0.00\t150/5155431\t0.0029\t1.00\t\t\tSalmonella enterica subsp. salamae serovar 56:b:[1,5]\t2577858\t0\t0\tSalmonella enterica subsp. salamae\t59202\t0\t0\t\t\t\t\tSalmonella enterica\t28901\t0\t0\tSalmonella\t590\t0\t0\r\ndetection_sample\tbacteria\t2926520\tScandinavium manionii\tspecies\tGCF_024764775\t0\t0\t0\t0\t0.00\t140/4650132\t0.0030\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tScandinavium manionii\t2926520\t0\t0\tScandinavium\t2726810\t0\t0\r\ndetection_sample\tbacteria\t640633\tShewanella algicola\tspecies\tGCF_014648035\t0\t0\t0\t0\t0.00\t150/4939980\t0.0030\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tShewanella algicola\t640633\t0\t0\tShewanella\t22\t0\t0\r\ndetection_sample\tbacteria\t1239307\tSodalis praecaptivus\tspecies\tGCF_000517425\t0\t0\t0\t0\t0.00\t150/5159435\t0.0029\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSodalis praecaptivus\t1239307\t0\t0\tSodalis\t84565\t0\t0\r\ndetection_sample\tbacteria\t2303576\tSphingomonas mesophila\tspecies\tGCF_003499275\t0\t0\t0\t0\t0.00\t205/2291471\t0.0089\t2.20\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSphingomonas mesophila\t2303576\t0\t0\tSphingomonas\t13687\t0\t0\r\ndetection_sample\tbacteria\t68193\tStreptomyces djakartensis\tspecies\tGCF_041028145\t0\t0\t0\t0\t0.00\t140/7750742\t0.0018\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tStreptomyces djakartensis\t68193\t0\t0\tStreptomyces\t1883\t0\t1\r\ndetection_sample\tbacteria\t1970\tStreptomyces morookaense\tspecies\tGCF_013030945\t0\t0\t0\t0\t0.00\t150/7471796\t0.0020\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tStreptomyces morookaense\t1970\t0\t0\tStreptomyces\t1883\t0\t1\r\ndetection_sample\tbacteria\t2022662\tSuperficieibacter electus\tspecies\tGCF_002915575\t0\t0\t0\t0\t0.00\t150/5681027\t0.0026\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tSuperficieibacter electus\t2022662\t0\t0\tSuperficieibacter\t2303321\t0\t0\r\ndetection_sample\tbacteria\t2726741\tVibrio agarilyticus\tspecies\tGCF_012641465\t0\t0\t0\t0\t0.00\t150/4353152\t0.0034\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tVibrio agarilyticus\t2726741\t0\t0\tVibrio\t662\t0\t0\r\ndetection_sample\tbacteria\t2890315\tYersinia artesiana\tspecies\tGCF_902726545\t0\t0\t0\t0\t0.00\t150/4408420\t0.0034\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tYersinia artesiana\t2890315\t0\t0\tYersinia\t629\t0\t1\r\ndetection_sample\tparasite\t1317128\tPristionchus maxplancki\tspecies\tGCA_900490775.1\t0\t4\t0\t4\t0.03\t917/223407312\t0.0004\t1.12\t0.89\t0.72\t\t\t\t\t\t\t\t\t\t\t\t\tPristionchus maxplancki\t1317128\t0\t4\tPristionchus\t54125\t0\t4\r\ndetection_sample\tparasite\t5866\tBabesia bigemina\tspecies\tGCA_000981445.1\t0\t1\t0\t1\t0.13\t450/13845756\t0.0033\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tBabesia bigemina\t5866\t0\t1\tBabesia\t5864\t0\t1\r\ndetection_sample\tparasite\t40348\tStrongylus vulgaris\tspecies\tGCA_900624965.1\t0\t1\t0\t1\t0.01\t2353/269442212\t0.0009\t1.08\t0.92\t0.79\t\t\t\t\t\t\t\t\t\t\t\t\tStrongylus vulgaris\t40348\t0\t1\tStrongylus\t40345\t0\t1\r\ndetection_sample\tparasite\t2777116\tCaenorhabditis auriculariae\tspecies\tGCA_904845305.1\t0\t0\t0\t0\t0.00\t287/109586468\t0.0003\t1.02\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tCaenorhabditis auriculariae\t2777116\t0\t0\tCaenorhabditis\t6237\t0\t0\r\ndetection_sample\tvirus\t3052230\tHepacivirus hominis\tspecies\tCS131702.1\t0\t1\t0\t1\t100.00\t300/6710\t4.47\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tHepacivirus hominis\t3052230\t0\t1\tHepacivirus\t11102\t0\t1\r\ndetection_sample\tvirus\t3418650\tLentivirus humimdef1\tspecies\tCS793684.1\t0\t0\t0\t0\t0.00\t300/14226\t2.11\t1.00\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tLentivirus humimdef1\t3418650\t0\t0\tLentivirus\t11646\t0\t0\r\n"
+      },
+      {
+        "path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/2/sample_overview.tsv",
+        "text": "SampleId\tMappedMicrobeReads\tMappedBacteriaReads\tMappedFungiReads\tMappedParasiteReads\tMappedVirusReads\ndetection_sample\t8402\t1453\t0\t6948\t1\n"
+      },
+      {
+        "path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/3/stage2_read_accounting.tsv",
+        "text": "Domain\tRetainedReadUnits\tRetainedPrimaryAlignments\tRetainedSecondaryAlignments\tDroppedTie\tDroppedLowerScoreDb\tDroppedHotspot\tDroppedMissingPrimary\nbacteria\t1453\t2847\t5193\t6927\t13056\t0\t0\nfungi\t0\t0\t0\t262\t131\t0\t0\nparasite\t6948\t13245\t3358\t6707\t1797\t0\t0\nvirus\t1\t2\t2\t82\t16\t0\t0\n"
+      },
+      {
+        "path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/4/stage2_crossdb_signature.tsv",
+        "text": "read_id\tdb\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/7bb1a15ee2da436bb8fbb4a6603c692d/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "roundtrip": {
+    "push": {
+      "transfer_id": "033a68683e3a44829d493317a4da0b37",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "metagenomic_pathogen_identification_files",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "c6e68d515d973343ab427b81155ac7a6"
+        },
+        "receipt_id": "033a68683e3a44829d493317a4da0b37",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+            "files_delivered": true,
+            "generic_import": {
+              "access": "Search or pull the attached sample files; native records are a separate outcome.",
+              "artifact_count": 5,
+              "state": "imported"
+            },
+            "pipeline": "metagenomic_pathogen_identification",
+            "format": "MetagenomicDetection",
+            "state": "unsupported",
+            "message": "MSCAN has no registered importer for this result format; files remain available."
+          }
+        ],
+        "files": [
+          {
+            "name": "6b4deb1ee347423eaa81d0db46254583_benign_R1.fastq.gz",
+            "source_path": "uploads/6b4deb1ee347423eaa81d0db46254583_benign_R1.fastq.gz",
+            "id": "f97815cfc4df807ed4d67eda37acbd127a8d7853dac570b0173116b9ccf99c33",
+            "size": 606829,
+            "sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "75687354e21f4d24a245cda65f66e532_benign_R2.fastq.gz",
+            "source_path": "uploads/75687354e21f4d24a245cda65f66e532_benign_R2.fastq.gz",
+            "id": "33242a7cc8a14efc6e9e2b2433029d356a92e37bd70c86cc8218cd8eb5e22550",
+            "size": 606829,
+            "sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/7bb1a15ee2da436bb8fbb4a6603c692d/results.zip",
+            "id": "37ad5669bbcd7a83c38ebe551b331ed6e0e4ca5eec7090cea4a290b2a6882905",
+            "size": 17426,
+            "sha256": "f7341bda3e9f4bbb85e77360c3c03c7e7bff47ba580efb3f6074fdf8e3f76b80",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "size": 30734,
+            "sha256": "d6dc567f10c446e26fdace53a07a23fb9f72e24b6a7867676dcbe8b561b13d98",
+            "name": "priority_with_confidence.tsv",
+            "source_path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/0/priority_with_confidence.tsv",
+            "id": "c5cfd521ed7f9be61f3dd45d4a019c1f8ab77ea87fdad4a363db7446a284e25f",
+            "pipeline_result": {
+              "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+              "pipeline_name": "metagenomic_pathogen_identification",
+              "output_key": "MetagenomicDetection.final_report_with_confidence",
+              "output_name": "final_report",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T03:04:30.168845+00:00"
+            },
+            "content": {
+              "preview": "SampleId\tCategory\tTaxonID\tTaxonName\tTaxonRank\tAssembly\tRefSMRN\tRefMRN\tTaxonSMRN\tTaxonMRN\tRelativeAbundance\tBreadth\tBreadthPct\tDepth\tObservedExpectedBreadthRatio\tShannonEntropy\tSubRank2\tSubRank2_ID\tSubRank2SMRN\tSubRank2MRN\tSubRank1\tSubRank1_ID\tSubRank1SMRN\tSubRank1MRN\tSpeciesGroup\tSpeciesGroup_ID\tSpeciesGroupSMRN\tSpeciesGroupMRN\tSpecies\tSpecies_ID\tSpeciesSMRN\tSpeciesMRN\tGenus\tGenus_ID\tGenusSMRN\tGenusMRN\tConfidence\r\ndetection_sample\tparasite\t6269\tAnisakis simplex\tspecies\tGCA_900576815.1\t5286\t5579\t5286\t5579\t68.56\t1353029/144170987\t0.9385\t1.33\t0.76\t0.67\t\t\t\t\t\t\t\t\t\t\t\t\tAnisakis simplex\t6269\t5286\t5579\tAnisakis\t6268\t5286\t5579\t0\r\ndetection_sample\tbacteria\t562\tEscherichia coli\tspecies\tGCF_036503815\t198\t282\t738\t943\t44.45\t95569/5199666\t1.84\t1.17\t0.86\t0.97\t\t\t\t\t\t\t\t\t\t\t\t\tEscherichia coli\t562\t738\t943\tEscherichia\t561\t1046\t1288\t1\r\ndetection_sample\tbacteria\t866789\tEscherichia coli DSM 30083 = JCM 1649 = ATCC 11775\tsublevel1\tGCF_003697165\t430\t593\t430\t593\t28.87\t157765/5034844\t3.13\t1.16\t0.87\t0.98\t\t\t\t\tEscherichia coli DSM 30083 = JCM …",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 30437,
+            "sha256": "b9d443ad371657920e97a5bf1b91fb67550d63de443f2060ae9c56a6c98142ba",
+            "name": "priority_microbe_panel.tsv",
+            "source_path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/1/priority_microbe_panel.tsv",
+            "id": "948ae84e95e1a05d8e69808573d9d1af7c83d3e9f8b709bc1875884b23ff6965",
+            "pipeline_result": {
+              "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+              "pipeline_name": "metagenomic_pathogen_identification",
+              "output_key": "MetagenomicDetection.stage5_priority_panel",
+              "output_name": "priority_panel",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T03:04:30.168845+00:00"
+            },
+            "content": {
+              "preview": "SampleId\tCategory\tTaxonID\tTaxonName\tTaxonRank\tAssembly\tRefSMRN\tRefMRN\tTaxonSMRN\tTaxonMRN\tRelativeAbundance\tBreadth\tBreadthPct\tDepth\tObservedExpectedBreadthRatio\tShannonEntropy\tSubRank2\tSubRank2_ID\tSubRank2SMRN\tSubRank2MRN\tSubRank1\tSubRank1_ID\tSubRank1SMRN\tSubRank1MRN\tSpeciesGroup\tSpeciesGroup_ID\tSpeciesGroupSMRN\tSpeciesGroupMRN\tSpecies\tSpecies_ID\tSpeciesSMRN\tSpeciesMRN\tGenus\tGenus_ID\tGenusSMRN\tGenusMRN\r\ndetection_sample\tparasite\t6269\tAnisakis simplex\tspecies\tGCA_900576815.1\t5286\t5579\t5286\t5579\t68.56\t1353029/144170987\t0.9385\t1.33\t0.76\t0.67\t\t\t\t\t\t\t\t\t\t\t\t\tAnisakis simplex\t6269\t5286\t5579\tAnisakis\t6268\t5286\t5579\r\ndetection_sample\tbacteria\t562\tEscherichia coli\tspecies\tGCF_036503815\t198\t282\t738\t943\t44.45\t95569/5199666\t1.84\t1.17\t0.86\t0.97\t\t\t\t\t\t\t\t\t\t\t\t\tEscherichia coli\t562\t738\t943\tEscherichia\t561\t1046\t1288\r\ndetection_sample\tbacteria\t866789\tEscherichia coli DSM 30083 = JCM 1649 = ATCC 11775\tsublevel1\tGCF_003697165\t430\t593\t430\t593\t28.87\t157765/5034844\t3.13\t1.16\t0.87\t0.98\t\t\t\t\tEscherichia coli DSM 30083 = JCM 1649 = ATCC 117…",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 138,
+            "sha256": "c155eddecffec26f67b4f55773164f0f1374450188a34c290775702cf49a3f84",
+            "name": "sample_overview.tsv",
+            "source_path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/2/sample_overview.tsv",
+            "id": "d897d01fd72a9f75a0b1a0de90374040bcbe0331b8b48c534f271f336eb2088e",
+            "pipeline_result": {
+              "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+              "pipeline_name": "metagenomic_pathogen_identification",
+              "output_key": "MetagenomicDetection.sample_overview",
+              "output_name": "sample_overview",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T03:04:30.168845+00:00"
+            },
+            "content": {
+              "preview_rows": [
+                [
+                  "detection_sample",
+                  "8402",
+                  "1453",
+                  "0",
+                  "6948",
+                  "1"
+                ]
+              ],
+              "columns": [
+                "SampleId",
+                "MappedMicrobeReads",
+                "MappedBacteriaReads",
+                "MappedFungiReads",
+                "MappedParasiteReads",
+                "MappedVirusReads"
+              ],
+              "delimiter": "tab",
+              "preview_only": true,
+              "preview_available": true,
+              "kind": "table"
+            }
+          },
+          {
+            "size": 271,
+            "sha256": "a7f295464e2acfd591937cb9221f43370856cb9af808311883841daf1f2283e9",
+            "name": "stage2_read_accounting.tsv",
+            "source_path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/3/stage2_read_accounting.tsv",
+            "id": "b798a8fd27ef9ec2c27a50b2efa09e974d4ea5ee2fc9b693586a1ecf51271d4c",
+            "pipeline_result": {
+              "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+              "pipeline_name": "metagenomic_pathogen_identification",
+              "output_key": "MetagenomicDetection.stage2_read_accounting",
+              "output_name": "read_accounting",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T03:04:30.168845+00:00"
+            },
+            "content": {
+              "preview_rows": [
+                [
+                  "bacteria",
+                  "1453",
+                  "2847",
+                  "5193",
+                  "6927",
+                  "13056",
+                  "0",
+                  "0"
+                ],
+                [
+                  "fungi",
+                  "0",
+                  "0",
+                  "0",
+                  "262",
+                  "131",
+                  "0",
+                  "0"
+                ],
+                [
+                  "parasite",
+                  "6948",
+                  "13245",
+                  "3358",
+                  "6707",
+                  "1797",
+                  "0",
+                  "0"
+                ]
+              ],
+              "columns": [
+                "Domain",
+                "RetainedReadUnits",
+                "RetainedPrimaryAlignments",
+                "RetainedSecondaryAlignments",
+                "DroppedTie",
+                "DroppedLowerScoreDb",
+                "DroppedHotspot",
+                "DroppedMissingPrimary"
+              ],
+              "delimiter": "tab",
+              "preview_only": true,
+              "preview_available": true,
+              "kind": "table"
+            }
+          },
+          {
+            "size": 11,
+            "sha256": "98388c26898b45e85e8287305386120c3a4b24be9f9a4f9fdfff9e8af86a4362",
+            "name": "stage2_crossdb_signature.tsv",
+            "source_path": "pipeline-artifacts/7bb1a15ee2da436bb8fbb4a6603c692d/4/stage2_crossdb_signature.tsv",
+            "id": "01c7a1efebcf618c4e48e842d1b33610b50593989142627392c99f9d13365ce7",
+            "pipeline_result": {
+              "job_id": "7bb1a15ee2da436bb8fbb4a6603c692d",
+              "pipeline_name": "metagenomic_pathogen_identification",
+              "output_key": "MetagenomicDetection.stage2_crossdb_signature",
+              "output_name": "crossdb_signature",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T03:04:30.168845+00:00"
+            },
+            "content": {
+              "preview": "read_id\tdb\n",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          }
+        ],
+        "native_qc_applied": false,
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R2": "5c3ea45f37573965a7e8ab34a9da61d5",
+            "R1": "f9a38bd3c6ce33238d586c3023682e5b"
+          },
+          "status": "registered"
+        }
+      }
+    },
+    "files": [
+      {
+        "name": "stage2_crossdb_signature.tsv",
+        "resource_id": "result:033a68683e3a44829d493317a4da0b37:01c7a1efebcf618c4e48e842d1b33610b50593989142627392c99f9d13365ce7",
+        "state": "succeeded",
+        "expected_sha256": "98388c26898b45e85e8287305386120c3a4b24be9f9a4f9fdfff9e8af86a4362",
+        "bytes": 11,
+        "sha256": "98388c26898b45e85e8287305386120c3a4b24be9f9a4f9fdfff9e8af86a4362",
+        "matches": true
+      },
+      {
+        "name": "75687354e21f4d24a245cda65f66e532_benign_R2.fastq.gz",
+        "resource_id": "result:033a68683e3a44829d493317a4da0b37:33242a7cc8a14efc6e9e2b2433029d356a92e37bd70c86cc8218cd8eb5e22550",
+        "state": "succeeded",
+        "expected_sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+        "bytes": 606829,
+        "sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+        "matches": true
+      },
+      {
+        "name": "results.zip",
+        "resource_id": "result:033a68683e3a44829d493317a4da0b37:37ad5669bbcd7a83c38ebe551b331ed6e0e4ca5eec7090cea4a290b2a6882905",
+        "state": "succeeded",
+        "expected_sha256": "f7341bda3e9f4bbb85e77360c3c03c7e7bff47ba580efb3f6074fdf8e3f76b80",
+        "bytes": 17426,
+        "sha256": "f7341bda3e9f4bbb85e77360c3c03c7e7bff47ba580efb3f6074fdf8e3f76b80",
+        "matches": true
+      },
+      {
+        "name": "priority_microbe_panel.tsv",
+        "resource_id": "result:033a68683e3a44829d493317a4da0b37:948ae84e95e1a05d8e69808573d9d1af7c83d3e9f8b709bc1875884b23ff6965",
+        "state": "succeeded",
+        "expected_sha256": "b9d443ad371657920e97a5bf1b91fb67550d63de443f2060ae9c56a6c98142ba",
+        "bytes": 30437,
+        "sha256": "b9d443ad371657920e97a5bf1b91fb67550d63de443f2060ae9c56a6c98142ba",
+        "matches": true
+      },
+      {
+        "name": "stage2_read_accounting.tsv",
+        "resource_id": "result:033a68683e3a44829d493317a4da0b37:b798a8fd27ef9ec2c27a50b2efa09e974d4ea5ee2fc9b693586a1ecf51271d4c",
+        "state": "succeeded",
+        "expected_sha256": "a7f295464e2acfd591937cb9221f43370856cb9af808311883841daf1f2283e9",
+        "bytes": 271,
+        "sha256": "a7f295464e2acfd591937cb9221f43370856cb9af808311883841daf1f2283e9",
+        "matches": true
+      },
+      {
+        "name": "priority_with_confidence.tsv",
+        "resource_id": "result:033a68683e3a44829d493317a4da0b37:c5cfd521ed7f9be61f3dd45d4a019c1f8ab77ea87fdad4a363db7446a284e25f",
+        "state": "succeeded",
+        "expected_sha256": "d6dc567f10c446e26fdace53a07a23fb9f72e24b6a7867676dcbe8b561b13d98",
+        "bytes": 30734,
+        "sha256": "d6dc567f10c446e26fdace53a07a23fb9f72e24b6a7867676dcbe8b561b13d98",
+        "matches": true
+      },
+      {
+        "name": "sample_overview.tsv",
+        "resource_id": "result:033a68683e3a44829d493317a4da0b37:d897d01fd72a9f75a0b1a0de90374040bcbe0331b8b48c534f271f336eb2088e",
+        "state": "succeeded",
+        "expected_sha256": "c155eddecffec26f67b4f55773164f0f1374450188a34c290775702cf49a3f84",
+        "bytes": 138,
+        "sha256": "c155eddecffec26f67b4f55773164f0f1374450188a34c290775702cf49a3f84",
+        "matches": true
+      },
+      {
+        "name": "6b4deb1ee347423eaa81d0db46254583_benign_R1.fastq.gz",
+        "resource_id": "result:033a68683e3a44829d493317a4da0b37:f97815cfc4df807ed4d67eda37acbd127a8d7853dac570b0173116b9ccf99c33",
+        "state": "succeeded",
+        "expected_sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+        "bytes": 606829,
+        "sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+        "matches": true
+      }
+    ],
+    "search_state": "succeeded",
+    "matched_all": true,
+    "native_exports": [
+      {
+        "resource_id": "result:033a68683e3a44829d493317a4da0b37:01c7a1efebcf618c4e48e842d1b33610b50593989142627392c99f9d13365ce7",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 11,
+        "sha256": "98388c26898b45e85e8287305386120c3a4b24be9f9a4f9fdfff9e8af86a4362"
+      },
+      {
+        "resource_id": "result:033a68683e3a44829d493317a4da0b37:33242a7cc8a14efc6e9e2b2433029d356a92e37bd70c86cc8218cd8eb5e22550",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 606829,
+        "sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7"
+      },
+      {
+        "resource_id": "result:033a68683e3a44829d493317a4da0b37:37ad5669bbcd7a83c38ebe551b331ed6e0e4ca5eec7090cea4a290b2a6882905",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 17426,
+        "sha256": "f7341bda3e9f4bbb85e77360c3c03c7e7bff47ba580efb3f6074fdf8e3f76b80"
+      },
+      {
+        "resource_id": "result:033a68683e3a44829d493317a4da0b37:948ae84e95e1a05d8e69808573d9d1af7c83d3e9f8b709bc1875884b23ff6965",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 30437,
+        "sha256": "b9d443ad371657920e97a5bf1b91fb67550d63de443f2060ae9c56a6c98142ba"
+      }
+    ]
+  },
+  "result_sync": {
+    "tool_response": {
+      "status": "ok",
+      "data": {
+        "value": {
+          "transfer_id": "871a407c1a594156a0a02c79b359b7a0",
+          "site_id": "mscan",
+          "operation": "result_sync",
+          "state": "failed",
+          "result": {
+            "retryable": true,
+            "error_code": "native_import_failed",
+            "error": "ResultSyncException: MSCAN native parser failed for pipeline metagenomic_pathogen_identification: detection workflow outputs 缺少 depth_track_archives"
+          }
+        }
+      },
+      "files": [],
+      "evidence": [],
+      "error": null
+    },
+    "transfer": {
+      "transfer_id": "871a407c1a594156a0a02c79b359b7a0",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "failed",
+      "result": {
+        "retryable": true,
+        "error_code": "native_import_failed",
+        "error": "ResultSyncException: MSCAN native parser failed for pipeline metagenomic_pathogen_identification: detection workflow outputs 缺少 depth_track_archives"
+      }
+    }
+  },
+  "elapsed_seconds": 783.8,
+  "finished": true
+}

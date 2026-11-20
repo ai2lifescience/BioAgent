@@ -1,11 +1,15 @@
 import { useEffect, useState, type ImgHTMLAttributes } from 'react';
+import { applicationUrl } from '../../applicationUrl';
 
 /** Native img requests cannot attach an embedded session's in-memory credential. */
 export function AuthenticatedImage({ src = '', ...props }: ImgHTMLAttributes<HTMLImageElement>) {
   const [loaded, setLoaded] = useState('');
   const [failed, setFailed] = useState(false);
   let owned = false;
-  try { const local = new URL(src || '#', window.location.href); owned = local.origin === window.location.origin && local.pathname === '/workspace/file'; }
+  try {
+    const local = new URL(src || '#', window.location.href);
+    owned = local.origin === window.location.origin && local.pathname === new URL(applicationUrl('workspace/file')).pathname;
+  }
   catch { /* Invalid URLs render as unavailable images, never break the chat. */ }
   useEffect(() => {
     if (!owned) return;

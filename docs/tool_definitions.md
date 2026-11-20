@@ -25,10 +25,10 @@ tools/function_tools/__init__.py
   -> FUNCTION_TOOLS
 tools/agent_tools/registry.py
   -> specialist Agent.as_tool tools
+tools/agent_tools/specialist/pipeline/
+  -> pipeline_specialist owns pipeline_shell
 tools/hosted_tools/__init__.py
   -> HOSTED_TOOLS
-tools/infrastructure/sdk_adapters
-  -> RUNTIME_TOOLS, including pipeline_shell
 tools/registry.py
   -> build_all_tools(model)
 harness/agent.py
@@ -235,7 +235,7 @@ Current specialists are:
 | Specialist | Tool composition |
 | --- | --- |
 | research_specialist | Sources, database lookup, evidence, knowledge, report review/synthesis, report writing |
-| pipeline_specialist | pipeline_shell |
+| pipeline_specialist | autograph_specialist, pipeline_shell |
 | document_specialist | Workspace search, document reading, file inspection |
 | data_analysis_specialist | Table tools, file inspection, workspace search |
 | coding_specialist | Code inspection, editing, tests, and approved Python execution |
@@ -251,14 +251,31 @@ Specialists receive a typed task containing the goal, known inputs, constraints,
 and expected output. They do not automatically receive the full conversation.
 The shared result extractor returns a summary and workspace-relative paths.
 
-## Runtime ShellTool: pipeline_shell
+## Pipeline specialist
 
-pipeline_shell is the only current runtime ShellTool. It does not expose
-arbitrary shell commands. Its input is exactly one allowlisted
-agent-pipeline command.
+The main agent delegates pipeline requests to `pipeline_specialist`. Its
+`pipeline_shell` tool takes one allowlisted `agent-pipeline` command per call.
+
+For a new combined analysis, the coordinator calls its internal
+`autograph_specialist` agent. The planner reads complete installed contracts
+through `autograph_catalog` and owned file metadata through `autograph_files`.
+Full contracts include `plan_limits` for the effective core and timeout bounds,
+including the worker deadline for isolated local pipelines.
+It returns typed steps, explicit input sources, parameters, step and input
+explanations, assumptions, and missing requirements. Ready proposals are checked
+by `dependency_graph.py` before they return to the coordinator. The coordinator
+saves the steps and requests execution approval. The saved multi-step plan
+includes the explanations in its approval review.
+
+The planner can describe a single pipeline when that fulfills the goal. Remote
+result references are marked as requiring import before they can supply local
+file inputs. A `needs_input` proposal identifies the data or decisions needed
+to finish planning.
 
 ~~~text
 agent-pipeline catalog
+agent-pipeline catalog --offset NEXT_OFFSET
+agent-pipeline catalog --pipeline NAME
 agent-pipeline files
 agent-pipeline example --pipeline NAME
 agent-pipeline plan --pipeline NAME --input SLOT=WORKSPACE_PATH
@@ -268,15 +285,23 @@ agent-pipeline status --job-id JOB_ID
 agent-pipeline wait --job-id JOB_ID --seconds 5
 agent-pipeline results --job-id JOB_ID
 agent-pipeline cancel --job-id JOB_ID
+agent-pipeline workflow-plan --steps 'JSON_ARRAY'
+agent-pipeline workflow-run --workflow-id ID
+agent-pipeline workflow-list
+agent-pipeline workflow-status --workflow-id ID
+agent-pipeline workflow-cancel --workflow-id ID
 ~~~
 
-The agent should use catalog, files, and plan before run. Pipeline manifests and
-their metadata are documented in [pipeline_definitions.md](pipeline_definitions.md).
+Catalog responses contain complete entries in pages. Follow `next_offset` to
+discover later entries, or use `--pipeline NAME` to inspect a named pipeline.
+The specialist uses catalog and files before planning. It saves input links
+with `workflow-plan` when a pipeline depends on another pipeline's outputs.
+See the manifest contract in [pipeline_definitions.md](pipeline_definitions.md).
 
-Pipeline run and cancellation use SDK approval. Catalog, files, example
-staging, planning, status, bounded wait, and results inspection do not. The
+Pipeline and workflow execution and cancellation use SDK approval. The
 pipeline service validates input confinement, required slots, accepted suffixes,
-parameters, resource limits, definition hashes, and declared outputs.
+parameters, resource limits, definition hashes, and declared outputs. The main
+agent receives verified results from the runtime.
 
 ## Website tools
 

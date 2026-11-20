@@ -1,0 +1,2283 @@
+{
+  "scope": "Trusted owner-scoped service harness; real model and real connector, not interactive SSO validation.",
+  "job": {
+    "run_id": "e46279579c95425ebc24959fdc71f040",
+    "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+    "request": "Live integration test using only dedicated software test data. Use website_search on site mscan to find sample formats_meta in project Bridge_expanded_20261120_standard. Pull its example.csv using the exact returned resource ID and website_pull. Inspect the actual file, write a short Markdown report using report_write with the filename, byte count and the two fixture rows. Push only that new report to project Bridge_expanded_20261120_standard, sample nl_backend_report, data_type meta, creating it if needed. Check transfer status. Do not run biological pipelines or change other samples.",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 15,
+    "status": "succeeded",
+    "result": {
+      "result_contract_version": 1,
+      "answer": "Integration test verified complete.\n\n- Exact CSV pulled: 49 bytes, two fixture rows.\n- Report delivered to `Bridge_expanded_20261120_standard / nl_backend_report / meta`.\n- Transfer `a9facdc3233d45fd9aa28eb747e1b9e0`: **succeeded**.\n- No pipelines ran and no other samples changed.",
+      "status": "ok",
+      "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+      "approval_required": false,
+      "approvals": [],
+      "evidence": {
+        "retrieval_date": "2026-11-20",
+        "tools": [
+          "website_search",
+          "website_pull",
+          "file_inspection",
+          "website_list_resources",
+          "table_profile",
+          "report_write",
+          "website_push",
+          "website_transfer_status"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [
+          "uploads/60cea7874dda4a369942181597a1e9d6_example.md",
+          "uploads/8e2c7c557a1649f39de207043ff76461_unicode_notes.txt",
+          "uploads/31adb3f92f144426b60ec6f08aa27cdf_example.csv",
+          "uploads/2a2da482f07d44f686b22a55b1af3460_example.fasta",
+          "uploads/68e445d76098458580f24cd3dc215c0d_example.fastq.gz",
+          "uploads/e2a42b8bfc05461483575539a60d879d_example.json",
+          "uploads/b8b53f0f763e4f128bc98476f6ee4962_example.tsv",
+          "uploads/a072d22d743d4fb18377623ef1ec2db9_example.txt",
+          "uploads/89f9fa0813534013a9017b4a4a50e9f6_example.zip",
+          "uploads/6de1b1a3b9cf47fb9e0a2b6e6c8faa27_example.fastq",
+          "uploads/c07e87c6b7ac4a86b6a02daf616cff76_binary.bin",
+          "uploads/0602466cef8b483b9923af3a55d0c478_31adb3f92f144426b60ec6f08aa27cdf_example.csv",
+          "outputs/report_write/5edccb46a71a46d6a09b11f2587b1745/MSCAN_formats_meta_CSV_fixture_report.md"
+        ],
+        "outputs": [
+          {
+            "tool": "website_search",
+            "arguments": {
+              "site_id": "mscan",
+              "operation": "search"
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "website_search",
+            "arguments": {
+              "site_id": "mscan",
+              "operation": "search"
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "website_pull",
+            "arguments": {
+              "site_id": "mscan",
+              "operation": "pull"
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "file_inspection",
+            "status": "error",
+            "error": "ValueError: No workspace file is available matching 'uploads/0602466cef8b483b9923af3a55d0c478_31adb3f92f144426b60ec6f08aa27cdf_example.csv'."
+          },
+          {
+            "tool": "website_list_resources",
+            "status": "error",
+            "error": "This tool requires an active trusted website embedding."
+          },
+          {
+            "tool": "table_profile",
+            "metrics": [
+              {
+                "index": "label",
+                "count": 2,
+                "unique": 2,
+                "top": "fixture_alpha",
+                "freq": 1,
+                "mean": null,
+                "std": null,
+                "min": null,
+                "25%": null,
+                "50%": null,
+                "75%": null,
+                "max": null
+              },
+              {
+                "index": "value",
+                "count": 2.0,
+                "unique": null,
+                "top": null,
+                "freq": null,
+                "mean": 0.5,
+                "std": 0.3535533906,
+                "min": 0.25,
+                "25%": 0.375,
+                "50%": 0.5,
+                "75%": 0.625,
+                "max": 0.75
+              }
+            ],
+            "missing_values": {
+              "label": 0,
+              "value": 0
+            },
+            "dtypes": {
+              "label": "str",
+              "value": "float64"
+            },
+            "sample": [
+              {
+                "label": "fixture_alpha",
+                "value": 0.25
+              },
+              {
+                "label": "fixture_beta",
+                "value": 0.75
+              }
+            ],
+            "source_path": "uploads/0602466cef8b483b9923af3a55d0c478_31adb3f92f144426b60ec6f08aa27cdf_example.csv",
+            "status": "ok"
+          },
+          {
+            "tool": "report_write",
+            "bytes": 190,
+            "report_path": "outputs/report_write/5edccb46a71a46d6a09b11f2587b1745/MSCAN_formats_meta_CSV_fixture_report.md",
+            "status": "ok"
+          },
+          {
+            "tool": "website_push",
+            "arguments": {
+              "site_id": "mscan",
+              "operation": "push"
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "website_transfer_status",
+            "arguments": {
+              "transfer_id": "a9facdc3233d45fd9aa28eb747e1b9e0"
+            },
+            "status": "ok"
+          }
+        ],
+        "tool_outputs": [],
+        "tool_errors": [
+          {
+            "tool": "file_inspection",
+            "error": "ValueError: No workspace file is available matching 'uploads/0602466cef8b483b9923af3a55d0c478_31adb3f92f144426b60ec6f08aa27cdf_example.csv'.",
+            "error_type": "ValueError"
+          },
+          {
+            "tool": "website_list_resources",
+            "error": "This tool requires an active trusted website embedding.",
+            "error_type": "ValueError"
+          }
+        ]
+      },
+      "trace": [
+        {
+          "timestamp": "2026-11-20T02:27:28.990140+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "run_started",
+          "data": {
+            "request": "Live integration test using only dedicated software test data. Use website_search on site mscan to find sample formats_meta in project Bridge_expanded_20261120_standard. Pull its example.csv using the exact returned resource ID and website_pull. Inspect the actual file, write a short Markdown report using report_write with the filename, byte count and the two fixture rows. Push only that new report to project Bridge_expanded_20261120_standard, sample nl_backend_report, data_type meta, creating it if needed. Check transfer status. Do not run biological pipelines or change other samples.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:29.028184+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:29.038909+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_76555f95229c49cba5d273e7",
+            "parent_id": "span_15df3da5e4014e509f776273",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-11-20T02:27:29.037744+00:00",
+            "ended_at": "2026-11-20T02:27:29.037947+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:29.041751+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_13c8007d3ad245728f655a56",
+            "parent_id": "span_b34a1ff466354b619249c5af",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:27:29.040587+00:00",
+            "ended_at": "2026-11-20T02:27:29.040767+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:29.043031+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_2af8c8d40ccf4f548e973381",
+            "parent_id": "span_b34a1ff466354b619249c5af",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:27:29.041955+00:00",
+            "ended_at": "2026-11-20T02:27:29.042093+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:29.050620+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_db440644df334ee49d730e8a",
+            "parent_id": "span_b34a1ff466354b619249c5af",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:27:29.043672+00:00",
+            "ended_at": "2026-11-20T02:27:29.049010+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:29.057489+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_18eee245a73f4b129e667b2b",
+            "parent_id": "span_b34a1ff466354b619249c5af",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:27:29.050803+00:00",
+            "ended_at": "2026-11-20T02:27:29.056492+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:29.059298+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_b34a1ff466354b619249c5af",
+            "parent_id": "span_15df3da5e4014e509f776273",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:27:29.039100+00:00",
+            "ended_at": "2026-11-20T02:27:29.058356+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:29.061657+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:29.130619+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:33.219582+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_d6f609253271492ba3e3cdfa",
+            "parent_id": "span_a68d451abfea413d92a85499",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:27:29.137853+00:00",
+            "ended_at": "2026-11-20T02:27:33.218450+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:33.239423+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12188,
+            "output_tokens": 71
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:33.243214+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_search"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:33.260757+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "website_transfer_status",
+          "data": {
+            "transfer_id": "223de06a76264af7a1ab6f5bd86a5f74",
+            "operation": "search",
+            "state": "queued"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:44.834488+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_search"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:44.835677+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_3ef85677d0544c9f90b7d9cd",
+            "parent_id": "span_a68d451abfea413d92a85499",
+            "span_type": "function",
+            "name": "website_search",
+            "model": null,
+            "started_at": "2026-11-20T02:27:33.242019+00:00",
+            "ended_at": "2026-11-20T02:27:44.834676+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:44.837481+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_a68d451abfea413d92a85499",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:27:29.061052+00:00",
+            "ended_at": "2026-11-20T02:27:44.836437+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:44.984737+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_7eea86e743c24598850c59d2",
+            "parent_id": "span_a7b71cc5199b40c581046198",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:27:44.983474+00:00",
+            "ended_at": "2026-11-20T02:27:44.983691+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:44.991586+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_dbe703bac1dc48fca5454a40",
+            "parent_id": "span_a7b71cc5199b40c581046198",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:27:44.985487+00:00",
+            "ended_at": "2026-11-20T02:27:44.990551+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:44.998200+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_e564887c6fe642a7aea568ef",
+            "parent_id": "span_a7b71cc5199b40c581046198",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:27:44.991709+00:00",
+            "ended_at": "2026-11-20T02:27:44.996546+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:44.999928+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_a7b71cc5199b40c581046198",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:27:44.982133+00:00",
+            "ended_at": "2026-11-20T02:27:44.998390+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:45.005757+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:49.423170+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_4c7691bfcd3441eea4e162da",
+            "parent_id": "span_f5d0f39b89034daa84a8023d",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:27:45.006636+00:00",
+            "ended_at": "2026-11-20T02:27:49.421816+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:49.450550+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12343,
+            "output_tokens": 55
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:49.455471+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_search"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:27:49.470286+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "website_transfer_status",
+          "data": {
+            "transfer_id": "09bceca462b7435c87dd1c22e5055d22",
+            "operation": "search",
+            "state": "queued"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:00.573085+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_search"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:00.574076+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_5f4af9945e3a4907b1a869b4",
+            "parent_id": "span_f5d0f39b89034daa84a8023d",
+            "span_type": "function",
+            "name": "website_search",
+            "model": null,
+            "started_at": "2026-11-20T02:27:49.454216+00:00",
+            "ended_at": "2026-11-20T02:28:00.573226+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:00.576276+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_f5d0f39b89034daa84a8023d",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:27:45.003237+00:00",
+            "ended_at": "2026-11-20T02:28:00.574906+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:00.611437+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_755c386cbccb4fd3b4d4d5ee",
+            "parent_id": "span_8109ff12486d4815aefeffce",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:28:00.610210+00:00",
+            "ended_at": "2026-11-20T02:28:00.610407+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:00.619093+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_0672a1dc46e04eac9d34a7b1",
+            "parent_id": "span_8109ff12486d4815aefeffce",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:00.612150+00:00",
+            "ended_at": "2026-11-20T02:28:00.618062+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:00.625753+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_9bbd98e8676f4c04808c3014",
+            "parent_id": "span_8109ff12486d4815aefeffce",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:00.619220+00:00",
+            "ended_at": "2026-11-20T02:28:00.624113+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:00.627303+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_8109ff12486d4815aefeffce",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:28:00.609038+00:00",
+            "ended_at": "2026-11-20T02:28:00.625844+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:00.631879+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:04.604073+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_bf4867a17f1b41eb9584f740",
+            "parent_id": "span_ac244cf814bc4ba791bba26d",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:28:00.632700+00:00",
+            "ended_at": "2026-11-20T02:28:04.603048+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:04.631729+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 16077,
+            "output_tokens": 83
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:04.635684+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_pull"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:04.677478+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "website_transfer_status",
+          "data": {
+            "transfer_id": "5c155db498a04af5b90fd6c117de0443",
+            "operation": "pull",
+            "state": "queued"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:05.686269+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_pull"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:05.687327+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_ec5ea9a47a7446fd973db589",
+            "parent_id": "span_ac244cf814bc4ba791bba26d",
+            "span_type": "function",
+            "name": "website_pull",
+            "model": null,
+            "started_at": "2026-11-20T02:28:04.634525+00:00",
+            "ended_at": "2026-11-20T02:28:05.686423+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:05.688880+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_ac244cf814bc4ba791bba26d",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:28:00.629331+00:00",
+            "ended_at": "2026-11-20T02:28:05.687968+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:05.740873+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_d9fc86b15364465598eb3351",
+            "parent_id": "span_e45c267530594ef394d310f5",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:28:05.739230+00:00",
+            "ended_at": "2026-11-20T02:28:05.739419+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:05.749767+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_40caf605ef504f48bcc3ac06",
+            "parent_id": "span_e45c267530594ef394d310f5",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:05.742002+00:00",
+            "ended_at": "2026-11-20T02:28:05.748315+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:05.755322+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_7dc0326b1384470d88a9f428",
+            "parent_id": "span_e45c267530594ef394d310f5",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:05.749906+00:00",
+            "ended_at": "2026-11-20T02:28:05.754319+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:05.756292+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_e45c267530594ef394d310f5",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:28:05.738050+00:00",
+            "ended_at": "2026-11-20T02:28:05.755388+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:05.760215+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:09.133478+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_a14d4b3a89be49f4a4640c11",
+            "parent_id": "span_f8d016a0f5f64da3895f8b8a",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:28:05.761019+00:00",
+            "ended_at": "2026-11-20T02:28:09.132390+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:09.150758+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 16433,
+            "output_tokens": 94
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:09.154421+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:09.155354+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "tool_started",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:13.773668+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "tool_failed",
+          "data": {
+            "tool": "file_inspection",
+            "error_type": "ValueError"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:13.774738+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "file_inspection"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:13.775801+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_81c84623626049719de4829d",
+            "parent_id": "span_f8d016a0f5f64da3895f8b8a",
+            "span_type": "function",
+            "name": "file_inspection",
+            "model": null,
+            "started_at": "2026-11-20T02:28:09.153330+00:00",
+            "ended_at": "2026-11-20T02:28:13.774885+00:00",
+            "has_error": true
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:13.777391+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_f8d016a0f5f64da3895f8b8a",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:28:05.757695+00:00",
+            "ended_at": "2026-11-20T02:28:13.776465+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:13.802277+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_6f0d55a2f40a42e5b52ec15c",
+            "parent_id": "span_ca10c7e3afaf480cb8ff588b",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:28:13.801108+00:00",
+            "ended_at": "2026-11-20T02:28:13.801281+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:13.808600+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_a6bdaa6aefa44ac5bce10eae",
+            "parent_id": "span_ca10c7e3afaf480cb8ff588b",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:13.802942+00:00",
+            "ended_at": "2026-11-20T02:28:13.807601+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:13.813995+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_3361b7c1264b4dc59776cc1b",
+            "parent_id": "span_ca10c7e3afaf480cb8ff588b",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:13.808715+00:00",
+            "ended_at": "2026-11-20T02:28:13.813010+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:13.814962+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_ca10c7e3afaf480cb8ff588b",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:28:13.799963+00:00",
+            "ended_at": "2026-11-20T02:28:13.814055+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:13.818813+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:18.499161+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_a83b81046d3c48c192f7cf7c",
+            "parent_id": "span_1fef29e8afa54adf98801e8c",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:28:13.819594+00:00",
+            "ended_at": "2026-11-20T02:28:18.498154+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:18.517775+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 16617,
+            "output_tokens": 84
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:18.521474+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_list_resources"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:18.527866+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "tool_failed",
+          "data": {
+            "tool": "website_list_resources",
+            "error_type": "ValueError"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:18.528713+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_list_resources"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:18.529735+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_7205cff4e03e4991808019fd",
+            "parent_id": "span_1fef29e8afa54adf98801e8c",
+            "span_type": "function",
+            "name": "website_list_resources",
+            "model": null,
+            "started_at": "2026-11-20T02:28:18.520439+00:00",
+            "ended_at": "2026-11-20T02:28:18.528843+00:00",
+            "has_error": true
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:18.531198+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_1fef29e8afa54adf98801e8c",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:28:13.816300+00:00",
+            "ended_at": "2026-11-20T02:28:18.530310+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:18.551763+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_bb3a65f79fc743b790dee1d6",
+            "parent_id": "span_d047f1df0faa4dddbf6446e0",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:28:18.550652+00:00",
+            "ended_at": "2026-11-20T02:28:18.550808+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:18.559378+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_f41142db96f74733b3304fa6",
+            "parent_id": "span_d047f1df0faa4dddbf6446e0",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:18.552446+00:00",
+            "ended_at": "2026-11-20T02:28:18.558381+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:18.565183+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_f57227add7984ba88f90ac94",
+            "parent_id": "span_d047f1df0faa4dddbf6446e0",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:18.559495+00:00",
+            "ended_at": "2026-11-20T02:28:18.564171+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:18.566169+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_d047f1df0faa4dddbf6446e0",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:28:18.549660+00:00",
+            "ended_at": "2026-11-20T02:28:18.565255+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:18.570147+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:21.745669+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_17c11e321df7477fb2ae30e8",
+            "parent_id": "span_348ca599112d4fbc837fb26e",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:28:18.570969+00:00",
+            "ended_at": "2026-11-20T02:28:21.744652+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:21.774454+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 16748,
+            "output_tokens": 62
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:21.778236+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "table_profile"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:21.779124+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "tool_started",
+          "data": {
+            "tool": "table_profile"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:26.648585+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "tool_finished",
+          "data": {
+            "tool": "table_profile",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:26.658764+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "table_profile"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:26.659842+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_8125ecfead1946029bd6b09e",
+            "parent_id": "span_348ca599112d4fbc837fb26e",
+            "span_type": "function",
+            "name": "table_profile",
+            "model": null,
+            "started_at": "2026-11-20T02:28:21.777170+00:00",
+            "ended_at": "2026-11-20T02:28:26.658912+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:26.661354+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_348ca599112d4fbc837fb26e",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:28:18.567509+00:00",
+            "ended_at": "2026-11-20T02:28:26.660435+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:26.683896+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_9ff33ca1a5784e5b827e5117",
+            "parent_id": "span_921deb3e68d34fb99be8497c",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:28:26.682679+00:00",
+            "ended_at": "2026-11-20T02:28:26.682855+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:26.690501+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_a7e763e11d3a47959fe966f6",
+            "parent_id": "span_921deb3e68d34fb99be8497c",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:26.684562+00:00",
+            "ended_at": "2026-11-20T02:28:26.689495+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:26.696314+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_83237274e2db42a49ac22f48",
+            "parent_id": "span_921deb3e68d34fb99be8497c",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:26.690631+00:00",
+            "ended_at": "2026-11-20T02:28:26.695321+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:26.697279+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_921deb3e68d34fb99be8497c",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:28:26.681533+00:00",
+            "ended_at": "2026-11-20T02:28:26.696373+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:26.701885+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:32.200729+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_d22865e036b04a0b9bc12083",
+            "parent_id": "span_ea66e23169524367a10d6b33",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:28:26.702737+00:00",
+            "ended_at": "2026-11-20T02:28:32.199553+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:32.250463+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 17095,
+            "output_tokens": 133
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:32.255682+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "report_write"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:32.257359+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "tool_started",
+          "data": {
+            "tool": "report_write"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:37.122535+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "artifact_created",
+          "data": {
+            "tool": "report_write",
+            "path": "outputs/report_write/5edccb46a71a46d6a09b11f2587b1745/MSCAN_formats_meta_CSV_fixture_report.md",
+            "workspace_path": "outputs/report_write/5edccb46a71a46d6a09b11f2587b1745/MSCAN_formats_meta_CSV_fixture_report.md",
+            "name": "MSCAN_formats_meta_CSV_fixture_report.md",
+            "kind": "text",
+            "content_type": "text/markdown; charset=utf-8",
+            "size": 190,
+            "modified_at": 1795141716050207168
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:37.122956+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "tool_finished",
+          "data": {
+            "tool": "report_write",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:37.150461+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "report_write"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:37.152355+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_5156e8604e454d55abfb4f98",
+            "parent_id": "span_ea66e23169524367a10d6b33",
+            "span_type": "function",
+            "name": "report_write",
+            "model": null,
+            "started_at": "2026-11-20T02:28:32.254240+00:00",
+            "ended_at": "2026-11-20T02:28:37.150715+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:37.154266+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_ea66e23169524367a10d6b33",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:28:26.698715+00:00",
+            "ended_at": "2026-11-20T02:28:37.153324+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:37.203425+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_645d855585fe48dfbd11e946",
+            "parent_id": "span_22478af0107a487db27b8bdd",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:28:37.201990+00:00",
+            "ended_at": "2026-11-20T02:28:37.202294+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:37.210641+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_ecdd2b8801464bd48bf4141f",
+            "parent_id": "span_22478af0107a487db27b8bdd",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:37.204332+00:00",
+            "ended_at": "2026-11-20T02:28:37.209627+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:37.216763+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_6b870fd8f04c4c5f861602f7",
+            "parent_id": "span_22478af0107a487db27b8bdd",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:37.210762+00:00",
+            "ended_at": "2026-11-20T02:28:37.215745+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:37.217814+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_22478af0107a487db27b8bdd",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:28:37.200166+00:00",
+            "ended_at": "2026-11-20T02:28:37.216875+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:37.222693+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:41.869998+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_ad008608cd4b43cc89a3d06f",
+            "parent_id": "span_41a2019476d0416488418867",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:28:37.223882+00:00",
+            "ended_at": "2026-11-20T02:28:41.868949+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:41.882201+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 17418,
+            "output_tokens": 91
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:41.886187+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_push"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:41.901245+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_b583751119d8476bb9089daa",
+            "parent_id": "span_124db07d566548689bd1b396",
+            "span_type": "custom",
+            "name": "sandbox.start",
+            "model": null,
+            "started_at": "2026-11-20T02:28:41.898049+00:00",
+            "ended_at": "2026-11-20T02:28:41.900067+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:41.908746+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_543e55b7d34c4e25a9df5f3a",
+            "parent_id": "span_124db07d566548689bd1b396",
+            "span_type": "custom",
+            "name": "sandbox.stop",
+            "model": null,
+            "started_at": "2026-11-20T02:28:41.906960+00:00",
+            "ended_at": "2026-11-20T02:28:41.908034+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:41.910500+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_9f488f45f61c4f8490d2b2b8",
+            "parent_id": "span_124db07d566548689bd1b396",
+            "span_type": "custom",
+            "name": "sandbox.shutdown",
+            "model": null,
+            "started_at": "2026-11-20T02:28:41.908844+00:00",
+            "ended_at": "2026-11-20T02:28:41.909824+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:41.946818+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "website_transfer_status",
+          "data": {
+            "transfer_id": "a9facdc3233d45fd9aa28eb747e1b9e0",
+            "operation": "push",
+            "state": "queued"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:43.458879+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_push"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:43.459913+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_124db07d566548689bd1b396",
+            "parent_id": "span_41a2019476d0416488418867",
+            "span_type": "function",
+            "name": "website_push",
+            "model": null,
+            "started_at": "2026-11-20T02:28:41.885075+00:00",
+            "ended_at": "2026-11-20T02:28:43.459023+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:43.461417+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_41a2019476d0416488418867",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:28:37.219377+00:00",
+            "ended_at": "2026-11-20T02:28:43.460508+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:43.508615+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_8bf3891c297940bdb17e566d",
+            "parent_id": "span_43636c2e9d7945338dbb3f0e",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:28:43.507380+00:00",
+            "ended_at": "2026-11-20T02:28:43.507561+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:43.515835+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_d6a78c1e5733437b81323f16",
+            "parent_id": "span_43636c2e9d7945338dbb3f0e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:43.509256+00:00",
+            "ended_at": "2026-11-20T02:28:43.514178+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:43.522404+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_664461558235410daa1eb668",
+            "parent_id": "span_43636c2e9d7945338dbb3f0e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:43.515999+00:00",
+            "ended_at": "2026-11-20T02:28:43.521393+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:43.523374+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_43636c2e9d7945338dbb3f0e",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:28:43.506223+00:00",
+            "ended_at": "2026-11-20T02:28:43.522466+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:43.527498+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:47.729114+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_32ec1343e8064808b72323fd",
+            "parent_id": "span_dfcdf87571374779990e214f",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:28:43.528537+00:00",
+            "ended_at": "2026-11-20T02:28:47.728035+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:47.757531+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 17970,
+            "output_tokens": 61
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:47.761412+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_transfer_status"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:47.767814+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "website_transfer_status",
+          "data": {
+            "transfer_id": "a9facdc3233d45fd9aa28eb747e1b9e0",
+            "operation": "push",
+            "state": "succeeded"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:47.768758+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_transfer_status"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:47.769824+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_b47f51ae5fae4821ad374276",
+            "parent_id": "span_dfcdf87571374779990e214f",
+            "span_type": "function",
+            "name": "website_transfer_status",
+            "model": null,
+            "started_at": "2026-11-20T02:28:47.760413+00:00",
+            "ended_at": "2026-11-20T02:28:47.768900+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:47.771366+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_dfcdf87571374779990e214f",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:28:43.524725+00:00",
+            "ended_at": "2026-11-20T02:28:47.770407+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:47.796957+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_796aed7034cf455a8fd81bce",
+            "parent_id": "span_138d2fe81bc449459b5d844e",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:28:47.795737+00:00",
+            "ended_at": "2026-11-20T02:28:47.795944+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:47.803954+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_8f8fa23ed8f74fc9aa8f9f27",
+            "parent_id": "span_138d2fe81bc449459b5d844e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:47.797902+00:00",
+            "ended_at": "2026-11-20T02:28:47.802872+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:47.809791+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_6be95f3f57024f39bdc0d6ab",
+            "parent_id": "span_138d2fe81bc449459b5d844e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:47.804082+00:00",
+            "ended_at": "2026-11-20T02:28:47.808746+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:47.810781+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_138d2fe81bc449459b5d844e",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:28:47.794579+00:00",
+            "ended_at": "2026-11-20T02:28:47.809852+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:47.815101+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.565799+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_55201472cd074b659762954e",
+            "parent_id": "span_fe986ed541224c258ea2352a",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:28:47.815894+00:00",
+            "ended_at": "2026-11-20T02:28:53.564126+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.581667+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 18493,
+            "output_tokens": 120
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.585741+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.600666+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_fe986ed541224c258ea2352a",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:28:47.812170+00:00",
+            "ended_at": "2026-11-20T02:28:53.599545+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.612439+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.613472+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_83f41709f3214b14b0c97a74",
+            "parent_id": "span_834b56f7263b40608e103797",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-11-20T02:28:53.611738+00:00",
+            "ended_at": "2026-11-20T02:28:53.612511+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.639111+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_834b56f7263b40608e103797",
+            "parent_id": "span_15df3da5e4014e509f776273",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-20T02:27:29.060859+00:00",
+            "ended_at": "2026-11-20T02:28:53.637999+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.640169+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_15df3da5e4014e509f776273",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-20T02:27:29.028366+00:00",
+            "ended_at": "2026-11-20T02:28:53.639295+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.640499+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.664896+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "website_transfer_completion_collected",
+          "data": {
+            "transfer_id": "223de06a76264af7a1ab6f5bd86a5f74",
+            "state": "succeeded",
+            "monitor_timed_out": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.665284+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "website_transfer_completion_collected",
+          "data": {
+            "transfer_id": "09bceca462b7435c87dd1c22e5055d22",
+            "state": "succeeded",
+            "monitor_timed_out": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.665662+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "website_transfer_completion_collected",
+          "data": {
+            "transfer_id": "5c155db498a04af5b90fd6c117de0443",
+            "state": "succeeded",
+            "monitor_timed_out": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.666027+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "website_transfer_completion_collected",
+          "data": {
+            "transfer_id": "a9facdc3233d45fd9aa28eb747e1b9e0",
+            "state": "succeeded",
+            "monitor_timed_out": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.676614+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.692301+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_548825795413426eaac056eb",
+            "parent_id": "span_977825e8c0e24087a4a98482",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-11-20T02:28:53.685801+00:00",
+            "ended_at": "2026-11-20T02:28:53.691311+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.695754+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_ce3b17c46bf24ffba37c4a29",
+            "parent_id": "span_c49382bd1cab46698138aafe",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:28:53.694472+00:00",
+            "ended_at": "2026-11-20T02:28:53.694773+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.697038+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_e7a518a6838e4fc282cff7b8",
+            "parent_id": "span_c49382bd1cab46698138aafe",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:28:53.695984+00:00",
+            "ended_at": "2026-11-20T02:28:53.696107+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.703917+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_8e4d0ad871da4a55b4dbf6cb",
+            "parent_id": "span_c49382bd1cab46698138aafe",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:53.697765+00:00",
+            "ended_at": "2026-11-20T02:28:53.702987+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.709106+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_bb5c5a098c9d4e5b895739ce",
+            "parent_id": "span_c49382bd1cab46698138aafe",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:28:53.704037+00:00",
+            "ended_at": "2026-11-20T02:28:53.708135+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.711225+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_c49382bd1cab46698138aafe",
+            "parent_id": "span_977825e8c0e24087a4a98482",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:28:53.692524+00:00",
+            "ended_at": "2026-11-20T02:28:53.710277+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.714151+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:53.738203+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:57.421793+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_e821137fa01e4b7ca2695644",
+            "parent_id": "span_820574e96f814b9c880adacf",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:28:53.743042+00:00",
+            "ended_at": "2026-11-20T02:28:57.420717+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:57.431390+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 23564,
+            "output_tokens": 81
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:57.434214+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:57.441368+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_820574e96f814b9c880adacf",
+            "parent_id": "span_6568357f13c8471c83d34e3d",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:28:53.713072+00:00",
+            "ended_at": "2026-11-20T02:28:57.440464+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:57.451701+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:57.452585+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_540183538471449ea0b82ede",
+            "parent_id": "span_6568357f13c8471c83d34e3d",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-11-20T02:28:57.451211+00:00",
+            "ended_at": "2026-11-20T02:28:57.451738+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:57.470859+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_6568357f13c8471c83d34e3d",
+            "parent_id": "span_977825e8c0e24087a4a98482",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-20T02:28:53.712908+00:00",
+            "ended_at": "2026-11-20T02:28:57.469811+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:57.471879+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56",
+            "span_id": "span_977825e8c0e24087a4a98482",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-20T02:28:53.676789+00:00",
+            "ended_at": "2026-11-20T02:28:57.471016+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:57.472188+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_d9b3d60038d34baea49d1948558b6f56"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:28:57.515904+00:00",
+          "session_id": "bb80e140-f4b2-41d1-93ab-f14e68d59785",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 9
+          }
+        }
+      ],
+      "workspace_files": [
+        {
+          "path": "uploads/0602466cef8b483b9923af3a55d0c478_31adb3f92f144426b60ec6f08aa27cdf_example.csv",
+          "workspace_path": "uploads/0602466cef8b483b9923af3a55d0c478_31adb3f92f144426b60ec6f08aa27cdf_example.csv",
+          "name": "0602466cef8b483b9923af3a55d0c478_31adb3f92f144426b60ec6f08aa27cdf_example.csv",
+          "size": 49,
+          "modified_at": 1795141685359031549,
+          "kind": "upload",
+          "content_type": "text/csv; charset=utf-8"
+        },
+        {
+          "path": "outputs/report_write/5edccb46a71a46d6a09b11f2587b1745/MSCAN_formats_meta_CSV_fixture_report.md",
+          "workspace_path": "outputs/report_write/5edccb46a71a46d6a09b11f2587b1745/MSCAN_formats_meta_CSV_fixture_report.md",
+          "name": "MSCAN_formats_meta_CSV_fixture_report.md",
+          "size": 190,
+          "modified_at": 1795141717071213030,
+          "kind": "text",
+          "content_type": "text/markdown; charset=utf-8"
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "outputs/report_write/5edccb46a71a46d6a09b11f2587b1745/MSCAN_formats_meta_CSV_fixture_report.md",
+          "workspace_path": "outputs/report_write/5edccb46a71a46d6a09b11f2587b1745/MSCAN_formats_meta_CSV_fixture_report.md",
+          "name": "MSCAN_formats_meta_CSV_fixture_report.md",
+          "size": 190,
+          "modified_at": 1795141717071213030,
+          "kind": "text",
+          "content_type": "text/markdown; charset=utf-8"
+        },
+        {
+          "path": "uploads/0602466cef8b483b9923af3a55d0c478_31adb3f92f144426b60ec6f08aa27cdf_example.csv",
+          "workspace_path": "uploads/0602466cef8b483b9923af3a55d0c478_31adb3f92f144426b60ec6f08aa27cdf_example.csv",
+          "name": "0602466cef8b483b9923af3a55d0c478_31adb3f92f144426b60ec6f08aa27cdf_example.csv",
+          "size": 49,
+          "modified_at": 1795141685359031549,
+          "kind": "upload",
+          "content_type": "text/csv; charset=utf-8"
+        }
+      ],
+      "files": [
+        {
+          "path": "uploads/0602466cef8b483b9923af3a55d0c478_31adb3f92f144426b60ec6f08aa27cdf_example.csv",
+          "workspace_path": "uploads/0602466cef8b483b9923af3a55d0c478_31adb3f92f144426b60ec6f08aa27cdf_example.csv",
+          "name": "0602466cef8b483b9923af3a55d0c478_31adb3f92f144426b60ec6f08aa27cdf_example.csv",
+          "size": 49,
+          "modified_at": 1795141685359031549,
+          "kind": "upload",
+          "content_type": "text/csv; charset=utf-8"
+        },
+        {
+          "path": "outputs/report_write/5edccb46a71a46d6a09b11f2587b1745/MSCAN_formats_meta_CSV_fixture_report.md",
+          "workspace_path": "outputs/report_write/5edccb46a71a46d6a09b11f2587b1745/MSCAN_formats_meta_CSV_fixture_report.md",
+          "name": "MSCAN_formats_meta_CSV_fixture_report.md",
+          "size": 190,
+          "modified_at": 1795141717071213030,
+          "kind": "text",
+          "content_type": "text/markdown; charset=utf-8"
+        }
+      ],
+      "max_turns": 15,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Live integration test using only dedicated software test data. Use website_search on site mscan to find sample formats_meta in project Bridge_expanded_20261120_standard. Pull its example.csv using the exact returned resource ID and website_pull. Inspect the actual file, write a short Markdown report using report_write with the filename, byte count and the two fixture rows. Push only that new report to project Bridge_expanded_20261120_standard, sample nl_backend_report, data_type meta, creating it if needed. Check transfer status. Do not run biological pipelines or change other samples."
+        },
+        {
+          "role": "assistant",
+          "content": "Integration test verified complete.\n\n- Exact CSV pulled: 49 bytes, two fixture rows.\n- Report delivered to `Bridge_expanded_20261120_standard / nl_backend_report / meta`.\n- Transfer `a9facdc3233d45fd9aa28eb747e1b9e0`: **succeeded**.\n- No pipelines ran and no other samples changed."
+        }
+      ],
+      "run": {
+        "run_id": "ef7d3214-253f-4610-8194-c35cfe7a4e36",
+        "session_dir": ".",
+        "runtime_dir": "runs/ef7d3214-253f-4610-8194-c35cfe7a4e36",
+        "workspace_dir": "outputs"
+      },
+      "approval_decision": null,
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    },
+    "error": null,
+    "pid": 197837,
+    "created_at": "2026-11-20T02:27:25.421832+00:00",
+    "updated_at": "2026-11-20T02:28:57.667466+00:00",
+    "approval": null,
+    "owner_user_id": "419bade1be8a4d03a080a989c010e948",
+    "cancel_requested": 0
+  }
+}

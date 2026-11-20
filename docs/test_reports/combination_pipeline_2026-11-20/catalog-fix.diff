@@ -1,0 +1,219 @@
+diff --git a/docs/pipeline_definitions.md b/docs/pipeline_definitions.md
+index a42ee58..51343b5 100644
+--- a/docs/pipeline_definitions.md
++++ b/docs/pipeline_definitions.md
+@@ -309,7 +309,9 @@ user request
+   -> status, bounded wait, and verified results
+ ~~~
+ 
+-The catalog returns compact fields specifically for selection:
++The shell catalog returns pages of complete entries with `next_offset` for
++continuation. `agent-pipeline catalog --pipeline NAME` returns a named entry.
++Each entry includes compact fields for selection.
+ 
+ - name and display_name;
+ - visibility;
+diff --git a/docs/tool_definitions.md b/docs/tool_definitions.md
+index 8bd8239..7ab9d08 100644
+--- a/docs/tool_definitions.md
++++ b/docs/tool_definitions.md
+@@ -259,6 +259,8 @@ agent-pipeline command.
+ 
+ ~~~text
+ agent-pipeline catalog
++agent-pipeline catalog --offset NEXT_OFFSET
++agent-pipeline catalog --pipeline NAME
+ agent-pipeline files
+ agent-pipeline example --pipeline NAME
+ agent-pipeline plan --pipeline NAME --input SLOT=WORKSPACE_PATH
+@@ -270,6 +272,8 @@ agent-pipeline results --job-id JOB_ID
+ agent-pipeline cancel --job-id JOB_ID
+ ~~~
+ 
++Catalog responses contain complete entries in pages. Follow `next_offset` to
++discover later entries, or use `--pipeline NAME` to inspect a named pipeline.
+ The agent should use catalog, files, and plan before run. Pipeline manifests and
+ their metadata are documented in [pipeline_definitions.md](pipeline_definitions.md).
+ 
+diff --git a/evals/smoke_local_transport.py b/evals/smoke_local_transport.py
+index 9c3acba..c4cba00 100644
+--- a/evals/smoke_local_transport.py
++++ b/evals/smoke_local_transport.py
+@@ -29,7 +29,7 @@ class LocalTransportTests(unittest.IsolatedAsyncioTestCase):
+         calls = [
+             {"id": "shell-1", "type": "function", "function": {
+                 "name": "pipeline_shell", "arguments": json.dumps({
+-                    "commands": ["agent-pipeline catalog"],
++                    "commands": ["agent-pipeline catalog --pipeline template_shell"],
+                     "timeout_ms": None, "max_output_length": None})}},
+             {"id": "patch-1", "type": "function", "function": {
+                 "name": "apply_patch", "arguments": json.dumps({
+diff --git a/tools/infrastructure/pipeline_engine/broker.py b/tools/infrastructure/pipeline_engine/broker.py
+index 6694a1a..d2fa7a9 100644
+--- a/tools/infrastructure/pipeline_engine/broker.py
++++ b/tools/infrastructure/pipeline_engine/broker.py
+@@ -622,7 +622,7 @@ def dispatch(root, command, *, access: WorkspaceAccess):
+             time.sleep(min(1, max(0, deadline - time.monotonic())))
+     with _locked_workspace(root, access) as (root, private):
+         if args.operation == 'catalog':
+-            return {'pipelines': catalog()}
++            return service.catalog_page(catalog(), args.pipeline, args.offset, args.limit)
+         if args.operation == 'files':
+             return {'files': service.files(root)}
+         if args.operation == 'example':
+diff --git a/tools/infrastructure/pipeline_engine/commands.py b/tools/infrastructure/pipeline_engine/commands.py
+index f5c48de..6f6badf 100644
+--- a/tools/infrastructure/pipeline_engine/commands.py
++++ b/tools/infrastructure/pipeline_engine/commands.py
+@@ -21,7 +21,11 @@ def parse_command(command: str) -> argparse.Namespace:
+         raise ValueError("Only agent-pipeline commands are supported.")
+     parser = Parser(prog="agent-pipeline", add_help=False, allow_abbrev=False)
+     subs = parser.add_subparsers(dest="operation", required=True, parser_class=Parser)
+-    for name in ("catalog", "files", "jobs"):
++    catalog = subs.add_parser("catalog", add_help=False, allow_abbrev=False)
++    catalog.add_argument("--pipeline")
++    catalog.add_argument("--offset", type=int, default=0)
++    catalog.add_argument("--limit", type=int, default=8)
++    for name in ("files", "jobs"):
+         subs.add_parser(name, add_help=False, allow_abbrev=False)
+     example = subs.add_parser("example", add_help=False, allow_abbrev=False)
+     example.add_argument("--pipeline", default="template_shell")
+@@ -71,7 +75,7 @@ def dispatch(root, command: str) -> dict:
+     if args.operation in WORKFLOW_OPERATIONS:
+         raise ValueError("Workflow commands require an owned agent session.")
+     if args.operation == "catalog":
+-        return {"pipelines": service.catalog(compact=True)}
++        return service.catalog_page(service.catalog(compact=True), args.pipeline, args.offset, args.limit)
+     if args.operation == "files":
+         return {"files": service.files(root)}
+     if args.operation == "example":
+diff --git a/tools/infrastructure/pipeline_engine/service.py b/tools/infrastructure/pipeline_engine/service.py
+index ea8a5e0..cfa43cb 100644
+--- a/tools/infrastructure/pipeline_engine/service.py
++++ b/tools/infrastructure/pipeline_engine/service.py
+@@ -85,6 +85,27 @@ def catalog(*, compact: bool = False) -> list[dict]:
+     return [_compact_catalog_entry(entry) for entry in entries]
+ 
+ 
++def catalog_page(entries, name=None, offset=0, limit=8):
++    """Keep complete catalog entries within the SDK shell response budget."""
++    if offset < 0 or not 1 <= limit <= 32:
++        raise ValueError("Catalog offset must be nonnegative and limit must be 1..32.")
++    if name is not None:
++        entries = [entry for entry in entries if entry["name"] == name]
++        if not entries:
++            raise ValueError(f"Pipeline is unavailable: {name}.")
++    page = {"pipelines": [], "total": len(entries), "offset": offset, "next_offset": None}
++    for entry in entries[offset:offset + limit]:
++        candidate = {**page, "pipelines": [*page["pipelines"], entry]}
++        # Account for the escaped stdout string in the SDK's JSON tool output.
++        if page["pipelines"] and len(json.dumps({"stdout": json.dumps(candidate)})) > 28000:
++            break
++        page = candidate
++    following = offset + len(page["pipelines"])
++    if following < len(entries):
++        page["next_offset"] = following
++    return page
++
++
+ def _compact_catalog_entry(entry: dict) -> dict:
+     """Return the bounded catalog shape sent through the agent shell tool.
+ 
+diff --git a/tools/infrastructure/sdk_adapters/pipeline_shell.py b/tools/infrastructure/sdk_adapters/pipeline_shell.py
+index a4dbec9..6b0729e 100644
+--- a/tools/infrastructure/sdk_adapters/pipeline_shell.py
++++ b/tools/infrastructure/sdk_adapters/pipeline_shell.py
+@@ -21,8 +21,12 @@ dependencies. Do not suggest installing pipeline dependencies into the agent
+ environment.
+ 
+ Commands:
+-- agent-pipeline catalog : discover intent-focused pipeline names, descriptions,
+-  use cases, limitations, inputs, parameters, and outputs.
++- agent-pipeline catalog [--offset N] [--limit N] : discover pages of pipeline
++  names, descriptions, use cases, limitations, inputs, parameters, and outputs.
++  Follow next_offset until all relevant pipelines have been discovered. A
++  pipeline missing from one page may appear on a later page.
++- agent-pipeline catalog --pipeline NAME : inspect one named pipeline's full
++  catalog entry, including its declared input slots, output names and parameters.
+ - agent-pipeline files : discover session workspace-relative input paths.
+ - agent-pipeline example --pipeline template_shell : stage bundled internal
+   demonstration data, only when the user requested a demonstration/example.
+@@ -44,8 +48,9 @@ Commands:
+   for an array slot. Example binding:
+   {"inputs":{"input":{"step":"prepare","output":"clean_file"}}}.
+   Use the output name declared in the catalog, not an anticipated file path.
+-- agent-pipeline workflow-run --workflow-id ID : approve and start the entire
+-  saved graph. The scheduler handles submissions and output handoffs.
++- agent-pipeline workflow-run --workflow-id ID : request SDK approval for the
++  saved graph. Execution starts after approval; the scheduler handles submissions
++  and output handoffs.
+ - agent-pipeline workflow-list : list saved workflows for this session.
+ - agent-pipeline workflow-status --workflow-id ID : get step states and
+   verified outputs, including why a step was blocked.
+@@ -57,6 +62,9 @@ pipeline by its display name, description, use_when, avoid_when, inputs, and
+ limitations. Treat entries marked visibility=internal as demonstrations and
+ select them only when the user asks for a demo or runtime test. Resolve missing
+ inputs or parameters before run. Use the returned plan ID; never invent an ID.
++To request execution approval, call run or workflow-run with the saved ID. The
++SDK opens the plan review and pauses before execution. When the user asks to
++approve before running, make this tool call so the chat displays approval controls.
+ When one pipeline requires another pipeline's output or successful completion,
+ use workflow-plan and workflow-run. Put all dependent steps in the same graph.
+ Use a step/output reference for data handoffs and depends_on for completion-only
+diff --git a/evals/test_pipeline_catalog_paging.py b/evals/test_pipeline_catalog_paging.py
+new file mode 100644
+index 0000000..b5abc90
+--- /dev/null
++++ b/evals/test_pipeline_catalog_paging.py
+@@ -0,0 +1,51 @@
++"""Prevent installed pipelines disappearing when shell output is truncated."""
++import json
++from pathlib import Path
++from tempfile import TemporaryDirectory
++import unittest
++
++from tools.infrastructure.pipeline_engine import service
++from tools.infrastructure.pipeline_engine.commands import dispatch
++
++
++class CatalogPagingTests(unittest.TestCase):
++    def test_all_installed_entries_are_reachable_in_complete_bounded_pages(self):
++        entries = service.catalog(compact=True)
++        found, offset = [], 0
++        while True:
++            page = service.catalog_page(entries, offset=offset)
++            encoded = json.dumps({"stdout": json.dumps(page)})
++            self.assertLess(len(encoded), 32000)
++            self.assertEqual(json.loads(json.dumps(page)), page)
++            found.extend(page["pipelines"])
++            if page["next_offset"] is None:
++                break
++            self.assertGreater(page["next_offset"], offset)
++            offset = page["next_offset"]
++        self.assertEqual(found, entries)
++        self.assertIn("tcdb_annotator_genome", {row["name"] for row in found})
++
++    def test_named_lookup_preserves_declared_slots_outputs_and_parameters(self):
++        with TemporaryDirectory() as root:
++            result = dispatch(Path(root), "agent-pipeline catalog --pipeline tcdb_annotator_genome")
++        entry, = result["pipelines"]
++        self.assertIn("genome_fasta", entry["inputs"])
++        self.assertIn("hits", entry["outputs"])
++        self.assertIn("genome_context", entry["parameters"])
++        self.assertIsNone(result["next_offset"])
++
++    def test_output_budget_can_end_a_page_before_the_requested_limit(self):
++        entries = [{"name": f"pipeline-{i}", "description": "a" * 10000} for i in range(4)]
++        result = service.catalog_page(entries)
++        self.assertEqual(len(result["pipelines"]), 2)
++        self.assertEqual(result["next_offset"], 2)
++        self.assertLess(len(json.dumps({"stdout": json.dumps(result)})), 32000)
++
++    def test_invalid_page_arguments_are_rejected(self):
++        for offset, limit in ((-1, 8), (0, 0), (0, 33)):
++            with self.assertRaises(ValueError):
++                service.catalog_page([], offset=offset, limit=limit)
++
++
++if __name__ == "__main__":
++    unittest.main()

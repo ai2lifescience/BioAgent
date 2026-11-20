@@ -103,6 +103,8 @@ class CompatibilityTests(unittest.TestCase):
             self.assertEqual(value['tools']['ncbi_retrieval']['status'], 'available')
             self.assertEqual(value['tools']['evidence_retrieve']['status'], 'needs_configuration')
             self.assertEqual(value['tools']['knowledge_status']['status'], 'available')
+            self.assertEqual(value['tools']['pipeline_specialist']['execution'], 'pipeline_broker')
+            self.assertNotIn('pipeline_shell', value['tools'])
             self.assertEqual(value['pipelines']['template_shell']['status'], 'available')
             self.assertEqual(value['pipelines']['template_wdl']['status'], 'needs_configuration')
             self.assertEqual(value['pipelines']['unregistered_workflow']['status'], 'unsupported')

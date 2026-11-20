@@ -1,0 +1,42 @@
+{
+  "checked_at": "2026-11-20T14:57:51.653820+08:00",
+  "browser_inspected": true,
+  "browser_account": "xiaomimi",
+  "sample_id": "42c1afa1e4a23c058ccab8e5bc5df996",
+  "sample_name": "tcdb_annotator_metagenome_sync",
+  "program": "tcdb",
+  "overview_counts_visible": {
+    "family_name": 251,
+    "substrate": 249,
+    "tc_class": 249,
+    "tc_family": 251,
+    "tc_subclass": 249
+  },
+  "detail_rows_visible": 0,
+  "backend_endpoint": "/cncb/tcdbResult/query",
+  "backend_error": "java.lang.IllegalStateException: DuckDB 查询失败",
+  "root_cause": "Invalid Input Error: Failed to parse port from http_proxy 'http://127.0.0.1:10801/'",
+  "current_backend_pid": 959778,
+  "proxy_variables_confirmed": [
+    "http_proxy",
+    "https_proxy",
+    "HTTP_PROXY",
+    "HTTPS_PROXY",
+    "all_proxy",
+    "ALL_PROXY"
+  ],
+  "source_path": [
+    "IAnnotatorResultServiceImpl.listSummary",
+    "BacParquetServiceImpl.querySql",
+    "DuckDBConnection.prepareStatement"
+  ],
+  "stage_assessment": {
+    "workflow_execution": "previously_succeeded",
+    "native_import": "previously_succeeded",
+    "overview_from_mysql": "loaded",
+    "annotator_parquet_table": "failed"
+  },
+  "report_gap": "Earlier execution/import success did not verify the actual annotator table-reading API.",
+  "remediation_applied": false,
+  "privacy": "The actual browser window was inspected; its private screenshot was not published because it contains unrelated tab titles."
+}

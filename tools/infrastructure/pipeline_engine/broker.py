@@ -42,6 +42,9 @@ def catalog(*, compact=True):
         try: backend = contracts.backend(entry['name'])
         except (ExecutionUnavailable, ValueError, OSError): continue
         if backend == 'docker' or os.getenv('CROMWELL_URL'):
+            if backend == 'docker' and 'plan_limits' in entry:
+                from isolation.policy import WORKER_TIMEOUT
+                entry['plan_limits']['max_timeout_seconds'] = min(entry['plan_limits']['max_timeout_seconds'], WORKER_TIMEOUT)
             entries.append(entry)
     return entries
 
@@ -622,7 +625,7 @@ def dispatch(root, command, *, access: WorkspaceAccess):
             time.sleep(min(1, max(0, deadline - time.monotonic())))
     with _locked_workspace(root, access) as (root, private):
         if args.operation == 'catalog':
-            return {'pipelines': catalog()}
+            return service.catalog_page(catalog(), args.pipeline, args.offset, args.limit)
         if args.operation == 'files':
             return {'files': service.files(root)}
         if args.operation == 'example':
