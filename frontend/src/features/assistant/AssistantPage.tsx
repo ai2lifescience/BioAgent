@@ -49,7 +49,7 @@ export function AssistantPage() {
   const abortRef = useRef<AbortController | null>(null);
   const creatingChatRef = useRef(false);
   const sessionRef = useRef(sessionId);
-  const api = useMemo(() => createApiClient(window.fetch.bind(window), new URL('./', window.location.href).href), []);
+  const api = useMemo(() => createApiClient((...args) => window.fetch(...args), new URL('./', window.location.href).href, 'poll'), []);
 
   useEffect(() => { sessionRef.current = sessionId; }, [sessionId]);
 

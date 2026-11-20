@@ -90,7 +90,7 @@ class Federation:
             if not row or row['expires'] < time.time() or row['site_id'] != site_id or row['origin'] != origin or not user or user['disabled']:
                 raise get_host().auth_error('Invalid, expired, or consumed website login grant.')
             db.execute('DELETE FROM website_grants WHERE digest=?', (digest,))
-            ttl = max(30, min(int(os.getenv('AGENT_WEBSITE_LOGIN_TTL_SECONDS', '120')), 300))
+            ttl = max(60, min(int(os.getenv('AGENT_WEBSITE_LOGIN_TTL_SECONDS', '3600')), 8 * 3600))
             db.create_login(hashlib.sha256(token.encode()).hexdigest(), row['user_id'], time.time() + ttl)
             db.execute('INSERT INTO website_logins VALUES (?,?,?)', (hashlib.sha256(token.encode()).hexdigest(), site_id, row['user_id']))
             return token, {
