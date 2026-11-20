@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-11-20T10:10:34.829847+08:00",
+  "stack": "standard",
+  "services": [
+    {
+      "service": "oauth",
+      "url": "http://localhost:8090/healthz",
+      "http_status": 200
+    },
+    {
+      "service": "agent",
+      "url": "http://localhost:8000/health",
+      "http_status": 200
+    },
+    {
+      "service": "frontend",
+      "url": "http://localhost:8848/",
+      "http_status": 200
+    },
+    {
+      "service": "cromwell",
+      "url": "http://192.168.164.46:39000/engine/v1/status",
+      "http_status": 200
+    }
+  ],
+  "versions": {
+    "commit": {
+      "exit_code": 0,
+      "output": "b44e4855b3e2787af4918c38ce57573ca5b178f2"
+    },
+    "working_tree": {
+      "exit_code": 0,
+      "output": "?? docs/test_report/mscan_interoperability_2026-11-20/"
+    },
+    "worker_image": {
+      "exit_code": 0,
+      "output": "sha256:6c93124cdb2d35cef091406f064141ebca9785d5424e82f6d4b136e38387d0b0"
+    },
+    "mscan_frontend_commit": {
+      "exit_code": 0,
+      "output": "948df823224a4dd320fba93a94d47ae8265e6bd2"
+    },
+    "mscan_backend_commit": {
+      "exit_code": 0,
+      "output": "29ec9e9baec962a9ca5823053009063fc8b5e022"
+    },
+    "oauth_commit": {
+      "exit_code": 0,
+      "output": "8b45b9c77fdfe2cc47f92a6620f8c2aec68bf076"
+    }
+  },
+  "standard_auth_mode": "oauth",
+  "standard_login_bypass": "false",
+  "backend_scheduler_disabled_at_discovery": true,
+  "note": "Services were already running and were preserved. Separate pre-existing local validation stack uses a synthetic identity and login bypass; its results do not validate real CNCB SSO."
+}

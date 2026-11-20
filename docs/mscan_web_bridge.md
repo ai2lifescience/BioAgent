@@ -154,6 +154,32 @@ java -jar mscan-admin/target/mscan-admin.jar \
   --spring.profiles.active=druid
 ```
 
+#### Supplement — DuckDB proxy errors when loading annotator results
+
+If annotation counts appear but the table shows **Failed to load annotator
+results**, check the backend log. An error such as
+`Failed to parse port from http_proxy 'http://127.0.0.1:10801/'` means DuckDB
+cannot use the inherited proxy configuration when reading Parquet from object
+storage. The counts can still load from MySQL even though the table query fails.
+
+In Terminal 2, stop the backend with **Ctrl+C**. Keep the environment exports
+above and the same working directory, then restart with generic proxy variables
+removed only for the Java process:
+
+```bash
+env -u http_proxy -u https_proxy \
+    -u HTTP_PROXY -u HTTPS_PROXY \
+    -u all_proxy -u ALL_PROXY \
+    java -jar mscan-admin/target/mscan-admin.jar \
+    --spring.profiles.active=druid
+```
+
+Preserve any additional startup flags you normally use. This launch variant
+does not change BioAgent's `AGENT_PROXY` in Terminal 1. Refresh the annotator page
+and verify that the table loads and the proxy error no longer appears in the
+backend log. Existing pipeline results can be reused; a successful import alone
+does not verify that the web table can read them.
+
 ### Terminal 3 — MSCAN frontend
 
 ```bash

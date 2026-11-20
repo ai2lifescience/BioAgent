@@ -1,0 +1,398 @@
+{
+  "case": "marker_single_end",
+  "pipeline": "metagenomic_pathogen_identification_marker",
+  "seconds": 900,
+  "type": "meta",
+  "input_files": {
+    "read1": "/media/data/fuhaoyi/codes/BioAgent/runtime/live-validation/mscan-expanded-20261120/inputs/assembly_R1.fastq.gz"
+  },
+  "scope": "Previously untested single-end branch using the original benign K-12 simulated reads; default scientific parameters.",
+  "execution": "succeeded",
+  "started_at": "2026-11-20T04:13:32.968522+00:00",
+  "session_id": "75f75896-4814-4e23-95ff-83d8c0ced67c",
+  "engine": "wdl",
+  "manifest_sha256": "5aaf4410d776ef522bb39d352014994799298cdbe44fbc0cef2638def830a0c3",
+  "inputs": {
+    "read1": "uploads/3bc1f9fd2079483393a6b2c961d07021_assembly_R1.fastq.gz"
+  },
+  "parameters": {},
+  "plan_id": "b1f63e9563254a6cae780b7cf809ac4a",
+  "job_id": "b1f63e9563254a6cae780b7cf809ac4a",
+  "last_state": {
+    "job_id": "b1f63e9563254a6cae780b7cf809ac4a",
+    "plan_id": "b1f63e9563254a6cae780b7cf809ac4a",
+    "status": "succeeded",
+    "created_at": "2026-11-20T04:13:33.400320+00:00",
+    "started_at": "2026-11-20T04:13:33.613285+00:00",
+    "finished_at": "2026-11-20T04:22:18.745181+00:00",
+    "updated_at": "2026-11-20T04:22:18.746068+00:00",
+    "error": null,
+    "remote_id": "958d1074-2cf6-4cca-8def-dfafb97ee21b",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_pathogen_identification_marker"
+  },
+  "outputs": {
+    "job_id": "b1f63e9563254a6cae780b7cf809ac4a",
+    "plan_id": "b1f63e9563254a6cae780b7cf809ac4a",
+    "status": "succeeded",
+    "created_at": "2026-11-20T04:13:33.400320+00:00",
+    "started_at": "2026-11-20T04:13:33.613285+00:00",
+    "finished_at": "2026-11-20T04:22:18.745181+00:00",
+    "updated_at": "2026-11-20T04:22:18.746068+00:00",
+    "error": null,
+    "remote_id": "958d1074-2cf6-4cca-8def-dfafb97ee21b",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_pathogen_identification_marker",
+    "files": [
+      {
+        "name": "profile.txt",
+        "path": "pipeline-artifacts/b1f63e9563254a6cae780b7cf809ac4a/0/profile.txt",
+        "workspace_path": "pipeline-artifacts/b1f63e9563254a6cae780b7cf809ac4a/0/profile.txt",
+        "size": 752,
+        "remote": true,
+        "artifact_id": "b1f63e9563254a6cae780b7cf809ac4a:0",
+        "pipeline_result": {
+          "job_id": "b1f63e9563254a6cae780b7cf809ac4a",
+          "pipeline_name": "metagenomic_pathogen_identification_marker",
+          "output_key": "StrainMeta.profile",
+          "output_name": "profile",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T04:22:18.745181+00:00"
+        }
+      },
+      {
+        "name": "sam.bz2",
+        "path": "pipeline-artifacts/b1f63e9563254a6cae780b7cf809ac4a/1/sam.bz2",
+        "workspace_path": "pipeline-artifacts/b1f63e9563254a6cae780b7cf809ac4a/1/sam.bz2",
+        "size": 63848155,
+        "remote": true,
+        "artifact_id": "b1f63e9563254a6cae780b7cf809ac4a:1",
+        "pipeline_result": {
+          "job_id": "b1f63e9563254a6cae780b7cf809ac4a",
+          "pipeline_name": "metagenomic_pathogen_identification_marker",
+          "output_key": "StrainMeta.sam_bz2",
+          "output_name": "sam_bz2",
+          "output_kind": "file",
+          "completed_at": "2026-11-20T04:22:18.745181+00:00"
+        }
+      },
+      {
+        "name": "consensus_marker.json.bz2",
+        "path": "pipeline-artifacts/b1f63e9563254a6cae780b7cf809ac4a/2/consensus_marker.json.bz2",
+        "workspace_path": "pipeline-artifacts/b1f63e9563254a6cae780b7cf809ac4a/2/consensus_marker.json.bz2",
+        "size": 514,
+        "remote": true,
+        "artifact_id": "b1f63e9563254a6cae780b7cf809ac4a:2",
+        "pipeline_result": {
+          "job_id": "b1f63e9563254a6cae780b7cf809ac4a",
+          "pipeline_name": "metagenomic_pathogen_identification_marker",
+          "output_key": "StrainMeta.consensus_marker",
+          "output_name": "consensus_marker",
+          "output_kind": "file",
+          "completed_at": "2026-11-20T04:22:18.745181+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/b1f63e9563254a6cae780b7cf809ac4a/0/profile.txt",
+        "text": "# data_type=metagenome; signal=DNA-level strain signal\n#mpa_vJan25_CHOCOPhlAnSGB_202503\n#/opt/conda/envs/strain-meta/bin/metaphlan /cromwell-executions/StrainMeta/958d1074-2cf6-4cca-8def-dfafb97ee21b/call-MetaPhlAnSample/inputs/1842615954/7dcac65f6d37eae4-3bc1f9fd2079483393a6b2c961d07021_assembly_R1.fastq.gz --input_type fastq --db_dir /data/zhaomh/program/database/strain_database/metaphlan -x mpa_vJan25_CHOCOPhlAnSGB_202503 --nproc 16 --samout strain_meta_SAMPLE/sams/SAMPLE.sam.bz2 --mapout strain_meta_SAMPLE/bowtie2/SAMPLE.bowtie2.bz2 --bowtie2_exe bowtie2 -o strain_meta_SAMPLE/profiles/SAMPLE_profile.txt\n#12000 reads processed\n#SampleID\tMetaphlan_Analysis\n#clade_name\tNCBI_tax_id\trelative_abundance\tadditional_species\nUNCLASSIFIED\t-1\t100.0\t\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/b1f63e9563254a6cae780b7cf809ac4a/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "inspection": [
+    {
+      "name": "profile.txt",
+      "bytes": 752,
+      "sha256": "37d4006146c3b920526151e60db193a2dece1d89e055f1c39d7e2b049c196606"
+    },
+    {
+      "name": "sam.bz2",
+      "bytes": 63848155,
+      "sha256": "3eca2dce5a7494d056b62cd00231e091302212c10eea2724f28d354e33bcc328"
+    },
+    {
+      "name": "consensus_marker.json.bz2",
+      "bytes": 514,
+      "sha256": "b67b23ce4dc8e85da639f619d5b9b058d8bde1fa81ee8702cb6e591eaa363d00"
+    }
+  ],
+  "roundtrip": {
+    "push": {
+      "transfer_id": "8f94ab61318b45c39c01faf14a435364",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_remaining_20261120",
+          "sample_name": "marker_single_end_files",
+          "project_id": "8f8dc171a6c2321eb84164aa5eaea3f4",
+          "sample_id": "29e32165754e38ca85deeef873b16eca"
+        },
+        "receipt_id": "8f94ab61318b45c39c01faf14a435364",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "b1f63e9563254a6cae780b7cf809ac4a",
+            "files_delivered": true,
+            "generic_import": {
+              "access": "Search or pull the attached sample files; native records are a separate outcome.",
+              "artifact_count": 3,
+              "state": "imported"
+            },
+            "pipeline": "metagenomic_pathogen_identification_marker",
+            "format": "StrainMeta",
+            "program": "strain_meta",
+            "state": "imported",
+            "message": "Native result imported."
+          }
+        ],
+        "files": [
+          {
+            "name": "3bc1f9fd2079483393a6b2c961d07021_assembly_R1.fastq.gz",
+            "source_path": "uploads/3bc1f9fd2079483393a6b2c961d07021_assembly_R1.fastq.gz",
+            "id": "79024f86e827a3c855be557c522f0a2c6560de62f04ceff548c23bb9dcd3b94f",
+            "size": 546528,
+            "sha256": "7dcac65f6d37eae4cfb2e0c44da0b606070c7911646edd472a8e7e5399fe3eb9",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/b1f63e9563254a6cae780b7cf809ac4a/results.zip",
+            "id": "f11ea9629fa0822d88958b49e661f11fd50eede6d9b966c2bdd591ea36526cc2",
+            "size": 63689168,
+            "sha256": "57ac630c2922301c2ded4506e363e402eb6cbaccc0cd28d5bf05b8e5d718fd6c",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "size": 752,
+            "sha256": "37d4006146c3b920526151e60db193a2dece1d89e055f1c39d7e2b049c196606",
+            "name": "profile.txt",
+            "source_path": "pipeline-artifacts/b1f63e9563254a6cae780b7cf809ac4a/0/profile.txt",
+            "id": "129ac1395346287dfb618c401a2bbbc5c964fc35342142bfafd95887c6326660",
+            "pipeline_result": {
+              "job_id": "b1f63e9563254a6cae780b7cf809ac4a",
+              "pipeline_name": "metagenomic_pathogen_identification_marker",
+              "output_key": "StrainMeta.profile",
+              "output_name": "profile",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T04:22:18.745181+00:00"
+            },
+            "content": {
+              "preview": "# data_type=metagenome; signal=DNA-level strain signal\n#mpa_vJan25_CHOCOPhlAnSGB_202503\n#/opt/conda/envs/strain-meta/bin/metaphlan /cromwell-executions/StrainMeta/958d1074-2cf6-4cca-8def-dfafb97ee21b/call-MetaPhlAnSample/inputs/1842615954/7dcac65f6d37eae4-3bc1f9fd2079483393a6b2c961d07021_assembly_R1.fastq.gz --input_type fastq --db_dir /data/zhaomh/program/database/strain_database/metaphlan -x mpa_vJan25_CHOCOPhlAnSGB_202503 --nproc 16 --samout strain_meta_SAMPLE/sams/SAMPLE.sam.bz2 --mapout strain_meta_SAMPLE/bowtie2/SAMPLE.bowtie2.bz2 --bowtie2_exe bowtie2 -o strain_meta_SAMPLE/profiles/SAMPLE_profile.txt\n#12000 reads processed\n#SampleID\tMetaphlan_Analysis\n#clade_name\tNCBI_tax_id\trelative_abundance\tadditional_species\nUNCLASSIFIED\t-1\t100.0\t\n",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 63848155,
+            "sha256": "3eca2dce5a7494d056b62cd00231e091302212c10eea2724f28d354e33bcc328",
+            "name": "sam.bz2",
+            "source_path": "pipeline-artifacts/b1f63e9563254a6cae780b7cf809ac4a/1/sam.bz2",
+            "id": "26e25eb1671882a1133244efb3d11de674bfab710489a7bcaf6c4a58113a618f",
+            "pipeline_result": {
+              "job_id": "b1f63e9563254a6cae780b7cf809ac4a",
+              "pipeline_name": "metagenomic_pathogen_identification_marker",
+              "output_key": "StrainMeta.sam_bz2",
+              "output_name": "sam_bz2",
+              "output_kind": "file",
+              "completed_at": "2026-11-20T04:22:18.745181+00:00"
+            },
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "size": 514,
+            "sha256": "b67b23ce4dc8e85da639f619d5b9b058d8bde1fa81ee8702cb6e591eaa363d00",
+            "name": "consensus_marker.json.bz2",
+            "source_path": "pipeline-artifacts/b1f63e9563254a6cae780b7cf809ac4a/2/consensus_marker.json.bz2",
+            "id": "5b65d169ff177be6e6220884634bf5626b78885a5dd50411a5eb7dac4f905591",
+            "pipeline_result": {
+              "job_id": "b1f63e9563254a6cae780b7cf809ac4a",
+              "pipeline_name": "metagenomic_pathogen_identification_marker",
+              "output_key": "StrainMeta.consensus_marker",
+              "output_name": "consensus_marker",
+              "output_kind": "file",
+              "completed_at": "2026-11-20T04:22:18.745181+00:00"
+            },
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          }
+        ],
+        "native_qc_applied": false,
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R1": "fe885fc1e7623524ab0da97037064b35"
+          },
+          "status": "registered"
+        }
+      }
+    },
+    "files": [
+      {
+        "name": "profile.txt",
+        "resource_id": "result:8f94ab61318b45c39c01faf14a435364:129ac1395346287dfb618c401a2bbbc5c964fc35342142bfafd95887c6326660",
+        "state": "succeeded",
+        "expected_sha256": "37d4006146c3b920526151e60db193a2dece1d89e055f1c39d7e2b049c196606",
+        "bytes": 752,
+        "sha256": "37d4006146c3b920526151e60db193a2dece1d89e055f1c39d7e2b049c196606",
+        "matches": true
+      },
+      {
+        "name": "sam.bz2",
+        "resource_id": "result:8f94ab61318b45c39c01faf14a435364:26e25eb1671882a1133244efb3d11de674bfab710489a7bcaf6c4a58113a618f",
+        "state": "succeeded",
+        "expected_sha256": "3eca2dce5a7494d056b62cd00231e091302212c10eea2724f28d354e33bcc328",
+        "bytes": 63848155,
+        "sha256": "3eca2dce5a7494d056b62cd00231e091302212c10eea2724f28d354e33bcc328",
+        "matches": true
+      },
+      {
+        "name": "consensus_marker.json.bz2",
+        "resource_id": "result:8f94ab61318b45c39c01faf14a435364:5b65d169ff177be6e6220884634bf5626b78885a5dd50411a5eb7dac4f905591",
+        "state": "succeeded",
+        "expected_sha256": "b67b23ce4dc8e85da639f619d5b9b058d8bde1fa81ee8702cb6e591eaa363d00",
+        "bytes": 514,
+        "sha256": "b67b23ce4dc8e85da639f619d5b9b058d8bde1fa81ee8702cb6e591eaa363d00",
+        "matches": true
+      },
+      {
+        "name": "3bc1f9fd2079483393a6b2c961d07021_assembly_R1.fastq.gz",
+        "resource_id": "result:8f94ab61318b45c39c01faf14a435364:79024f86e827a3c855be557c522f0a2c6560de62f04ceff548c23bb9dcd3b94f",
+        "state": "succeeded",
+        "expected_sha256": "7dcac65f6d37eae4cfb2e0c44da0b606070c7911646edd472a8e7e5399fe3eb9",
+        "bytes": 546528,
+        "sha256": "7dcac65f6d37eae4cfb2e0c44da0b606070c7911646edd472a8e7e5399fe3eb9",
+        "matches": true
+      },
+      {
+        "name": "results.zip",
+        "resource_id": "result:8f94ab61318b45c39c01faf14a435364:f11ea9629fa0822d88958b49e661f11fd50eede6d9b966c2bdd591ea36526cc2",
+        "state": "succeeded",
+        "expected_sha256": "57ac630c2922301c2ded4506e363e402eb6cbaccc0cd28d5bf05b8e5d718fd6c",
+        "bytes": 63689168,
+        "sha256": "57ac630c2922301c2ded4506e363e402eb6cbaccc0cd28d5bf05b8e5d718fd6c",
+        "matches": true
+      }
+    ],
+    "search_state": "succeeded",
+    "matched_all": true,
+    "native_exports": [
+      {
+        "resource_id": "native:29e32165754e38ca85deeef873b16eca:strain_profile:5451092add2647587235f1171f638623:record",
+        "kind": "native_analysis_record",
+        "state": "succeeded",
+        "bytes": 369,
+        "sha256": "e026eaeafb3969d46fe21ddfdb59413b4de709d217dadfed2b7a7779cba86c51",
+        "sample_id_matches": true
+      },
+      {
+        "resource_id": "result:8f94ab61318b45c39c01faf14a435364:129ac1395346287dfb618c401a2bbbc5c964fc35342142bfafd95887c6326660",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 752,
+        "sha256": "37d4006146c3b920526151e60db193a2dece1d89e055f1c39d7e2b049c196606"
+      },
+      {
+        "resource_id": "result:8f94ab61318b45c39c01faf14a435364:26e25eb1671882a1133244efb3d11de674bfab710489a7bcaf6c4a58113a618f",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 63848155,
+        "sha256": "3eca2dce5a7494d056b62cd00231e091302212c10eea2724f28d354e33bcc328"
+      },
+      {
+        "resource_id": "result:8f94ab61318b45c39c01faf14a435364:5b65d169ff177be6e6220884634bf5626b78885a5dd50411a5eb7dac4f905591",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 514,
+        "sha256": "b67b23ce4dc8e85da639f619d5b9b058d8bde1fa81ee8702cb6e591eaa363d00"
+      }
+    ]
+  },
+  "result_sync": {
+    "tool_response": {
+      "status": "ok",
+      "data": {
+        "value": {
+          "transfer_id": "e722728e382b4349b0b1da2aad69e84a",
+          "site_id": "mscan",
+          "operation": "result_sync",
+          "state": "succeeded",
+          "result": {
+            "cromwell_task_id": "958d1074-2cf6-4cca-8def-dfafb97ee21b",
+            "pipeline_name": "metagenomic_pathogen_identification_marker",
+            "target": {
+              "data_type": "meta",
+              "project_name": "Bridge_remaining_20261120",
+              "sample_name": "marker_single_end_sync",
+              "project_id": "8f8dc171a6c2321eb84164aa5eaea3f4",
+              "sample_id": "26c75c528fe43d0a96354ac7c267a9fd"
+            },
+            "state": "imported",
+            "program": "strain_meta"
+          }
+        }
+      },
+      "files": [],
+      "evidence": [],
+      "error": null
+    },
+    "transfer": {
+      "transfer_id": "e722728e382b4349b0b1da2aad69e84a",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "cromwell_task_id": "958d1074-2cf6-4cca-8def-dfafb97ee21b",
+        "pipeline_name": "metagenomic_pathogen_identification_marker",
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_remaining_20261120",
+          "sample_name": "marker_single_end_sync",
+          "project_id": "8f8dc171a6c2321eb84164aa5eaea3f4",
+          "sample_id": "26c75c528fe43d0a96354ac7c267a9fd"
+        },
+        "state": "imported",
+        "program": "strain_meta"
+      }
+    },
+    "repeat": {
+      "transfer_id": "e8f32b64aac4446bb952d4959f45c682",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_remaining_20261120",
+          "sample_name": "26c75c528fe43d0a96354ac7c267a9fd",
+          "project_id": "8f8dc171a6c2321eb84164aa5eaea3f4",
+          "sample_id": "26c75c528fe43d0a96354ac7c267a9fd"
+        },
+        "program": "strain_meta",
+        "state": "imported",
+        "cromwell_task_id": "958d1074-2cf6-4cca-8def-dfafb97ee21b",
+        "message": "Native result already imported.",
+        "pipeline_name": "metagenomic_pathogen_identification_marker"
+      }
+    }
+  },
+  "finished": true,
+  "elapsed_seconds": 625.0
+}

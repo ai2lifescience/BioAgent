@@ -1,0 +1,496 @@
+{
+  "pipeline": "viral_read_molecular_typing",
+  "execution": "succeeded",
+  "stack": "standard",
+  "project": "Bridge_expanded_20261120_standard",
+  "session_id": "28616e4e-8dc2-4abc-a8f7-8e90c94c7518",
+  "engine": "wdl",
+  "catalog_name": "viral_read_molecular_typing",
+  "manifest_sha256": "9041c29a8a3a6e2e0b47655514a8528b15c399384edf1ab897989672aea3d795",
+  "inputs": {
+    "read1": "uploads/examples/viral_read_molecular_typing-cd3a889257b0484d9bdab5a5119643fc/molecular_demo_h1n1.fastq.gz"
+  },
+  "parameters": {
+    "pathogen": "H1N1"
+  },
+  "input_scope": "Bundled public seasonal influenza example, routine molecular typing only; no phenotype/risk assessment.",
+  "plan_id": "caf59dbd87004e7e97cd42bbce62116e",
+  "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+  "last_state": {
+    "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+    "plan_id": "caf59dbd87004e7e97cd42bbce62116e",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:34:44.196628+00:00",
+    "started_at": "2026-11-20T02:34:44.402891+00:00",
+    "finished_at": "2026-11-20T02:35:39.413073+00:00",
+    "updated_at": "2026-11-20T02:35:39.414095+00:00",
+    "error": null,
+    "remote_id": "f38bc873-d346-4b32-b022-f89b75f61833",
+    "artifact_status": "available",
+    "pipeline_name": "viral_read_molecular_typing"
+  },
+  "outputs": {
+    "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+    "plan_id": "caf59dbd87004e7e97cd42bbce62116e",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:34:44.196628+00:00",
+    "started_at": "2026-11-20T02:34:44.402891+00:00",
+    "finished_at": "2026-11-20T02:35:39.413073+00:00",
+    "updated_at": "2026-11-20T02:35:39.414095+00:00",
+    "error": null,
+    "remote_id": "f38bc873-d346-4b32-b022-f89b75f61833",
+    "artifact_status": "available",
+    "pipeline_name": "viral_read_molecular_typing",
+    "files": [
+      {
+        "name": "result.csv",
+        "path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/0/result.csv",
+        "workspace_path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/0/result.csv",
+        "size": 117,
+        "remote": true,
+        "artifact_id": "caf59dbd87004e7e97cd42bbce62116e:0",
+        "pipeline_result": {
+          "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+          "pipeline_name": "viral_read_molecular_typing",
+          "output_key": "run_molecular_typing.result_csv",
+          "output_name": "result_csv",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:35:39.413073+00:00"
+        }
+      },
+      {
+        "name": "nextclade.tsv",
+        "path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/1/nextclade.tsv",
+        "workspace_path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/1/nextclade.tsv",
+        "size": 3726,
+        "remote": true,
+        "artifact_id": "caf59dbd87004e7e97cd42bbce62116e:1",
+        "pipeline_result": {
+          "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+          "pipeline_name": "viral_read_molecular_typing",
+          "output_key": "run_molecular_typing.nextclade_tsv",
+          "output_name": "nextclade_tsv",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:35:39.413073+00:00"
+        }
+      },
+      {
+        "name": "nextclade.json",
+        "path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/2/nextclade.json",
+        "workspace_path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/2/nextclade.json",
+        "size": 115101,
+        "remote": true,
+        "artifact_id": "caf59dbd87004e7e97cd42bbce62116e:2",
+        "pipeline_result": {
+          "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+          "pipeline_name": "viral_read_molecular_typing",
+          "output_key": "run_molecular_typing.nextclade_json",
+          "output_name": "nextclade_json",
+          "output_kind": "json",
+          "completed_at": "2026-11-20T02:35:39.413073+00:00"
+        }
+      },
+      {
+        "name": "consensus.fa",
+        "path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/3/consensus.fa",
+        "workspace_path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/3/consensus.fa",
+        "size": 1709,
+        "remote": true,
+        "artifact_id": "caf59dbd87004e7e97cd42bbce62116e:3",
+        "pipeline_result": {
+          "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+          "pipeline_name": "viral_read_molecular_typing",
+          "output_key": "run_molecular_typing.consensus_fa",
+          "output_name": "consensus_fasta",
+          "output_kind": "sequence",
+          "completed_at": "2026-11-20T02:35:39.413073+00:00"
+        }
+      },
+      {
+        "name": "final.bam",
+        "path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/4/final.bam",
+        "workspace_path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/4/final.bam",
+        "size": 1016260,
+        "remote": true,
+        "artifact_id": "caf59dbd87004e7e97cd42bbce62116e:4",
+        "pipeline_result": {
+          "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+          "pipeline_name": "viral_read_molecular_typing",
+          "output_key": "run_molecular_typing.final_bam_out",
+          "output_name": "final_bam",
+          "output_kind": "alignment",
+          "completed_at": "2026-11-20T02:35:39.413073+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/0/result.csv",
+        "text": "sequence_name,clade,subclade,legacy-clade,quality,coverage,depth\nSAMPLE,C.1.9,C.1.9,6B.1A.5a.2a,mediocre,85.84,37.81\n"
+      },
+      {
+        "path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/1/nextclade.tsv",
+        "text": "index\tseqName\tclade\tproposedSubclade\tsubclade\tshort-clade\tlegacy-clade\tglycosylation\tqc.overallScore\tqc.overallStatus\ttotalSubstitutions\ttotalDeletions\ttotalInsertions\ttotalFrameShifts\ttotalMissing\ttotalNonACGTNs\ttotalAminoacidSubstitutions\ttotalAminoacidDeletions\ttotalAminoacidInsertions\ttotalUnknownAa\talignmentScore\talignmentStart\talignmentEnd\tcoverage\tcdsCoverage\tisReverseComplement\tsubstitutions\tdeletions\tinsertions\tframeShifts\taaSubstitutions\taaDeletions\taaInsertions\tprivateNucMutations.reversionSubstitutions\tprivateNucMutations.labeledSubstitutions\tprivateNucMutations.unlabeledSubstitutions\tprivateNucMutations.totalReversionSubstitutions\tprivateNucMutations.totalLabeledSubstitutions\tprivateNucMutations.totalUnlabeledSubstitutions\tprivateNucMutations.totalPrivateSubstitutions\tprivateAaMutations.reversionSubstitutions\tprivateAaMutations.labeledSubstitutions\tprivateAaMutations.unlabeledSubstitutions\tprivateAaMutations.totalReversionSubstitutions\tprivateAaMutations.totalLabeledSubstitutions\tprivateAaMutations.totalUnlabeledSubstitutions\tprivateAaMutations.totalPrivateSubstitutions\tmissing\tfounderMuts['clade'].nodeName\tfounderMuts['clade'].substitutions\tfounderMuts['clade'].deletions\tfounderMuts['clade'].aaSubstitutions\tfounderMuts['clade'].aaDeletions\tfounderMuts['legacy-clade'].nodeName\tfounderMuts['legacy-clade'].substitutions\tfounderMuts['legacy-clade'].deletions\tfounderMuts['legacy-clade'].aaSubstitutions\tfounderMuts['legacy-clade'].aaDeletions\tunknownAaRanges\tnonACGTNs\tqc.missingData.missingDataThreshold\tqc.missingData.score\tqc.missingData.status\tqc.missingData.totalMissing\tqc.mixedSites.mixedSitesThreshold\tqc.mixedSites.score\tqc.mixedSites.status\tqc.mixedSites.totalMixedSites\tqc.privateMutations.cutoff\tqc.privateMutations.excess\tqc.privateMutations.score\tqc.privateMutations.status\tqc.privateMutations.total\tqc.snpClusters.clusteredSNPs\tqc.snpClusters.score\tqc.snpClusters.status\tqc.snpClusters.totalSNPs\tqc.frameShifts.frameShifts\tqc.frameShifts.totalFrameShifts\tqc.frameShifts.frameShiftsIgnored\tqc.frameShifts.totalFrameShiftsIgnored\tqc.frameShifts.score\tqc.frameShifts.status\tqc.stopCodons.stopCodons\tqc.stopCodons.totalStopCodons\tqc.stopCodons.score\tqc.stopCodons.status\ttotalPcrPrimerChanges\tpcrPrimerChanges\tfailedCdses\twarnings\terrors\n0\tSAMPLE\tC.1.9\tC.1.9\tC.1.9\t5a.2a\t6B.1A.5a.2a\tHA1:87:NGT;HA2:154:NGT\t72.250000\tmediocre\t62\t1\t0\t1\t248\t0\t10\t2\t0\t239\t4597\t21\t1721\t0.829337899543379\tHA1:0.3730886850152905,HA2:0.9234234234234234,SigPep:0\tfalse\tT161C,C164T,G188A,A231C,T236C,C293A,G311A,G338T,G360A,G416A,A429G,A456G,A461T,T485C,T512C,A576C,A599G,C636G,T678A,G685A,T718C,A736G,A742C,G776A,A809T,T820C,G847A,A849G,A911G,A918G,A954G,A974G,T1023C,A1032G,T1061C,T1082C,C1163T,G1178A,T1199C,T1211C,G1238A,A1250T,G1271T,T1290C,A1301G,A1323G,T1347C,T1356C,C1382T,C1385T,C1428T,C1442T,T1487C,G1493A,G1566A,G1577A,A1589C,G1616A,C1631T,A1646G,G1650A,T1673C\t561\t\tHA1:165-327\tHA1:K54Q,HA1:S74R,HA1:D97N,HA1:T120A,HA1:N129D,HA1:K130N,HA2:I91V,HA2:E172K,HA2:E179D,HA2:V200I\tHA1:W150-,HA1:S164-\t\tT443C,G515A,G968A,G1511A\t\tT236C,G685A,A736G,T1211C,G1238A,G1650A\t4\t0\t6\t10\t\t\tHA2:V200I\t0\t0\t1\t1\t21-145,315-322,442,519-558,618-627,739,834-840,983-994,1073-1076,1185-1194,1361-1367,1403-1425\tNODE_0000321\tT236C,G311A,T443C,G515A,G685A,A736G,G968A,T1211C,G1238A,C1385T,G1511A,G1650A,T1673C\t561\tHA2:V200I\tHA1:W150-,HA1:T164-\tNODE_0000185\tT236C,G311A,G338T,A429G,T443C,G515A,A576C,G685A,A736G,G968A,T1023C,T1211C,G1238A,A1323G,T1347C,C1385T,C1442T,G1511A,A1646G,G1650A\t561\tHA1:T120A,HA2:I91V,HA2:V200I\tHA1:W150-,HA1:T164-\tSigPep:1-17,HA1:1-25,HA1:82-84,HA1:124,HA1:151-163,HA1:165-327,HA2:8,HA2:45-48,HA2:103-105,HA2:117-125\t\t\t\t\t\t4\t0\tgood\t0\t15\t6\t40\tmediocre\t11\t\t\t\t\tHA1:165-327\t1\t\t0\t75\tmediocre\t\t0\t0\tgood\t0\t\t\t\t\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/caf59dbd87004e7e97cd42bbce62116e/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "roundtrip": {
+    "push": {
+      "transfer_id": "958fb79a6316478bb389f0ef1b5478fa",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "viral_read_molecular_typing_files",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "128cf57df95c3cf2ba8b0a54689869d9"
+        },
+        "receipt_id": "958fb79a6316478bb389f0ef1b5478fa",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+            "files_delivered": true,
+            "generic_import": {
+              "access": "Search or pull the attached sample files; native records are a separate outcome.",
+              "artifact_count": 5,
+              "state": "imported"
+            },
+            "pipeline": "viral_read_molecular_typing",
+            "format": "run_molecular_typing",
+            "state": "unsupported",
+            "message": "MSCAN has no registered importer for this result format; files remain available."
+          }
+        ],
+        "files": [
+          {
+            "name": "molecular_demo_h1n1.fastq.gz",
+            "source_path": "uploads/examples/viral_read_molecular_typing-cd3a889257b0484d9bdab5a5119643fc/molecular_demo_h1n1.fastq.gz",
+            "id": "5ac1aad49751c224aa8349a6d4f4cef557b1d2694d0418205c0dbf60c52886e8",
+            "size": 8803144,
+            "sha256": "edf1d6cd93913afc3a9947805c714f9ce17bf167026ca7946524708c2c1c52f4",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/caf59dbd87004e7e97cd42bbce62116e/results.zip",
+            "id": "e47f177c828044361e91214269800f83bed0dbed42f3f4d7d1a2cbf1e298d2f0",
+            "size": 1029012,
+            "sha256": "922366dc3b258bf22549a8799d5d60e9b69077dbcc9ea79a404e2de4dd05bd17",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "size": 117,
+            "sha256": "c8232b87f32eac800fbbd8b2f6243f193de48e8e60085c81fe9069cbb66a2837",
+            "name": "result.csv",
+            "source_path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/0/result.csv",
+            "id": "f169d1bee508d53ce0cf9a528ffcfa46fc1997c006fc884c290953fbca6d4fe6",
+            "pipeline_result": {
+              "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+              "pipeline_name": "viral_read_molecular_typing",
+              "output_key": "run_molecular_typing.result_csv",
+              "output_name": "result_csv",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:35:39.413073+00:00"
+            },
+            "content": {
+              "preview_rows": [
+                [
+                  "SAMPLE",
+                  "C.1.9",
+                  "C.1.9",
+                  "6B.1A.5a.2a",
+                  "mediocre",
+                  "85.84",
+                  "37.81"
+                ]
+              ],
+              "columns": [
+                "sequence_name",
+                "clade",
+                "subclade",
+                "legacy-clade",
+                "quality",
+                "coverage",
+                "depth"
+              ],
+              "delimiter": "comma",
+              "preview_only": true,
+              "preview_available": true,
+              "kind": "table"
+            }
+          },
+          {
+            "size": 3726,
+            "sha256": "bad10379e1f9d804593516535958d83f2e7aa81cb2dbbc7c748578043232ce72",
+            "name": "nextclade.tsv",
+            "source_path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/1/nextclade.tsv",
+            "id": "142b19f941bf65d6e5e2367cd2b24d0044ee8aa00962bc754f8fecb25e112038",
+            "pipeline_result": {
+              "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+              "pipeline_name": "viral_read_molecular_typing",
+              "output_key": "run_molecular_typing.nextclade_tsv",
+              "output_name": "nextclade_tsv",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:35:39.413073+00:00"
+            },
+            "content": {
+              "preview": "index\tseqName\tclade\tproposedSubclade\tsubclade\tshort-clade\tlegacy-clade\tglycosylation\tqc.overallScore\tqc.overallStatus\ttotalSubstitutions\ttotalDeletions\ttotalInsertions\ttotalFrameShifts\ttotalMissing\ttotalNonACGTNs\ttotalAminoacidSubstitutions\ttotalAminoacidDeletions\ttotalAminoacidInsertions\ttotalUnknownAa\talignmentScore\talignmentStart\talignmentEnd\tcoverage\tcdsCoverage\tisReverseComplement\tsubstitutions\tdeletions\tinsertions\tframeShifts\taaSubstitutions\taaDeletions\taaInsertions\tprivateNucMutations.reversionSubstitutions\tprivateNucMutations.labeledSubstitutions\tprivateNucMutations.unlabeledSubstitutions\tprivateNucMutations.totalReversionSubstitutions\tprivateNucMutations.totalLabeledSubstitutions\tprivateNucMutations.totalUnlabeledSubstitutions\tprivateNucMutations.totalPrivateSubstitutions\tprivateAaMutations.reversionSubstitutions\tprivateAaMutations.labeledSubstitutions\tprivateAaMutations.unlabeledSubstitutions\tprivateAaMutations.totalReversionSubstitutions\tprivateAaMutations.totalLabeledSubstitutions\tprivateAaMutatio…",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 115101,
+            "sha256": "4ae6a5e2e1a04cfa0424b92af45786da983a2477a1fb907987877b318e43ddd6",
+            "name": "nextclade.json",
+            "source_path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/2/nextclade.json",
+            "id": "63f87adc4d2dea36cc5a9e37ef201fd697b3975c694ba19bf12e3df188c3cee8",
+            "pipeline_result": {
+              "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+              "pipeline_name": "viral_read_molecular_typing",
+              "output_key": "run_molecular_typing.nextclade_json",
+              "output_name": "nextclade_json",
+              "output_kind": "json",
+              "completed_at": "2026-11-20T02:35:39.413073+00:00"
+            },
+            "content": {
+              "preview": "{\n  \"$schema\": \"https://raw.githubusercontent.com/nextstrain/nextclade/refs/heads/release/packages/nextclade-schemas/output-json.schema.json\",\n  \"schemaVersion\": \"3.0.0\",\n  \"nextcladeAlgoVersion\": \"3.21.2\",\n  \"createdAt\": \"2026-11-20T02:35:29.032211361+00:00\",\n  \"cladeNodeAttrKeys\": [\n    {\n      \"name\": \"legacy-clade\",\n      \"displayName\": \"Legacy clade\",\n      \"description\": \"Previous clades system that is no longer actively used.\",\n      \"hideInWeb\": true,\n      \"skipAsReference\": false\n    },\n    {\n      \"name\": \"short-clade\",\n      \"displayName\": \"Abbr.legacy clade name\",\n      \"description\": \"Shortened names of legacy clades.\",\n      \"hideInWeb\": false,\n      \"skipAsReference\": true\n    },\n    {\n      \"name\": \"subclade\",\n      \"displayName\": \"Subclade\",\n      \"description\": \"Fine-grained subclade annotation.\",\n      \"hideInWeb\": true,\n      \"skipAsReference\": true\n    },\n    {\n      \"name\": \"proposedSubclade\",\n      \"displayName\": \"Proposed subclade\",\n      \"description\": \"Includes proposals of new subc…",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 1709,
+            "sha256": "f5a4061e054d90043e83c178d44990b7613e0ed1d1e53f1307471c9bf3e19ee3",
+            "name": "consensus.fa",
+            "source_path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/3/consensus.fa",
+            "id": "656a4572515fafe997fa702810f96d957b4ef1f732fc922a3f5e026e8dbc6a59",
+            "pipeline_result": {
+              "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+              "pipeline_name": "viral_read_molecular_typing",
+              "output_key": "run_molecular_typing.consensus_fa",
+              "output_name": "consensus_fasta",
+              "output_kind": "sequence",
+              "completed_at": "2026-11-20T02:35:39.413073+00:00"
+            },
+            "content": {
+              "preview": ">SAMPLE\nNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNAGTAACACACTCTGTCAATCTTCTAGAAGACAAGCATAACGGAAAACTATGCAAACTAAGAGGGGTAGCCCCATTGCATTTGGGTCAATGCAACATTGCTGGCTGGATCCTGGGAAATCCAGAGTGTGAATCACTCTCCACAGCAAGATCATGGTCCTACATTGTAGAANNNNNNNNTTCAGACAATGGAACTTGTTACCCAGGAGATTTCATCAATTATGAGGAGCTAAGAGAGCAATTGAGCTCAGTGTCATCATTTGAAAGGTTTGAAATATTCCCCAAGGCAAGTTCATGGCNCAATCATGACTCGGACAATGGTGTAACGGCAGCATGTCCTCACGCTGGAGCAAAAAGCTTCTACAAAAACTTAATANNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNAACCTACATTAATGATCAAGGGAAAGAAGTCCTCGTGCTGTGGGGCATTCACCATCCANNNNNNNNNNCTGACCAAGAAAGTCTCTATCAGAATGCAGATGCATATGTTTTTGTGGGGACATCAAAATACAGCAAGAAGTTCAAGCCGGAAATAGCAACAAGACCCAAAGTGAGGGGTCNAGCAGGGAGAATGAACTATTACTGGACACTAGTAGAACCGGGAGACAAAATAACATTCGAAGCAACTGGTAATCTAGTGGCACCGAGATATGCANNNNNNNTGGAAAAAGATGCTGGATCTGGTATTATCATTTCAGATACACCAGTCCACGATTGCAATACAACTTGTCAGACACCCGAGGGTGCTATAAACACCAGCCTCCCATTTCAGAATGTACATCCGATCACAATTGGGAAATGTCCNNNNNNNNNNNNAAGCACAAAATTGAGACTGGCCACAGGACTGAGGAATGTCCCG…",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 1016260,
+            "sha256": "09d2cf43cc7a55649925bcd8a65a98c3eb5dca53157fabef8a87671feae1ccb7",
+            "name": "final.bam",
+            "source_path": "pipeline-artifacts/caf59dbd87004e7e97cd42bbce62116e/4/final.bam",
+            "id": "b4e6eb351376632bfa1cf06c062735cee109ab7afaec1cf8531c2f0bf28130cd",
+            "pipeline_result": {
+              "job_id": "caf59dbd87004e7e97cd42bbce62116e",
+              "pipeline_name": "viral_read_molecular_typing",
+              "output_key": "run_molecular_typing.final_bam_out",
+              "output_name": "final_bam",
+              "output_kind": "alignment",
+              "completed_at": "2026-11-20T02:35:39.413073+00:00"
+            },
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          }
+        ],
+        "native_qc_applied": false,
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R1": "7d2e0f6045273a9fbe24d46a1531b5ac"
+          },
+          "status": "registered"
+        }
+      }
+    },
+    "files": [
+      {
+        "name": "nextclade.tsv",
+        "resource_id": "result:958fb79a6316478bb389f0ef1b5478fa:142b19f941bf65d6e5e2367cd2b24d0044ee8aa00962bc754f8fecb25e112038",
+        "state": "succeeded",
+        "expected_sha256": "bad10379e1f9d804593516535958d83f2e7aa81cb2dbbc7c748578043232ce72",
+        "bytes": 3726,
+        "sha256": "bad10379e1f9d804593516535958d83f2e7aa81cb2dbbc7c748578043232ce72",
+        "matches": true
+      },
+      {
+        "name": "molecular_demo_h1n1.fastq.gz",
+        "resource_id": "result:958fb79a6316478bb389f0ef1b5478fa:5ac1aad49751c224aa8349a6d4f4cef557b1d2694d0418205c0dbf60c52886e8",
+        "state": "succeeded",
+        "expected_sha256": "edf1d6cd93913afc3a9947805c714f9ce17bf167026ca7946524708c2c1c52f4",
+        "bytes": 8803144,
+        "sha256": "edf1d6cd93913afc3a9947805c714f9ce17bf167026ca7946524708c2c1c52f4",
+        "matches": true
+      },
+      {
+        "name": "nextclade.json",
+        "resource_id": "result:958fb79a6316478bb389f0ef1b5478fa:63f87adc4d2dea36cc5a9e37ef201fd697b3975c694ba19bf12e3df188c3cee8",
+        "state": "succeeded",
+        "expected_sha256": "4ae6a5e2e1a04cfa0424b92af45786da983a2477a1fb907987877b318e43ddd6",
+        "bytes": 115101,
+        "sha256": "4ae6a5e2e1a04cfa0424b92af45786da983a2477a1fb907987877b318e43ddd6",
+        "matches": true
+      },
+      {
+        "name": "consensus.fa",
+        "resource_id": "result:958fb79a6316478bb389f0ef1b5478fa:656a4572515fafe997fa702810f96d957b4ef1f732fc922a3f5e026e8dbc6a59",
+        "state": "succeeded",
+        "expected_sha256": "f5a4061e054d90043e83c178d44990b7613e0ed1d1e53f1307471c9bf3e19ee3",
+        "bytes": 1709,
+        "sha256": "f5a4061e054d90043e83c178d44990b7613e0ed1d1e53f1307471c9bf3e19ee3",
+        "matches": true
+      },
+      {
+        "name": "final.bam",
+        "resource_id": "result:958fb79a6316478bb389f0ef1b5478fa:b4e6eb351376632bfa1cf06c062735cee109ab7afaec1cf8531c2f0bf28130cd",
+        "state": "succeeded",
+        "expected_sha256": "09d2cf43cc7a55649925bcd8a65a98c3eb5dca53157fabef8a87671feae1ccb7",
+        "bytes": 1016260,
+        "sha256": "09d2cf43cc7a55649925bcd8a65a98c3eb5dca53157fabef8a87671feae1ccb7",
+        "matches": true
+      },
+      {
+        "name": "results.zip",
+        "resource_id": "result:958fb79a6316478bb389f0ef1b5478fa:e47f177c828044361e91214269800f83bed0dbed42f3f4d7d1a2cbf1e298d2f0",
+        "state": "succeeded",
+        "expected_sha256": "922366dc3b258bf22549a8799d5d60e9b69077dbcc9ea79a404e2de4dd05bd17",
+        "bytes": 1029012,
+        "sha256": "922366dc3b258bf22549a8799d5d60e9b69077dbcc9ea79a404e2de4dd05bd17",
+        "matches": true
+      },
+      {
+        "name": "result.csv",
+        "resource_id": "result:958fb79a6316478bb389f0ef1b5478fa:f169d1bee508d53ce0cf9a528ffcfa46fc1997c006fc884c290953fbca6d4fe6",
+        "state": "succeeded",
+        "expected_sha256": "c8232b87f32eac800fbbd8b2f6243f193de48e8e60085c81fe9069cbb66a2837",
+        "bytes": 117,
+        "sha256": "c8232b87f32eac800fbbd8b2f6243f193de48e8e60085c81fe9069cbb66a2837",
+        "matches": true
+      }
+    ],
+    "search_state": "succeeded",
+    "matched_all": true,
+    "native_exports": [
+      {
+        "resource_id": "result:958fb79a6316478bb389f0ef1b5478fa:142b19f941bf65d6e5e2367cd2b24d0044ee8aa00962bc754f8fecb25e112038",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 3726,
+        "sha256": "bad10379e1f9d804593516535958d83f2e7aa81cb2dbbc7c748578043232ce72"
+      },
+      {
+        "resource_id": "result:958fb79a6316478bb389f0ef1b5478fa:5ac1aad49751c224aa8349a6d4f4cef557b1d2694d0418205c0dbf60c52886e8",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 8803144,
+        "sha256": "edf1d6cd93913afc3a9947805c714f9ce17bf167026ca7946524708c2c1c52f4"
+      },
+      {
+        "resource_id": "result:958fb79a6316478bb389f0ef1b5478fa:63f87adc4d2dea36cc5a9e37ef201fd697b3975c694ba19bf12e3df188c3cee8",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 115101,
+        "sha256": "4ae6a5e2e1a04cfa0424b92af45786da983a2477a1fb907987877b318e43ddd6",
+        "sample_id_matches": false
+      },
+      {
+        "resource_id": "result:958fb79a6316478bb389f0ef1b5478fa:656a4572515fafe997fa702810f96d957b4ef1f732fc922a3f5e026e8dbc6a59",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 1709,
+        "sha256": "f5a4061e054d90043e83c178d44990b7613e0ed1d1e53f1307471c9bf3e19ee3"
+      }
+    ]
+  },
+  "result_sync": {
+    "tool_response": {
+      "status": "ok",
+      "data": {
+        "value": {
+          "transfer_id": "4205891d33ce467a9f43e3bb4b74b229",
+          "site_id": "mscan",
+          "operation": "result_sync",
+          "state": "succeeded",
+          "result": {
+            "cromwell_task_id": "f38bc873-d346-4b32-b022-f89b75f61833",
+            "pipeline_name": "viral_read_molecular_typing",
+            "target": {
+              "data_type": "meta",
+              "project_name": "Bridge_expanded_20261120_standard",
+              "sample_name": "viral_read_molecular_typing_sync",
+              "project_id": "4a651c555eae32c39c8bfdd142321567",
+              "sample_id": "8ddd031e87d83280b8e694f61c9b0bb6"
+            },
+            "state": "imported",
+            "program": "molecular"
+          }
+        }
+      },
+      "files": [],
+      "evidence": [],
+      "error": null
+    },
+    "transfer": {
+      "transfer_id": "4205891d33ce467a9f43e3bb4b74b229",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "cromwell_task_id": "f38bc873-d346-4b32-b022-f89b75f61833",
+        "pipeline_name": "viral_read_molecular_typing",
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "viral_read_molecular_typing_sync",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "8ddd031e87d83280b8e694f61c9b0bb6"
+        },
+        "state": "imported",
+        "program": "molecular"
+      }
+    },
+    "repeat": {
+      "transfer_id": "52c89ebbadff4e3ca95a5878d98d8e75",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "8ddd031e87d83280b8e694f61c9b0bb6",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "8ddd031e87d83280b8e694f61c9b0bb6"
+        },
+        "program": "molecular",
+        "state": "imported",
+        "cromwell_task_id": "f38bc873-d346-4b32-b022-f89b75f61833",
+        "message": "Native result already imported.",
+        "pipeline_name": "viral_read_molecular_typing"
+      }
+    }
+  },
+  "elapsed_seconds": 109.6,
+  "finished": true
+}

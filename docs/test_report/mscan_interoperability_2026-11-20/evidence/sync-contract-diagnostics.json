@@ -1,0 +1,32 @@
+{
+  "broad_detection": {
+    "producer": "tools/runtime_tools/pipelines/metagenomic_pathogen_identification/pipeline.wdl",
+    "producer_contains_depth_track_archives": false,
+    "consumer": "resource/mscan/mscan-app/mscan-database/src/main/java/com/mscan/database/service/impl/IMetadataProcessServiceImpl.java",
+    "consumer_requires_depth_track_archives": true
+  },
+  "kmer": {
+    "artifact_rows": [
+      {
+        "name": "classified.tsv",
+        "data_rows": 24000,
+        "sha256": "94f730ca19af3eee04aa5347ec4f2ed0018b98f7ea18008f8f95718792777346"
+      },
+      {
+        "name": "report.tsv",
+        "data_rows": 150,
+        "sha256": "96c27ca82706eb4728f0b01f64d925d5fcab2fb72b6c8f2398fee745a25e35d1"
+      },
+      {
+        "name": "signature_coverage.csv",
+        "data_rows": 0,
+        "sha256": "428fd70a4a1400c847f8504632834be43ac2b428399dc2e2e81c4616e7260da0"
+      }
+    ],
+    "consumer_rejects_empty_csv": true
+  },
+  "retry_states": {
+    "metagenomic_pathogen_identification": "failed",
+    "metagenomic_pathogen_identification_kmer": "failed"
+  }
+}

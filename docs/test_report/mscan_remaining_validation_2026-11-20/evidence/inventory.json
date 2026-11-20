@@ -1,0 +1,44 @@
+{
+  "live_cases": [
+    {
+      "case": "assembly_extended",
+      "pipeline": "metagenomic_de_novo_assembly",
+      "seconds": 2700,
+      "type": "meta",
+      "scope": "Repeat of the original unmodified E. coli K-12 simulated-read case; observation extended from 20 to 45 minutes."
+    },
+    {
+      "case": "phi_genome_protein_negative",
+      "pipeline": "phi_annotator_genome",
+      "seconds": 900,
+      "type": "synthetic",
+      "scope": "Artificial low-complexity nonfunctional protein negative control; execution/format test only."
+    },
+    {
+      "case": "phi_metagenome_paired_negative",
+      "pipeline": "phi_annotator_metagenome",
+      "seconds": 900,
+      "type": "meta",
+      "scope": "Artificial low-complexity FASTQ negative controls; no real organism or pathogen reads."
+    },
+    {
+      "case": "phi_genome_dna_negative",
+      "pipeline": "phi_annotator_genome",
+      "seconds": 900,
+      "type": "synthetic",
+      "scope": "Artificial noncoding low-complexity FASTA negative control; gene-prediction branch may reject a no-gene input."
+    }
+  ],
+  "excluded": [
+    {
+      "pipeline": "pathogen_variant_risk_assessment",
+      "execution": "skipped_safety",
+      "reason": "Pathogen variant-risk interpretation remains outside the authorized safe execution scope; previous inert contract checks are retained."
+    },
+    {
+      "pipeline": "pathogen_variant_risk_assessment_consensus",
+      "execution": "skipped_safety",
+      "reason": "Pathogen variant-risk interpretation remains outside the authorized safe execution scope; previous inert contract checks are retained."
+    }
+  ]
+}

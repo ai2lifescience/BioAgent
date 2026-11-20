@@ -1,0 +1,465 @@
+{
+  "pipeline": "metagenomic_pathogen_identification_kmer",
+  "execution": "succeeded",
+  "stack": "standard",
+  "project": "Bridge_expanded_20261120_standard",
+  "session_id": "bbc572eb-206b-4dc4-be4f-307430d384a2",
+  "engine": "wdl",
+  "catalog_name": "kmer-detection",
+  "manifest_sha256": "bad75ce31ca9217f04952a49f4dc56d658fa3e7dd6a6dd07f96da5314e431a74",
+  "inputs": {
+    "clean_r1": "uploads/c23dece688e74d919792a15449470936_benign_R1.fastq.gz",
+    "clean_r2": "uploads/95b83220b76b4ba5b046573d4a1f7161_benign_R2.fastq.gz"
+  },
+  "parameters": {},
+  "input_scope": "Deterministic paired reads sampled from unmodified E. coli K-12 MG1655; no experimental or clinical data.",
+  "plan_id": "e6b557d3121940a8bc3234eaead353e3",
+  "job_id": "e6b557d3121940a8bc3234eaead353e3",
+  "last_state": {
+    "job_id": "e6b557d3121940a8bc3234eaead353e3",
+    "plan_id": "e6b557d3121940a8bc3234eaead353e3",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:27:14.634705+00:00",
+    "started_at": "2026-11-20T02:27:14.814555+00:00",
+    "finished_at": "2026-11-20T02:40:29.655442+00:00",
+    "updated_at": "2026-11-20T02:40:29.656448+00:00",
+    "error": null,
+    "remote_id": "6d16161e-34e0-4f4f-bcc0-2abbaa7ce6aa",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_pathogen_identification_kmer"
+  },
+  "outputs": {
+    "job_id": "e6b557d3121940a8bc3234eaead353e3",
+    "plan_id": "e6b557d3121940a8bc3234eaead353e3",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:27:14.634705+00:00",
+    "started_at": "2026-11-20T02:27:14.814555+00:00",
+    "finished_at": "2026-11-20T02:40:29.655442+00:00",
+    "updated_at": "2026-11-20T02:40:29.656448+00:00",
+    "error": null,
+    "remote_id": "6d16161e-34e0-4f4f-bcc0-2abbaa7ce6aa",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_pathogen_identification_kmer",
+    "files": [
+      {
+        "name": "classified.tsv",
+        "path": "pipeline-artifacts/e6b557d3121940a8bc3234eaead353e3/0/classified.tsv",
+        "workspace_path": "pipeline-artifacts/e6b557d3121940a8bc3234eaead353e3/0/classified.tsv",
+        "size": 1444258,
+        "remote": true,
+        "artifact_id": "e6b557d3121940a8bc3234eaead353e3:0",
+        "pipeline_result": {
+          "job_id": "e6b557d3121940a8bc3234eaead353e3",
+          "pipeline_name": "metagenomic_pathogen_identification_kmer",
+          "output_key": "StrobeTaxaDetection.classified_tsv",
+          "output_name": "classified_tsv",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:40:29.655442+00:00"
+        }
+      },
+      {
+        "name": "report.tsv",
+        "path": "pipeline-artifacts/e6b557d3121940a8bc3234eaead353e3/1/report.tsv",
+        "workspace_path": "pipeline-artifacts/e6b557d3121940a8bc3234eaead353e3/1/report.tsv",
+        "size": 12442,
+        "remote": true,
+        "artifact_id": "e6b557d3121940a8bc3234eaead353e3:1",
+        "pipeline_result": {
+          "job_id": "e6b557d3121940a8bc3234eaead353e3",
+          "pipeline_name": "metagenomic_pathogen_identification_kmer",
+          "output_key": "StrobeTaxaDetection.report_tsv",
+          "output_name": "report_tsv",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:40:29.655442+00:00"
+        }
+      },
+      {
+        "name": "signature_coverage.csv",
+        "path": "pipeline-artifacts/e6b557d3121940a8bc3234eaead353e3/2/signature_coverage.csv",
+        "workspace_path": "pipeline-artifacts/e6b557d3121940a8bc3234eaead353e3/2/signature_coverage.csv",
+        "size": 2323,
+        "remote": true,
+        "artifact_id": "e6b557d3121940a8bc3234eaead353e3:2",
+        "pipeline_result": {
+          "job_id": "e6b557d3121940a8bc3234eaead353e3",
+          "pipeline_name": "metagenomic_pathogen_identification_kmer",
+          "output_key": "StrobeTaxaDetection.signature_coverage_csv",
+          "output_name": "signature_coverage_csv",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:40:29.655442+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/e6b557d3121940a8bc3234eaead353e3/1/report.tsv",
+        "text": "tax_id\tname\trank\tcount\tfraction\tcount_feat2_ge_0.6\tfrac_feat2_ge_0.6\tcount_feat3_ge_0.5\tfrac_feat3_ge_0.5\tcount_both_ge_0.6&0.5\tfrac_both_ge_0.6&0.5\r\n543\tEnterobacteriaceae\tfamily\t14197\t0.591542\t9428\t0.664084\t0\t0.000000\t0\t0.000000\r\n2\tBacteria\tdomain\t4022\t0.167583\t3574\t0.888613\t0\t0.000000\t0\t0.000000\r\n562\tEscherichia coli\tspecies\t2253\t0.093875\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1\troot\tno rank\t1483\t0.061792\t1483\t1.000000\t0\t0.000000\t0\t0.000000\r\n561\tEscherichia\tgenus\t749\t0.031208\t73\t0.097463\t0\t0.000000\t0\t0.000000\r\n1236\tGammaproteobacteria\tclass\t314\t0.013083\t164\t0.522293\t0\t0.000000\t0\t0.000000\r\n131567\tcellular organisms\tcellular root\t233\t0.009708\t190\t0.815451\t0\t0.000000\t0\t0.000000\r\n623\tShigella flexneri\tspecies\t146\t0.006083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n91347\tEnterobacterales\torder\t108\t0.004500\t25\t0.231481\t0\t0.000000\t0\t0.000000\r\n1224\tPseudomonadota\tphylum\t81\t0.003375\t41\t0.506173\t0\t0.000000\t0\t0.000000\r\n3379134\tPseudomonadati\tkingdom\t55\t0.002292\t27\t0.490909\t0\t0.000000\t0\t0.000000\r\n573\tKlebsiella pneumoniae\tspecies\t30\t0.001250\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n77133\tuncultured bacterium\tspecies\t23\t0.000958\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n620\tShigella\tgenus\t21\t0.000875\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n208962\tEscherichia albertii\tspecies\t21\t0.000875\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n621\tShigella boydii\tspecies\t18\t0.000750\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n624\tShigella sonnei\tspecies\t18\t0.000750\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n564\tEscherichia fergusonii\tspecies\t15\t0.000625\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n28901\tSalmonella enterica\tspecies\t15\t0.000625\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n544\tCitrobacter\tgenus\t13\t0.000542\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n158836\tEnterobacter hormaechei\tspecies\t13\t0.000542\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n622\tShigella dysenteriae\tspecies\t10\t0.000417\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1499973\tEscherichia marmotae\tspecies\t6\t0.000250\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2044467\tEscherichia sp. E4742\tspecies\t5\t0.000208\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n237777\tuncultured Escherichia sp.\tspecies\t4\t0.000167\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n590\tSalmonella\tgenus\t4\t0.000167\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n547\tEnterobacter\tgenus\t3\t0.000125\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n54291\tRaoultella ornithinolytica\tspecies\t3\t0.000125\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n244366\tKlebsiella variicola\tspecies\t3\t0.000125\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n548\tKlebsiella aerogenes\tspecies\t2\t0.000083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n613\tSerratia\tgenus\t2\t0.000083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1760\tActinomycetes\tclass\t2\t0.000083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n9606\tHomo sapiens\tspecies\t2\t0.000083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n91750\tuncultured Alphaproteobacteria bacterium\tspecies\t2\t0.000083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2890311\tKlebsiella/Raoultella group\tno rank\t2\t0.000083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n54736\tSalmonella bongori\tspecies\t2\t0.000083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n379893\tTrabulsiella odontotermitis\tspecies\t2\t0.000083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n374\tBradyrhizobium\tgenus\t2\t0.000083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n570\tKlebsiella\tgenus\t2\t0.000083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n299767\tEnterobacter ludwigii\tspecies\t2\t0.000083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2608867\tEscherichia ruysiae\tspecies\t2\t0.000083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2608929\tunclassified Klebsiella\tno rank\t2\t0.000083\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n566\tPseudescherichia vulneris\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n599\tSalmonella sp.\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n645\tAeromonas salmonicida\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1901\tStreptomyces clavuligerus\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n35703\tCitrobacter amalonaticus\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n36033\tVanderwaltozyma polyspora\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n51288\tKluyvera ascorbata\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n61647\tPluralibacter gergoviae\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n67829\tCitrobacter murliniae\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n86663\tBacillus carboniphilus\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n171438\tPhotorhabdus akhurstii\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n185978\tunclassified Paenibacillus\tno rank\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n204773\tHerminiimonas arsenicoxydans\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n240495\tPseudonocardia dioxanivorans\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n313985\tTrichlorobacter lovleyi\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1078765\tScheffersomyces amazonensis\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1221880\tPsychrobacillus\tgenus\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1393385\tuncultured bacterium Contig1152\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1673037\tVibrio sp. R-52683\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1849603\tEnterobacteriaceae bacterium\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1912891\tSphingobium sp.\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2026887\tNitrospirota bacterium\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2587529\tKlebsiella pasteurii\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2613769\tunclassified Rhizobium\tno rank\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2645744\tunclassified Superficieibacter\tno rank\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2795974\tStieleria maiorica\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2895491\tPseudomonas sp. B21-051\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2921714\tPaenibacillus sp. FSL W8-0426\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n3107663\tVulcanimicrobiota bacterium\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n3240025\tPseudonocardia sp. CA-247075\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n550\tEnterobacter cloacae\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n632\tYersinia pestis\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n729\tHaemophilus parainfluenzae\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1268\tMicrococcaceae\tfamily\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1452\tBacillus atrophaeus\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1817\tNocardia\tgenus\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n38018\tBacteriophage sp.\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n57706\tCitrobacter braakii\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n61648\tKluyvera intermedia\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n138072\tCandidatus Williamhamiltonella defendens\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n152831\tuncultured Xanthomonas sp.\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n172827\tMeiothermus taiwanensis\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n208223\tKosakonia cowanii\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n266021\tCandidatus Endecteinascidia fromenterensis\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n333966\tSaccharopolyspora pogona\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n434008\tVariovorax sp. PBS-H4\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n545619\tParaoerskovia marina\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n981605\tuncultured Amphritea sp.\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1159327\tPontimonas salivibrio\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1397264\tCatalinimonas niigatensis\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1639133\tCitrobacter portucalensis\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1909293\tAcetobacteraceae bacterium\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2030809\tCandidatus Hydrogenedentota bacterium\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2065378\tBreoghania sp.\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2498113\tLimnobaculum zhutongyuii\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2711156\tRhizorhabdus phycosphaerae\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2975804\tStreptomyces sp. NBC_00670\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n3020906\tBrevibacterium sp. BDJS002\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n3133272\tDryocola sp. BD613\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n222\tAchromobacter\tgenus\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n625\tShigella sp.\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n13690\tSphingobium yanoikuyae\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n28141\tCronobacter sakazakii\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n47763\tStreptomyces lydicus\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n61645\tEnterobacter asburiae\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n67825\tCitrobacter rodentium\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n69218\tEnterobacter cancerogenus\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n83655\tLeclercia adecarboxylata\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n107401\tTenacibaculum maritimum\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n169679\tClostridium saccharobutylicum\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n186765\tLambdavirus\tgenus\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n203907\tCandidatus Blochmanniella floridana\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n413496\tCronobacter\tgenus\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n459529\tSphingobacterium siyangense\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n497725\tKosakonia oryzae\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n693444\tEnterobacteriaceae bacterium strain FGI 57\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1005665\tKosakonia oryzendophytica\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1210884\tGemmata massiliana\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1385715\tHymenobacter qilianensis\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1393613\tuncultured bacterium Contig785_n_1807_cl\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1526412\tMicrobacterium endophyticum\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1573676\tCitrobacter sp. R56\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1686384\tCitrobacter sp. BIDMC107\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1855352\tStreptomyces sp. TLI_053\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1927833\tCandidatus Fukatsuia\tgenus\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n1955412\t[Actinomadura] parvosata\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2006115\tAcinetobacter piscicola\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2201156\tAcidimicrobiales bacterium\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2320858\tPaenisporosarcina cavernae\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2600598\tPseudomonas saxonica\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2795609\tAureliella sp.\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2831891\tEnterobacter sp. JBIWA005\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2832643\tCaudoviricetes sp.\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2872754\tEndozoicomonas sp. 4G\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n3024416\tDesulfatiglandales bacterium\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n55193\tMalassezia\tgenus\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n67780\tEdwardsiella ictaluri\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n83654\tLeclercia\tgenus\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n158822\tCedecea neteri\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n211146\tPaenarthrobacter nitroguajacolicus\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n311230\tParaburkholderia terrae\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2267253\tThiomicrorhabdus indica\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2614250\tCaldilineaceae bacterium\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2615029\tunclassified Leeuwenhoekiella\tno rank\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2829596\tKordiimonas sp. SCSIO 12603\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2910168\tLongimicrobiales bacterium\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n2913493\tArenicellales bacterium\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n3423946\tSerratia sp. L9\tspecies\t1\t0.000042\t0\t0.000000\t0\t0.000000\t0\t0.000000\r\n"
+      },
+      {
+        "path": "pipeline-artifacts/e6b557d3121940a8bc3234eaead353e3/2/signature_coverage.csv",
+        "text": "tax_id,species_name,type,confident_reads_count,confident_reads_relative_abundance,total_assigned_reads,genome_length_bp,cell_abundance,relative_cell_abundance,max_confident_score,novel_seed_rate,binned_reads_count,covered_bins,expected_covered_bins,covered_vs_expected,covered_vs_expected_100bins,covered_vs_expected_25bins,covered_vs_expected_5bins,coverage_frac,weighted_coverage,confidence_read_threshold,high_confidence_species,bin_0,bin_1,bin_2,bin_3,bin_4,bin_5,bin_6,bin_7,bin_8,bin_9,bin_10,bin_11,bin_12,bin_13,bin_14,bin_15,bin_16,bin_17,bin_18,bin_19,bin_20,bin_21,bin_22,bin_23,bin_24,bin_25,bin_26,bin_27,bin_28,bin_29,bin_30,bin_31,bin_32,bin_33,bin_34,bin_35,bin_36,bin_37,bin_38,bin_39,bin_40,bin_41,bin_42,bin_43,bin_44,bin_45,bin_46,bin_47,bin_48,bin_49,bin_50,bin_51,bin_52,bin_53,bin_54,bin_55,bin_56,bin_57,bin_58,bin_59,bin_60,bin_61,bin_62,bin_63,bin_64,bin_65,bin_66,bin_67,bin_68,bin_69,bin_70,bin_71,bin_72,bin_73,bin_74,bin_75,bin_76,bin_77,bin_78,bin_79,bin_80,bin_81,bin_82,bin_83,bin_84,bin_85,bin_86,bin_87,bin_88,bin_89,bin_90,bin_91,bin_92,bin_93,bin_94,bin_95,bin_96,bin_97,bin_98,bin_99,bin_100,bin_101,bin_102,bin_103,bin_104,bin_105,bin_106,bin_107,bin_108,bin_109,bin_110,bin_111,bin_112,bin_113,bin_114,bin_115,bin_116,bin_117,bin_118,bin_119,bin_120,bin_121,bin_122,bin_123,bin_124,bin_125,bin_126,bin_127,bin_128,bin_129,bin_130,bin_131,bin_132,bin_133,bin_134,bin_135,bin_136,bin_137,bin_138,bin_139,bin_140,bin_141,bin_142,bin_143,bin_144,bin_145,bin_146,bin_147,bin_148,bin_149,bin_150,bin_151,bin_152,bin_153,bin_154,bin_155,bin_156,bin_157,bin_158,bin_159,bin_160,bin_161,bin_162,bin_163,bin_164,bin_165,bin_166,bin_167,bin_168,bin_169,bin_170,bin_171,bin_172,bin_173,bin_174,bin_175,bin_176,bin_177,bin_178,bin_179,bin_180,bin_181,bin_182,bin_183,bin_184,bin_185,bin_186,bin_187,bin_188,bin_189,bin_190,bin_191,bin_192,bin_193,bin_194,bin_195,bin_196,bin_197,bin_198,bin_199,bin_200,bin_201,bin_202,bin_203,bin_204,bin_205,bin_206,bin_207,bin_208,bin_209,bin_210,bin_211,bin_212,bin_213,bin_214,bin_215,bin_216,bin_217,bin_218,bin_219,bin_220,bin_221,bin_222,bin_223,bin_224,bin_225,bin_226,bin_227,bin_228,bin_229,bin_230,bin_231,bin_232,bin_233,bin_234,bin_235,bin_236,bin_237,bin_238,bin_239,bin_240,bin_241,bin_242,bin_243,bin_244,bin_245,bin_246,bin_247,bin_248,bin_249\r\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/e6b557d3121940a8bc3234eaead353e3/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "roundtrip": {
+    "push": {
+      "transfer_id": "c834f33dec894fa5b495900a5a8018c6",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "metagenomic_pathogen_identification_kmer_files",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "0aeb3359007a3a718345a8406bc0461f"
+        },
+        "receipt_id": "c834f33dec894fa5b495900a5a8018c6",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "e6b557d3121940a8bc3234eaead353e3",
+            "files_delivered": true,
+            "generic_import": {
+              "access": "Search or pull the attached sample files; native records are a separate outcome.",
+              "artifact_count": 3,
+              "state": "imported"
+            },
+            "pipeline": "metagenomic_pathogen_identification_kmer",
+            "format": "StrobeTaxaDetection",
+            "state": "unsupported",
+            "message": "MSCAN has no registered importer for this result format; files remain available."
+          }
+        ],
+        "files": [
+          {
+            "name": "c23dece688e74d919792a15449470936_benign_R1.fastq.gz",
+            "source_path": "uploads/c23dece688e74d919792a15449470936_benign_R1.fastq.gz",
+            "id": "e8fe49ec141ca34f30b1af193f3dbe06fe56d533754feeaecf9059a736c82444",
+            "size": 606829,
+            "sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "95b83220b76b4ba5b046573d4a1f7161_benign_R2.fastq.gz",
+            "source_path": "uploads/95b83220b76b4ba5b046573d4a1f7161_benign_R2.fastq.gz",
+            "id": "fd72fac24d5e3f7bfe7cfee3f1737e3f3c6d007c054a21a6fea01aa66ea63d7e",
+            "size": 606829,
+            "sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/e6b557d3121940a8bc3234eaead353e3/results.zip",
+            "id": "d7600765803bd7c4087254fd4c011375e6a3d07e35d1e61b9dba18ec3f81239d",
+            "size": 338400,
+            "sha256": "473af59e9856509aab054b581b732262d2e83d87d0d64b40b7bf7473b0658aa1",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "size": 1444258,
+            "sha256": "94f730ca19af3eee04aa5347ec4f2ed0018b98f7ea18008f8f95718792777346",
+            "name": "classified.tsv",
+            "source_path": "pipeline-artifacts/e6b557d3121940a8bc3234eaead353e3/0/classified.tsv",
+            "id": "727bb138aa617d9c90e39cb0161fb74275910e650337f7c97022ef6e2741a234",
+            "pipeline_result": {
+              "job_id": "e6b557d3121940a8bc3234eaead353e3",
+              "pipeline_name": "metagenomic_pathogen_identification_kmer",
+              "output_key": "StrobeTaxaDetection.classified_tsv",
+              "output_name": "classified_tsv",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:40:29.655442+00:00"
+            },
+            "content": {
+              "preview_rows": [
+                [
+                  "benign_0/1",
+                  "543",
+                  "0.9066667",
+                  "0.9066667",
+                  "0.86017096",
+                  "0",
+                  "39",
+                  ""
+                ],
+                [
+                  "benign_1/1",
+                  "543",
+                  "0.9866667",
+                  "0.82666665",
+                  "0.96474075",
+                  "0",
+                  "45",
+                  "213,229,230"
+                ],
+                [
+                  "benign_2/1",
+                  "562",
+                  "0.16",
+                  "0",
+                  "0.0038095238",
+                  "0.0016380952",
+                  "42",
+                  "197"
+                ]
+              ],
+              "columns": [
+                "seqid",
+                "tax_id",
+                "base_coverage",
+                "uniq_base_coverage",
+                "uniq_seed_coverage",
+                "context_weighted_seed_coverage",
+                "seed_counts",
+                "bin_indices"
+              ],
+              "delimiter": "tab",
+              "preview_only": true,
+              "preview_available": true,
+              "kind": "table"
+            }
+          },
+          {
+            "size": 12442,
+            "sha256": "96c27ca82706eb4728f0b01f64d925d5fcab2fb72b6c8f2398fee745a25e35d1",
+            "name": "report.tsv",
+            "source_path": "pipeline-artifacts/e6b557d3121940a8bc3234eaead353e3/1/report.tsv",
+            "id": "7af05df8b0b2b5ccb6f7b05d830a60b784e9f67a2f6053c73f6c82e42839b5cc",
+            "pipeline_result": {
+              "job_id": "e6b557d3121940a8bc3234eaead353e3",
+              "pipeline_name": "metagenomic_pathogen_identification_kmer",
+              "output_key": "StrobeTaxaDetection.report_tsv",
+              "output_name": "report_tsv",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:40:29.655442+00:00"
+            },
+            "content": {
+              "preview_rows": [
+                [
+                  "543",
+                  "Enterobacteriaceae",
+                  "family",
+                  "14197",
+                  "0.591542",
+                  "9428",
+                  "0.664084",
+                  "0",
+                  "0.000000",
+                  "0",
+                  "0.000000"
+                ],
+                [
+                  "2",
+                  "Bacteria",
+                  "domain",
+                  "4022",
+                  "0.167583",
+                  "3574",
+                  "0.888613",
+                  "0",
+                  "0.000000",
+                  "0",
+                  "0.000000"
+                ],
+                [
+                  "562",
+                  "Escherichia coli",
+                  "species",
+                  "2253",
+                  "0.093875",
+                  "0",
+                  "0.000000",
+                  "0",
+                  "0.000000",
+                  "0",
+                  "0.000000"
+                ]
+              ],
+              "columns": [
+                "tax_id",
+                "name",
+                "rank",
+                "count",
+                "fraction",
+                "count_feat2_ge_0.6",
+                "frac_feat2_ge_0.6",
+                "count_feat3_ge_0.5",
+                "frac_feat3_ge_0.5",
+                "count_both_ge_0.6&0.5",
+                "frac_both_ge_0.6&0.5"
+              ],
+              "delimiter": "tab",
+              "preview_only": true,
+              "preview_available": true,
+              "kind": "table"
+            }
+          },
+          {
+            "size": 2323,
+            "sha256": "428fd70a4a1400c847f8504632834be43ac2b428399dc2e2e81c4616e7260da0",
+            "name": "signature_coverage.csv",
+            "source_path": "pipeline-artifacts/e6b557d3121940a8bc3234eaead353e3/2/signature_coverage.csv",
+            "id": "401f2069619cf870a4304f5e2f12e011a82d8f063ca6ce9164e15fa8d5ee3492",
+            "pipeline_result": {
+              "job_id": "e6b557d3121940a8bc3234eaead353e3",
+              "pipeline_name": "metagenomic_pathogen_identification_kmer",
+              "output_key": "StrobeTaxaDetection.signature_coverage_csv",
+              "output_name": "signature_coverage_csv",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:40:29.655442+00:00"
+            },
+            "content": {
+              "preview": "tax_id,species_name,type,confident_reads_count,confident_reads_relative_abundance,total_assigned_reads,genome_length_bp,cell_abundance,relative_cell_abundance,max_confident_score,novel_seed_rate,binned_reads_count,covered_bins,expected_covered_bins,covered_vs_expected,covered_vs_expected_100bins,covered_vs_expected_25bins,covered_vs_expected_5bins,coverage_frac,weighted_coverage,confidence_read_threshold,high_confidence_species,bin_0,bin_1,bin_2,bin_3,bin_4,bin_5,bin_6,bin_7,bin_8,bin_9,bin_10,bin_11,bin_12,bin_13,bin_14,bin_15,bin_16,bin_17,bin_18,bin_19,bin_20,bin_21,bin_22,bin_23,bin_24,bin_25,bin_26,bin_27,bin_28,bin_29,bin_30,bin_31,bin_32,bin_33,bin_34,bin_35,bin_36,bin_37,bin_38,bin_39,bin_40,bin_41,bin_42,bin_43,bin_44,bin_45,bin_46,bin_47,bin_48,bin_49,bin_50,bin_51,bin_52,bin_53,bin_54,bin_55,bin_56,bin_57,bin_58,bin_59,bin_60,bin_61,bin_62,bin_63,bin_64,bin_65,bin_66,bin_67,bin_68,bin_69,bin_70,bin_71,bin_72,bin_73,bin_74,bin_75,bin_76,bin_77,bin_78,bin_79,bin_80,bin_81,bin_82,bin_83,bin_84,bin_85,…",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          }
+        ],
+        "native_qc_applied": false,
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R2": "8e1498531cb43a7eaf4a33d5552766b7",
+            "R1": "fc4c9ca5793f3925958b161d9b4d4349"
+          },
+          "status": "registered"
+        }
+      }
+    },
+    "files": [
+      {
+        "name": "signature_coverage.csv",
+        "resource_id": "result:c834f33dec894fa5b495900a5a8018c6:401f2069619cf870a4304f5e2f12e011a82d8f063ca6ce9164e15fa8d5ee3492",
+        "state": "succeeded",
+        "expected_sha256": "428fd70a4a1400c847f8504632834be43ac2b428399dc2e2e81c4616e7260da0",
+        "bytes": 2323,
+        "sha256": "428fd70a4a1400c847f8504632834be43ac2b428399dc2e2e81c4616e7260da0",
+        "matches": true
+      },
+      {
+        "name": "classified.tsv",
+        "resource_id": "result:c834f33dec894fa5b495900a5a8018c6:727bb138aa617d9c90e39cb0161fb74275910e650337f7c97022ef6e2741a234",
+        "state": "succeeded",
+        "expected_sha256": "94f730ca19af3eee04aa5347ec4f2ed0018b98f7ea18008f8f95718792777346",
+        "bytes": 1444258,
+        "sha256": "94f730ca19af3eee04aa5347ec4f2ed0018b98f7ea18008f8f95718792777346",
+        "matches": true
+      },
+      {
+        "name": "report.tsv",
+        "resource_id": "result:c834f33dec894fa5b495900a5a8018c6:7af05df8b0b2b5ccb6f7b05d830a60b784e9f67a2f6053c73f6c82e42839b5cc",
+        "state": "succeeded",
+        "expected_sha256": "96c27ca82706eb4728f0b01f64d925d5fcab2fb72b6c8f2398fee745a25e35d1",
+        "bytes": 12442,
+        "sha256": "96c27ca82706eb4728f0b01f64d925d5fcab2fb72b6c8f2398fee745a25e35d1",
+        "matches": true
+      },
+      {
+        "name": "results.zip",
+        "resource_id": "result:c834f33dec894fa5b495900a5a8018c6:d7600765803bd7c4087254fd4c011375e6a3d07e35d1e61b9dba18ec3f81239d",
+        "state": "succeeded",
+        "expected_sha256": "473af59e9856509aab054b581b732262d2e83d87d0d64b40b7bf7473b0658aa1",
+        "bytes": 338400,
+        "sha256": "473af59e9856509aab054b581b732262d2e83d87d0d64b40b7bf7473b0658aa1",
+        "matches": true
+      },
+      {
+        "name": "c23dece688e74d919792a15449470936_benign_R1.fastq.gz",
+        "resource_id": "result:c834f33dec894fa5b495900a5a8018c6:e8fe49ec141ca34f30b1af193f3dbe06fe56d533754feeaecf9059a736c82444",
+        "state": "succeeded",
+        "expected_sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+        "bytes": 606829,
+        "sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+        "matches": true
+      },
+      {
+        "name": "95b83220b76b4ba5b046573d4a1f7161_benign_R2.fastq.gz",
+        "resource_id": "result:c834f33dec894fa5b495900a5a8018c6:fd72fac24d5e3f7bfe7cfee3f1737e3f3c6d007c054a21a6fea01aa66ea63d7e",
+        "state": "succeeded",
+        "expected_sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+        "bytes": 606829,
+        "sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+        "matches": true
+      }
+    ],
+    "search_state": "succeeded",
+    "matched_all": true,
+    "native_exports": [
+      {
+        "resource_id": "result:c834f33dec894fa5b495900a5a8018c6:401f2069619cf870a4304f5e2f12e011a82d8f063ca6ce9164e15fa8d5ee3492",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 2323,
+        "sha256": "428fd70a4a1400c847f8504632834be43ac2b428399dc2e2e81c4616e7260da0"
+      },
+      {
+        "resource_id": "result:c834f33dec894fa5b495900a5a8018c6:727bb138aa617d9c90e39cb0161fb74275910e650337f7c97022ef6e2741a234",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 1444258,
+        "sha256": "94f730ca19af3eee04aa5347ec4f2ed0018b98f7ea18008f8f95718792777346"
+      },
+      {
+        "resource_id": "result:c834f33dec894fa5b495900a5a8018c6:7af05df8b0b2b5ccb6f7b05d830a60b784e9f67a2f6053c73f6c82e42839b5cc",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 12442,
+        "sha256": "96c27ca82706eb4728f0b01f64d925d5fcab2fb72b6c8f2398fee745a25e35d1"
+      },
+      {
+        "resource_id": "result:c834f33dec894fa5b495900a5a8018c6:d7600765803bd7c4087254fd4c011375e6a3d07e35d1e61b9dba18ec3f81239d",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 338400,
+        "sha256": "473af59e9856509aab054b581b732262d2e83d87d0d64b40b7bf7473b0658aa1"
+      }
+    ]
+  },
+  "result_sync": {
+    "tool_response": {
+      "status": "ok",
+      "data": {
+        "value": {
+          "transfer_id": "5d2102107a7548f99f4483ed4e29fd97",
+          "site_id": "mscan",
+          "operation": "result_sync",
+          "state": "failed",
+          "result": {
+            "retryable": true,
+            "error_code": "native_import_failed",
+            "error": "ResultSyncException: MSCAN native parser failed for pipeline metagenomic_pathogen_identification_kmer: kmer 结果入库失败, taskId=6d16161e-34e0-4f4f-bcc0-2abbaa7ce6aa"
+          }
+        }
+      },
+      "files": [],
+      "evidence": [],
+      "error": null
+    },
+    "transfer": {
+      "transfer_id": "5d2102107a7548f99f4483ed4e29fd97",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "failed",
+      "result": {
+        "retryable": true,
+        "error_code": "native_import_failed",
+        "error": "ResultSyncException: MSCAN native parser failed for pipeline metagenomic_pathogen_identification_kmer: kmer 结果入库失败, taskId=6d16161e-34e0-4f4f-bcc0-2abbaa7ce6aa"
+      }
+    }
+  },
+  "elapsed_seconds": 842.7,
+  "finished": true
+}
