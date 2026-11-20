@@ -1,0 +1,1411 @@
+{
+  "stack": "standard",
+  "session_id": "a3628b84-5e45-48bf-be29-cc6d253da397",
+  "owner_user_id": "419bade1be8a4d03a080a989c010e948",
+  "project": "Bridge_expanded_20261120_standard",
+  "connection": {
+    "site_id": "mscan",
+    "external_subject": "344674d1-2931-44a0-9de3-bd3e8403914d",
+    "capabilities": {
+      "cromwell_result_sync": {
+        "protocol_version": 1,
+        "engine": "cromwell",
+        "importers": [
+          {
+            "pipeline_key": "metagenomic_read_quality_control",
+            "program": "qc",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "shortReads",
+              "meta"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "metagenomic_qc_UniVec_Host",
+            "program": "read_qc",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "shortReads",
+              "meta"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "metagenomic_de_novo_assembly",
+            "program": "assembly",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "shortReads",
+              "meta"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "metax_classification_abundance_analysis",
+            "program": "metax",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "shortReads",
+              "meta"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "metagenomic_pathogen_identification_marker",
+            "program": "strain_meta",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "shortReads",
+              "meta"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "metagenomic_growth_rate_Calculation",
+            "program": "growth",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "shortReads",
+              "meta"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "bacterial_defense_system_annotation",
+            "program": "bacdef",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "genomic",
+              "shortReads",
+              "meta",
+              "synthetic"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "bacterial_secretion_system_annotation",
+            "program": "bacsec",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "genomic",
+              "shortReads",
+              "meta",
+              "synthetic"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "bacterial_biosynthetic_gene_clusters",
+            "program": "bacbgc",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "genomic",
+              "shortReads",
+              "meta",
+              "synthetic"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "bacterial_viral_variant_analysis",
+            "program": "snp",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "genomic",
+              "shortReads",
+              "meta",
+              "synthetic"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "metagenomic_pathogen_identification",
+            "program": "detection",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "shortReads",
+              "meta"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "metagenomic_pathogen_identification_kmer",
+            "program": "detectionKmer",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "shortReads",
+              "meta"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "genomic_pathogen_identification",
+            "program": "detection",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "genomic"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "risk_screen",
+            "program": "screenmec",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "synthetic"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "viral_read_molecular_typing",
+            "program": "molecular",
+            "requires_pathogen_reference": true,
+            "sample_types": [
+              "shortReads",
+              "meta"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "viral_genome_molecular_typing",
+            "program": "molecular",
+            "requires_pathogen_reference": true,
+            "sample_types": [
+              "genomic"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "pathogen_variant_risk_assessment",
+            "program": "risk",
+            "requires_pathogen_reference": true,
+            "sample_types": [
+              "shortReads",
+              "meta"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "pathogen_variant_risk_assessment_consensus",
+            "program": "risk",
+            "requires_pathogen_reference": true,
+            "sample_types": [
+              "genomic"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "traceback_covid19",
+            "program": "tracing",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "shortReads",
+              "genomic",
+              "meta"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "phi_annotator_genome",
+            "program": "phi",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "synthetic",
+              "genomic"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "phi_annotator_metagenome",
+            "program": "phi",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "shortReads",
+              "meta"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "tcdb_annotator_genome",
+            "program": "tcdb",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "synthetic",
+              "genomic"
+            ],
+            "contract_version": 1
+          },
+          {
+            "pipeline_key": "tcdb_annotator_metagenome",
+            "program": "tcdb",
+            "requires_pathogen_reference": false,
+            "sample_types": [
+              "shortReads",
+              "meta"
+            ],
+            "contract_version": 1
+          }
+        ]
+      },
+      "destination_fields": {
+        "project": "Exact owned project ID or name",
+        "sample": "Exact sample ID or name in the project",
+        "source_slots": "Optional map of R1/R2 or genome to selected workspace paths",
+        "data_type": "meta, shortReads, genomic or synthetic"
+      },
+      "operations": [
+        "search",
+        "pull",
+        "push",
+        "result_sync"
+      ],
+      "create_missing": true,
+      "existing_sources": "preserved",
+      "native_result_importers": [
+        {
+          "required_outputs": [
+            "contig_report_tsv",
+            "final_contigs_renamed",
+            "species_report_tsv"
+          ],
+          "program": "assembly",
+          "sample_types": [
+            "shortReads",
+            "meta"
+          ],
+          "format": "AssemblyId"
+        },
+        {
+          "required_outputs": [
+            "profile"
+          ],
+          "program": "metax",
+          "sample_types": [
+            "shortReads",
+            "meta"
+          ],
+          "format": "metax"
+        },
+        {
+          "required_outputs": [
+            "gene_annotations_tsv"
+          ],
+          "program": "funcflow",
+          "sample_types": [
+            "shortReads",
+            "meta"
+          ],
+          "format": "FuncReads"
+        },
+        {
+          "required_outputs": [
+            "gene_annotations_tsv"
+          ],
+          "program": "funcflow",
+          "sample_types": [
+            "synthetic",
+            "genomic"
+          ],
+          "format": "FuncAssembly"
+        },
+        {
+          "required_outputs": [
+            "profile"
+          ],
+          "program": "strain_meta",
+          "sample_types": [
+            "shortReads",
+            "meta"
+          ],
+          "format": "StrainMeta"
+        },
+        {
+          "required_outputs": [
+            "log2ptr_csv"
+          ],
+          "program": "growth",
+          "sample_types": [
+            "shortReads",
+            "meta"
+          ],
+          "format": "StrainCoPTR"
+        },
+        {
+          "required_outputs": [
+            "defense_systems",
+            "defense_genes",
+            "defense_hmmer_hits"
+          ],
+          "program": "bacdef",
+          "sample_types": [
+            "genomic",
+            "shortReads",
+            "meta",
+            "synthetic"
+          ],
+          "format": "BacDef"
+        },
+        {
+          "required_outputs": [
+            "secretion_genes",
+            "secretion_systems"
+          ],
+          "program": "bacsec",
+          "sample_types": [
+            "genomic",
+            "shortReads",
+            "meta",
+            "synthetic"
+          ],
+          "format": "BacSec"
+        },
+        {
+          "required_outputs": [
+            "bgc_genes",
+            "bgc_clusters",
+            "bgc_features"
+          ],
+          "program": "bacbgc",
+          "sample_types": [
+            "genomic",
+            "shortReads",
+            "meta",
+            "synthetic"
+          ],
+          "format": "BacBGC"
+        },
+        {
+          "required_outputs": [
+            "hits",
+            "summary"
+          ],
+          "program": "phi",
+          "sample_types": [
+            "synthetic",
+            "genomic"
+          ],
+          "format": "PhiAnnotatorGenome"
+        },
+        {
+          "required_outputs": [
+            "hits",
+            "summary"
+          ],
+          "program": "phi",
+          "sample_types": [
+            "shortReads",
+            "meta"
+          ],
+          "format": "PhiAnnotatorMetagenome"
+        },
+        {
+          "required_outputs": [
+            "hits",
+            "summary"
+          ],
+          "program": "tcdb",
+          "sample_types": [
+            "synthetic",
+            "genomic"
+          ],
+          "format": "TcdbAnnotatorGenome"
+        },
+        {
+          "required_outputs": [
+            "hits",
+            "summary"
+          ],
+          "program": "tcdb",
+          "sample_types": [
+            "shortReads",
+            "meta"
+          ],
+          "format": "TcdbAnnotatorMetagenome"
+        },
+        {
+          "required_outputs": [
+            "qc_counts"
+          ],
+          "program": "qc",
+          "sample_types": [
+            "meta",
+            "shortReads"
+          ],
+          "format": "MetagenomicQc"
+        },
+        {
+          "required_outputs": [
+            "qc_summary"
+          ],
+          "program": "qc",
+          "sample_types": [
+            "meta",
+            "shortReads"
+          ],
+          "format": "ReadQc"
+        }
+      ]
+    },
+    "backend_last_seen": 1795140619.735515
+  },
+  "search": {
+    "transfer_id": "78b93017bede42bc88207c2aebc47087",
+    "site_id": "mscan",
+    "operation": "search",
+    "state": "succeeded",
+    "result": {
+      "offset": 0,
+      "total": 28,
+      "resources": [
+        {
+          "project_type": 1,
+          "id": "4a651c555eae32c39c8bfdd142321567",
+          "kind": "project",
+          "name": "Bridge_expanded_20261120_standard"
+        },
+        {
+          "sha256": "298bce179fe675293de783a7e5d983632c88bcef9eea88491bd2644297ded53a",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "alignments",
+            "output_name": "alignments",
+            "output_kind": "alignment",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview": "@HD\tVN:1.6\tSO:unknown\n@SQ\tSN:demo_reference\tLN:24\n@RG\tID:sample_demo\tSM:sample_demo\tPL:Illumina\nread001\t0\tdemo_reference\t1\t60\t24M\t*\t0\t0\tACGTACGTACGTACGTACGTACGT\tIIIIIIIIIIIIIIIIIIIIIIII\tRG:Z:sample_demo\tNM:i:0\nread002\t0\tdemo_reference\t1\t60\t24M\t*\t0\t0\tACGTACGAACGTACGTACGTACGT\tIIIIIIIIIIIIIIIIIIIIIIII\tRG:Z:sample_demo\tNM:i:1\nread003\t0\tdemo_reference\t1\t60\t24M\t*\t0\t0\tACGTACGAACGTACGTACGTACGT\tIIIIIIIIIIIIIIIIIIIIIIII\tRG:Z:sample_demo\tNM:i:1\n",
+            "preview_available": true,
+            "preview_only": true,
+            "kind": "text"
+          },
+          "size": 438,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "alignments.sam",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:0505cec7d38c4d1d73c661104c2c2b44740d9f6ba46e3bf5a9f663103115e905",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/alignments.sam",
+          "id": "0505cec7d38c4d1d73c661104c2c2b44740d9f6ba46e3bf5a9f663103115e905",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "d13b2720e4a5f0c07fc2cc5b0601eb8d5a214db81ea7943a361ddbc78150e02f",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "html_report",
+            "output_name": "html_report",
+            "output_kind": "report",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview": "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Template Bioinformatics Report — sample_demo</title>\n<style>\nbody { color:#1f2933; background:#f5f7fa; font:15px/1.5 system-ui,sans-serif; margin:0; }\nmain { max-width:1100px; margin:auto; padding:32px; }\nh1,h2 { color:#102a43; } .muted { color:#627d98; }\n.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; }\n.card,section { background:white; border:1px solid #d9e2ec; border-radius:10px; padding:18px; margin:16px 0; }\n.card span,.card strong { display:block; } .card strong { color:#0b7285; font-size:1.5rem; }\ntable { border-collapse:collapse; width:100%; } th,td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; }\nimg { max-width:100%; height:auto; } figure { margin:20px 0; } figcaption { color:#627d98; text-align:center; }\ncode { overflow-wrap:anywhere; } .warning { border-left:5px solid #d9480f; }\n</style>\n</head>\n<body…",
+            "preview_available": true,
+            "preview_only": true,
+            "kind": "text"
+          },
+          "size": 240684,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "report.html",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:10e74c5b449c5fb455d513931e61b72c104bac64ea50bdbeacc57d11b02778fc",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/report.html",
+          "id": "10e74c5b449c5fb455d513931e61b72c104bac64ea50bdbeacc57d11b02778fc",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "4accf066bee5fe78569eada9122f0a02a2b0d3761e09dd7142f6ac434c53306e",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "phylogenetic_tree_figure",
+            "output_name": "phylogenetic_tree_figure",
+            "output_kind": "image",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "kind": "file",
+            "preview_available": false
+          },
+          "size": 32702,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "phylogenetic_tree.png",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:2c18b91e414bc618cc044716a6f449c1cb321691662bc7011fff08f1438c9e20",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/phylogenetic_tree.png",
+          "id": "2c18b91e414bc618cc044716a6f449c1cb321691662bc7011fff08f1438c9e20",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "ab843cad4c085902847f8145aec07c0f932ef591663efdc9cd13bac0c6acb79e",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview_rows": [
+              [
+                "sample_demo",
+                "synthetic construct",
+                "demo",
+                "1",
+                "single-end",
+                "Illumina",
+                "2026-01-15"
+              ]
+            ],
+            "columns": [
+              "sample_id",
+              "organism",
+              "condition",
+              "replicate",
+              "library_layout",
+              "platform",
+              "collection_date"
+            ],
+            "delimiter": "tab",
+            "preview_only": true,
+            "preview_available": true,
+            "kind": "table"
+          },
+          "size": 149,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "example_samples.tsv",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:2e556c56e27974ddc241c00fa6a79a5120f66299cea88bee9c109df79b16ba93",
+          "source_path": "uploads/examples/template_bio-f1d0993b348e4c8d8e0b8de38cd08fa2/example_samples.tsv",
+          "id": "2e556c56e27974ddc241c00fa6a79a5120f66299cea88bee9c109df79b16ba93",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "1f9e8c0708537fe213d2da845f0d1278f6ffb2a72f6c7b4282a88449b8393ac8",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "sample_summary",
+            "output_name": "sample_summary",
+            "output_kind": "table",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview_rows": [
+              [
+                "sample_demo",
+                "synthetic construct",
+                "demo",
+                "1",
+                "single-end",
+                "Illumina",
+                "2026-01-15",
+                "5",
+                "3",
+                "60.0",
+                "20.8",
+                "32.0",
+                "76.92",
+                "3.0",
+                "100.0",
+                "1"
+              ]
+            ],
+            "columns": [
+              "sample_id",
+              "organism",
+              "condition",
+              "replicate",
+              "library_layout",
+              "platform",
+              "collection_date",
+              "input_read_count",
+              "passed_read_count",
+              "read_retention_percent",
+              "mean_input_read_length",
+              "mean_input_quality",
+              "q30_base_percent",
+              "mean_retained_depth",
+              "reference_coverage_percent",
+              "variant_count"
+            ],
+            "delimiter": "tab",
+            "preview_only": true,
+            "preview_available": true,
+            "kind": "table"
+          },
+          "size": 364,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "sample_summary.tsv",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:5206a5a07f8e40a7678ec9745a5c1db4c52e6646131df72bac8694ff82b90b6e",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/sample_summary.tsv",
+          "id": "5206a5a07f8e40a7678ec9745a5c1db4c52e6646131df72bac8694ff82b90b6e",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "cf2fda9b1d77ff559bdf39679792a7d9f3db8418e940c6f0810192f01b72a95d",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "variant_table",
+            "output_name": "variant_table",
+            "output_kind": "table",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview_rows": [
+              [
+                "demo_reference",
+                "8",
+                "T",
+                "A",
+                "3",
+                "1",
+                "2",
+                "0.6667",
+                "transversion",
+                "PASS"
+              ]
+            ],
+            "columns": [
+              "chrom",
+              "position",
+              "ref",
+              "alt",
+              "depth",
+              "ref_depth",
+              "alt_depth",
+              "alt_fraction",
+              "change_type",
+              "filter"
+            ],
+            "delimiter": "tab",
+            "preview_only": true,
+            "preview_available": true,
+            "kind": "table"
+          },
+          "size": 133,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "variant_summary.tsv",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:5c4c42d191bd29a1beaa5b4f9cadc3c9847dd8d3e501320259a190887309c4a1",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/variant_summary.tsv",
+          "id": "5c4c42d191bd29a1beaa5b4f9cadc3c9847dd8d3e501320259a190887309c4a1",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "64573329560f5223959fcd43dd09c386e4f171dc1e22c7f6226caf79aa73b05f",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "kind": "file",
+            "preview_available": false
+          },
+          "size": 305872,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "results.zip",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:69509d5c28e59b0553726382ff999ca16f55ef2f05d55fbdb755c67c757bedab",
+          "source_path": "pipeline-bundles/c9b5d34b22a34458b5a32373b6aecf27/results.zip",
+          "id": "69509d5c28e59b0553726382ff999ca16f55ef2f05d55fbdb755c67c757bedab",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "079bce3c8066706a599d2e43834b64c48d66285985866df895c6ac9d27129ebf",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "phylogenetic_tree",
+            "output_name": "phylogenetic_tree",
+            "output_kind": "phylogenetic_tree",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview": "(demo_reference:0.020833,sample_demo_consensus:0.020833);\n",
+            "preview_available": true,
+            "preview_only": true,
+            "kind": "text"
+          },
+          "size": 58,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "phylogenetic_tree.nwk",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:7527276151f7d439dca5b3ffbadc2fecb3391fcc7708747e9a4e4110c4430507",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/phylogenetic_tree.nwk",
+          "id": "7527276151f7d439dca5b3ffbadc2fecb3391fcc7708747e9a4e4110c4430507",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "8d325baafc5e32e9efbe02a92ace5aaed42541d0d8aba3395f3f7337262bc1bd",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "metrics",
+            "output_name": "metrics",
+            "output_kind": "metrics",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "fields": [
+              "aligned_read_count",
+              "base_retention_percent",
+              "bases_at_3x_percent",
+              "covered_reference_bases",
+              "failed_read_count",
+              "filter_outcomes",
+              "input_base_count",
+              "input_read_count",
+              "maximum_retained_depth",
+              "mean_input_gc_percent",
+              "mean_input_quality",
+              "mean_input_read_length",
+              "mean_retained_depth",
+              "mean_retained_read_length",
+              "metadata_field_count",
+              "mode",
+              "parameters",
+              "passed_read_count",
+              "phylogenetic_tree_emitted",
+              "pipeline",
+              "q20_base_percent",
+              "q30_base_percent",
+              "read_retention_percent",
+              "reference_coverage_percent",
+              "reference_id",
+              "reference_length",
+              "retained_base_count",
+              "sample_id",
+              "status",
+              "transition_count",
+              "transversion_count",
+              "variant_count"
+            ],
+            "shape": "object",
+            "preview_available": true,
+            "kind": "json"
+          },
+          "size": 1240,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "metrics.json",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:76361b53eb0c28cd90c7c06ea56e62e6af4bda0aea91c46d96eac1b8609fea34",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/metrics.json",
+          "id": "76361b53eb0c28cd90c7c06ea56e62e6af4bda0aea91c46d96eac1b8609fea34",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "4abdef905000d380f63a84da444729a253af59655f1223a0bdf43df96bd8292d",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "consensus",
+            "output_name": "consensus",
+            "output_kind": "sequence",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview": ">sample_demo|consensus\nACGTACGAACGTACGTACGTACGT\n",
+            "preview_available": true,
+            "preview_only": true,
+            "kind": "text"
+          },
+          "size": 48,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "consensus.fasta",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:7906fae13ce04091acaedb6696270ec93e7e254918872ad403af808e86d07463",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/consensus.fasta",
+          "id": "7906fae13ce04091acaedb6696270ec93e7e254918872ad403af808e86d07463",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "4c0e47b4faac72a220407e4f22fa11a0f38a522753a68631d21743b7048191bb",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "coverage",
+            "output_name": "coverage",
+            "output_kind": "table",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview_rows": [
+              [
+                "demo_reference",
+                "1",
+                "A",
+                "3",
+                "3",
+                "0",
+                "0",
+                "0",
+                "A",
+                "no"
+              ],
+              [
+                "demo_reference",
+                "2",
+                "C",
+                "3",
+                "0",
+                "3",
+                "0",
+                "0",
+                "C",
+                "no"
+              ],
+              [
+                "demo_reference",
+                "3",
+                "G",
+                "3",
+                "0",
+                "0",
+                "3",
+                "0",
+                "G",
+                "no"
+              ]
+            ],
+            "columns": [
+              "chrom",
+              "position",
+              "reference",
+              "depth",
+              "A",
+              "C",
+              "G",
+              "T",
+              "consensus",
+              "variant"
+            ],
+            "delimiter": "tab",
+            "preview_only": true,
+            "preview_available": true,
+            "kind": "table"
+          },
+          "size": 889,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "coverage.tsv",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:8e49baccd1117c56d18a8fad3626481d93a668dd334d5c26c97bb61f4f8a9c9e",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/coverage.tsv",
+          "id": "8e49baccd1117c56d18a8fad3626481d93a668dd334d5c26c97bb61f4f8a9c9e",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "07c3e1d2623c1df14a10e5b4672a7518dc23f48dfa05317f59f064ab1f961d54",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "filtered_reads",
+            "output_name": "filtered_reads",
+            "output_kind": "sequence",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview": "@read001 sample_demo identical\nACGTACGTACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read002 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read003 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n",
+            "preview_available": true,
+            "preview_only": true,
+            "kind": "text"
+          },
+          "size": 253,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "filtered_reads.fastq",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:9817b2aced587ade5a9e797b2505aa8d0827009b072adb83f8a88f45afe469e1",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/filtered_reads.fastq",
+          "id": "9817b2aced587ade5a9e797b2505aa8d0827009b072adb83f8a88f45afe469e1",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "73f4c86513507e373bc902232aded85b398678e313f059b42b26e1ae38c4fd09",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview": ">demo_reference synthetic_reference\nACGTACGTACGTACGTACGTACGT\n",
+            "preview_available": true,
+            "preview_only": true,
+            "kind": "text"
+          },
+          "size": 61,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "example_reference.fasta",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:bb957077c1626d82eaf62c8f6eee516db3bb8a45fc8d3a5160a6f2da693028ba",
+          "source_path": "uploads/examples/template_bio-f1d0993b348e4c8d8e0b8de38cd08fa2/example_reference.fasta",
+          "id": "bb957077c1626d82eaf62c8f6eee516db3bb8a45fc8d3a5160a6f2da693028ba",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "062e8abb162232d2fcc1b039ee9a2ea51a09fcc3a90cda62b044e0866b54fdd5",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "variants",
+            "output_name": "variants",
+            "output_kind": "variants",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview": "##fileformat=VCFv4.2\n##source=template_bio_positional_comparison\n##contig=<ID=demo_reference,length=24>\n##INFO=<ID=DP,Number=1,Type=Integer,Description=\"Read depth\">\n##INFO=<ID=AF,Number=A,Type=Float,Description=\"Alternate allele fraction\">\n##INFO=<ID=TYPE,Number=1,Type=String,Description=\"SNV change type\">\n##FORMAT=<ID=GT,Number=1,Type=String,Description=\"Haploid genotype\">\n##FORMAT=<ID=AD,Number=R,Type=Integer,Description=\"Allele depths\">\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tsample_demo\ndemo_reference\t8\t.\tT\tA\t.\tPASS\tDP=3;AF=0.6667;TYPE=transversion\tGT:AD\t1:1,2\n",
+            "preview_available": true,
+            "preview_only": true,
+            "kind": "text"
+          },
+          "size": 578,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "variants.vcf",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:c14dbb2efb17b8d49fb32348bba7fb91cb06eddcafe7d29b43c9b2026525438b",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/variants.vcf",
+          "id": "c14dbb2efb17b8d49fb32348bba7fb91cb06eddcafe7d29b43c9b2026525438b",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "2a35486b26655a75cf649c494b0d88d9009933e488ab235bd64aa24ac10c322b",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "read_qc",
+            "output_name": "read_qc",
+            "output_kind": "table",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview_rows": [
+              [
+                "read001",
+                "24",
+                "50.00",
+                "40.00",
+                "24",
+                "24",
+                "pass"
+              ],
+              [
+                "read002",
+                "24",
+                "50.00",
+                "40.00",
+                "24",
+                "24",
+                "pass"
+              ],
+              [
+                "read003",
+                "24",
+                "50.00",
+                "40.00",
+                "24",
+                "24",
+                "pass"
+              ]
+            ],
+            "columns": [
+              "read_id",
+              "length",
+              "gc_percent",
+              "mean_quality",
+              "q20_bases",
+              "q30_bases",
+              "status"
+            ],
+            "delimiter": "tab",
+            "preview_only": true,
+            "preview_available": true,
+            "kind": "table"
+          },
+          "size": 238,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "read_qc.tsv",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:d840ce60fa2c5a1e7a0a32f12fac3a63f1019d24321d0cf6ebdeaaa0122acd84",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/read_qc.tsv",
+          "id": "d840ce60fa2c5a1e7a0a32f12fac3a63f1019d24321d0cf6ebdeaaa0122acd84",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "5e95fa95821c31e5446e051cdf4ccd4b82144ac71b809e065e1101c12386b60d",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview": "@read001 sample_demo identical\nACGTACGTACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read002 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read003 sample_demo variant_T8A\nACGTACGAACGTACGTACGTACGT\n+\nIIIIIIIIIIIIIIIIIIIIIIII\n@read004 sample_demo low_quality\nACGTACGTACGTACGTACGTACGT\n+\n!!!!!!!!!!!!!!!!!!!!!!!!\n@read005 sample_demo short\nACGTACGT\n+\nIIIIIIII\n",
+            "preview_available": true,
+            "preview_only": true,
+            "kind": "text"
+          },
+          "size": 385,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "example_reads.fastq",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:d8cc1d736fd048e916bc812f6557a8f1c2735f9fd209ca1381013ebb0d240151",
+          "source_path": "uploads/examples/template_bio-f1d0993b348e4c8d8e0b8de38cd08fa2/example_reads.fastq",
+          "id": "d8cc1d736fd048e916bc812f6557a8f1c2735f9fd209ca1381013ebb0d240151",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "0113be9f3870d6819612d47d18ac8d1e81a6dc00a1b0405ae802d870512ed3bd",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "variant_figure",
+            "output_name": "variant_figure",
+            "output_kind": "image",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "kind": "file",
+            "preview_available": false
+          },
+          "size": 28447,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "variant_allele_fraction.png",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:df14786e9bf3d3734469a3a15cfd24231510b6740faa8f1a899372eea46758b9",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/variant_allele_fraction.png",
+          "id": "df14786e9bf3d3734469a3a15cfd24231510b6740faa8f1a899372eea46758b9",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "43da879b8b7e02844261e6a7ed28700fed4a6eb5e891c31a450eab09fbf728e8",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "report",
+            "output_name": "report",
+            "output_kind": "report",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview": "# Template Bioinformatics Pipeline Report\n\n- Run label: template_bio\n- Sample: sample_demo\n- Reference: demo_reference (24 bp)\n- Reads: 3 / 5 passed filters\n- Q30 bases: 76.92%\n- Reference coverage: 100.0%\n- Mean retained depth: 3.0×\n- Passing variants: 1\n\n## Workflow\n\n```text\nFASTQ + reference FASTA + metadata\n  -> validation and read QC\n  -> read filtering and demonstration alignment\n  -> coverage, consensus, and variant calling\n  -> tables, figures, metrics, and reports\n```\n\n## Inputs\n\n- FASTQ reads: `/tmp/tmp4lqcihiz/runtime/agent_runs/c9b5d34b22a34458b5a32373b6aecf27/inputs/reads/0_example_reads.fastq`\n- Reference FASTA: `/tmp/tmp4lqcihiz/runtime/agent_runs/c9b5d34b22a34458b5a32373b6aecf27/inputs/reference/0_example_reference.fasta`\n- Metadata table: `/tmp/tmp4lqcihiz/runtime/agent_runs/c9b5d34b22a34458b5a32373b6aecf27/inputs/metadata/0_example_samples.tsv`\n\n## Sample metadata\n\n| Field | Value |\n| --- | --- |\n| sample_id | sample_demo |\n| organism | synthetic construct |\n| condition | demo |\n| replicate …",
+            "preview_available": true,
+            "preview_only": true,
+            "kind": "text"
+          },
+          "size": 2442,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "report.md",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:e584600c2b1e959d93243cf7365cba987b8b4fcc2a94bb09e32b50d6e24a4c20",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/report.md",
+          "id": "e584600c2b1e959d93243cf7365cba987b8b4fcc2a94bb09e32b50d6e24a4c20",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "8fbb68db592ee65cdd2c16d4bbef378ac006c43c97472e40666a243f02e4e22a",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "qc_figure",
+            "output_name": "qc_figure",
+            "output_kind": "image",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "kind": "file",
+            "preview_available": false
+          },
+          "size": 79528,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "qc_overview.png",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:e87aa585638125c10573518628179c84863a240f4197bfc37b5b2c51d03711d3",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/qc_overview.png",
+          "id": "e87aa585638125c10573518628179c84863a240f4197bfc37b5b2c51d03711d3",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "ad9b29f6427999634547ea0a74749c91fe00f6cf539c77ebf36e9ac7be2cea7c",
+          "kind": "analysis_output",
+          "sample_id": "d29391ee6cde3542bab396b3576678ce",
+          "pipeline_result": {
+            "job_id": "c9b5d34b22a34458b5a32373b6aecf27",
+            "pipeline_name": "template_bio",
+            "output_key": "coverage_figure",
+            "output_name": "coverage_figure",
+            "output_kind": "image",
+            "completed_at": "2026-11-20T02:09:43.413085+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "kind": "file",
+            "preview_available": false
+          },
+          "size": 35889,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "coverage.png",
+          "data_type": "meta",
+          "resource_id": "result:390747a983fa416ca7c12aad52c9e8fb:fee92e072a1c1358a428a3deee36553695094c69ada529d54247ec20952c4eab",
+          "source_path": "outputs/pipelines/c9b5d34b22a34458b5a32373b6aecf27/outputs/coverage.png",
+          "id": "fee92e072a1c1358a428a3deee36553695094c69ada529d54247ec20952c4eab",
+          "sample_name": "template_bio_files"
+        },
+        {
+          "sha256": "fd4cf6bb4f6a6a28fda1fa23763bcb73c30e9447391b4d77c935a2933a9ddc97",
+          "kind": "analysis_output",
+          "sample_id": "0306412a2850337c86324625aef9606d",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview_rows": [
+              [
+                "read_001",
+                "alpha"
+              ],
+              [
+                "read_002",
+                "beta"
+              ],
+              [
+                "read_003",
+                "gamma"
+              ]
+            ],
+            "columns": [
+              "sequence_id",
+              "subtype"
+            ],
+            "delimiter": "tab",
+            "preview_only": true,
+            "preview_available": true,
+            "kind": "table"
+          },
+          "size": 64,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "example_metadata.tsv",
+          "data_type": "meta",
+          "resource_id": "result:c1e9aaccb9b14dd8830137bd58efde59:43794be67ba4eb1da6e52f15dcce453b958162e267abff1f15b0e415b368ef3c",
+          "source_path": "uploads/examples/template_shell-ca5e15ce4f2b4c718f836934bd6edc62/example_metadata.tsv",
+          "id": "43794be67ba4eb1da6e52f15dcce453b958162e267abff1f15b0e415b368ef3c",
+          "sample_name": "template_shell_files"
+        },
+        {
+          "sha256": "a8d973d244259b7922cbf1281bdae12c53952333caada4c89e096d9a2b19b521",
+          "kind": "analysis_output",
+          "sample_id": "0306412a2850337c86324625aef9606d",
+          "pipeline_result": {
+            "job_id": "8feaff715bdc41978272d4d1faeccb4c",
+            "pipeline_name": "template_shell",
+            "output_key": "metrics",
+            "output_name": "metrics",
+            "output_kind": "metrics",
+            "completed_at": "2026-11-20T02:09:42.171197+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "fields": [
+              "status",
+              "pipeline",
+              "label",
+              "normalize_mode",
+              "uppercase",
+              "line_count",
+              "word_count",
+              "char_count",
+              "sequence_count",
+              "assigned_subtype_count",
+              "unassigned_subtype_count"
+            ],
+            "shape": "object",
+            "preview_available": true,
+            "kind": "json"
+          },
+          "size": 276,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "metrics.json",
+          "data_type": "meta",
+          "resource_id": "result:c1e9aaccb9b14dd8830137bd58efde59:73ca6621bbcfaa89fb9802b80aa9cfe427317031c35224dc84f4944a8264b35b",
+          "source_path": "outputs/pipelines/8feaff715bdc41978272d4d1faeccb4c/outputs/metrics.json",
+          "id": "73ca6621bbcfaa89fb9802b80aa9cfe427317031c35224dc84f4944a8264b35b",
+          "sample_name": "template_shell_files"
+        },
+        {
+          "sha256": "fd4cf6bb4f6a6a28fda1fa23763bcb73c30e9447391b4d77c935a2933a9ddc97",
+          "kind": "analysis_output",
+          "sample_id": "0306412a2850337c86324625aef9606d",
+          "pipeline_result": {
+            "job_id": "8feaff715bdc41978272d4d1faeccb4c",
+            "pipeline_name": "template_shell",
+            "output_key": "subtype_assignments",
+            "output_name": "subtype_assignments",
+            "output_kind": "table",
+            "completed_at": "2026-11-20T02:09:42.171197+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview_rows": [
+              [
+                "read_001",
+                "alpha"
+              ],
+              [
+                "read_002",
+                "beta"
+              ],
+              [
+                "read_003",
+                "gamma"
+              ]
+            ],
+            "columns": [
+              "sequence_id",
+              "subtype"
+            ],
+            "delimiter": "tab",
+            "preview_only": true,
+            "preview_available": true,
+            "kind": "table"
+          },
+          "size": 64,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "subtypes.tsv",
+          "data_type": "meta",
+          "resource_id": "result:c1e9aaccb9b14dd8830137bd58efde59:7c16d3169c9369a316924dbc6cadbc587d1ba5a4c09b6ac926fa9e747add9c88",
+          "source_path": "outputs/pipelines/8feaff715bdc41978272d4d1faeccb4c/outputs/subtypes.tsv",
+          "id": "7c16d3169c9369a316924dbc6cadbc587d1ba5a4c09b6ac926fa9e747add9c88",
+          "sample_name": "template_shell_files"
+        },
+        {
+          "sha256": "12a682b19b6af38ab0e331f97b586a6d8feeda079c6566bea13a54b2c70ca0ed",
+          "kind": "analysis_output",
+          "sample_id": "0306412a2850337c86324625aef9606d",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "kind": "file",
+            "preview_available": false
+          },
+          "size": 1109,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "results.zip",
+          "data_type": "meta",
+          "resource_id": "result:c1e9aaccb9b14dd8830137bd58efde59:a4ef52e7e20f8933fd7358a422fad77a2347b2d9f82e39781606b5834a369a02",
+          "source_path": "pipeline-bundles/8feaff715bdc41978272d4d1faeccb4c/results.zip",
+          "id": "a4ef52e7e20f8933fd7358a422fad77a2347b2d9f82e39781606b5834a369a02",
+          "sample_name": "template_shell_files"
+        },
+        {
+          "sha256": "9bafdba3da5f47f80aefa077632e633cc888b99bdab98106043df3df69e33259",
+          "kind": "analysis_output",
+          "sample_id": "0306412a2850337c86324625aef9606d",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview": "read_001 ATGCGTACGTAGCTAGCTAG microbial example alpha\nread_002 ATGCGTACGTAGCTAGAAAA microbial example beta\nread_003 TTTGCGTACGTAGCTAGCTA microbial example gamma\n",
+            "preview_available": true,
+            "preview_only": true,
+            "kind": "text"
+          },
+          "size": 161,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "example_reads.txt",
+          "data_type": "meta",
+          "resource_id": "result:c1e9aaccb9b14dd8830137bd58efde59:a6ffb952c48d9978e8b7dfe4d950e67a5702f03f482e211bfc1036103cdd9884",
+          "source_path": "uploads/examples/template_shell-ca5e15ce4f2b4c718f836934bd6edc62/example_reads.txt",
+          "id": "a6ffb952c48d9978e8b7dfe4d950e67a5702f03f482e211bfc1036103cdd9884",
+          "sample_name": "template_shell_files"
+        },
+        {
+          "sha256": "bf213903a66a22a93d0e2f518bd86ce08d762447ea0ec52641c95f652d04290c",
+          "kind": "analysis_output",
+          "sample_id": "0306412a2850337c86324625aef9606d",
+          "pipeline_result": {
+            "job_id": "8feaff715bdc41978272d4d1faeccb4c",
+            "pipeline_name": "template_shell",
+            "output_key": "normalized_text",
+            "output_name": "normalized_text",
+            "output_kind": "text",
+            "completed_at": "2026-11-20T02:09:42.171197+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview": "read_001 ATGCGTACGTAGCTAGCTAG microbial example alpha read_002 ATGCGTACGTAGCTAGAAAA microbial example beta read_003 TTTGCGTACGTAGCTAGCTA microbial example gamma ",
+            "preview_available": true,
+            "preview_only": true,
+            "kind": "text"
+          },
+          "size": 161,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "normalized.txt",
+          "data_type": "meta",
+          "resource_id": "result:c1e9aaccb9b14dd8830137bd58efde59:b33f5ef75ecfb0468484e102009a863b14a235120b76fabc61917cd3a47c18eb",
+          "source_path": "outputs/pipelines/8feaff715bdc41978272d4d1faeccb4c/outputs/normalized.txt",
+          "id": "b33f5ef75ecfb0468484e102009a863b14a235120b76fabc61917cd3a47c18eb",
+          "sample_name": "template_shell_files"
+        },
+        {
+          "sha256": "a531ce2973223a71bd13016bd01bbc8addeb4cbf0f986b8399690191427cd945",
+          "kind": "analysis_output",
+          "sample_id": "0306412a2850337c86324625aef9606d",
+          "pipeline_result": {
+            "job_id": "8feaff715bdc41978272d4d1faeccb4c",
+            "pipeline_name": "template_shell",
+            "output_key": "report",
+            "output_name": "report",
+            "output_kind": "report",
+            "completed_at": "2026-11-20T02:09:42.171197+00:00"
+          },
+          "project_name": "Bridge_expanded_20261120_standard",
+          "content": {
+            "preview": "# Shell Pipeline Report\n\n- Label: template_shell\n- Config: /tmp/tmpf0bmll3w/runtime/agent_runs/8feaff715bdc41978272d4d1faeccb4c/outputs/config.runtime.yaml\n- Input: /tmp/tmpf0bmll3w/runtime/agent_runs/8feaff715bdc41978272d4d1faeccb4c/inputs/reads/0_example_reads.txt\n- Metadata: /tmp/tmpf0bmll3w/runtime/agent_runs/8feaff715bdc41978272d4d1faeccb4c/inputs/metadata/0_example_metadata.tsv\n- Normalize mode: whitespace\n- Uppercase: false\n- Lines: 3\n- Words: 15\n- Characters: 161\n- Sequences: 3\n- Assigned subtypes: 3\n- Unassigned subtypes: 0\n- Normalized text: /tmp/tmpf0bmll3w/runtime/agent_runs/8feaff715bdc41978272d4d1faeccb4c/outputs/normalized.txt\n- Subtype assignments: /tmp/tmpf0bmll3w/runtime/agent_runs/8feaff715bdc41978272d4d1faeccb4c/outputs/subtypes.tsv\n",
+            "preview_available": true,
+            "preview_only": true,
+            "kind": "text"
+          },
+          "size": 763,
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "name": "report.md",
+          "data_type": "meta",
+          "resource_id": "result:c1e9aaccb9b14dd8830137bd58efde59:ea91bf0d42c707da3ca8c9c86a019fddba9edf28985b37587b24186eadb1329f",
+          "source_path": "outputs/pipelines/8feaff715bdc41978272d4d1faeccb4c/outputs/report.md",
+          "id": "ea91bf0d42c707da3ca8c9c86a019fddba9edf28985b37587b24186eadb1329f",
+          "sample_name": "template_shell_files"
+        }
+      ]
+    }
+  }
+}

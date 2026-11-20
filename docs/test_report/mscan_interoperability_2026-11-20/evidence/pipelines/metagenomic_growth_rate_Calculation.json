@@ -1,0 +1,321 @@
+{
+  "pipeline": "metagenomic_growth_rate_Calculation",
+  "execution": "succeeded",
+  "stack": "standard",
+  "project": "Bridge_expanded_20261120_standard",
+  "session_id": "141cda2b-0699-44a7-a27f-2b9e9b8b7383",
+  "engine": "wdl",
+  "catalog_name": "strain-coptr",
+  "manifest_sha256": "6976e3c0f6dddd8c28a882428268d34facc96140c0015474d849060468a33d64",
+  "inputs": {
+    "read1": "uploads/ce24c5899ec54ed49b62b73ee521b286_benign_R1.fastq.gz",
+    "read2": "uploads/9716799289a4486095abbd5eb9f7e242_benign_R2.fastq.gz"
+  },
+  "parameters": {},
+  "input_scope": "Deterministic paired reads sampled from unmodified E. coli K-12 MG1655; no experimental or clinical data.",
+  "plan_id": "10953f447b684f75b50ab2f5f4e7c59e",
+  "job_id": "10953f447b684f75b50ab2f5f4e7c59e",
+  "last_state": {
+    "job_id": "10953f447b684f75b50ab2f5f4e7c59e",
+    "plan_id": "10953f447b684f75b50ab2f5f4e7c59e",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:32:28.091718+00:00",
+    "started_at": "2026-11-20T02:32:28.287640+00:00",
+    "finished_at": "2026-11-20T02:33:04.289908+00:00",
+    "updated_at": "2026-11-20T02:33:04.290769+00:00",
+    "error": null,
+    "remote_id": "f1d6bb6c-153c-4696-b87a-3eeac9c01fad",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_growth_rate_Calculation"
+  },
+  "outputs": {
+    "job_id": "10953f447b684f75b50ab2f5f4e7c59e",
+    "plan_id": "10953f447b684f75b50ab2f5f4e7c59e",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:32:28.091718+00:00",
+    "started_at": "2026-11-20T02:32:28.287640+00:00",
+    "finished_at": "2026-11-20T02:33:04.289908+00:00",
+    "updated_at": "2026-11-20T02:33:04.290769+00:00",
+    "error": null,
+    "remote_id": "f1d6bb6c-153c-4696-b87a-3eeac9c01fad",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_growth_rate_Calculation",
+    "files": [
+      {
+        "name": "coptr_log2ptr.csv",
+        "path": "pipeline-artifacts/10953f447b684f75b50ab2f5f4e7c59e/0/coptr_log2ptr.csv",
+        "workspace_path": "pipeline-artifacts/10953f447b684f75b50ab2f5f4e7c59e/0/coptr_log2ptr.csv",
+        "size": 90,
+        "remote": true,
+        "artifact_id": "10953f447b684f75b50ab2f5f4e7c59e:0",
+        "pipeline_result": {
+          "job_id": "10953f447b684f75b50ab2f5f4e7c59e",
+          "pipeline_name": "metagenomic_growth_rate_Calculation",
+          "output_key": "StrainCoPTR.log2ptr_csv",
+          "output_name": "log2ptr_csv",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:33:04.289908+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/10953f447b684f75b50ab2f5f4e7c59e/0/coptr_log2ptr.csv",
+        "text": "log2(PTR):genome_id/sample_id,reads\nE_coli_K12_MG1655_GCF_000005845.2,0.06063460600072578\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/10953f447b684f75b50ab2f5f4e7c59e/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "roundtrip": {
+    "push": {
+      "transfer_id": "f3db3497753648c0a761a2808fb392d4",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "metagenomic_growth_rate_Calculation_files",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "5a04b9c85dbf3588b243be68f50385f5"
+        },
+        "receipt_id": "f3db3497753648c0a761a2808fb392d4",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "10953f447b684f75b50ab2f5f4e7c59e",
+            "files_delivered": true,
+            "generic_import": {
+              "access": "Search or pull the attached sample files; native records are a separate outcome.",
+              "artifact_count": 1,
+              "state": "imported"
+            },
+            "pipeline": "metagenomic_growth_rate_Calculation",
+            "format": "StrainCoPTR",
+            "program": "growth",
+            "state": "imported",
+            "message": "Native result imported."
+          }
+        ],
+        "files": [
+          {
+            "name": "ce24c5899ec54ed49b62b73ee521b286_benign_R1.fastq.gz",
+            "source_path": "uploads/ce24c5899ec54ed49b62b73ee521b286_benign_R1.fastq.gz",
+            "id": "7add91e8ab5b24a15ada18f8d35f4208e240c48b1ab4a25a8b2e83e4ea2e081c",
+            "size": 606829,
+            "sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "9716799289a4486095abbd5eb9f7e242_benign_R2.fastq.gz",
+            "source_path": "uploads/9716799289a4486095abbd5eb9f7e242_benign_R2.fastq.gz",
+            "id": "ddf0cc4ad6251ac755e10ebd7a318e032a1c42d55791ab2e54ff4b807a3cde81",
+            "size": 606829,
+            "sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/10953f447b684f75b50ab2f5f4e7c59e/results.zip",
+            "id": "224e9e0fc800eb7464e3aeaf145baceacc3a9c11ed9c1d95a46b6af1d1d90628",
+            "size": 244,
+            "sha256": "23f7127a79e6bdcdfeedc7d4eca464743f8511b3ba58eb1d301d38f6675e4240",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "size": 90,
+            "sha256": "c548c78f1ab096757c59281edcae701b920d63ecfb4255a02a5ea68a9c086763",
+            "name": "coptr_log2ptr.csv",
+            "source_path": "pipeline-artifacts/10953f447b684f75b50ab2f5f4e7c59e/0/coptr_log2ptr.csv",
+            "id": "4095efced8edf6a994c868c27a02d2f35018db09956743ea66ca5037ec7217f5",
+            "pipeline_result": {
+              "job_id": "10953f447b684f75b50ab2f5f4e7c59e",
+              "pipeline_name": "metagenomic_growth_rate_Calculation",
+              "output_key": "StrainCoPTR.log2ptr_csv",
+              "output_name": "log2ptr_csv",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:33:04.289908+00:00"
+            },
+            "content": {
+              "preview_rows": [
+                [
+                  "E_coli_K12_MG1655_GCF_000005845.2",
+                  "0.06063460600072578"
+                ]
+              ],
+              "columns": [
+                "log2(PTR):genome_id/sample_id",
+                "reads"
+              ],
+              "delimiter": "comma",
+              "preview_only": true,
+              "preview_available": true,
+              "kind": "table"
+            }
+          }
+        ],
+        "native_qc_applied": false,
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R2": "848af7701924365397ddc97842330fe8",
+            "R1": "00c1ba62cbc935dbae4bf9e938cab257"
+          },
+          "status": "registered"
+        }
+      }
+    },
+    "files": [
+      {
+        "name": "results.zip",
+        "resource_id": "result:f3db3497753648c0a761a2808fb392d4:224e9e0fc800eb7464e3aeaf145baceacc3a9c11ed9c1d95a46b6af1d1d90628",
+        "state": "succeeded",
+        "expected_sha256": "23f7127a79e6bdcdfeedc7d4eca464743f8511b3ba58eb1d301d38f6675e4240",
+        "bytes": 244,
+        "sha256": "23f7127a79e6bdcdfeedc7d4eca464743f8511b3ba58eb1d301d38f6675e4240",
+        "matches": true
+      },
+      {
+        "name": "coptr_log2ptr.csv",
+        "resource_id": "result:f3db3497753648c0a761a2808fb392d4:4095efced8edf6a994c868c27a02d2f35018db09956743ea66ca5037ec7217f5",
+        "state": "succeeded",
+        "expected_sha256": "c548c78f1ab096757c59281edcae701b920d63ecfb4255a02a5ea68a9c086763",
+        "bytes": 90,
+        "sha256": "c548c78f1ab096757c59281edcae701b920d63ecfb4255a02a5ea68a9c086763",
+        "matches": true
+      },
+      {
+        "name": "ce24c5899ec54ed49b62b73ee521b286_benign_R1.fastq.gz",
+        "resource_id": "result:f3db3497753648c0a761a2808fb392d4:7add91e8ab5b24a15ada18f8d35f4208e240c48b1ab4a25a8b2e83e4ea2e081c",
+        "state": "succeeded",
+        "expected_sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+        "bytes": 606829,
+        "sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+        "matches": true
+      },
+      {
+        "name": "9716799289a4486095abbd5eb9f7e242_benign_R2.fastq.gz",
+        "resource_id": "result:f3db3497753648c0a761a2808fb392d4:ddf0cc4ad6251ac755e10ebd7a318e032a1c42d55791ab2e54ff4b807a3cde81",
+        "state": "succeeded",
+        "expected_sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+        "bytes": 606829,
+        "sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+        "matches": true
+      }
+    ],
+    "search_state": "succeeded",
+    "matched_all": true,
+    "native_exports": [
+      {
+        "resource_id": "native:5a04b9c85dbf3588b243be68f50385f5:growth:2461a255b0aacc48b2ab12f2d1c4f7d1:record",
+        "kind": "native_analysis_record",
+        "state": "succeeded",
+        "bytes": 419,
+        "sha256": "e1583adb12b3b69c1b4ba9dbcd8cbb8f6011c90f6621431578e7b2cdababbebf",
+        "sample_id_matches": true
+      },
+      {
+        "resource_id": "result:f3db3497753648c0a761a2808fb392d4:224e9e0fc800eb7464e3aeaf145baceacc3a9c11ed9c1d95a46b6af1d1d90628",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 244,
+        "sha256": "23f7127a79e6bdcdfeedc7d4eca464743f8511b3ba58eb1d301d38f6675e4240"
+      },
+      {
+        "resource_id": "result:f3db3497753648c0a761a2808fb392d4:4095efced8edf6a994c868c27a02d2f35018db09956743ea66ca5037ec7217f5",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 90,
+        "sha256": "c548c78f1ab096757c59281edcae701b920d63ecfb4255a02a5ea68a9c086763"
+      },
+      {
+        "resource_id": "result:f3db3497753648c0a761a2808fb392d4:7add91e8ab5b24a15ada18f8d35f4208e240c48b1ab4a25a8b2e83e4ea2e081c",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 606829,
+        "sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae"
+      }
+    ]
+  },
+  "result_sync": {
+    "tool_response": {
+      "status": "ok",
+      "data": {
+        "value": {
+          "transfer_id": "26dae4d555e84f1e984fca541018c835",
+          "site_id": "mscan",
+          "operation": "result_sync",
+          "state": "succeeded",
+          "result": {
+            "cromwell_task_id": "f1d6bb6c-153c-4696-b87a-3eeac9c01fad",
+            "pipeline_name": "metagenomic_growth_rate_Calculation",
+            "target": {
+              "data_type": "meta",
+              "project_name": "Bridge_expanded_20261120_standard",
+              "sample_name": "metagenomic_growth_rate_Calculation_sync",
+              "project_id": "4a651c555eae32c39c8bfdd142321567",
+              "sample_id": "473813e1acd932a8ab166c4746a066eb"
+            },
+            "state": "imported",
+            "program": "growth"
+          }
+        }
+      },
+      "files": [],
+      "evidence": [],
+      "error": null
+    },
+    "transfer": {
+      "transfer_id": "26dae4d555e84f1e984fca541018c835",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "cromwell_task_id": "f1d6bb6c-153c-4696-b87a-3eeac9c01fad",
+        "pipeline_name": "metagenomic_growth_rate_Calculation",
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "metagenomic_growth_rate_Calculation_sync",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "473813e1acd932a8ab166c4746a066eb"
+        },
+        "state": "imported",
+        "program": "growth"
+      }
+    },
+    "repeat": {
+      "transfer_id": "3e39ec641b5f4479bce7d4bf456e9ed5",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "473813e1acd932a8ab166c4746a066eb",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "473813e1acd932a8ab166c4746a066eb"
+        },
+        "program": "growth",
+        "state": "imported",
+        "cromwell_task_id": "f1d6bb6c-153c-4696-b87a-3eeac9c01fad",
+        "message": "Native result already imported.",
+        "pipeline_name": "metagenomic_growth_rate_Calculation"
+      }
+    }
+  },
+  "elapsed_seconds": 77.2,
+  "finished": true
+}

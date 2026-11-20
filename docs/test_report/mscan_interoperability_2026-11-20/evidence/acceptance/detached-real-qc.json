@@ -1,0 +1,2172 @@
+{
+  "job": {
+    "run_id": "df91ae45b99e473f84e3a5e7149b31fe",
+    "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+    "request": "Authorized software test on benign E. coli K-12 simulated reads. Run only metagenomic_read_quality_control with read1 uploads/88466f3a6a7441958b12c3d03f15f513_benign_R1.fastq.gz and read2 uploads/980340c2fb5543ffaf6d85673c112bc9_benign_R2.fastq.gz using the configured remote Cromwell executor. Collect its actual results, then synchronize that succeeded BioAgent job with website_result_sync to MSCAN project fcdbb2633e9c316c9053590a04feabe6, sample d54ee437c7043868b2c910ee7d2d95ba, data_type meta, create_missing false. Do not run other pipelines. After submission do not make website page callbacks; I will close the host page.",
+    "model_key": "gpt-5.6-sol",
+    "max_turns": 20,
+    "status": "succeeded",
+    "result": {
+      "result_contract_version": 1,
+      "answer": "Confirmed: MSCAN import succeeded.\n\n- Transfer: `3596171329a44c1f9ce1fa6cf0c80bae`\n- Project: `fcdbb2633e9c316c9053590a04feabe6`\n- Sample: `d54ee437c7043868b2c910ee7d2d95ba`\n- Data type: `meta`\n- Program: `qc`",
+      "status": "ok",
+      "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+      "approval_required": false,
+      "approvals": [],
+      "evidence": {
+        "retrieval_date": "2026-11-20",
+        "tools": [
+          "pipeline_shell",
+          "website_result_sync"
+        ],
+        "databases": [],
+        "query_terms": [],
+        "record_ids": [],
+        "citations": [],
+        "urls": [],
+        "files": [
+          "uploads/88466f3a6a7441958b12c3d03f15f513_benign_R1.fastq.gz",
+          "uploads/980340c2fb5543ffaf6d85673c112bc9_benign_R2.fastq.gz",
+          "pipeline-artifacts/0b11b0b535ab4151b58d9fe50c3cf6c7/0/clean.R1.fq",
+          "pipeline-artifacts/0b11b0b535ab4151b58d9fe50c3cf6c7/1/clean.R2.fq",
+          "pipeline-artifacts/0b11b0b535ab4151b58d9fe50c3cf6c7/2/qc_counts.tsv",
+          "pipeline-artifacts/0b11b0b535ab4151b58d9fe50c3cf6c7/3/phase1_read_overview.tsv",
+          "pipeline-bundles/0b11b0b535ab4151b58d9fe50c3cf6c7/results.zip"
+        ],
+        "outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "plan_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "status": "planned",
+            "command": "agent-pipeline run --plan-id 0b11b0b535ab4151b58d9fe50c3cf6c7"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "plan_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "status": "queued",
+            "pipeline_name": "metagenomic_read_quality_control"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "plan_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "status": "running",
+            "pipeline_name": "metagenomic_read_quality_control"
+          },
+          {
+            "tool": "pipeline_shell",
+            "job_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "plan_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "bundle_path": "pipeline-bundles/0b11b0b535ab4151b58d9fe50c3cf6c7/results.zip",
+            "status": "succeeded",
+            "error": null,
+            "pipeline_name": "metagenomic_read_quality_control"
+          },
+          {
+            "tool": "website_result_sync",
+            "arguments": {
+              "site_id": "mscan",
+              "operation": "result_sync"
+            },
+            "status": "ok"
+          }
+        ],
+        "tool_outputs": [
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "ok"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "planned",
+            "job_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "plan_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "command": "agent-pipeline run --plan-id 0b11b0b535ab4151b58d9fe50c3cf6c7"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "queued",
+            "job_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "plan_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "pipeline_name": "metagenomic_read_quality_control"
+          },
+          {
+            "tool": "pipeline_shell",
+            "status": "running",
+            "job_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "plan_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "pipeline_name": "metagenomic_read_quality_control"
+          }
+        ],
+        "tool_errors": []
+      },
+      "trace": [
+        {
+          "timestamp": "2026-11-20T02:41:23.237196+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "run_started",
+          "data": {
+            "request": "Authorized software test on benign E. coli K-12 simulated reads. Run only metagenomic_read_quality_control with read1 uploads/88466f3a6a7441958b12c3d03f15f513_benign_R1.fastq.gz and read2 uploads/980340c2fb5543ffaf6d85673c112bc9_benign_R2.fastq.gz using the configured remote Cromwell executor. Collect its actual results, then synchronize that succeeded BioAgent job with website_result_sync to MSCAN project fcdbb2633e9c316c9053590a04feabe6, sample d54ee437c7043868b2c910ee7d2d95ba, data_type meta, create_missing false. Do not run other pipelines. After submission do not make website page callbacks; I will close the host page.",
+            "model_key": "gpt-5.6-sol"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:23.277751+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:23.315069+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_395dc4e00ca8471caa0cddfa",
+            "parent_id": "span_90c1fa1949b04f079f81fea4",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-11-20T02:41:23.313179+00:00",
+            "ended_at": "2026-11-20T02:41:23.313408+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:23.318944+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_3bce6bdfe4c346fbb6e1aa1c",
+            "parent_id": "span_c1c983dfff534bd4964acdc3",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:41:23.317048+00:00",
+            "ended_at": "2026-11-20T02:41:23.317272+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:23.320975+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_d30af5cdda3642a6a6e9cfeb",
+            "parent_id": "span_c1c983dfff534bd4964acdc3",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:41:23.319179+00:00",
+            "ended_at": "2026-11-20T02:41:23.319322+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:23.329807+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_1d2a386c4ac14fa69fba065e",
+            "parent_id": "span_c1c983dfff534bd4964acdc3",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:41:23.321758+00:00",
+            "ended_at": "2026-11-20T02:41:23.327990+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:23.336799+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_6c9efe48b44f44d1aee72e8a",
+            "parent_id": "span_c1c983dfff534bd4964acdc3",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:41:23.330039+00:00",
+            "ended_at": "2026-11-20T02:41:23.335129+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:23.339332+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_c1c983dfff534bd4964acdc3",
+            "parent_id": "span_90c1fa1949b04f079f81fea4",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:41:23.315330+00:00",
+            "ended_at": "2026-11-20T02:41:23.337771+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:23.341778+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:23.405436+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:28.121908+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_084d6214a7b340419b3ce518",
+            "parent_id": "span_3ae8a517b612445790e2292d",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:41:23.426776+00:00",
+            "ended_at": "2026-11-20T02:41:28.120177+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:28.152087+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 12338,
+            "output_tokens": 57
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:28.163666+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:29.048009+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline catalog",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:29.050703+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:29.051550+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_65e534b3fe0644ee9a0977a8",
+            "parent_id": "span_3ae8a517b612445790e2292d",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-11-20T02:41:28.154875+00:00",
+            "ended_at": "2026-11-20T02:41:29.050781+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:29.052901+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_3ae8a517b612445790e2292d",
+            "parent_id": "span_97c3af9c90574cb9be1cda24",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:41:23.340983+00:00",
+            "ended_at": "2026-11-20T02:41:29.052129+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:29.084852+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_ab477e13581c4a5db3a29233",
+            "parent_id": "span_b90f5457d85e4438b1243018",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:41:29.083268+00:00",
+            "ended_at": "2026-11-20T02:41:29.083431+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:29.092092+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_b720682baafa4663a1f67d7d",
+            "parent_id": "span_b90f5457d85e4438b1243018",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:41:29.085592+00:00",
+            "ended_at": "2026-11-20T02:41:29.090433+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:29.098530+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_e9a73d5a6b44404aa03ea8eb",
+            "parent_id": "span_b90f5457d85e4438b1243018",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:41:29.092215+00:00",
+            "ended_at": "2026-11-20T02:41:29.096906+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:29.100194+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_b90f5457d85e4438b1243018",
+            "parent_id": "span_97c3af9c90574cb9be1cda24",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:41:29.082227+00:00",
+            "ended_at": "2026-11-20T02:41:29.098679+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:29.104083+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:34.040112+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_c1403ea8abda47d79857728f",
+            "parent_id": "span_6848982180404749a63be49c",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:41:29.105321+00:00",
+            "ended_at": "2026-11-20T02:41:34.038421+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:34.058960+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 21111,
+            "output_tokens": 64
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:34.066172+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:34.080450+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline files",
+            "status": "ok"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:34.082988+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:34.084621+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_4c91b2b3964d42658241df11",
+            "parent_id": "span_6848982180404749a63be49c",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-11-20T02:41:34.061273+00:00",
+            "ended_at": "2026-11-20T02:41:34.083114+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:34.086844+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_6848982180404749a63be49c",
+            "parent_id": "span_97c3af9c90574cb9be1cda24",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:41:29.101549+00:00",
+            "ended_at": "2026-11-20T02:41:34.085363+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:34.136650+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_644c778a24424bcdb8383e54",
+            "parent_id": "span_723c865a70cb49be86517358",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:41:34.134758+00:00",
+            "ended_at": "2026-11-20T02:41:34.134940+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:34.144093+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_69c96daad3ee43b488e80e27",
+            "parent_id": "span_723c865a70cb49be86517358",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:41:34.137333+00:00",
+            "ended_at": "2026-11-20T02:41:34.142418+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:34.150369+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_f38fa12d8f594a179b716ea0",
+            "parent_id": "span_723c865a70cb49be86517358",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:41:34.144213+00:00",
+            "ended_at": "2026-11-20T02:41:34.148749+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:34.151935+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_723c865a70cb49be86517358",
+            "parent_id": "span_97c3af9c90574cb9be1cda24",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:41:34.133591+00:00",
+            "ended_at": "2026-11-20T02:41:34.150427+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:34.156296+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:41.056392+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_cb550dd6b81b4d1db33b147e",
+            "parent_id": "span_3730e0f143f84e24a29e2a65",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:41:34.157562+00:00",
+            "ended_at": "2026-11-20T02:41:41.054610+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:41.067681+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 21370,
+            "output_tokens": 110
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:41.075707+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:41.430042+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline plan --pipeline metagenomic_read_quality_control --input read1=uploads/88466f3a6a7441958b12c3d03f15f513_benign_R1.fastq.gz --input read2=uploads/980340c2fb5543ffaf6d85673c112bc9_benign_R2.fastq.gz",
+            "status": "planned"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:41.433405+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:41.434937+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_bab3834ddfd14cb2a000a2df",
+            "parent_id": "span_3730e0f143f84e24a29e2a65",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-11-20T02:41:41.070300+00:00",
+            "ended_at": "2026-11-20T02:41:41.433524+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:41.437749+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_3730e0f143f84e24a29e2a65",
+            "parent_id": "span_97c3af9c90574cb9be1cda24",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:41:34.153732+00:00",
+            "ended_at": "2026-11-20T02:41:41.436269+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:41.468474+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_238aa14c4ae5435e9c7d8918",
+            "parent_id": "span_3f1a6ee184174f1590c1e03e",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:41:41.466590+00:00",
+            "ended_at": "2026-11-20T02:41:41.466773+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:41.476121+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_dc568d65fc4e43d1857b81b9",
+            "parent_id": "span_3f1a6ee184174f1590c1e03e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:41:41.469185+00:00",
+            "ended_at": "2026-11-20T02:41:41.474436+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:41.482441+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_92082251f9cf4e1fb6a2ab5b",
+            "parent_id": "span_3f1a6ee184174f1590c1e03e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:41:41.476248+00:00",
+            "ended_at": "2026-11-20T02:41:41.480778+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:41.484041+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_3f1a6ee184174f1590c1e03e",
+            "parent_id": "span_97c3af9c90574cb9be1cda24",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:41:41.465350+00:00",
+            "ended_at": "2026-11-20T02:41:41.482505+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:41.488059+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:46.306849+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_a66efa6faf914b26acec22ba",
+            "parent_id": "span_d0c3f5599cd54bf2add87fa6",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:41:41.489635+00:00",
+            "ended_at": "2026-11-20T02:41:46.305154+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:46.328729+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 22307,
+            "output_tokens": 88
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:46.342683+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_934802f0aa0e425d98be76cb",
+            "parent_id": "span_d0c3f5599cd54bf2add87fa6",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-11-20T02:41:46.333758+00:00",
+            "ended_at": "2026-11-20T02:41:46.341227+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:46.345228+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_d0c3f5599cd54bf2add87fa6",
+            "parent_id": "span_97c3af9c90574cb9be1cda24",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:41:41.485425+00:00",
+            "ended_at": "2026-11-20T02:41:46.343844+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:46.366747+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_97c3af9c90574cb9be1cda24",
+            "parent_id": "span_90c1fa1949b04f079f81fea4",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-20T02:41:23.340764+00:00",
+            "ended_at": "2026-11-20T02:41:46.365437+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:46.368002+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_90c1fa1949b04f079f81fea4",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-20T02:41:23.277955+00:00",
+            "ended_at": "2026-11-20T02:41:46.366859+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:46.368399+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:46.432156+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "run_paused",
+          "data": {
+            "reason": "tool_approval",
+            "tool_names": [
+              "pipeline_shell"
+            ]
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:50.381711+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "approval_decision",
+          "data": {
+            "approved": true,
+            "tool_name": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:50.398629+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:50.407346+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_428b3ae2ab79470ab5c4db44",
+            "parent_id": "span_3c2223817945401fae8d38a0",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:41:50.406128+00:00",
+            "ended_at": "2026-11-20T02:41:50.406252+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:50.408611+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_30449aaab987452fb56374ae",
+            "parent_id": "span_3c2223817945401fae8d38a0",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:41:50.407494+00:00",
+            "ended_at": "2026-11-20T02:41:50.407599+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:50.428596+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_4e36ac58d5794fe88db8bd43",
+            "parent_id": "span_3c2223817945401fae8d38a0",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:41:50.409042+00:00",
+            "ended_at": "2026-11-20T02:41:50.427079+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:50.435011+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_0e241b77e85642508e54ab7a",
+            "parent_id": "span_3c2223817945401fae8d38a0",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:41:50.428737+00:00",
+            "ended_at": "2026-11-20T02:41:50.433339+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:50.437409+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_3c2223817945401fae8d38a0",
+            "parent_id": "span_9b3249fac8bf4d7eaba57ea8",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:41:50.405143+00:00",
+            "ended_at": "2026-11-20T02:41:50.435820+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:50.449528+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:53.186076+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline run --plan-id 0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "status": "queued"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:53.188987+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:53.190673+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_05e6564d307241ed892d74d7",
+            "parent_id": "span_9b3249fac8bf4d7eaba57ea8",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-11-20T02:41:50.448332+00:00",
+            "ended_at": "2026-11-20T02:41:53.189111+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:53.224471+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_99d944acac3545919ca4aa9f",
+            "parent_id": "span_477a241c405643c78846d15d",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:41:53.222545+00:00",
+            "ended_at": "2026-11-20T02:41:53.222769+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:53.232209+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_21fab34653fa44b580000b4f",
+            "parent_id": "span_477a241c405643c78846d15d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:41:53.225226+00:00",
+            "ended_at": "2026-11-20T02:41:53.230509+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:53.238823+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_10fe161bc62f4627ad7e3034",
+            "parent_id": "span_477a241c405643c78846d15d",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:41:53.232340+00:00",
+            "ended_at": "2026-11-20T02:41:53.237146+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:53.240515+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_477a241c405643c78846d15d",
+            "parent_id": "span_9b3249fac8bf4d7eaba57ea8",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:41:53.221347+00:00",
+            "ended_at": "2026-11-20T02:41:53.238970+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:53.243074+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:53.303790+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:57.493991+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_c23a45d3a94c4688ab273854",
+            "parent_id": "span_13cbea36dd46421d98737f14",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:41:53.305488+00:00",
+            "ended_at": "2026-11-20T02:41:57.492263+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:57.515283+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 22608,
+            "output_tokens": 87
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:41:57.523225+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:02.617479+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "pipeline_command_finished",
+          "data": {
+            "command": "agent-pipeline wait --job-id 0b11b0b535ab4151b58d9fe50c3cf6c7 --seconds 5",
+            "status": "running"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:02.620371+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "pipeline_shell"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:02.622054+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_a309f7b4e0f7453497035da8",
+            "parent_id": "span_13cbea36dd46421d98737f14",
+            "span_type": "function",
+            "name": "pipeline_shell",
+            "model": null,
+            "started_at": "2026-11-20T02:41:57.518414+00:00",
+            "ended_at": "2026-11-20T02:42:02.620511+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:02.624482+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_13cbea36dd46421d98737f14",
+            "parent_id": "span_24b9815400b24282b680146b",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:41:53.242002+00:00",
+            "ended_at": "2026-11-20T02:42:02.622962+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:02.648472+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_085ec255175e44dba7893c1a",
+            "parent_id": "span_c288890d81014f7e927b6a30",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:42:02.646590+00:00",
+            "ended_at": "2026-11-20T02:42:02.646793+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:02.655852+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_5c88c6b827be4251a9020eaa",
+            "parent_id": "span_c288890d81014f7e927b6a30",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:42:02.649188+00:00",
+            "ended_at": "2026-11-20T02:42:02.654196+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:02.662173+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_a1ab6c5784a84cdda73b7428",
+            "parent_id": "span_c288890d81014f7e927b6a30",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:42:02.655971+00:00",
+            "ended_at": "2026-11-20T02:42:02.660500+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:02.663803+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_c288890d81014f7e927b6a30",
+            "parent_id": "span_24b9815400b24282b680146b",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:42:02.645408+00:00",
+            "ended_at": "2026-11-20T02:42:02.662239+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:02.667889+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:05.649713+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_6ea3711e41ed41f49d7c2925",
+            "parent_id": "span_524f869a499948869a80a9c0",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:42:02.669278+00:00",
+            "ended_at": "2026-11-20T02:42:05.647988+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:05.660923+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 22908,
+            "output_tokens": 85
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:05.664291+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:05.671233+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_524f869a499948869a80a9c0",
+            "parent_id": "span_24b9815400b24282b680146b",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:42:02.665150+00:00",
+            "ended_at": "2026-11-20T02:42:05.669679+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:05.681633+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:05.683177+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_93cd8ab378c34269bc43d236",
+            "parent_id": "span_24b9815400b24282b680146b",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-11-20T02:42:05.681025+00:00",
+            "ended_at": "2026-11-20T02:42:05.681671+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:05.688428+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_24b9815400b24282b680146b",
+            "parent_id": "span_9b3249fac8bf4d7eaba57ea8",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-20T02:41:53.241788+00:00",
+            "ended_at": "2026-11-20T02:42:05.686793+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:05.690024+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_9b3249fac8bf4d7eaba57ea8",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-20T02:41:50.398757+00:00",
+            "ended_at": "2026-11-20T02:42:05.688550+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:05.690461+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:42:05.754017+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "pipeline_job_status",
+          "data": {
+            "job_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "pipeline_name": "metagenomic_read_quality_control",
+            "status": "running"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:20.363346+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "pipeline_job_status",
+          "data": {
+            "job_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "pipeline_name": "metagenomic_read_quality_control",
+            "status": "succeeded"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:20.487541+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "pipeline_completion_collected",
+          "data": {
+            "job_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+            "status": "succeeded"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:20.499461+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:20.519378+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_98404f15ab1b448b927c6832",
+            "parent_id": "span_a97e3e03140040019c07adcf",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-11-20T02:43:20.509323+00:00",
+            "ended_at": "2026-11-20T02:43:20.517779+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:20.523432+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_4a38dbb9d4b04e25a5b2a9ec",
+            "parent_id": "span_d3b7dece52f3409291de9ea6",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:43:20.521515+00:00",
+            "ended_at": "2026-11-20T02:43:20.521760+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:20.525460+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_8ab3edce102b41ab8b928e2e",
+            "parent_id": "span_d3b7dece52f3409291de9ea6",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:43:20.523679+00:00",
+            "ended_at": "2026-11-20T02:43:20.523817+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:20.533154+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_f92a08e721c041258ed219bd",
+            "parent_id": "span_d3b7dece52f3409291de9ea6",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:43:20.526234+00:00",
+            "ended_at": "2026-11-20T02:43:20.531470+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:20.539466+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_2fe8db27cdf64cc6a61e3bdb",
+            "parent_id": "span_d3b7dece52f3409291de9ea6",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:43:20.533276+00:00",
+            "ended_at": "2026-11-20T02:43:20.537804+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:20.541935+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_d3b7dece52f3409291de9ea6",
+            "parent_id": "span_a97e3e03140040019c07adcf",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:43:20.519606+00:00",
+            "ended_at": "2026-11-20T02:43:20.540361+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:20.544537+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:20.553955+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:26.178564+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_7c20e9c3260544c2b8993bb3",
+            "parent_id": "span_e121460882a74c61a8dbb7ea",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:43:20.558545+00:00",
+            "ended_at": "2026-11-20T02:43:26.176741+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:26.197892+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 24415,
+            "output_tokens": 139
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:26.201883+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_tool_started",
+          "data": {
+            "tool": "website_result_sync"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:26.251585+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "website_transfer_status",
+          "data": {
+            "transfer_id": "3596171329a44c1f9ce1fa6cf0c80bae",
+            "operation": "result_sync",
+            "state": "queued"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:27.771909+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_tool_finished",
+          "data": {
+            "tool": "website_result_sync"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:27.773563+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_5d92280e792b4d58948bf2d5",
+            "parent_id": "span_e121460882a74c61a8dbb7ea",
+            "span_type": "function",
+            "name": "website_result_sync",
+            "model": null,
+            "started_at": "2026-11-20T02:43:26.200522+00:00",
+            "ended_at": "2026-11-20T02:43:27.772054+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:27.775753+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_e121460882a74c61a8dbb7ea",
+            "parent_id": "span_8652f2559efe416dbbe0af57",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:43:20.543413+00:00",
+            "ended_at": "2026-11-20T02:43:27.774259+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:27.798818+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_b08fd8504eb6451fb6d75c4e",
+            "parent_id": "span_66e51c785b8f4032bc34ece3",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:43:27.796973+00:00",
+            "ended_at": "2026-11-20T02:43:27.797141+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:27.806001+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_5b83a87c55a44483bd03804b",
+            "parent_id": "span_66e51c785b8f4032bc34ece3",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:43:27.799502+00:00",
+            "ended_at": "2026-11-20T02:43:27.804348+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:27.812072+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_6ee8eb1bc3e84a07b0b6735b",
+            "parent_id": "span_66e51c785b8f4032bc34ece3",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:43:27.806116+00:00",
+            "ended_at": "2026-11-20T02:43:27.810404+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:27.813654+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_66e51c785b8f4032bc34ece3",
+            "parent_id": "span_8652f2559efe416dbbe0af57",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:43:27.795853+00:00",
+            "ended_at": "2026-11-20T02:43:27.812130+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:27.818184+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:32.967351+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_db5692a629314f779f744371",
+            "parent_id": "span_1f99c77dc4bd40f4bbcae386",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:43:27.820238+00:00",
+            "ended_at": "2026-11-20T02:43:32.965297+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:32.985926+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 24762,
+            "output_tokens": 106
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:32.990187+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.009579+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_1f99c77dc4bd40f4bbcae386",
+            "parent_id": "span_8652f2559efe416dbbe0af57",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:43:27.814952+00:00",
+            "ended_at": "2026-11-20T02:43:33.007925+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.020560+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.022333+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_7642aae873db4fdb8d01824f",
+            "parent_id": "span_8652f2559efe416dbbe0af57",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-11-20T02:43:33.019936+00:00",
+            "ended_at": "2026-11-20T02:43:33.020637+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.028175+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_8652f2559efe416dbbe0af57",
+            "parent_id": "span_a97e3e03140040019c07adcf",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-20T02:43:20.543227+00:00",
+            "ended_at": "2026-11-20T02:43:33.026664+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.029669+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_a97e3e03140040019c07adcf",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-20T02:43:20.499626+00:00",
+            "ended_at": "2026-11-20T02:43:33.028311+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.030077+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.055373+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "website_transfer_completion_collected",
+          "data": {
+            "transfer_id": "3596171329a44c1f9ce1fa6cf0c80bae",
+            "state": "succeeded",
+            "monitor_timed_out": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.064946+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_trace_started",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.086314+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_a0bb9a3e26a74f2aaaf7af36",
+            "parent_id": "span_38d98aa0048846e2932cc6d2",
+            "span_type": "guardrail",
+            "name": "bio_safety_input",
+            "model": null,
+            "started_at": "2026-11-20T02:43:33.075780+00:00",
+            "ended_at": "2026-11-20T02:43:33.084724+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.090245+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_d95cfb40688a4e76bef23bbb",
+            "parent_id": "span_ab155e9ffe4f4c67ab47147e",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:43:33.088170+00:00",
+            "ended_at": "2026-11-20T02:43:33.088512+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.092271+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_9950666a4c484c32870a98df",
+            "parent_id": "span_ab155e9ffe4f4c67ab47147e",
+            "span_type": "custom",
+            "name": "sandbox.running",
+            "model": null,
+            "started_at": "2026-11-20T02:43:33.090494+00:00",
+            "ended_at": "2026-11-20T02:43:33.090654+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.099973+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_e9817974e1d44917aa483a96",
+            "parent_id": "span_ab155e9ffe4f4c67ab47147e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:43:33.093019+00:00",
+            "ended_at": "2026-11-20T02:43:33.098423+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.106138+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_949225a01d8b4632abfd1b05",
+            "parent_id": "span_ab155e9ffe4f4c67ab47147e",
+            "span_type": "custom",
+            "name": "sandbox.exec",
+            "model": null,
+            "started_at": "2026-11-20T02:43:33.100086+00:00",
+            "ended_at": "2026-11-20T02:43:33.104461+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.108907+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_ab155e9ffe4f4c67ab47147e",
+            "parent_id": "span_38d98aa0048846e2932cc6d2",
+            "span_type": "custom",
+            "name": "sandbox.prepare_agent",
+            "model": null,
+            "started_at": "2026-11-20T02:43:33.086513+00:00",
+            "ended_at": "2026-11-20T02:43:33.107298+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.111599+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "agent_started",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent started: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:33.120349+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_requested",
+          "data": {
+            "agent": "Pipeline2Agent"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:38.485730+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_1155e0d2118f41c0b7596ceb",
+            "parent_id": "span_004c838ca3f8435cbc696ad7",
+            "span_type": "generation",
+            "name": null,
+            "model": "openai/gpt-5.6-sol",
+            "started_at": "2026-11-20T02:43:33.129811+00:00",
+            "ended_at": "2026-11-20T02:43:38.483994+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:38.525240+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "model_responded",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "input_tokens": 25154,
+            "output_tokens": 95
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:38.528363+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "agent_finished",
+          "data": {
+            "agent": "Pipeline2Agent",
+            "message": "Agent finished: Pipeline2Agent."
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:38.536969+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_004c838ca3f8435cbc696ad7",
+            "parent_id": "span_e42a7567ed7546b2bb44af76",
+            "span_type": "turn",
+            "name": null,
+            "model": null,
+            "started_at": "2026-11-20T02:43:33.110395+00:00",
+            "ended_at": "2026-11-20T02:43:38.535402+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:38.547453+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "guardrail_completed",
+          "data": {
+            "guardrail": "output",
+            "warnings": []
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:38.548986+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_876a57e179d84577b2d6aa57",
+            "parent_id": "span_e42a7567ed7546b2bb44af76",
+            "span_type": "guardrail",
+            "name": "bio_evidence_output",
+            "model": null,
+            "started_at": "2026-11-20T02:43:38.546856+00:00",
+            "ended_at": "2026-11-20T02:43:38.547489+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:38.554144+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_e42a7567ed7546b2bb44af76",
+            "parent_id": "span_38d98aa0048846e2932cc6d2",
+            "span_type": "agent",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-20T02:43:33.110224+00:00",
+            "ended_at": "2026-11-20T02:43:38.552636+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:38.555636+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_span_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028",
+            "span_id": "span_38d98aa0048846e2932cc6d2",
+            "parent_id": null,
+            "span_type": "task",
+            "name": "Pipeline2Agent",
+            "model": null,
+            "started_at": "2026-11-20T02:43:33.065090+00:00",
+            "ended_at": "2026-11-20T02:43:38.554280+00:00",
+            "has_error": false
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:38.556020+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "sdk_trace_finished",
+          "data": {
+            "trace_id": "trace_2ee1574409d04575a9380211dea68028"
+          }
+        },
+        {
+          "timestamp": "2026-11-20T02:43:38.593787+00:00",
+          "session_id": "c4bbf0db-2e66-4cf2-add3-8053cf8bfe0f",
+          "event": "run_finished",
+          "data": {
+            "status": "ok",
+            "tool_count": 7
+          }
+        }
+      ],
+      "workspace_files": [
+        {
+          "path": "uploads/88466f3a6a7441958b12c3d03f15f513_benign_R1.fastq.gz",
+          "workspace_path": "uploads/88466f3a6a7441958b12c3d03f15f513_benign_R1.fastq.gz",
+          "name": "88466f3a6a7441958b12c3d03f15f513_benign_R1.fastq.gz",
+          "size": 606829,
+          "modified_at": 1795142471560770265,
+          "kind": "upload",
+          "content_type": "application/gzip"
+        },
+        {
+          "path": "uploads/980340c2fb5543ffaf6d85673c112bc9_benign_R2.fastq.gz",
+          "workspace_path": "uploads/980340c2fb5543ffaf6d85673c112bc9_benign_R2.fastq.gz",
+          "name": "980340c2fb5543ffaf6d85673c112bc9_benign_R2.fastq.gz",
+          "size": 606829,
+          "modified_at": 1795142471598770501,
+          "kind": "upload",
+          "content_type": "application/gzip"
+        }
+      ],
+      "artifacts": [],
+      "files": [
+        {
+          "path": "uploads/88466f3a6a7441958b12c3d03f15f513_benign_R1.fastq.gz",
+          "workspace_path": "uploads/88466f3a6a7441958b12c3d03f15f513_benign_R1.fastq.gz",
+          "name": "88466f3a6a7441958b12c3d03f15f513_benign_R1.fastq.gz",
+          "size": 606829,
+          "modified_at": 1795142471560770265,
+          "kind": "upload",
+          "content_type": "application/gzip"
+        },
+        {
+          "path": "uploads/980340c2fb5543ffaf6d85673c112bc9_benign_R2.fastq.gz",
+          "workspace_path": "uploads/980340c2fb5543ffaf6d85673c112bc9_benign_R2.fastq.gz",
+          "name": "980340c2fb5543ffaf6d85673c112bc9_benign_R2.fastq.gz",
+          "size": 606829,
+          "modified_at": 1795142471598770501,
+          "kind": "upload",
+          "content_type": "application/gzip"
+        }
+      ],
+      "max_turns": 20,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Authorized software test on benign E. coli K-12 simulated reads. Run only metagenomic_read_quality_control with read1 uploads/88466f3a6a7441958b12c3d03f15f513_benign_R1.fastq.gz and read2 uploads/980340c2fb5543ffaf6d85673c112bc9_benign_R2.fastq.gz using the configured remote Cromwell executor. Collect its actual results, then synchronize that succeeded BioAgent job with website_result_sync to MSCAN project fcdbb2633e9c316c9053590a04feabe6, sample d54ee437c7043868b2c910ee7d2d95ba, data_type meta, create_missing false. Do not run other pipelines. After submission do not make website page callbacks; I will close the host page."
+        },
+        {
+          "role": "assistant",
+          "content": "Confirmed: MSCAN import succeeded.\n\n- Transfer: `3596171329a44c1f9ce1fa6cf0c80bae`\n- Project: `fcdbb2633e9c316c9053590a04feabe6`\n- Sample: `d54ee437c7043868b2c910ee7d2d95ba`\n- Data type: `meta`\n- Program: `qc`"
+        }
+      ],
+      "run": {
+        "run_id": "047960e3-c427-42af-bd25-8544772044ef",
+        "session_dir": ".",
+        "runtime_dir": "runs/047960e3-c427-42af-bd25-8544772044ef",
+        "workspace_dir": "outputs"
+      },
+      "approval_decision": {
+        "approved": true,
+        "approval_id": "817e3e0edecd416e95dff0ed2a074118",
+        "tool_name": "pipeline_shell",
+        "arguments": {
+          "commands": [
+            "agent-pipeline run --plan-id 0b11b0b535ab4151b58d9fe50c3cf6c7"
+          ],
+          "max_output_length": 20000,
+          "timeout_ms": 20000
+        },
+        "plan": {
+          "pipeline_name": "metagenomic_read_quality_control",
+          "engine": "wdl",
+          "inputs": {
+            "read1": [
+              {
+                "path": "uploads/88466f3a6a7441958b12c3d03f15f513_benign_R1.fastq.gz",
+                "sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+                "size": 606829
+              }
+            ],
+            "read2": [
+              {
+                "path": "uploads/980340c2fb5543ffaf6d85673c112bc9_benign_R2.fastq.gz",
+                "sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+                "size": 606829
+              }
+            ]
+          },
+          "parameters": {},
+          "cores": 1,
+          "timeout_seconds": 86400,
+          "max_memory_mb": 8192,
+          "dry_run": false,
+          "definition_sha256": "1ac9af8c14b1b2954f027fe805950ea2f964f81097089f13f51d78336f4e4dee",
+          "outputs": {
+            "clean_r1": {
+              "name": "clean_r1",
+              "label": "Host-filtered read 1",
+              "config_key": "",
+              "default": "data/output/clean.R1.fq",
+              "kind": "sequence",
+              "required": true,
+              "description": "Host-filtered read 1 produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": "MetagenomicQc.clean_r1"
+            },
+            "clean_r2": {
+              "name": "clean_r2",
+              "label": "Host-filtered read 2",
+              "config_key": "",
+              "default": "data/output/clean.R2.fq",
+              "kind": "sequence",
+              "required": false,
+              "description": "Host-filtered read 2 produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": "MetagenomicQc.clean_r2"
+            },
+            "qc_counts": {
+              "name": "qc_counts",
+              "label": "QC read counts",
+              "config_key": "",
+              "default": "data/output/qc_counts.tsv",
+              "kind": "table",
+              "required": true,
+              "description": "QC read counts produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": "MetagenomicQc.qc_counts"
+            },
+            "phase1_metrics": {
+              "name": "phase1_metrics",
+              "label": "Phase 1 read overview",
+              "config_key": "",
+              "default": "data/output/phase1_read_overview.tsv",
+              "kind": "table",
+              "required": true,
+              "description": "Phase 1 read overview produced by this workflow.",
+              "nextflow_output": "",
+              "wdl_output": "MetagenomicQc.phase1_metrics"
+            }
+          },
+          "wdl_engine": "cromwell",
+          "immutable_input_snapshot": true
+        }
+      },
+      "runtime": "agents_sdk",
+      "model_key": "gpt-5.6-sol"
+    },
+    "error": null,
+    "pid": 242301,
+    "created_at": "2026-11-20T02:41:19.719651+00:00",
+    "updated_at": "2026-11-20T02:43:38.771369+00:00",
+    "approval": {
+      "approved": true,
+      "approval_id": "817e3e0edecd416e95dff0ed2a074118"
+    },
+    "owner_user_id": "4f5d4597-00a0-444a-94de-60881822b1bc",
+    "cancel_requested": 0
+  },
+  "detached": true,
+  "events": [
+    {
+      "sequence": 78,
+      "event": "pipeline_job_status",
+      "payload": {
+        "job_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+        "pipeline_name": "metagenomic_read_quality_control",
+        "status": "running"
+      },
+      "created_at": "2026-11-20T02:42:05.755826+00:00"
+    },
+    {
+      "sequence": 79,
+      "event": "pipeline_job_status",
+      "payload": {
+        "job_id": "0b11b0b535ab4151b58d9fe50c3cf6c7",
+        "pipeline_name": "metagenomic_read_quality_control",
+        "status": "succeeded"
+      },
+      "created_at": "2026-11-20T02:43:20.365245+00:00"
+    }
+  ]
+}

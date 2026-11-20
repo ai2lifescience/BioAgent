@@ -1,0 +1,809 @@
+{
+  "case": "phi_metagenome_single_negative",
+  "pipeline": "phi_annotator_metagenome",
+  "seconds": 900,
+  "type": "meta",
+  "single_end": true,
+  "scope": "Single-end optional-input branch using the same artificial low-complexity negative reads; software execution and exchange only.",
+  "execution": "succeeded",
+  "started_at": "2026-11-20T03:54:51.279662+00:00",
+  "session_id": "74649024-caac-4321-9bbb-81d41d11ed86",
+  "engine": "wdl",
+  "manifest_sha256": "939ce9e220276d26921e78735c158d0c866f2365394ab3bc38f039f04eb972e1",
+  "inputs": {
+    "read1": "uploads/2e84147ffa814cddbf416095ba37dcbb_negative_R1.fastq.gz"
+  },
+  "parameters": {
+    "sample_id": "software_negative_control"
+  },
+  "plan_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+  "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+  "last_state": {
+    "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+    "plan_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+    "status": "succeeded",
+    "created_at": "2026-11-20T03:54:51.941856+00:00",
+    "started_at": "2026-11-20T03:54:52.159228+00:00",
+    "finished_at": "2026-11-20T03:55:20.827322+00:00",
+    "updated_at": "2026-11-20T03:55:20.828681+00:00",
+    "error": null,
+    "remote_id": "3ea515e5-1ccd-478e-ac84-c10f3f89c23a",
+    "artifact_status": "available",
+    "pipeline_name": "phi_annotator_metagenome"
+  },
+  "outputs": {
+    "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+    "plan_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+    "status": "succeeded",
+    "created_at": "2026-11-20T03:54:51.941856+00:00",
+    "started_at": "2026-11-20T03:54:52.159228+00:00",
+    "finished_at": "2026-11-20T03:55:20.827322+00:00",
+    "updated_at": "2026-11-20T03:55:20.828681+00:00",
+    "error": null,
+    "remote_id": "3ea515e5-1ccd-478e-ac84-c10f3f89c23a",
+    "artifact_status": "available",
+    "pipeline_name": "phi_annotator_metagenome",
+    "files": [
+      {
+        "name": "phi_hits.tsv",
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/0/phi_hits.tsv",
+        "workspace_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/0/phi_hits.tsv",
+        "size": 423,
+        "remote": true,
+        "artifact_id": "e7a4d3ec5f3d4dc9a55138e17a85208a:0",
+        "pipeline_result": {
+          "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+          "pipeline_name": "phi_annotator_metagenome",
+          "output_key": "PhiAnnotatorMetagenome.hits",
+          "output_name": "hits",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T03:55:20.827322+00:00"
+        }
+      },
+      {
+        "name": "phi_read_hits.tsv",
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/1/phi_read_hits.tsv",
+        "workspace_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/1/phi_read_hits.tsv",
+        "size": 423,
+        "remote": true,
+        "artifact_id": "e7a4d3ec5f3d4dc9a55138e17a85208a:1",
+        "pipeline_result": {
+          "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+          "pipeline_name": "phi_annotator_metagenome",
+          "output_key": "PhiAnnotatorMetagenome.read_hits",
+          "output_name": "read_hits",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T03:55:20.827322+00:00"
+        }
+      },
+      {
+        "name": "phi_summary.tsv",
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/2/phi_summary.tsv",
+        "workspace_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/2/phi_summary.tsv",
+        "size": 62,
+        "remote": true,
+        "artifact_id": "e7a4d3ec5f3d4dc9a55138e17a85208a:2",
+        "pipeline_result": {
+          "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+          "pipeline_name": "phi_annotator_metagenome",
+          "output_key": "PhiAnnotatorMetagenome.summary",
+          "output_name": "summary",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T03:55:20.827322+00:00"
+        }
+      },
+      {
+        "name": "qc.json",
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/3/qc.json",
+        "workspace_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/3/qc.json",
+        "size": 1178,
+        "remote": true,
+        "artifact_id": "e7a4d3ec5f3d4dc9a55138e17a85208a:3",
+        "pipeline_result": {
+          "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+          "pipeline_name": "phi_annotator_metagenome",
+          "output_key": "PhiAnnotatorMetagenome.qc",
+          "output_name": "qc",
+          "output_kind": "file",
+          "completed_at": "2026-11-20T03:55:20.827322+00:00"
+        }
+      },
+      {
+        "name": "status.json",
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/4/status.json",
+        "workspace_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/4/status.json",
+        "size": 674,
+        "remote": true,
+        "artifact_id": "e7a4d3ec5f3d4dc9a55138e17a85208a:4",
+        "pipeline_result": {
+          "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+          "pipeline_name": "phi_annotator_metagenome",
+          "output_key": "PhiAnnotatorMetagenome.status",
+          "output_name": "status",
+          "output_kind": "file",
+          "completed_at": "2026-11-20T03:55:20.827322+00:00"
+        }
+      },
+      {
+        "name": "manifest.json",
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/5/manifest.json",
+        "workspace_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/5/manifest.json",
+        "size": 1854,
+        "remote": true,
+        "artifact_id": "e7a4d3ec5f3d4dc9a55138e17a85208a:5",
+        "pipeline_result": {
+          "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+          "pipeline_name": "phi_annotator_metagenome",
+          "output_key": "PhiAnnotatorMetagenome.manifest",
+          "output_name": "manifest",
+          "output_kind": "file",
+          "completed_at": "2026-11-20T03:55:20.827322+00:00"
+        }
+      },
+      {
+        "name": "report.md",
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/6/report.md",
+        "workspace_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/6/report.md",
+        "size": 906,
+        "remote": true,
+        "artifact_id": "e7a4d3ec5f3d4dc9a55138e17a85208a:6",
+        "pipeline_result": {
+          "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+          "pipeline_name": "phi_annotator_metagenome",
+          "output_key": "PhiAnnotatorMetagenome.report",
+          "output_name": "report",
+          "output_kind": "file",
+          "completed_at": "2026-11-20T03:55:20.827322+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/0/phi_hits.tsv",
+        "text": "sample_id\tquery_id\toriginal_query_id\tsource_file\tsubject_id\tphi_id\tgene_name\tpathogen\thost\thost_group\tphenotype\tinteraction_type\tfunction\tevidence\treference\tpident\talignment_length\tquery_coverage\tsubject_coverage\tevalue\tbitscore\tbest_hit\tinput_type\tanalysis_mode\tgenome_context\tcontig_id\torf_id\torf_start\torf_end\tstrand\torf_partial\tquery_start\tquery_end\tquery_frame\taggregation_level\tsupporting_reads\tmean_pident\tbest_read\n"
+      },
+      {
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/1/phi_read_hits.tsv",
+        "text": "sample_id\tquery_id\toriginal_query_id\tsource_file\tsubject_id\tphi_id\tgene_name\tpathogen\thost\thost_group\tphenotype\tinteraction_type\tfunction\tevidence\treference\tpident\talignment_length\tquery_coverage\tsubject_coverage\tevalue\tbitscore\tbest_hit\tinput_type\tanalysis_mode\tgenome_context\tcontig_id\torf_id\torf_start\torf_end\tstrand\torf_partial\tquery_start\tquery_end\tquery_frame\taggregation_level\tsupporting_reads\tmean_pident\tbest_read\n"
+      },
+      {
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/2/phi_summary.tsv",
+        "text": "dimension\tvalue\thit_count\tunique_query_count\tsupporting_reads\n"
+      },
+      {
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/3/qc.json",
+        "text": "{\n  \"pipeline\": \"phi-annotator-v2\",\n  \"pipeline_version\": \"0.2.0\",\n  \"sample_id\": \"software_negative_control\",\n  \"input_type\": \"reads\",\n  \"analysis_mode\": \"blastx\",\n  \"program\": \"blastx\",\n  \"input_files\": 1,\n  \"input_file_names\": [\n    \"df49f308c282f85f-2e84147ffa814cddbf416095ba37dcbb_negative_R1.fastq.gz\"\n  ],\n  \"protein_count\": 64,\n  \"query_length_unit\": \"nt\",\n  \"residue_count\": 9600,\n  \"raw_hit_count\": 0,\n  \"filtered_alignment_count\": 0,\n  \"annotation_row_count\": 0,\n  \"aggregation_level\": \"subject\",\n  \"unique_hit_queries\": 0,\n  \"orf_metadata_available\": 0,\n  \"rows_with_orf_coordinates\": 0,\n  \"unmatched_metadata_hits\": 0,\n  \"database_version\": \"PHI-base 5.6\",\n  \"thresholds\": {\n    \"min_identity\": 80.0,\n    \"min_query_coverage\": 0.0,\n    \"min_subject_coverage\": 0.0,\n    \"max_evalue\": 1e-05,\n    \"max_target_seqs\": 25,\n    \"min_alignment_length\": 30\n  },\n  \"result\": \"no_hits\",\n  \"dry_run\": false,\n  \"started_at\": \"2026-11-20T03:55:08.972701+00:00\",\n  \"finished_at\": \"2026-11-20T03:55:09.870646+00:00\",\n  \"read_count\": 64,\n  \"reads_kept\": 64,\n  \"reads_filtered_below_min_length\": 0,\n  \"read_bases_kept\": 9600,\n  \"min_read_length\": 0,\n  \"assembly_performed\": false\n}\n"
+      },
+      {
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/4/status.json",
+        "text": "{\n  \"status\": \"ok\",\n  \"result\": \"no_hits\",\n  \"pipeline\": \"phi-annotator-v2\",\n  \"sample_id\": \"software_negative_control\",\n  \"input_type\": \"reads\",\n  \"analysis_mode\": \"blastx\",\n  \"required_outputs\": [\n    \"/cromwell-executions/PhiAnnotatorMetagenome/3ea515e5-1ccd-478e-ac84-c10f3f89c23a/call-RunPhiMetagenome/execution/phi_out/phi_hits.tsv\",\n    \"/cromwell-executions/PhiAnnotatorMetagenome/3ea515e5-1ccd-478e-ac84-c10f3f89c23a/call-RunPhiMetagenome/execution/phi_out/qc.json\",\n    \"/cromwell-executions/PhiAnnotatorMetagenome/3ea515e5-1ccd-478e-ac84-c10f3f89c23a/call-RunPhiMetagenome/execution/phi_out/status.json\"\n  ],\n  \"finished_at\": \"2026-11-20T03:55:09.870646+00:00\"\n}\n"
+      },
+      {
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/5/manifest.json",
+        "text": "{\n  \"pipeline\": \"phi-annotator-v2\",\n  \"pipeline_version\": \"0.2.0\",\n  \"database_version\": \"PHI-base 5.6\",\n  \"database\": \"/data/zhaomh/program/database/phibase/5.6/diamond/phibase5.dmnd\",\n  \"metadata\": \"/data/zhaomh/program/database/phibase/5.6/normalized/phibase5_metadata.tsv\",\n  \"resolved_metadata_fields\": {\n    \"subject_id\": \"subject_id\",\n    \"phi_id\": \"phi_id\",\n    \"gene_name\": \"gene_name\",\n    \"pathogen\": \"pathogen\",\n    \"host\": \"host\",\n    \"host_group\": \"host_group\",\n    \"phenotype\": \"phenotype\",\n    \"interaction_type\": \"interaction_type\",\n    \"function\": \"function\",\n    \"evidence\": \"evidence\",\n    \"reference\": \"reference\"\n  },\n  \"inputs\": [\n    {\n      \"path\": \"/cromwell-executions/PhiAnnotatorMetagenome/3ea515e5-1ccd-478e-ac84-c10f3f89c23a/call-RunPhiMetagenome/execution/wdl_reads/df49f308c282f85f-2e84147ffa814cddbf416095ba37dcbb_negative_R1.fastq.gz\",\n      \"sha256\": \"df49f308c282f85f380ee951567666686b51bfe52c784b9c865504473aecc473\"\n    }\n  ],\n  \"commands\": [\n    [\n      \"diamond\",\n      \"blastx\",\n      \"--query\",\n      \"/cromwell-executions/PhiAnnotatorMetagenome/3ea515e5-1ccd-478e-ac84-c10f3f89c23a/call-RunPhiMetagenome/execution/phi_out/work/queries.faa\",\n      \"--db\",\n      \"/data/zhaomh/program/database/phibase/5.6/diamond/phibase5.dmnd\",\n      \"--out\",\n      \"/cromwell-executions/PhiAnnotatorMetagenome/3ea515e5-1ccd-478e-ac84-c10f3f89c23a/call-RunPhiMetagenome/execution/phi_out/work/diamond_hits.tsv\",\n      \"--outfmt\",\n      \"6\",\n      \"qseqid\",\n      \"sseqid\",\n      \"pident\",\n      \"length\",\n      \"mismatch\",\n      \"gapopen\",\n      \"qstart\",\n      \"qend\",\n      \"sstart\",\n      \"send\",\n      \"evalue\",\n      \"bitscore\",\n      \"qlen\",\n      \"slen\",\n      \"qcovhsp\",\n      \"qframe\",\n      \"--evalue\",\n      \"1e-05\",\n      \"--max-target-seqs\",\n      \"25\",\n      \"--threads\",\n      \"8\"\n    ]\n  ],\n  \"dry_run\": false\n}\n"
+      },
+      {
+        "path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/6/report.md",
+        "text": "# phi-annotator-v2 run report\n\n- sample: software_negative_control\n- input_type: reads (analysis_mode: blastx)\n- genome_context: n/a\n- program: DIAMOND blastx\n- database: PHI-base 5.6\n- input files: 1\n- queries searched: 64 (nt)\n- raw alignments: 0, after filtering: 0\n- result: no_hits, output rows: 0\n- dry run: False\n\n## thresholds in effect\n\n- min_identity: 80.0\n- min_query_coverage: 0.0\n- min_subject_coverage: 0.0\n- max_evalue: 1e-05\n- max_target_seqs: 25\n- min_alignment_length: 30\n\n## interpretation note (reads mode)\n\nReads were translated and searched without assembly. A hit means that a short\ntranslated fragment is homologous to a PHI-base reference protein. It does not\nestablish that the complete gene is present, which organism it came from, or that\nthe annotated pathogen-host phenotype applies to this sample.\n\n## top hits\n\nNo hit passed the filters; an empty result is a valid outcome.\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/e7a4d3ec5f3d4dc9a55138e17a85208a/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "inspection": [
+    {
+      "name": "phi_hits.tsv",
+      "bytes": 423,
+      "sha256": "14242bfc6959b3412a90064c6bb02b3cf48f29e66e530a1f829b26003925150a",
+      "data_rows": 0,
+      "header": "sample_id\tquery_id\toriginal_query_id\tsource_file\tsubject_id\tphi_id\tgene_name\tpathogen\thost\thost_group\tphenotype\tinteraction_type\tfunction\tevidence\treference\tpident\talignment_length\tquery_coverage\tsubject_coverage\tevalue\tbitscore\tbest_hit\tinput_type\tanalysis_mode\tgenome_context\tcontig_id\torf_id\torf_start\torf_end\tstrand\torf_partial\tquery_start\tquery_end\tquery_frame\taggregation_level\tsupporting_reads\tmean_pident\tbest_read"
+    },
+    {
+      "name": "phi_read_hits.tsv",
+      "bytes": 423,
+      "sha256": "14242bfc6959b3412a90064c6bb02b3cf48f29e66e530a1f829b26003925150a",
+      "data_rows": 0,
+      "header": "sample_id\tquery_id\toriginal_query_id\tsource_file\tsubject_id\tphi_id\tgene_name\tpathogen\thost\thost_group\tphenotype\tinteraction_type\tfunction\tevidence\treference\tpident\talignment_length\tquery_coverage\tsubject_coverage\tevalue\tbitscore\tbest_hit\tinput_type\tanalysis_mode\tgenome_context\tcontig_id\torf_id\torf_start\torf_end\tstrand\torf_partial\tquery_start\tquery_end\tquery_frame\taggregation_level\tsupporting_reads\tmean_pident\tbest_read"
+    },
+    {
+      "name": "phi_summary.tsv",
+      "bytes": 62,
+      "sha256": "8f6c0c0a6a6769152500782f96de3a7d5603f55662ff02aca029ac8449a3f431",
+      "data_rows": 0,
+      "header": "dimension\tvalue\thit_count\tunique_query_count\tsupporting_reads"
+    },
+    {
+      "name": "qc.json",
+      "bytes": 1178,
+      "sha256": "eed0e05c0402f7b349a57629e90fe45183a5fc4dae02cb35095095a91f831de2",
+      "json": {
+        "pipeline": "phi-annotator-v2",
+        "pipeline_version": "0.2.0",
+        "sample_id": "software_negative_control",
+        "input_type": "reads",
+        "analysis_mode": "blastx",
+        "program": "blastx",
+        "input_files": 1,
+        "input_file_names": [
+          "df49f308c282f85f-2e84147ffa814cddbf416095ba37dcbb_negative_R1.fastq.gz"
+        ],
+        "protein_count": 64,
+        "query_length_unit": "nt",
+        "residue_count": 9600,
+        "raw_hit_count": 0,
+        "filtered_alignment_count": 0,
+        "annotation_row_count": 0,
+        "aggregation_level": "subject",
+        "unique_hit_queries": 0,
+        "orf_metadata_available": 0,
+        "rows_with_orf_coordinates": 0,
+        "unmatched_metadata_hits": 0,
+        "database_version": "PHI-base 5.6",
+        "thresholds": {
+          "min_identity": 80.0,
+          "min_query_coverage": 0.0,
+          "min_subject_coverage": 0.0,
+          "max_evalue": 1e-05,
+          "max_target_seqs": 25,
+          "min_alignment_length": 30
+        },
+        "result": "no_hits",
+        "dry_run": false,
+        "started_at": "2026-11-20T03:55:08.972701+00:00",
+        "finished_at": "2026-11-20T03:55:09.870646+00:00",
+        "read_count": 64,
+        "reads_kept": 64,
+        "reads_filtered_below_min_length": 0,
+        "read_bases_kept": 9600,
+        "min_read_length": 0,
+        "assembly_performed": false
+      }
+    },
+    {
+      "name": "status.json",
+      "bytes": 674,
+      "sha256": "c61e58428a1beb79cbcb8f7f28fb2b5ba2f1d22f8e38179d7f406d0246c0e4df",
+      "json": {
+        "status": "ok",
+        "result": "no_hits",
+        "pipeline": "phi-annotator-v2",
+        "sample_id": "software_negative_control",
+        "input_type": "reads",
+        "analysis_mode": "blastx",
+        "required_outputs": [
+          "/cromwell-executions/PhiAnnotatorMetagenome/3ea515e5-1ccd-478e-ac84-c10f3f89c23a/call-RunPhiMetagenome/execution/phi_out/phi_hits.tsv",
+          "/cromwell-executions/PhiAnnotatorMetagenome/3ea515e5-1ccd-478e-ac84-c10f3f89c23a/call-RunPhiMetagenome/execution/phi_out/qc.json",
+          "/cromwell-executions/PhiAnnotatorMetagenome/3ea515e5-1ccd-478e-ac84-c10f3f89c23a/call-RunPhiMetagenome/execution/phi_out/status.json"
+        ],
+        "finished_at": "2026-11-20T03:55:09.870646+00:00"
+      }
+    },
+    {
+      "name": "manifest.json",
+      "bytes": 1854,
+      "sha256": "c8d48b9e966944148752768ce6d6edd2224d63836b2b917830d67d70679e27cc",
+      "json": {
+        "pipeline": "phi-annotator-v2",
+        "pipeline_version": "0.2.0",
+        "database_version": "PHI-base 5.6",
+        "database": "/data/zhaomh/program/database/phibase/5.6/diamond/phibase5.dmnd",
+        "metadata": "/data/zhaomh/program/database/phibase/5.6/normalized/phibase5_metadata.tsv",
+        "resolved_metadata_fields": {
+          "subject_id": "subject_id",
+          "phi_id": "phi_id",
+          "gene_name": "gene_name",
+          "pathogen": "pathogen",
+          "host": "host",
+          "host_group": "host_group",
+          "phenotype": "phenotype",
+          "interaction_type": "interaction_type",
+          "function": "function",
+          "evidence": "evidence",
+          "reference": "reference"
+        },
+        "inputs": [
+          {
+            "path": "/cromwell-executions/PhiAnnotatorMetagenome/3ea515e5-1ccd-478e-ac84-c10f3f89c23a/call-RunPhiMetagenome/execution/wdl_reads/df49f308c282f85f-2e84147ffa814cddbf416095ba37dcbb_negative_R1.fastq.gz",
+            "sha256": "df49f308c282f85f380ee951567666686b51bfe52c784b9c865504473aecc473"
+          }
+        ],
+        "commands": [
+          [
+            "diamond",
+            "blastx",
+            "--query",
+            "/cromwell-executions/PhiAnnotatorMetagenome/3ea515e5-1ccd-478e-ac84-c10f3f89c23a/call-RunPhiMetagenome/execution/phi_out/work/queries.faa",
+            "--db",
+            "/data/zhaomh/program/database/phibase/5.6/diamond/phibase5.dmnd",
+            "--out",
+            "/cromwell-executions/PhiAnnotatorMetagenome/3ea515e5-1ccd-478e-ac84-c10f3f89c23a/call-RunPhiMetagenome/execution/phi_out/work/diamond_hits.tsv",
+            "--outfmt",
+            "6",
+            "qseqid",
+            "sseqid",
+            "pident",
+            "length",
+            "mismatch",
+            "gapopen",
+            "qstart",
+            "qend",
+            "sstart",
+            "send",
+            "evalue",
+            "bitscore",
+            "qlen",
+            "slen",
+            "qcovhsp",
+            "qframe",
+            "--evalue",
+            "1e-05",
+            "--max-target-seqs",
+            "25",
+            "--threads",
+            "8"
+          ]
+        ],
+        "dry_run": false
+      }
+    },
+    {
+      "name": "report.md",
+      "bytes": 906,
+      "sha256": "306b64289c6dc90c988d326a8a0052615cbef0a6f876b73a53bf5e6856c91a6f",
+      "text": "# phi-annotator-v2 run report\n\n- sample: software_negative_control\n- input_type: reads (analysis_mode: blastx)\n- genome_context: n/a\n- program: DIAMOND blastx\n- database: PHI-base 5.6\n- input files: 1\n- queries searched: 64 (nt)\n- raw alignments: 0, after filtering: 0\n- result: no_hits, output rows: 0\n- dry run: False\n\n## thresholds in effect\n\n- min_identity: 80.0\n- min_query_coverage: 0.0\n- min_subject_coverage: 0.0\n- max_evalue: 1e-05\n- max_target_seqs: 25\n- min_alignment_length: 30\n\n## interpretation note (reads mode)\n\nReads were translated and searched without assembly. A hit means that a short\ntranslated fragment is homologous to a PHI-base reference protein. It does not\nestablish that the complete gene is present, which organism it came from, or that\nthe annotated pathogen-host phenotype applies to this sample.\n\n## top hits\n\nNo hit passed the filters; an empty result is a valid outcome.\n"
+    }
+  ],
+  "negative_control_has_hits": false,
+  "roundtrip": {
+    "push": {
+      "transfer_id": "969965e5a1084969bc41fd73cb86743a",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_remaining_20261120",
+          "sample_name": "phi_metagenome_single_negative_files",
+          "project_id": "8f8dc171a6c2321eb84164aa5eaea3f4",
+          "sample_id": "521bea9af9503c629c5ce0ef9f0cf6cf"
+        },
+        "receipt_id": "969965e5a1084969bc41fd73cb86743a",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+            "files_delivered": true,
+            "generic_import": {
+              "access": "Search or pull the attached sample files; native records are a separate outcome.",
+              "artifact_count": 7,
+              "state": "imported"
+            },
+            "pipeline": "phi_annotator_metagenome",
+            "format": "PhiAnnotatorMetagenome",
+            "program": "phi",
+            "state": "imported",
+            "message": "Native result imported."
+          }
+        ],
+        "files": [
+          {
+            "name": "2e84147ffa814cddbf416095ba37dcbb_negative_R1.fastq.gz",
+            "source_path": "uploads/2e84147ffa814cddbf416095ba37dcbb_negative_R1.fastq.gz",
+            "id": "8820f37e55a0340e3341617e3628d6218f98fa025558a4aef5869f3e085846f7",
+            "size": 315,
+            "sha256": "df49f308c282f85f380ee951567666686b51bfe52c784b9c865504473aecc473",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/e7a4d3ec5f3d4dc9a55138e17a85208a/results.zip",
+            "id": "193e1f9214996b2b7e83e4a5593466954b27c3730491eabd32838abf9cd62109",
+            "size": 3495,
+            "sha256": "66758bbb27c2fa1f2f020d9c4fe372a79b14b8f866b3874e403c730a56fc4471",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "size": 423,
+            "sha256": "14242bfc6959b3412a90064c6bb02b3cf48f29e66e530a1f829b26003925150a",
+            "name": "phi_hits.tsv",
+            "source_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/0/phi_hits.tsv",
+            "id": "86f3b3f3a003b3a95654aad44442709edcadc20f75d01abb310287ef2e7076fc",
+            "pipeline_result": {
+              "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+              "pipeline_name": "phi_annotator_metagenome",
+              "output_key": "PhiAnnotatorMetagenome.hits",
+              "output_name": "hits",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T03:55:20.827322+00:00"
+            },
+            "content": {
+              "preview": "sample_id\tquery_id\toriginal_query_id\tsource_file\tsubject_id\tphi_id\tgene_name\tpathogen\thost\thost_group\tphenotype\tinteraction_type\tfunction\tevidence\treference\tpident\talignment_length\tquery_coverage\tsubject_coverage\tevalue\tbitscore\tbest_hit\tinput_type\tanalysis_mode\tgenome_context\tcontig_id\torf_id\torf_start\torf_end\tstrand\torf_partial\tquery_start\tquery_end\tquery_frame\taggregation_level\tsupporting_reads\tmean_pident\tbest_read\n",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 423,
+            "sha256": "14242bfc6959b3412a90064c6bb02b3cf48f29e66e530a1f829b26003925150a",
+            "name": "phi_read_hits.tsv",
+            "source_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/1/phi_read_hits.tsv",
+            "id": "66d1a0d620f4221d6f6f6f29e2f5286eb3294d15d7884a7f30b2edaab52f764e",
+            "pipeline_result": {
+              "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+              "pipeline_name": "phi_annotator_metagenome",
+              "output_key": "PhiAnnotatorMetagenome.read_hits",
+              "output_name": "read_hits",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T03:55:20.827322+00:00"
+            },
+            "content": {
+              "preview": "sample_id\tquery_id\toriginal_query_id\tsource_file\tsubject_id\tphi_id\tgene_name\tpathogen\thost\thost_group\tphenotype\tinteraction_type\tfunction\tevidence\treference\tpident\talignment_length\tquery_coverage\tsubject_coverage\tevalue\tbitscore\tbest_hit\tinput_type\tanalysis_mode\tgenome_context\tcontig_id\torf_id\torf_start\torf_end\tstrand\torf_partial\tquery_start\tquery_end\tquery_frame\taggregation_level\tsupporting_reads\tmean_pident\tbest_read\n",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 62,
+            "sha256": "8f6c0c0a6a6769152500782f96de3a7d5603f55662ff02aca029ac8449a3f431",
+            "name": "phi_summary.tsv",
+            "source_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/2/phi_summary.tsv",
+            "id": "9a782f030c11e33bb8c1fa4398e5987836e472ca4c3654f5684975752af95e5d",
+            "pipeline_result": {
+              "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+              "pipeline_name": "phi_annotator_metagenome",
+              "output_key": "PhiAnnotatorMetagenome.summary",
+              "output_name": "summary",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T03:55:20.827322+00:00"
+            },
+            "content": {
+              "preview": "dimension\tvalue\thit_count\tunique_query_count\tsupporting_reads\n",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 1178,
+            "sha256": "eed0e05c0402f7b349a57629e90fe45183a5fc4dae02cb35095095a91f831de2",
+            "name": "qc.json",
+            "source_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/3/qc.json",
+            "id": "1afc035c31cea22c722d0ce526c87e2269adc01e8f1b5ea34bfc8b7780985fb1",
+            "pipeline_result": {
+              "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+              "pipeline_name": "phi_annotator_metagenome",
+              "output_key": "PhiAnnotatorMetagenome.qc",
+              "output_name": "qc",
+              "output_kind": "file",
+              "completed_at": "2026-11-20T03:55:20.827322+00:00"
+            },
+            "content": {
+              "fields": [
+                "pipeline",
+                "pipeline_version",
+                "sample_id",
+                "input_type",
+                "analysis_mode",
+                "program",
+                "input_files",
+                "input_file_names",
+                "protein_count",
+                "query_length_unit",
+                "residue_count",
+                "raw_hit_count",
+                "filtered_alignment_count",
+                "annotation_row_count",
+                "aggregation_level",
+                "unique_hit_queries",
+                "orf_metadata_available",
+                "rows_with_orf_coordinates",
+                "unmatched_metadata_hits",
+                "database_version",
+                "thresholds",
+                "result",
+                "dry_run",
+                "started_at",
+                "finished_at",
+                "read_count",
+                "reads_kept",
+                "reads_filtered_below_min_length",
+                "read_bases_kept",
+                "min_read_length",
+                "assembly_performed"
+              ],
+              "shape": "object",
+              "preview_available": true,
+              "kind": "json"
+            }
+          },
+          {
+            "size": 674,
+            "sha256": "c61e58428a1beb79cbcb8f7f28fb2b5ba2f1d22f8e38179d7f406d0246c0e4df",
+            "name": "status.json",
+            "source_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/4/status.json",
+            "id": "974d645caf8e43c344687a86cd8684dd165f123160fe15d03388162677529d4b",
+            "pipeline_result": {
+              "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+              "pipeline_name": "phi_annotator_metagenome",
+              "output_key": "PhiAnnotatorMetagenome.status",
+              "output_name": "status",
+              "output_kind": "file",
+              "completed_at": "2026-11-20T03:55:20.827322+00:00"
+            },
+            "content": {
+              "fields": [
+                "status",
+                "result",
+                "pipeline",
+                "sample_id",
+                "input_type",
+                "analysis_mode",
+                "required_outputs",
+                "finished_at"
+              ],
+              "shape": "object",
+              "preview_available": true,
+              "kind": "json"
+            }
+          },
+          {
+            "size": 1854,
+            "sha256": "c8d48b9e966944148752768ce6d6edd2224d63836b2b917830d67d70679e27cc",
+            "name": "manifest.json",
+            "source_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/5/manifest.json",
+            "id": "9a32eedc0417ad4a3957bf07124bc31ee3e8934254589067a4b7b17354b42d42",
+            "pipeline_result": {
+              "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+              "pipeline_name": "phi_annotator_metagenome",
+              "output_key": "PhiAnnotatorMetagenome.manifest",
+              "output_name": "manifest",
+              "output_kind": "file",
+              "completed_at": "2026-11-20T03:55:20.827322+00:00"
+            },
+            "content": {
+              "fields": [
+                "pipeline",
+                "pipeline_version",
+                "database_version",
+                "database",
+                "metadata",
+                "resolved_metadata_fields",
+                "inputs",
+                "commands",
+                "dry_run"
+              ],
+              "shape": "object",
+              "preview_available": true,
+              "kind": "json"
+            }
+          },
+          {
+            "size": 906,
+            "sha256": "306b64289c6dc90c988d326a8a0052615cbef0a6f876b73a53bf5e6856c91a6f",
+            "name": "report.md",
+            "source_path": "pipeline-artifacts/e7a4d3ec5f3d4dc9a55138e17a85208a/6/report.md",
+            "id": "254b0d2db9cbb94bc53e5efb243cf7d64ffe5c6e870b681b3390bb8b2a97f739",
+            "pipeline_result": {
+              "job_id": "e7a4d3ec5f3d4dc9a55138e17a85208a",
+              "pipeline_name": "phi_annotator_metagenome",
+              "output_key": "PhiAnnotatorMetagenome.report",
+              "output_name": "report",
+              "output_kind": "file",
+              "completed_at": "2026-11-20T03:55:20.827322+00:00"
+            },
+            "content": {
+              "preview": "# phi-annotator-v2 run report\n\n- sample: software_negative_control\n- input_type: reads (analysis_mode: blastx)\n- genome_context: n/a\n- program: DIAMOND blastx\n- database: PHI-base 5.6\n- input files: 1\n- queries searched: 64 (nt)\n- raw alignments: 0, after filtering: 0\n- result: no_hits, output rows: 0\n- dry run: False\n\n## thresholds in effect\n\n- min_identity: 80.0\n- min_query_coverage: 0.0\n- min_subject_coverage: 0.0\n- max_evalue: 1e-05\n- max_target_seqs: 25\n- min_alignment_length: 30\n\n## interpretation note (reads mode)\n\nReads were translated and searched without assembly. A hit means that a short\ntranslated fragment is homologous to a PHI-base reference protein. It does not\nestablish that the complete gene is present, which organism it came from, or that\nthe annotated pathogen-host phenotype applies to this sample.\n\n## top hits\n\nNo hit passed the filters; an empty result is a valid outcome.\n",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          }
+        ],
+        "native_qc_applied": false,
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R1": "5557bb3558663340a820e7cefe87a390"
+          },
+          "status": "registered"
+        }
+      }
+    },
+    "files": [
+      {
+        "name": "results.zip",
+        "resource_id": "result:969965e5a1084969bc41fd73cb86743a:193e1f9214996b2b7e83e4a5593466954b27c3730491eabd32838abf9cd62109",
+        "state": "succeeded",
+        "expected_sha256": "66758bbb27c2fa1f2f020d9c4fe372a79b14b8f866b3874e403c730a56fc4471",
+        "bytes": 3495,
+        "sha256": "66758bbb27c2fa1f2f020d9c4fe372a79b14b8f866b3874e403c730a56fc4471",
+        "matches": true
+      },
+      {
+        "name": "qc.json",
+        "resource_id": "result:969965e5a1084969bc41fd73cb86743a:1afc035c31cea22c722d0ce526c87e2269adc01e8f1b5ea34bfc8b7780985fb1",
+        "state": "succeeded",
+        "expected_sha256": "eed0e05c0402f7b349a57629e90fe45183a5fc4dae02cb35095095a91f831de2",
+        "bytes": 1178,
+        "sha256": "eed0e05c0402f7b349a57629e90fe45183a5fc4dae02cb35095095a91f831de2",
+        "matches": true
+      },
+      {
+        "name": "report.md",
+        "resource_id": "result:969965e5a1084969bc41fd73cb86743a:254b0d2db9cbb94bc53e5efb243cf7d64ffe5c6e870b681b3390bb8b2a97f739",
+        "state": "succeeded",
+        "expected_sha256": "306b64289c6dc90c988d326a8a0052615cbef0a6f876b73a53bf5e6856c91a6f",
+        "bytes": 906,
+        "sha256": "306b64289c6dc90c988d326a8a0052615cbef0a6f876b73a53bf5e6856c91a6f",
+        "matches": true
+      },
+      {
+        "name": "phi_read_hits.tsv",
+        "resource_id": "result:969965e5a1084969bc41fd73cb86743a:66d1a0d620f4221d6f6f6f29e2f5286eb3294d15d7884a7f30b2edaab52f764e",
+        "state": "succeeded",
+        "expected_sha256": "14242bfc6959b3412a90064c6bb02b3cf48f29e66e530a1f829b26003925150a",
+        "bytes": 423,
+        "sha256": "14242bfc6959b3412a90064c6bb02b3cf48f29e66e530a1f829b26003925150a",
+        "matches": true
+      },
+      {
+        "name": "phi_hits.tsv",
+        "resource_id": "result:969965e5a1084969bc41fd73cb86743a:86f3b3f3a003b3a95654aad44442709edcadc20f75d01abb310287ef2e7076fc",
+        "state": "succeeded",
+        "expected_sha256": "14242bfc6959b3412a90064c6bb02b3cf48f29e66e530a1f829b26003925150a",
+        "bytes": 423,
+        "sha256": "14242bfc6959b3412a90064c6bb02b3cf48f29e66e530a1f829b26003925150a",
+        "matches": true
+      },
+      {
+        "name": "2e84147ffa814cddbf416095ba37dcbb_negative_R1.fastq.gz",
+        "resource_id": "result:969965e5a1084969bc41fd73cb86743a:8820f37e55a0340e3341617e3628d6218f98fa025558a4aef5869f3e085846f7",
+        "state": "succeeded",
+        "expected_sha256": "df49f308c282f85f380ee951567666686b51bfe52c784b9c865504473aecc473",
+        "bytes": 315,
+        "sha256": "df49f308c282f85f380ee951567666686b51bfe52c784b9c865504473aecc473",
+        "matches": true
+      },
+      {
+        "name": "status.json",
+        "resource_id": "result:969965e5a1084969bc41fd73cb86743a:974d645caf8e43c344687a86cd8684dd165f123160fe15d03388162677529d4b",
+        "state": "succeeded",
+        "expected_sha256": "c61e58428a1beb79cbcb8f7f28fb2b5ba2f1d22f8e38179d7f406d0246c0e4df",
+        "bytes": 674,
+        "sha256": "c61e58428a1beb79cbcb8f7f28fb2b5ba2f1d22f8e38179d7f406d0246c0e4df",
+        "matches": true
+      },
+      {
+        "name": "manifest.json",
+        "resource_id": "result:969965e5a1084969bc41fd73cb86743a:9a32eedc0417ad4a3957bf07124bc31ee3e8934254589067a4b7b17354b42d42",
+        "state": "succeeded",
+        "expected_sha256": "c8d48b9e966944148752768ce6d6edd2224d63836b2b917830d67d70679e27cc",
+        "bytes": 1854,
+        "sha256": "c8d48b9e966944148752768ce6d6edd2224d63836b2b917830d67d70679e27cc",
+        "matches": true
+      },
+      {
+        "name": "phi_summary.tsv",
+        "resource_id": "result:969965e5a1084969bc41fd73cb86743a:9a782f030c11e33bb8c1fa4398e5987836e472ca4c3654f5684975752af95e5d",
+        "state": "succeeded",
+        "expected_sha256": "8f6c0c0a6a6769152500782f96de3a7d5603f55662ff02aca029ac8449a3f431",
+        "bytes": 62,
+        "sha256": "8f6c0c0a6a6769152500782f96de3a7d5603f55662ff02aca029ac8449a3f431",
+        "matches": true
+      }
+    ],
+    "search_state": "succeeded",
+    "matched_all": true,
+    "native_exports": [
+      {
+        "resource_id": "native:521bea9af9503c629c5ce0ef9f0cf6cf:annotation:8a0da9df1e81f82ddce64b5c85567c9d:record",
+        "kind": "native_analysis_record",
+        "state": "succeeded",
+        "bytes": 1077,
+        "sha256": "0264c4e88c4423809d9af5e16e508e14e1b549e92bb7384e5867b5da1a98142a",
+        "sample_id_matches": true
+      },
+      {
+        "resource_id": "result:969965e5a1084969bc41fd73cb86743a:193e1f9214996b2b7e83e4a5593466954b27c3730491eabd32838abf9cd62109",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 3495,
+        "sha256": "66758bbb27c2fa1f2f020d9c4fe372a79b14b8f866b3874e403c730a56fc4471"
+      },
+      {
+        "resource_id": "result:969965e5a1084969bc41fd73cb86743a:1afc035c31cea22c722d0ce526c87e2269adc01e8f1b5ea34bfc8b7780985fb1",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 1178,
+        "sha256": "eed0e05c0402f7b349a57629e90fe45183a5fc4dae02cb35095095a91f831de2",
+        "sample_id_matches": false
+      },
+      {
+        "resource_id": "result:969965e5a1084969bc41fd73cb86743a:254b0d2db9cbb94bc53e5efb243cf7d64ffe5c6e870b681b3390bb8b2a97f739",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 906,
+        "sha256": "306b64289c6dc90c988d326a8a0052615cbef0a6f876b73a53bf5e6856c91a6f"
+      }
+    ]
+  },
+  "result_sync": {
+    "tool_response": {
+      "status": "ok",
+      "data": {
+        "value": {
+          "transfer_id": "6fccd18cd9204d95bc7847184ad3c9c4",
+          "site_id": "mscan",
+          "operation": "result_sync",
+          "state": "succeeded",
+          "result": {
+            "cromwell_task_id": "3ea515e5-1ccd-478e-ac84-c10f3f89c23a",
+            "pipeline_name": "phi_annotator_metagenome",
+            "target": {
+              "data_type": "meta",
+              "project_name": "Bridge_remaining_20261120",
+              "sample_name": "phi_metagenome_single_negative_sync",
+              "project_id": "8f8dc171a6c2321eb84164aa5eaea3f4",
+              "sample_id": "5a4cdddb07a03ac09df28900b5be27b6"
+            },
+            "state": "imported",
+            "program": "phi"
+          }
+        }
+      },
+      "files": [],
+      "evidence": [],
+      "error": null
+    },
+    "transfer": {
+      "transfer_id": "6fccd18cd9204d95bc7847184ad3c9c4",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "cromwell_task_id": "3ea515e5-1ccd-478e-ac84-c10f3f89c23a",
+        "pipeline_name": "phi_annotator_metagenome",
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_remaining_20261120",
+          "sample_name": "phi_metagenome_single_negative_sync",
+          "project_id": "8f8dc171a6c2321eb84164aa5eaea3f4",
+          "sample_id": "5a4cdddb07a03ac09df28900b5be27b6"
+        },
+        "state": "imported",
+        "program": "phi"
+      }
+    },
+    "repeat": {
+      "transfer_id": "ae8e29699c7f44619ae5ba009749e15e",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_remaining_20261120",
+          "sample_name": "5a4cdddb07a03ac09df28900b5be27b6",
+          "project_id": "8f8dc171a6c2321eb84164aa5eaea3f4",
+          "sample_id": "5a4cdddb07a03ac09df28900b5be27b6"
+        },
+        "program": "phi",
+        "state": "imported",
+        "cromwell_task_id": "3ea515e5-1ccd-478e-ac84-c10f3f89c23a",
+        "message": "Native result already imported.",
+        "pipeline_name": "phi_annotator_metagenome"
+      }
+    }
+  },
+  "finished": true,
+  "elapsed_seconds": 85.4
+}

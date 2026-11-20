@@ -1,0 +1,497 @@
+{
+  "pipeline": "bacterial_viral_variant_analysis",
+  "execution": "succeeded",
+  "stack": "standard",
+  "project": "Bridge_expanded_20261120_standard",
+  "session_id": "aef7ef7c-7ecd-4c59-8e5b-9c59340f5d45",
+  "engine": "wdl",
+  "catalog_name": "snp",
+  "manifest_sha256": "bbd1b330a16d3c5b249e7db12b2eaff50bc65e65dac68d10042b5aae2d44951d",
+  "inputs": {
+    "sequence_file1": "uploads/examples/bacterial_viral_variant_analysis-550f2d6e3aa34627bf54cf7a0a324cdb/example_vir_phiX174.fasta",
+    "reference_fasta": "uploads/examples/bacterial_viral_variant_analysis-550f2d6e3aa34627bf54cf7a0a324cdb/example_vir_phiX174_reference.fasta"
+  },
+  "parameters": {
+    "input_type": "genome",
+    "organism": "virus"
+  },
+  "input_scope": "Bundled harmless phiX174 bacteriophage example; no trait or risk scoring.",
+  "plan_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+  "job_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+  "last_state": {
+    "job_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+    "plan_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:17:37.800035+00:00",
+    "started_at": "2026-11-20T02:17:37.986863+00:00",
+    "finished_at": "2026-11-20T02:18:19.730640+00:00",
+    "updated_at": "2026-11-20T02:18:19.731978+00:00",
+    "error": null,
+    "remote_id": "d5e9db17-8a17-4d28-aaf7-98c6cf32c515",
+    "artifact_status": "available",
+    "pipeline_name": "bacterial_viral_variant_analysis"
+  },
+  "outputs": {
+    "job_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+    "plan_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:17:37.800035+00:00",
+    "started_at": "2026-11-20T02:17:37.986863+00:00",
+    "finished_at": "2026-11-20T02:18:19.730640+00:00",
+    "updated_at": "2026-11-20T02:18:19.731978+00:00",
+    "error": null,
+    "remote_id": "d5e9db17-8a17-4d28-aaf7-98c6cf32c515",
+    "artifact_status": "available",
+    "pipeline_name": "bacterial_viral_variant_analysis",
+    "files": [
+      {
+        "name": "snp_matrix",
+        "path": "pipeline-artifacts/fbcae3adb6e347d6aec69f04eb8c1a11/0/snp_matrix",
+        "workspace_path": "pipeline-artifacts/fbcae3adb6e347d6aec69f04eb8c1a11/0/snp_matrix",
+        "size": 75,
+        "remote": true,
+        "artifact_id": "fbcae3adb6e347d6aec69f04eb8c1a11:0",
+        "pipeline_result": {
+          "job_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+          "pipeline_name": "bacterial_viral_variant_analysis",
+          "output_key": "MutationAnalysis.snp_matrix",
+          "output_name": "snp_matrix",
+          "output_kind": "file",
+          "completed_at": "2026-11-20T02:18:19.730640+00:00"
+        }
+      },
+      {
+        "name": "variants.tsv",
+        "path": "pipeline-artifacts/fbcae3adb6e347d6aec69f04eb8c1a11/1/variants.tsv",
+        "workspace_path": "pipeline-artifacts/fbcae3adb6e347d6aec69f04eb8c1a11/1/variants.tsv",
+        "size": 226,
+        "remote": true,
+        "artifact_id": "fbcae3adb6e347d6aec69f04eb8c1a11:1",
+        "pipeline_result": {
+          "job_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+          "pipeline_name": "bacterial_viral_variant_analysis",
+          "output_key": "MutationAnalysis.variants_tsv",
+          "output_name": "variants_tsv",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:18:19.730640+00:00"
+        }
+      },
+      {
+        "name": "variants_summary.txt",
+        "path": "pipeline-artifacts/fbcae3adb6e347d6aec69f04eb8c1a11/2/variants_summary.txt",
+        "workspace_path": "pipeline-artifacts/fbcae3adb6e347d6aec69f04eb8c1a11/2/variants_summary.txt",
+        "size": 57,
+        "remote": true,
+        "artifact_id": "fbcae3adb6e347d6aec69f04eb8c1a11:2",
+        "pipeline_result": {
+          "job_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+          "pipeline_name": "bacterial_viral_variant_analysis",
+          "output_key": "MutationAnalysis.variants_summary",
+          "output_name": "variants_summary",
+          "output_kind": "text",
+          "completed_at": "2026-11-20T02:18:19.730640+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/fbcae3adb6e347d6aec69f04eb8c1a11/1/variants.tsv",
+        "text": "REGION\tPOS\tREF\tsample\tVARIANT_TYPE\tREF_CODON\tREF_AA\tALT_CODON\tALT_AA\tEFFECT\nNC_001422.1\t101\tC\tT\tSNP\tACG\tT\tATG\tM\tnonsynonymous\nNC_001422.1\t1001\tA\tT\tSNP\tTAT\tY\tTTT\tF\tnonsynonymous\nNC_001422.1\t2001\tT\tA\tSNP\tTGT\tC\tTGA\t*\tstop_gained\n"
+      },
+      {
+        "path": "pipeline-artifacts/fbcae3adb6e347d6aec69f04eb8c1a11/2/variants_summary.txt",
+        "text": "unique_variant_positions\t3\nnonsynonymous\t2\nstop_gained\t1\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/fbcae3adb6e347d6aec69f04eb8c1a11/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "roundtrip": {
+    "push": {
+      "transfer_id": "c8137fb1f8424b94a80004f9e8d7ed5c",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "genomic",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "bacterial_viral_variant_analysis_files",
+          "project_id": "64ce73afe66738d687e28d429915e28b",
+          "sample_id": "52c51291f39139ff8cf37fbe53d14f68"
+        },
+        "receipt_id": "c8137fb1f8424b94a80004f9e8d7ed5c",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+            "files_delivered": true,
+            "generic_import": {
+              "access": "Search or pull the attached sample files; native records are a separate outcome.",
+              "artifact_count": 3,
+              "state": "imported"
+            },
+            "pipeline": "bacterial_viral_variant_analysis",
+            "format": "MutationAnalysis",
+            "state": "unsupported",
+            "message": "MSCAN has no registered importer for this result format; files remain available."
+          }
+        ],
+        "files": [
+          {
+            "name": "example_vir_phiX174.fasta",
+            "source_path": "uploads/examples/bacterial_viral_variant_analysis-550f2d6e3aa34627bf54cf7a0a324cdb/example_vir_phiX174.fasta",
+            "id": "45ac8c8d586a939ccd0d16cf8b123ef722c7f745767b6cc934e03ca54b5ef478",
+            "size": 5404,
+            "sha256": "b9c1b4e766a0141aca5ff4cee25fbd7575dcbec2aaa49980d739c000ad114271",
+            "content": {
+              "preview": ">phiX174_query_1\nGAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTTGATAAAGCAGGAATTACTACTGCTTGTTTATGAATTAAATCGAAGTGGACTGCTGGCGGAAAATGAGAAAATTCGACCTATCCTTGCGCAGCTCGAGAAGCTCTTACTTTGCGACCTTTCGCCATCAACTAACGATTCTGTCAAAAACTGACGCGTTGGATGAGGAGAAGTGGCTTAATATGCTTGGCACGTTCGTCAAGGACTGGTTTAGATATGAGTCACATTTTGTTCATGGTAGAGATTCTCTTGTTGACATTTTAAAAGAGCGTGGATTACTATCTGAGTCCGATGCTGTTCAACCACTAATAGGTAAGAAATCATGAGTCAAGTTACTGAACAATCCGTACGTTTCCAGACCGCTTTGGCCTCTATTAAGCTCATTCAGGCTTCTGCCGTTTTGGATTTAACCGAAGATGATTTCGATTTTCTGACGAGTAACAAAGTTTGGATTGCTACTGACCGCTCTCGTGCTCGTCGCTGCGTTGAGGCTTGCGTTTATGGTACGCTGGACTTTGTGGGATACCCTCGCTTTCCTGCTCCTGTTGAGTTTATTGCTGCCGTCATTGCTTATTATGTTCATCCCGTCAACATTCAAACGGCCTGTCTCATCATGGAAGGCGCTGAATTTACGGAAAACATTATTAATGGCGTCGAGCGTCCGGTTAAAGCCGCTGAATTGTTCGCGTTTACCTTGCGTGTACGCGCAGGAAACACTGACGTTCTTACTGACGCAGAAGAAAACGTGCGTCAAAAATTACGTGCGGAAGGAGTGATGTAATGTCTAAAGGTAAAAAACGTTCTGGCGCTCGCCCTGGTCGTCCGCAGCCGTTGCGAGGTACTAAAGGCAAGCGTAAAGGCGCTCGTCTTTGGTATGTAGGTGGTCAACAATTTTAATTGCAGGGGCTTCGGCCCCTTACTTGAGGATAAATTTTGTCTA…",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "name": "example_vir_phiX174_reference.fasta",
+            "source_path": "uploads/examples/bacterial_viral_variant_analysis-550f2d6e3aa34627bf54cf7a0a324cdb/example_vir_phiX174_reference.fasta",
+            "id": "2a3eede324699f73bd8d0f81704515528550b8364cda26e2b6981000860698f7",
+            "size": 5520,
+            "sha256": "caa155c83967cc080f4f188f14f1f28c18d77448e87c3d00d3579ed348f4de2a",
+            "content": {
+              "preview": ">NC_001422.1 Escherichia phage phiX174, complete genome\nGAGTTTTATCGCTTCCATGACGCAGAAGTTAACACTTTCGGATATTTCTGATGAGTCGAAAAATTATCTT\nGATAAAGCAGGAATTACTACTGCTTGTTTACGAATTAAATCGAAGTGGACTGCTGGCGGAAAATGAGAAA\nATTCGACCTATCCTTGCGCAGCTCGAGAAGCTCTTACTTTGCGACCTTTCGCCATCAACTAACGATTCTG\nTCAAAAACTGACGCGTTGGATGAGGAGAAGTGGCTTAATATGCTTGGCACGTTCGTCAAGGACTGGTTTA\nGATATGAGTCACATTTTGTTCATGGTAGAGATTCTCTTGTTGACATTTTAAAAGAGCGTGGATTACTATC\nTGAGTCCGATGCTGTTCAACCACTAATAGGTAAGAAATCATGAGTCAAGTTACTGAACAATCCGTACGTT\nTCCAGACCGCTTTGGCCTCTATTAAGCTCATTCAGGCTTCTGCCGTTTTGGATTTAACCGAAGATGATTT\nCGATTTTCTGACGAGTAACAAAGTTTGGATTGCTACTGACCGCTCTCGTGCTCGTCGCTGCGTTGAGGCT\nTGCGTTTATGGTACGCTGGACTTTGTGGGATACCCTCGCTTTCCTGCTCCTGTTGAGTTTATTGCTGCCG\nTCATTGCTTATTATGTTCATCCCGTCAACATTCAAACGGCCTGTCTCATCATGGAAGGCGCTGAATTTAC\nGGAAAACATTATTAATGGCGTCGAGCGTCCGGTTAAAGCCGCTGAATTGTTCGCGTTTACCTTGCGTGTA\nCGCGCAGGAAACACTGACGTTCTTACTGACGCAGAAGAAAACGTGCGTCAAAAATTACGTGCGGAAGGAG\nTGATGTAATGTCTAAAGGTAAAAAACGTTCTGGCGCTCGCCCTGGTCGTCCGCAGCCGTTGCGAGGTACT\nAAAGGCAAGCGTAAAGGCGCTCGTCTTTGGTATGTAGGTGGTCAA…",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/fbcae3adb6e347d6aec69f04eb8c1a11/results.zip",
+            "id": "2304fbc65ece1dbc35c7c2546c178e301116c0bbe9a37b731541260220510e65",
+            "size": 668,
+            "sha256": "1b8729c52613139948555873845fb7be288b4720feb745e978da8662b56c5009",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "size": 75,
+            "sha256": "79f73d6f08bd04b5fb99d2df6c6ba0bacb86f3c5d0d7d6d955f46535c3ce3552",
+            "name": "snp_matrix",
+            "source_path": "pipeline-artifacts/fbcae3adb6e347d6aec69f04eb8c1a11/0/snp_matrix",
+            "id": "7b8af759f7a891b8d977805bcef0ab990edf2220af096c9ba014e9db1489dd05",
+            "pipeline_result": {
+              "job_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+              "pipeline_name": "bacterial_viral_variant_analysis",
+              "output_key": "MutationAnalysis.snp_matrix",
+              "output_name": "snp_matrix",
+              "output_kind": "file",
+              "completed_at": "2026-11-20T02:18:19.730640+00:00"
+            },
+            "content": {
+              "preview_rows": [
+                [
+                  "NC_001422.1",
+                  "101",
+                  "T"
+                ],
+                [
+                  "NC_001422.1",
+                  "1001",
+                  "T"
+                ],
+                [
+                  "NC_001422.1",
+                  "2001",
+                  "A"
+                ]
+              ],
+              "columns": [
+                "segment",
+                "pos",
+                "sample"
+              ],
+              "delimiter": "tab",
+              "preview_only": true,
+              "preview_available": true,
+              "kind": "table"
+            }
+          },
+          {
+            "size": 226,
+            "sha256": "0749d47e33c576ff45ef75b1aab687b856922541eeb29ba47b37c0888a63183c",
+            "name": "variants.tsv",
+            "source_path": "pipeline-artifacts/fbcae3adb6e347d6aec69f04eb8c1a11/1/variants.tsv",
+            "id": "1e493e98800fb101adde0f354b8bb755a5d0d549e207b022cb81fefe368fabeb",
+            "pipeline_result": {
+              "job_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+              "pipeline_name": "bacterial_viral_variant_analysis",
+              "output_key": "MutationAnalysis.variants_tsv",
+              "output_name": "variants_tsv",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:18:19.730640+00:00"
+            },
+            "content": {
+              "preview_rows": [
+                [
+                  "NC_001422.1",
+                  "101",
+                  "C",
+                  "T",
+                  "SNP",
+                  "ACG",
+                  "T",
+                  "ATG",
+                  "M",
+                  "nonsynonymous"
+                ],
+                [
+                  "NC_001422.1",
+                  "1001",
+                  "A",
+                  "T",
+                  "SNP",
+                  "TAT",
+                  "Y",
+                  "TTT",
+                  "F",
+                  "nonsynonymous"
+                ],
+                [
+                  "NC_001422.1",
+                  "2001",
+                  "T",
+                  "A",
+                  "SNP",
+                  "TGT",
+                  "C",
+                  "TGA",
+                  "*",
+                  "stop_gained"
+                ]
+              ],
+              "columns": [
+                "REGION",
+                "POS",
+                "REF",
+                "sample",
+                "VARIANT_TYPE",
+                "REF_CODON",
+                "REF_AA",
+                "ALT_CODON",
+                "ALT_AA",
+                "EFFECT"
+              ],
+              "delimiter": "tab",
+              "preview_only": true,
+              "preview_available": true,
+              "kind": "table"
+            }
+          },
+          {
+            "size": 57,
+            "sha256": "30efa329dab808ad0957eb01c7e15c5f67b659c8876082915269200ac427670f",
+            "name": "variants_summary.txt",
+            "source_path": "pipeline-artifacts/fbcae3adb6e347d6aec69f04eb8c1a11/2/variants_summary.txt",
+            "id": "2b40fa0b83fd1b276adde6d8f0b5808e9a794ab1daad1b571e94affaccb23bf3",
+            "pipeline_result": {
+              "job_id": "fbcae3adb6e347d6aec69f04eb8c1a11",
+              "pipeline_name": "bacterial_viral_variant_analysis",
+              "output_key": "MutationAnalysis.variants_summary",
+              "output_name": "variants_summary",
+              "output_kind": "text",
+              "completed_at": "2026-11-20T02:18:19.730640+00:00"
+            },
+            "content": {
+              "preview_rows": [
+                [
+                  "nonsynonymous",
+                  "2"
+                ],
+                [
+                  "stop_gained",
+                  "1"
+                ]
+              ],
+              "columns": [
+                "unique_variant_positions",
+                "3"
+              ],
+              "delimiter": "tab",
+              "preview_only": true,
+              "preview_available": true,
+              "kind": "table"
+            }
+          }
+        ],
+        "native_qc_applied": false,
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "genome": "f88933ce18863893ab70c3e9d2ddf423"
+          },
+          "status": "registered"
+        }
+      }
+    },
+    "files": [
+      {
+        "name": "variants.tsv",
+        "resource_id": "result:c8137fb1f8424b94a80004f9e8d7ed5c:1e493e98800fb101adde0f354b8bb755a5d0d549e207b022cb81fefe368fabeb",
+        "state": "succeeded",
+        "expected_sha256": "0749d47e33c576ff45ef75b1aab687b856922541eeb29ba47b37c0888a63183c",
+        "bytes": 226,
+        "sha256": "0749d47e33c576ff45ef75b1aab687b856922541eeb29ba47b37c0888a63183c",
+        "matches": true
+      },
+      {
+        "name": "results.zip",
+        "resource_id": "result:c8137fb1f8424b94a80004f9e8d7ed5c:2304fbc65ece1dbc35c7c2546c178e301116c0bbe9a37b731541260220510e65",
+        "state": "succeeded",
+        "expected_sha256": "1b8729c52613139948555873845fb7be288b4720feb745e978da8662b56c5009",
+        "bytes": 668,
+        "sha256": "1b8729c52613139948555873845fb7be288b4720feb745e978da8662b56c5009",
+        "matches": true
+      },
+      {
+        "name": "example_vir_phiX174_reference.fasta",
+        "resource_id": "result:c8137fb1f8424b94a80004f9e8d7ed5c:2a3eede324699f73bd8d0f81704515528550b8364cda26e2b6981000860698f7",
+        "state": "succeeded",
+        "expected_sha256": "caa155c83967cc080f4f188f14f1f28c18d77448e87c3d00d3579ed348f4de2a",
+        "bytes": 5520,
+        "sha256": "caa155c83967cc080f4f188f14f1f28c18d77448e87c3d00d3579ed348f4de2a",
+        "matches": true
+      },
+      {
+        "name": "variants_summary.txt",
+        "resource_id": "result:c8137fb1f8424b94a80004f9e8d7ed5c:2b40fa0b83fd1b276adde6d8f0b5808e9a794ab1daad1b571e94affaccb23bf3",
+        "state": "succeeded",
+        "expected_sha256": "30efa329dab808ad0957eb01c7e15c5f67b659c8876082915269200ac427670f",
+        "bytes": 57,
+        "sha256": "30efa329dab808ad0957eb01c7e15c5f67b659c8876082915269200ac427670f",
+        "matches": true
+      },
+      {
+        "name": "example_vir_phiX174.fasta",
+        "resource_id": "result:c8137fb1f8424b94a80004f9e8d7ed5c:45ac8c8d586a939ccd0d16cf8b123ef722c7f745767b6cc934e03ca54b5ef478",
+        "state": "succeeded",
+        "expected_sha256": "b9c1b4e766a0141aca5ff4cee25fbd7575dcbec2aaa49980d739c000ad114271",
+        "bytes": 5404,
+        "sha256": "b9c1b4e766a0141aca5ff4cee25fbd7575dcbec2aaa49980d739c000ad114271",
+        "matches": true
+      },
+      {
+        "name": "snp_matrix",
+        "resource_id": "result:c8137fb1f8424b94a80004f9e8d7ed5c:7b8af759f7a891b8d977805bcef0ab990edf2220af096c9ba014e9db1489dd05",
+        "state": "succeeded",
+        "expected_sha256": "79f73d6f08bd04b5fb99d2df6c6ba0bacb86f3c5d0d7d6d955f46535c3ce3552",
+        "bytes": 75,
+        "sha256": "79f73d6f08bd04b5fb99d2df6c6ba0bacb86f3c5d0d7d6d955f46535c3ce3552",
+        "matches": true
+      }
+    ],
+    "search_state": "succeeded",
+    "matched_all": true,
+    "native_exports": [
+      {
+        "resource_id": "result:c8137fb1f8424b94a80004f9e8d7ed5c:1e493e98800fb101adde0f354b8bb755a5d0d549e207b022cb81fefe368fabeb",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 226,
+        "sha256": "0749d47e33c576ff45ef75b1aab687b856922541eeb29ba47b37c0888a63183c"
+      },
+      {
+        "resource_id": "result:c8137fb1f8424b94a80004f9e8d7ed5c:2304fbc65ece1dbc35c7c2546c178e301116c0bbe9a37b731541260220510e65",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 668,
+        "sha256": "1b8729c52613139948555873845fb7be288b4720feb745e978da8662b56c5009"
+      },
+      {
+        "resource_id": "result:c8137fb1f8424b94a80004f9e8d7ed5c:2a3eede324699f73bd8d0f81704515528550b8364cda26e2b6981000860698f7",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 5520,
+        "sha256": "caa155c83967cc080f4f188f14f1f28c18d77448e87c3d00d3579ed348f4de2a"
+      },
+      {
+        "resource_id": "result:c8137fb1f8424b94a80004f9e8d7ed5c:2b40fa0b83fd1b276adde6d8f0b5808e9a794ab1daad1b571e94affaccb23bf3",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 57,
+        "sha256": "30efa329dab808ad0957eb01c7e15c5f67b659c8876082915269200ac427670f"
+      }
+    ]
+  },
+  "result_sync": {
+    "tool_response": {
+      "status": "ok",
+      "data": {
+        "value": {
+          "transfer_id": "dd22e8e33f97420ea1c7a6b34171b200",
+          "site_id": "mscan",
+          "operation": "result_sync",
+          "state": "succeeded",
+          "result": {
+            "cromwell_task_id": "d5e9db17-8a17-4d28-aaf7-98c6cf32c515",
+            "pipeline_name": "bacterial_viral_variant_analysis",
+            "target": {
+              "data_type": "genomic",
+              "project_name": "Bridge_expanded_20261120_standard",
+              "sample_name": "bacterial_viral_variant_analysis_sync",
+              "project_id": "64ce73afe66738d687e28d429915e28b",
+              "sample_id": "2c9bb96f637a361f909bc1d9f843d91f"
+            },
+            "state": "imported",
+            "program": "snp"
+          }
+        }
+      },
+      "files": [],
+      "evidence": [],
+      "error": null
+    },
+    "transfer": {
+      "transfer_id": "dd22e8e33f97420ea1c7a6b34171b200",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "cromwell_task_id": "d5e9db17-8a17-4d28-aaf7-98c6cf32c515",
+        "pipeline_name": "bacterial_viral_variant_analysis",
+        "target": {
+          "data_type": "genomic",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "bacterial_viral_variant_analysis_sync",
+          "project_id": "64ce73afe66738d687e28d429915e28b",
+          "sample_id": "2c9bb96f637a361f909bc1d9f843d91f"
+        },
+        "state": "imported",
+        "program": "snp"
+      }
+    },
+    "repeat": {
+      "transfer_id": "7d0147b60ae54049b872c4c929353fa4",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "genomic",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "2c9bb96f637a361f909bc1d9f843d91f",
+          "project_id": "64ce73afe66738d687e28d429915e28b",
+          "sample_id": "2c9bb96f637a361f909bc1d9f843d91f"
+        },
+        "program": "snp",
+        "state": "imported",
+        "cromwell_task_id": "d5e9db17-8a17-4d28-aaf7-98c6cf32c515",
+        "message": "Native result already imported.",
+        "pipeline_name": "bacterial_viral_variant_analysis"
+      }
+    }
+  },
+  "elapsed_seconds": 87.4,
+  "finished": true
+}

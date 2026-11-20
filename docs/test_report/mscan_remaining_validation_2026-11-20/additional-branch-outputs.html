@@ -1,0 +1,18 @@
+<!doctype html><meta charset="utf-8"><title>Additional branch output inspection</title><style>body{font:16px system-ui;margin:35px;color:#173438;max-width:1520px}h1{font-size:30px}p{line-height:1.5;color:#4b5e64}table{border-collapse:collapse;width:100%;font-size:14px}td,th{border-bottom:1px solid #cbd5d9;padding:12px 8px;text-align:left;overflow-wrap:anywhere}th{background:#eef4f4}pre{white-space:pre-wrap;background:#f2f6f6;padding:20px;font:15px/1.6 monospace}.notice{padding:15px;border-left:5px solid #277683;background:#eef6f7}h2{margin-top:30px}</style><h1>Additional input branch outputs</h1><p class="notice">Captured actual output rows, sequence counts and native value comparisons. Supplementary artifact inspection; this is not the MSCAN interface.</p><h2>qc_single_end</h2><p>QC source counts: {&#x27;InputReads&#x27;: 12000, &#x27;ReadsAfterQC&#x27;: 12000, &#x27;ReadsAfterHostRemoval&#x27;: 11767}. Native values match: True.</p><pre>[
+  {
+    &quot;name&quot;: &quot;clean.R1.fq&quot;,
+    &quot;fastq_records&quot;: 11767,
+    &quot;four_line_records_complete&quot;: true
+  }
+]</pre><h3>qc_counts.tsv — 87 bytes, 3 data rows</h3><pre>MetricName	MetricValue
+InputReads	12000
+ReadsAfterQC	12000
+ReadsAfterHostRemoval	11767</pre><h3>phase1_read_overview.tsv — 78 bytes, 1 data rows</h3><pre>SampleId	InputReads	ReadsAfterQC	ReadsAfterHostRemoval
+0722	12000	12000	11767</pre><h2>assembly_extended</h2><pre>[
+  {
+    &quot;name&quot;: &quot;final.contigs.renamed.fa&quot;,
+    &quot;fasta_records&quot;: 3,
+    &quot;sequence_bases&quot;: 99923
+  }
+]</pre><h3>contig_report.tsv — 0 bytes, 0 data rows</h3><pre>(empty file)</pre><h3>species_report.tsv — 0 bytes, 0 data rows</h3><pre>(empty file)</pre><h2>growth_single_end</h2><h3>coptr_log2ptr.csv — 38 bytes, 0 data rows</h3><pre>log2(PTR):genome_id/sample_id,reads_1</pre><h2>metax_single_end</h2><h3>profile.txt — 0 bytes, 0 data rows</h3><pre>(empty file)</pre><h2>marker_single_end</h2><h3>profile.txt — 752 bytes, 1 data rows</h3><pre>#clade_name	NCBI_tax_id	relative_abundance	additional_species
+UNCLASSIFIED	-1	100.0	</pre><h2>tcdb_metagenome_single_negative</h2><h3>tcdb_hits.tsv — 524 bytes, 0 data rows</h3><pre>sample_id	query_id	original_query_id	source_file	subject_id	tcid	tc_class	tc_subclass	tc_family	tc_subfamily	tc_system	protein_name	family_name	system_name	description	substrate	organism	pident	alignment_length	query_coverage	subject_coverage	evalue	bitscore	tm_alpha_segments	tm_beta_segments	signal_peptide	tm_prediction_status	best_hit	input_type	analysis_mode	genome_context	contig_id	orf_id	orf_start	orf_end	strand	orf_partial	query_start	query_end	query_frame	aggregation_level	supporting_reads	mean_pident	best_read</pre><h3>tcdb_read_hits.tsv — 524 bytes, 0 data rows</h3><pre>sample_id	query_id	original_query_id	source_file	subject_id	tcid	tc_class	tc_subclass	tc_family	tc_subfamily	tc_system	protein_name	family_name	system_name	description	substrate	organism	pident	alignment_length	query_coverage	subject_coverage	evalue	bitscore	tm_alpha_segments	tm_beta_segments	signal_peptide	tm_prediction_status	best_hit	input_type	analysis_mode	genome_context	contig_id	orf_id	orf_start	orf_end	strand	orf_partial	query_start	query_end	query_frame	aggregation_level	supporting_reads	mean_pident	best_read</pre><h3>tcdb_summary.tsv — 62 bytes, 0 data rows</h3><pre>dimension	value	hit_count	unique_query_count	supporting_reads</pre>

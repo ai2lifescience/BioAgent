@@ -1,0 +1,460 @@
+{
+  "pipeline": "risk_screen",
+  "execution": "succeeded",
+  "stack": "standard",
+  "project": "Bridge_expanded_20261120_standard",
+  "session_id": "c0d0fe2c-1530-44f5-8200-dc2ba445b352",
+  "engine": "wdl",
+  "catalog_name": "risk_screen",
+  "manifest_sha256": "1ea520120b29b17792183f354eb72a30d539910af5119d54b57ec15a3d52fcfd",
+  "inputs": {
+    "query_fasta": "uploads/f344481a355a4a41b057528b8f66c7c7_synthetic_negative.fasta"
+  },
+  "parameters": {},
+  "input_scope": "Synthetic random-sequence negative control only; no sensitive positive targets.",
+  "plan_id": "03941148394c465fb065172a9c70549f",
+  "job_id": "03941148394c465fb065172a9c70549f",
+  "last_state": {
+    "job_id": "03941148394c465fb065172a9c70549f",
+    "plan_id": "03941148394c465fb065172a9c70549f",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:41:17.305631+00:00",
+    "started_at": "2026-11-20T02:41:17.527961+00:00",
+    "finished_at": "2026-11-20T02:51:40.471743+00:00",
+    "updated_at": "2026-11-20T02:51:40.472549+00:00",
+    "error": null,
+    "remote_id": "ee5f3f8c-52d6-4b7f-aba0-c0994267c5dc",
+    "artifact_status": "available",
+    "pipeline_name": "risk_screen"
+  },
+  "outputs": {
+    "job_id": "03941148394c465fb065172a9c70549f",
+    "plan_id": "03941148394c465fb065172a9c70549f",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:41:17.305631+00:00",
+    "started_at": "2026-11-20T02:41:17.527961+00:00",
+    "finished_at": "2026-11-20T02:51:40.471743+00:00",
+    "updated_at": "2026-11-20T02:51:40.472549+00:00",
+    "error": null,
+    "remote_id": "ee5f3f8c-52d6-4b7f-aba0-c0994267c5dc",
+    "artifact_status": "available",
+    "pipeline_name": "risk_screen",
+    "files": [
+      {
+        "name": "screenmec.tsv",
+        "path": "pipeline-artifacts/03941148394c465fb065172a9c70549f/0/screenmec.tsv",
+        "workspace_path": "pipeline-artifacts/03941148394c465fb065172a9c70549f/0/screenmec.tsv",
+        "size": 35,
+        "remote": true,
+        "artifact_id": "03941148394c465fb065172a9c70549f:0",
+        "pipeline_result": {
+          "job_id": "03941148394c465fb065172a9c70549f",
+          "pipeline_name": "risk_screen",
+          "output_key": "ScreenMec.result_tsv",
+          "output_name": "result_tsv",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:51:40.471743+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/03941148394c465fb065172a9c70549f/0/screenmec.tsv",
+        "text": "synthetic_negative_control\t\t\t\tFLAG\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/03941148394c465fb065172a9c70549f/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "roundtrip": {
+    "push": {
+      "transfer_id": "653a97ab490f42e3a863073864e35845",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "genomic",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "risk_screen_files",
+          "project_id": "64ce73afe66738d687e28d429915e28b",
+          "sample_id": "879df3fc68e83863a73e097823fd43e6"
+        },
+        "receipt_id": "653a97ab490f42e3a863073864e35845",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "03941148394c465fb065172a9c70549f",
+            "files_delivered": true,
+            "generic_import": {
+              "access": "Search or pull the attached sample files; native records are a separate outcome.",
+              "artifact_count": 1,
+              "state": "imported"
+            },
+            "pipeline": "risk_screen",
+            "format": "ScreenMec",
+            "state": "unsupported",
+            "message": "MSCAN has no registered importer for this result format; files remain available."
+          }
+        ],
+        "files": [
+          {
+            "name": "f344481a355a4a41b057528b8f66c7c7_synthetic_negative.fasta",
+            "source_path": "uploads/f344481a355a4a41b057528b8f66c7c7_synthetic_negative.fasta",
+            "id": "020cb262eef9eacbde1603ec9d9af137a1427c2ac40ad7dff47faf731023359f",
+            "size": 2029,
+            "sha256": "72e996eaa271536fd6a7e41b7767e91beae92dd1d63630a30ee49a93e308129b",
+            "content": {
+              "preview": ">synthetic_negative_control\nCGCAGGCCCCCTTTAGGCCAATTTTTAAAGGTCACATATCTCTCTTTGCAGATTCGGAATCGATAGGCATTCCGAGACAATTCCATCGCTAATACGAGTACCGCACGTTCTACACCATTACTACCTGATTCATGGCTTGTCGTCTAAAATTGGTGGAAATTTTACACATTGAGTGTTCCGACACAAAGCTACGGGGGGGGGTGGTAAACATGCTCCGTTGTGCACATACGCCGGCCTCATCCATAGGTCACTGGAGCAACAACGTCCGAGTCGTGGAAGTAATGACCGGGCGAAGCATGCATCAACCCGGTTTCGTCAAGTGAAATGCAGAACAGCTGTCATGACCTCGGGGACGAAGAAGCGAATGTAGTAACGATTGAGCCGTGGCAGGTCTTGTGTACACACTGGTTGCGAATGTAATGCGGACCCTTCCGAGAATACGACGCGGATAGCAGGCCTCACTTGTGAGCTCTAGGACAAGTAACCGAGACGCTCGCCTCGGTGACCTTCTGTGGTGTATATTGTACCAAGGCGGCCCGCGAAGGCTAATCGACGACAGGTCCTACTTCGTAAAAGGGTTGCACCCATAAAACCAGACTTTTCCGCTACCTGCCACTTGCGCTTAGGTCAGGTACGCTCGGCCTGAAGGGCACTCTGGCTCGCGGAGAAATTATTTGTAAAACCGACCATCGCCTCAGAGTAAGGACCAACGAGCAGGTCCGCTTATCAGCGAGCGGGTCGAAGTGGTTCTTCTCTAAGTCCTGCGAGTCTTACTGATCGTTGCTTACGATTAACCCAAACGTCGTTTGGCACGACGTAAATGTGTGCAGTGTGTGTGACAGGTTAACTTCCTGCGGGGATAGTCCAAGCCTAATTCTATGACCGTGTGGACTCGAGTTCCAGATTATGAATAGCTTTTTCATTGACGAGCGCGCCAAAACTCTGGCAATCTGTAAATTCGTAGAAGTCGTCGGTCACGCTAATAGGTACAGAGGC…",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/03941148394c465fb065172a9c70549f/results.zip",
+            "id": "492fff3a97474ffafb434cda2f21644ef7c0b3145c8bb9e9b95fa4dd94eea59f",
+            "size": 187,
+            "sha256": "c04f763588db6bc3ee2271e3d28cf31c3d3c02127592355df3b29346adec3b20",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "size": 35,
+            "sha256": "9f1485a4a0b12ea0c4c7436cdb23830cb7f350c73502690d8d33f728db7b487d",
+            "name": "screenmec.tsv",
+            "source_path": "pipeline-artifacts/03941148394c465fb065172a9c70549f/0/screenmec.tsv",
+            "id": "30df38fb7abd9c1c15a0b1a50b27bee86288922cd020e59eeb6f83ce1034b9c7",
+            "pipeline_result": {
+              "job_id": "03941148394c465fb065172a9c70549f",
+              "pipeline_name": "risk_screen",
+              "output_key": "ScreenMec.result_tsv",
+              "output_name": "result_tsv",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:51:40.471743+00:00"
+            },
+            "content": {
+              "preview": "synthetic_negative_control\t\t\t\tFLAG\n",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          }
+        ],
+        "native_qc_applied": false,
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "genome": "95a3a2604fb93457a302f5e2f2d97ff3"
+          },
+          "status": "registered"
+        }
+      }
+    },
+    "files": [
+      {
+        "name": "f344481a355a4a41b057528b8f66c7c7_synthetic_negative.fasta",
+        "resource_id": "result:653a97ab490f42e3a863073864e35845:020cb262eef9eacbde1603ec9d9af137a1427c2ac40ad7dff47faf731023359f",
+        "state": "succeeded",
+        "expected_sha256": "72e996eaa271536fd6a7e41b7767e91beae92dd1d63630a30ee49a93e308129b",
+        "bytes": 2029,
+        "sha256": "72e996eaa271536fd6a7e41b7767e91beae92dd1d63630a30ee49a93e308129b",
+        "matches": true
+      },
+      {
+        "name": "screenmec.tsv",
+        "resource_id": "result:653a97ab490f42e3a863073864e35845:30df38fb7abd9c1c15a0b1a50b27bee86288922cd020e59eeb6f83ce1034b9c7",
+        "state": "succeeded",
+        "expected_sha256": "9f1485a4a0b12ea0c4c7436cdb23830cb7f350c73502690d8d33f728db7b487d",
+        "bytes": 35,
+        "sha256": "9f1485a4a0b12ea0c4c7436cdb23830cb7f350c73502690d8d33f728db7b487d",
+        "matches": true
+      },
+      {
+        "name": "results.zip",
+        "resource_id": "result:653a97ab490f42e3a863073864e35845:492fff3a97474ffafb434cda2f21644ef7c0b3145c8bb9e9b95fa4dd94eea59f",
+        "state": "succeeded",
+        "expected_sha256": "c04f763588db6bc3ee2271e3d28cf31c3d3c02127592355df3b29346adec3b20",
+        "bytes": 187,
+        "sha256": "c04f763588db6bc3ee2271e3d28cf31c3d3c02127592355df3b29346adec3b20",
+        "matches": true
+      }
+    ],
+    "search_state": "succeeded",
+    "matched_all": true,
+    "native_exports": [
+      {
+        "resource_id": "result:653a97ab490f42e3a863073864e35845:020cb262eef9eacbde1603ec9d9af137a1427c2ac40ad7dff47faf731023359f",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 2029,
+        "sha256": "72e996eaa271536fd6a7e41b7767e91beae92dd1d63630a30ee49a93e308129b"
+      },
+      {
+        "resource_id": "result:653a97ab490f42e3a863073864e35845:30df38fb7abd9c1c15a0b1a50b27bee86288922cd020e59eeb6f83ce1034b9c7",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 35,
+        "sha256": "9f1485a4a0b12ea0c4c7436cdb23830cb7f350c73502690d8d33f728db7b487d"
+      },
+      {
+        "resource_id": "result:653a97ab490f42e3a863073864e35845:492fff3a97474ffafb434cda2f21644ef7c0b3145c8bb9e9b95fa4dd94eea59f",
+        "kind": "analysis_output",
+        "state": "succeeded",
+        "bytes": 187,
+        "sha256": "c04f763588db6bc3ee2271e3d28cf31c3d3c02127592355df3b29346adec3b20"
+      }
+    ]
+  },
+  "result_sync": {
+    "tool_response": {
+      "status": "ok",
+      "data": {
+        "value": {
+          "transfer_id": "24c8211ba5e440e990f2dc50be2b9aa2",
+          "site_id": "mscan",
+          "operation": "result_sync",
+          "state": "failed",
+          "result": {
+            "retryable": false,
+            "error_code": "incompatible_sample_type",
+            "error": "ResultSyncException: Pipeline risk_screen does not support destination sample type genomic."
+          }
+        }
+      },
+      "files": [],
+      "evidence": [],
+      "error": null
+    },
+    "transfer": {
+      "transfer_id": "24c8211ba5e440e990f2dc50be2b9aa2",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "failed",
+      "result": {
+        "retryable": false,
+        "error_code": "incompatible_sample_type",
+        "error": "ResultSyncException: Pipeline risk_screen does not support destination sample type genomic."
+      }
+    }
+  },
+  "elapsed_seconds": 664.5,
+  "finished": true,
+  "exchange_correction": {
+    "reason": "ScreenMec importer requires a synthetic sample; first harness exchange used genomic. Workflow execution is unchanged.",
+    "roundtrip": {
+      "push": {
+        "transfer_id": "437fd30f48d04021b1512708f8beef46",
+        "site_id": "mscan",
+        "operation": "push",
+        "state": "succeeded",
+        "result": {
+          "target": {
+            "data_type": "synthetic",
+            "project_name": "Bridge_expanded_20261120_standard",
+            "sample_name": "risk_screen_synthetic_files",
+            "project_id": "38b3fb0c72b83afcb4d0daeba93a8dda",
+            "sample_id": "bf54921909b4377b98b383a9eeb06d94"
+          },
+          "receipt_id": "437fd30f48d04021b1512708f8beef46",
+          "qc": {},
+          "native_imports": [
+            {
+              "job_id": "03941148394c465fb065172a9c70549f",
+              "files_delivered": true,
+              "generic_import": {
+                "access": "Search or pull the attached sample files; native records are a separate outcome.",
+                "artifact_count": 1,
+                "state": "imported"
+              },
+              "pipeline": "risk_screen",
+              "format": "ScreenMec",
+              "state": "unsupported",
+              "message": "MSCAN has no registered importer for this result format; files remain available."
+            }
+          ],
+          "files": [
+            {
+              "name": "f344481a355a4a41b057528b8f66c7c7_synthetic_negative.fasta",
+              "source_path": "uploads/f344481a355a4a41b057528b8f66c7c7_synthetic_negative.fasta",
+              "id": "020cb262eef9eacbde1603ec9d9af137a1427c2ac40ad7dff47faf731023359f",
+              "size": 2029,
+              "sha256": "72e996eaa271536fd6a7e41b7767e91beae92dd1d63630a30ee49a93e308129b",
+              "content": {
+                "preview": ">synthetic_negative_control\nCGCAGGCCCCCTTTAGGCCAATTTTTAAAGGTCACATATCTCTCTTTGCAGATTCGGAATCGATAGGCATTCCGAGACAATTCCATCGCTAATACGAGTACCGCACGTTCTACACCATTACTACCTGATTCATGGCTTGTCGTCTAAAATTGGTGGAAATTTTACACATTGAGTGTTCCGACACAAAGCTACGGGGGGGGGTGGTAAACATGCTCCGTTGTGCACATACGCCGGCCTCATCCATAGGTCACTGGAGCAACAACGTCCGAGTCGTGGAAGTAATGACCGGGCGAAGCATGCATCAACCCGGTTTCGTCAAGTGAAATGCAGAACAGCTGTCATGACCTCGGGGACGAAGAAGCGAATGTAGTAACGATTGAGCCGTGGCAGGTCTTGTGTACACACTGGTTGCGAATGTAATGCGGACCCTTCCGAGAATACGACGCGGATAGCAGGCCTCACTTGTGAGCTCTAGGACAAGTAACCGAGACGCTCGCCTCGGTGACCTTCTGTGGTGTATATTGTACCAAGGCGGCCCGCGAAGGCTAATCGACGACAGGTCCTACTTCGTAAAAGGGTTGCACCCATAAAACCAGACTTTTCCGCTACCTGCCACTTGCGCTTAGGTCAGGTACGCTCGGCCTGAAGGGCACTCTGGCTCGCGGAGAAATTATTTGTAAAACCGACCATCGCCTCAGAGTAAGGACCAACGAGCAGGTCCGCTTATCAGCGAGCGGGTCGAAGTGGTTCTTCTCTAAGTCCTGCGAGTCTTACTGATCGTTGCTTACGATTAACCCAAACGTCGTTTGGCACGACGTAAATGTGTGCAGTGTGTGTGACAGGTTAACTTCCTGCGGGGATAGTCCAAGCCTAATTCTATGACCGTGTGGACTCGAGTTCCAGATTATGAATAGCTTTTTCATTGACGAGCGCGCCAAAACTCTGGCAATCTGTAAATTCGTAGAAGTCGTCGGTCACGCTAATAGGTACAGAGGC…",
+                "preview_available": true,
+                "preview_only": true,
+                "kind": "text"
+              }
+            },
+            {
+              "name": "results.zip",
+              "source_path": "pipeline-bundles/03941148394c465fb065172a9c70549f/results.zip",
+              "id": "492fff3a97474ffafb434cda2f21644ef7c0b3145c8bb9e9b95fa4dd94eea59f",
+              "size": 187,
+              "sha256": "c04f763588db6bc3ee2271e3d28cf31c3d3c02127592355df3b29346adec3b20",
+              "content": {
+                "kind": "file",
+                "preview_available": false
+              }
+            },
+            {
+              "size": 35,
+              "sha256": "9f1485a4a0b12ea0c4c7436cdb23830cb7f350c73502690d8d33f728db7b487d",
+              "name": "screenmec.tsv",
+              "source_path": "pipeline-artifacts/03941148394c465fb065172a9c70549f/0/screenmec.tsv",
+              "id": "30df38fb7abd9c1c15a0b1a50b27bee86288922cd020e59eeb6f83ce1034b9c7",
+              "pipeline_result": {
+                "job_id": "03941148394c465fb065172a9c70549f",
+                "pipeline_name": "risk_screen",
+                "output_key": "ScreenMec.result_tsv",
+                "output_name": "result_tsv",
+                "output_kind": "table",
+                "completed_at": "2026-11-20T02:51:40.471743+00:00"
+              },
+              "content": {
+                "preview": "synthetic_negative_control\t\t\t\tFLAG\n",
+                "preview_available": true,
+                "preview_only": true,
+                "kind": "text"
+              }
+            }
+          ],
+          "native_qc_applied": false,
+          "file_delivery": "delivered",
+          "source_registration": {
+            "slots": {
+              "genome": "6ea5f99f025c361fbbe6c1b5c83dc261"
+            },
+            "status": "registered"
+          }
+        }
+      },
+      "files": [
+        {
+          "name": "f344481a355a4a41b057528b8f66c7c7_synthetic_negative.fasta",
+          "resource_id": "result:437fd30f48d04021b1512708f8beef46:020cb262eef9eacbde1603ec9d9af137a1427c2ac40ad7dff47faf731023359f",
+          "state": "succeeded",
+          "expected_sha256": "72e996eaa271536fd6a7e41b7767e91beae92dd1d63630a30ee49a93e308129b",
+          "bytes": 2029,
+          "sha256": "72e996eaa271536fd6a7e41b7767e91beae92dd1d63630a30ee49a93e308129b",
+          "matches": true
+        },
+        {
+          "name": "screenmec.tsv",
+          "resource_id": "result:437fd30f48d04021b1512708f8beef46:30df38fb7abd9c1c15a0b1a50b27bee86288922cd020e59eeb6f83ce1034b9c7",
+          "state": "succeeded",
+          "expected_sha256": "9f1485a4a0b12ea0c4c7436cdb23830cb7f350c73502690d8d33f728db7b487d",
+          "bytes": 35,
+          "sha256": "9f1485a4a0b12ea0c4c7436cdb23830cb7f350c73502690d8d33f728db7b487d",
+          "matches": true
+        },
+        {
+          "name": "results.zip",
+          "resource_id": "result:437fd30f48d04021b1512708f8beef46:492fff3a97474ffafb434cda2f21644ef7c0b3145c8bb9e9b95fa4dd94eea59f",
+          "state": "succeeded",
+          "expected_sha256": "c04f763588db6bc3ee2271e3d28cf31c3d3c02127592355df3b29346adec3b20",
+          "bytes": 187,
+          "sha256": "c04f763588db6bc3ee2271e3d28cf31c3d3c02127592355df3b29346adec3b20",
+          "matches": true
+        }
+      ],
+      "search_state": "succeeded",
+      "matched_all": true,
+      "native_exports": [
+        {
+          "resource_id": "result:437fd30f48d04021b1512708f8beef46:020cb262eef9eacbde1603ec9d9af137a1427c2ac40ad7dff47faf731023359f",
+          "kind": "analysis_output",
+          "state": "succeeded",
+          "bytes": 2029,
+          "sha256": "72e996eaa271536fd6a7e41b7767e91beae92dd1d63630a30ee49a93e308129b"
+        },
+        {
+          "resource_id": "result:437fd30f48d04021b1512708f8beef46:30df38fb7abd9c1c15a0b1a50b27bee86288922cd020e59eeb6f83ce1034b9c7",
+          "kind": "analysis_output",
+          "state": "succeeded",
+          "bytes": 35,
+          "sha256": "9f1485a4a0b12ea0c4c7436cdb23830cb7f350c73502690d8d33f728db7b487d"
+        },
+        {
+          "resource_id": "result:437fd30f48d04021b1512708f8beef46:492fff3a97474ffafb434cda2f21644ef7c0b3145c8bb9e9b95fa4dd94eea59f",
+          "kind": "analysis_output",
+          "state": "succeeded",
+          "bytes": 187,
+          "sha256": "c04f763588db6bc3ee2271e3d28cf31c3d3c02127592355df3b29346adec3b20"
+        }
+      ]
+    },
+    "result_sync": {
+      "tool_response": {
+        "status": "ok",
+        "data": {
+          "value": {
+            "transfer_id": "476c54f027334dd19faac1e50f8cbf00",
+            "site_id": "mscan",
+            "operation": "result_sync",
+            "state": "succeeded",
+            "result": {
+              "cromwell_task_id": "ee5f3f8c-52d6-4b7f-aba0-c0994267c5dc",
+              "pipeline_name": "risk_screen",
+              "target": {
+                "data_type": "synthetic",
+                "project_name": "Bridge_expanded_20261120_standard",
+                "sample_name": "risk_screen_synthetic_sync",
+                "project_id": "38b3fb0c72b83afcb4d0daeba93a8dda",
+                "sample_id": "dd2891bb344c3d939e36fc5e0e8ea120"
+              },
+              "state": "imported",
+              "program": "screenmec"
+            }
+          }
+        },
+        "files": [],
+        "evidence": [],
+        "error": null
+      },
+      "transfer": {
+        "transfer_id": "476c54f027334dd19faac1e50f8cbf00",
+        "site_id": "mscan",
+        "operation": "result_sync",
+        "state": "succeeded",
+        "result": {
+          "cromwell_task_id": "ee5f3f8c-52d6-4b7f-aba0-c0994267c5dc",
+          "pipeline_name": "risk_screen",
+          "target": {
+            "data_type": "synthetic",
+            "project_name": "Bridge_expanded_20261120_standard",
+            "sample_name": "risk_screen_synthetic_sync",
+            "project_id": "38b3fb0c72b83afcb4d0daeba93a8dda",
+            "sample_id": "dd2891bb344c3d939e36fc5e0e8ea120"
+          },
+          "state": "imported",
+          "program": "screenmec"
+        }
+      },
+      "repeat": {
+        "transfer_id": "9a1e6506aad040679ed1fc95c9e395cb",
+        "site_id": "mscan",
+        "operation": "result_sync",
+        "state": "succeeded",
+        "result": {
+          "target": {
+            "data_type": "synthetic",
+            "project_name": "Bridge_expanded_20261120_standard",
+            "sample_name": "dd2891bb344c3d939e36fc5e0e8ea120",
+            "project_id": "38b3fb0c72b83afcb4d0daeba93a8dda",
+            "sample_id": "dd2891bb344c3d939e36fc5e0e8ea120"
+          },
+          "program": "screenmec",
+          "state": "imported",
+          "cromwell_task_id": "ee5f3f8c-52d6-4b7f-aba0-c0994267c5dc",
+          "message": "Native result already imported.",
+          "pipeline_name": "risk_screen"
+        }
+      }
+    }
+  }
+}

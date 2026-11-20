@@ -1,0 +1,402 @@
+{
+  "pipeline": "metagenomic_pathogen_identification_marker",
+  "execution": "succeeded",
+  "stack": "standard",
+  "project": "Bridge_expanded_20261120_standard",
+  "session_id": "7cb63702-65c2-4ed3-90e7-86b4f0f82ce8",
+  "engine": "wdl",
+  "catalog_name": "strain-meta",
+  "manifest_sha256": "5aaf4410d776ef522bb39d352014994799298cdbe44fbc0cef2638def830a0c3",
+  "inputs": {
+    "read1": "uploads/68498b290e734590b87cb6e93edc96f5_benign_R1.fastq.gz",
+    "read2": "uploads/367ecd1a7e0b42f4942712b389f8b17d_benign_R2.fastq.gz"
+  },
+  "parameters": {},
+  "input_scope": "Deterministic paired reads sampled from unmodified E. coli K-12 MG1655; no experimental or clinical data.",
+  "plan_id": "be6aa35643414a50a11288104fd3b51c",
+  "job_id": "be6aa35643414a50a11288104fd3b51c",
+  "last_state": {
+    "job_id": "be6aa35643414a50a11288104fd3b51c",
+    "plan_id": "be6aa35643414a50a11288104fd3b51c",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:20:44.377675+00:00",
+    "started_at": "2026-11-20T02:20:44.565546+00:00",
+    "finished_at": "2026-11-20T02:31:04.610283+00:00",
+    "updated_at": "2026-11-20T02:31:04.611123+00:00",
+    "error": null,
+    "remote_id": "f8919014-7ed7-4285-8d25-0d5499af1703",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_pathogen_identification_marker"
+  },
+  "outputs": {
+    "job_id": "be6aa35643414a50a11288104fd3b51c",
+    "plan_id": "be6aa35643414a50a11288104fd3b51c",
+    "status": "succeeded",
+    "created_at": "2026-11-20T02:20:44.377675+00:00",
+    "started_at": "2026-11-20T02:20:44.565546+00:00",
+    "finished_at": "2026-11-20T02:31:04.610283+00:00",
+    "updated_at": "2026-11-20T02:31:04.611123+00:00",
+    "error": null,
+    "remote_id": "f8919014-7ed7-4285-8d25-0d5499af1703",
+    "artifact_status": "available",
+    "pipeline_name": "metagenomic_pathogen_identification_marker",
+    "files": [
+      {
+        "name": "profile.txt",
+        "path": "pipeline-artifacts/be6aa35643414a50a11288104fd3b51c/0/profile.txt",
+        "workspace_path": "pipeline-artifacts/be6aa35643414a50a11288104fd3b51c/0/profile.txt",
+        "size": 12652,
+        "remote": true,
+        "artifact_id": "be6aa35643414a50a11288104fd3b51c:0",
+        "pipeline_result": {
+          "job_id": "be6aa35643414a50a11288104fd3b51c",
+          "pipeline_name": "metagenomic_pathogen_identification_marker",
+          "output_key": "StrainMeta.profile",
+          "output_name": "profile",
+          "output_kind": "table",
+          "completed_at": "2026-11-20T02:31:04.610283+00:00"
+        }
+      },
+      {
+        "name": "sam.bz2",
+        "path": "pipeline-artifacts/be6aa35643414a50a11288104fd3b51c/1/sam.bz2",
+        "workspace_path": "pipeline-artifacts/be6aa35643414a50a11288104fd3b51c/1/sam.bz2",
+        "size": 64048226,
+        "remote": true,
+        "artifact_id": "be6aa35643414a50a11288104fd3b51c:1",
+        "pipeline_result": {
+          "job_id": "be6aa35643414a50a11288104fd3b51c",
+          "pipeline_name": "metagenomic_pathogen_identification_marker",
+          "output_key": "StrainMeta.sam_bz2",
+          "output_name": "sam_bz2",
+          "output_kind": "file",
+          "completed_at": "2026-11-20T02:31:04.610283+00:00"
+        }
+      },
+      {
+        "name": "consensus_marker.json.bz2",
+        "path": "pipeline-artifacts/be6aa35643414a50a11288104fd3b51c/2/consensus_marker.json.bz2",
+        "workspace_path": "pipeline-artifacts/be6aa35643414a50a11288104fd3b51c/2/consensus_marker.json.bz2",
+        "size": 122,
+        "remote": true,
+        "artifact_id": "be6aa35643414a50a11288104fd3b51c:2",
+        "pipeline_result": {
+          "job_id": "be6aa35643414a50a11288104fd3b51c",
+          "pipeline_name": "metagenomic_pathogen_identification_marker",
+          "output_key": "StrainMeta.consensus_marker",
+          "output_name": "consensus_marker",
+          "output_kind": "file",
+          "completed_at": "2026-11-20T02:31:04.610283+00:00"
+        }
+      }
+    ],
+    "previews": [
+      {
+        "path": "pipeline-artifacts/be6aa35643414a50a11288104fd3b51c/0/profile.txt",
+        "text": "# data_type=metagenome; signal=DNA-level strain signal\n#mpa_vJan25_CHOCOPhlAnSGB_202503\n#/opt/conda/envs/strain-meta/bin/metaphlan /cromwell-executions/StrainMeta/f8919014-7ed7-4285-8d25-0d5499af1703/call-MetaPhlAnSample/inputs/327820505/86f1b73a520b97b1-68498b290e734590b87cb6e93edc96f5_benign_R1.fastq.gz,/cromwell-executions/StrainMeta/f8919014-7ed7-4285-8d25-0d5499af1703/call-MetaPhlAnSample/inputs/327820505/70ea9556dce4ecb7-367ecd1a7e0b42f4942712b389f8b17d_benign_R2.fastq.gz --input_type fastq --db_dir /data/zhaomh/program/database/strain_database/metaphlan -x mpa_vJan25_CHOCOPhlAnSGB_202503 --nproc 16 --samout strain_meta_SAMPLE/sams/SAMPLE.sam.bz2 --mapout strain_meta_SAMPLE/bowtie2/SAMPLE.bowtie2.bz2 --bowtie2_exe bowtie2 -o strain_meta_SAMPLE/profiles/SAMPLE_profile.txt\n#24000 reads processed\n#SampleID\tMetaphlan_Analysis\n#clade_name\tNCBI_tax_id\trelative_abundance\tadditional_species\nUNCLASSIFIED\t-1\t0.0\t\nk__Bacteria\t2\t100.0\t\nk__Bacteria|p__Pseudomonadota\t2|1224\t100.0\t\nk__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria\t2|1224|1236\t100.0\t\nk__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales\t2|1224|1236|91347\t100.0\t\nk__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae\t2|1224|1236|91347|543\t100.0\t\nk__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia\t2|1224|1236|91347|543|561\t100.0\t\nk__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_coli\t2|1224|1236|91347|543|561|562\t100.0\t\nk__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_coli|t__SGB10068\t2|1224|1236|91347|543|561|562|\t100.0\tk__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sonnei,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_flexneri,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_boydii,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_dysenteriae,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_FC1139,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_TF21_Red,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_HH26CH,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_XD11,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_R15,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_M626,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_HH41S,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_KCJ4928,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_MOD1_EC5287,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_R16,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_MOD1_EC5189,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_M612,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Enterobacteriaceae_unclassified|s__Enterobacteriaceae_bacterium_MCC505,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_R11,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_FC1567,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_M593,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_FC1661,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_R14,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_SCLE84,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_MOD1_EC1915,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_DSM_109009,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_MOD1_EC6021,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_MOD1_EC5990,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_NT45,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_M623,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_KCJ4943,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_MOD1_EC6300,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_NIC33,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_XD100,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_XD12,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_SHS_8,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_XD33,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_R3,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_MOD1_EC4550,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_S85_ASV_4,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_7785,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_FC6485,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_JL983,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_R12,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_FC2383,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_M608,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_S2_ASV_4,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_R7,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_M609,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_MOD1_EC2449,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_FC1544,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_MOD1_EC4516,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_FC2175,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_R8,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_TM_G17TGC,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_R18,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_NIC18_1,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Enterobacteriaceae_unclassified|s__Enterobacteriaceae_bacterium,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_SHS_2,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_XD115,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_R6,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_FC1056,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_MOD1_EC4560,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_FC2541,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_FC6543,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_4_1_40B,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_1_1_43,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_TW15838,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_R1,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_SHS_3,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_SHS_5,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_E_sYA108,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_94_0001,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_79_0191,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_0_2392,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Shigella|s__Shigella_sp_FC6515,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_S10b,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_10290,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_HH091_1A,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_HH154_1D,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_KS167_9B,k__Bacteria|p__Pseudomonadota|c__Gammaproteobacteria|o__Enterobacterales|f__Enterobacteriaceae|g__Escherichia|s__Escherichia_sp_AM3\n"
+      }
+    ],
+    "bundle_path": "pipeline-bundles/be6aa35643414a50a11288104fd3b51c/results.zip",
+    "message": "Outputs remain in remote storage. Small text previews are included; import selected files to use workspace tools."
+  },
+  "roundtrip": {
+    "push": {
+      "transfer_id": "c0af79c5bb0648108f7274db674c1878",
+      "site_id": "mscan",
+      "operation": "push",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "metagenomic_pathogen_identification_marker_files",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "abf5284830593e2c8713b929aef89695"
+        },
+        "receipt_id": "c0af79c5bb0648108f7274db674c1878",
+        "qc": {},
+        "native_imports": [
+          {
+            "job_id": "be6aa35643414a50a11288104fd3b51c",
+            "files_delivered": true,
+            "generic_import": {
+              "access": "Search or pull the attached sample files; native records are a separate outcome.",
+              "artifact_count": 3,
+              "state": "imported"
+            },
+            "pipeline": "metagenomic_pathogen_identification_marker",
+            "format": "StrainMeta",
+            "program": "strain_meta",
+            "state": "imported",
+            "message": "Native result imported."
+          }
+        ],
+        "files": [
+          {
+            "name": "68498b290e734590b87cb6e93edc96f5_benign_R1.fastq.gz",
+            "source_path": "uploads/68498b290e734590b87cb6e93edc96f5_benign_R1.fastq.gz",
+            "id": "7e21649b8b38b026ca0b1016f0c8b35d461657fc40619e77b3d014ac29b32f03",
+            "size": 606829,
+            "sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "367ecd1a7e0b42f4942712b389f8b17d_benign_R2.fastq.gz",
+            "source_path": "uploads/367ecd1a7e0b42f4942712b389f8b17d_benign_R2.fastq.gz",
+            "id": "fe7fea2a9096fce45403f73d00cb177456c969cbd11c9c529d1020964dd0c096",
+            "size": 606829,
+            "sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "name": "results.zip",
+            "source_path": "pipeline-bundles/be6aa35643414a50a11288104fd3b51c/results.zip",
+            "id": "8bb445a586a0ed382a2ea4326649c70aa45137c78d0b62553815fb659d88a529",
+            "size": 63889001,
+            "sha256": "05dcba9ea28993301fbf81b3c4d4f148e4f0b0c4130a957f50491a23611b0abe",
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "size": 12652,
+            "sha256": "362380e6bd381c1dbef41c2b496700fe691f241aef787f69f6ab9280a7ebe8b1",
+            "name": "profile.txt",
+            "source_path": "pipeline-artifacts/be6aa35643414a50a11288104fd3b51c/0/profile.txt",
+            "id": "1419d5738e41efb010e42e8f6a60efbe980a597405a2a34b55a3ac30732e272a",
+            "pipeline_result": {
+              "job_id": "be6aa35643414a50a11288104fd3b51c",
+              "pipeline_name": "metagenomic_pathogen_identification_marker",
+              "output_key": "StrainMeta.profile",
+              "output_name": "profile",
+              "output_kind": "table",
+              "completed_at": "2026-11-20T02:31:04.610283+00:00"
+            },
+            "content": {
+              "preview": "# data_type=metagenome; signal=DNA-level strain signal\n#mpa_vJan25_CHOCOPhlAnSGB_202503\n#/opt/conda/envs/strain-meta/bin/metaphlan /cromwell-executions/StrainMeta/f8919014-7ed7-4285-8d25-0d5499af1703/call-MetaPhlAnSample/inputs/327820505/86f1b73a520b97b1-68498b290e734590b87cb6e93edc96f5_benign_R1.fastq.gz,/cromwell-executions/StrainMeta/f8919014-7ed7-4285-8d25-0d5499af1703/call-MetaPhlAnSample/inputs/327820505/70ea9556dce4ecb7-367ecd1a7e0b42f4942712b389f8b17d_benign_R2.fastq.gz --input_type fastq --db_dir /data/zhaomh/program/database/strain_database/metaphlan -x mpa_vJan25_CHOCOPhlAnSGB_202503 --nproc 16 --samout strain_meta_SAMPLE/sams/SAMPLE.sam.bz2 --mapout strain_meta_SAMPLE/bowtie2/SAMPLE.bowtie2.bz2 --bowtie2_exe bowtie2 -o strain_meta_SAMPLE/profiles/SAMPLE_profile.txt\n#24000 reads processed\n#SampleID\tMetaphlan_Analysis\n#clade_name\tNCBI_tax_id\trelative_abundance\tadditional_species\nUNCLASSIFIED\t-1\t0.0\t\nk__Bacteria\t2\t100.0\t\nk__Bacteria|p__Pseudomonadota\t2|1224\t100.0\t\nk__Bacteria|p__Pseudomonadota|c__Gam…",
+              "preview_available": true,
+              "preview_only": true,
+              "kind": "text"
+            }
+          },
+          {
+            "size": 64048226,
+            "sha256": "75836187cf4d449eb38fdea6b006004cf828340400bb4ec913124205f18e419f",
+            "name": "sam.bz2",
+            "source_path": "pipeline-artifacts/be6aa35643414a50a11288104fd3b51c/1/sam.bz2",
+            "id": "e8ae1721612f051e748d6cbc59828c72ffa38cb89a146dcf93d6a6c8975920f2",
+            "pipeline_result": {
+              "job_id": "be6aa35643414a50a11288104fd3b51c",
+              "pipeline_name": "metagenomic_pathogen_identification_marker",
+              "output_key": "StrainMeta.sam_bz2",
+              "output_name": "sam_bz2",
+              "output_kind": "file",
+              "completed_at": "2026-11-20T02:31:04.610283+00:00"
+            },
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          },
+          {
+            "size": 122,
+            "sha256": "fe8b90a630423e814827aa69ac492114798ba7a04ee257a64605b5454d94730e",
+            "name": "consensus_marker.json.bz2",
+            "source_path": "pipeline-artifacts/be6aa35643414a50a11288104fd3b51c/2/consensus_marker.json.bz2",
+            "id": "c28b0d81e4dc1b30776d0fe2e76421597bd296c020a292ff1d1b81a4ba2b19ed",
+            "pipeline_result": {
+              "job_id": "be6aa35643414a50a11288104fd3b51c",
+              "pipeline_name": "metagenomic_pathogen_identification_marker",
+              "output_key": "StrainMeta.consensus_marker",
+              "output_name": "consensus_marker",
+              "output_kind": "file",
+              "completed_at": "2026-11-20T02:31:04.610283+00:00"
+            },
+            "content": {
+              "kind": "file",
+              "preview_available": false
+            }
+          }
+        ],
+        "native_qc_applied": false,
+        "file_delivery": "delivered",
+        "source_registration": {
+          "slots": {
+            "R2": "df8c121afe1f3bfc8d4f2b064f069c59",
+            "R1": "42a38477cc3f3d949d340ac8525af824"
+          },
+          "status": "registered"
+        }
+      }
+    },
+    "files": [
+      {
+        "name": "profile.txt",
+        "resource_id": "result:c0af79c5bb0648108f7274db674c1878:1419d5738e41efb010e42e8f6a60efbe980a597405a2a34b55a3ac30732e272a",
+        "state": "succeeded",
+        "expected_sha256": "362380e6bd381c1dbef41c2b496700fe691f241aef787f69f6ab9280a7ebe8b1",
+        "bytes": 12652,
+        "sha256": "362380e6bd381c1dbef41c2b496700fe691f241aef787f69f6ab9280a7ebe8b1",
+        "matches": true
+      },
+      {
+        "name": "68498b290e734590b87cb6e93edc96f5_benign_R1.fastq.gz",
+        "resource_id": "result:c0af79c5bb0648108f7274db674c1878:7e21649b8b38b026ca0b1016f0c8b35d461657fc40619e77b3d014ac29b32f03",
+        "state": "succeeded",
+        "expected_sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+        "bytes": 606829,
+        "sha256": "86f1b73a520b97b1bdf63c83012bd29f6f33bbd4720d33649c2bc8aea1aa02ae",
+        "matches": true
+      },
+      {
+        "name": "results.zip",
+        "resource_id": "result:c0af79c5bb0648108f7274db674c1878:8bb445a586a0ed382a2ea4326649c70aa45137c78d0b62553815fb659d88a529",
+        "state": "succeeded",
+        "expected_sha256": "05dcba9ea28993301fbf81b3c4d4f148e4f0b0c4130a957f50491a23611b0abe",
+        "bytes": 63889001,
+        "sha256": "05dcba9ea28993301fbf81b3c4d4f148e4f0b0c4130a957f50491a23611b0abe",
+        "matches": true
+      },
+      {
+        "name": "consensus_marker.json.bz2",
+        "resource_id": "result:c0af79c5bb0648108f7274db674c1878:c28b0d81e4dc1b30776d0fe2e76421597bd296c020a292ff1d1b81a4ba2b19ed",
+        "state": "succeeded",
+        "expected_sha256": "fe8b90a630423e814827aa69ac492114798ba7a04ee257a64605b5454d94730e",
+        "bytes": 122,
+        "sha256": "fe8b90a630423e814827aa69ac492114798ba7a04ee257a64605b5454d94730e",
+        "matches": true
+      },
+      {
+        "name": "sam.bz2",
+        "resource_id": "result:c0af79c5bb0648108f7274db674c1878:e8ae1721612f051e748d6cbc59828c72ffa38cb89a146dcf93d6a6c8975920f2",
+        "state": "succeeded",
+        "expected_sha256": "75836187cf4d449eb38fdea6b006004cf828340400bb4ec913124205f18e419f",
+        "bytes": 64048226,
+        "sha256": "75836187cf4d449eb38fdea6b006004cf828340400bb4ec913124205f18e419f",
+        "matches": true
+      },
+      {
+        "name": "367ecd1a7e0b42f4942712b389f8b17d_benign_R2.fastq.gz",
+        "resource_id": "result:c0af79c5bb0648108f7274db674c1878:fe7fea2a9096fce45403f73d00cb177456c969cbd11c9c529d1020964dd0c096",
+        "state": "succeeded",
+        "expected_sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+        "bytes": 606829,
+        "sha256": "70ea9556dce4ecb7d248eea380fa86d154c427eeff7239ad62c80c1e8f3115b7",
+        "matches": true
+      }
+    ],
+    "search_state": "succeeded",
+    "matched_all": true,
+    "native_exports": [
+      {
+        "resource_id": "native:abf5284830593e2c8713b929aef89695:strain_profile:0699b1f5279a094e84767ed6e27618b9:record",
+        "kind": "native_analysis_record",
+        "state": "succeeded",
+        "bytes": 11404,
+        "sha256": "ebec74dc4e9f10208ec75f83755a28069c3415c0acc8216c263049fdc23598e2",
+        "sample_id_matches": true
+      },
+      {
+        "resource_id": "native:abf5284830593e2c8713b929aef89695:strain_profile:154d073e4ecda408c5f43aaf2890f540:record",
+        "kind": "native_analysis_record",
+        "state": "succeeded",
+        "bytes": 418,
+        "sha256": "4ba465083071bd72afd6fd01d83664b7b06e781645a9db6ed5ae78ba28dcb30f",
+        "sample_id_matches": true
+      },
+      {
+        "resource_id": "native:abf5284830593e2c8713b929aef89695:strain_profile:1731ba1da20c41d9118c91c2dc4258a3:record",
+        "kind": "native_analysis_record",
+        "state": "succeeded",
+        "bytes": 367,
+        "sha256": "9d31cc78a0334de508e9a4132be5b839ea3ba52529a043428dddcc33bd36a7e6",
+        "sample_id_matches": true
+      },
+      {
+        "resource_id": "native:abf5284830593e2c8713b929aef89695:strain_profile:194830a8819356aec6816ca8a994215a:record",
+        "kind": "native_analysis_record",
+        "state": "succeeded",
+        "bytes": 470,
+        "sha256": "c09b6f10308734eca67b0b91c2efe1bd4ca66e9133d4ed1a732d8d55957fc961",
+        "sample_id_matches": true
+      }
+    ]
+  },
+  "result_sync": {
+    "tool_response": {
+      "status": "ok",
+      "data": {
+        "value": {
+          "transfer_id": "c50569c7b01941fea63607b263fe2de9",
+          "site_id": "mscan",
+          "operation": "result_sync",
+          "state": "succeeded",
+          "result": {
+            "cromwell_task_id": "f8919014-7ed7-4285-8d25-0d5499af1703",
+            "pipeline_name": "metagenomic_pathogen_identification_marker",
+            "target": {
+              "data_type": "meta",
+              "project_name": "Bridge_expanded_20261120_standard",
+              "sample_name": "metagenomic_pathogen_identification_marker_sync",
+              "project_id": "4a651c555eae32c39c8bfdd142321567",
+              "sample_id": "81b3e0c6e1de3448906b7913efea4fa8"
+            },
+            "state": "imported",
+            "program": "strain_meta"
+          }
+        }
+      },
+      "files": [],
+      "evidence": [],
+      "error": null
+    },
+    "transfer": {
+      "transfer_id": "c50569c7b01941fea63607b263fe2de9",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "cromwell_task_id": "f8919014-7ed7-4285-8d25-0d5499af1703",
+        "pipeline_name": "metagenomic_pathogen_identification_marker",
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "metagenomic_pathogen_identification_marker_sync",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "81b3e0c6e1de3448906b7913efea4fa8"
+        },
+        "state": "imported",
+        "program": "strain_meta"
+      }
+    },
+    "repeat": {
+      "transfer_id": "205390c1823f47be9115023f66b7406c",
+      "site_id": "mscan",
+      "operation": "result_sync",
+      "state": "succeeded",
+      "result": {
+        "target": {
+          "data_type": "meta",
+          "project_name": "Bridge_expanded_20261120_standard",
+          "sample_name": "81b3e0c6e1de3448906b7913efea4fa8",
+          "project_id": "4a651c555eae32c39c8bfdd142321567",
+          "sample_id": "81b3e0c6e1de3448906b7913efea4fa8"
+        },
+        "program": "strain_meta",
+        "state": "imported",
+        "cromwell_task_id": "f8919014-7ed7-4285-8d25-0d5499af1703",
+        "message": "Native result already imported.",
+        "pipeline_name": "metagenomic_pathogen_identification_marker"
+      }
+    }
+  },
+  "elapsed_seconds": 703.7,
+  "finished": true
+}
