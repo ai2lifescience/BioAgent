@@ -117,12 +117,30 @@ export function useWebsiteBridge({ sessionRef, onLog: appendLog, onStatus: setSt
     }
   }, [appendLog, pollWebsite, postParent, websitePost]);
 
+  const applyHostStyle = useCallback((css: unknown) => {
+    if (typeof css !== 'string') return;
+    const text = css.slice(0, 64 * 1024);
+    let styleEl = document.getElementById('bioagent-host-custom-style') as HTMLStyleElement | null;
+    if (!text.trim()) {
+      styleEl?.remove();
+      return;
+    }
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = 'bioagent-host-custom-style';
+      document.head.appendChild(styleEl);
+    }
+    styleEl.textContent = text;
+  }, []);
+
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {
       if (window.parent === window || event.source !== window.parent || event.origin !== parentRef.current) return;
       const data = event.data as Record<string, unknown> | null;
       if (!data || typeof data !== 'object') return;
-      if (data.type === 'agent-context') {
+      if (data.type === 'agent-style') {
+        applyHostStyle(data.css);
+      } else if (data.type === 'agent-context') {
         setSafeContext(data.context);
         queueContextUpdate((data.context && typeof data.context === 'object' ? data.context : {}) as AssistantContext, String(data.context_update_id || ''));
       } else if (data.type === 'agent-connect') {
@@ -140,9 +158,10 @@ export function useWebsiteBridge({ sessionRef, onLog: appendLog, onStatus: setSt
       }
     };
     window.addEventListener('message', onMessage);
+    postParent({ type: 'agent-style-request' });
     if (sessionRef.current) postParent({ type: 'agent-ready', session_id: sessionRef.current });
     return () => window.removeEventListener('message', onMessage);
-  }, [onFilesChanged, appendLog, connectWebsite, postParent, queueContextUpdate, setSafeContext, websitePost]);
+  }, [applyHostStyle, onFilesChanged, appendLog, connectWebsite, postParent, queueContextUpdate, setSafeContext, websitePost]);
 
   const disconnect = useCallback(() => {
     const binding = websiteRef.current;

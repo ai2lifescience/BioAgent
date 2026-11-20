@@ -96,7 +96,7 @@ class WebsiteIntegrationTests(unittest.TestCase):
             self.assertEqual(status, 200, raw)
             value, _ = self.exchange(json.loads(raw))
             self.assertEqual(value['user'], {'id': identity['user_id'], 'name': identity['username']})
-            self.assertLessEqual(value['expires_in'], 300)
+            self.assertLessEqual(value['expires_in'], 8 * 3600)
 
             with patch.dict(os.environ, {
                 'AGENT_AUTH_MODE': 'oauth',

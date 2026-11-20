@@ -14,12 +14,21 @@ export interface AssistantDrawerOptions {
   title?: string;
   launcherLabel?: string;
   open?: boolean;
+  defaultWidth?: number;
+  minWidth?: number;
+  resizable?: boolean;
+  allowFullscreen?: boolean;
+  fullscreen?: boolean;
+  customCss?: string;
   onEvent?: (event: Record<string, unknown>) => void;
 }
 
 export interface AssistantDrawerHandle {
   open(): void;
   close(): void;
+  setWidth(width: number): void;
+  setFullscreen(fullscreen: boolean): void;
+  setCustomCss(css: string): void;
   refreshFiles(): void;
   updateContext(context?: Record<string, unknown>, options?: { waitForSync?: boolean }): Promise<Record<string, unknown>>;
   readonly binding: { binding_id: string } | null;
@@ -33,16 +42,30 @@ const CSS = `
     .agent-icon { display: grid; width: 30px; height: 30px; place-items: center; color: #fff; }
     .agent-icon svg { width: 100%; height: 100%; display: block; }
     .agent-launcher:hover { transform: translateY(-2px); box-shadow: 0 14px 30px #17343845; }
-    .agent-panel { position: fixed; z-index: 2147483001; inset: 0 0 0 auto; display: grid; grid-template-rows: auto minmax(0,1fr); width: min(460px,100vw); overflow: hidden; border-left: 1px solid #d9e5e4; background: #f4f8f8; box-shadow: -16px 0 40px #17343826; transition: transform .22s ease, box-shadow .22s ease; }
+    .agent-panel { position: fixed; z-index: 2147483001; inset: 0 0 0 auto; display: grid; grid-template-rows: auto minmax(0,1fr); width: min(var(--agent-panel-width, 460px), 100vw); overflow: hidden; border-left: 1px solid #d9e5e4; background: #f4f8f8; box-shadow: -16px 0 40px #17343826; transition: transform .22s ease, box-shadow .22s ease, width .18s ease; }
+    .agent-panel.is-resizing { transition: none; user-select: none; }
+    .agent-panel.is-resizing .agent-frame { pointer-events: none; }
+    .agent-panel.is-fullscreen { width: 100vw; border-left: 0; box-shadow: none; }
     .agent-panel[hidden] { display: grid; transform: translateX(102%); pointer-events: none; box-shadow: none; }
+    .agent-resizer { position: absolute; top: 0; bottom: 0; left: 0; width: 8px; z-index: 2; cursor: ew-resize; touch-action: none; background: transparent; }
+    .agent-resizer::after { content: ''; position: absolute; top: 0; bottom: 0; left: 2px; width: 3px; border-radius: 999px; background: transparent; transition: background-color .15s ease; }
+    .agent-resizer:hover::after, .agent-resizer:focus-visible::after, .agent-panel.is-resizing .agent-resizer::after { background: #159487; }
+    .agent-resizer:focus-visible { outline: none; }
+    .agent-panel.is-fullscreen .agent-resizer { display: none; }
     .agent-panel-header { display: flex; align-items: center; gap: 10px; min-height: 58px; padding: 11px 16px; border-bottom: 1px solid #d9e5e4; color: #173438; background: #ffffffed; backdrop-filter: blur(12px); font: 700 14px/1.2 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
     .agent-panel-header .agent-icon { width: 42px; height: 42px; border-radius: 9px; background: transparent; }
-    .agent-panel-header span { margin-right: auto; }
-    .agent-close { display: grid; width: 30px; height: 30px; place-items: center; border: 1px solid #d9e5e4; border-radius: 8px; color: #62777b; background: #f4f8f8; font-size: 20px; line-height: 1; cursor: pointer; }
-    .agent-close:hover { color: #115e59; background: #e7f4f1; }
+    .agent-panel-title { margin-right: auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .agent-panel-actions { display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto; }
+    .agent-header-btn { display: grid; width: 30px; height: 30px; padding: 0; place-items: center; border: 1px solid #d9e5e4; border-radius: 8px; color: #62777b; background: #f4f8f8; font-size: 20px; line-height: 1; cursor: pointer; transition: color .15s ease, background-color .15s ease, border-color .15s ease; }
+    .agent-header-btn:hover { color: #115e59; background: #e7f4f1; border-color: #b7d7d3; }
+    .agent-header-btn:focus-visible { outline: 2px solid #159487; outline-offset: 2px; }
+    .agent-expand svg { width: 15px; height: 15px; display: block; }
     .agent-frame { display: block; width: 100%; height: 100%; border: 0; }
-    @media (max-width: 480px) { .agent-launcher { right: 12px; bottom: 12px; padding: 10px 13px; } .agent-panel { width: 100vw; } }
+    @media (max-width: 480px) { .agent-launcher { right: 12px; bottom: 12px; padding: 10px 13px; } .agent-panel { width: 100vw; } .agent-resizer, .agent-expand { display: none; } }
   `;
+
+const EXPAND_ICON = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 2.5h4v4"/><path d="M13.5 2.5L8.75 7.25"/><path d="M6.5 13.5h-4v-4"/><path d="M2.5 13.5l4.75-4.75"/></svg>`;
+const RESTORE_ICON = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 3.5v3h3"/><path d="M13.5 2.5L9.5 6.5"/><path d="M6.5 12.5v-3h-3"/><path d="M2.5 13.5l4-4"/></svg>`;
 
 function randomId(prefix: string) {
   const uuid = globalThis.crypto?.randomUUID?.();
@@ -96,12 +119,122 @@ export function mountAssistantDrawer(options: AssistantDrawerOptions = {}): Assi
   const icon = createAgentIcon(28);
   launcher.append(icon, document.createTextNode(options.launcherLabel || 'Ask assistant'));
   const panel = document.createElement('aside'); panel.className = 'agent-panel'; panel.hidden = true; panel.setAttribute('aria-label', options.title || 'Assistant');
+  const defaultWidth = Math.max(280, Math.round(Number(options.defaultWidth) || 460));
+  const minWidth = Math.max(280, Math.min(defaultWidth, Math.round(Number(options.minWidth) || 320)));
+  const resizable = options.resizable !== false;
+  const allowFullscreen = options.allowFullscreen !== false;
+  const widthStorageKey = `bioagent-assistant-width:${options.siteId || 'default'}`;
+  const clampWidth = (width: number) => {
+    const viewport = window.innerWidth || defaultWidth;
+    return Math.max(Math.min(minWidth, viewport), Math.min(Math.round(width), viewport));
+  };
+  const loadSavedWidth = () => {
+    try {
+      const raw = Number(window.localStorage?.getItem(widthStorageKey));
+      return Number.isFinite(raw) && raw > 0 ? raw : null;
+    } catch { return null; }
+  };
+  const saveWidth = (width: number) => {
+    try { window.localStorage?.setItem(widthStorageKey, String(Math.round(width))); } catch { /* Ignore storage errors. */ }
+  };
+  let panelWidth = clampWidth(loadSavedWidth() ?? defaultWidth);
+  let isFullscreen = Boolean(options.fullscreen && allowFullscreen);
+  const resizer = resizable ? document.createElement('div') : null;
+  if (resizer) {
+    resizer.className = 'agent-resizer';
+    resizer.setAttribute('role', 'separator');
+    resizer.setAttribute('aria-orientation', 'vertical');
+    resizer.setAttribute('aria-label', 'Resize assistant panel');
+    resizer.setAttribute('title', 'Drag to resize (double-click to reset)');
+    resizer.tabIndex = 0;
+  }
   const header = document.createElement('div'); header.className = 'agent-panel-header';
   const panelIcon = createAgentIcon(30);
   const title = document.createElement('span'); title.className = 'agent-panel-title'; title.textContent = options.title || 'Assistant';
-  const close = document.createElement('button'); close.className = 'agent-close'; close.type = 'button'; close.textContent = '×'; close.setAttribute('aria-label', 'Close assistant');
+  const actions = document.createElement('div'); actions.className = 'agent-panel-actions';
+  const expand = allowFullscreen ? document.createElement('button') : null;
+  if (expand) { expand.className = 'agent-header-btn agent-expand'; expand.type = 'button'; }
+  const close = document.createElement('button'); close.className = 'agent-header-btn agent-close'; close.type = 'button'; close.textContent = '×'; close.setAttribute('aria-label', 'Close assistant'); close.title = 'Close assistant';
   const frame = document.createElement('iframe'); frame.className = 'agent-frame'; frame.title = options.title || 'Assistant'; frame.src = src.toString();
-  header.append(panelIcon, title, close); panel.append(header, frame); shadow.append(style, launcher, panel);
+  if (expand) actions.append(expand);
+  actions.append(close);
+  header.append(panelIcon, title, actions);
+  if (resizer) panel.append(resizer);
+  panel.append(header, frame); shadow.append(style, launcher, panel);
+
+  const applyWidth = (width: number, persist = false) => {
+    panelWidth = clampWidth(width);
+    panel.style.setProperty('--agent-panel-width', `${panelWidth}px`);
+    if (resizer) {
+      resizer.setAttribute('aria-valuemin', String(minWidth));
+      resizer.setAttribute('aria-valuemax', String(Math.max(minWidth, window.innerWidth || defaultWidth)));
+      resizer.setAttribute('aria-valuenow', String(panelWidth));
+    }
+    if (persist) saveWidth(panelWidth);
+  };
+  const setFullscreen = (next: boolean) => {
+    isFullscreen = allowFullscreen ? Boolean(next) : false;
+    panel.classList.toggle('is-fullscreen', isFullscreen);
+    if (expand) {
+      expand.innerHTML = isFullscreen ? RESTORE_ICON : EXPAND_ICON;
+      const label = isFullscreen ? 'Restore drawer width' : 'Expand to full page';
+      expand.setAttribute('aria-label', label);
+      expand.setAttribute('aria-pressed', String(isFullscreen));
+      expand.title = label;
+    }
+  };
+  const setWidth = (width: number) => {
+    if (!Number.isFinite(width)) return;
+    if (isFullscreen) setFullscreen(false);
+    applyWidth(width, true);
+  };
+  applyWidth(panelWidth);
+  setFullscreen(isFullscreen);
+
+  let resizeState: { pointerId: number; startX: number; startWidth: number } | null = null;
+  const onResizeMove = (event: PointerEvent) => {
+    if (!resizeState || event.pointerId !== resizeState.pointerId) return;
+    applyWidth(resizeState.startWidth + (resizeState.startX - event.clientX));
+  };
+  const finishResize = (event?: PointerEvent) => {
+    if (!resizeState) return;
+    if (event && event.pointerId !== resizeState.pointerId) return;
+    const pointerId = resizeState.pointerId;
+    resizeState = null;
+    panel.classList.remove('is-resizing');
+    try { if (resizer?.hasPointerCapture?.(pointerId)) resizer.releasePointerCapture(pointerId); } catch { /* Ignore capture release errors. */ }
+    window.removeEventListener('pointermove', onResizeMove);
+    window.removeEventListener('pointerup', finishResize);
+    window.removeEventListener('pointercancel', finishResize);
+    window.removeEventListener('blur', onWindowBlur);
+    saveWidth(panelWidth);
+  };
+  const onWindowBlur = () => finishResize();
+  if (resizer) {
+    resizer.addEventListener('pointerdown', (event: PointerEvent) => {
+      if (isFullscreen || (event.pointerType === 'mouse' && event.button !== 0)) return;
+      event.preventDefault();
+      resizeState = { pointerId: event.pointerId, startX: event.clientX, startWidth: panel.getBoundingClientRect().width || panelWidth };
+      panel.classList.add('is-resizing');
+      try { resizer.setPointerCapture?.(event.pointerId); } catch { /* Fallback to window listeners. */ }
+      window.addEventListener('pointermove', onResizeMove);
+      window.addEventListener('pointerup', finishResize);
+      window.addEventListener('pointercancel', finishResize);
+      window.addEventListener('blur', onWindowBlur);
+    });
+    resizer.addEventListener('dblclick', () => { if (!isFullscreen) applyWidth(defaultWidth, true); });
+    resizer.addEventListener('keydown', (event: KeyboardEvent) => {
+      if (isFullscreen) return;
+      const step = event.shiftKey ? 80 : 32;
+      if (event.key === 'ArrowLeft') { event.preventDefault(); applyWidth(panelWidth + step, true); }
+      else if (event.key === 'ArrowRight') { event.preventDefault(); applyWidth(panelWidth - step, true); }
+      else if (event.key === 'Home') { event.preventDefault(); applyWidth(window.innerWidth || defaultWidth, true); }
+      else if (event.key === 'End' || event.key === 'Enter' || event.key === ' ') { event.preventDefault(); applyWidth(defaultWidth, true); }
+    });
+  }
+  if (expand) expand.addEventListener('click', () => setFullscreen(!isFullscreen));
+  const onWindowResize = () => { if (!isFullscreen) applyWidth(panelWidth); };
+  window.addEventListener('resize', onWindowResize);
 
   let destroyed = false;
   let connectionAttempt = 0;
@@ -194,13 +327,29 @@ export function mountAssistantDrawer(options: AssistantDrawerOptions = {}): Assi
     })());
     void calls.get(callId)?.then(response => { if (!destroyed && message.session_id === sessionId) post({ type: 'agent-website-response', session_id: sessionId, call_id: callId, run_id: message.run_id, revision: message.revision, ...response }); });
   };
+  let customCss = typeof options.customCss === 'string' ? options.customCss : '';
+  const setCustomCss = (css: string) => {
+    customCss = typeof css === 'string' ? css : '';
+    post({ type: 'agent-style', css: customCss });
+  };
+  const onFrameLoad = () => { if (customCss) post({ type: 'agent-style', css: customCss }); };
   const onMessage = (event: MessageEvent) => {
     if (event.source !== frame.contentWindow || event.origin !== sourceOrigin) return;
     const message = event.data as Record<string, unknown> | null; if (!message) return;
+    if (message.type === 'agent-style-request' && customCss) {
+      post({ type: 'agent-style', css: customCss });
+      return;
+    }
     if (message.type === 'agent-auth-required' && options.getAuthorization) {
-      binding = null; connecting = false; connectionAttempt++; clearTimer();
+      if (!message.refresh) {
+        binding = null; connecting = false; connectionAttempt++; clearTimer();
+      }
       void options.getAuthorization().then(value => { if (!destroyed) post({ type: 'agent-authenticate', code: value.code }); })
-        .catch(error => { if (!destroyed) post({ type: 'agent-auth-error', message: String(error.message || error) }); });
+        .catch(error => {
+          if (destroyed) return;
+          binding = null; connecting = false; connectionAttempt++; clearTimer();
+          post({ type: 'agent-auth-error', message: String(error.message || error) });
+        });
     }
     if (message.type === 'agent-close') closePanel();
     if (message.type === 'agent-ready' || message.type === 'agent-website-retry') {
@@ -210,6 +359,7 @@ export function mountAssistantDrawer(options: AssistantDrawerOptions = {}): Assi
         for (const waiter of syncWaiters.values()) { window.clearTimeout(waiter.timer); waiter.reject(new Error('Website connection was reset.')); }
         syncWaiters.clear();
       }
+      if (customCss) post({ type: 'agent-style', css: customCss });
       post({ type: 'agent-context', context }); void connect();
     }
     if (message.type === 'agent-website-request') dispatchRequest(message);
@@ -222,14 +372,14 @@ export function mountAssistantDrawer(options: AssistantDrawerOptions = {}): Assi
   };
   const open = () => { lastFocus = document.activeElement; panel.hidden = false; launcher.hidden = true; launcher.setAttribute('aria-expanded', 'true'); post({ type: 'agent-context', context }); };
   const closePanel = () => { panel.hidden = true; launcher.hidden = false; launcher.setAttribute('aria-expanded', 'false'); (lastFocus as HTMLElement || launcher).focus?.(); };
-  launcher.addEventListener('click', open); close.addEventListener('click', closePanel); window.addEventListener('message', onMessage);
+  launcher.addEventListener('click', open); close.addEventListener('click', closePanel); frame.addEventListener('load', onFrameLoad); window.addEventListener('message', onMessage);
   if (options.open) open();
   return {
-    open, close: closePanel,
+    open, close: closePanel, setWidth, setFullscreen, setCustomCss,
     refreshFiles() { post({ type: 'agent-files-changed', session_id: sessionId }); },
     updateContext,
     get binding() { return binding ? { binding_id: binding.binding_id } : null; },
-    destroy() { observer.destroy(); destroyed = true; connectionAttempt++; clearTimer(); for (const waiter of syncWaiters.values()) { window.clearTimeout(waiter.timer); waiter.reject(new Error('Assistant drawer was destroyed.')); } syncWaiters.clear(); if (binding) post({ type: 'agent-disconnect' }); window.removeEventListener('message', onMessage); launcher.remove(); panel.remove(); style.remove(); if (ownedHost) host.remove(); },
+    destroy() { finishResize(); window.removeEventListener('resize', onWindowResize); frame.removeEventListener('load', onFrameLoad); observer.destroy(); destroyed = true; connectionAttempt++; clearTimer(); for (const waiter of syncWaiters.values()) { window.clearTimeout(waiter.timer); waiter.reject(new Error('Assistant drawer was destroyed.')); } syncWaiters.clear(); if (binding) post({ type: 'agent-disconnect' }); window.removeEventListener('message', onMessage); launcher.remove(); panel.remove(); style.remove(); if (ownedHost) host.remove(); },
   };
 }
 
