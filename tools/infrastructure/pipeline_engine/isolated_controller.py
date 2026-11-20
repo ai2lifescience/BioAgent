@@ -1,5 +1,6 @@
 """Durable host supervision for isolated local engine plugins."""
 import asyncio
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import subprocess
 import sys
@@ -7,7 +8,7 @@ from threading import Thread
 
 from auth import OwnershipStore, Principal, database, principal_scope
 from isolation import WorkspaceAccess, supervisor
-from .store import JobStore, now
+from .store import CapacityReached, JobStore, now
 from . import service
 from .isolated_worker import _operation
 
@@ -22,7 +23,7 @@ def start(private, identifier, access):
     with _lock(private.parent / '.launch.lock'):
         active = [job for folder in private.parent.iterdir() if folder.is_dir() for job in JobStore(folder).list() if job['status'] in ACTIVE or job.get('submission_unknown')]
         if len(active) >= 16 or sum(job['plan']['owner_user_id'] == row['plan']['owner_user_id'] for job in active) >= 2:
-            raise ValueError('Pipeline job limit reached (2 per account, 16 server-wide).')
+            raise CapacityReached('Pipeline job limit reached (2 per account, 16 server-wide).')
         row = store.update(identifier, expected={'planned'}, status='queued', started_at=now(), execution_backend='docker')
     try:
         process = subprocess.Popen([sys.executable, '-B', '-m', __name__, str(access.metadata_root.resolve()), str(access.workspaces_root.resolve()), private.name, identifier],
@@ -36,9 +37,18 @@ def start(private, identifier, access):
 
 def status(private, identifier):
     store = JobStore(private); row = store.get(identifier)
-    if row['status'] in {'queued', 'running', 'cancelling'} and row.get('controller_pid'):
-        if service.identity(row['controller_pid']) != row.get('controller_identity'):
-            row = store.update(identifier, status='interrupted', finished_at=now(), error='Pipeline controller stopped; execution was not resubmitted.')
+    if row['status'] in {'queued', 'running', 'cancelling'}:
+        pid = row.get('controller_pid')
+        if pid:
+            interrupted = service.identity(pid) != row.get('controller_identity')
+        else:
+            # Cover a server interruption after persisting queued but before
+            # recording the controller. Give concurrent launches time to attach.
+            started = datetime.fromisoformat(row.get('started_at') or row['created_at'])
+            interrupted = datetime.now(timezone.utc) - started >= timedelta(seconds=10)
+        if interrupted:
+            row = store.update(identifier, expected={row['status']}, status='interrupted', finished_at=now(),
+                               error='Pipeline controller stopped; execution was not resubmitted.')
     return row
 
 

@@ -1,4 +1,4 @@
-"""Agents SDK local ShellTool for the Pipeline2Agent pipeline command protocol."""
+"""The pipeline specialist's allowlisted ShellTool commands and approvals."""
 from __future__ import annotations
 
 import asyncio
@@ -8,7 +8,7 @@ from pathlib import Path
 from agents import ShellTool
 from agents.tool import ShellCommandRequest, ShellCommandOutput, ShellResult, ShellCallOutcome
 
-from tools.infrastructure.pipeline_engine.commands import dispatch, parse_command
+from tools.infrastructure.pipeline_engine.commands import WORKFLOW_OPERATIONS, dispatch, parse_command
 from tools.infrastructure.pipeline_engine.store import JobStore
 
 PIPELINE_INSTRUCTIONS = """
@@ -21,8 +21,13 @@ dependencies. Do not suggest installing pipeline dependencies into the agent
 environment.
 
 Commands:
-- agent-pipeline catalog : discover intent-focused pipeline names, descriptions,
-  use cases, limitations, inputs, parameters, and outputs.
+- agent-pipeline catalog [--offset N] [--limit N] : discover pages of pipeline
+  names, descriptions, use cases, limitations, inputs, parameters, and outputs.
+  Offset is nonnegative and limit is between 1 and 32.
+  Follow next_offset until all relevant pipelines have been discovered. A
+  pipeline missing from one page may appear on a later page.
+- agent-pipeline catalog --pipeline NAME : inspect one named pipeline's full
+  catalog entry, including its declared input slots, output names and parameters.
 - agent-pipeline files : discover session workspace-relative input paths.
 - agent-pipeline example --pipeline template_shell : stage bundled internal
   demonstration data, only when the user requested a demonstration/example.
@@ -37,23 +42,46 @@ Commands:
 - agent-pipeline results --job-id ID [--max-table-rows 10] : verified outputs,
   metrics, table previews, and a ZIP bundle, without rerunning.
 - agent-pipeline cancel --job-id ID : stop the local process group (SDK approval).
+- agent-pipeline workflow-plan --steps 'JSON_ARRAY' : save a multi-pipeline
+  graph. Each step has an id, pipeline, and inputs mapping, with optional
+  params, cores, timeout, and depends_on (a list of prerequisite step IDs).
+  An input is a workspace file path, an output reference, or a list of these
+  for an array slot. Example binding:
+  {"inputs":{"input":{"step":"prepare","output":"clean_file"}}}.
+  Use the output name declared in the catalog, not an anticipated file path.
+- agent-pipeline workflow-run --workflow-id ID : request SDK approval for the
+  saved graph. Execution starts after approval; the scheduler handles submissions
+  and output handoffs.
+- agent-pipeline workflow-list : list saved workflows for this session.
+- agent-pipeline workflow-status --workflow-id ID : get step states and
+  verified outputs, including why a step was blocked.
+- agent-pipeline workflow-cancel --workflow-id ID : cancel waiting steps and
+  stop active jobs (SDK approval).
 
 Inspect catalog and session files, reuse known paths, then plan. Choose a
 pipeline by its display name, description, use_when, avoid_when, inputs, and
 limitations. Treat entries marked visibility=internal as demonstrations and
 select them only when the user asks for a demo or runtime test. Resolve missing
 inputs or parameters before run. Use the returned plan ID; never invent an ID.
+To request execution approval, call run or workflow-run with the saved ID. The
+SDK opens the plan review and pauses before execution. When the user asks to
+approve before running, make this tool call so the chat displays approval controls.
+When one pipeline requires another pipeline's output or successful completion,
+call autograph_specialist to design the graph. Copy its ready steps into
+workflow-plan and request approval with workflow-run. Include its reason and
+input_reasons fields in the saved plan. Put all dependent steps in the same graph.
+Use a step/output reference for data handoffs and depends_on for completion-only
+prerequisites. Do not create standalone plans or run downstream jobs yourself.
+After starting a workflow, return its ID and current status to the main agent.
+The runtime monitors the graph and supplies terminal results to the main agent.
 Do not modify job state or pipeline definitions through filesystem tools.
-Use existing data retrieval tools to obtain requested public data before planning;
-use example files only when the user requested examples. The agent selects data
-and parameters; deterministic code validates them.
-A queued/running job is not a successful pipeline. After starting a job, perform
-at most one short status/wait check. If it is still active, END your current
-response with a brief progress update; do not keep calling wait or status in a
-loop. The runtime will monitor it without consuming model turns, then supply
-verified terminal results so you can finish the original request automatically,
-including any requested analysis. Do not ask the user to check again or claim
-completion before receiving those results.
+Use inputs provided by the main agent or already present in the session. If a
+required file is missing, tell the main agent what it needs to retrieve or ask
+for. Use example files only when the user requested examples.
+After starting a job, perform at most one short status or wait check. Return
+the job ID and its actual status to the main agent. The runtime monitors active
+jobs without consuming model turns and supplies verified terminal results to the
+main agent for its final answer.
 On later requests inspect existing jobs. Never rerun to review outputs. Do not
 automatically retry failed/interrupted jobs. Preserve logs and explain failures.
 
@@ -106,7 +134,7 @@ async def needs_approval(ctx, action, call_id) -> bool:
                 return False
         except ValueError:
             return False
-    return args.operation in {"run", "cancel"}
+    return args.operation in {"run", "cancel", "workflow-run", "workflow-cancel"}
 
 
 async def execute_local_pipeline_command(request: ShellCommandRequest) -> ShellResult:
@@ -123,12 +151,16 @@ async def execute_local_pipeline_command(request: ShellCommandRequest) -> ShellR
         timeout = request.data.action.timeout_ms
         if args.operation == "wait" and timeout and args.seconds * 1000 > timeout:
             raise ValueError("--seconds exceeds the shell action timeout_ms budget.")
-        if isolated_execution():
+        if args.operation in WORKFLOW_OPERATIONS:
+            from tools.infrastructure.pipeline_engine.workflow import dispatch as executor
+            operation = asyncio.to_thread(executor, workspace(context), args, access=context.execution_access,
+                                          isolated=isolated_execution())
+        elif isolated_execution():
             from tools.infrastructure.pipeline_engine.broker import dispatch as executor
             operation = asyncio.to_thread(executor, workspace(context), command, access=context.execution_access)
         else:
             operation = asyncio.to_thread(dispatch, workspace(context), command)
-        if args.operation == 'run':
+        if args.operation in {"run", "workflow-run"}:
             # A submitted remote job must be recorded before Stop can cancel it.
             task = asyncio.create_task(operation)
             try:

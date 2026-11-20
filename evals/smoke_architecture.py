@@ -55,12 +55,12 @@ def _run_checks() -> int:
         "genome_read_features", "genome_render_map", "pubmed_search", "web_search", "web_fetch", "evidence_index",
         "evidence_retrieve", "knowledge_ingest", "knowledge_status", "knowledge_retrieve", "report_write", "database_lookup", "pdb_download",
         "alphafold_download", "file_inspection", "document_read", "workspace_search",
-        "blast_search", "code_inspection", "code_edit", "code_test", "python_execute", "pipeline_shell",
+        "blast_search", "code_inspection", "code_edit", "code_test", "python_execute",
         "research_specialist", "pipeline_specialist", "document_specialist",
         "data_analysis_specialist", "coding_specialist", "report_review", "report_synthesize",
     }
     assert expected <= names
-    assert not {"biology_specialist", "retrieval_specialist", "web_research_specialist"} & names
+    assert not {"biology_specialist", "retrieval_specialist", "web_research_specialist", "pipeline_shell", "autograph_specialist"} & names
     for specialist_name in {
         "research_specialist", "pipeline_specialist", "document_specialist",
         "data_analysis_specialist", "coding_specialist",
@@ -99,11 +99,13 @@ def _run_checks() -> int:
     assert any(event["event"] == "guardrail_blocked" for event in blocked["trace"])
 
     approval_model = ScriptedModel([
+        ModelStep(output=[function_call("pipeline_specialist", {"task": "Cancel the fixture job."}, call_id="delegate")]),
         ModelStep(output=[ResponseFunctionShellToolCall(
             id="approval-item", call_id="approval-call", type="shell_call", status="completed",
             action={"commands": ["agent-pipeline cancel --job-id " + "a" * 32],
                     "timeout_ms": None, "max_output_length": None},
         )]),
+        ModelStep(output=[assistant_message("The pipeline specialist handled the request.")]),
         ModelStep(output=[assistant_message("Pipeline approval completed.")]),
     ])
     pending = asyncio.run(runtime.async_run_agent(

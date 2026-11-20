@@ -22,12 +22,23 @@ from models.config import DEFAULT_AGENT_MODEL_KEY, resolve_model_id
 from models.openrouter_provider import OpenRouterProvider
 
 
-def completion(message):
+def completion(message, *, streaming=False):
+    base = {"id": "offline-chat", "created": 1, "model": "offline-model"}
+    finish = "tool_calls" if message.get("tool_calls") else "stop"
+    if streaming:
+        delta = dict(message)
+        if message.get("tool_calls"):
+            delta["tool_calls"] = [{"index": index, **call} for index, call in enumerate(message["tool_calls"])]
+        chunks = [
+            {**base, "object": "chat.completion.chunk", "choices": [{"index": 0, "delta": delta, "finish_reason": None}]},
+            {**base, "object": "chat.completion.chunk", "choices": [{"index": 0, "delta": {}, "finish_reason": finish}]},
+        ]
+        data = "".join(f"data: {json.dumps(chunk)}\n\n" for chunk in chunks) + "data: [DONE]\n\n"
+        return httpx2.Response(200, text=data, headers={"content-type": "text/event-stream"})
     return httpx2.Response(200, json={
-        "id": "offline-chat", "created": 1, "model": "offline-model",
-        "object": "chat.completion", "choices": [{
+        **base, "object": "chat.completion", "choices": [{
             "index": 0, "message": message,
-            "finish_reason": "tool_calls" if message.get("tool_calls") else "stop",
+            "finish_reason": finish,
         }],
     })
 
@@ -105,6 +116,12 @@ class ProviderTests(unittest.IsolatedAsyncioTestCase):
                     provider.get_model("gpt-oss")
 
     async def test_nested_approval_resume_uses_fresh_provider_and_executes_once(self):
+        await self.check_nested_approval_resume()
+
+    async def test_streamed_nested_approval_resumes_in_the_main_chat(self):
+        await self.check_nested_approval_resume(streaming=True)
+
+    async def check_nested_approval_resume(self, *, streaming=False):
         messages = [
             tool_call("pipeline_specialist", {"task": "Cancel the fixture job"}, "specialist"),
             tool_call("pipeline_shell", {
@@ -115,24 +132,29 @@ class ProviderTests(unittest.IsolatedAsyncioTestCase):
             {"role": "assistant", "content": "Cancellation completed."},
         ]
         requests = []
+        events = []
+        event_fn = (lambda kind, data: events.append((kind, data))) if streaming else None
 
         def respond(request):
-            requests.append(json.loads(request.content))
-            return completion(messages[len(requests) - 1])
+            request_body = json.loads(request.content)
+            requests.append(request_body)
+            return completion(messages[len(requests) - 1], streaming=request_body.get("stream", False))
 
-        pipeline = importlib.import_module("tools.infrastructure.sdk_adapters.pipeline_shell")
+        pipeline = importlib.import_module("tools.agent_tools.specialist.pipeline.pipeline_shell")
         with patch("models.openrouter_provider.create_async_client", side_effect=lambda: self.make_client(respond)) as factory:
             with patch.object(pipeline, "dispatch", return_value={"status": "ok"}) as dispatch:
                 pending = await runtime.async_run_agent(
-                    "Ask the pipeline specialist to cancel the fixture job", session_id="approval", model_key="gpt-oss",
+                    "Ask the pipeline specialist to cancel the fixture job", session_id="approval",
+                    model_key="gpt-oss", event_fn=event_fn,
                 )
                 self.assertEqual(pending["status"], "pending_approval", pending["answer"])
+                self.assertEqual(pending["approvals"][0]["agent"], "pipeline_specialist")
                 dispatch.assert_not_called()
                 factory.assert_called_once()
                 self.assertTrue(self.clients[0].is_closed())
                 runtime.STATE_STORE = SessionMetadataStore(self.root / "metadata")
                 result = await runtime.async_resume_agent(
-                    "approval", True, pending["approvals"][0]["approval_id"],
+                    "approval", True, pending["approvals"][0]["approval_id"], event_fn=event_fn,
                 )
                 self.assertEqual(result["status"], "ok", result["answer"])
                 self.assertEqual(result["answer"], "Cancellation completed.")
@@ -140,6 +162,9 @@ class ProviderTests(unittest.IsolatedAsyncioTestCase):
                 dispatch.assert_called_once()
         self.assertTrue(all(client.is_closed() for client in self.clients))
         self.assertEqual(len(requests), 4)
+        if streaming:
+            self.assertTrue(requests[0]["stream"])
+            self.assertTrue(any(data.get("agent") == "pipeline_specialist" for _, data in events))
         self.assertTrue(all(request["model"] == resolve_model_id("gpt-oss") for request in requests))
         for request, call_id in ((requests[2], "cancel"), (requests[3], "specialist")):
             self.assertTrue(any(item.get("tool_call_id") == call_id for item in request["messages"]))

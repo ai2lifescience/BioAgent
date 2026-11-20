@@ -372,7 +372,8 @@ crawling, and staged, quota-checked retrieval artifacts. The research specialist
 report reviewer, and report synthesizer are registered again; model calls stay on
 the server while their workspace tools use the normal isolation routes.
 
-`pipeline_shell` and the pipeline specialist use the pipeline broker described below.
+`pipeline_specialist` uses its `pipeline_shell` tool to call the pipeline broker
+described below.
 Arbitrary code retains no network access. An unrelated large file no longer
 blocks tools with explicit inputs. Session/account storage quotas cover server
 uploads, isolated output imports, and private pipeline snapshots; trusted local

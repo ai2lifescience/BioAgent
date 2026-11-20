@@ -20,7 +20,9 @@ export default function ApprovalControls({ result, busy, onResult, onBusy, onPro
         onProgress?.(frame);
         if (frame.event === 'pipeline_job_status') {
           const state = String(frame.payload.status || 'running');
-          const message = ['queued', 'running'].includes(state)
+          const message = frame.payload.workflow_id
+            ? `Workflow step ${String(frame.payload.step_id)} · ${state}`
+            : ['queued', 'running'].includes(state)
             ? `Pipeline ${state}. Waiting for verified results…`
             : `Pipeline ${state}. Preparing the result summary…`;
           setStatus(prev => ({ ...prev, [key]: message }));
@@ -49,7 +51,7 @@ export default function ApprovalControls({ result, busy, onResult, onBusy, onPro
         const expanded = event.currentTarget.open;
         setPlanOpen(prev => prev[item.approval_id] === expanded ? prev : { ...prev, [item.approval_id]: expanded });
       }}>
-        <summary>{plan ? 'Pipeline plan' : 'Requested operation'}</summary>
+        <summary>{plan && typeof plan === 'object' && 'workflow_id' in plan ? 'Workflow plan' : plan ? 'Pipeline plan' : 'Requested operation'}</summary>
         <pre>{JSON.stringify(plan ? { action: item.arguments, plan } : item.arguments, null, 2)}</pre>
       </details>
       <div className="approval-actions"><button type="button" disabled={disabled} onClick={() => decide(item, true)}>Approve</button><button type="button" disabled={disabled} onClick={() => decide(item, false)}>Reject</button></div>

@@ -1,0 +1,194 @@
+{
+  "verified_at": "2026-11-20T10:27:59.984381+00:00",
+  "workflow_id": "3667336148ce4e7d800ebeea6bce340b",
+  "status": "succeeded",
+  "steps": {
+    "qc": {
+      "pipeline": "metagenomic_read_quality_control",
+      "job_id": "8bee8160ffdd41a69d77412b5b850ed2",
+      "remote_id": "08b9be9a-c315-4a9c-8bc0-ef3dc5c2d898",
+      "status": "succeeded",
+      "submitted_at": "2026-11-20T10:02:48.144285+00:00",
+      "artifacts_registered_at": "2026-11-20T10:03:49.048231+00:00",
+      "cromwell_start": "2026-11-20T10:03:03.694Z",
+      "cromwell_end": "2026-11-20T10:03:47.609Z",
+      "calls": {
+        "MetagenomicQc.QcAndHostRemovalPe": [
+          {
+            "executionStatus": "Done",
+            "returnCode": 0,
+            "start": "2026-11-20T10:03:08.803Z",
+            "end": "2026-11-20T10:03:45.200Z"
+          }
+        ]
+      }
+    },
+    "assembly": {
+      "pipeline": "metagenomic_de_novo_assembly",
+      "job_id": "63f2a8e6b8d845a6949a889700d0f95f",
+      "remote_id": "6761928e-7de2-4dac-90d3-a08291b7f7d3",
+      "status": "succeeded",
+      "submitted_at": "2026-11-20T10:04:07.528281+00:00",
+      "artifacts_registered_at": "2026-11-20T10:24:00.002963+00:00",
+      "cromwell_start": "2026-11-20T10:04:33.874Z",
+      "cromwell_end": "2026-11-20T10:23:56.761Z",
+      "calls": {
+        "AssemblyId.ReadSupport": [
+          {
+            "executionStatus": "Done",
+            "returnCode": 0,
+            "start": "2026-11-20T10:05:01.433Z",
+            "end": "2026-11-20T10:05:14.203Z"
+          }
+        ],
+        "AssemblyId.Assembly": [
+          {
+            "executionStatus": "Done",
+            "returnCode": 0,
+            "start": "2026-11-20T10:04:36.954Z",
+            "end": "2026-11-20T10:05:00.199Z"
+          }
+        ],
+        "AssemblyId.Identify": [
+          {
+            "executionStatus": "Done",
+            "returnCode": 0,
+            "start": "2026-11-20T10:05:15.713Z",
+            "end": "2026-11-20T10:23:41.213Z"
+          }
+        ],
+        "AssemblyId.Evaluate": [
+          {
+            "executionStatus": "Done",
+            "returnCode": 0,
+            "start": "2026-11-20T10:23:42.473Z",
+            "end": "2026-11-20T10:23:54.200Z"
+          }
+        ]
+      }
+    },
+    "metax": {
+      "pipeline": "metax_classification_abundance_analysis",
+      "job_id": "7e04e9371b6247be87fbdda17ca95b23",
+      "remote_id": "271e47b7-3f32-4c6d-812d-0b6ca191ed54",
+      "status": "succeeded",
+      "submitted_at": "2026-11-20T10:04:40.803832+00:00",
+      "artifacts_registered_at": "2026-11-20T10:14:20.608468+00:00",
+      "cromwell_start": "2026-11-20T10:05:03.942Z",
+      "cromwell_end": "2026-11-20T10:14:17.865Z",
+      "calls": {
+        "metax.MetaxProfile": [
+          {
+            "executionStatus": "Done",
+            "returnCode": 0,
+            "start": "2026-11-20T10:05:07.013Z",
+            "end": "2026-11-20T10:14:16.210Z"
+          }
+        ]
+      }
+    },
+    "tcdb": {
+      "pipeline": "tcdb_annotator_genome",
+      "job_id": "49703919a33941eea7db87d17defc84e",
+      "remote_id": "dd3bcc97-c3df-40cb-a8a1-be7cc9649dec",
+      "status": "succeeded",
+      "submitted_at": "2026-11-20T10:24:01.328434+00:00",
+      "artifacts_registered_at": "2026-11-20T10:25:40.246649+00:00",
+      "cromwell_start": "2026-11-20T10:24:06.221Z",
+      "cromwell_end": "2026-11-20T10:25:34.981Z",
+      "calls": {
+        "TcdbAnnotatorGenome.RunTcdbGenome": [
+          {
+            "executionStatus": "Done",
+            "returnCode": 0,
+            "start": "2026-11-20T10:24:08.273Z",
+            "end": "2026-11-20T10:25:33.210Z"
+          }
+        ]
+      }
+    }
+  },
+  "remote_statuses": {
+    "dd3bcc97-c3df-40cb-a8a1-be7cc9649dec": "Succeeded",
+    "271e47b7-3f32-4c6d-812d-0b6ca191ed54": "Succeeded",
+    "6761928e-7de2-4dac-90d3-a08291b7f7d3": "Succeeded",
+    "08b9be9a-c315-4a9c-8bc0-ef3dc5c2d898": "Succeeded",
+    "cfda9f29-5272-4587-9cba-d4c7c74503b2": "Failed",
+    "e751bac9-c9cc-4709-91e6-7ef8eff7fb46": "Aborted"
+  },
+  "links": [
+    {
+      "from": "qc.clean_r1",
+      "to": "assembly.read1",
+      "upstream_sha256": "74bbc796efd9fa33fdb0062d3ddf5cc3f5e6c279fd4c35a1c4ff3c74692aa5e1",
+      "downstream_input_sha256": "74bbc796efd9fa33fdb0062d3ddf5cc3f5e6c279fd4c35a1c4ff3c74692aa5e1",
+      "hash_matches": true,
+      "submitted_after_artifact_registration": true
+    },
+    {
+      "from": "qc.clean_r2",
+      "to": "assembly.read2",
+      "upstream_sha256": "4eae54861990fe3bfe8444e184a5d614ab76ddef3394b163f6a2deb183a48d98",
+      "downstream_input_sha256": "4eae54861990fe3bfe8444e184a5d614ab76ddef3394b163f6a2deb183a48d98",
+      "hash_matches": true,
+      "submitted_after_artifact_registration": true
+    },
+    {
+      "from": "qc.clean_r1",
+      "to": "metax.reads",
+      "upstream_sha256": "74bbc796efd9fa33fdb0062d3ddf5cc3f5e6c279fd4c35a1c4ff3c74692aa5e1",
+      "downstream_input_sha256": "74bbc796efd9fa33fdb0062d3ddf5cc3f5e6c279fd4c35a1c4ff3c74692aa5e1",
+      "hash_matches": true,
+      "submitted_after_artifact_registration": true
+    },
+    {
+      "from": "qc.clean_r2",
+      "to": "metax.reads2",
+      "upstream_sha256": "4eae54861990fe3bfe8444e184a5d614ab76ddef3394b163f6a2deb183a48d98",
+      "downstream_input_sha256": "4eae54861990fe3bfe8444e184a5d614ab76ddef3394b163f6a2deb183a48d98",
+      "hash_matches": true,
+      "submitted_after_artifact_registration": true
+    },
+    {
+      "from": "assembly.contigs",
+      "to": "tcdb.genome_fasta",
+      "upstream_sha256": "8d6336834c915e4741031098e4abd86fc9814777df0ee0b962695860698c6b19",
+      "downstream_input_sha256": "8d6336834c915e4741031098e4abd86fc9814777df0ee0b962695860698c6b19",
+      "hash_matches": true,
+      "submitted_after_artifact_registration": true
+    }
+  ],
+  "artifact_integrity": [
+    {
+      "upstream_step": "qc",
+      "output": "clean_r1",
+      "size": 42042834,
+      "sha256": "74bbc796efd9fa33fdb0062d3ddf5cc3f5e6c279fd4c35a1c4ff3c74692aa5e1",
+      "matches_registered_size": true
+    },
+    {
+      "upstream_step": "qc",
+      "output": "clean_r2",
+      "size": 42089172,
+      "sha256": "4eae54861990fe3bfe8444e184a5d614ab76ddef3394b163f6a2deb183a48d98",
+      "matches_registered_size": true
+    },
+    {
+      "upstream_step": "assembly",
+      "output": "contigs",
+      "size": 4187390,
+      "sha256": "8d6336834c915e4741031098e4abd86fc9814777df0ee0b962695860698c6b19",
+      "matches_registered_size": true
+    }
+  ],
+  "checks": {
+    "four_steps_succeeded": true,
+    "five_input_links_verified": true,
+    "dependency_submission_order": true,
+    "four_distinct_remote_ids": true,
+    "all_test_remote_jobs_terminal": true,
+    "at_most_two_remote_jobs_active": true,
+    "assembly_and_metax_overlap": true
+  },
+  "max_concurrent_remote_jobs": 2
+}

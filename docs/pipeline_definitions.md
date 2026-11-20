@@ -4,10 +4,10 @@ This document defines the contract for pipeline bundles under
 tools/runtime_tools/pipelines. A pipeline bundle is a self-contained workflow
 description, its engine files, and optional example data.
 
-A runner.yaml file is **not** a model-facing SDK FunctionTool. The model calls the
-native SDK ShellTool named pipeline_shell with the allowlisted agent-pipeline
-protocol. The pipeline catalog reads runner.yaml, exposes its intent and
-contracts to the agent, and the pipeline engine validates the selected plan.
+The pipeline catalog reads `runner.yaml` and exposes its intent and contracts to
+`pipeline_specialist`. The specialist uses `pipeline_shell` to call the
+allowlisted `agent-pipeline` protocol. The pipeline engine validates the
+selected plan.
 
 ## Recommended file layout
 
@@ -298,6 +298,7 @@ The model-facing selection path is:
 
 ~~~text
 user request
+  -> main agent delegates to pipeline_specialist
   -> pipeline_shell: agent-pipeline catalog
   -> compare description, use_when, avoid_when, inputs, outputs, limitations
   -> pipeline_shell: agent-pipeline files
@@ -309,7 +310,9 @@ user request
   -> status, bounded wait, and verified results
 ~~~
 
-The catalog returns compact fields specifically for selection:
+The shell catalog returns pages of complete entries with `next_offset` for
+continuation. `agent-pipeline catalog --pipeline NAME` returns a named entry.
+Each entry includes compact fields for selection.
 
 - name and display_name;
 - visibility;

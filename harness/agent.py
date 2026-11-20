@@ -5,8 +5,6 @@ from __future__ import annotations
 from agents import Model
 from agents.sandbox import Manifest, SandboxAgent
 
-from tools.infrastructure.sdk_adapters.pipeline_shell import PIPELINE_INSTRUCTIONS
-
 from .guardrails import INPUT_GUARDRAIL, OUTPUT_GUARDRAIL
 from tools.registry import build_all_tools
 
@@ -27,9 +25,8 @@ responsibility for the final answer, including work delegated to specialists.
   outputs. Use a documented session workspace file path; never
   guess a file path or assume local run context is visible to you.
 - The SDK provides a per-session Unix-local sandbox rooted at the session
-  workspace. Use its filesystem tools for workspace inspection and edits. Use
-  the local pipeline_shell runtime tool for biological command execution;
-  never use a filesystem capability to bypass that route.
+  workspace. Use its filesystem tools for workspace inspection and edits.
+  Delegate pipeline execution to pipeline_specialist.
 - Ask a concise question only when a missing input or ambiguity materially
   affects the result and cannot be resolved from available information.
 - For complex tasks, briefly state the steps and carry out the requested work.
@@ -39,8 +36,8 @@ responsibility for the final answer, including work delegated to specialists.
 - Use registered tool descriptions and parameter schemas to choose the
   narrowest tool that produces the requested outcome. Follow their input
   constraints and documented side effects.
-- Prefer one direct tool for one outcome. Use a specialist only when the
-  request combines several dependent capabilities.
+- Prefer one direct tool for one outcome. Delegate pipeline work and tasks that
+  combine several dependent capabilities to the relevant specialist.
 - Use ncbi_retrieval for raw NCBI sequence records; pubmed_search or web_search
   for evidence collection; database_lookup for database annotations and
   metadata; use alphafold_download for an AlphaFold structure file.
@@ -77,26 +74,27 @@ responsibility for the final answer, including work delegated to specialists.
   must stay within the active workspace. Use python_execute as the fallback for
   a bounded computation when no registered domain tool can provide the requested
   operation. Pass explicit input and expected output paths, inspect its returned
-  status and artifacts, and never send arbitrary Python through pipeline_shell.
+  status and artifacts.
   For a requested plot, calculation, or file transformation without a matching
   registered tool, generate the source and call python_execute rather than
   claiming that the pipeline runtime is the only available execution route.
 - Use the direct sequence, genome, similarity, and structure capabilities for
   biology work. They can be chained by the root agent when several operations
   are required.
-- Call only tools present in the registered tool list. Do not invent terminal
-  or filesystem tool names such as `exec_command` or `read_file`; use
-  `document_read` for PDF contents and `pipeline_shell` for pipeline commands.
+- Call only tools present in the registered tool list. Use `document_read` for
+  PDF contents.
 - Use genome_read_features followed by genome_render_map for an interactive genome browser;
   use the research specialist with knowledge_ingest, knowledge_retrieve,
   pubmed_search, web_search, report_synthesize, and report_write for a cited
   narrative.
-- Use pipeline_shell for pipeline discovery, execution, status, and collection,
-  or pipeline_specialist for a multi-step pipeline task. Reviewing results alone
-  does not authorize another pipeline run.
-- For pipeline selection, call `agent-pipeline catalog` first and use each
-  entry's display name, description, use_when, avoid_when, input_summary, and
-  limitations. Treat `visibility: internal` entries as demonstrations only.
+- Delegate pipeline discovery, planning, execution, status, results, and
+  cancellation to pipeline_specialist, including single-operation requests.
+  Pass known workspace files, workflow or job IDs, and the requested scope.
+  Retrieve any requested source data before delegating execution. For review
+  requests, ask the specialist to inspect the existing results.
+  After the specialist starts a queued or running job or workflow, return a short
+  progress update. The runtime monitors it and supplies verified terminal results
+  so you can finish the original request.
 
 ## Delegate bounded tasks
 - Use a specialist whose description covers the requested combination of
@@ -156,11 +154,10 @@ def create_agent(
     default_manifest = Manifest(root=sandbox_root) if sandbox_root else None
     from isolation import isolated_execution
     from tools.agent_tools.specialist.website_guide import ROOT_INSTRUCTIONS
-    instructions = INSTRUCTIONS + PIPELINE_INSTRUCTIONS + ROOT_INSTRUCTIONS
+    instructions = INSTRUCTIONS + ROOT_INSTRUCTIONS
     if isolated_execution():
         instructions += "\nThis run uses isolated tool workers. web_fetch, web_search and pubmed_search use a public GET broker. " \
-            "pipeline_shell uses an owned remote Cromwell broker; call catalog for supported workflows. " \
-            "The audited template_wdl is currently supported; use it only for requested demonstrations. " \
+            "pipeline_specialist uses session-owned pipeline workers; ask it to check the catalog for supported workflows. " \
             "An approval executes the immutable input snapshot saved with the plan. Jobs survive server restarts. " \
             "Raw sockets, arbitrary shell pipelines, durable knowledge ingestion and SDK filesystem tools remain unavailable. " \
             "Use only supplied tools; do not bypass these boundaries. Each workspace transfer is limited to 32 MiB."

@@ -60,6 +60,7 @@ def catalog(*, compact: bool = False) -> list[dict]:
             continue
         try:
             _, manifest, config = definition(path.name)
+            max_cores, max_timeout = resource_bounds(manifest)
             entries.append({
                 "name": path.name,
                 "display_name": manifest.get("display_name") or path.name,
@@ -77,12 +78,34 @@ def catalog(*, compact: bool = False) -> list[dict]:
                 "outputs": pipeline_output_specs(manifest),
                 "parameters": manifest.get("param_overrides") or config.get("params", {}),
                 "timeout_seconds": manifest.get("timeout", 300),
+                "plan_limits": {"max_cores": max_cores, "max_timeout_seconds": max_timeout},
             })
         except (ValueError, OSError) as exc:
             entries.append({"name": path.name, "error": str(exc)})
     if not compact:
         return entries
     return [_compact_catalog_entry(entry) for entry in entries]
+
+
+def catalog_page(entries, name=None, offset=0, limit=8):
+    """Keep complete catalog entries within the SDK shell response budget."""
+    if offset < 0 or not 1 <= limit <= 32:
+        raise ValueError("Catalog offset must be nonnegative and limit must be 1..32.")
+    if name is not None:
+        entries = [entry for entry in entries if entry["name"] == name]
+        if not entries:
+            raise ValueError(f"Pipeline is unavailable: {name}.")
+    page = {"pipelines": [], "total": len(entries), "offset": offset, "next_offset": None}
+    for entry in entries[offset:offset + limit]:
+        candidate = {**page, "pipelines": [*page["pipelines"], entry]}
+        # Account for the escaped stdout string in the SDK's JSON tool output.
+        if page["pipelines"] and len(json.dumps({"stdout": json.dumps(candidate)})) > 28000:
+            break
+        page = candidate
+    following = offset + len(page["pipelines"])
+    if following < len(entries):
+        page["next_offset"] = following
+    return page
 
 
 def _compact_catalog_entry(entry: dict) -> dict:
@@ -166,20 +189,43 @@ def stage_example(root: Path, name: str) -> dict:
     return {"pipeline_name": name, "files": staged, "example_data": True}
 
 
+def resource_bounds(manifest):
+    return min(64, int(manifest.get("resources", {}).get("max_cores", 4))), min(86400, int(manifest.get("timeout", 300)))
+
+
+def required_parameters(manifest, params):
+    return [{"name": key, **spec} for key, spec in (manifest.get("param_overrides") or {}).items()
+            if isinstance(spec, dict) and spec.get("required") and params.get(key) in (None, "")]
+
+
+def plan_configuration(root, manifest, config, params):
+    from .engine.config import apply_config_overrides, apply_runner_param_overrides, apply_runner_preset
+    from .engine.outputs import pipeline_output_specs
+
+    updated = copy.deepcopy(config)
+    selected = apply_runner_preset(updated, params, manifest)
+    if apply_runner_param_overrides(updated, selected, manifest) is None:
+        apply_config_overrides(updated, selected)
+    outputs = pipeline_output_specs(manifest)
+    if not outputs:
+        raise ValueError("Local pipelines must declare their outputs in runner.yaml.")
+    for spec in outputs.values():
+        value = updated.get(spec["config_key"]) or spec["default"]
+        confined(root, str(value))
+    return selected, outputs
+
+
 def plan(root: Path, name: str, inputs: dict, params: dict, cores: int = 1,
          timeout: int | None = None, dry_run: bool = False) -> dict:
     from tools.infrastructure.pipeline_engine.engine.inputs import pipeline_input_specs, validate_input_value
-    from tools.infrastructure.pipeline_engine.engine.outputs import pipeline_output_specs
-    from tools.infrastructure.pipeline_engine.engine.config import apply_config_overrides, apply_runner_param_overrides, apply_runner_preset
     directory, manifest, config = definition(name)
     engine = manifest.get("engine")
     if engine not in {"shell", "snakemake", "nextflow", "wdl"}:
         raise ValueError("Unsupported local engine.")
     if dry_run and engine == "shell":
         raise ValueError("Shell pipelines do not declare a dry-run command; use plan to validate inputs.")
-    max_timeout = min(86400, int(manifest.get("timeout", 300)))
+    max_cores, max_timeout = resource_bounds(manifest)
     timeout = max_timeout if timeout is None else timeout
-    max_cores = min(64, int(manifest.get("resources", {}).get("max_cores", 4)))
     if not 1 <= timeout <= max_timeout or not 1 <= cores <= max_cores:
         raise ValueError(f"Timeout must be 1..{max_timeout} seconds and cores 1..{max_cores}.")
     specs = pipeline_input_specs(manifest)
@@ -200,20 +246,10 @@ def plan(root: Path, name: str, inputs: dict, params: dict, cores: int = 1,
             raise ValueError(f"Input {slot} must contain existing regular files.")
         validate_input_value(paths if spec["multiple"] else paths[0], spec)
         records[slot] = [{"path": p.relative_to(root).as_posix(), "sha256": digest(p), "size": p.stat().st_size} for p in paths]
-    updated = copy.deepcopy(config)
-    for key, spec in (manifest.get("param_overrides") or {}).items():
-        if isinstance(spec, dict) and spec.get("required") and params.get(key) in (None, ""):
-            return {"status": "needs_parameters", "required_parameters": [{"name": key, **spec}]}
-    selected = apply_runner_preset(updated, params, manifest)
-    if apply_runner_param_overrides(updated, selected, manifest) is None:
-        apply_config_overrides(updated, selected)
-    outputs = pipeline_output_specs(manifest)
-    if not outputs:
-        raise ValueError("Local pipelines must declare their outputs in runner.yaml.")
-    # Reject output escapes before presenting the plan, including parameter overrides.
-    for spec in outputs.values():
-        value = updated.get(spec["config_key"]) or spec["default"]
-        confined(root, str(value))
+    missing_params = required_parameters(manifest, params)
+    if missing_params:
+        return {"status": "needs_parameters", "required_parameters": missing_params[:1]}
+    selected, outputs = plan_configuration(root, manifest, config, params)
     memory_mb = int(manifest.get("resources", {}).get("max_memory_mb", 8192))
     if not 128 <= memory_mb <= 65536:
         raise ValueError("Pipeline max_memory_mb must be between 128 and 65536.")

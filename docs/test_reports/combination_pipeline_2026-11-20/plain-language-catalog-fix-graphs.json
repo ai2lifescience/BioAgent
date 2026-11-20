@@ -1,0 +1,92 @@
+[
+  {
+    "workflow_id": "eb4d1f1f15124a338e301fd1b4ebeb0e",
+    "status": "planned",
+    "created_at": "2026-11-20T10:23:37.299783+00:00",
+    "step_count": 4,
+    "steps": [
+      {
+        "id": "qc",
+        "pipeline": "metagenomic_read_quality_control",
+        "depends_on": [],
+        "inputs": {
+          "read1": "uploads/DRR000852_subset_R1.fastq.gz",
+          "read2": "uploads/DRR000852_subset_R2.fastq.gz"
+        },
+        "params": {
+          "sample_id": "DRR000852"
+        },
+        "cores": 4,
+        "timeout": 86400,
+        "status": "waiting"
+      },
+      {
+        "id": "assembly",
+        "pipeline": "metagenomic_de_novo_assembly",
+        "depends_on": [
+          "qc"
+        ],
+        "inputs": {
+          "read1": {
+            "step": "qc",
+            "output": "clean_r1"
+          },
+          "read2": {
+            "step": "qc",
+            "output": "clean_r2"
+          }
+        },
+        "params": {
+          "sample_id": "DRR000852"
+        },
+        "cores": 4,
+        "timeout": 86400,
+        "status": "waiting"
+      },
+      {
+        "id": "metax",
+        "pipeline": "metax_classification_abundance_analysis",
+        "depends_on": [
+          "qc"
+        ],
+        "inputs": {
+          "reads": {
+            "step": "qc",
+            "output": "clean_r1"
+          },
+          "reads2": {
+            "step": "qc",
+            "output": "clean_r2"
+          }
+        },
+        "params": {
+          "sequencer": "Illumina"
+        },
+        "cores": 4,
+        "timeout": 86400,
+        "status": "waiting"
+      },
+      {
+        "id": "tcdb",
+        "pipeline": "tcdb_annotator_genome",
+        "depends_on": [
+          "assembly"
+        ],
+        "inputs": {
+          "genome_fasta": {
+            "step": "assembly",
+            "output": "contigs"
+          }
+        },
+        "params": {
+          "sample_id": "DRR000852",
+          "genome_context": "metagenome",
+          "backend": "blast"
+        },
+        "cores": 4,
+        "timeout": 86400,
+        "status": "waiting"
+      }
+    ]
+  }
+]

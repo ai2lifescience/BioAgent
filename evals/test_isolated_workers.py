@@ -96,7 +96,7 @@ assert 'tools' not in sys.modules
             names = {tool.name for tool in build_all_tools('unused')}
             self.assertIn('code_test', names)
             self.assertIn('python_execute', names)
-            self.assertIn('pipeline_shell', names)
+            self.assertNotIn('pipeline_shell', names)
             self.assertIn('pipeline_specialist', names)
             self.assertIn('knowledge_ingest', names)
             self.assertIn('web_fetch', names)

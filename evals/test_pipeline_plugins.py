@@ -84,6 +84,16 @@ Path(config['metrics_path']).write_text(json.dumps({'files': len(items)}))
         with principal_scope(Principal('other')), self.assertRaises(AccessDenied):
             broker.get_plan(self.root, result['plan_id'], access=self.access)
 
+    def test_catalog_exposes_effective_backend_planning_limits(self):
+        shell, wdl = self.plugin(), self.plugin('wdl')
+        with patch('isolation.policy.WORKER_TIMEOUT', 30):
+            catalog = {entry['name']: entry for entry in broker.catalog(compact=False)}
+            ordinary = {entry['name']: entry for entry in service.catalog(compact=False)}
+        self.assertEqual(catalog[shell]['plan_limits']['max_timeout_seconds'], 30)
+        self.assertEqual(catalog[wdl]['plan_limits']['max_timeout_seconds'], 60)
+        self.assertEqual(ordinary[shell]['plan_limits']['max_timeout_seconds'], 60)
+        self.assertGreaterEqual(catalog[shell]['plan_limits']['max_cores'], 1)
+
     def test_policy_is_separate_from_adapter_selection(self):
         from isolation.pipeline_policy import RESTRICTED_WORKFLOWS
         with patch.object(service, 'definition') as definition:

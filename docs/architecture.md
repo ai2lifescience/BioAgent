@@ -77,17 +77,13 @@ and response exchange.
     |     |
     |     +-- specialists: research, pipeline, document, data_analysis,
     |     |                coding, website_guide
-    |     |     -> nested SDK Agent -> selected function/runtime tools
+    |     |     -> nested SDK Agent -> selected tools
+    |     |     -> pipeline_specialist -> pipeline_shell
+    |     |           -> agent-pipeline protocol -> pipeline_engine -> verified results
     |     |
     |     +-- reporting: report_review / report_synthesize
     |           -> evidence-bound SDK Agent -> structured review/report draft
     |           -> root or research agent can call report_write to save a file
-    |
-    +-- ShellTool: pipeline_shell
-    |     -> allowlisted agent-pipeline commands
-    |     -> pipeline_engine: catalog -> plan -> approval -> detached job
-    |     -> shell / Snakemake / Nextflow / WDL -> verified results
-    |     -> definitions: tools/runtime_tools/pipelines/
     |
     +-- SDK Filesystem -> session workspace
 
@@ -208,8 +204,8 @@ The SDK is the orchestration boundary. The [Agents SDK tools guide](https://open
   retain control of the conversation.
 - report review and report synthesis are nested SDK Agents. They receive
   evidence paths and source identifiers and do not perform searching or writing.
-- pipeline_shell is a native SDK ShellTool adapter with an allowlisted
-  agent-pipeline protocol.
+- `pipeline_specialist` uses the native SDK `pipeline_shell` tool with the
+  allowlisted `agent-pipeline` protocol.
 
 The application adds persistence, workspace confinement, provider clients, and
 HTTP transport around the SDK. It does not implement a second agent loop.
@@ -486,8 +482,7 @@ The infrastructure package also contains:
 - workspace and public path serialization;
 - tool decorators and guardrails;
 - the knowledge service and crawler adapters;
-- the pipeline engine;
-- SDK adapters such as pipeline_shell.
+- the pipeline engine.
 
 ## Knowledge and retrieval
 
@@ -536,10 +531,21 @@ Pipeline definitions live under tools/runtime_tools/pipelines. The execution
 service lives under tools/infrastructure/pipeline_engine and includes commands,
 store, service, worker, and engine adapters.
 
-pipeline_shell is a native SDK ShellTool, but it accepts only one allowlisted
-agent-pipeline command protocol. The parser uses shlex and argparse. It rejects
-arbitrary shell text, pipes, redirects, command substitution, and workspace
-overrides.
+`dependency_graph.py` validates pipeline steps, parameters and input/output
+links, checks for cycles, and orders dependencies. `workflow.py` saves the
+validated plan and handles scheduling, status, cancellation and recovery.
+
+The pipeline coordinator uses an internal `autograph_specialist` for graph
+design. Its typed proposal is defined in
+`tools/agent_tools/specialist/pipeline/graph_contracts.py`. The planner has
+read-only catalog and file-discovery tools and returns step and input
+explanations with its proposed connections. The coordinator opens approval
+through `pipeline_shell` after saving a validated plan.
+
+`pipeline_specialist` calls its native SDK `pipeline_shell` tool. The tool
+accepts one allowlisted `agent-pipeline` command per call. The parser uses
+`shlex` and `argparse` to validate operations and arguments. Each command runs
+against the workspace assigned to the session.
 
 The protocol supports:
 
@@ -583,8 +589,8 @@ process limits include per-process memory limits; aggregate cgroup isolation is
 a deployment concern.
 
 The local and isolated executors share `service.prepare_execution()` and the
-engine adapters. The isolated multi-user profile routes `pipeline_shell` and the
-pipeline specialist through `tools/infrastructure/pipeline_engine/broker.py`.
+engine adapters. In the isolated multi-user profile, the specialist's
+`pipeline_shell` tool calls `tools/infrastructure/pipeline_engine/broker.py`.
 Shell, Snakemake and Nextflow execute through `service.execute_engine()` in Docker.
 WDL uses the same `engine/cromwell.py` preparation and REST client as the ordinary
 executor, with a bounded, credential-bearing transport supplied by the broker.

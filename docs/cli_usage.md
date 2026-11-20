@@ -53,12 +53,12 @@ different key with `--model-key`.
 ## Registered workflows
 
 Biological workflows are SDK `FunctionTool` objects exported by
-`tools/function_tools`. Pipeline operations use the local `pipeline_shell`
-ShellTool exported by `tools/infrastructure/sdk_adapters`.
+`tools/function_tools`. The main agent delegates pipeline operations to
+`pipeline_specialist`, which uses its `pipeline_shell` tool.
 
 | Workflow | Main tool or actions |
 | --- | --- |
-| `pipeline_shell` | `agent-pipeline plan/run/status/wait/results/cancel` |
+| `pipeline_specialist` | Pipeline and workflow discovery, planning, execution, status, and results |
 | `ncbi_retrieval` | `ncbi_fetch` |
 | `database_lookup` | database search actions |
 | `pdb_download` | `pdb_download` |
@@ -118,7 +118,7 @@ tools/runtime_tools/pipelines/<pipeline_name>/
 1. Discover the registered pipelines before choosing one:
 
    ```bash
-   python -m interfaces.cli "Use pipeline_shell to list the available pipelines."
+   python -m interfaces.cli "List the available pipelines."
    ```
 
 2. Run the bundled demonstration and collect its results:

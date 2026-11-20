@@ -1,0 +1,284 @@
+{
+  "observed_at": "2026-11-20T10:25:43.825291+00:00",
+  "workflows": [
+    {
+      "workflow_id": "3667336148ce4e7d800ebeea6bce340b",
+      "status": "succeeded",
+      "steps": [
+        {
+          "id": "qc",
+          "pipeline": "metagenomic_read_quality_control",
+          "status": "succeeded",
+          "job_id": "8bee8160ffdd41a69d77412b5b850ed2",
+          "inputs": {
+            "read1": "uploads/DRR000852_subset_R1.fastq.gz",
+            "read2": "uploads/DRR000852_subset_R2.fastq.gz"
+          },
+          "depends_on": [],
+          "files": [
+            {
+              "output_name": "clean_r1",
+              "kind": "sequence",
+              "workspace_path": "pipeline-artifacts/8bee8160ffdd41a69d77412b5b850ed2/0/clean.R1.fq",
+              "size": 42042834,
+              "sha256": null,
+              "remote": true
+            },
+            {
+              "output_name": "clean_r2",
+              "kind": "sequence",
+              "workspace_path": "pipeline-artifacts/8bee8160ffdd41a69d77412b5b850ed2/1/clean.R2.fq",
+              "size": 42089172,
+              "sha256": null,
+              "remote": true
+            },
+            {
+              "output_name": "qc_counts",
+              "kind": "table",
+              "workspace_path": "pipeline-artifacts/8bee8160ffdd41a69d77412b5b850ed2/2/qc_counts.tsv",
+              "size": 90,
+              "sha256": null,
+              "remote": true
+            },
+            {
+              "output_name": "phase1_metrics",
+              "kind": "table",
+              "workspace_path": "pipeline-artifacts/8bee8160ffdd41a69d77412b5b850ed2/3/phase1_read_overview.tsv",
+              "size": 86,
+              "sha256": null,
+              "remote": true
+            }
+          ],
+          "remote_id": "08b9be9a-c315-4a9c-8bc0-ef3dc5c2d898",
+          "started_at": "2026-11-20T10:02:48.144285+00:00",
+          "finished_at": "2026-11-20T10:03:49.048231+00:00",
+          "created_at": "2026-11-20T10:02:47.947128+00:00",
+          "artifact_status": "available",
+          "error": null,
+          "verified_inputs": {
+            "read1": [
+              {
+                "path": "uploads/e9ef656f318d4b328912b054d6883452/DRR000852_subset_R1.fastq.gz",
+                "sha256": "cc86b2815e045094eb8332a517bc34471fc5b2e4d83148042f2fda3851f60d51",
+                "size": 11894885
+              }
+            ],
+            "read2": [
+              {
+                "path": "uploads/9b277c8b47b747cc899e6efc7d234ea4/DRR000852_subset_R2.fastq.gz",
+                "sha256": "40bb2335a5907d0138e82bb94f6aa5dea20ba70ca571fb5c75ec21ad5d3921e2",
+                "size": 11548154
+              }
+            ]
+          }
+        },
+        {
+          "id": "assembly",
+          "pipeline": "metagenomic_de_novo_assembly",
+          "status": "succeeded",
+          "job_id": "63f2a8e6b8d845a6949a889700d0f95f",
+          "inputs": {
+            "read1": {
+              "step": "qc",
+              "output": "clean_r1"
+            },
+            "read2": {
+              "step": "qc",
+              "output": "clean_r2"
+            }
+          },
+          "depends_on": [
+            "qc"
+          ],
+          "files": [
+            {
+              "output_name": "contigs",
+              "kind": "sequence",
+              "workspace_path": "pipeline-artifacts/63f2a8e6b8d845a6949a889700d0f95f/0/final.contigs.renamed.fa",
+              "size": 4187390,
+              "sha256": null,
+              "remote": true
+            },
+            {
+              "output_name": "contig_report",
+              "kind": "table",
+              "workspace_path": "pipeline-artifacts/63f2a8e6b8d845a6949a889700d0f95f/1/contig_report.tsv",
+              "size": 0,
+              "sha256": null,
+              "remote": true
+            },
+            {
+              "output_name": "species_report",
+              "kind": "table",
+              "workspace_path": "pipeline-artifacts/63f2a8e6b8d845a6949a889700d0f95f/2/species_report.tsv",
+              "size": 0,
+              "sha256": null,
+              "remote": true
+            }
+          ],
+          "remote_id": "6761928e-7de2-4dac-90d3-a08291b7f7d3",
+          "started_at": "2026-11-20T10:04:07.528281+00:00",
+          "finished_at": "2026-11-20T10:24:00.002963+00:00",
+          "created_at": "2026-11-20T10:04:07.170174+00:00",
+          "artifact_status": "available",
+          "error": null,
+          "verified_inputs": {
+            "read1": [
+              {
+                "path": "uploads/16215897bac94e93bfdb0c12ea2b7761/8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq",
+                "sha256": "74bbc796efd9fa33fdb0062d3ddf5cc3f5e6c279fd4c35a1c4ff3c74692aa5e1",
+                "size": 42042834
+              }
+            ],
+            "read2": [
+              {
+                "path": "uploads/674be8cbcad34a5ab91f78f68fbcf43e/01634d66a0d644a39c76220c59bc5a31_clean.R2.fq",
+                "sha256": "4eae54861990fe3bfe8444e184a5d614ab76ddef3394b163f6a2deb183a48d98",
+                "size": 42089172
+              }
+            ]
+          }
+        },
+        {
+          "id": "metax",
+          "pipeline": "metax_classification_abundance_analysis",
+          "status": "succeeded",
+          "job_id": "7e04e9371b6247be87fbdda17ca95b23",
+          "inputs": {
+            "reads": {
+              "step": "qc",
+              "output": "clean_r1"
+            },
+            "reads2": {
+              "step": "qc",
+              "output": "clean_r2"
+            }
+          },
+          "depends_on": [
+            "qc"
+          ],
+          "files": [
+            {
+              "output_name": "profile",
+              "kind": "table",
+              "workspace_path": "pipeline-artifacts/7e04e9371b6247be87fbdda17ca95b23/0/profile.txt",
+              "size": 594,
+              "sha256": null,
+              "remote": true
+            }
+          ],
+          "remote_id": "271e47b7-3f32-4c6d-812d-0b6ca191ed54",
+          "started_at": "2026-11-20T10:04:40.803832+00:00",
+          "finished_at": "2026-11-20T10:14:20.608468+00:00",
+          "created_at": "2026-11-20T10:04:30.831071+00:00",
+          "artifact_status": "available",
+          "error": null,
+          "verified_inputs": {
+            "reads": [
+              {
+                "path": "uploads/251d3ddf62f24e00b7376ae5a5e5acbc/8f50fb6cbeb44992a89abcd48ee204ac_clean.R1.fq",
+                "sha256": "74bbc796efd9fa33fdb0062d3ddf5cc3f5e6c279fd4c35a1c4ff3c74692aa5e1",
+                "size": 42042834
+              }
+            ],
+            "reads2": [
+              {
+                "path": "uploads/3b82a91b9c39438196bf3c026927b585/01634d66a0d644a39c76220c59bc5a31_clean.R2.fq",
+                "sha256": "4eae54861990fe3bfe8444e184a5d614ab76ddef3394b163f6a2deb183a48d98",
+                "size": 42089172
+              }
+            ]
+          }
+        },
+        {
+          "id": "tcdb",
+          "pipeline": "tcdb_annotator_genome",
+          "status": "succeeded",
+          "job_id": "49703919a33941eea7db87d17defc84e",
+          "inputs": {
+            "genome_fasta": {
+              "step": "assembly",
+              "output": "contigs"
+            }
+          },
+          "depends_on": [
+            "assembly"
+          ],
+          "files": [
+            {
+              "output_name": "hits",
+              "kind": "table",
+              "workspace_path": "pipeline-artifacts/49703919a33941eea7db87d17defc84e/0/tcdb_hits.tsv",
+              "size": 4371090,
+              "sha256": null,
+              "remote": true
+            },
+            {
+              "output_name": "summary",
+              "kind": "table",
+              "workspace_path": "pipeline-artifacts/49703919a33941eea7db87d17defc84e/1/tcdb_summary.tsv",
+              "size": 25749,
+              "sha256": null,
+              "remote": true
+            },
+            {
+              "output_name": "tm_predictions",
+              "kind": "table",
+              "workspace_path": "pipeline-artifacts/49703919a33941eea7db87d17defc84e/2/tm_predictions.tsv",
+              "size": 127,
+              "sha256": null,
+              "remote": true
+            },
+            {
+              "output_name": "qc",
+              "kind": "file",
+              "workspace_path": "pipeline-artifacts/49703919a33941eea7db87d17defc84e/3/qc.json",
+              "size": 1294,
+              "sha256": null,
+              "remote": true
+            },
+            {
+              "output_name": "status",
+              "kind": "file",
+              "workspace_path": "pipeline-artifacts/49703919a33941eea7db87d17defc84e/4/status.json",
+              "size": 663,
+              "sha256": null,
+              "remote": true
+            },
+            {
+              "output_name": "manifest",
+              "kind": "file",
+              "workspace_path": "pipeline-artifacts/49703919a33941eea7db87d17defc84e/5/manifest.json",
+              "size": 2345,
+              "sha256": null,
+              "remote": true
+            },
+            {
+              "output_name": "report",
+              "kind": "file",
+              "workspace_path": "pipeline-artifacts/49703919a33941eea7db87d17defc84e/6/report.md",
+              "size": 3960,
+              "sha256": null,
+              "remote": true
+            }
+          ],
+          "remote_id": "dd3bcc97-c3df-40cb-a8a1-be7cc9649dec",
+          "started_at": "2026-11-20T10:24:01.328434+00:00",
+          "finished_at": "2026-11-20T10:25:40.246649+00:00",
+          "created_at": "2026-11-20T10:24:01.169237+00:00",
+          "artifact_status": "available",
+          "error": null,
+          "verified_inputs": {
+            "genome_fasta": [
+              {
+                "path": "uploads/fc1f6f67ebc2483d90516e30c2666638/7548337c8d60402b9a433b1a822950b1_final.contigs.renamed.fa",
+                "sha256": "8d6336834c915e4741031098e4abd86fc9814777df0ee0b962695860698c6b19",
+                "size": 4187390
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

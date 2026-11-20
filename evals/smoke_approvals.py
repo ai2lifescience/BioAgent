@@ -25,17 +25,17 @@ from harness.sessions import SessionMetadataStore
 from harness.jobs import RunQueue
 from interfaces import api, web
 
-pipeline_module = importlib.import_module("tools.infrastructure.sdk_adapters.pipeline_shell")
+pipeline_module = importlib.import_module("tools.agent_tools.specialist.pipeline.pipeline_shell")
 
 
 def response(text="Completed."):
     return ModelStep(output=[assistant_message(text)])
 
 
-def pipeline(call_id="pipeline-1"):
+def pipeline(call_id="pipeline-1", job_id="a" * 32):
     return ResponseFunctionShellToolCall(
         id=f"item-{call_id}", call_id=call_id, type="shell_call", status="completed",
-        action={"commands": ["agent-pipeline cancel --job-id " + "a" * 32],
+        action={"commands": [f"agent-pipeline cancel --job-id {job_id}"],
                 "timeout_ms": None, "max_output_length": None},
     )
 
@@ -61,9 +61,14 @@ class ApprovalTests(unittest.TestCase):
         self.addCleanup(patcher.stop)
 
     def pause(self, calls=None, session="test", steps=None):
+        if steps is None:
+            steps = [
+                ModelStep(output=[function_call("pipeline_specialist", {"task": "Run the fixture pipeline"}, call_id="specialist")]),
+                ModelStep(output=calls or [pipeline()]),
+            ]
         result = asyncio.run(runtime.async_run_agent(
             "Run the fixture pipeline", session_id=session,
-            model=ScriptedModel(steps or [ModelStep(output=calls or [pipeline()])]),
+            model=ScriptedModel(steps),
         ))
         self.assertEqual(result["status"], "pending_approval", result["answer"])
         return result
@@ -71,7 +76,7 @@ class ApprovalTests(unittest.TestCase):
     def resume(self, pending, approved=True, steps=None):
         return asyncio.run(runtime.async_resume_agent(
             pending["session_id"], approved, pending["approvals"][0]["approval_id"],
-            model=ScriptedModel(steps or [response()]),
+            model=ScriptedModel(steps or [response("Specialist finished."), response()]),
         ))
 
     def test_restart_approval_executes_once_and_preserves_history(self):
@@ -94,7 +99,7 @@ class ApprovalTests(unittest.TestCase):
         finally:
             sdk_session.close()
         self.assertEqual(sum(i.get("role") == "user" for i in items), 1)
-        self.assertEqual(sum(i.get("type") == "shell_call_output" for i in items), 1)
+        self.assertEqual(sum(i.get("type") == "function_call_output" for i in items), 1)
         with self.assertRaises(ValueError):
             self.resume(pending)
         self.workflow.assert_called_once()
@@ -123,8 +128,9 @@ class ApprovalTests(unittest.TestCase):
 
     def test_reviewed_plan_survives_progress_and_later_turn(self):
         pending = self.pause(steps=[ModelStep(output=[
-            assistant_message("I will prepare the requested operation."), pipeline(),
-        ])])
+            assistant_message("I will prepare the requested operation."),
+            function_call("pipeline_specialist", {"task": "Run the fixture pipeline"}, call_id="specialist"),
+        ]), ModelStep(output=[pipeline()])])
         runtime.STATE_STORE = SessionMetadataStore(self.root / "metadata")
         restored = api.list_session_messages("test")["pending_approval"]
         self.assertEqual(restored["approvals"], pending["approvals"])
@@ -150,16 +156,18 @@ class ApprovalTests(unittest.TestCase):
         self.workflow.assert_not_called()
         self.assertEqual(self.resume(pending)["status"], "ok")
 
-    def test_multiple_calls_pause_again_without_replaying_first(self):
-        first = self.pause([pipeline("one"), pipeline("two")])
+    def test_multiple_nested_calls_require_each_approval_and_execute_once(self):
+        calls = [pipeline("one"), pipeline("two", "b" * 32)]
+        first = self.pause(calls)
         self.assertEqual(len(first["approvals"]), 2)
         second = self.resume(first, steps=[])
         self.assertEqual(second["status"], "pending_approval", second["answer"])
         self.assertEqual(len(second["approvals"]), 1)
-        self.workflow.assert_called_once()
+        self.workflow.assert_not_called()
         done = self.resume(second)
         self.assertEqual(done["status"], "ok", done["answer"])
-        self.assertEqual(self.workflow.call_count, 2)
+        self.assertCountEqual([call.args[1] for call in self.workflow.call_args_list],
+                              [call.action.commands[0] for call in calls])
 
     def test_nested_specialist_approval_restores_shared_context(self):
         pending = self.pause(steps=[
@@ -172,6 +180,28 @@ class ApprovalTests(unittest.TestCase):
         self.workflow.assert_called_once()
         self.assertTrue(any(e["event"] == "approval_decision" for e in done["trace"]))
         self.assertIn("pipeline_shell", done["evidence"]["tools"])
+
+    def test_saved_root_approval_resumes_without_exposing_shell_to_model(self):
+        current_builder = runtime.create_agent
+
+        def previous_agent(*args, **kwargs):
+            agent = current_builder(*args, **kwargs)
+            agent.tools.append(pipeline_module.pipeline_shell)
+            return agent
+
+        with patch.object(runtime, "create_agent", side_effect=previous_agent):
+            pending = self.pause(steps=[ModelStep(output=[pipeline()])])
+        self.assertEqual(pending["approvals"][0]["agent"], "Pipeline2Agent")
+        self.workflow.assert_not_called()
+
+        def completed(call):
+            self.assertNotIn("pipeline_shell", {tool.name for tool in call.tools})
+            return [assistant_message("Cancellation completed.")]
+
+        done = self.resume(pending, steps=[ModelStep.respond(completed)])
+        self.assertEqual(done["status"], "ok", done["answer"])
+        self.assertEqual(done["answer"], "Cancellation completed.")
+        self.workflow.assert_called_once()
 
     def test_http_requires_explicit_boolean_and_can_reject(self):
         pending = self.pause()
@@ -193,7 +223,8 @@ class ApprovalTests(unittest.TestCase):
                 post(bad)
             self.assertEqual(failure.exception.code, 400)
         def handler(session_id, approved, approval_id, **kwargs):
-            return asyncio.run(runtime.async_resume_agent(session_id, approved, approval_id, model=ScriptedModel([response()])))
+            model = ScriptedModel([response("Specialist finished."), response()])
+            return asyncio.run(runtime.async_resume_agent(session_id, approved, approval_id, model=model))
         with patch.object(web, "handle_approval", side_effect=handler):
             result = post({**payload, "approved": False})
         self.assertEqual(result["status"], "ok")

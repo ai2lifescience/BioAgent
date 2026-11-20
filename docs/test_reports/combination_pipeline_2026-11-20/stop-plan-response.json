@@ -1,0 +1,413 @@
+{
+  "result_contract_version": 1,
+  "answer": "Review the requested tool arguments and approve or reject each pending call.",
+  "status": "pending_approval",
+  "session_id": "live-combination-stop-20261120",
+  "approval_required": true,
+  "approvals": [
+    {
+      "approval_id": "519930872d1e45a1a032523e75e257b0",
+      "call_id": "call_4w4MSzl1uIQBuqvoz6fk4pjH",
+      "agent": "Pipeline2Agent",
+      "tool_name": "pipeline_shell",
+      "arguments": {
+        "commands": [
+          "agent-pipeline workflow-run --workflow-id 8d906c1c30a7465a9f831ed2f00c9304"
+        ],
+        "max_output_length": 12000,
+        "timeout_ms": 30000
+      },
+      "plan": {
+        "workflow_id": "8d906c1c30a7465a9f831ed2f00c9304",
+        "status": "planned",
+        "created_at": "2026-11-20T10:04:01.529034+00:00",
+        "step_count": 2,
+        "steps": [
+          {
+            "id": "qc",
+            "pipeline": "metagenomic_read_quality_control",
+            "depends_on": [],
+            "inputs": {
+              "read1": "uploads/DRR000852_subset_R1.fastq.gz",
+              "read2": "uploads/DRR000852_subset_R2.fastq.gz"
+            },
+            "params": {
+              "sample_id": "orchestration_stop_test"
+            },
+            "cores": 1,
+            "timeout": 86400,
+            "status": "waiting"
+          },
+          {
+            "id": "profile",
+            "pipeline": "metax_classification_abundance_analysis",
+            "depends_on": [
+              "qc"
+            ],
+            "inputs": {
+              "reads": {
+                "step": "qc",
+                "output": "clean_r1"
+              },
+              "reads2": {
+                "step": "qc",
+                "output": "clean_r2"
+              }
+            },
+            "params": {},
+            "cores": 1,
+            "timeout": 86400,
+            "status": "waiting"
+          }
+        ]
+      }
+    }
+  ],
+  "evidence": {
+    "retrieval_date": "2026-11-20",
+    "tools": [],
+    "databases": [],
+    "query_terms": [],
+    "record_ids": [],
+    "citations": [],
+    "urls": [],
+    "files": [],
+    "outputs": [],
+    "tool_outputs": [],
+    "tool_errors": []
+  },
+  "trace": [
+    {
+      "timestamp": "2026-11-20T10:04:01.539695+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "run_started",
+      "data": {
+        "request": "Live Stop test. Use pipeline_shell to start the already saved workflow 8d906c1c30a7465a9f831ed2f00c9304. It contains QC and downstream MetaX on the public Bacillus subtilis test reads. Request workflow-run approval. Return its ID and current status immediately after launch so the runtime can monitor it.",
+        "model_key": "gpt-5.6-sol"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:01.561264+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_trace_started",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:01.568485+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def",
+        "span_id": "span_9238e06e5c9048889a5db53e",
+        "parent_id": "span_12b1dd5dd5ed4ab584d4349f",
+        "span_type": "guardrail",
+        "name": "bio_safety_input",
+        "model": null,
+        "started_at": "2026-11-20T10:04:01.567647+00:00",
+        "ended_at": "2026-11-20T10:04:01.567738+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:01.570429+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def",
+        "span_id": "span_82eae8cadcb545d79d450900",
+        "parent_id": "span_406ed7ed7e28461197748226",
+        "span_type": "custom",
+        "name": "sandbox.running",
+        "model": null,
+        "started_at": "2026-11-20T10:04:01.569522+00:00",
+        "ended_at": "2026-11-20T10:04:01.569648+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:01.571426+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def",
+        "span_id": "span_2fd0dd34d12c4a57aebe4137",
+        "parent_id": "span_406ed7ed7e28461197748226",
+        "span_type": "custom",
+        "name": "sandbox.running",
+        "model": null,
+        "started_at": "2026-11-20T10:04:01.570578+00:00",
+        "ended_at": "2026-11-20T10:04:01.570669+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:01.577957+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def",
+        "span_id": "span_cbcdd4161930433886056ca0",
+        "parent_id": "span_406ed7ed7e28461197748226",
+        "span_type": "custom",
+        "name": "sandbox.exec",
+        "model": null,
+        "started_at": "2026-11-20T10:04:01.571825+00:00",
+        "ended_at": "2026-11-20T10:04:01.576458+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:01.584616+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def",
+        "span_id": "span_c0d9d9a9b67740229ecc65e4",
+        "parent_id": "span_406ed7ed7e28461197748226",
+        "span_type": "custom",
+        "name": "sandbox.exec",
+        "model": null,
+        "started_at": "2026-11-20T10:04:01.578149+00:00",
+        "ended_at": "2026-11-20T10:04:01.583213+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:01.586879+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def",
+        "span_id": "span_406ed7ed7e28461197748226",
+        "parent_id": "span_12b1dd5dd5ed4ab584d4349f",
+        "span_type": "custom",
+        "name": "sandbox.prepare_agent",
+        "model": null,
+        "started_at": "2026-11-20T10:04:01.568631+00:00",
+        "ended_at": "2026-11-20T10:04:01.585516+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:01.612911+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "agent_started",
+      "data": {
+        "agent": "Pipeline2Agent",
+        "message": "Agent started: Pipeline2Agent."
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:01.677386+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "model_requested",
+      "data": {
+        "agent": "Pipeline2Agent"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:08.954618+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def",
+        "span_id": "span_e91f010be44343aea1ee9ae8",
+        "parent_id": "span_37ea3b93016b4c40b0ef051c",
+        "span_type": "generation",
+        "name": null,
+        "model": "openai/gpt-5.6-sol-pro",
+        "started_at": "2026-11-20T10:04:01.678080+00:00",
+        "ended_at": "2026-11-20T10:04:08.953394+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:08.960618+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "model_responded",
+      "data": {
+        "agent": "Pipeline2Agent",
+        "input_tokens": 46072,
+        "output_tokens": 258
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:08.967265+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def",
+        "span_id": "span_a55ed785ff0d4b4aa4810693",
+        "parent_id": "span_37ea3b93016b4c40b0ef051c",
+        "span_type": "function",
+        "name": "pipeline_shell",
+        "model": null,
+        "started_at": "2026-11-20T10:04:08.962302+00:00",
+        "ended_at": "2026-11-20T10:04:08.966270+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:08.969052+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def",
+        "span_id": "span_37ea3b93016b4c40b0ef051c",
+        "parent_id": "span_053d6ec6e1f44ad0ae7590f4",
+        "span_type": "turn",
+        "name": null,
+        "model": null,
+        "started_at": "2026-11-20T10:04:01.611995+00:00",
+        "ended_at": "2026-11-20T10:04:08.968079+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:08.986025+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def",
+        "span_id": "span_b9118a8df52c455f954438fb",
+        "parent_id": "span_0cd32c2cfde64794b9c92171",
+        "span_type": "custom",
+        "name": "sandbox.cleanup_sessions",
+        "model": null,
+        "started_at": "2026-11-20T10:04:08.983684+00:00",
+        "ended_at": "2026-11-20T10:04:08.984560+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:08.987404+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def",
+        "span_id": "span_0cd32c2cfde64794b9c92171",
+        "parent_id": "span_053d6ec6e1f44ad0ae7590f4",
+        "span_type": "custom",
+        "name": "sandbox.cleanup",
+        "model": null,
+        "started_at": "2026-11-20T10:04:08.983590+00:00",
+        "ended_at": "2026-11-20T10:04:08.986067+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:08.988798+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def",
+        "span_id": "span_053d6ec6e1f44ad0ae7590f4",
+        "parent_id": "span_12b1dd5dd5ed4ab584d4349f",
+        "span_type": "agent",
+        "name": "Pipeline2Agent",
+        "model": null,
+        "started_at": "2026-11-20T10:04:01.611657+00:00",
+        "ended_at": "2026-11-20T10:04:08.987453+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:08.990216+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_span_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def",
+        "span_id": "span_12b1dd5dd5ed4ab584d4349f",
+        "parent_id": null,
+        "span_type": "task",
+        "name": "Pipeline2Agent",
+        "model": null,
+        "started_at": "2026-11-20T10:04:01.561427+00:00",
+        "ended_at": "2026-11-20T10:04:08.988972+00:00",
+        "has_error": false
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:08.990603+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "sdk_trace_finished",
+      "data": {
+        "trace_id": "trace_6e3e800d51c54fc38ef2bebb864e3def"
+      }
+    },
+    {
+      "timestamp": "2026-11-20T10:04:09.035224+00:00",
+      "session_id": "live-combination-stop-20261120",
+      "event": "run_paused",
+      "data": {
+        "reason": "tool_approval",
+        "tool_names": [
+          "pipeline_shell"
+        ]
+      }
+    }
+  ],
+  "workspace_files": [
+    {
+      "path": "uploads/DRR000852_subset_R1.fastq.gz",
+      "workspace_path": "uploads/DRR000852_subset_R1.fastq.gz",
+      "name": "DRR000852_subset_R1.fastq.gz",
+      "size": 11894885,
+      "modified_at": 1795169041378131418,
+      "kind": "upload",
+      "content_type": "application/gzip"
+    },
+    {
+      "path": "uploads/DRR000852_subset_R2.fastq.gz",
+      "workspace_path": "uploads/DRR000852_subset_R2.fastq.gz",
+      "name": "DRR000852_subset_R2.fastq.gz",
+      "size": 11548154,
+      "modified_at": 1795169041401131578,
+      "kind": "upload",
+      "content_type": "application/gzip"
+    }
+  ],
+  "artifacts": [],
+  "files": [
+    {
+      "path": "uploads/DRR000852_subset_R1.fastq.gz",
+      "workspace_path": "uploads/DRR000852_subset_R1.fastq.gz",
+      "name": "DRR000852_subset_R1.fastq.gz",
+      "size": 11894885,
+      "modified_at": 1795169041378131418,
+      "kind": "upload",
+      "content_type": "application/gzip"
+    },
+    {
+      "path": "uploads/DRR000852_subset_R2.fastq.gz",
+      "workspace_path": "uploads/DRR000852_subset_R2.fastq.gz",
+      "name": "DRR000852_subset_R2.fastq.gz",
+      "size": 11548154,
+      "modified_at": 1795169041401131578,
+      "kind": "upload",
+      "content_type": "application/gzip"
+    }
+  ],
+  "max_turns": 8,
+  "messages": [
+    {
+      "role": "user",
+      "content": "Live Stop test. Use pipeline_shell to start the already saved workflow 8d906c1c30a7465a9f831ed2f00c9304. It contains QC and downstream MetaX on the public Bacillus subtilis test reads. Request workflow-run approval. Return its ID and current status immediately after launch so the runtime can monitor it."
+    },
+    {
+      "role": "assistant",
+      "content": "Review the requested tool arguments and approve or reject each pending call."
+    }
+  ],
+  "run": {
+    "run_id": "338f1422-10d0-4ce9-997e-30ce8d1e5d43",
+    "session_dir": ".",
+    "runtime_dir": "runs/338f1422-10d0-4ce9-997e-30ce8d1e5d43",
+    "workspace_dir": "outputs"
+  },
+  "approval_decision": null,
+  "runtime": "agents_sdk",
+  "model_key": "gpt-5.6-sol"
+}

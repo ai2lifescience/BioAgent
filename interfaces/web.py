@@ -948,6 +948,8 @@ def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
     reaper = start_worker_reaper(execution_access().metadata_root) if isolated_execution() else None
     from tools.infrastructure.pipeline_engine.broker import start_reconciler
     reconciler = start_reconciler(execution_access().metadata_root) if isolated_execution() else None
+    from tools.infrastructure.pipeline_engine.workflow import start_reconciler as start_workflow_reconciler
+    workflow_reconciler = start_workflow_reconciler(execution_access(), isolated=isolated_execution())
     try:
         server.serve_forever()
     finally:
@@ -955,6 +957,7 @@ def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
             reaper.set()
         if reconciler:
             reconciler.set()
+        workflow_reconciler.set()
         server.server_close()
 
 

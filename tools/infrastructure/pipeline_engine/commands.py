@@ -5,6 +5,8 @@ import argparse
 import json
 import shlex
 
+WORKFLOW_OPERATIONS = {"workflow-plan", "workflow-run", "workflow-status", "workflow-list", "workflow-cancel"}
+
 
 class Parser(argparse.ArgumentParser):
     def error(self, message):
@@ -19,7 +21,11 @@ def parse_command(command: str) -> argparse.Namespace:
         raise ValueError("Only agent-pipeline commands are supported.")
     parser = Parser(prog="agent-pipeline", add_help=False, allow_abbrev=False)
     subs = parser.add_subparsers(dest="operation", required=True, parser_class=Parser)
-    for name in ("catalog", "files", "jobs"):
+    catalog = subs.add_parser("catalog", add_help=False, allow_abbrev=False)
+    catalog.add_argument("--pipeline")
+    catalog.add_argument("--offset", type=int, default=0)
+    catalog.add_argument("--limit", type=int, default=8)
+    for name in ("files", "jobs"):
         subs.add_parser(name, add_help=False, allow_abbrev=False)
     example = subs.add_parser("example", add_help=False, allow_abbrev=False)
     example.add_argument("--pipeline", default="template_shell")
@@ -39,6 +45,12 @@ def parse_command(command: str) -> argparse.Namespace:
             sub.add_argument("--seconds", type=float, default=5)
         if name == "results":
             sub.add_argument("--max-table-rows", type=int, default=10)
+    workflow = subs.add_parser("workflow-plan", add_help=False, allow_abbrev=False)
+    workflow.add_argument("--steps", type=json.loads, required=True)
+    subs.add_parser("workflow-list", add_help=False, allow_abbrev=False)
+    for name in ("workflow-run", "workflow-status", "workflow-cancel"):
+        sub = subs.add_parser(name, add_help=False, allow_abbrev=False)
+        sub.add_argument("--workflow-id", required=True)
     return parser.parse_args(tokens[1:])
 
 
@@ -60,8 +72,10 @@ def mapping(items: list[str], *, decode: bool = False) -> dict:
 def dispatch(root, command: str) -> dict:
     from . import service
     args = parse_command(command)
+    if args.operation in WORKFLOW_OPERATIONS:
+        raise ValueError("Workflow commands require an owned agent session.")
     if args.operation == "catalog":
-        return {"pipelines": service.catalog(compact=True)}
+        return service.catalog_page(service.catalog(compact=True), args.pipeline, args.offset, args.limit)
     if args.operation == "files":
         return {"files": service.files(root)}
     if args.operation == "example":
