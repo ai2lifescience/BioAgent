@@ -38,10 +38,17 @@ export interface AssistantDrawerHandle {
 const PROTOCOL = 1;
 const CSS = `
     :host { all: initial; }
-    .agent-launcher { position: fixed; right: 22px; bottom: 22px; z-index: 2147483000; display: inline-flex; align-items: center; gap: 8px; border: 1px solid #0d655e; border-radius: 999px; padding: 11px 16px; color: #fff; background: linear-gradient(145deg, #159487, #115e59); box-shadow: 0 10px 26px #17343835; font: 700 13px/1.2 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease; }
+    .agent-launcher { position: fixed; right: 22px; bottom: 22px; z-index: 2147483000; display: inline-flex; align-items: center; gap: 8px; border: 1px solid #0d655e; border-radius: 999px; padding: 11px 16px; color: #fff; background: linear-gradient(145deg, #159487, #115e59); box-shadow: 0 10px 26px #17343835; font: 700 13px/1.2 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; cursor: grab; touch-action: none; user-select: none; transition: transform .18s ease, box-shadow .18s ease; }
+    .agent-launcher.is-positioned { right: auto; bottom: auto; }
+    .agent-launcher.is-positioned:not(.is-dragging) { transition: left .18s ease, top .18s ease, padding .18s ease, border-radius .18s ease, transform .18s ease, box-shadow .18s ease; }
+    .agent-launcher.is-dragging { cursor: grabbing; transition: none; }
+    .agent-launcher.is-docked { gap: 0; padding: 10px 8px; }
+    .agent-launcher.is-docked-left { border-radius: 0 16px 16px 0; }
+    .agent-launcher.is-docked-right { border-radius: 16px 0 0 16px; }
+    .agent-launcher.is-docked .agent-launcher-label { display: none; }
     .agent-icon { display: grid; width: 30px; height: 30px; place-items: center; color: #fff; }
     .agent-icon svg { width: 100%; height: 100%; display: block; }
-    .agent-launcher:hover { transform: translateY(-2px); box-shadow: 0 14px 30px #17343845; }
+    .agent-launcher:hover:not(.is-dragging):not(.is-docked) { transform: translateY(-2px); box-shadow: 0 14px 30px #17343845; }
     .agent-panel { position: fixed; z-index: 2147483001; inset: 0 0 0 auto; display: grid; grid-template-rows: auto minmax(0,1fr); width: min(var(--agent-panel-width, 460px), 100vw); overflow: hidden; border-left: 1px solid #d9e5e4; background: #f4f8f8; box-shadow: -16px 0 40px #17343826; transition: transform .22s ease, box-shadow .22s ease, width .18s ease; }
     .agent-panel.is-resizing { transition: none; user-select: none; }
     .agent-panel.is-resizing .agent-frame { pointer-events: none; }
@@ -61,7 +68,7 @@ const CSS = `
     .agent-header-btn:focus-visible { outline: 2px solid #159487; outline-offset: 2px; }
     .agent-expand svg { width: 15px; height: 15px; display: block; }
     .agent-frame { display: block; width: 100%; height: 100%; border: 0; }
-    @media (max-width: 480px) { .agent-launcher { right: 12px; bottom: 12px; padding: 10px 13px; } .agent-panel { width: 100vw; } .agent-resizer, .agent-expand { display: none; } }
+    @media (max-width: 480px) { .agent-launcher:not(.is-positioned) { right: 12px; bottom: 12px; padding: 10px 13px; } .agent-panel { width: 100vw; } .agent-resizer, .agent-expand { display: none; } }
   `;
 
 const EXPAND_ICON = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 2.5h4v4"/><path d="M13.5 2.5L8.75 7.25"/><path d="M6.5 13.5h-4v-4"/><path d="M2.5 13.5l4.75-4.75"/></svg>`;
@@ -115,9 +122,12 @@ export function mountAssistantDrawer(options: AssistantDrawerOptions = {}): Assi
   if (options.getAuthorization) src.searchParams.set('website_auth', '1');
   const shadow = host.shadowRoot || (host.attachShadow ? host.attachShadow({ mode: 'open' }) : host);
   const style = document.createElement('style'); style.textContent = CSS;
-  const launcher = document.createElement('button'); launcher.className = 'agent-launcher'; launcher.type = 'button'; launcher.setAttribute('aria-expanded', 'false');
+  const launcherLabel = options.launcherLabel || 'Ask assistant';
+  const launcher = document.createElement('button'); launcher.className = 'agent-launcher'; launcher.type = 'button'; launcher.setAttribute('aria-expanded', 'false'); launcher.setAttribute('aria-label', launcherLabel);
+  launcher.title = 'Drag to move. Release at the left or right edge to tuck it aside.';
   const icon = createAgentIcon(28);
-  launcher.append(icon, document.createTextNode(options.launcherLabel || 'Ask assistant'));
+  const label = document.createElement('span'); label.className = 'agent-launcher-label'; label.textContent = launcherLabel;
+  launcher.append(icon, label);
   const panel = document.createElement('aside'); panel.className = 'agent-panel'; panel.hidden = true; panel.setAttribute('aria-label', options.title || 'Assistant');
   const defaultWidth = Math.max(280, Math.round(Number(options.defaultWidth) || 460));
   const minWidth = Math.max(280, Math.min(defaultWidth, Math.round(Number(options.minWidth) || 320)));
@@ -161,6 +171,39 @@ export function mountAssistantDrawer(options: AssistantDrawerOptions = {}): Assi
   header.append(panelIcon, title, actions);
   if (resizer) panel.append(resizer);
   panel.append(header, frame); shadow.append(style, launcher, panel);
+
+  type LauncherPlacement = { x: number; y: number; docked: 'left' | 'right' | null };
+  const positionStorageKey = `bioagent-assistant-launcher:${options.siteId || 'default'}`;
+  const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), Math.max(min, max));
+  const readPlacement = (): LauncherPlacement | null => {
+    try {
+      const raw = JSON.parse(window.localStorage?.getItem(positionStorageKey) || 'null');
+      const x = Number(raw?.x), y = Number(raw?.y);
+      if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+      return { x, y, docked: raw.docked === 'left' || raw.docked === 'right' ? raw.docked : null };
+    } catch { return null; }
+  };
+  const writePlacement = (placement: LauncherPlacement) => {
+    try { window.localStorage?.setItem(positionStorageKey, JSON.stringify(placement)); } catch { /* Ignore storage errors. */ }
+  };
+  let launcherPlacement: LauncherPlacement | null = readPlacement();
+  const placeLauncher = (placement: LauncherPlacement, persist = false) => {
+    const docked = placement.docked === 'left' || placement.docked === 'right' ? placement.docked : null;
+    launcher.classList.add('is-positioned');
+    launcher.classList.toggle('is-docked', Boolean(docked));
+    launcher.classList.toggle('is-docked-left', docked === 'left');
+    launcher.classList.toggle('is-docked-right', docked === 'right');
+    const width = launcher.offsetWidth || 48, height = launcher.offsetHeight || 48;
+    const viewportWidth = window.innerWidth || width, viewportHeight = window.innerHeight || height;
+    const margin = docked ? 0 : 8;
+    const x = docked === 'left' ? 0 : docked === 'right' ? Math.max(0, viewportWidth - width) : clamp(placement.x, margin, viewportWidth - width - margin);
+    const y = clamp(placement.y, margin, viewportHeight - height - margin);
+    launcherPlacement = { x, y, docked };
+    launcher.style.left = `${x}px`;
+    launcher.style.top = `${y}px`;
+    if (persist) writePlacement(launcherPlacement);
+  };
+  if (launcherPlacement) placeLauncher(launcherPlacement);
 
   const applyWidth = (width: number, persist = false) => {
     panelWidth = clampWidth(width);
@@ -233,7 +276,7 @@ export function mountAssistantDrawer(options: AssistantDrawerOptions = {}): Assi
     });
   }
   if (expand) expand.addEventListener('click', () => setFullscreen(!isFullscreen));
-  const onWindowResize = () => { if (!isFullscreen) applyWidth(panelWidth); };
+  const onWindowResize = () => { if (!isFullscreen) applyWidth(panelWidth); if (launcherPlacement) placeLauncher(launcherPlacement); };
   window.addEventListener('resize', onWindowResize);
 
   let destroyed = false;
@@ -372,14 +415,68 @@ export function mountAssistantDrawer(options: AssistantDrawerOptions = {}): Assi
   };
   const open = () => { lastFocus = document.activeElement; panel.hidden = false; launcher.hidden = true; launcher.setAttribute('aria-expanded', 'true'); post({ type: 'agent-context', context }); };
   const closePanel = () => { panel.hidden = true; launcher.hidden = false; launcher.setAttribute('aria-expanded', 'false'); (lastFocus as HTMLElement || launcher).focus?.(); };
-  launcher.addEventListener('click', open); close.addEventListener('click', closePanel); frame.addEventListener('load', onFrameLoad); window.addEventListener('message', onMessage);
+  let suppressLauncherClick = false;
+  let launcherDrag: { pointerId: number; startX: number; startY: number; originX: number; originY: number; moved: boolean; snapshot: LauncherPlacement | null } | null = null;
+  const restoreLauncher = (snapshot: LauncherPlacement | null) => {
+    if (snapshot) { placeLauncher(snapshot); return; }
+    launcher.classList.remove('is-positioned', 'is-dragging', 'is-docked', 'is-docked-left', 'is-docked-right');
+    launcher.style.left = '';
+    launcher.style.top = '';
+    launcherPlacement = null;
+  };
+  const onLauncherMove = (event: PointerEvent) => {
+    if (!launcherDrag || event.pointerId !== launcherDrag.pointerId) return;
+    const dx = event.clientX - launcherDrag.startX, dy = event.clientY - launcherDrag.startY;
+    if (!launcherDrag.moved && Math.hypot(dx, dy) < 6) return;
+    launcherDrag.moved = true;
+    launcher.classList.add('is-dragging', 'is-positioned');
+    const width = launcher.offsetWidth || 48, height = launcher.offsetHeight || 48;
+    const x = clamp(launcherDrag.originX + dx, 0, Math.max(0, window.innerWidth - width));
+    const y = clamp(launcherDrag.originY + dy, 0, Math.max(0, window.innerHeight - height));
+    launcher.style.left = `${x}px`;
+    launcher.style.top = `${y}px`;
+    launcherPlacement = { x, y, docked: null };
+  };
+  const finishLauncherDrag = (event?: PointerEvent) => {
+    if (!launcherDrag) return;
+    if (event && event.pointerId !== launcherDrag.pointerId) return;
+    const moved = launcherDrag.moved, pointerId = launcherDrag.pointerId, snapshot = launcherDrag.snapshot;
+    launcherDrag = null;
+    launcher.classList.remove('is-dragging');
+    try { if (launcher.hasPointerCapture?.(pointerId)) launcher.releasePointerCapture(pointerId); } catch { /* Ignore capture release errors. */ }
+    window.removeEventListener('pointermove', onLauncherMove);
+    window.removeEventListener('pointerup', finishLauncherDrag);
+    window.removeEventListener('pointercancel', finishLauncherDrag);
+    if (!moved) return;
+    if (!launcherPlacement || event?.type === 'pointercancel') { restoreLauncher(snapshot); return; }
+    suppressLauncherClick = true;
+    const width = launcher.offsetWidth || 48, viewportWidth = window.innerWidth || width;
+    const docked = launcherPlacement.x <= 12 ? 'left' as const : launcherPlacement.x + width >= viewportWidth - 12 ? 'right' as const : null;
+    placeLauncher({ ...launcherPlacement, docked }, true);
+  };
+  launcher.addEventListener('pointerdown', (event: PointerEvent) => {
+    if (launcherDrag || (event.pointerType === 'mouse' && event.button !== 0)) return;
+    const rect = launcher.getBoundingClientRect();
+    launcherDrag = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, originX: rect.left, originY: rect.top, moved: false, snapshot: launcherPlacement ? { ...launcherPlacement } : null };
+    try { launcher.setPointerCapture?.(event.pointerId); } catch { /* Fallback to window listeners. */ }
+    window.addEventListener('pointermove', onLauncherMove);
+    window.addEventListener('pointerup', finishLauncherDrag);
+    window.addEventListener('pointercancel', finishLauncherDrag);
+  });
+  launcher.addEventListener('click', event => {
+    if (!suppressLauncherClick) { open(); return; }
+    suppressLauncherClick = false;
+    event.preventDefault();
+    event.stopPropagation();
+  });
+  close.addEventListener('click', closePanel); frame.addEventListener('load', onFrameLoad); window.addEventListener('message', onMessage);
   if (options.open) open();
   return {
     open, close: closePanel, setWidth, setFullscreen, setCustomCss,
     refreshFiles() { post({ type: 'agent-files-changed', session_id: sessionId }); },
     updateContext,
     get binding() { return binding ? { binding_id: binding.binding_id } : null; },
-    destroy() { finishResize(); window.removeEventListener('resize', onWindowResize); frame.removeEventListener('load', onFrameLoad); observer.destroy(); destroyed = true; connectionAttempt++; clearTimer(); for (const waiter of syncWaiters.values()) { window.clearTimeout(waiter.timer); waiter.reject(new Error('Assistant drawer was destroyed.')); } syncWaiters.clear(); if (binding) post({ type: 'agent-disconnect' }); window.removeEventListener('message', onMessage); launcher.remove(); panel.remove(); style.remove(); if (ownedHost) host.remove(); },
+    destroy() { finishResize(); finishLauncherDrag(); window.removeEventListener('resize', onWindowResize); frame.removeEventListener('load', onFrameLoad); observer.destroy(); destroyed = true; connectionAttempt++; clearTimer(); for (const waiter of syncWaiters.values()) { window.clearTimeout(waiter.timer); waiter.reject(new Error('Assistant drawer was destroyed.')); } syncWaiters.clear(); if (binding) post({ type: 'agent-disconnect' }); window.removeEventListener('message', onMessage); launcher.remove(); panel.remove(); style.remove(); if (ownedHost) host.remove(); },
   };
 }
 
