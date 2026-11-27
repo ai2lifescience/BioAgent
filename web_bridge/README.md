@@ -105,9 +105,11 @@ python -m web_bridge.identity SITE_ID EXTERNAL_USER_ID AGENT_USERNAME
 
 ## Compatibility
 
-This reorganization preserves HTTP URLs, message protocol, tool names,
-environment-variable names, database paths, table layouts and existing identity,
-session and artifact records. No data migration is required. Pipeline definitions
+The bridge preserves HTTP URLs, message protocol, tool names, environment-variable
+names, database paths and existing identity, session and artifact records. BioAgent
+adds a `mode` column to login tokens on first startup so a cookie from one login
+mode cannot authenticate in another. Existing password, CAS and OAuth tokens are
+classified; old website tokens require a new browser exchange. Pipeline definitions
 are not part of this module and were not moved or edited.
 
 Python import paths and developer CLI paths have moved. The old implementation

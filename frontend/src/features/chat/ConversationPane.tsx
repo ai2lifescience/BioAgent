@@ -45,6 +45,7 @@ export function ConversationPane({ sessionId, active, config, onStatus, onMessag
   const [connection, setConnection] = useState('');
   const controller = useRef<AbortController | null>(null);
   const occupied = useRef(false);
+  const lastFocusRefresh = useRef(Date.now());
   const approvalCompleted = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const progress = useRunProgress();
@@ -118,6 +119,24 @@ export function ConversationPane({ sessionId, active, config, onStatus, onMessag
     void restore(current.signal);
     return () => { current.abort(); controller.current?.abort(); };
   }, [restore]);
+  useEffect(() => {
+    if (!active) return;
+    const refresh = () => {
+      if (document.visibilityState === 'hidden' || occupied.current || Date.now() - lastFocusRefresh.current < 1500) return;
+      lastFocusRefresh.current = Date.now();
+      controller.current?.abort();
+      const current = new AbortController(); controller.current = current;
+      void restore(current.signal);
+    };
+    const visible = () => { if (document.visibilityState === 'visible') refresh(); };
+    window.addEventListener('focus', refresh);
+    document.addEventListener('visibilitychange', visible);
+    refresh();
+    return () => {
+      window.removeEventListener('focus', refresh);
+      document.removeEventListener('visibilitychange', visible);
+    };
+  }, [active, restore]);
   const reconnect = () => {
     controller.current?.abort();
     const current = new AbortController(); controller.current = current;

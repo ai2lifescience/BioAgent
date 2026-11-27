@@ -146,6 +146,13 @@ For direct LAN access, choose one mode below. From your browser, open the
 server's LAN address on port `8000`, for example `http://192.168.75.56:8000`.
 Both modes use Docker workers on network listeners. See
 [User accounts and isolation](user_isolation.md) for worker setup and HTTPS deployment.
+Run one startup command at a time. `singleuser` uses the local shared account,
+`multiuser` uses password accounts, and the separate
+[MSCAN OAuth startup](mscan_web_bridge.md#everyday-startup) uses SSO identities.
+See the [user model design](user_model_design.md) for the separation rules.
+Switching the command does not convert or merge their conversations.
+Sign in again after changing modes; an old login cookie cannot authenticate
+under another mode. MSCAN's shared SSO connector requires the OAuth startup.
 
 #### Single-user access
 
@@ -169,7 +176,9 @@ AGENT_AUTH_MODE=multiuser python -B -m interfaces.web --host 0.0.0.0 --port 8000
 ~~~
 
 If switching from SSO, start in a fresh terminal and use a configuration file
-without SSO URLs. Registration is enabled by default. To restrict sign-up, set
+without SSO URLs. If the current shell or `.env` still sets a public origin,
+prefix the command with `AGENT_PUBLIC_ORIGIN= AGENT_PUBLIC_BASE_URL=` for direct
+LAN access. Registration is enabled by default. To restrict sign-up, set
 `AGENT_REGISTRATION=false` before starting the server and create accounts with
 `python -m auth add-user alice`.
 

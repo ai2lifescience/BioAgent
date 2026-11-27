@@ -4,7 +4,7 @@ import secrets
 import tempfile
 from pathlib import Path
 
-from auth import AuthError, AccessDenied, Principal, current_principal, principal_scope
+from auth import AuthError, AccessDenied, Principal, auth_mode, current_principal, principal_scope
 from auth.context import LOCAL_USER_ID
 from auth.store import AuthStore, database, password_hash
 
@@ -42,9 +42,9 @@ class Accounts:
         self._check_username(user_id, username)
         self.db.execute('UPDATE users SET username=? WHERE user_id=?', (username, user_id))
 
-    def create_login(self, digest, user_id, expires):
-        self.db.execute('INSERT INTO logins(token_hash,user_id,expires_at) VALUES (?,?,?)',
-                        (digest, user_id, expires))
+    def create_login(self, digest, user_id, expires, mode):
+        self.db.execute('INSERT INTO logins(token_hash,user_id,expires_at,mode) VALUES (?,?,?,?)',
+                        (digest, user_id, expires, mode))
 
     def revoke_login(self, digest):
         self.db.execute('DELETE FROM logins WHERE token_hash=?', (digest,))
@@ -53,6 +53,7 @@ class Accounts:
 class BioAgentHost:
     auth_error = AuthError
     access_denied = AccessDenied
+    access_mode = staticmethod(auth_mode)
     current_user = staticmethod(current_principal)
     principal = staticmethod(Principal)
 

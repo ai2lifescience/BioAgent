@@ -11,6 +11,15 @@ from .ports import get_host
 from .config import clients, text_id, check_site
 
 
+def require_site_mode(site_id):
+    shared_sso = clients().get(site_id, {}).get('identity_mode') == 'shared_user_id'
+    mode = get_host().access_mode()
+    if shared_sso and mode != 'oauth':
+        raise ValueError('Shared SSO website clients require AGENT_AUTH_MODE=oauth.')
+    if not shared_sso and mode == 'oauth':
+        raise ValueError('OAuth mode requires a shared SSO website client.')
+
+
 class Federation:
     def __init__(self):
         with get_host().identity_transaction() as db:
@@ -19,6 +28,7 @@ class Federation:
             db.execute('CREATE TABLE IF NOT EXISTS website_logins (digest TEXT PRIMARY KEY, site_id TEXT, user_id TEXT)')
 
     def identity(self, site_id, subject, identity=None):
+        require_site_mode(site_id)
         text_id(subject, 'external subject')
         shared_user_id = clients().get(site_id, {}).get('identity_mode') == 'shared_user_id'
         username = None
@@ -28,6 +38,8 @@ class Federation:
             username = text_id(identity.get('username'), 'external username')
         with get_host().identity_transaction() as db:
             mapping = db.execute('SELECT user_id FROM external_identities WHERE site_id=? AND subject=?', (site_id, subject)).fetchone()
+            if shared_user_id and mapping and mapping['user_id'] != subject:
+                raise ValueError('Shared SSO identity is linked to a different BioAgent account; migrate the website conversations before login.')
             row = db.user(mapping['user_id']) if mapping else None
             if shared_user_id and not mapping and identity is None:
                 raise ValueError('Shared website identities require a verified user_id and username.')
@@ -61,6 +73,8 @@ class Federation:
     def link(self, site_id, subject, username):
         if site_id not in clients():
             raise ValueError('Configure the website client first.')
+        if clients()[site_id].get('identity_mode') == 'shared_user_id':
+            raise ValueError('Shared SSO website identities cannot be linked to local password accounts.')
         text_id(subject, 'external subject')
         with get_host().identity_transaction() as db:
             principal = db.named_user(username)
@@ -79,6 +93,7 @@ class Federation:
         return {'code': code, 'site_id': site_id, 'origin': origin, 'expires_in': 60}
 
     def exchange(self, code, site_id, origin):
+        require_site_mode(site_id)
         check_site(site_id, origin)
         if not isinstance(code, str) or len(code) > 256:
             raise get_host().auth_error('Invalid website login grant.')
@@ -91,7 +106,8 @@ class Federation:
                 raise get_host().auth_error('Invalid, expired, or consumed website login grant.')
             db.execute('DELETE FROM website_grants WHERE digest=?', (digest,))
             ttl = max(60, min(int(os.getenv('AGENT_WEBSITE_LOGIN_TTL_SECONDS', '3600')), 8 * 3600))
-            db.create_login(hashlib.sha256(token.encode()).hexdigest(), row['user_id'], time.time() + ttl)
+            mode = 'oauth' if clients().get(site_id, {}).get('identity_mode') == 'shared_user_id' else 'multiuser'
+            db.create_login(hashlib.sha256(token.encode()).hexdigest(), row['user_id'], time.time() + ttl, mode)
             db.execute('INSERT INTO website_logins VALUES (?,?,?)', (hashlib.sha256(token.encode()).hexdigest(), site_id, row['user_id']))
             return token, {
                 'user': {'id': row['user_id'], 'name': user['username']},

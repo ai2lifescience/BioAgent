@@ -278,8 +278,8 @@ def _create_login(user_id: str, username: str, email: str, sid: str) -> tuple[st
             db.execute("INSERT INTO users(user_id,username,password_hash,email) VALUES (?,?,?,?)",
                        (user_id, username, password_hash(secrets.token_urlsafe(48)), email))
         db.execute("DELETE FROM logins WHERE expires_at<?", (time.time(),))
-        db.execute("INSERT INTO logins(token_hash,user_id,expires_at,sid) VALUES (?,?,?,?)",
-                   (token_hash, user_id, time.time() + 8 * 3600, sid))
+        db.execute("INSERT INTO logins(token_hash,user_id,expires_at,sid,mode) VALUES (?,?,?,?,?)",
+                   (token_hash, user_id, time.time() + 8 * 3600, sid, 'oauth'))
     return token, Principal(user_id, username, token_hash, sid)
 
 
