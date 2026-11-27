@@ -271,6 +271,8 @@ The planner can describe a single pipeline when that fulfills the goal. Remote
 result references are marked as requiring import before they can supply local
 file inputs. A `needs_input` proposal identifies the data or decisions needed
 to finish planning.
+See the [Autograph design](autograph_design.md) for component responsibilities,
+graph validation, approval, and dependent-step scheduling.
 
 ~~~text
 agent-pipeline catalog

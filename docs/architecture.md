@@ -541,6 +541,8 @@ design. Its typed proposal is defined in
 read-only catalog and file-discovery tools and returns step and input
 explanations with its proposed connections. The coordinator opens approval
 through `pipeline_shell` after saving a validated plan.
+See the [Autograph design](autograph_design.md) for the full planning and
+execution flow.
 
 `pipeline_specialist` calls its native SDK `pipeline_shell` tool. The tool
 accepts one allowlisted `agent-pipeline` command per call. The parser uses
