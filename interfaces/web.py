@@ -87,7 +87,7 @@ def _load_environment_file(path: Path) -> None:
 
 
 def _configure_development_urls(port: int) -> None:
-    """Derive local OAuth URLs after .env and explicit exports are available."""
+    """Derive SSO URLs without constraining direct LAN access."""
     os.environ["BIOAGENT_PORT"] = str(port)
     public_host = os.getenv("BIOAGENT_PUBLIC_HOST", "localhost").strip()
     public_scheme = os.getenv("BIOAGENT_PUBLIC_SCHEME", "http").strip()
@@ -96,11 +96,13 @@ def _configure_development_urls(port: int) -> None:
     oauth_port = os.getenv("OAUTH_PORT", "8090").strip()
     public_base = f"{public_scheme}://{public_host}:{port}"
     oauth_base = f"{oauth_scheme}://{oauth_host}:{oauth_port}"
-    os.environ.setdefault("AGENT_PUBLIC_ORIGIN", public_base)
-    os.environ.setdefault("AGENT_PUBLIC_BASE_URL", public_base)
-    os.environ.setdefault("AGENT_OAUTH_SERVER_URL", oauth_base)
-    os.environ.setdefault("AGENT_OAUTH_REDIRECT_URI", public_base + "/auth/oauth/callback")
-    os.environ.setdefault("AGENT_OAUTH_POST_LOGOUT_REDIRECT_URI", public_base + "/")
+    if auth_mode() in {"cas", "oauth"}:
+        os.environ.setdefault("AGENT_PUBLIC_ORIGIN", public_base)
+        os.environ.setdefault("AGENT_PUBLIC_BASE_URL", os.environ["AGENT_PUBLIC_ORIGIN"])
+    if auth_mode() == "oauth":
+        os.environ.setdefault("AGENT_OAUTH_SERVER_URL", oauth_base)
+        os.environ.setdefault("AGENT_OAUTH_REDIRECT_URI", public_base + "/auth/oauth/callback")
+        os.environ.setdefault("AGENT_OAUTH_POST_LOGOUT_REDIRECT_URI", public_base + "/")
 
 
 def _frontend_asset_path(relative_path: str) -> Path | None:

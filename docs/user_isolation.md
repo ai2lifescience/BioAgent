@@ -558,8 +558,9 @@ Back up authentication, ownership, metadata, history, and queue databases togeth
 
 In multi-user mode, the web bridge maps a trusted website's authenticated
 `(site_id, external_subject)` to a BioAgent account. New external identities receive
-separate accounts; an administrator can explicitly link an existing account before
-first use. Usernames and email addresses are not automatically matched. Linked
+separate accounts; for sites without `shared_user_id`, an administrator can
+explicitly link an existing account before first use. Usernames and email
+addresses are not automatically matched. Linked
 access uses the account's normal permissions, including session and file ownership.
 
 The website backend authenticates with a private service credential configured

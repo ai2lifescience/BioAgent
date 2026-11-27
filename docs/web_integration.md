@@ -169,8 +169,12 @@ A trusted SSO adapter can instead opt into `"identity_mode": "shared_user_id"`.
 Its backend must send an `identity` object whose `user_id` exactly matches the
 authenticated `subject`, plus a non-empty `username`. The bridge then creates or
 reuses the BioAgent account with that verified user ID, including across sites
-using the same mode. Existing `(site_id, external_subject)` mappings continue to
-win for upgrade compatibility. Use this only when the sites and BioAgent share
+using the same mode. Explicit links to local password accounts are rejected in
+this mode. Migrate legacy mappings and their website conversations before login.
+Start BioAgent with `AGENT_AUTH_MODE=oauth` for a shared SSO site. The bridge
+rejects shared SSO requests in `singleuser` and `multiuser` mode; a website
+linked to a password account is likewise unavailable in OAuth mode.
+Use this only when the sites and BioAgent share
 one authoritative user-ID namespace; the MSCAN `run.py init` command configures
 this mode automatically.
 

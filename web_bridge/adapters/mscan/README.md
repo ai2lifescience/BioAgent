@@ -202,8 +202,9 @@ bypass is off. Check the flow with two real accounts before production release.
 
 `run.py init` configures MSCAN to share its verified SSO user ID with the agent.
 On first use the agent creates or reuses the account with that same ID and the
-MSCAN username; no manual linking step is required. Existing mappings continue
-to resolve to their prior account so an upgrade does not orphan saved work.
+MSCAN username; no manual linking step is required. A legacy mapping to a local
+password account is rejected until its website conversations are migrated to
+the SSO account. `singleuser` and `multiuser` remain independent login modes.
 
 The controller verifies both sample and source-file ownership. Shared-project or
 administrator access rules need an explicit host-side permission implementation

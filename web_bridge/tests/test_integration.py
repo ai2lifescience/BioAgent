@@ -90,7 +90,7 @@ class WebsiteIntegrationTests(unittest.TestCase):
             'other': {'secret': 'd'*40, 'origins': ['https://other.test'], 'identity_mode': 'shared_user_id'},
         }
         identity = {'user_id': 'oos-user-42', 'username': 'oos.alice'}
-        with patch.dict(os.environ, {'AGENT_WEBSITE_CLIENTS': json.dumps(clients)}):
+        with patch.dict(os.environ, {'AGENT_WEBSITE_CLIENTS': json.dumps(clients), 'AGENT_AUTH_MODE': 'oauth'}):
             status, _, raw = self.service('bootstrap', {'origin': 'https://fixture.test', 'identity': identity},
                                           subject=identity['user_id'])
             self.assertEqual(status, 200, raw)
@@ -123,6 +123,77 @@ class WebsiteIntegrationTests(unittest.TestCase):
                                           subject='oos-user-43')[0], 400)
             self.assertEqual(self.service('bootstrap', {'origin': 'https://fixture.test'},
                                           subject='new-shared-user')[0], 400)
+
+    def test_shared_sso_keeps_oauth_separate_from_password_accounts(self):
+        from auth import AuthStore, database
+
+        clients = {
+            'fixture': {'secret': 'c'*40, 'origins': ['https://fixture.test'], 'identity_mode': 'shared_user_id'},
+        }
+        identity = {'user_id': 'oos-user-42', 'username': 'oos.alice'}
+        with patch.dict(os.environ, {'AGENT_WEBSITE_CLIENTS': json.dumps(clients), 'AGENT_AUTH_MODE': 'oauth'}):
+            with self.assertRaisesRegex(ValueError, 'cannot be linked to local password accounts'):
+                Federation().link('fixture', identity['user_id'], 'alice')
+            with database(AuthStore().path) as db:
+                db.execute('INSERT INTO external_identities VALUES (?,?,?)',
+                           ('fixture', identity['user_id'], self.alice.user_id))
+            self.assertEqual(self.service('bootstrap', {
+                'origin': 'https://fixture.test', 'identity': identity,
+            }, subject=identity['user_id'])[0], 400)
+            with database(AuthStore().path) as db:
+                db.execute('DELETE FROM external_identities WHERE site_id=? AND subject=?',
+                           ('fixture', identity['user_id']))
+            status, _, raw = self.service('bootstrap', {
+                'origin': 'https://fixture.test', 'identity': identity,
+            }, subject=identity['user_id'])
+            self.assertEqual(status, 200, raw)
+            website, website_cookie = self.exchange(json.loads(raw))
+            self.assertEqual(website['user']['id'], identity['user_id'])
+            next_grant = json.loads(self.service('bootstrap', {
+                'origin': 'https://fixture.test', 'identity': identity,
+            }, subject=identity['user_id'])[2])
+            self.assertEqual(self.request(
+                f"/sessions/{website['session_id']}/messages", cookie=self.alice_cookie,
+            )[0], 401)
+
+            with patch.dict(os.environ, {'AGENT_AUTH_MODE': 'multiuser'}):
+                self.assertEqual(self.request('/auth/website/exchange', method='POST', body=next_grant)[0], 400)
+                self.assertEqual(self.service('bootstrap', {
+                    'origin': 'https://fixture.test', 'identity': identity,
+                }, subject=identity['user_id'])[0], 400)
+                self.assertEqual(self.request('/sessions', cookie=website_cookie)[0], 401)
+                self.assertEqual(self.request(
+                    f"/sessions/{website['session_id']}/messages", cookie=self.alice_cookie,
+                )[0], 404)
+            with patch.dict(os.environ, {'AGENT_AUTH_MODE': 'singleuser'}):
+                self.assertEqual(self.service('bootstrap', {
+                    'origin': 'https://fixture.test', 'identity': identity,
+                }, subject=identity['user_id'])[0], 400)
+
+            with patch.dict(os.environ, {
+                'AGENT_AUTH_MODE': 'oauth',
+                'AGENT_OAUTH_SERVER_URL': 'https://identity.test',
+                'AGENT_OAUTH_CLIENT_SECRET': 's' * 32,
+                'AGENT_OAUTH_REDIRECT_URI': 'http://localhost/auth/oauth/callback',
+            }), patch('auth.oauth._exchange', return_value={**identity, 'email': '', 'sid': 'broker-session'}):
+                _, state = begin_login('/')
+                token, principal, _ = complete_login('broker-code', state, state)
+                self.assertEqual((principal.user_id, principal.username),
+                                 (identity['user_id'], identity['username']))
+                status, _, data = self.request(
+                    f"/sessions/{website['session_id']}/messages", cookie=f'{COOKIE_NAME}={token}',
+                )
+                self.assertEqual(status, 200, data)
+                with patch.dict(os.environ, {'AGENT_AUTH_MODE': 'multiuser'}):
+                    self.assertEqual(self.request('/sessions', cookie=f'{COOKIE_NAME}={token}')[0], 401)
+
+    def test_password_linked_website_cannot_cross_into_oauth_mode(self):
+        self.configure()
+        _, cookie = self.exchange(self.bootstrap())
+        self.assertEqual(self.request('/sessions', cookie=cookie)[0], 200)
+        with patch.dict(os.environ, {'AGENT_AUTH_MODE': 'oauth'}):
+            self.assertEqual(self.request('/sessions', cookie=cookie)[0], 401)
+            self.assertEqual(self.service('bootstrap', {'origin': 'https://fixture.test'})[0], 400)
 
     def test_streamed_import_download_ownership_and_persistent_results(self):
         self.configure(); value,cookie=self.exchange(self.bootstrap()); sid=value['session_id']

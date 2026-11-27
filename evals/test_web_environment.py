@@ -21,6 +21,7 @@ class WebEnvironmentTests(unittest.TestCase):
                 encoding="utf-8",
             )
             with patch.dict(os.environ, {
+                "AGENT_AUTH_MODE": "oauth",
                 "AGENT_PROXY": "socks5h://explicit-export:7890",
                 "OAUTH_PORT": "8190",
             }, clear=True):
@@ -35,6 +36,19 @@ class WebEnvironmentTests(unittest.TestCase):
                     os.environ["AGENT_OAUTH_REDIRECT_URI"],
                     "http://agent.local:8123/auth/oauth/callback",
                 )
+
+    def test_multiuser_startup_allows_direct_lan_hosts(self):
+        from interfaces.auth import configure_server
+        from interfaces.web import _configure_development_urls
+
+        with patch.dict(os.environ, {"AGENT_AUTH_MODE": "multiuser"}, clear=True):
+            _configure_development_urls(8000)
+            self.assertNotIn("AGENT_PUBLIC_ORIGIN", os.environ)
+            self.assertNotIn("AGENT_PUBLIC_BASE_URL", os.environ)
+            self.assertNotIn("AGENT_OAUTH_SERVER_URL", os.environ)
+            self.assertNotIn("AGENT_OAUTH_REDIRECT_URI", os.environ)
+            configure_server("0.0.0.0")
+            self.assertEqual(os.environ["AGENT_DIRECT_HTTP"], "true")
 
 
 if __name__ == "__main__":

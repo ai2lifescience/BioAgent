@@ -7,7 +7,7 @@ import re
 from urllib.parse import parse_qs, urlparse
 
 from .ports import get_host
-from .identity import Federation
+from .identity import Federation, require_site_mode
 from .config import authenticate_client, text_id, signing_secret
 from .bridge import get_bridge, issue_ticket, check_site
 from .conversations import WebsiteAccounts
@@ -27,6 +27,7 @@ def handle_service(handler, path):
     site = handler.headers.get('X-Website-Site', '')
     header = handler.headers.get('Authorization', '')
     authenticate_client(site, header[7:] if header.startswith('Bearer ') else '')
+    require_site_mode(site)
     if handler.headers.get('Origin'):
         raise get_host().auth_error('Website service credentials are for backend requests only.')
     operation = path[len('/website/service/'):]

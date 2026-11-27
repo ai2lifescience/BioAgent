@@ -33,6 +33,10 @@ python -B -m interfaces.web --host 127.0.0.1 --port 8000
 ```
 
 Open `http://127.0.0.1:8000`. The build checks TypeScript before creating a clean `dist/`. Rebuild after changing UI source or public assets, and deploy the complete build directory with the Python server. The server does not compile the frontend on startup.
+The standard build uses `/` for direct access on port `8000`. When deploying
+behind a path prefix, set `VITE_PUBLIC_PATH` for that build, for example
+`VITE_PUBLIC_PATH=/OneMicro/agent/ npm --prefix frontend run build`. Rebuild
+without that override before returning to direct access.
 Keep the Python process working directory at the repository root. Runtime
 defaults are relative to that directory; starting the backend from `frontend/`
 would create a second `frontend/runtime/` tree.

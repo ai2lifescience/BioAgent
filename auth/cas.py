@@ -151,8 +151,8 @@ def _create_login(user_id: str, username: str, ticket: str) -> tuple[str, Princi
                 (user_id, username, password_hash(secrets.token_urlsafe(48))),
             )
         db.execute("DELETE FROM logins WHERE expires_at<?", (time.time(),))
-        db.execute("INSERT INTO logins(token_hash,user_id,expires_at) VALUES (?,?,?)",
-                   (token_hash, user_id, time.time() + 8 * 3600))
+        db.execute("INSERT INTO logins(token_hash,user_id,expires_at,mode) VALUES (?,?,?,?)",
+                   (token_hash, user_id, time.time() + 8 * 3600, 'cas'))
         db.execute(
             "INSERT INTO cas_logins(ticket_hash,token_hash,user_id) VALUES (?,?,?) "
             "ON CONFLICT(ticket_hash) DO UPDATE SET "

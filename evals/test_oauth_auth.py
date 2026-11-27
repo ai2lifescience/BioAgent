@@ -5,6 +5,7 @@ import http.client
 import json
 import os
 from pathlib import Path
+import sqlite3
 import tempfile
 import threading
 import unittest
@@ -69,6 +70,32 @@ class OAuthAuthTests(unittest.TestCase):
         for request in (token_request, userinfo_request):
             self.assertFalse(request.call_args.args[0].trust_env)
             self.assertEqual(request.call_args.args[0].proxies, {})
+
+    def test_legacy_logins_get_modes_and_ambiguous_website_tokens_expire(self):
+        path = Path(os.environ['AGENT_AUTH_DB'])
+        tokens = {name: name + '-token' for name in ('password', 'oauth', 'cas', 'website')}
+        digests = {name: hashlib.sha256(token.encode()).hexdigest() for name, token in tokens.items()}
+        with sqlite3.connect(path) as db:
+            db.execute('CREATE TABLE users (user_id TEXT PRIMARY KEY, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, disabled INTEGER NOT NULL DEFAULT 0)')
+            db.execute("INSERT INTO users VALUES ('test-user','tester','unused',0)")
+            db.execute('CREATE TABLE logins (token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL, expires_at REAL NOT NULL, sid TEXT)')
+            for name, digest in digests.items():
+                db.execute('INSERT INTO logins VALUES (?,?,?,?)', (digest, 'test-user', 9999999999, 'broker-sid' if name == 'oauth' else None))
+            db.execute('CREATE TABLE cas_logins (ticket_hash TEXT PRIMARY KEY, token_hash TEXT, user_id TEXT)')
+            db.execute('INSERT INTO cas_logins VALUES (?,?,?)', ('ticket', digests['cas'], 'test-user'))
+            db.execute('CREATE TABLE website_logins (digest TEXT PRIMARY KEY, site_id TEXT, user_id TEXT)')
+            db.execute('INSERT INTO website_logins VALUES (?,?,?)', (digests['website'], 'mscan', 'test-user'))
+        store = AuthStore()
+        with sqlite3.connect(path) as db:
+            modes = dict(db.execute('SELECT token_hash,mode FROM logins'))
+            self.assertEqual(db.execute('SELECT count(*) FROM website_logins').fetchone()[0], 0)
+        self.assertEqual(modes, {
+            digests['password']: 'multiuser', digests['oauth']: 'oauth', digests['cas']: 'cas',
+        })
+        self.assertEqual(store.authenticate(tokens['oauth']).user_id, 'test-user')
+        for name in ('password', 'cas', 'website'):
+            with self.assertRaises(Exception):
+                store.authenticate(tokens[name])
 
     def test_logout_request_is_created_by_server_side_client(self):
         response = _Response({
@@ -227,8 +254,8 @@ class OAuthAuthTests(unittest.TestCase):
         AuthStore().add_user("alice", "alice-password-123")
         token, _ = AuthStore().login("alice", "alice-password-123", "127.0.0.1")
         status, location, _ = get("/", cookie="bioagent_session=" + token)
-        self.assertNotEqual(status, 302)
-        self.assertNotIn("/auth/oauth/login", location)
+        self.assertEqual(status, 302)
+        self.assertIn("/auth/oauth/login", location)
 
         prefix = "/OneMicro/agent"
         with patch.dict(os.environ, {

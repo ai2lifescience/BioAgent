@@ -75,6 +75,30 @@ export default function App() {
     return () => { cancelled = true; };
   }, []);
 
+  useEffect(() => {
+    let refreshing = false;
+    const refresh = async () => {
+      if (document.visibilityState === 'hidden' || refreshing) return;
+      refreshing = true;
+      try {
+        const payload = await api.listSessions();
+        const loaded: SessionSummary[] = payload.sessions.map(raw => ({
+          id: sessionIdOf(raw), title: String(raw.title || 'New chat'), message_count: Number(raw.message_count || 0),
+          last_run_id: raw.last_run_id, created_at: raw.created_at || nowIso(), updated_at: raw.updated_at || raw.created_at || nowIso(), pinned: Boolean(raw.pinned),
+        })).filter(item => item.id);
+        if (loaded.length) setSessions(loaded);
+      } catch { /* The active view will report an expired login when used. */ }
+      finally { refreshing = false; }
+    };
+    const visible = () => { if (document.visibilityState === 'visible') void refresh(); };
+    window.addEventListener('focus', refresh);
+    document.addEventListener('visibilitychange', visible);
+    return () => {
+      window.removeEventListener('focus', refresh);
+      document.removeEventListener('visibilitychange', visible);
+    };
+  }, []);
+
   const updateStatus = useCallback((id: string, status: ConversationStatus) => {
     setStatuses(previous => previous[id] === status ? previous : { ...previous, [id]: status });
   }, []);

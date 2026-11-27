@@ -146,6 +146,9 @@ export BIOAGENT_SECRET="$(
 cd resource/mscan/mscan-app
 
 export BIOAGENT_PORT=8000  # Must match Terminal 1.
+export BIOAGENT_SERVICE_URL=http://127.0.0.1:8000
+export BIOAGENT_PUBLIC_URL=http://192.168.75.56:8000
+export BIOAGENT_ORIGINS=http://localhost:8848,http://127.0.0.1:8848,http://192.168.75.56:8848
 export OAUTH_PORT=8090
 export MSCAN_PORT=8080
 export OAUTH_MSCAN_CLIENT_SECRET="YOUR_MSCAN_OAUTH_SECRET"
@@ -193,12 +196,25 @@ Open MSCAN at `http://localhost:8848`, sign in, select a sample and open
 **Ask assistant**. Confirm the assistant opens and MSCAN logout ends the
 embedded session.
 
-## Unified identity and login
+## OAuth identity shared with MSCAN
 
 The bridge secret authenticates MSCAN's backend. MSCAN sends the verified SSO
 user ID and username, which BioAgent uses to open the embedded account. In
-standalone `oauth` or `cas` mode, the same verified CNCB user ID opens that same
-account. Existing explicit account links take precedence.
+standalone `oauth` mode, the same verified CNCB user ID opens that account.
+`singleuser` has one separate local account. `multiuser` has separate password
+accounts. Neither mode links its accounts to OAuth. Select one mode when starting
+BioAgent; the MSCAN shared SSO connection belongs to the OAuth identity.
+The [user model design](user_model_design.md) describes the separate startup
+modes and their account boundaries.
+BioAgent rejects MSCAN's shared SSO requests in `singleuser` and `multiuser`
+mode. Login cookies from one mode do not grant access after switching modes;
+sign in again when changing the startup command.
+Keep `OAUTH_AGENT_LOGIN_BYPASS=false` when sharing MSCAN and BioAgent identity;
+the bypass signs BioAgent into a fixed test account instead. A legacy MSCAN
+mapping to a password account must be migrated before using shared SSO mode.
+
+An already open standalone BioAgent tab refreshes its conversation list and
+selected chat when it regains focus after activity in MSCAN.
 
 Connector logout revokes embedded grants and bindings while preserving
 conversation history, files and account links. See

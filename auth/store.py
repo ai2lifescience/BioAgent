@@ -12,7 +12,7 @@ import sqlite3
 import time
 from uuid import uuid4
 
-from .context import AuthError, ExecutionUnavailable, Principal, RateLimited, RegistrationConflict, registration_enabled
+from .context import AuthError, ExecutionUnavailable, Principal, RateLimited, RegistrationConflict, auth_mode, registration_enabled
 
 @contextmanager
 def database(path: Path):
@@ -44,9 +44,24 @@ class AuthStore:
             db.execute("CREATE TABLE IF NOT EXISTS users (user_id TEXT PRIMARY KEY, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, disabled INTEGER NOT NULL DEFAULT 0)")
             if "email" not in {row["name"] for row in db.execute("PRAGMA table_info(users)")}:
                 db.execute("ALTER TABLE users ADD COLUMN email TEXT NOT NULL DEFAULT ''")
-            db.execute("CREATE TABLE IF NOT EXISTS logins (token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL, expires_at REAL NOT NULL, sid TEXT)")
-            if "sid" not in {row["name"] for row in db.execute("PRAGMA table_info(logins)")}:
+            db.execute("CREATE TABLE IF NOT EXISTS logins (token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL, expires_at REAL NOT NULL, sid TEXT, mode TEXT)")
+            login_columns = {row["name"] for row in db.execute("PRAGMA table_info(logins)")}
+            if "sid" not in login_columns:
                 db.execute("ALTER TABLE logins ADD COLUMN sid TEXT")
+            if "mode" not in login_columns:
+                db.execute("ALTER TABLE logins ADD COLUMN mode TEXT")
+                db.execute("UPDATE logins SET mode='oauth' WHERE sid IS NOT NULL")
+                tables = {row["name"] for row in db.execute(
+                    "SELECT name FROM sqlite_master WHERE name IN ('cas_logins','website_logins')"
+                )}
+                if "cas_logins" in tables:
+                    db.execute("UPDATE logins SET mode='cas' WHERE token_hash IN (SELECT token_hash FROM cas_logins)")
+                # Old website logins have no stored access mode. Require a new
+                # grant instead of guessing from mutable site configuration.
+                if "website_logins" in tables:
+                    db.execute("DELETE FROM logins WHERE token_hash IN (SELECT digest FROM website_logins)")
+                    db.execute("DELETE FROM website_logins")
+                db.execute("UPDATE logins SET mode='multiuser' WHERE mode IS NULL")
             db.execute("CREATE TABLE IF NOT EXISTS login_attempts (bucket TEXT PRIMARY KEY, count INTEGER NOT NULL, expires_at REAL NOT NULL)")
 
     def add_user(self, username: str, password: str) -> str:
@@ -82,8 +97,8 @@ class AuthStore:
         with database(self.path) as db:
             db.execute("DELETE FROM logins WHERE expires_at < ?", (time.time(),))
             db.execute("DELETE FROM login_attempts WHERE bucket=?", ("user:" + username,))
-            db.execute("INSERT INTO logins(token_hash,user_id,expires_at) VALUES (?,?,?)",
-                       (token_hash, user["user_id"], time.time() + 8 * 3600))
+            db.execute("INSERT INTO logins(token_hash,user_id,expires_at,mode) VALUES (?,?,?,?)",
+                       (token_hash, user["user_id"], time.time() + 8 * 3600, "multiuser"))
         return token, Principal(user["user_id"], username, token_hash)
 
     def register(self, username: str, password: str, client: str) -> tuple[str, Principal]:
@@ -105,9 +120,11 @@ class AuthStore:
 
     def validate_login(self, token_hash: str) -> Principal:
         with database(self.path) as db:
-            row = db.execute("SELECT u.user_id,u.username,l.sid FROM logins l JOIN users u ON u.user_id=l.user_id WHERE l.token_hash=? AND l.expires_at>? AND u.disabled=0", (token_hash, time.time())).fetchone()
-        if not row:
-            raise AuthError("Your session has expired. Sign in again.")
+            row = db.execute("SELECT u.user_id,u.username,l.sid,l.mode FROM logins l JOIN users u ON u.user_id=l.user_id WHERE l.token_hash=? AND l.expires_at>? AND u.disabled=0", (token_hash, time.time())).fetchone()
+            if not row:
+                raise AuthError("Your session has expired. Sign in again.")
+            if row["mode"] != auth_mode():
+                raise AuthError("This login belongs to another access mode. Sign in again.")
         return Principal(row["user_id"], row["username"], token_hash, row["sid"])
 
     def authenticate(self, token: str) -> Principal:
